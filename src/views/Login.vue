@@ -4,7 +4,7 @@
        <v-col cols="12" md="6" class="left">
           <div class="form-section mb-15">
             <div class="logo mb-15">
-              <v-img :src="require('@/assets/images/logo.png')" contain></v-img>
+              <img :src="require('@/assets/images/logo.png')">
             </div>
              <v-form @submit.prevent="submit" ref="form" class="login-form" v-model="valid"
               lazy-validation>
