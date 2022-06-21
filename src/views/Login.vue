@@ -4,7 +4,7 @@
        <v-col cols="12" md="6" class="left">
           <div class="form-section mb-15">
             <div class="logo mb-15">
-              <img :src="require('@/assets/images/logo.png')">
+              <img :src="require('@/assets/images/logo1.png')" width="100%">
             </div>
              <v-form @submit.prevent="submit" ref="form" class="login-form" v-model="valid"
               lazy-validation>
@@ -34,7 +34,11 @@
                    color="#0D1139"
                    background-color="white"
                  ></v-text-field>
-                 <a href="/forgot-password" class="ml-3 font-weight-medium">Forgot password?</a>
+                 <v-hover
+                    v-slot="{ hover }"
+                    open-delay="200"
+                  >
+                 <a href="/forgot-password" class="ml-3 font-weight-medium">Forgot password?</a> </v-hover>
                <div class="text-center mt-8">
                  <v-btn class="signin-btn rounded-lg font-weight-bold text-capitalize" type="submit" color="success" :disabled="!valid" @click="login">
                    Submit
@@ -48,7 +52,7 @@
           </div>
        </v-col>
        <v-col cols="12" md="6" class="right d-none d-md-block">
-         <v-img :src="require('@/assets/images/sideBanner.png')"></v-img>
+         <v-img :src="require('@/assets/images/sideBanner.png')" width="100%" height="100%"></v-img>
        </v-col>
      </v-row>
    </section>
