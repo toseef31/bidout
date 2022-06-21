@@ -9,28 +9,21 @@
         <v-img
         max-height="100"
         max-width="100"
-          src="src/assets/logo.png"
+          :src="require('@/assets/images/logo.png')"
         ></v-img>
       </template>
 
       <v-spacer></v-spacer>
 
       
-      <v-list>
-        <v-list-item
-          prepend-avatar="src/assets/user.png"
-          title="John Leider"
-          subtitle="john@vuetifyjs.com"
-        >
-          <template>
-            <v-list-item-avatar end>
-              <v-btn size="small" variant="text" icon>mdi-menu-down</v-btn>
-            </v-list-item-avatar>
-          </template>
-        </v-list-item>
-      </v-list>
+      
       <v-list >
-        <v-img src="src/assets/user.png"></v-img>
+        <v-list-item>
+          <v-list-item-title class="mr-3">Aubrey  McClendon</v-list-item-title>
+          <v-avatar>
+            <v-img :src="require('@/assets/images/user.png')"></v-img>
+          </v-avatar>
+        </v-list-item>
       </v-list>
     </v-app-bar>
 </template>

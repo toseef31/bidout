@@ -4,7 +4,7 @@
        <v-col cols="12" md="6" class="left">
           <div class="form-section mb-15">
             <div class="logo mb-15">
-              <v-img src="src/assets/logo.png" contain></v-img>
+              <v-img :src="require('@/assets/images/logo.png')" contain></v-img>
             </div>
              <v-form @submit.prevent="submit" ref="form" class="login-form" v-model="valid"
               lazy-validation>
@@ -48,7 +48,7 @@
           </div>
        </v-col>
        <v-col cols="12" md="6" class="right d-none d-md-block">
-         <v-img src="src/assets/sideBanner.png"></v-img>
+         <v-img :src="require('@/assets/images/sideBanner.png')"></v-img>
        </v-col>
      </v-row>
    </section>
@@ -84,5 +84,5 @@ export default {
 };
 </script>
 <style scoped lang="scss">
-
+@import '@/assets/styles/auth/common.scss';
 </style>

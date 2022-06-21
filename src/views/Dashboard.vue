@@ -1,11 +1,11 @@
 <template>
   <section class="section-container fill-height">
     <Navbar></Navbar>
-     <v-row class="signin">
+     <!-- <v-row class="signin">
        <v-col cols="12" md="6" class="left">
           <div class="form-section mb-15">
             <div class="logo mb-15">
-              <v-img src="src/assets/logo.png" contain></v-img>
+              <v-img :src="require('@/assets/images/logo.png')" contain></v-img>
             </div>
              <v-form @submit.prevent="submit" ref="form" class="login-form" v-model="valid"
               lazy-validation>
@@ -51,7 +51,7 @@
        <v-col cols="12" md="6" class="right d-none d-md-block">
          <v-img src="src/assets/sideBanner.png"></v-img>
        </v-col>
-     </v-row>
+     </v-row> -->
    </section>
 </template>
 
@@ -64,29 +64,14 @@ export default {
   },
   data() {
     return {
-      valid: true,
-      email: "",
-      emailRules: [
-        v => !!v || 'E-mail is required',
-        v => /.+@.+\..+/.test(v) || 'E-mail must be valid',
-      ],
-      password: "",
-      passwordRules: [
-        v => !!v || 'Password is required',
-        v => (v && v.length >= 8) || 'Password must be more than 8 characters',
-      ],
-      showPass: false
+      
     };
   },
   methods: {
-    login() {
-      this.$refs.form.validate()
-      const { email } = this;
-      console.log(email + "logged in")
-    },
+    
   },
 };
 </script>
 <style scoped lang="scss">
-
+@import '@/assets/styles/dashboard/dashboard.scss';
 </style>
