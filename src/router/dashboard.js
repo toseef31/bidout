@@ -1,5 +1,5 @@
 import Base from '@/views/Layout/Base.vue';
-
+import store from '@/store';
 
 const routes = [
   {
@@ -16,6 +16,13 @@ const routes = [
         path: '/dashboard',
         name: 'Dashboard',
         component: () => import('@/views/Dashboard.vue'),
+        beforeEnter: (to, from, next) => {
+           if(localStorage.getItem("userData") == null) {
+               next('/login');
+           } else {
+               next();
+           }
+       }
       },
     ],
   },

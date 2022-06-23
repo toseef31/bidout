@@ -7,6 +7,7 @@
     "serve": "vite preview"
   },
   "dependencies": {
+    "firebase": "^9.8.3",
     "material-design-icons": "^3.0.1",
     "vite-plugin-components": "^0.13.2",
     "vite-plugin-vue2": "^1.4.0",

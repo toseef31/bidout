@@ -3,6 +3,7 @@ import VueRouter from 'vue-router';
 import Base from '@/views/Layout/Base.vue';
 import AuthRoutes from '@/router/auth'
 import Dashboard from '@/router/dashboard'
+import store from '@/store';
 
 Vue.use(VueRouter);
 

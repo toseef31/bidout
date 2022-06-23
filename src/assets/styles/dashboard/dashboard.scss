@@ -1,0 +1,59 @@
+.section-container{
+	background: #FBFBFB;
+}
+.left-sidebar{
+	background-color: #fff;
+}
+.mid-content{
+	.content-section{
+		background: #FFFFFF;
+		border: 1px solid #B8B8B8;
+		border-radius: 8px;
+		margin-bottom: 20px;
+		padding: 3px;
+		.title-block{
+			display: flex;
+			flex-direction: row;
+			justify-content: space-between;
+			align-items: center;
+			padding: 16px 13px;
+			gap: 10px;
+			h3{
+				font-size: 20px;
+				line-height: 25px;
+				color: #0D9648;
+			}
+			a{
+				font-weight: 600;
+				font-size: 16px;
+				line-height: 20px;
+				color: #0D1139;
+			}
+		}
+		.shipment{
+			border: 1px solid #F2F2F2;
+		}
+		.bids-table {
+			table tbody tr:nth-of-type(even) {
+		   	background-color: #F2F2F2;
+		 	}
+			table tbody tr th {
+		   	color: #959595;
+		    font-weight: 600;
+		    font-size: 14px;
+		 	}
+			table tbody tr td {
+		   	color: #0D1139;
+		    font-weight: 600;
+		    font-size: 16px;
+		 	}
+		}
+	}
+	.map-section{
+		border: 1px solid #B8B8B8;
+    border-radius: 8px;
+	}
+}
+.v-select__selection--comma{
+	color: #fff;
+}

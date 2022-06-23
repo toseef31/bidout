@@ -1,71 +1,148 @@
 <template>
   <section class="section-container fill-height">
     <Navbar></Navbar>
-     <!-- <v-row class="signin">
-       <v-col cols="12" md="6" class="left">
-          <div class="form-section mb-15">
-            <div class="logo mb-15">
-              <v-img :src="require('@/assets/images/logo.png')" contain></v-img>
+     <v-row class="pa-3">
+       <v-col cols="12" md="3" class="left-sidebar pr-1">
+          <LeftSidebar></LeftSidebar>
+       </v-col>
+       <v-col cols="12" md="6" class="mid-content">
+          <div class="content-section">
+            <div class="title-block">
+              <h3 class="font-weight-bold">Active Bids</h3>
+              <a href="">View all</a>
             </div>
-             <v-form @submit.prevent="submit" ref="form" class="login-form" v-model="valid"
-              lazy-validation>
-               <label class="font-weight-bold">Dashboard</label> 
-                 <v-text-field
-                   v-model="email"
-                   :rules="emailRules"
-                   required
-                   outlined
-                   placeholder="admin@bidoutapp.com"
-                   class="rounded-lg mt-2"
-                   type="email"
-                   color="#0D1139"
-                   background-color="white"
-                 ></v-text-field>
-                 <label class="font-weight-bold">Password</label> 
-                 <v-text-field
-                   v-model="password"
-                   :rules="passwordRules"
-                   :append-icon="showPass ? 'mdi-eye view-pass' : 'mdi-eye-off view-pass'"
-                   @click:append="showPass = !showPass"
-                   required
-                   outlined
-                   placeholder="••••••••••••"
-                   class="rounded-lg mt-2"
-                   :type="showPass ? 'text' : 'password'"
-                   color="#0D1139"
-                   background-color="white"
-                 ></v-text-field>
-                 <a href="/forgot-password" class="ml-3 font-weight-medium">Forgot password?</a>
-               <div class="text-center mt-8">
-                 <v-btn class="signin-btn rounded-lg font-weight-bold text-capitalize" type="submit" color="success" :disabled="!valid" @click="login">
-                   Submit
-                 </v-btn>
-               </div>
-
-             </v-form>
+            <v-simple-table class="bids-table">
+              <template v-slot:default>
+                <thead>
+                  <tr>
+                    <th class="text-left">
+                      Bid ID
+                    </th>
+                    <th class="text-left">
+                      Title
+                    </th>
+                    <th class="text-left">
+                      Entries
+                    </th>
+                    <th class="text-left">
+                      End Time
+                    </th>
+                    <th class="text-left">
+                      Action
+                    </th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr
+                    v-for="bid in bids"
+                    :key="bid.id"
+                  >
+                    <td class="text-left">{{ bid.id }}</td>
+                    <td class="text-left">{{ bid.title }}</td>
+                    <td class="text-left">{{ bid.entries }}</td>
+                    <td class="text-left">{{ bid.endTime }}</td>
+                    <td class="text-left">View Details</td>
+                  </tr>
+                </tbody>
+              </template>
+            </v-simple-table>
+            <div class="title-block shipment">
+              <h3>Active Shipments</h3>
+              <a href="">View all</a>
+            </div>
+            <v-simple-table class="bids-table">
+              <template v-slot:default>
+                <thead>
+                  <tr>
+                    <th class="text-left">
+                      Bid ID
+                    </th>
+                    <th class="text-left">
+                      Title
+                    </th>
+                    <th class="text-left">
+                      Entries
+                    </th>
+                    <th class="text-left">
+                      End Time
+                    </th>
+                    <th class="text-left">
+                      Action
+                    </th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr
+                    v-for="bid in bids"
+                    :key="bid.id"
+                  >
+                    <td class="text-left">{{ bid.id }}</td>
+                    <td class="text-left">{{ bid.title }}</td>
+                    <td class="text-left">{{ bid.entries }}</td>
+                    <td class="text-left">{{ bid.endTime }}</td>
+                    <td class="text-left">View Details</td>
+                  </tr>
+                </tbody>
+              </template>
+            </v-simple-table>
           </div>
-          <div class="bottom-section">
-            <p class="center font-weight-bold">Don't have account yet? <a href="">Join BidOut</a></p>
+          <div class="map-section">
+            <v-img :src="require('@/assets/images/dashboard/map.png')"></v-img>
           </div>
        </v-col>
-       <v-col cols="12" md="6" class="right d-none d-md-block">
-         <v-img src="src/assets/sideBanner.png"></v-img>
+       <v-col cols="12" md="3" class="pl-0">
+        <div class="right-sidebar">
+          <RightSidebar></RightSidebar>
+        </div>
        </v-col>
-     </v-row> -->
+     </v-row>
    </section>
 </template>
 
 <script>
   import Navbar from './Layout/Navbar.vue'
+  import LeftSidebar from './Layout/Dashboard/LeftSidebar.vue'
+  import RightSidebar from './Layout/Dashboard/RightSidebar.vue'
 export default {
   name : "Dashboard",
   components: {
     Navbar,
+    LeftSidebar,
+    RightSidebar,
   },
+  
   data() {
     return {
-      
+      bids: [
+        {
+          id: 10007,
+          title: 'Water Job',
+          entries: 0,
+          endTime: '-',
+        },
+        {
+          id: 10008,
+          title: 'Water Job',
+          entries: 0,
+          endTime: '-',
+        },
+        {
+          id: 10009,
+          title: 'Water Job',
+          entries: 0,
+          endTime: '-',
+        },
+        {
+          id: 10010,
+          title: 'Water Job',
+          entries: 0,
+          endTime: '-',
+        },
+      ],
     };
+  },
+  computed : {
+
   },
   methods: {
     

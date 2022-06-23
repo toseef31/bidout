@@ -1,4 +1,5 @@
 import { createVuePlugin } from 'vite-plugin-vue2';
+import { defineConfig, loadEnv } from 'vite';
 import viteComponents, {
   VuetifyResolver,
 } from 'vite-plugin-components';

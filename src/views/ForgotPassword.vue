@@ -4,9 +4,9 @@
        <v-col cols="12" md="6" class="left">
           <div class="form-section mb-15 mt-n16 ">
             <div class="logo mb-15">
-              <img :src="require('@/assets/images/logo1.png')" width="100%">
+              <img :src="require('@/assets/images/logo.png')" width="100%">
             </div>
-             <v-form @submit.prevent="submit" ref="form" class="login-form" v-model="valid"
+             <v-form @submit.prevent="forgetPassword" ref="form" class="login-form" v-model="valid"
               lazy-validation>
                <label class="font-weight-bold">Email</label> 
                  <v-text-field
@@ -40,7 +40,9 @@
 </template>
 
 <script>
-
+  import firebase from 'firebase/compat/app';
+  import 'firebase/compat/auth';
+  import 'firebase/compat/firestore';
 export default {
   name : "ForgotPassword",
   data() {
@@ -59,6 +61,19 @@ export default {
       const { email } = this;
       console.log(email + "logged in")
     },
+    forgetPassword() {
+      firebase
+      .auth()
+      .sendPasswordResetEmail(this.email)
+      .then(() => {
+          alert('Check your registered email to reset the password!')
+          this.user = {   
+            email: ''
+          }
+      }).catch((error) => {
+        alert(error)
+      })
+    }
   },
 };
 </script>

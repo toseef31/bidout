@@ -4,9 +4,15 @@
        <v-col cols="12" md="6" class="left">
           <div class="form-section mb-15">
             <div class="logo mb-15">
-              <img :src="require('@/assets/images/logo1.png')" width="100%">
-            </div>
-             <v-form @submit.prevent="submit" ref="form" class="login-form" v-model="valid"
+              <img :src="require('@/assets/images/logo.png')" width="100%">
+            </div> 
+            <v-alert type="error" v-if="errorMessage !== ''">
+              {{ errorMessage }}
+            </v-alert>
+            <v-alert type="success" v-if="successMessage !== ''">
+              {{ successMessage }}
+            </v-alert>
+            <v-form @submit.prevent="loginRequest" ref="form" class="login-form" v-model="valid"
               lazy-validation>
                <label class="font-weight-bold">Email</label> 
                  <v-text-field
@@ -59,7 +65,9 @@
 </template>
 
 <script>
-
+import firebase from 'firebase/compat/app';
+import 'firebase/compat/auth';
+import 'firebase/compat/firestore';
 export default {
   name : "Login",
   data() {
@@ -73,9 +81,13 @@ export default {
       password: "",
       passwordRules: [
         v => !!v || 'Password is required',
-        v => (v && v.length >= 8) || 'Password must be more than 8 characters',
+        v => (v && v.length >= 6) || 'Password must be more than 6 characters',
       ],
-      showPass: false
+      showPass: false,
+      xhrRequest: false,
+      errorMessage: "",
+      successMessage: "",
+      userData: ""
     };
   },
   methods: {
@@ -83,6 +95,28 @@ export default {
       this.$refs.form.validate()
       const { email } = this;
       console.log(email + "logged in")
+    },
+    loginRequest() {
+      let v = this;
+
+      v.xhrRequest = true;
+      v.errorMessage = "";
+      v.successMessage = "";
+
+      firebase.auth().signInWithEmailAndPassword(v.email, v.password).then(
+          (result) => {
+            this.userData = result.user.multiFactor.user;
+            console.log(this.userData); 
+            localStorage.setItem("userData",this.userData);
+            this.$router.replace({ name: "Dashboard" });
+              // this.$router.replace('dashboard')
+              v.xhrRequest = false;
+          }, 
+          (error) => {
+              v.errorMessage = error.message;
+              v.xhrRequest = false;
+          }
+      )
     },
   },
 };
