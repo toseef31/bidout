@@ -5,7 +5,7 @@
        <v-col cols="12" md="3" class="left-sidebar pr-1">
           <LeftSidebar></LeftSidebar>
        </v-col>
-       <v-col cols="12" md="6" class="mid-content">
+       <v-col cols="12" md="6" class="mid-content pa-0 pa-sm-3">
           <div class="content-section">
             <div class="title-block">
               <h3 class="font-weight-bold">Active Bids</h3>
@@ -87,7 +87,8 @@
             </v-simple-table>
           </div>
           <div class="map-section">
-            <v-img :src="require('@/assets/images/dashboard/map.png')"></v-img>
+            <v-img :src="require('@/assets/images/dashboard/map.png')" class="d-none d-sm-block"></v-img>
+            <v-img :src="require('@/assets/images/dashboard/mapMobile.png')" class="d-block d-sm-none"></v-img>
           </div>
        </v-col>
        <v-col cols="12" md="3" class="pl-0">
@@ -113,6 +114,7 @@ export default {
   
   data() {
     return {
+      isActivity : false,
       bids: [
         {
           id: 10007,

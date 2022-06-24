@@ -1,6 +1,6 @@
 <template>
   <div>
-    <div class="activity-section mb-4">
+    <div class="activity-section desktop-section">
       <div class="title">
         <h3 class="font-weight-bold text-left">Activity</h3>
       </div>
@@ -45,7 +45,7 @@
     </div>    
     <div class="social-section pa-2">
       <v-row class="align-center">
-        <v-col cols="12" md="4" class="pr-0">
+        <v-col cols="6" md="4" class="pr-sm-0">
           <v-img :src="require('@/assets/images/dashboard/linkedin.png')" class="mb-2"></v-img>
           <h4 class="social-text text-left">Stay up to date!</h4>
         </v-col>
@@ -217,6 +217,11 @@ export default {
       line-height: 20px;
       color: #fff;
       width: 100%;
+    }
+  }
+  @media(max-width: 768px){
+    .desktop-section{
+      display: none;
     }
   }
 </style>

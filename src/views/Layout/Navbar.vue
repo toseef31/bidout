@@ -3,7 +3,7 @@
     <v-app-bar
         color="white"
         height="104"
-        class="d-none d-sm-block"
+        class="desktop-navbar"
       >
       <template>
         <v-app-bar-nav-icon></v-app-bar-nav-icon>
@@ -60,8 +60,6 @@
         </template>
         <v-spacer></v-spacer>
 
-        
-        
         <v-list>
           <v-list-item>
             <v-list-item-title class="mr-3">Aubrey  McClendon</v-list-item-title>
@@ -74,7 +72,7 @@
     <div
         color="white"
         height="104"
-        class="d-block d-sm-none"
+        class="mobile-navbar"
       >
         <div class="logo-top-bar">
           <template>
@@ -85,10 +83,11 @@
             ></v-img>
           </template>
           <template>
-            <v-btn>
-              v-icon
+            <v-btn class="menu-btn" @click="isMenu = !isMenu">
+              <v-icon>{{iconText}}</v-icon>
+               {{menuText}}<v-icon :class="{ 'active-icon': isMenu}">mdi-chevron-down</v-icon>
             </v-btn>
-            <div class="mobile-menu d-none">
+            <div class="mobile-menu" v-show="isMenu">
               <v-list
                 nav
                 dense
@@ -101,16 +100,73 @@
                   <v-list-item
                     v-for="(item, i) in itemss"
                     :key="i"
+                    class="mb-0" @click="getData(item)"
                   >
-                    <v-list-item-icon class="mr-6 mt-3">
+                    <v-list-item-icon class="mr-6 mt-3 d-none">
                       <v-icon v-text="item.icon"></v-icon>
                     </v-list-item-icon>
 
                     <v-list-item-content class="text-left py-1">
-                      <v-list-item-title class="font-weight-bold" v-text="item.text"></v-list-item-title>
+                      <v-list-item-title v-text="item.title"></v-list-item-title>
+                      <span class="msg-badge" v-if="i == 4">(2)</span>
                     </v-list-item-content>
                   </v-list-item>
                 </v-list-item-group>
+              </v-list>
+              <v-divider></v-divider>
+              <v-list>
+                <v-list-item-title class="sub-menu-title">Edit Corporate Profile</v-list-item-title>
+              </v-list>
+              <v-list
+                nav
+                dense
+                class="pa-0"
+              >
+                <v-list-item-group
+                  color="primary"
+                >
+                  <v-list-item
+                    class="mb-0"
+                  >
+                    <v-list-item-icon class="mr-6 mt-3 d-none">
+                      <v-icon></v-icon>
+                    </v-list-item-icon>
+                    <v-list-item-content class="text-left py-1">
+                      <v-list-item-title>Manage Users</v-list-item-title>
+                    </v-list-item-content>
+                  </v-list-item>
+                </v-list-item-group>
+              </v-list>
+              <v-list
+                nav
+                dense
+                class="pa-0"
+              >
+                <v-list-item-group
+                  color="primary"
+                >
+                  <v-list-item
+                    class="mb-0"
+                  >
+                    <v-list-item-icon class="mr-6 mt-3 d-none">
+                      <v-icon></v-icon>
+                    </v-list-item-icon>
+                    <v-list-item-content class="text-left py-1">
+                      <v-list-item-title>Manage Modules</v-list-item-title>
+                    </v-list-item-content>
+                  </v-list-item>
+                </v-list-item-group>
+              </v-list>
+              <v-divider></v-divider>
+              <v-list class="px-4" >
+                <v-list-item-title @click="getData(profileMenu)" class="text-left" v-text="profileMenu.title"></v-list-item-title>
+              </v-list>
+              <v-divider></v-divider>
+              <v-list class="px-4">
+                <v-list-item-title @click="getData(activityMenu)" class="text-left" v-text="activityMenu.title"></v-list-item-title>
+              </v-list>
+              <v-list class="px-4">
+                <v-list-item-title  @click="signout" class="text-left" >Logout</v-list-item-title>
               </v-list>
             </div>
           </template>
@@ -118,6 +174,7 @@
         <div class="menu-bottom-bar">
           <v-select
             :items="items"
+            v-model="select"
             success
             outlined 
             class="mb-0"
@@ -134,21 +191,26 @@ export default {
   data() {
     return {
       isHidden : false,
+      isMenu : false,
       isActive : false,
+      isActivity : false,
+      iconText: 'mdi-view-dashboard-outline',
+      menuText: 'Dashboard',
+      select: {text: 'Create a new Bid', icon: 'mdi-gavel'},
       items: [
         { text: 'Create a new Bid', icon: 'mdi-gavel' },
         { text: 'Create a new Shipment', icon: 'mdi-truck' },
       ],
       selectedItem: 0,
         itemss: [
-          { text: 'Dashboard', icon: 'mdi-view-dashboard-outline' },
-          { text: 'View Bids', icon: 'mdi-gavel' },
-          { text: 'View Shipments', icon: 'mdi-truck' },
-          { text: 'View OFS Suppliers', icon: 'mdi-tag-outline' },
-          { text: 'Messages', icon: 'mdi-email-outline' },
-          { text: "Browse Public RFx's", icon: 'mdi-compass-outline' },
-          { text: 'Manage Invoices', icon: 'mdi-calendar-text-outline' },
-          { text: 'Reporting', icon: 'mdi-note-multiple-outline' },
+          { title: 'Dashboard', icon: 'mdi-view-dashboard-outline' },
+          { title: 'View Bids', icon: 'mdi-gavel' },
+          { title: 'View Shipments', icon: 'mdi-truck' },
+          { title: 'View OFS Suppliers', icon: 'mdi-tag-outline' },
+          { title: 'Messages', icon: 'mdi-email-outline' },
+          { title: "Browse Public RFx's", icon: 'mdi-compass-outline' },
+          { title: 'Manage Invoices', icon: 'mdi-calendar-text-outline' },
+          { title: 'Reporting', icon: 'mdi-note-multiple-outline' },
         ],
         subitems: [
           {
@@ -161,11 +223,30 @@ export default {
             title: 'Edit Corporate Profile',
           },
         ],
+        profileMenu: { title: 'Profile', icon: 'mdi-account-outline' },
+        activityMenu: { title: 'Activity', icon: 'mdi-bell-outline' },
     };
   },
   methods: {
     openBox(){
       this.openmenu = true;
+    },
+    getData(data){
+      this.iconText = data.icon;
+      this.menuText = data.title;
+    },
+    signout() {
+      // alert("gdfgdf");
+      firebase
+        .auth()
+        .signOut()
+        .then((result) => {
+          // console.log(result);
+          localStorage.removeItem("userData");
+          this.$router.replace({
+            name: "Login"
+          });
+        });
     }
   },
 };
@@ -209,15 +290,93 @@ export default {
   border-right: 0;
   border-left: 0;
   
-  .v-input {
+  ::v-deep .v-input {
     height: 55px;
     background: #0d9648;
-    border: 1px solid #0d9648;
+    border: 0;
     color: #fff !important;
     caret-color:  #fff !important;
   }
-  .v-select__selection--comma{
+  ::v-deep .v-select__selection--comma{
     color: #fff !important;
+  }
+  ::v-deep .material-icons{
+    color: #fff !important;
+  }
+  ::v-deep .v-text-field__details{
+    display: none;
+  }
+  ::v-deep .v-select > .v-input__control > .v-input__slot{
+    margin-bottom: 0;
+  }
+}
+.mobile-navbar{
+  display: none;
+}
+@media (max-width: 768px) {
+  .desktop-navbar{
+    display: none;
+  }
+  .mobile-navbar{
+    display: block;
+  }
+  .logo-top-bar{
+    position: relative;
+    .menu-btn{
+      background: rgba(13, 150, 72, 0.1);
+      border-radius: 44px;
+      padding: 8px;
+      font-weight: 700;
+      font-size: 16px;
+      line-height: 20px;
+      color: #0D9648;
+      text-transform: capitalize;
+      box-shadow: none;
+      height: 44px;
+    }
+    .active-icon{
+      transform: rotate(180deg);
+    }
+  }
+  .mobile-menu{
+    position: absolute;
+    z-index: 9;
+    top: 66%;
+    right: 3%;
+    width: 250px;
+    background: rgb(237 237 237 / 80%);
+    filter: drop-shadow(0px 8px 64px rgba(0, 0, 0, 0.1));
+    backdrop-filter: blur(80px);
+    .v-sheet.v-list{
+      border-radius: 12px;
+      background: rgb(237 237 237 / 80%);
+      border-bottom: 1px solid #ddd;
+    }
+    .v-list--nav .v-list-item {
+      padding: 0 16px;
+      border-bottom: 1px solid #ddd;
+      min-height: 43px;
+    }
+    .msg-badge{
+      position: absolute;
+      left: 40%;
+    }
+    .v-list-item__title{
+      color: #000000;
+      font-size: 15px;
+      font-weight: 700;
+    }
+    .theme--light.v-divider{
+      border: 0;
+      height: 8px;
+      max-height: 8px;
+      border-color: rgba(0, 0, 0, 0.12);
+      background: linear-gradient(0deg, rgba(20, 20, 20, 0.15), rgba(20, 20, 20, 0.15)), rgba(255, 255, 255, 0.7);
+    }
+    .sub-menu-title{
+      color: rgba(60, 60, 67, 0.6);
+      font-size: 12px;
+    }
   }
 }
 </style>

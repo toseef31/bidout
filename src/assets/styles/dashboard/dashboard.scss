@@ -57,3 +57,16 @@
 .v-select__selection--comma{
 	color: #fff;
 }
+@media (max-width: 768px) {
+	.mid-content {
+		.content-section{
+			border: 0px;
+			padding: 0;
+		}
+		.map-section{
+			border: 0;
+			border-radius:0;
+		}
+	}
+}
+

@@ -1,5 +1,5 @@
 <template>
-  <div class="d-none d-sm-block">
+  <div class="desktop-view">
     <v-list
       nav
       dense
@@ -176,8 +176,11 @@ export default {
   .v-list-item{
     padding: 0 10px
   }
-  .v-list-item{
-    padding:  0 0px;
+  ::v-deep .v-list-item{
+    padding:  0 8px;
+  }
+  ::v-deep .v-list-item--active .v-icon {
+      color: #0d9648;
   }
   .v-list-group__items > .v-list-item{
     padding-left: 56px;
@@ -190,6 +193,12 @@ export default {
   }
   .v-list-group .v-list-group__header .v-list-item__icon.v-list-group__header__append-icon .material-icons{
     caret-color: red;
+  }
+
+}
+@media(max-width:  768px){
+  .desktop-view{
+    display: none;
   }
 }
 </style>

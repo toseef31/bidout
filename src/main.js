@@ -7,6 +7,7 @@ import vuetify from './plugins/vuetify';
 import firebase from 'firebase/compat/app';
 import 'firebase/compat/auth';
 import 'firebase/compat/firestore';
+import axios from 'axios';
 
 // Your web app's Firebase configuration
 var firebaseConfig = {
@@ -23,7 +24,9 @@ var firebaseConfig = {
 // Initialize Firebase
 firebase.initializeApp(firebaseConfig);
 
-Vue.use(Vuex);
+axios.defaults.baseURL = import.meta.env.VITE_API_BASE_URL;
+
+Vue.use(Vuex,axios);
 
 const stores = new Vuex.Store(
     {

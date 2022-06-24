@@ -6,6 +6,12 @@
             <div class="logo mb-15">
               <img :src="require('@/assets/images/logo.png')" width="100%">
             </div>
+            <v-alert type="error" v-if="errorMessage !== ''">
+              {{ errorMessage }}
+            </v-alert>
+            <v-alert type="success" v-if="successMessage !== ''">
+              {{ successMessage }}
+            </v-alert>
              <v-form @submit.prevent="forgetPassword" ref="form" class="login-form" v-model="valid"
               lazy-validation>
                <label class="font-weight-bold">Email</label> 
@@ -43,6 +49,7 @@
   import firebase from 'firebase/compat/app';
   import 'firebase/compat/auth';
   import 'firebase/compat/firestore';
+  import axios from 'axios';
 export default {
   name : "ForgotPassword",
   data() {
@@ -53,6 +60,8 @@ export default {
         v => !!v || 'E-mail is required',
         v => /.+@.+\..+/.test(v) || 'E-mail must be valid',
       ],
+      errorMessage: '',
+      successMessage: '',
     };
   },
   methods: {
@@ -62,17 +71,31 @@ export default {
       console.log(email + "logged in")
     },
     forgetPassword() {
-      firebase
-      .auth()
-      .sendPasswordResetEmail(this.email)
-      .then(() => {
-          alert('Check your registered email to reset the password!')
-          this.user = {   
-            email: ''
+
+      axios.post('/auth/sendPasswordResetEmail',{'email':this.email})
+         .then(responce => {
+          console.log(responce);
+          if(responce.status == 200){
+            this.successMessage = 'Email sent successfully! Please check your email';
           }
-      }).catch((error) => {
-        alert(error)
-      })
+          else{
+            this.errorMessage = 'Something wrong please try again';
+          }
+          
+         // this.singleChate = responce.data;
+        })
+
+      // firebase
+      // .auth()
+      // .sendPasswordResetEmail(this.email)
+      // .then(() => {
+      //     alert('Check your registered email to reset the password!')
+      //     this.user = {   
+      //       email: ''
+      //     }
+      // }).catch((error) => {
+      //   alert(error)
+      // })
     }
   },
 };
