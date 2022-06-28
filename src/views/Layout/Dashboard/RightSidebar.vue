@@ -234,7 +234,7 @@ export default {
       flex-direction: row;
       justify-content: space-between;
       align-items: center;
-      background: #0D1139;
+      background-color: #0D1139 !important;
       border-radius: 4px;
       text-transform: none;
       font-weight: 700;
