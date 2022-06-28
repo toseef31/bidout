@@ -93,7 +93,10 @@
 	color: #fff;
 }
 @media (max-width: 768px) {
+	
 	.mid-content {
+		flex: 0 0 100%;
+  	max-width: 100%;
 		.content-section{
 			border: 0px;
 			padding: 0;
@@ -106,12 +109,24 @@
 			border-radius:0;
 		}
 	}
+	.activity-section{
+		display: none;
+	}
 }
 
-@media (min-width: 768px) {
+@media (min-width: 769px) {
 	.right-col{
 		flex: 0 0 28%;
 	  max-width: 28%;
+	}
+	.left-sidebar{
+		background-color: #fff;
+		position: relative;
+		flex: 0 0 22%;
+  	max-width: 22%;
+	}
+	.mid-content{
+		display: block;
 	}
 }
 

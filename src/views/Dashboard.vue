@@ -5,7 +5,7 @@
        <v-col :class="[ showSideBar ? 'col-12' : 'toggleLeft-sidebar']" class="left-sidebar pr-1">
           <LeftSidebar></LeftSidebar>
        </v-col>
-       <v-col class="mid-content pa-0 pa-sm-3" :class="[ showSideBar ? 'col-md-6 col-12' : 'mid-content-collapse', activityPanel ? 'd-sm-block' : 'd-md-block']" v-show="!activityPanel">
+       <v-col class="mid-content pa-0 pa-sm-3" :class="[ showSideBar ? 'col-md-6 col-12 col-sm-7' : 'mid-content-collapse', activityPanel ? 'd-sm-block' : 'd-md-block']" v-show="!activityPanel">
           <div class="content-section">
             <div class="title-block">
               <h3 class="font-weight-bold">Active Bids</h3>
@@ -41,7 +41,7 @@
                     <td class="text-left">{{ bid.title }}</td>
                     <td class="text-left">{{ bid.entries }}</td>
                     <td class="text-left">{{ bid.endTime }}</td>
-                    <td class="text-left d-none d-sm-block">View Details</td>
+                    <td class="text-left d-none d-sm-block pt-3">View Details</td>
                     <td class="text-left d-flex d-sm-none align-center"><span class="icon-circle"><v-icon>mdi-chevron-right</v-icon></span></td>
                   </tr>
                 </tbody>
