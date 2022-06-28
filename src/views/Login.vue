@@ -108,6 +108,7 @@ export default {
             this.userData = result.user.multiFactor.user;
             console.log(this.userData); 
             localStorage.setItem("userData",this.userData);
+            localStorage.setItem("userId",this.userData.uid);
             this.$router.replace({ name: "Dashboard" });
               // this.$router.replace('dashboard')
               v.xhrRequest = false;

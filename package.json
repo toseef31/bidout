@@ -7,8 +7,12 @@
     "serve": "vite preview"
   },
   "dependencies": {
+    "@fawmi/vue-google-maps": "^0.9.72",
+    "@gravitano/vue2-google-maps": "^0.12.1",
     "axios": "^0.27.2",
     "firebase": "^9.8.3",
+    "google-maps": "^4.3.3",
+    "install": "^0.13.0",
     "material-design-icons": "^3.0.1",
     "vite-plugin-components": "^0.13.2",
     "vite-plugin-vue2": "^1.4.0",

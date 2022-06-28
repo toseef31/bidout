@@ -35,7 +35,7 @@
              </v-form>
           </div>
           <div class="bottom-section">
-            <a href="/login" class="center font-weight-bold font-lg text-decoration-none"> <v-icon large color="#0D1139">mdi-chevron-left</v-icon>    Back to Log In</a>
+            <a href="/login" class="center font-weight-bold font-lg text-decoration-none"> <v-icon large color="#0D1139">mdi-chevron-left</v-icon>    <span class="text-decoration-underline">Back to Log In</span></a>
           </div>
        </v-col>
        <v-col cols="12" md="6" class="right d-none d-md-block">
@@ -85,17 +85,6 @@ export default {
          // this.singleChate = responce.data;
         })
 
-      // firebase
-      // .auth()
-      // .sendPasswordResetEmail(this.email)
-      // .then(() => {
-      //     alert('Check your registered email to reset the password!')
-      //     this.user = {   
-      //       email: ''
-      //     }
-      // }).catch((error) => {
-      //   alert(error)
-      // })
     }
   },
 };

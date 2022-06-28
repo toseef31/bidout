@@ -6,7 +6,7 @@
         class="desktop-navbar"
       >
       <template>
-        <v-app-bar-nav-icon></v-app-bar-nav-icon>
+        <v-app-bar-nav-icon @click="toggleSideBar"></v-app-bar-nav-icon>
         </template>
         <template>
           <v-img
@@ -61,11 +61,13 @@
         <v-spacer></v-spacer>
 
         <v-list>
-          <v-list-item>
-            <v-list-item-title class="mr-3">Aubrey  McClendon</v-list-item-title>
-            <v-avatar>
-              <v-img :src="require('@/assets/images/user.png')"></v-img>
-            </v-avatar>
+          <v-list-item class="pr-0">
+            <a href="" class="d-flex text-decoration-none">
+              <v-list-item-title class="mr-3">Aubrey  McClendon</v-list-item-title>
+              <v-avatar>
+                <v-img :src="require('@/assets/images/user.png')"></v-img>
+              </v-avatar>
+            </a>
           </v-list-item>
         </v-list>
       </v-app-bar>
@@ -94,13 +96,12 @@
                 class="pa-0"
               >
                 <v-list-item-group
-                  v-model="selectedItem"
                   color="primary"
                 >
                   <v-list-item
                     v-for="(item, i) in itemss"
                     :key="i"
-                    class="mb-0" @click="getData(item)"
+                    class="mb-0" @click="getData(item); openDashboard(i)"
                   >
                     <v-list-item-icon class="mr-6 mt-3 d-none">
                       <v-icon v-text="item.icon"></v-icon>
@@ -163,7 +164,7 @@
               </v-list>
               <v-divider></v-divider>
               <v-list class="px-4">
-                <v-list-item-title @click="getData(activityMenu)" class="text-left" v-text="activityMenu.title"></v-list-item-title>
+                <v-list-item-title @click="getData(activityMenu); toggleActivityPanel();" class="text-left" v-text="activityMenu.title"></v-list-item-title>
               </v-list>
               <v-list class="px-4">
                 <v-list-item-title  @click="signout" class="text-left" >Logout</v-list-item-title>
@@ -171,7 +172,7 @@
             </div>
           </template>
         </div>
-        <div class="menu-bottom-bar">
+        <div class="menu-bottom-bar" :class="[ activityPanel ? 'd-none' : '']">
           <v-select
             :items="items"
             v-model="select"
@@ -199,18 +200,17 @@ export default {
       select: {text: 'Create a new Bid', icon: 'mdi-gavel'},
       items: [
         { text: 'Create a new Bid', icon: 'mdi-gavel' },
-        { text: 'Create a new Shipment', icon: 'mdi-truck' },
+        // { text: 'Create a new Shipment', icon: 'mdi-truck' },
       ],
-      selectedItem: 0,
         itemss: [
           { title: 'Dashboard', icon: 'mdi-view-dashboard-outline' },
           { title: 'View Bids', icon: 'mdi-gavel' },
-          { title: 'View Shipments', icon: 'mdi-truck' },
+          // { title: 'View Shipments', icon: 'mdi-truck' },
           { title: 'View OFS Suppliers', icon: 'mdi-tag-outline' },
           { title: 'Messages', icon: 'mdi-email-outline' },
-          { title: "Browse Public RFx's", icon: 'mdi-compass-outline' },
-          { title: 'Manage Invoices', icon: 'mdi-calendar-text-outline' },
-          { title: 'Reporting', icon: 'mdi-note-multiple-outline' },
+          // { title: "Browse Public RFx's", icon: 'mdi-compass-outline' },
+          // { title: 'Manage Invoices', icon: 'mdi-calendar-text-outline' },
+          // { title: 'Reporting', icon: 'mdi-note-multiple-outline' },
         ],
         subitems: [
           {
@@ -226,6 +226,11 @@ export default {
         profileMenu: { title: 'Profile', icon: 'mdi-account-outline' },
         activityMenu: { title: 'Activity', icon: 'mdi-bell-outline' },
     };
+  },
+  computed: {
+    activityPanel(){
+        return this.$store.getters.g_activityPanel;
+    }
   },
   methods: {
     openBox(){
@@ -247,6 +252,17 @@ export default {
             name: "Login"
           });
         });
+    },
+    toggleSideBar(){
+      this.$store.commit('toggleSideBar');
+    },
+    toggleActivityPanel(){
+      this.$store.commit('toggleActivityPanel');
+      this.isMenu = false;
+    },
+    openDashboard(index){
+      this.$store.commit('toggleActivityPanel');
+      this.isMenu = false;
     }
   },
 };
@@ -256,7 +272,7 @@ export default {
   box-shadow: none !important;
   .toggle-btn{
     position: relative;
-    width: 24%;
+    width: 18%;
     .active-btn{
       border-bottom-right-radius: 0;
       border-top-right-radius: 0;

@@ -8,7 +8,6 @@ import firebase from 'firebase/compat/app';
 import 'firebase/compat/auth';
 import 'firebase/compat/firestore';
 import axios from 'axios';
-
 // Your web app's Firebase configuration
 var firebaseConfig = {
   apiKey: import.meta.env.VITE_FIREBASE_API_KEY,
@@ -31,15 +30,35 @@ Vue.use(Vuex,axios);
 const stores = new Vuex.Store(
     {
         state: {
-            authenticated: false
+            authenticated: false,
+            sideBarOpen: true,
+            activityPanel: false
+        },
+        getters: {
+            g_sideBarOpen(state){
+                return state.sideBarOpen
+            },
+            g_activityPanel(state){
+                return state.activityPanel
+            }
         },
         mutations: {
             setAuthentication(state, status) {
                 state.authenticated = status;
+            },
+            toggleSideBar(state){
+                return state.sideBarOpen = !state.sideBarOpen;
+            },
+            toggleActivityPanel(state){
+                return state.activityPanel = !state.activityPanel;
+                return state.sideBarOpen = false;
             }
         }
     }
 );
+
+
+
 
 new Vue({
   vuetify,
