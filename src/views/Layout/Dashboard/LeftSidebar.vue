@@ -5,7 +5,7 @@
     <v-list
       nav
       dense
-      class="pa-0 main-menu"
+      class="pa-0 main-menu" href=""
     >
       <v-list-item-group
         v-model="selectedItem"
@@ -19,12 +19,13 @@
             <v-icon v-text="item.icon"></v-icon>
           </v-list-item-icon>
 
+            
           <v-list-item-content class="text-left py-1">
-            <v-list-item-title class="font-weight-bold" v-text="item.text" v-show="showSideBar"> 
-
-            </v-list-item-title>
+            <router-link :to="item.link" class="text-decoration-none"><v-list-item-title class="font-weight-bold" v-text="item.text" v-show="showSideBar"> 
+              
+            </v-list-item-title></router-link>
             <span class="badge" :class="[ showSideBar ? 'msg-badge' : 'mobile-badge']" v-if="i == 3"
-              >{{unreadMsgCount}}</span>
+              >{{showMsgCount}}</span>
           </v-list-item-content>
         </v-list-item>
       </v-list-item-group>
@@ -86,10 +87,7 @@
 </template>
 
 <script>
-import firebase from 'firebase/compat/app';
-import 'firebase/compat/auth';
-import 'firebase/compat/firestore';
-import axios from 'axios';
+import { mapActions } from "vuex";
 export default {
   name : "LeftSidebar",
   data() {
@@ -97,11 +95,11 @@ export default {
       selectedItem: 0,
       showSide : true,
         items: [
-          { id: 0, text: 'Dashboard', icon: 'mdi-view-dashboard-outline' },
-          { id: 1, text: 'View Bids', icon: 'mdi-gavel' },
+          { id: 0, text: 'Dashboard', icon: 'mdi-view-dashboard-outline', link: 'dashboard' },
+          { id: 1, text: 'View Bids', icon: 'mdi-gavel' , link: 'view-bids' },
           // { id: 2, text: 'View Shipments', icon: 'mdi-truck' },
-          { id: 3, text: 'View OFS Suppliers', icon: 'mdi-tag-outline' },
-          { id: 4, text: 'Messages', icon: 'mdi-email-outline' },
+          { id: 3, text: 'View OFS Suppliers', icon: 'mdi-tag-outline' , link: 'view-ofs-suppliers'},
+          { id: 4, text: 'Messages', icon: 'mdi-email-outline', link: 'chat' },
           // { id: 5, text: "Browse Public RFx's", icon: 'mdi-compass-outline' },
           // { id: 6, text: 'Manage Invoices', icon: 'mdi-calendar-text-outline' },
           // { id: 7, text: 'Reporting', icon: 'mdi-note-multiple-outline' },
@@ -125,27 +123,18 @@ export default {
   computed:{
     showSideBar(){
         return this.$store.getters.g_sideBarOpen;
+    },
+    showMsgCount(){
+        return this.$store.getters.unreadCount;
     }
   },
   methods: {
+    ...mapActions(["signOutAction","unreadMessagesCount"]),
     signout() {
-      // alert("gdfgdf");
-      firebase
-        .auth()
-        .signOut()
-        .then((result) => {
-          // console.log(result);
-          localStorage.removeItem("userData");
-          this.$router.replace({
-            name: "Login"
-          });
-        });
+      this.signOutAction();
     },
     getUnreadMessages() {
-      axios.post('/chat/countUnreadMessages',{'userId':this.userId})
-       .then(responce => {
-        this.unreadMsgCount = responce.data.totalUnreadMessages;
-      })
+      this.unreadMessagesCount({'userId':this.userId});
     }
   },
   mounted() {

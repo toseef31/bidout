@@ -68,6 +68,12 @@
 	  		.v-list-item{
 	  			height: 80px;
 	  			border-bottom: 1px solid #F1F1F1;
+	  			.v-list-item__avatar{
+	  				background: rgba(13, 150, 72, 0.08);
+	  				.v-icon{
+	  					color: #0d9648;
+	  				}
+	  			}
 	  		}
 	  		.v-list-item__content{
 	  			text-align: left;
@@ -201,6 +207,10 @@
 	  	}
   	}
   }
+}
+.mid-content-collapse{
+		flex: 0 0 95%;
+	  max-width: 95%;
 }
 @media (max-width: 768px) {
 	.mid-content {

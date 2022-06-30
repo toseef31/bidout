@@ -6,11 +6,11 @@
             <div class="logo mb-15">
               <img :src="require('@/assets/images/logo.png')" width="100%">
             </div>
-            <v-alert type="error" v-if="errorMessage !== ''">
-              {{ errorMessage }}
+            <v-alert type="error" v-if="emailError !== null">
+              {{ emailError }}
             </v-alert>
-            <v-alert type="success" v-if="successMessage !== ''">
-              {{ successMessage }}
+            <v-alert type="success" v-if="emailSucess !== null">
+              {{ emailSucess }}
             </v-alert>
              <v-form @submit.prevent="forgetPassword" ref="form" class="login-form" v-model="valid"
               lazy-validation>
@@ -46,10 +46,7 @@
 </template>
 
 <script>
-  import firebase from 'firebase/compat/app';
-  import 'firebase/compat/auth';
-  import 'firebase/compat/firestore';
-  import axios from 'axios';
+  import { mapActions } from "vuex";
 export default {
   name : "ForgotPassword",
   data() {
@@ -64,27 +61,23 @@ export default {
       successMessage: '',
     };
   },
+  computed: {
+    emailError () {
+      return this.$store.getters.errorMessage
+    },
+    emailSucess () {
+      return this.$store.getters.successMessage
+    },
+  },
   methods: {
+    ...mapActions(["forgotEmail"]),
     reset() {
       this.$refs.form.validate();
       const { email } = this;
       console.log(email + "logged in")
     },
     forgetPassword() {
-
-      axios.post('/auth/sendPasswordResetEmail',{'email':this.email})
-         .then(responce => {
-          console.log(responce);
-          if(responce.status == 200){
-            this.successMessage = 'Email sent successfully! Please check your email';
-          }
-          else{
-            this.errorMessage = 'Something wrong please try again';
-          }
-          
-         // this.singleChate = responce.data;
-        })
-
+      this.forgotEmail({ 'email': this.email});
     }
   },
 };
