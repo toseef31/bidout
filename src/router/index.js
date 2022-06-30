@@ -1,23 +1,16 @@
 import Vue from 'vue';
 import VueRouter from 'vue-router';
 import Base from '@/views/Layout/Base.vue';
+import AuthRoutes from '@/router/auth'
+import Dashboard from '@/router/dashboard'
+import store from '@/store';
 
 Vue.use(VueRouter);
 
-const routes = [
-  {
-    path: '',
-    component: Base,
-    meta: { requiresAuth: true },
-    children: [
-      {
-        path: '/',
-        name: 'Home',
-        component: () => import('@/views/Home.vue'),
-      },
-    ],
-  },
-];
+var allRoutes = []
+allRoutes = allRoutes.concat(AuthRoutes, Dashboard)
+
+const routes = allRoutes
 
 const router = new VueRouter({
   mode: 'history',
