@@ -107,7 +107,7 @@
   import Navbar from './Layout/Navbar.vue'
   import LeftSidebar from './Layout/Dashboard/LeftSidebar.vue'
   import RightSidebar from './Layout/Dashboard/RightSidebar.vue'
-  import axios from 'axios'
+  import { mapActions } from "vuex";
 export default {
   name : "Dashboard",
   components: {
@@ -158,13 +158,14 @@ export default {
     activityPanel(){
         return this.$store.getters.g_activityPanel;
     },
+    allbids(){
+        return this.$store.getters.bids;
+    }
   },
   methods: {
+    ...mapActions(["getAllBids"]),
     getBids(){
-      axios.get('/admin/getBids')
-       .then(responce => {
-        console.log(responce);
-      })
+      this.getAllBids();
     },
     shipMap(){
       this.mapOptions = {

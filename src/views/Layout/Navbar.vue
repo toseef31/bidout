@@ -242,26 +242,17 @@ export default {
     },
     signout() {
       // alert("gdfgdf");
-      firebase
-        .auth()
-        .signOut()
-        .then((result) => {
-          // console.log(result);
-          localStorage.removeItem("userData");
-          this.$router.replace({
-            name: "Login"
-          });
-        });
+      this.$store.dispatch('signOutAction')
     },
     toggleSideBar(){
-      this.$store.commit('toggleSideBar');
+      this.$store.dispatch('toggleSideMenu');
     },
     toggleActivityPanel(){
-      this.$store.commit('toggleActivityPanel');
+      this.$store.dispatch('activityPanel');
       this.isMenu = false;
     },
     openDashboard(index){
-      this.$store.commit('toggleActivityPanel');
+      this.$store.dispatch('activityPanel');
       this.isMenu = false;
     }
   },

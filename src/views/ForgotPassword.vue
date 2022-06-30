@@ -6,11 +6,11 @@
             <div class="logo mb-15">
               <img :src="require('@/assets/images/logo.png')" width="100%">
             </div>
-            <v-alert type="error" v-if="errorMessage !== ''">
-              {{ errorMessage }}
+            <v-alert type="error" v-if="emailError !== null">
+              {{ emailError }}
             </v-alert>
-            <v-alert type="success" v-if="successMessage !== ''">
-              {{ successMessage }}
+            <v-alert type="success" v-if="emailSucess !== null">
+              {{ emailSucess }}
             </v-alert>
              <v-form @submit.prevent="forgetPassword" ref="form" class="login-form" v-model="valid"
               lazy-validation>
@@ -35,7 +35,7 @@
              </v-form>
           </div>
           <div class="bottom-section">
-            <a href="/login" class="center font-weight-bold font-lg text-decoration-none"> <v-icon large color="#0D1139">mdi-chevron-left</v-icon>    <span class="text-decoration-underline">Back to Log In</span></a>
+            <router-link to="/login" class="center font-weight-bold font-lg text-decoration-none"><v-icon large color="#0D1139">mdi-chevron-left</v-icon> <span class="text-decoration-underline">Back to Log In</span></router-link>
           </div>
        </v-col>
        <v-col cols="12" md="6" class="right d-none d-md-block">
@@ -46,10 +46,7 @@
 </template>
 
 <script>
-  import firebase from 'firebase/compat/app';
-  import 'firebase/compat/auth';
-  import 'firebase/compat/firestore';
-  import axios from 'axios';
+  import { mapActions } from "vuex";
 export default {
   name : "ForgotPassword",
   data() {
@@ -64,7 +61,16 @@ export default {
       successMessage: '',
     };
   },
+  computed: {
+    emailError () {
+      return this.$store.getters.errorMessage
+    },
+    emailSucess () {
+      return this.$store.getters.successMessage
+    },
+  },
   methods: {
+    ...mapActions(["forgotEmail"]),
     reset() {
       this.$refs.form.validate();
       const { email } = this;
@@ -72,19 +78,7 @@ export default {
     },
     forgetPassword() {
 
-      axios.post('/auth/sendPasswordResetEmail',{'email':this.email})
-         .then(responce => {
-          console.log(responce);
-          if(responce.status == 200){
-            this.successMessage = 'Email sent successfully! Please check your email';
-          }
-          else{
-            this.errorMessage = 'Something wrong please try again';
-          }
-          
-         // this.singleChate = responce.data;
-        })
-
+      this.forgotEmail({ 'email': this.email});
     }
   },
 };

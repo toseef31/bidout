@@ -6,8 +6,8 @@
             <div class="logo mb-15">
               <img :src="require('@/assets/images/logo.png')" width="100%">
             </div> 
-            <v-alert type="error" v-if="errorMessage !== ''">
-              {{ errorMessage }}
+            <v-alert type="error" v-if="logInError !== null">
+              {{ logInError }}
             </v-alert>
             <v-alert type="success" v-if="successMessage !== ''">
               {{ successMessage }}
@@ -44,7 +44,7 @@
                     v-slot="{ hover }"
                     open-delay="200"
                   >
-                 <a href="/forgot-password" class="ml-3 font-weight-medium">Forgot password?</a> </v-hover>
+                 <router-link to="/forgot-password" class="ml-3 font-weight-medium">Forgot password?</router-link> </v-hover>
                <div class="text-center mt-8">
                  <v-btn class="signin-btn rounded-lg font-weight-bold text-capitalize" type="submit" color="success" :disabled="!valid" @click="login">
                    Submit
@@ -54,7 +54,7 @@
              </v-form>
           </div>
           <div class="bottom-section">
-            <p class="center font-weight-bold">Don't have account yet? <a href="">Join BidOut</a></p>
+            <p class="center font-weight-bold">Don't have account yet? <router-link to="">Join BidOut</router-link></p>
           </div>
        </v-col>
        <v-col cols="12" md="6" class="right d-none d-md-block">
@@ -65,9 +65,7 @@
 </template>
 
 <script>
-import firebase from 'firebase/compat/app';
-import 'firebase/compat/auth';
-import 'firebase/compat/firestore';
+import { mapActions } from "vuex";
 export default {
   name : "Login",
   data() {
@@ -90,34 +88,20 @@ export default {
       userData: ""
     };
   },
+  computed: {
+    logInError () {
+      return this.$store.getters.error
+    }
+  },
   methods: {
+    ...mapActions(["signInAction"]),
     login() {
       this.$refs.form.validate()
       const { email } = this;
       console.log(email + "logged in")
     },
     loginRequest() {
-      let v = this;
-
-      v.xhrRequest = true;
-      v.errorMessage = "";
-      v.successMessage = "";
-
-      firebase.auth().signInWithEmailAndPassword(v.email, v.password).then(
-          (result) => {
-            this.userData = result.user.multiFactor.user;
-            console.log(this.userData); 
-            localStorage.setItem("userData",this.userData);
-            localStorage.setItem("userId",this.userData.uid);
-            this.$router.replace({ name: "Dashboard" });
-              // this.$router.replace('dashboard')
-              v.xhrRequest = false;
-          }, 
-          (error) => {
-              v.errorMessage = error.message;
-              v.xhrRequest = false;
-          }
-      )
+      this.signInAction({ email: this.email, password: this.password });
     },
   },
 };
