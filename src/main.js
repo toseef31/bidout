@@ -1,8 +1,8 @@
 import Vue from 'vue';
 import App from './App.vue';
 import router from './router';
-// import store from './store';
 import Vuex from "vuex"
+import store from './store/store';
 import vuetify from './plugins/vuetify';
 import firebase from 'firebase/compat/app';
 import 'firebase/compat/auth';
@@ -27,42 +27,9 @@ axios.defaults.baseURL = import.meta.env.VITE_API_BASE_URL;
 
 Vue.use(Vuex,axios);
 
-const stores = new Vuex.Store(
-    {
-        state: {
-            authenticated: false,
-            sideBarOpen: true,
-            activityPanel: false
-        },
-        getters: {
-            g_sideBarOpen(state){
-                return state.sideBarOpen
-            },
-            g_activityPanel(state){
-                return state.activityPanel
-            }
-        },
-        mutations: {
-            setAuthentication(state, status) {
-                state.authenticated = status;
-            },
-            toggleSideBar(state){
-                return state.sideBarOpen = !state.sideBarOpen;
-            },
-            toggleActivityPanel(state){
-                return state.activityPanel = !state.activityPanel;
-                return state.sideBarOpen = false;
-            }
-        }
-    }
-);
-
-
-
-
 new Vue({
   vuetify,
   router,
-  store : stores,
+  store ,
   render: (h) => h(App),
 }).$mount('#app');

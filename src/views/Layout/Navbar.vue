@@ -254,14 +254,14 @@ export default {
         });
     },
     toggleSideBar(){
-      this.$store.commit('toggleSideBar');
+      this.$store.dispatch('toggleSideMenu');
     },
     toggleActivityPanel(){
-      this.$store.commit('toggleActivityPanel');
+      this.$store.dispatch('activityPanel');
       this.isMenu = false;
     },
     openDashboard(index){
-      this.$store.commit('toggleActivityPanel');
+      this.$store.dispatch('activityPanel');
       this.isMenu = false;
     }
   },

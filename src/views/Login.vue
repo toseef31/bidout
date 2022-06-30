@@ -44,7 +44,7 @@
                     v-slot="{ hover }"
                     open-delay="200"
                   >
-                 <a href="/forgot-password" class="ml-3 font-weight-medium">Forgot password?</a> </v-hover>
+                 <router-link to="/forgot-password" class="ml-3 font-weight-medium">Forgot password?</router-link> </v-hover>
                <div class="text-center mt-8">
                  <v-btn class="signin-btn rounded-lg font-weight-bold text-capitalize" type="submit" color="success" :disabled="!valid" @click="login">
                    Submit
@@ -54,7 +54,7 @@
              </v-form>
           </div>
           <div class="bottom-section">
-            <p class="center font-weight-bold">Don't have account yet? <a href="">Join BidOut</a></p>
+            <p class="center font-weight-bold">Don't have account yet? <router-link to="">Join BidOut</router-link></p>
           </div>
        </v-col>
        <v-col cols="12" md="6" class="right d-none d-md-block">

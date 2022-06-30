@@ -35,7 +35,7 @@
              </v-form>
           </div>
           <div class="bottom-section">
-            <a href="/login" class="center font-weight-bold font-lg text-decoration-none"> <v-icon large color="#0D1139">mdi-chevron-left</v-icon>    <span class="text-decoration-underline">Back to Log In</span></a>
+            <router-link to="/login" class="center font-weight-bold font-lg text-decoration-none"><v-icon large color="#0D1139">mdi-chevron-left</v-icon> <span class="text-decoration-underline">Back to Log In</span></router-link>
           </div>
        </v-col>
        <v-col cols="12" md="6" class="right d-none d-md-block">
