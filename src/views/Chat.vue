@@ -23,13 +23,7 @@
                       </template>
                       <template v-slot:append>
                         <v-fade-transition leave-absolute>
-                          <v-progress-circular
-                            v-if="loading"
-                            size="24"
-                            color="info"
-                            indeterminate
-                          ></v-progress-circular>
-                          <span class="icon-box"  v-else>
+                          <span class="icon-box">
                             <v-icon>mdi-plus</v-icon>
                           </span>
                         </v-fade-transition>
