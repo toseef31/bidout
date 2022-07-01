@@ -108,7 +108,7 @@
                     </v-list-item-icon>
 
                     <v-list-item-content class="text-left py-1">
-                      <v-list-item-title v-text="item.title"></v-list-item-title>
+                      <router-link :to="item.link" class="text-decoration-none"><v-list-item-title v-text="item.title"></v-list-item-title></router-link>
                       <span class="msg-badge" v-if="i == 4">(2)</span>
                     </v-list-item-content>
                   </v-list-item>
@@ -133,7 +133,7 @@
                       <v-icon></v-icon>
                     </v-list-item-icon>
                     <v-list-item-content class="text-left py-1">
-                      <v-list-item-title>Manage Users</v-list-item-title>
+                      <router-link to="/manage-users" class="text-decoration-none"><v-list-item-title @click="getData(manageUser)">Manage Users</v-list-item-title></router-link>
                     </v-list-item-content>
                   </v-list-item>
                 </v-list-item-group>
@@ -203,11 +203,11 @@ export default {
         // { text: 'Create a new Shipment', icon: 'mdi-truck' },
       ],
         itemss: [
-          { title: 'Dashboard', icon: 'mdi-view-dashboard-outline' },
-          { title: 'View Bids', icon: 'mdi-gavel' },
+          { title: 'Dashboard', icon: 'mdi-view-dashboard-outline', link: 'dashboard' },
+          { title: 'View Bids', icon: 'mdi-gavel', link: 'view-bids' },
           // { title: 'View Shipments', icon: 'mdi-truck' },
-          { title: 'View OFS Suppliers', icon: 'mdi-tag-outline' },
-          { title: 'Messages', icon: 'mdi-email-outline' },
+          { title: 'View OFS Suppliers', icon: 'mdi-tag-outline', link:'view-ofs-suppliers' },
+          { title: 'Messages', icon: 'mdi-email-outline', link: 'chat' },
           // { title: "Browse Public RFx's", icon: 'mdi-compass-outline' },
           // { title: 'Manage Invoices', icon: 'mdi-calendar-text-outline' },
           // { title: 'Reporting', icon: 'mdi-note-multiple-outline' },
@@ -217,12 +217,14 @@ export default {
             action: 'mdi-clipboard-account-outline',
             active: true,
             items: [
-              { title: 'Manage Users' },
-              { title: 'Manage Module' },
+              { title: 'Manage Users', link: 'manage-users' },
+              { title: 'Manage Module', link: 'manage-module' },
             ],
             title: 'Edit Corporate Profile',
           },
         ],
+        manageUser: { title: 'Manage Users', icon: 'mdi-account-outline' },
+        manageModule: { title: 'Manage Module', icon: 'mdi-cog-outline' },
         profileMenu: { title: 'Profile', icon: 'mdi-account-outline' },
         activityMenu: { title: 'Activity', icon: 'mdi-bell-outline' },
     };

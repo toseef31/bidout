@@ -1,0 +1,135 @@
+.section-container{
+	background: #FBFBFB;
+}
+/*.left-sidebar{
+	background-color: #fff;
+	position: relative;
+	flex: 0 0 22%;
+	max-width: 22%;
+	height: 94vh;
+}*/
+.toggleLeft-sidebar{
+	flex: 0 0 5% !important;
+  max-width: 5% !important;
+  ::v-deep .v-list-group .v-list-group__header .v-list-item__icon.v-list-group__header__append-icon{
+  	margin-left: -22px;
+  	min-width: 0px;
+  }
+  .sub-menu-item {
+  	.v-list-group__items > .v-list-item{
+	    padding-left: 59px;
+	  }
+  }
+
+}
+.mid-content{
+	flex: 0 0 78%;
+  max-width: 78%;
+  .content-section{
+  	background: #FFFFFF;
+  	border: 1px solid #B8B8B8;
+  	border-radius: 8px;
+  	margin-bottom: 20px;
+  	padding: 10px 4px;
+  	height: calc(88vh - 20px);
+  	.manage-sections{
+  		.top-section{
+  			justify-content: space-between;
+  			align-items: center;
+  			h4{
+  				font-weight: 700;
+  				font-size: 24px;
+  				line-height: 30px;
+  				color: #0D1139;
+  			}
+  			v-btn{
+  				background: #0D9648;
+					border-radius: 8px;
+  			}
+  		}
+  		.userlist-table{
+  			table {
+  				thead{
+  					tr{
+  						th{
+  							border: 0;
+								font-size: 18px;
+  						}
+  					}
+  				}
+  				tbody{
+  					tr{
+  						background: #FBFBFB;
+  						td{
+  							color: #201B1B;
+  							font-size: 15px;
+  							border: 0;
+  							.v-btn{
+  								font-weight: 500;
+  								font-size: 14px;
+  								line-height: 20px;
+  								:hover{
+  									background: transparent;
+  								}
+  							}
+								.v-btn:first-child{
+									color: #0D9648;
+								}
+								.v-btn:last-child{
+									color: #F32349;
+								}
+  						}
+  					}
+  				}
+  			}
+  		}
+  	}
+  }
+}
+.mid-content-collapse{
+		flex: 0 0 95%;
+	  max-width: 95%;
+}
+@media (max-width: 768px) {
+	.mid-content {
+		flex: 0 0 100%;
+  	max-width: 100%;
+		.content-section{
+			border: 0px;
+			padding: 0;
+  		.userlist-table{
+  			table {
+  				thead{
+  					tr{
+  						th{
+								font-size: 16px !important;
+  						}
+  					}
+  				}
+  			}
+  		}
+		}
+	}
+	.activity-section{
+		display: none;
+	}
+}
+@media (min-width: 768px) {
+	.right-col{
+		display: none;
+	}
+}
+
+@media (min-width: 769px) {
+	.left-sidebar{
+		background-color: #fff;
+		position: relative;
+		flex: 0 0 22%;
+  	max-width: 22%;
+  	height: 94vh;
+	}
+	.mid-content{
+		
+	}
+	
+}

@@ -91,8 +91,6 @@
             <!-- <v-img :src="require('@/assets/images/dashboard/map.png')" class="d-none d-sm-block"></v-img>
             <v-img :src="require('@/assets/images/dashboard/mapMobile.png')" class="d-block d-sm-none"></v-img> -->
             <div id="map" class="map" height="400px"></div>
-            <GmapMarker ref="myMarker"
-                :position="google && new google.maps.LatLng(1.38, 103.8)" />
           </div>
        </v-col>
        <v-col cols="12" class="pl-0 right-col" :class="[ activityPanel ? '' : 'mobile-right-col']" >
