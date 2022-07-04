@@ -9,12 +9,12 @@
         <v-app-bar-nav-icon @click="toggleSideBar"></v-app-bar-nav-icon>
         </template>
         <template>
-          <v-img
+          <router-link to="/dashboard"><v-img
           max-height="150"
           max-width="150"
             :src="require('@/assets/images/logo.png')"
             class="ml-3"
-          ></v-img>
+          ></v-img></router-link>
         </template>
         <template>
           <div class="toggle-btn">

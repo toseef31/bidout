@@ -168,7 +168,7 @@ export default {
     shipMap(){
       this.mapOptions = {
         center: new google.maps.LatLng(29.721085, -95.342049),
-        zoom: 10,
+        zoom: 18,
         mapTypeId: 'terrain',
         mapTypeControl: false,
         scaleControl: false,

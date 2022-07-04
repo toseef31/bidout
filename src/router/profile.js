@@ -31,6 +31,18 @@ const routes = [
            }
        }
       },
+      {
+        path: '/manage-module',
+        name: 'ManageModules',
+        component: () => import('@/views/ManageModule.vue'),
+        beforeEnter: (to, from, next) => {
+           if(localStorage.getItem("userData") == null) {
+               next('/login');
+           } else {
+               next();
+           }
+       }
+      },
     ],
   },
 ];

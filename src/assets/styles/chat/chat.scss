@@ -29,7 +29,7 @@
   	background: #FFFFFF;
   	border: 1px solid #B8B8B8;
   	border-radius: 8px;
-  	margin-bottom: 20px;
+  	margin-bottom: 0px;
   	padding: 10px 4px;
   	.userCol{
   		padding: 9px 0 9px 9px;
@@ -165,6 +165,7 @@
 	    }
   	}
   	.messages-section{
+  		height: calc(63vh - 11px);
   		.own-user{
   			background: #FBFBFB;
   		}
@@ -232,7 +233,7 @@
 			}
 		}
 		.messages-section{
-			height: calc(66vh - 11px);
+			height: calc(63vh - 11px);
 			overflow: auto;
 		}
 	}
@@ -246,14 +247,14 @@
 		position: relative;
 		flex: 0 0 22%;
   	max-width: 22%;
-  	height: 94vh;
+  	height: 88vh;
 	}
 	.mid-content{
 		.userCol{
 			height: calc(89vh - 16px);
 		}
 		.messages-section{
-			height: calc(66vh - 11px);
+			height: calc(63vh - 11px);
 			overflow: auto;
 		}
 	}

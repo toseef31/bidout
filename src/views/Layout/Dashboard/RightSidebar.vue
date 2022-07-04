@@ -50,7 +50,7 @@
           <h4 class="social-text text-left">Stay up to date!</h4>
         </v-col>
         <v-col cols="12" md="8">
-          <v-btn class="follow-btn pa-2">Follow us on LinkedIn 
+          <v-btn class="follow-btn pa-2 white--text" href="https://www.linkedin.com/company/bidout">Follow us on LinkedIn 
               <v-icon>mdi-chevron-right</v-icon>
           </v-btn> 
         </v-col>
@@ -69,7 +69,7 @@
             <h4 class="social-text text-left">Stay up to date!</h4>
           </v-col>
           <v-col cols="8">
-            <v-btn class="follow-btn pa-2">Follow us on LinkedIn 
+            <v-btn class="follow-btn pa-2 white--text" href="https://www.linkedin.com/company/bidout">Follow us on LinkedIn 
                 <v-icon>mdi-chevron-right</v-icon>
             </v-btn> 
           </v-col>
@@ -148,11 +148,6 @@ export default {
            action: '1d',
            title: 'Your bid Water Job was created.',
            icon: 'mdi-check'
-         },
-         {
-           action: '1d',
-           title: 'Peter sent you new messages.',
-           icon: 'mdi-email-outline'
          },
        ],
     };
