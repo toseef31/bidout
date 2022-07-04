@@ -8,6 +8,18 @@ const routes = [
     meta: { requiresAuth: true },
     children: [
       {
+        path: '/edit-profile',
+        name: 'EditProfile',
+        component: () => import('@/views/EditProfile.vue'),
+        beforeEnter: (to, from, next) => {
+           if(localStorage.getItem("userData") == null) {
+               next('/login');
+           } else {
+               next();
+           }
+       }
+      },
+      {
         path: '/manage-users',
         name: 'ManageUsers',
         component: () => import('@/views/ManageUsers.vue'),

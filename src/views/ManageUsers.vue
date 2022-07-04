@@ -124,5 +124,5 @@ export default {
 };
 </script>
 <style scoped lang="scss">
-@import '@/assets/styles/profile/profile.scss';
+@import '@/assets/styles/profile/manageUsers.scss';
 </style>

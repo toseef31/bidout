@@ -142,6 +142,18 @@ export default {
           entries: 0,
           endTime: '-',
         },
+        {
+          id: 10010,
+          title: 'Water Job',
+          entries: 0,
+          endTime: '-',
+        },
+        {
+          id: 10010,
+          title: 'Water Job',
+          entries: 0,
+          endTime: '-',
+        },
       ],
       bidss:{},
       mapOptions: {},

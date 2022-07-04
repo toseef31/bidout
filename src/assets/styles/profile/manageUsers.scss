@@ -34,17 +34,54 @@
   	height: calc(88vh - 20px);
   	.manage-sections{
   		.top-section{
-  			justify-content: center;
+  			justify-content: space-between;
   			align-items: center;
-  			.admin-tag{
-  				box-shadow: none;
-  				color: #0D9648;
-  				border-radius: 0px 0px 8px 8px;
-  				margin-top: 2px;
+  			h4{
+  				font-weight: 700;
+  				font-size: 24px;
+  				line-height: 30px;
+  				color: #0D1139;
+  			}
+  			v-btn{
+  				background: #0D9648;
+					border-radius: 8px;
   			}
   		}
-  		.module-content{
-  			
+  		.userlist-table{
+  			table {
+  				thead{
+  					tr{
+  						th{
+  							border: 0;
+								font-size: 18px;
+  						}
+  					}
+  				}
+  				tbody{
+  					tr{
+  						background: #FBFBFB;
+  						td{
+  							color: #201B1B;
+  							font-size: 15px;
+  							border: 0;
+  							.v-btn{
+  								font-weight: 500;
+  								font-size: 14px;
+  								line-height: 20px;
+  								:hover{
+  									background: transparent;
+  								}
+  							}
+								.v-btn:first-child{
+									color: #0D9648;
+								}
+								.v-btn:last-child{
+									color: #F32349;
+								}
+  						}
+  					}
+  				}
+  			}
   		}
   	}
   }
@@ -60,14 +97,17 @@
 		.content-section{
 			border: 0px;
 			padding: 0;
-			.manage-sections{
-				padding: 8px !important;
-				.top-section{
-					display: block !important;
-				}
-				.module-content{
-				}
-			}
+  		.userlist-table{
+  			table {
+  				thead{
+  					tr{
+  						th{
+								font-size: 16px !important;
+  						}
+  					}
+  				}
+  			}
+  		}
 		}
 	}
 	.activity-section{

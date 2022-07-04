@@ -12,7 +12,7 @@
                 <div class="manage-sections pa-4">
                   <div class="top-section d-flex">
                     <h4>Manage Modules</h4>
-                    <div>
+                    <div class="tabs-head">
                       <template>
                         <v-tabs
                           v-model="tab"
@@ -30,15 +30,70 @@
                       </template>
                     </div>
                   </div>
-                  <div class="userlist-table mt-16">
+                  <div class="module-content mt-16">
                     <v-tabs-items v-model="tab">
-                      <v-tab-item
-                        v-for="item in items"
-                        :key="item"
-                      >
-                        <v-card flat>
-                          <v-card-text v-text="text"></v-card-text>
-                        </v-card>
+                      <v-tab-item>
+
+                        <v-expansion-panels>
+                          <v-expansion-panel>
+                            <v-expansion-panel-header>
+                              <template v-slot:actions>
+                                <v-icon>
+                                  $expand
+                                </v-icon>
+                              </template>
+                              <h6>BidOut Procurement Platform</h6>
+                              <div class="btn-section">
+                                <a href="" class="text-decoration-none text-right toggle-btn" max-width="150px"><v-icon>mdi-bookmark-outline</v-icon>Upgrade to Enterpise</a>
+                                <a href="" class="text-decoration-none text-right contract-btn" max-width="150px"><v-icon>mdi-file-outline</v-icon>View Contract</a>
+                              </div>
+                            </v-expansion-panel-header>
+                            <v-expansion-panel-content>
+                              <p class="mb-1 black--text">Renewal Date: 07/12/2023</p>
+                              <p class="black--text">Annual Fee: $900</p>
+                            </v-expansion-panel-content>
+                          </v-expansion-panel>
+                        </v-expansion-panels>
+                        <v-expansion-panels>
+                          <v-expansion-panel>
+                            <v-expansion-panel-header>
+                              <template v-slot:actions>
+                                <v-icon>
+                                  $expand
+                                </v-icon>
+                              </template>
+                              <h6>OFS Directory Profile</h6>
+                              <div class="btn-section">
+                                <a href="" class="text-decoration-none text-right toggle-btn" max-width="150px"><v-icon>mdi-bookmark-outline</v-icon>Upgrade to Enterpise</a>
+                                <a href="" class="text-decoration-none text-right contract-btn" max-width="150px"><v-icon>mdi-file-outline</v-icon>View Contract</a>
+                              </div>
+                            </v-expansion-panel-header>
+                            <v-expansion-panel-content>
+                              <p class="mb-1 black--text">Renewal Date: 07/12/2023</p>
+                              <p class="black--text">Annual Fee: $900</p>
+                            </v-expansion-panel-content>
+                          </v-expansion-panel>
+                        </v-expansion-panels>
+                        <v-expansion-panels>
+                          <v-expansion-panel>
+                            <v-expansion-panel-header>
+                              <template v-slot:actions>
+                                <v-icon>
+                                  $expand
+                                </v-icon>
+                              </template>
+                              <h6>BidOut Procurement Platform</h6>
+                              <div class="btn-section">
+                                <a href="" class="text-decoration-none text-right toggle-btn" max-width="150px"><v-icon>mdi-bookmark-outline</v-icon>Upgrade to Enterpise</a>
+                                <a href="" class="text-decoration-none text-right contract-btn" max-width="150px"><v-icon>mdi-file-outline</v-icon>View Contract</a>
+                              </div>
+                            </v-expansion-panel-header>
+                            <v-expansion-panel-content>
+                              <p class="mb-1 black--text">Renewal Date: 07/12/2023</p>
+                              <p class="black--text">Annual Fee: $900</p>
+                            </v-expansion-panel-content>
+                          </v-expansion-panel>
+                        </v-expansion-panels>
                       </v-tab-item>
                     </v-tabs-items>
                   </div>
@@ -95,5 +150,5 @@ export default {
 };
 </script>
 <style scoped lang="scss">
-@import '@/assets/styles/profile/profile.scss';
+@import '@/assets/styles/profile/manageModule.scss';
 </style>

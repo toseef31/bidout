@@ -62,12 +62,12 @@
 
         <v-list>
           <v-list-item class="pr-0">
-            <a href="" class="d-flex text-decoration-none">
+            <router-link to="/edit-profile" class="d-flex text-decoration-none">
               <v-list-item-title class="mr-3">Aubrey  McClendon</v-list-item-title>
               <v-avatar>
                 <v-img :src="require('@/assets/images/user.png')"></v-img>
               </v-avatar>
-            </a>
+            </router-link>
           </v-list-item>
         </v-list>
       </v-app-bar>
