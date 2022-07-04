@@ -100,7 +100,7 @@ export default {
           { id: 1, text: 'View Bids', icon: 'mdi-gavel' , link: 'view-bids' },
           // { id: 2, text: 'View Shipments', icon: 'mdi-truck' },
           { id: 3, text: 'View OFS Suppliers', icon: 'mdi-tag-outline' , link: 'view-ofs-suppliers'},
-          { id: 4, text: 'Messages', icon: 'mdi-email-outline', link: 'chat' },
+          { id: 4, text: 'Messages', icon: 'mdi-email-outline', link: 'messages' },
           // { id: 5, text: "Browse Public RFx's", icon: 'mdi-compass-outline' },
           // { id: 6, text: 'Manage Invoices', icon: 'mdi-calendar-text-outline' },
           // { id: 7, text: 'Reporting', icon: 'mdi-note-multiple-outline' },

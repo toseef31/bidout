@@ -163,5 +163,5 @@ export default {
 };
 </script>
 <style scoped lang="scss">
-  @import '@/assets/styles/rightsidebar.scss';
+ @import '@/assets/styles/rightsidebar.scss';
 </style>

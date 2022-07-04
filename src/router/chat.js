@@ -13,8 +13,8 @@ const routes = [
       //   component: () => import('@/views/Home.vue'),
       // },
       {
-        path: '/chat',
-        name: 'Chat',
+        path: '/messages',
+        name: 'Messages',
         component: () => import('@/views/Chat.vue'),
         beforeEnter: (to, from, next) => {
            if(localStorage.getItem("userData") == null) {
