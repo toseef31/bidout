@@ -180,14 +180,16 @@ export default {
     shipMap(){
       this.mapOptions = {
         center: new google.maps.LatLng(29.721085, -95.342049),
-        zoom: 18,
+        zoom: 19,
         mapTypeId: 'terrain',
         mapTypeControl: false,
         scaleControl: false,
-           streetViewControl: false,
-           rotateControl: false,
-           fullscreenControl: true,
-           disableDefaultUi: false
+        streetViewControl: false,
+        rotateControl: false,
+        fullscreenControl: true,
+        disableDefaultUi: false,
+        zoomControl: true,
+        scrollwheel: false,
       },
       this.markerOptions = {
         url: '/assets/images/dashboard/mapMobile.png',

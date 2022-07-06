@@ -20,6 +20,18 @@ const routes = [
        }
       },
       {
+        path: '/company-profile',
+        name: 'CompanyProfile',
+        component: () => import('@/views/CompanyProfile.vue'),
+        beforeEnter: (to, from, next) => {
+           if(localStorage.getItem("userData") == null) {
+               next('/login');
+           } else {
+               next();
+           }
+       }
+      },
+      {
         path: '/manage-users',
         name: 'ManageUsers',
         component: () => import('@/views/ManageUsers.vue'),

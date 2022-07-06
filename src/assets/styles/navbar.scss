@@ -2,7 +2,7 @@
   box-shadow: none !important;
   .toggle-btn{
     position: relative;
-    width: 18%;
+    width: 16%;
     .active-btn{
       border-bottom-right-radius: 0;
       border-top-right-radius: 0;
@@ -67,7 +67,11 @@
     display: block;
   }
   .logo-top-bar{
-    position: relative;
+    position: fixed;
+        top: 0;
+        background: #fff;
+        width: 100%;
+        z-index: 5;
     .menu-btn{
       background: rgba(13, 150, 72, 0.1);
       border-radius: 44px;

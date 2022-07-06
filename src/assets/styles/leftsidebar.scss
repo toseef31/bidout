@@ -122,3 +122,14 @@
     display: none;
   }
 }
+@media (min-width: 769px) {
+  .left-sidebar{
+    background-color: #fff;
+    position: relative;
+    flex: 0 0 22%;
+    max-width: 22%;
+    height: 91vh;
+    position: sticky;
+    top: 92px;
+  }
+}

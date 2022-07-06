@@ -22,6 +22,8 @@
 
 }
 .mid-content{
+	z-index: 2;
+  padding-left: 0 !important;
 	.content-section{
 		background: #FFFFFF;
 		border: 1px solid #B8B8B8;
@@ -124,6 +126,9 @@
 		position: relative;
 		flex: 0 0 22%;
   	max-width: 22%;
+  	height: 91vh;
+  	position: sticky;
+  	top: 92px;
 	}
 	.mid-content{
 		display: block;

@@ -3,7 +3,7 @@
     <v-app-bar
         color="white"
         height="104"
-        class="desktop-navbar"
+        class="desktop-navbar" fixed dense app
       >
       <template>
         <v-app-bar-nav-icon @click="toggleSideBar"></v-app-bar-nav-icon>
