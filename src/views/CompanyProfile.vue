@@ -212,7 +212,7 @@
                           <div class="doc-col" v-show="file">
                             <div id="doc-preview"></div>
                             <v-img v-if="fileExt == 'pdf'" :src="require('@/assets/images/profile/pdf.png')" width="80px" class="mx-auto"></v-img>
-                            <v-img v-else-if="fileExt == 'xlsx'" :src="require('@/assets/images/profile/xslx.png')" width="80px" class="mx-auto"></v-img>
+                            <v-img v-else-if="fileExt == 'xlsx'" :src="require('@/assets/images/profile/excel.png')" width="80px" class="mx-auto"></v-img>
                             <v-img v-else :src="require('@/assets/images/profile/other.png')" width="80px" class="mx-auto"></v-img>
                             <p>{{fileName}}</p>
                             <v-btn small min-width="36px" min-height="36px"><v-icon>mdi-trash-can-outline</v-icon></v-btn>
