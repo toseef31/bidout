@@ -1,5 +1,11 @@
 .v-sheet.v-app-bar{
   box-shadow: none !important;
+  .logo_main{
+    max-width: 161px;
+    img{
+      width: 100%;
+    }
+  }
   .toggle-btn{
     position: relative;
     width: 16%;
