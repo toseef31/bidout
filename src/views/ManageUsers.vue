@@ -64,11 +64,6 @@
             </v-row>
           </div>
        </v-col>
-       <!-- <v-col cols="12" class="pl-0 right-col" :class="[ activityPanel ? '' : 'mobile-right-col']" >
-        <div class="right-sidebar"> 
-          <RightSidebar></RightSidebar>
-        </div>
-       </v-col> -->
      </v-row>
    </section>
 </template>
