@@ -194,5 +194,6 @@ export default {
 };
 </script>
 <style scoped lang="scss">
+@import '@/assets/styles/global.scss';
 @import '@/assets/styles/dashboard/dashboard.scss';
 </style>
