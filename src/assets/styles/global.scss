@@ -16,12 +16,12 @@
 }
 @media (min-width: 769px) {
 	.left-sidebar{
-		background-color: #fff;
-		position: relative;
-		flex: 0 0 22%;
-  	max-width: 22%;
-  	height: 91vh;
-  	position: sticky;
+		background-color: #fff !important;
+		position: relative !important;
+		flex: 0 0 22% !important;
+  	max-width: 22% !important;
+  	height: 91vh !important;
+  	position: sticky !important;
   	top: 92px;
 	}
 }
