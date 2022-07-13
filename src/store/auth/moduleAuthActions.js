@@ -58,5 +58,4 @@ export default {
      // this.singleChate = responce.data;
     })
   },
-
 }
