@@ -1,4 +1,5 @@
-.activity-section{
+.rightSide-Module{
+  .activity-section{
     border: 1px solid #B8B8B8;
     border-radius: 8px;
     background-color: #fff;
@@ -74,7 +75,9 @@
       width: 100%;
     }
   }
-  @media(max-width: 768px){
+}
+@media(max-width: 768px){
+  .rightSide-Module{
     .desktop-section{
       display: none;
     }
@@ -105,3 +108,4 @@
       }
     }
   }
+}

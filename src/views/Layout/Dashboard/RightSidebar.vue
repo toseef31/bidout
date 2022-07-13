@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="rightSide-Module">
     <div class="activity-section" :class="[ activityPanel ? '' : 'desktop-section']">
       <div class="title">
         <h3 class="font-weight-bold text-left">Activity</h3>
@@ -163,5 +163,5 @@ export default {
 };
 </script>
 <style scoped lang="scss">
- @import '@/assets/styles/rightsidebar.scss';
+ 
 </style>

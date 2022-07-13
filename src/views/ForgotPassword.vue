@@ -1,5 +1,5 @@
 <template>
-  <section class="section-container fill-height">
+  <section class="section-container fill-height auth-module">
      <v-row class="signin">
        <v-col cols="12" md="6" class="left">
           <div class="form-section mb-15 mt-n16 ">
@@ -83,5 +83,4 @@ export default {
 };
 </script>
 <style scoped lang="scss">
-@import '@/assets/styles/auth/common.scss';
 </style>

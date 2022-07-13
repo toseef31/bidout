@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="navbar-module">
     <v-app-bar
         color="white"
         height="104"
@@ -76,11 +76,10 @@
       >
         <div class="logo-top-bar">
           <template>
-            <v-img
-            max-height="150"
-            max-width="150"
-              :src="require('@/assets/images/logo.png')"
-            ></v-img>
+            <router-link to="/dashboard" class="logo_main"><img
+              :src="require('@/assets/images/green-black.png')"
+              class="ml-3"
+            ></router-link>
           </template>
           <template>
             <v-btn class="menu-btn" @click="isMenu = !isMenu">
@@ -258,5 +257,5 @@ export default {
 };
 </script>
 <style scoped lang="scss">
-@import '@/assets/styles/navbar.scss';
+
 </style>

@@ -1,5 +1,5 @@
 <template>
-  <section class="section-container fill-height">
+  <section class="section-container fill-height chat-module">
     <Navbar></Navbar>
      <v-row class="mx-0">
        <v-col :class="[ showSideBar ? 'col-12' : 'toggleLeft-sidebar']" class="left-sidebar pr-1">
@@ -493,5 +493,5 @@ export default {
 };
 </script>
 <style scoped lang="scss">
-@import '@/assets/styles/chat/chat.scss';
+
 </style>

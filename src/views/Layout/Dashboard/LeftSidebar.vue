@@ -1,6 +1,6 @@
 <template>
 
-  <div class="desktop-view">
+  <div class="desktop-view leftSide-module">
    
     <v-list
       nav
@@ -145,5 +145,5 @@ export default {
 };
 </script>
 <style scoped lang="scss">
-@import '@/assets/styles/leftsidebar.scss';
+
 </style>

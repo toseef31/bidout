@@ -1,363 +1,340 @@
-.mid-content{
-	flex: 0 0 78%;
-  max-width: 78%;
-  z-index: 2;
-  padding-left: 0 !important;
-  .content-section{
-  	background: #FFFFFF;
-  	border: 1px solid #B8B8B8;
-  	border-radius: 8px;
-  	margin-bottom: 0px;
-  	padding: 10px 0px;
-  	.manage-sections{
-  		.top-section{
-  			justify-content: space-between;
-  			align-items: center;
-  			h4{
-  				font-weight: 700;
-  				font-size: 32px;
-  				line-height: 40px;
-  				color: #0D1139;
-  			}
-  			.progress-section{
-  				width: 45%;
-  				.progress-heading{
-  					justify-content: space-between;
-  					p{
-  						color: #0D1139;
-  						font-size: 14px;
-  					}
-  					small{
-  						color: #0D1139;
-  					}
-  				}
-  				.v-progress-linear{
-  					width: 100%;
-  				}
-  			}
-  		}
-  		.company-form{
-  			::v-deep .v-file-input .v-file-input__text {
-  			    color: rgb(13 150 72);
-  			}
-  			.row{
-  				align-items: center;
-  			}
-  			hr{
-  				border: 1px solid #F1F1F1;
-  			}
-  			.input-label{
-  				font-weight: 700;
-					font-size: 16px;
-					line-height: 20px;
-					color: #0D1139;
-					margin-bottom: 5px;
-  			}
-  			.main-label{
-  				font-weight: 700;
-					font-size: 20px;
-					line-height: 25px;
-					color: #0D1139;
-					margin-bottom: 5px;
-  			}
-  			.logo-input{
-  				flex-direction: row-reverse;
-  				::v-deep .v-input__slot{
-  					background-color: #0d964814;
-  					fieldset{
-  						border-color: #0d964814;
-  					}
-  				}
-  				
-  				
-  				::v-deep .v-input__prepend-outer{
-  					display: none;
-  				}
-  			}
-				.v-btn{
-					font-weight: 700;
-			    font-size: 14px;
-			    line-height: 20px;
-			    border-radius: 8px;
-				}
-  			.btn-col{
-  				.v-btn{
-  					font-weight: 700;
-				    font-size: 14px;
-				    line-height: 20px;
-				    border-radius: 8px;
-  				}
-  				.del-btn{
-  					box-shadow: none;
-  					color: #F32349;
-  				}
-  			}
-  			.v-input{
-  				border-radius: 8px;
-  				::v-deep .v-text-field__details{
-  					display: none;
-  				}
-  				::v-deep .v-input__slot{
-  					margin-bottom: 0;
-  				}
-  				fieldset{
-  					border-color: #B8B8B8;
-  				}
-  			}
-  			.service-list{
-  				display: grid;
-			    grid-template-columns: repeat(4, 1fr);
-			    /*grid-template-rows: repeat(4, 0fr);*/
-			    grid-column-gap: 5px;
-			    grid-row-gap: 15px;
-  				label{
-  					font-weight: 400;
-				    font-size: 11px;
-				    line-height: 12px;
-				    margin-right: 2px;
-				    color: #013D3A;
-				    .v-icon{
-				    	color: #0D9647;
-				    	margin-right: 5px;
-				    }
-  				}
-  			}
-  			.alert-text{
-  				color: #F32349;
-  				font-size: 12px;
-  			}
-  			.corporate-video{
-  				.col-12{
-  					display: flex;
-  					justify-content: space-between;
-  					align-items: center;
-  				}
-  			}
-  			.video-col{
-  				position: relative;
-  				.v-btn{
-  					color: #F32349;
-				    background-color: #fff;
-				    text-transform: capitalize;
-  				}
-  				p{
-  					position: absolute;
-				    bottom: 0;
-				    font-weight: 700;
-				    font-size: 16px;
-				    line-height: 25px;
-				    color: white;
-				    left: 16px;
-  				}
-  			}
-  			.doc-col{
-  				position: relative;
-  				.v-btn{
-  					color: #F32349;
-				    background-color: #fff;
-				    border: 1px solid #F32349;
-  				}
-  				p{
-				    font-weight: 500;
-				    font-size: 12px;
-				    line-height: 25px;
-				    color: #013D3A;
-  				}
-  			}
-  			.news-list{
-  				background-color: #FBFBFB;
-  				.v-btn{
-  					box-shadow: none;
-  				}
-  				.edit-btn{
-  					color: #0D9648;
-  				}
-  				.dele-btn{
-  					color: #F32349;
-  				}
-  			}
-  			.v-form{
-  				.profile-input{
-  					::v-deep .v-input__control{
-  						::v-deep .v-input__slot{
-  							::v-deep .v-text-field__slot{
-  								::v-deep .v-file-input__text{
-  									color: #0D9648;
-  									justify-content: center
-  								}
-  							}
-  						}
-  					}
-  				}
-  				.service-list{
-  					grid-template-columns: repeat(5, 1fr);
-				    /*grid-template-rows: repeat(5, 0fr);*/
-    				.profile-list{
-    					h6{
-    						font-weight: 700;
-    						font-size: 16px;
-    						line-height: 20px;
-    						color: #013D3A;
-    					}
-    					p{
-    						font-weight: 500;
-  							font-size: 16px;
-  							line-height: 20px;
-  							color: #013D3A;
-    					}
-    				}
-  				}
-  			}
-				.subsid-list{
-					position: relative;
-					.v-btn{
-						border-radius: 4px;
-					}
-				}
-				.esg-list{
-					h4{
-						font-weight: 700;
-						font-size: 20px;
-						line-height: 20px;
-						color: #013D3A;
-					}
-					p{
-						font-weight: 400;
-						font-size: 15px;
-						line-height: 20px;
-						color: #013D3A;
-					}
-					a{
-						background-color: rgba(13, 150, 71, 0.2);
-				    border-radius: 36px;
-				    padding: 8px;
-				    color: #0D9647 !important;
-				    .v-icon{
-				    	color: #0D9647 !important;
-				    }
-					}
-				}
-				.contact-list{
-					display: grid;
-					grid-template-columns: repeat(5, 1fr);
-			    /*grid-template-rows: repeat(5, 0fr);*/
-			    grid-column-gap: 5px;
-			    grid-row-gap: 5px;
-			    background-color: #FBFBFB;
-			    h6{
-			    	color: #0D1139;
-			    	font-size: 14px;
-			    }
-			    .v-btn{
-			    	box-shadow: none;
-			    	color: #F32349;
-			    }
-				}
-  		}
-  	}
-  }
-}
-.mid-content-collapse{
-		flex: 0 0 95%;
-	  max-width: 95%;
-}
-@media (max-width: 768px) {
+.companyProfile-module{
 	.mid-content{
-		flex: 0 0 100%;
-	  max-width: 100%;
+		flex: 0 0 78%;
+	  max-width: 78%;
 	  z-index: 2;
 	  padding-left: 0 !important;
 	  .content-section{
-	  	border: 0px;
-			padding: 0;
+	  	background: #FFFFFF;
+	  	border: 1px solid #B8B8B8;
+	  	border-radius: 8px;
+	  	margin-bottom: 0px;
+	  	padding: 10px 0px;
 	  	.manage-sections{
-	  		padding: 8px !important;
 	  		.top-section{
-	  			display: block !important;
+	  			justify-content: space-between;
+	  			align-items: center;
+	  			h4{
+	  				font-weight: 700;
+	  				font-size: 32px;
+	  				line-height: 40px;
+	  				color: #0D1139;
+	  			}
 	  			.progress-section{
-	  				width: 100%;
-	  				margin-top: 20px;
+	  				width: 45%;
+	  				.progress-heading{
+	  					justify-content: space-between;
+	  					p{
+	  						color: #0D1139;
+	  						font-size: 14px;
+	  					}
+	  					small{
+	  						color: #0D1139;
+	  					}
+	  				}
+	  				.v-progress-linear{
+	  					width: 100%;
+	  				}
 	  			}
 	  		}
 	  		.company-form{
+	  			::v-deep .v-file-input .v-file-input__text {
+	  			    color: rgb(13 150 72);
+	  			}
+	  			.row{
+	  				align-items: center;
+	  			}
+	  			hr{
+	  				border: 1px solid #F1F1F1;
+	  			}
+	  			.input-label{
+	  				font-weight: 700;
+						font-size: 16px;
+						line-height: 20px;
+						color: #0D1139;
+						margin-bottom: 5px;
+	  			}
 	  			.main-label{
-	  				font-size: 16px;
+	  				font-weight: 700;
+						font-size: 20px;
+						line-height: 25px;
+						color: #0D1139;
+						margin-bottom: 5px;
 	  			}
-	  			.v-btn{
-	  				font-size: 11px;
-	  				min-width: 40px;
-	  			}
-	  			.btn-col{
-	  				padding-bottom: 5px;
-	  				.v-btn{
-	  					font-size: 11px;
-	  					width: 100% !important;
-	  					height:  25px !important;
+	  			.logo-input{
+	  				flex-direction: row-reverse;
+	  				::v-deep .v-input__slot{
+	  					background-color: #0d964814;
+	  					fieldset{
+	  						border-color: #0d964814;
+	  					}
 	  				}
-	  				.add-logo{
-	  					
+	  				
+	  				
+	  				::v-deep .v-input__prepend-outer{
+	  					display: none;
+	  				}
+	  			}
+					.v-btn{
+						font-weight: 700;
+				    font-size: 14px;
+				    line-height: 20px;
+				    border-radius: 8px;
+					}
+	  			.btn-col{
+	  				.v-btn{
+	  					font-weight: 700;
+					    font-size: 14px;
+					    line-height: 20px;
+					    border-radius: 8px;
 	  				}
 	  				.del-btn{
-	  					height: 25px !important;
-	  					margin-top: 5px;
+	  					box-shadow: none;
+	  					color: #F32349;
+	  				}
+	  			}
+	  			.v-input{
+	  				border-radius: 8px;
+	  				::v-deep .v-text-field__details{
+	  					display: none;
+	  				}
+	  				::v-deep .v-input__slot{
+	  					margin-bottom: 0;
+	  				}
+	  				fieldset{
+	  					border-color: #B8B8B8;
 	  				}
 	  			}
 	  			.service-list{
-	  				grid-template-columns: repeat(2, 1fr);
+	  				display: grid;
+				    grid-template-columns: repeat(4, 1fr);
+				    /*grid-template-rows: repeat(4, 0fr);*/
+				    grid-column-gap: 5px;
+				    grid-row-gap: 15px;
 	  				label{
-	  					.v-icon{
-	  						font-size: 20px;
-	  					}
+	  					font-weight: 400;
+					    font-size: 11px;
+					    line-height: 12px;
+					    margin-right: 2px;
+					    color: #013D3A;
+					    .v-icon{
+					    	color: #0D9647;
+					    	margin-right: 5px;
+					    }
+	  				}
+	  			}
+	  			.alert-text{
+	  				color: #F32349;
+	  				font-size: 12px;
+	  			}
+	  			.corporate-video{
+	  				.col-12{
+	  					display: flex;
+	  					justify-content: space-between;
+	  					align-items: center;
+	  				}
+	  			}
+	  			.video-col{
+	  				position: relative;
+	  				.v-btn{
+	  					color: #F32349;
+					    background-color: #fff;
+					    text-transform: capitalize;
+	  				}
+	  				p{
+	  					position: absolute;
+					    bottom: 0;
+					    font-weight: 700;
+					    font-size: 16px;
+					    line-height: 25px;
+					    color: white;
+					    left: 16px;
+	  				}
+	  			}
+	  			.doc-col{
+	  				position: relative;
+	  				.v-btn{
+	  					color: #F32349;
+					    background-color: #fff;
+					    border: 1px solid #F32349;
+	  				}
+	  				p{
+					    font-weight: 500;
+					    font-size: 12px;
+					    line-height: 25px;
+					    color: #013D3A;
+	  				}
+	  			}
+	  			.news-list{
+	  				background-color: #FBFBFB;
+	  				.v-btn{
+	  					box-shadow: none;
+	  				}
+	  				.edit-btn{
+	  					color: #0D9648;
+	  				}
+	  				.dele-btn{
+	  					color: #F32349;
 	  				}
 	  			}
 	  			.v-form{
-	  				.service-list{
-	  					grid-template-columns: repeat(2, 1fr);
-	  					.profile-list{
-	  						h6,p{
-	  							font-size: 14px;
+	  				.profile-input{
+	  					::v-deep .v-input__control{
+	  						::v-deep .v-input__slot{
+	  							::v-deep .v-text-field__slot{
+	  								::v-deep .v-file-input__text{
+	  									color: #0D9648;
+	  									justify-content: center
+	  								}
+	  							}
 	  						}
 	  					}
 	  				}
-	  			}
-	  			.contact-list{
-	  				grid-template-columns: repeat(1, 1fr);
-	  			}
-	  			.v-form{
-	  				.v-btn{
-	  					width: 45% !important;
-	  					font-size: 14px;
+	  				.service-list{
+	  					grid-template-columns: repeat(5, 1fr);
+					    /*grid-template-rows: repeat(5, 0fr);*/
+	    				.profile-list{
+	    					h6{
+	    						font-weight: 700;
+	    						font-size: 16px;
+	    						line-height: 20px;
+	    						color: #013D3A;
+	    					}
+	    					p{
+	    						font-weight: 500;
+	  							font-size: 16px;
+	  							line-height: 20px;
+	  							color: #013D3A;
+	    					}
+	    				}
 	  				}
 	  			}
+					.subsid-list{
+						position: relative;
+						.v-btn{
+							border-radius: 4px;
+						}
+					}
+					.esg-list{
+						h4{
+							font-weight: 700;
+							font-size: 20px;
+							line-height: 20px;
+							color: #013D3A;
+						}
+						p{
+							font-weight: 400;
+							font-size: 15px;
+							line-height: 20px;
+							color: #013D3A;
+						}
+						a{
+							background-color: rgba(13, 150, 71, 0.2);
+					    border-radius: 36px;
+					    padding: 8px;
+					    color: #0D9647 !important;
+					    .v-icon{
+					    	color: #0D9647 !important;
+					    }
+						}
+					}
+					.contact-list{
+						display: grid;
+						grid-template-columns: repeat(5, 1fr);
+				    /*grid-template-rows: repeat(5, 0fr);*/
+				    grid-column-gap: 5px;
+				    grid-row-gap: 5px;
+				    background-color: #FBFBFB;
+				    h6{
+				    	color: #0D1139;
+				    	font-size: 14px;
+				    }
+				    .v-btn{
+				    	box-shadow: none;
+				    	color: #F32349;
+				    }
+					}
 	  		}
 	  	}
 	  }
 	}
-
-
-
-	.activity-section{
-		display: none;
+	.mid-content-collapse{
+			flex: 0 0 95%;
+		  max-width: 95%;
 	}
 }
-@media (min-width: 768px) {
-	.right-col{
-		display: none;
-	}
-}
-
-@media (min-width: 769px) {
-	.left-sidebar{
-		background-color: #fff;
-		position: relative;
-		flex: 0 0 22%;
-  	max-width: 22%;
-  	height: 91vh;
-  	position: sticky;
-  	top: 92px;
-	}
-	.mid-content{
-		
-	}
-	
+@media (max-width: 768px) {
+	.companyProfile-module{
+		.mid-content{
+			flex: 0 0 100%;
+		  max-width: 100%;
+		  z-index: 2;
+		  padding-left: 0 !important;
+		  .content-section{
+		  	border: 0px;
+				padding: 0;
+		  	.manage-sections{
+		  		padding: 8px !important;
+		  		.top-section{
+		  			display: block !important;
+		  			.progress-section{
+		  				width: 100%;
+		  				margin-top: 20px;
+		  			}
+		  		}
+		  		.company-form{
+		  			.main-label{
+		  				font-size: 16px;
+		  			}
+		  			.v-btn{
+		  				font-size: 11px;
+		  				min-width: 40px;
+		  			}
+		  			.btn-col{
+		  				padding-bottom: 5px;
+		  				.v-btn{
+		  					font-size: 11px;
+		  					width: 100% !important;
+		  					height:  25px !important;
+		  				}
+		  				.add-logo{
+		  					
+		  				}
+		  				.del-btn{
+		  					height: 25px !important;
+		  					margin-top: 5px;
+		  				}
+		  			}
+		  			.service-list{
+		  				grid-template-columns: repeat(2, 1fr);
+		  				label{
+		  					.v-icon{
+		  						font-size: 20px;
+		  					}
+		  				}
+		  			}
+		  			.v-form{
+		  				.service-list{
+		  					grid-template-columns: repeat(2, 1fr);
+		  					.profile-list{
+		  						h6,p{
+		  							font-size: 14px;
+		  						}
+		  					}
+		  				}
+		  			}
+		  			.contact-list{
+		  				grid-template-columns: repeat(1, 1fr);
+		  			}
+		  			.v-form{
+		  				.v-btn{
+		  					width: 45% !important;
+		  					font-size: 14px;
+		  				}
+		  			}
+		  		}
+		  	}
+		  }
+		}
+	}	
 }
