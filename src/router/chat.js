@@ -8,9 +8,9 @@ const routes = [
     meta: { requiresAuth: true },
     children: [
       {
-        path: '/dashboard',
-        name: 'Dashboard',
-        component: () => import('@/views/Dashboard.vue'),
+        path: '/chat',
+        name: 'Chat',
+        component: () => import('@/views/Chat.vue'),
         beforeEnter: (to, from, next) => {
            if(localStorage.getItem("userData") == null) {
                next('/login');

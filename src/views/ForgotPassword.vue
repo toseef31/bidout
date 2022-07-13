@@ -77,7 +77,6 @@ export default {
       console.log(email + "logged in")
     },
     forgetPassword() {
-
       this.forgotEmail({ 'email': this.email});
     }
   },
