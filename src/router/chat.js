@@ -8,8 +8,8 @@ const routes = [
     meta: { requiresAuth: true },
     children: [
       {
-        path: '/chat',
-        name: 'Chat',
+        path: '/messages',
+        name: 'Messages',
         component: () => import('@/views/Chat.vue'),
         beforeEnter: (to, from, next) => {
            if(localStorage.getItem("userData") == null) {

@@ -1,5 +1,5 @@
 <template>
-  <section class="section-container fill-height">
+  <section class="section-container fill-height dashboard-module">
     <Navbar></Navbar>
      <v-row class="mx-0">
        <v-col :class="[ showSideBar ? 'col-12' : 'toggleLeft-sidebar']" class="left-sidebar pr-1">
@@ -91,8 +91,6 @@
             <!-- <v-img :src="require('@/assets/images/dashboard/map.png')" class="d-none d-sm-block"></v-img>
             <v-img :src="require('@/assets/images/dashboard/mapMobile.png')" class="d-block d-sm-none"></v-img> -->
             <div id="map" class="map" height="400px"></div>
-            <GmapMarker ref="myMarker"
-                :position="google && new google.maps.LatLng(1.38, 103.8)" />
           </div>
        </v-col>
        <v-col cols="12" class="pl-0 right-col" :class="[ activityPanel ? '' : 'mobile-right-col']" >
@@ -144,6 +142,18 @@ export default {
           entries: 0,
           endTime: '-',
         },
+        {
+          id: 10010,
+          title: 'Water Job',
+          entries: 0,
+          endTime: '-',
+        },
+        {
+          id: 10010,
+          title: 'Water Job',
+          entries: 0,
+          endTime: '-',
+        },
       ],
       bidss:{},
       mapOptions: {},
@@ -170,14 +180,16 @@ export default {
     shipMap(){
       this.mapOptions = {
         center: new google.maps.LatLng(29.721085, -95.342049),
-        zoom: 10,
+        zoom: 19,
         mapTypeId: 'terrain',
         mapTypeControl: false,
         scaleControl: false,
-           streetViewControl: false,
-           rotateControl: false,
-           fullscreenControl: true,
-           disableDefaultUi: false
+        streetViewControl: false,
+        rotateControl: false,
+        fullscreenControl: true,
+        disableDefaultUi: false,
+        zoomControl: true,
+        scrollwheel: false,
       },
       this.markerOptions = {
         url: '/assets/images/dashboard/mapMobile.png',
@@ -194,6 +206,5 @@ export default {
 };
 </script>
 <style scoped lang="scss">
-@import '@/assets/styles/global.scss';
-@import '@/assets/styles/dashboard/dashboard.scss';
+
 </style>

@@ -1,14 +1,13 @@
 <template>
 
-  <div class="desktop-view">
+  <div class="desktop-view leftSide-module">
    
     <v-list
       nav
       dense
       class="pa-0 main-menu" href=""
     >
-      <v-list-item-group
-        v-model="selectedItem"
+      <v-list-item-group 
         color="primary"
       >
         <v-list-item
@@ -16,7 +15,7 @@
           :key="i"
         >
           <v-list-item-icon class="mr-6 mt-3">
-            <v-icon v-text="item.icon"></v-icon>
+            <router-link :to="item.link" class="text-decoration-none"><v-icon v-text="item.icon"></v-icon></router-link>
           </v-list-item-icon>
 
             
@@ -57,7 +56,9 @@
               <v-icon v-text="child.icon"></v-icon>
             </v-list-item-icon>
             <v-list-item-content class="text-left py-1" v-show="showSideBar">
-              <v-list-item-title class="font-weight-bold" v-text="child.title"></v-list-item-title>
+              <router-link :to="child.link" class="text-decoration-none">
+                <v-list-item-title class="font-weight-bold" v-text="child.title"></v-list-item-title>
+              </router-link>
             </v-list-item-content>
           </v-list-item>
         </v-list-group>
@@ -99,7 +100,7 @@ export default {
           { id: 1, text: 'View Bids', icon: 'mdi-gavel' , link: 'view-bids' },
           // { id: 2, text: 'View Shipments', icon: 'mdi-truck' },
           { id: 3, text: 'View OFS Suppliers', icon: 'mdi-tag-outline' , link: 'view-ofs-suppliers'},
-          { id: 4, text: 'Messages', icon: 'mdi-email-outline', link: 'chat' },
+          { id: 4, text: 'Messages', icon: 'mdi-email-outline', link: 'messages' },
           // { id: 5, text: "Browse Public RFx's", icon: 'mdi-compass-outline' },
           // { id: 6, text: 'Manage Invoices', icon: 'mdi-calendar-text-outline' },
           // { id: 7, text: 'Reporting', icon: 'mdi-note-multiple-outline' },
@@ -109,10 +110,10 @@ export default {
             action: 'mdi-clipboard-account-outline',
             active: false,
             items: [
-              { icon: 'mdi-account-multiple',title: 'Manage Users' },
-              { icon: 'mdi-cog-outline' ,title: 'Manage Module' },
+              { icon: 'mdi-account-multiple',title: 'Manage Users', link: 'manage-users' },
+              { icon: 'mdi-cog-outline' ,title: 'Manage Module', link: 'manage-module' },
             ],
-            title: 'Edit Corporate Profile',
+            title: 'Edit Corporate Profile'
           },
         ],
         userData: '',
@@ -144,5 +145,5 @@ export default {
 };
 </script>
 <style scoped lang="scss">
-@import '@/assets/styles/leftsidebar.scss';
+
 </style>
