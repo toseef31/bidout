@@ -22,11 +22,11 @@
 	  				color: #0D1139;
 	  			}
 	  			.tabs-head{
-	  				::v-deep .v-tabs-bar{
+	  				.v-tabs-bar{
 	  					background-color: #F1F1F1;
 	  					border-radius: 8px;
 	  				}
-	  				::v-deep .v-tabs-slider-wrapper{
+	  				.v-tabs-slider-wrapper{
 	  					display: none;
 	  				}
 	  				.v-tabs-bar__content{
@@ -52,7 +52,7 @@
 					    font-size: 16px;
 	  					 font-weight: 700;
 	  				}
-	  				::v-deep .v-expansion-panel-header__icon{
+	  				.v-expansion-panel-header__icon{
 	  					position: absolute;
 	  					left: 10px;
 	  					.v-icon{
@@ -117,7 +117,7 @@
 							margin-bottom: 8px;
 						}
 						.tabs-head{
-							::v-deep .v-slide-group__prev{
+							.v-slide-group__prev{
 								display: none !important;
 							}
 						}
@@ -129,7 +129,7 @@
 						    font-size: 15px;
 						    margin-bottom: 15px;
 		  				}
-		  				::v-deep .v-expansion-panel-header__icon{
+		  				.v-expansion-panel-header__icon{
 		  					top: 36px;
 		  				}
 		  				.btn-section{

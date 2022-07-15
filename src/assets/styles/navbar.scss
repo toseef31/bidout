@@ -43,23 +43,23 @@
     border-right: 0;
     border-left: 0;
     
-    ::v-deep .v-input {
+    .v-input {
       height: 55px;
       background: #0d9648;
       border: 0;
       color: #fff !important;
       caret-color:  #fff !important;
     }
-    ::v-deep .v-select__selection--comma{
+    .v-select__selection--comma{
       color: #fff !important;
     }
-    ::v-deep .material-icons{
+    .material-icons{
       color: #fff !important;
     }
-    ::v-deep .v-text-field__details{
+    .v-text-field__details{
       display: none;
     }
-    ::v-deep .v-select > .v-input__control > .v-input__slot{
+    .v-select > .v-input__control > .v-input__slot{
       margin-bottom: 0;
     }
   }
