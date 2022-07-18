@@ -51,7 +51,8 @@
                       <v-row class="mt-8 bg-light">
                         <v-col cols="12" sm="12" text="left" class="pa-6">
                           <label class="d-block text-left input-label mb-2 font-weight-bold">Company Name</label>
-                          <v-text-field label="Full name ..." single-line outlined type="text"></v-text-field>
+                          <v-text-field prepend-inner-icon="search" label="Full name ..." single-line outlined type="text">
+                          </v-text-field>
                         </v-col>
                       </v-row>
                       <v-row class="mt-12 bg-light pa-3">
