@@ -58,4 +58,22 @@ export default {
      // this.singleChate = responce.data;
     })
   },
+
+  signUpAction({ commit }, payload) {
+
+    console.log(payload);
+    // Try to sigin
+    // axios.post('/ofs/createProvider',{'email': payload.email})
+    //  .then(responce => {
+    //   console.log(responce);
+    //   if(responce.status == 200){
+    //     commit('setEmailSuccess', 'Email sent successfully! Please check your email')
+    //   }
+    //   else{
+    //     commit('setEmailError', 'Something wrong please try again')
+    //   }
+      
+     
+    // })
+  },
 }
