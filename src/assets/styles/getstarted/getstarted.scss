@@ -98,12 +98,20 @@
 			}
 			
 		}
-		.getStart-box{
-			h1{
-				font-size: 23px;
+		.tabs-head{
+			.v-slide-group__prev{
+				display: none;
 			}
-			p{
-				font-size: 16px;
+			.v-slide-group{
+				.v-tab{
+					width: 48%;
+				}
+				.v-tab:first-child{
+					margin-right: 8px !important;
+				}
+				.v-tab:last-child{
+					margin-right: 0 !important;
+				}
 			}
 		}
 		.alert-section{

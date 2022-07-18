@@ -7,7 +7,7 @@
     >
       <v-col
         class="py-4 text-left white--text"
-        cols="6" md="3"
+        cols="12" md="3"
       >
         <div class="first-col">
           <div class="footer-logo">
@@ -20,7 +20,7 @@
       </v-col>
       <v-col
         class="py-4 text-left white--text"
-        cols="6" md="3"
+        cols="12" md="3"
       >
         <div class="second-col">
           <h4 class="text-uppercase pl-2 mb-6">Information</h4>
@@ -46,7 +46,7 @@
       </v-col>
       <v-col
         class="py-4 text-left white--text"
-        cols="6" md="3"
+        cols="12" md="3"
       >
         <div class="second-col">
           <h4 class="text-uppercase pl-2 mb-6">Contact Us</h4>
@@ -64,7 +64,7 @@
       </v-col>
       <v-col
         class="py-4 text-left white--text"
-        cols="6" md="3"
+        cols="12" md="3"
       >
         <div class="second-col last-col">
           <div class="d-flex light-text align-center">

@@ -65,7 +65,7 @@
                         </v-col>
                         <v-col cols="12" sm="6" text="left">
                           <label class="d-block text-left input-label mb-2 font-weight-bold">Company HQ Country</label>
-                          <v-select outlined placeholder="Select"></v-select>
+                          <v-select :items="countries" outlined v-model="country" placeholder="Select"></v-select>
                         </v-col>
                         <v-col cols="12" sm="6" text="left">
                           <label class="d-block text-left input-label mb-2 font-weight-bold">Company HQ State</label>
@@ -146,6 +146,18 @@ export default {
       items: [
         'Operator', 'Service Provider',
       ],
+      countries: [
+        'Uninted States',
+        'United Kingdom',
+        'China',
+        'Russia',
+        'Germany',
+        'Pakistan',
+        'India',
+        'Brazil',
+        'Australia',
+      ],
+      country: 'Uninted States'
     };
   },
   computed:{

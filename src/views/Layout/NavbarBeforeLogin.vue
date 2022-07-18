@@ -40,9 +40,9 @@
           >
             <v-list-item-group
             >
-              <v-list-item v-for="(item, index) in items">
-                <router-link to="" class="text-decoration-none">
-                  <v-list-item-title @click="tab = index" class="text-left">{{ item }}</v-list-item-title>
+              <v-list-item v-for="(item, index) in items" :key="index">
+                <router-link :to="item.link" class="text-decoration-none">
+                  <v-list-item-title @click="tab = index" class="text-left">{{ item.title }}</v-list-item-title>
                 </router-link>
               </v-list-item>
 
@@ -63,7 +63,10 @@ export default {
       drawer: false,
       tab: null,
         items: [
-          'Home', 'OFS Directory', 'Get Started Now', 'Log In',
+          {title: 'Home', link:''},
+          {title: 'OFS Directory', link: ''},
+          {title: 'Get started Now', link: '/get-started'},
+          {title: 'Log In', link: '/login'}
         ],
     };
   },
