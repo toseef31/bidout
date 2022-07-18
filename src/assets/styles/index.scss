@@ -1,6 +1,8 @@
 @import '@/assets/styles/global.scss';
 @import '@/assets/styles/auth/common.scss';
 @import '@/assets/styles/navbar.scss';
+@import '@/assets/styles/navbarBeforeLogin.scss';
+@import '@/assets/styles/footer.scss';
 @import '@/assets/styles/rightsidebar.scss';
 @import '@/assets/styles/leftsidebar.scss';
 @import '@/assets/styles/dashboard/dashboard.scss';
@@ -10,3 +12,6 @@
 @import '@/assets/styles/profile/profile.scss';
 @import '@/assets/styles/profile/manageModule.scss';
 @import '@/assets/styles/profile/manageUsers.scss';
+@import '@/assets/styles/getstarted/getstarted.scss';
+@import '@/assets/styles/getstarted/moduleSelection.scss';
+@import '@/assets/styles/getstarted/payment.scss';

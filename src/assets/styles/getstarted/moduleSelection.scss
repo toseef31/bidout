@@ -1,0 +1,72 @@
+.module-selection{
+	.title-head{
+		h1{
+			font-size: 32px;
+		}
+	}
+	.v-form{
+		.create-bid{
+			border: 2px solid #F4F5F7;
+			.v-input--switch{
+				.v-input--switch__track {
+				  
+				}
+			}
+			.v-input--is-label-active{
+				color: #0D9648 !important;
+				opacity: 1;
+				.v-input--switch__track.primary--text{
+					color: #0D9648 !important;
+					opacity: 1;
+				}
+				.v-input--switch__thumb.primary--text{
+					color: #fff !important;
+				}
+				.v-input--selection-controls__ripple.primary--text{
+					color: #0D9648 !important;
+				}
+			}
+			.agreement-box{
+				background: rgba(13, 150, 72, 0.1);
+				p{
+					font-size: 12px;
+				}
+			}
+			.price-text{
+				color: #0d9648;
+			}
+			.agreement-link{
+				background-color: #0D9647;
+				border-radius: 4px;
+				line-height: 4;
+				font-size: 14px;
+			}
+		}
+	}
+}
+@media(max-width: 768px){
+	.module-selection{
+		.create-bid{
+			h1{
+				font-size: 19px;
+			}
+		}
+		.getStart-box{
+			h1{
+				font-size: 23px;
+			}
+			p{
+				font-size: 16px;
+			}
+		}
+	}
+}
+@media(max-width: 600px){
+	.module-selection{
+		.create-bid{
+			.label-title{
+				display: block !important;
+			}
+		}
+	}
+}

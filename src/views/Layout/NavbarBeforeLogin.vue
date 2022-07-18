@@ -1,71 +1,56 @@
 <template>
-  <div class="navbar-module">
-    <v-app-bar
-        color="white"
-        height="104" fixed dense app
-      >
-      <template>
-        <v-app-bar-nav-icon @click="toggleSideBar"></v-app-bar-nav-icon>
-        </template>
-        <template>
-          <router-link to="" class="logo_main"><img
-            :src="require('@/assets/images/green-black.png')"
-            class="ml-3"
-          ></router-link>
-        </template>
-        <template>
-          <div class="toggle-btn">
-            <v-btn
-              fab
-              dark
-              small
-              color="#0D9648"
-            >
-              <v-icon dark>
-                {{isHidden ? 'mdi-close' : 'mdi-plus'}}
-              </v-icon>
-            </v-btn>
-            <div>
-              <v-card
-                  class="mx-auto menu-card"
-                  min-width="290"
-                  tile
-                  outlined
-                >
-                  <v-list class="pa-0">
-                    <v-list-item-group
-                      color="success"
-                    >
-                      <v-list-item
-                        v-for="(item, i) in items"
-                        :key="i"
-                      >
-                        <v-list-item-icon class="mr-2 my-2">
-                          <v-icon color="#0D9648" v-text="item.icon"></v-icon>
-                        </v-list-item-icon>
-                        <v-list-item-content align-start color="#0D9648" class="pa-0">
-                          <v-list-item-title v-text="item.text" color="#0D9648"></v-list-item-title>
-                        </v-list-item-content>
-                      </v-list-item>
-                    </v-list-item-group>
-                  </v-list>
-                </v-card>
+  <div class="navbarNoLogin-module">
+        <v-app-bar height="88" fixed dense app>
+           
+            <template>
+              <router-link to="/dashboard" class="logo_main">
+                <img
+                :src="require('@/assets/images/green-black.png')">
+              </router-link>
+            </template>
+            <v-spacer></v-spacer>
+      
+            
+            <div class="d-flex justify-center align-center main-menu">
+              <v-list class="px-7">
+                <v-list-item-title class="font-weight-bold">Home</v-list-item-title>
+              </v-list>
+              <v-list class="px-7">
+                <v-list-item-title class="font-weight-bold">OFS Directory</v-list-item-title>
+              </v-list>
+              <router-link to="get-started" color="white" large height="56" class="font-weight-bold text-capitalize mr-3 text-decoration-none pa-3 white">
+                Get Started Now  <v-icon class="pl-2" color="#0D9647">mdi-arrow-right-circle</v-icon>
+              </router-link>
+              
+              <router-link to="login" color="white" large height="56" class="font-weight-bold text-capitalize ml-3 text-decoration-none pa-3 white">
+                Log In<v-icon class="pl-2" color="#0D9647">mdi-arrow-right-circle</v-icon>
+              </router-link>
             </div>
-          </div>
-        </template>
-        <v-spacer></v-spacer>
+            <v-app-bar-nav-icon @click="drawer = true" class="mobile-icon d-none"></v-app-bar-nav-icon>
+        </v-app-bar>
+        <!-- Add a navigation bar -->
+        <v-navigation-drawer
+          v-model="drawer"
+          absolute
+          temporary
+        >
+          <v-list
+            nav
+            dense class="responsive-menu"
+          >
+            <v-list-item-group
+            >
+              <v-list-item v-for="(item, index) in items">
+                <router-link to="" class="text-decoration-none">
+                  <v-list-item-title @click="tab = index" class="text-left">{{ item }}</v-list-item-title>
+                </router-link>
+              </v-list-item>
 
-        <v-list>
-          <v-list-item class="pr-0">
-            <router-link to="/edit-profile" class="d-flex text-decoration-none">
-              <v-list-item-title class="mr-3">Aubrey  McClendon</v-list-item-title>
-              <v-avatar>
-                <v-img :src="require('@/assets/images/user.png')"></v-img>
-              </v-avatar>
-            </router-link>
-          </v-list-item>
-        </v-list>
-      </v-app-bar>
+            </v-list-item-group>
+          </v-list>
+        </v-navigation-drawer>
+        <!-- Navigation bar ends -->
+    
   </div>
 </template>
 
@@ -75,7 +60,11 @@ export default {
   name : "NavbarBeforeLogin",
   data() {
     return {
-      
+      drawer: false,
+      tab: null,
+        items: [
+          'Home', 'OFS Directory', 'Get Started Now', 'Log In',
+        ],
     };
   },
   computed: {
