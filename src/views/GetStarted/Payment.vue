@@ -2,20 +2,22 @@
   <section class="fill-height payment-module white">
     <NavbarBeforeLogin></NavbarBeforeLogin>
       <div class="get-topHeader d-flex">
-        <v-row
-          align="center"
-          justify="center"
-          no-gutters
-        >
-          <v-col
-            class="text-left pl-16"
-            cols="12"
+        <v-container fill-height>
+          <v-row
+            align="center"
+            justify="center"
+            no-gutters
           >
-            <h1 class="font-weight-bolder white--text">
-              Get Started
-            </h1>
-          </v-col>
-        </v-row>
+            <v-col
+              class="text-left"
+              cols="12"
+            >
+              <h1 class="font-weight-bolder white--text">
+                Get Started
+              </h1>
+            </v-col>
+          </v-row>
+        </v-container>
       </div>
       <v-container>
         <v-main>

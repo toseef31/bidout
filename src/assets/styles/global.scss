@@ -23,7 +23,7 @@
 /*Get Started Selection*/
 .get-topHeader{
 	background-image: url(@/assets/images/topheader.png);
-	height: 300px;
+	height: 200px;
 	background-size: cover;
 	background-repeat: no-repeat;
 	h1{
@@ -49,6 +49,14 @@
 		color: #0D1139;
 	}
 }
+.ofs-bottom-section{
+	background-image: url(@/assets/images/ofs/bottom-bg.jpg);
+	background-size: cover;
+	background-repeat: no-repeat;
+	.title{
+		font-size: 32px !important;
+	}
+}
 @media (min-width: 769px) {
 	.left-sidebar{
 		background-color: #fff !important;
@@ -63,6 +71,9 @@
 @media(max-width:  768px){
 	.get-topHeader{
 		height: 200px;
+		h1{
+			font-size: 35px;
+		}
 	}
 	.getStart-box{
 		h1{
@@ -70,6 +81,11 @@
 		}
 		p{
 			font-size: 16px;
+		}
+	}
+	.ofs-bottom-section{
+		.title{
+			font-size: 24px !important;
 		}
 	}
 }

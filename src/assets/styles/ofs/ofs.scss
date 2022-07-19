@@ -1,0 +1,63 @@
+.ofs-module{
+	.search-form{
+		.v-input{
+			
+			border-radius: 0;
+			&__slot{
+				margin-bottom: 0;
+				fieldset{
+					border: 2px solid #EFEFEF;
+				}
+			}
+			&__control{
+				.v-text-field__details{
+					display: none;
+				}
+			}
+		}
+		.v-btn{
+			border-radius: 0;
+			box-shadow: none;
+		}
+	}
+	.company-slider{
+		.slick-slide {
+		  padding: 0 10px;
+		  .slide-item{
+		  	border: 2px solid #EFEFEF;
+		  	height: 180px;
+		  	.slide-img{
+		  		height: 140px;
+		  		img{
+		  			width: 100%;
+		  		}
+		  	}
+		  	.slide-caption{
+		  		h3{
+		  			font-size: 16px;
+		  			color: #013D3A;
+		  		}
+		  	}
+		  }
+		}
+		.slick-prev:before, .slick-next:before{
+			color: #0D9647;
+		}
+	}
+	.ofs-listing{
+		h1{
+			color: #013D3A;
+		}
+		p{
+			color: #4A4242;
+			font-weight: 600;
+		}
+	}
+}
+@media(max-width: 768px){
+	.company-slider{
+		.slick-slide {
+		  padding: 0 5px;
+		}
+	}
+}

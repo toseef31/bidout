@@ -6,12 +6,13 @@ import Dashboard from '@/router/dashboard'
 import Chat from '@/router/chat'
 import Profile from '@/router/profile'
 import GetStarted from '@/router/getstarted'
+import Ofs from '@/router/ofs'
 import store from '@/store';
 
 Vue.use(VueRouter);
 
 var allRoutes = []
-allRoutes = allRoutes.concat(AuthRoutes, Dashboard, Chat, Profile, GetStarted)
+allRoutes = allRoutes.concat(AuthRoutes, Dashboard, Chat, Profile, GetStarted, Ofs)
 
 const routes = allRoutes
 
