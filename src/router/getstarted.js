@@ -11,22 +11,22 @@ const routes = [
         component: () => import('@/views/GetStarted/GetStarted.vue'),
       },
       {
-        path: '/existing-account',
+        path: '/get-started/existing-account',
         name: 'ExistingAccount',
         component: () => import('@/views/GetStarted/ExistingAccount.vue'),
       },
       {
-        path: '/module-selection',
+        path: '/get-started/module-selection',
         name: 'ModuleSelection',
         component: () => import('@/views/GetStarted/ModuleSelection.vue'),
       },
       {
-        path: '/contract',
+        path: '/get-started/contract',
         name: 'Contract',
         component: () => import('@/views/GetStarted/Contract.vue'),
       },
       {
-        path: '/payment',
+        path: '/get-started/payment',
         name: 'payment',
         component: () => import('@/views/GetStarted/Payment.vue'),
       },
