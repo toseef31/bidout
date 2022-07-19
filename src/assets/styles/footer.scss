@@ -1,0 +1,40 @@
+.footer-module{
+	padding: 5rem 3rem !important;
+	.light-text{
+		color: #747474;
+	}
+	.footer-logo{
+		max-width: 200px;
+		img{
+			width: 100%;
+		}
+	}
+	.first-col{
+		p{
+			color: #747474;
+	    font-weight: 700;
+		}
+	}
+	.second-col{
+		h4{
+			border-left: 1px solid #0D9647;
+		}
+		.footer-menu{
+			.v-list{
+				background: transparent;
+		    color: #fff;
+			}
+		}
+	}
+	.last-col{
+		padding-top: 3.5rem;
+	}
+}
+@media(max-width: 768px){
+	.footer-module{
+		padding: 2rem 1rem !important;
+	}
+	.footer-module .last-col {
+	    padding-top: 0.5rem;
+	}
+}
