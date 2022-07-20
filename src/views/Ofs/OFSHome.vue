@@ -191,6 +191,7 @@ export default {
         "pauseOnDotsHover": true,
         "pauseOnFocus": true,
         "pauseOnHover": true,
+        "prev-icon": 'mdi-arrow-left',
         "responsive": [
             {
               "breakpoint": 950,

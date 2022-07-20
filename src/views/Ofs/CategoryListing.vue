@@ -7,7 +7,7 @@
             <v-col cols="12" md="12">
               <div class="category-list">
                 <h1 class="text-left service-title mb-8">Drilling Services</h1>
-                <div class="d-flex align-center">
+                <div class="d-flex align-center tabs-header">
                   <v-tabs
                     v-model="tab"
                     hide-slider class="service-tabs mb-5"
@@ -17,7 +17,7 @@
                       v-for="item in items"
                       :key="item"
                     >
-                      <small class="text-capitalize font-weight-medium">{{ item }}</small>
+                      <span class="text-capitalize">{{ item }}</span>
                     </v-tab>
                   </v-tabs>
                   <div class="category-list__searchBox">
@@ -36,7 +36,7 @@
                     v-for="item in items"
                     :key="item"
                   >
-                    <v-simple-table dense class="company-table">
+                    <v-simple-table dense class="company-table mb-12">
                       <template v-slot:default>
                         <thead>
                           <tr class="py-4 px-8">
@@ -53,7 +53,9 @@
                             v-for="item in desserts"
                             :key="item.companies"
                           >
-                            <td class="pl-8">{{ item.companies }} <img :src="require('@/assets/images/ofs/'+item.badge)"></td>
+                            <td class="pl-8">{{ item.companies }} 
+                              
+                            </td>
                             <td>{{ item.hQLocation }}</td>
                             <td>{{ item.employees }}</td>
                             <td>{{ item.fieldLocations }}</td>
@@ -63,6 +65,13 @@
                         </tbody>
                       </template>
                     </v-simple-table>
+                    <v-pagination
+                      v-model="page"
+                      :length="4"
+                      color="#0D9647"
+                      next-icon="mdi-arrow-right"
+                      prev-icon="mdi-arrow-left"
+                    ></v-pagination>
                   </v-tab-item>
                 </v-tabs-items>
               </div>
@@ -87,6 +96,7 @@ export default {
     return {
       tab: null,
       search: '',
+      page: 1,
       items: [
         'All', 'Gulf Coast', 'Northwest', 'Rockies', 'Mid-Con', 'Permian', 'Arklatex', 'Offshore',
       ],
@@ -107,7 +117,7 @@ export default {
       desserts: [
         {
           companies: 'Peterson-UTI',
-          badge: 'badge.png',
+          image: 'badge.png',
           hQLocation: 'Houston TX USA',
           employees: '2100+',
           fieldLocations: 11,
@@ -115,6 +125,7 @@ export default {
         },
         {
           companies: 'Nabors',
+          image: 'badge.png',
           hQLocation: 'Houston TX USA',
           employees: '1800+',
           fieldLocations: 4,
@@ -122,6 +133,7 @@ export default {
         },
         {
           companies: 'Cactus Drilling',
+          image: 'badge.png',
           hQLocation: 'Oklahoma City OK USA',
           employees: '22+',
           fieldLocations: 4,
@@ -129,6 +141,7 @@ export default {
         },
         {
           companies: 'Peterson-UTI',
+          image: 'badge.png',
           hQLocation: 'Houston TX USA',
           employees: '2100+',
           fieldLocations: 11,
@@ -136,6 +149,7 @@ export default {
         },
         {
           companies: 'Nabors',
+          image: 'badge.png',
           hQLocation: 'Houston TX USA',
           employees: '1800+',
           fieldLocations: 4,
@@ -143,6 +157,7 @@ export default {
         },
         {
           companies: 'Cactus Drilling',
+          image: 'badge.png',
           hQLocation: 'Oklahoma City OK USA',
           employees: '22+',
           fieldLocations: 4,
@@ -150,6 +165,7 @@ export default {
         },
         {
           companies: 'Peterson-UTI',
+          image: 'badge.png',
           hQLocation: 'Houston TX USA',
           employees: '2100+',
           fieldLocations: 11,
@@ -157,6 +173,7 @@ export default {
         },
         {
           companies: 'Nabors',
+          image: 'badge.png',
           hQLocation: 'Houston TX USA',
           employees: '1800+',
           fieldLocations: 4,
@@ -164,6 +181,7 @@ export default {
         },
         {
           companies: 'Cactus Drilling',
+          image: 'badge.png',
           hQLocation: 'Oklahoma City OK USA',
           employees: '22+',
           fieldLocations: 4,
@@ -171,6 +189,7 @@ export default {
         },
         {
           companies: 'Peterson-UTI',
+          image: 'badge.png',
           hQLocation: 'Houston TX USA',
           employees: '2100+',
           fieldLocations: 11,
@@ -178,6 +197,7 @@ export default {
         },
         {
           companies: 'Nabors',
+          image: 'badge.png',
           hQLocation: 'Houston TX USA',
           employees: '1800+',
           fieldLocations: 4,
@@ -185,6 +205,7 @@ export default {
         },
         {
           companies: 'Cactus Drilling',
+          image: 'badge.png',
           hQLocation: 'Oklahoma City OK USA',
           employees: '22+',
           fieldLocations: 4,
@@ -192,6 +213,7 @@ export default {
         },
         {
           companies: 'Peterson-UTI',
+          image: 'badge.png',
           hQLocation: 'Houston TX USA',
           employees: '2100+',
           fieldLocations: 11,
@@ -199,6 +221,7 @@ export default {
         },
         {
           companies: 'Nabors',
+          image: 'badge.png',
           hQLocation: 'Houston TX USA',
           employees: '1800+',
           fieldLocations: 4,
@@ -206,6 +229,7 @@ export default {
         },
         {
           companies: 'Cactus Drilling',
+          image: 'badge.png',
           hQLocation: 'Oklahoma City OK USA',
           employees: '22+',
           fieldLocations: 4,

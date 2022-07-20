@@ -25,7 +25,7 @@
                 	color="#0D9647"
                 	class="font-weight-bold text-capitalize"
                 	height="52"
-                	>Access OFS Directory</v-btn>
+                	><router-link to="/" class="text-decoration-none">Access OFS Directory</router-link></v-btn>
                 </div>
               </div>
             </v-col>
