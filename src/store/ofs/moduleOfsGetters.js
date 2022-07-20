@@ -1,6 +1,6 @@
 export default {
    categories (state){
-      console.log(state);
+      // console.log(state);
       return state.categories
    },
 }
