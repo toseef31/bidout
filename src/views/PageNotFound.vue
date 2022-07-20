@@ -7,18 +7,18 @@
             <v-col cols="12" md="9">
               <div class="alert-section">
                 <div class="error-title mb-5">
-                	<h1 class="font-weight-bold">Opps!</h1>
+                	<h1 class="font-weight-bold">Opps! - BidOut</h1>
                 	<h1 class="font-weight-medium">This page is not available.</h1>
                 </div>
                 
                 <div class="btn-section mt-8 mb-16 pb-16">
-                	<v-btn 
+                	<a class="text-decoration-none" href="https://bidout.app"><v-btn 
                 	large
                 	outlined
                 	color="#0D9647"
                 	height="52"
                 	class="mr-5 font-weight-bold text-capitalize"
-                	>Access Homepage</v-btn>
+                	>Access Homepage</v-btn></a>
                 	<v-btn 
                 	large
                 	outlined
@@ -39,7 +39,7 @@
   import NavbarBeforeLogin from './Layout/NavbarBeforeLogin.vue'
   import Footer from './Layout/Footer.vue'
 export default {
-  name : "404",
+  name : "PageNotFound",
   components: {
     NavbarBeforeLogin,
     Footer,

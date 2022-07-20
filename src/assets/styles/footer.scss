@@ -11,13 +11,44 @@
 	}
 	.first-col{
 		p{
-			color: #747474;
-	    font-weight: 700;
+			color: hsla(0,0%,100%,.4);
+	    font-weight: 600;
+		}
+		.made-by{
+			position: relative;
+			&:before{
+				position: absolute;
+		    content: "";
+		    right: 27%;
+		    top: 0px;
+		    width: 25px;
+		    height: 26px;
+		    background: url(https://bidoutapp.com/wp-content/themes/bidout/images/madein-img.png);
+		    background-repeat: no-repeat;
+		    background-position: 50%;
+			}
 		}
 	}
 	.second-col{
+		a{
+			:hover{
+				color: #0d9648;
+			}
+		}
+		.phone{
+			font-size: 20px;
+		}
+		.router-link-exact-active{
+			color: #0d9648 !important;
+		}
 		h4{
-			border-left: 1px solid #0D9647;
+			border-left: 2px solid #0D9647;
+			font-size: 18px;
+			font-weight: 700;
+		}
+		.sub-heading{
+			font-size: 14px;
+			color: hsla(0,0%,100%,.4);
 		}
 		.footer-menu{
 			.v-list{
@@ -28,6 +59,12 @@
 	}
 	.last-col{
 		padding-top: 3.5rem;
+		a{
+			font-size: 20px;
+			&:hover{
+				color: #0d9648 !important;
+			}
+		}
 	}
 }
 @media(max-width: 768px){

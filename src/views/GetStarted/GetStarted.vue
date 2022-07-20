@@ -38,31 +38,23 @@
               </div>
               <v-tabs-items v-model="currentItem">
                 <v-tab-item>
-                  <v-card flat>
-                    <v-card-text>
-                      <h2></h2>
-                      
-                    </v-card-text>
-                  </v-card>
-                </v-tab-item>
-                <v-tab-item>
                   <v-form @submit.prevent="registerRequest" ref="form">
                     <v-container>
                       <v-row class="mt-8 bg-light">
                         <v-col cols="12" sm="12" text="left" class="pa-6">
                           <label class="d-block text-left input-label mb-2 font-weight-bold">Company Name</label>
-                          <v-text-field prepend-inner-icon="search" label="Full name ..." single-line outlined type="text">
+                          <v-text-field placeholder="Compnay name" single-line outlined type="text" v-model="companyName">
                           </v-text-field>
                         </v-col>
                       </v-row>
                       <v-row class="mt-12 bg-light pa-3">
                         <v-col cols="12" sm="12" text="left">
                           <label class="d-block text-left input-label mb-2 font-weight-bold">Company HQ Address 1</label>
-                          <v-text-field label="Company HQ Address 1 ..." single-line outlined type="text" v-model="companyHq" color="#ffffff"></v-text-field>
+                          <v-text-field placeholder="Company HQ Address 1" single-line outlined type="text" v-model="companyHq" color="#ffffff"></v-text-field>
                         </v-col>
                         <v-col cols="12" sm="12" text="left">
                           <label class="d-block text-left input-label mb-2 font-weight-bold">Company HQ Address 2</label>
-                          <v-text-field label="Company HQ Address 2 ..." single-line outlined type="text" v-model="companyHq2"></v-text-field>
+                          <v-text-field placeholder="Company HQ Address 2" single-line outlined type="text" v-model="companyHq2"></v-text-field>
                         </v-col>
                         <v-col cols="12" sm="6" text="left">
                           <label class="d-block text-left input-label mb-2 font-weight-bold">Company HQ Country</label>
@@ -78,17 +70,17 @@
                         </v-col>
                         <v-col cols="12" sm="6" text="left">
                           <label class="d-block text-left input-label mb-2 font-weight-bold">Company HQ ZIP</label>
-                          <v-text-field label="ZIP Code ..." single-line outlined type="text" v-model="companyHqZip"></v-text-field>
+                          <v-text-field placeholder="ZIP Code" single-line outlined type="text" v-model="companyHqZip"></v-text-field>
                         </v-col>
                       </v-row>
                       <v-row class="mt-12 bg-light pa-3">
                         <v-col cols="12" sm="12" text="left">
                           <label class="d-block text-left input-label mb-2 font-weight-bold">First Name</label>
-                          <v-text-field label="First Name ..." single-line outlined type="text" color="#ffffff" v-model="firstName"></v-text-field>
+                          <v-text-field placeholder="First Name" single-line outlined type="text" color="#ffffff" v-model="firstName"></v-text-field>
                         </v-col>
                         <v-col cols="12" sm="12" text="left">
                           <label class="d-block text-left input-label mb-2 font-weight-bold">Last Name</label>
-                          <v-text-field label="Last Name ..." single-line outlined type="text" v-model="lastName"></v-text-field>
+                          <v-text-field placeholder="Last Name" single-line outlined type="text" v-model="lastName"></v-text-field>
                         </v-col>
                         <v-col cols="12" sm="12" text="left">
                           <label class="d-block text-left input-label mb-2 font-weight-bold">Email Address</label>
@@ -96,11 +88,149 @@
                         </v-col>
                         <v-col cols="12" sm="12" text="left">
                           <label class="d-block text-left input-label mb-2 font-weight-bold">Title</label>
-                          <v-text-field label="Title ..." single-line outlined type="text" v-model="title"></v-text-field>
+                          <v-text-field placeholder="Title" single-line outlined type="text" v-model="title"></v-text-field>
                         </v-col>
                         <v-col cols="12" sm="12" text="left">
                           <label class="d-block text-left input-label mb-2 font-weight-bold">Direct Phone Number</label>
-                          <v-text-field label="000000-00" single-line outlined type="text" v-model="phoneNumber"></v-text-field>
+                          <v-text-field placeholder="(832) 786-2400" single-line outlined type="text" v-model="phoneNumber"></v-text-field>
+                        </v-col>
+                      </v-row>
+                      <v-row class="mt-12 bg-light pa-3">
+                        <v-col cols="12" sm="12" text="left">
+                          <label class="d-block text-left input-label mb-2 font-weight-bold">Password</label>
+                          <v-text-field placeholder="Password" single-line outlined type="password" color="#ffffff" v-model="password" :rules="[required, min6]">
+                            <template v-slot:append>
+                              <v-icon
+                                 v-if="successPass"
+                                 color="green"
+                                 >{{ passRule }}</v-icon
+                                >
+                              <v-icon
+                                 v-if="!successPass"
+                                 color="red"
+                                 >{{ passRule }}</v-icon
+                                >
+                            </template>
+                          </v-text-field>
+                        </v-col>
+                        <v-col cols="12" sm="12" text="left">
+                          <label class="d-block text-left input-label mb-2 font-weight-bold">Confirm Password</label>
+                          <v-text-field placeholder="Confirm Password" single-line outlined type="password" v-model="confirmPassword":rules="[required, min6, matchingPasswords ]">
+                            <template v-slot:append>
+                              <v-icon
+                                v-if="successPass1"
+                                color="green"
+                                >{{ passRule1 }}</v-icon
+                              >
+                              <v-icon
+                                 v-if="!successPass1"
+                                 color="red"
+                                 >{{ passRule1 }}</v-icon
+                              >
+                            </template>
+                          </v-text-field>
+                        </v-col>
+                      </v-row>
+                      <v-row justify="center mt-10">
+                        <v-col cols="12" md="3">
+                          <v-btn color="#0D9647" large dense width="100%" height="56" class="font-weight-bold white--text text-capitalize" type="submit">Next <v-icon class="pl-2" color="#fff">mdi-arrow-right-circle</v-icon></v-btn>
+                        </v-col>
+                      </v-row>
+                    </v-container>
+                  </v-form>
+                </v-tab-item>
+                <v-tab-item>
+                  <v-form @submit.prevent="registerRequest" ref="form">
+                    <v-container>
+                      <v-row class="mt-8 bg-light">
+                        <v-col cols="12" sm="12" text="left" class="pa-6">
+                          <label class="d-block text-left input-label mb-2 font-weight-bold">Company Name</label>
+                          <v-text-field prepend-inner-icon="search" placeholder="Compnay name" single-line outlined type="text">
+                          </v-text-field>
+                        </v-col>
+                      </v-row>
+                      <v-row class="mt-12 bg-light pa-3">
+                        <v-col cols="12" sm="12" text="left">
+                          <label class="d-block text-left input-label mb-2 font-weight-bold">Company HQ Address 1</label>
+                          <v-text-field placeholder="Company HQ Address 1" single-line outlined type="text" v-model="companyHq" color="#ffffff"></v-text-field>
+                        </v-col>
+                        <v-col cols="12" sm="12" text="left">
+                          <label class="d-block text-left input-label mb-2 font-weight-bold">Company HQ Address 2</label>
+                          <v-text-field placeholder="Company HQ Address 2" single-line outlined type="text" v-model="companyHq2"></v-text-field>
+                        </v-col>
+                        <v-col cols="12" sm="6" text="left">
+                          <label class="d-block text-left input-label mb-2 font-weight-bold">Company HQ Country</label>
+                          <v-select :items="countries" outlined v-model="companyHqCountry" placeholder="Select"></v-select>
+                        </v-col>
+                        <v-col cols="12" sm="6" text="left">
+                          <label class="d-block text-left input-label mb-2 font-weight-bold">Company HQ State</label>
+                          <v-select outlined placeholder="Select" v-model="companyHqState"></v-select>
+                        </v-col>
+                        <v-col cols="12" sm="6" text="left">
+                          <label class="d-block text-left input-label mb-2 font-weight-bold">Company HQ City</label>
+                          <v-select outlined placeholder="Select" v-model="companyHqCity"></v-select>
+                        </v-col>
+                        <v-col cols="12" sm="6" text="left">
+                          <label class="d-block text-left input-label mb-2 font-weight-bold">Company HQ ZIP</label>
+                          <v-text-field placeholder="ZIP Code" single-line outlined type="text" v-model="companyHqZip"></v-text-field>
+                        </v-col>
+                      </v-row>
+                      <v-row class="mt-12 bg-light pa-3">
+                        <v-col cols="12" sm="12" text="left">
+                          <label class="d-block text-left input-label mb-2 font-weight-bold">First Name</label>
+                          <v-text-field placeholder="First Name" single-line outlined type="text" color="#ffffff" v-model="firstName"></v-text-field>
+                        </v-col>
+                        <v-col cols="12" sm="12" text="left">
+                          <label class="d-block text-left input-label mb-2 font-weight-bold">Last Name</label>
+                          <v-text-field placeholder="Last Name" single-line outlined type="text" v-model="lastName"></v-text-field>
+                        </v-col>
+                        <v-col cols="12" sm="12" text="left">
+                          <label class="d-block text-left input-label mb-2 font-weight-bold">Email Address</label>
+                          <v-text-field label="example@email.com" single-line outlined type="email" v-model="email"></v-text-field>
+                        </v-col>
+                        <v-col cols="12" sm="12" text="left">
+                          <label class="d-block text-left input-label mb-2 font-weight-bold">Title</label>
+                          <v-text-field placeholder="Title" single-line outlined type="text" v-model="title"></v-text-field>
+                        </v-col>
+                        <v-col cols="12" sm="12" text="left">
+                          <label class="d-block text-left input-label mb-2 font-weight-bold">Direct Phone Number</label>
+                          <v-text-field placeholder="(832) 786-2400" single-line outlined type="text" v-model="phoneNumber"></v-text-field>
+                        </v-col>
+                      </v-row>
+                      <v-row class="mt-12 bg-light pa-3">
+                        <v-col cols="12" sm="12" text="left">
+                          <label class="d-block text-left input-label mb-2 font-weight-bold">Password</label>
+                          <v-text-field placeholder="Password" single-line outlined type="password" color="#ffffff" v-model="password" :rules="[required, min6]">
+                            <template v-slot:append>
+                              <v-icon
+                                 v-if="successPass"
+                                 color="green"
+                                 >{{ passRule }}</v-icon
+                                >
+                              <v-icon
+                                 v-if="!successPass"
+                                 color="red"
+                                 >{{ passRule }}</v-icon
+                                >
+                            </template>
+                          </v-text-field>
+                        </v-col>
+                        <v-col cols="12" sm="12" text="left">
+                          <label class="d-block text-left input-label mb-2 font-weight-bold">Confirm Password</label>
+                          <v-text-field placeholder="Confirm Password" single-line outlined type="password" v-model="confirmPassword":rules="[required, min6, matchingPasswords ]">
+                            <template v-slot:append>
+                              <v-icon
+                                v-if="successPass1"
+                                color="green"
+                                >{{ passRule1 }}</v-icon
+                              >
+                              <v-icon
+                                 v-if="!successPass1"
+                                 color="red"
+                                 >{{ passRule1 }}</v-icon
+                              >
+                            </template>
+                          </v-text-field>
                         </v-col>
                       </v-row>
                       <v-row justify="center mt-10">
@@ -133,12 +263,14 @@
 <script>
   import NavbarBeforeLogin from '../Layout/NavbarBeforeLogin.vue'
   import Footer from '../Layout/Footer.vue'
+  
   import { mapActions } from "vuex";
 export default {
   name : "GetStarted",
   components: {
     NavbarBeforeLogin,
     Footer,
+    
   },
   
   data() {
@@ -146,7 +278,7 @@ export default {
       isActivity : false,
       currentItem: null,
       items: [
-        'Operator', 'Service Provider',
+        'Buyer', 'Supplier',
       ],
       countries: [
         'Uninted States',
@@ -169,12 +301,44 @@ export default {
       lastName: '',
       email: '',
       phoneNumber: '',
-      title: ''
+      title: '',
+      password: '',
+      confirmPassword: '',
+      successPass: false,
+      successPass1: false,
+      country: '',
+      region: ''
     };
   },
   computed:{
     activityPanel(){
         return this.$store.getters.g_activityPanel;
+    },
+    passRule: function() {
+      if (this.password === '') {
+        this.successPass = false;
+        return '';
+      } else if (this.min6(this.password) === true) {
+        this.successPass = true;
+        return 'mdi-check';
+      } else {
+        this.successPass = false;
+        return 'mdi-close';
+      }
+    },
+    passRule1: function() {
+      if (this.confirmPassword === '') {
+        // field is empty
+        this.successPass1 = false;
+        return '';
+      } else if (this.min6(this.confirmPassword) === true && this.matchingPasswords() === true) {
+        this.successPass1 = true;
+        return 'mdi-check';
+      } else {
+        // password wrong
+        this.successPass1 = false;
+        return 'mdi-close';
+      }
     },
   },
   methods: {
@@ -195,10 +359,31 @@ export default {
       }
       this.signUpAction(providerData);
     },
+    required: function(value) {
+      if (value) {
+        return true;
+      } else {
+        return 'This field is required.';
+      }
+    },
+    min6: function(value) {
+      if (value.length >= 6) {
+        return true;
+      } else {
+        return 'Password should have more than 6 characters.';
+      }
+    },
+    matchingPasswords: function() {
+      if (this.password === this.confirmPassword) {
+        return true;
+      } else {
+        return 'Passwords does not match.';
+      }
+    },
   },
   mounted() {
     
-}
+  }
 };
 </script>
 <style scoped lang="scss">
