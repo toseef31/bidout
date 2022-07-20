@@ -1,12 +1,11 @@
 import Base from '@/views/Layout/Base.vue';
-
 const routes = [
   {
     path: '',
     component: Base,
     children: [
       {
-        path: '/ofs',
+        path: '/',
         name: 'OFSHome',
         component: () => import('@/views/Ofs/OFSHome.vue'),
       },

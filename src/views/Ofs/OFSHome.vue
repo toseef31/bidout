@@ -24,6 +24,7 @@
           <v-row>
             <v-col cols="12" md="12">
               <VueSlickCarousel v-bind="settings" class="company-slider">
+
                 <div class="slide-item">
                   <div class="slide-img d-flex align-center justify-center flex-column">
                     <img
@@ -83,16 +84,13 @@
             </v-col>
           </v-row>
           <v-row justify="center">
-            <v-col cols="12" md="6">
+            <v-col cols="12" md="6" v-for="category in allcategories">
               <div class="ofs-listing text-left">
-                <h1 class="font-weight-bold mb-3">Drilling Services</h1>
-                <p>Pad Construction (23) Drilling Companies (13) Drilling Companies (13)
-                  Pipe Service (99) Pad Construction (23) Pad Construction (23)
-                  Drilling Companies (13) Pad Construction (23) Pad Construction (23)
-                  Trucking Companies (12)</p>
+                <h1 class="font-weight-bold mb-3">{{category.name}}</h1>
+                <p><span v-for="subcategry in category.subCategories">{{subcategry.name}} ({{subcategry.spCount}})</span></p>
               </div>
             </v-col>
-            <v-col cols="12" md="6">
+            <!-- <v-col cols="12" md="6">
               <div class="ofs-listing text-left">
                 <h1 class="font-weight-bold mb-3">Completion Services</h1>
                 <p>Water Service (23) Water Transfer (13) Chemicals (92) Wireline (99)
@@ -136,7 +134,7 @@
                   Drilling Companies (13) Pad Construction (23) Pad Construction (23)
                   Trucking Companies (12)</p>
               </div>
-            </v-col>
+            </v-col> -->
           </v-row>
           <v-row justify="center" class="mb-15 mt-16">
             <v-col cols="12" md="12">
@@ -169,6 +167,7 @@
   import 'vue-slick-carousel/dist/vue-slick-carousel.css'
     // optional style for arrows & dots
   import 'vue-slick-carousel/dist/vue-slick-carousel-theme.css'
+  import { mapActions } from "vuex"
 export default {
   name : "ModuleSelection",
   components: {
@@ -227,14 +226,20 @@ export default {
     };
   },
   computed:{
-   
+   allcategories(){
+       return this.$store.getters.categories;
+   },
   },
   methods: {
+    ...mapActions(["getCategories"]),
+    getAllCategories(){
+      this.getCategories();
+    }
     
   },
   mounted() {
-    
-}
+    this.getCategories();
+  }
 };
 </script>
 <style scoped lang="scss">
