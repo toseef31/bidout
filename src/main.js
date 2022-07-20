@@ -9,7 +9,6 @@ import 'firebase/compat/auth';
 import 'firebase/compat/firestore';
 import axios from 'axios';
 import '@/assets/styles/index.scss';
-import vueCountryRegionSelect from 'vue-country-region-select';
 
 // Your web app's Firebase configuration
 var firebaseConfig = {
@@ -28,7 +27,7 @@ firebase.initializeApp(firebaseConfig);
 
 axios.defaults.baseURL = import.meta.env.VITE_API_BASE_URL;
 
-Vue.use(Vuex,axios,vueCountryRegionSelect);
+Vue.use(Vuex,axios);
 
 new Vue({
   vuetify,
