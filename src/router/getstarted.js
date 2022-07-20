@@ -30,11 +30,10 @@ const routes = [
         name: 'payment',
         component: () => import('@/views/GetStarted/Payment.vue'),
       },
-      {
-        path: '/404',
-        name: '404',
-        component: () => import('@/views/404.vue'),
-      },
+      
+      { path: "*", 
+        component: () => import('@/views/PageNotFound.vue'), 
+      }
     ],
   },
 ];
