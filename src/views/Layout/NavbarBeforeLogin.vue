@@ -16,7 +16,7 @@
                 <a class="text-decoration-none" href="https://bidout.app"><v-list-item-title class="font-weight-bold">Home</v-list-item-title></a>
               </v-list>
               <v-list class="px-7">
-                <v-list-item-title class="font-weight-bold"><router-link to="/" class="text-decoration-none">OFS Directory</router-link></v-list-item-title>
+                <router-link to="/" class="text-decoration-none"><v-list-item-title class="font-weight-bold">OFS Directory</v-list-item-title></router-link>
               </v-list>
               <router-link to="get-started" color="white" large height="56" class="font-weight-bold text-capitalize mr-3 text-decoration-none pa-3 white">
                 Get Started Now  <v-icon class="pl-2" color="#0D9647">mdi-arrow-right-circle</v-icon>

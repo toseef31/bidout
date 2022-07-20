@@ -161,14 +161,6 @@
                         <v-col cols="12" sm="6" text="left">
                           <label class="d-block text-left input-label mb-2 font-weight-bold">Company HQ Country</label>
                           <v-select :items="countries" outlined v-model="companyHqCountry" placeholder="Select"></v-select>
-                          <country-select v-model="country" :country="country" topCountry="US" />
-                            <region-select v-model="region" :country="country" :region="region" />
-                            <div>
-                                        Country: <select class="crs-country" data-region-id="one"></select>
-                                    </div>
-                                    <div>
-                                        Region: <select id="one"></select>
-                                    </div>
                         </v-col>
                         <v-col cols="12" sm="6" text="left">
                           <label class="d-block text-left input-label mb-2 font-weight-bold">Company HQ State</label>
