@@ -2,7 +2,7 @@
   <section class="fill-height catgeory-module white">
     <NavbarBeforeLogin></NavbarBeforeLogin>
       <v-container>
-        <v-main>
+        <v-main class="mb-16">
           <v-row justify="center">
             <v-col cols="12" md="12">
               <div class="category-list">
