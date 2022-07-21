@@ -272,15 +272,12 @@
 <script>
   import NavbarBeforeLogin from '../Layout/NavbarBeforeLogin.vue'
   import Footer from '../Layout/Footer.vue'
-  import vueCountryRegionSelect from 'vue-country-region-select'
-  import { allCountries } from 'country-region-data';
   import { mapActions } from "vuex";
 export default {
   name : "GetStarted",
   components: {
     NavbarBeforeLogin,
     Footer,
-    vueCountryRegionSelect,
   },
   
   data() {
