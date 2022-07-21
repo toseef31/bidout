@@ -24,9 +24,10 @@
           <v-row justify="center">
             <v-col cols="12" md="9">
               <div class="tabs-head pa-6">
+                
                 <h4 class="text-left mb-4 font-weight-bold">Choose an option</h4>
                 <template>
-                  <v-tabs
+                  <v-tabs optional="false"
                     v-model="currentItem"
                     centered
                     hide-slider grow  height="56"
@@ -60,15 +61,19 @@
                         </v-col>
                         <v-col cols="12" sm="6" text="left">
                           <label class="d-block text-left input-label mb-2 font-weight-bold">Company HQ Country</label>
-                          <v-select :items="countries" outlined v-model="companyHqCountry" placeholder="Select"></v-select>
+                          <!-- <v-select :items="countries" outlined v-model="companyHqCountry" placeholder="Select"></v-select> -->
+                          <country-select v-model="country" :country="country" topCountry="US" className="countrySelect" placeholder="Select Country" />
+                            
                         </v-col>
+                        
                         <v-col cols="12" sm="6" text="left">
                           <label class="d-block text-left input-label mb-2 font-weight-bold">Company HQ State</label>
-                          <v-select outlined placeholder="Select" v-model="companyHqState"></v-select>
+                          <!-- <v-select outlined placeholder="Select" v-model="companyHqState"></v-select> -->
+                          <region-select v-model="region" :country="country" :region="region" className="countrySelect" />
                         </v-col>
                         <v-col cols="12" sm="6" text="left">
                           <label class="d-block text-left input-label mb-2 font-weight-bold">Company HQ City</label>
-                          <v-select outlined placeholder="Select" v-model="companyHqCity"></v-select>
+                          <v-text-field placeholder="Company HQ City" single-line outlined type="text" v-model="companyHqCity"></v-text-field>
                         </v-col>
                         <v-col cols="12" sm="6" text="left">
                           <label class="d-block text-left input-label mb-2 font-weight-bold">Company HQ ZIP</label>
@@ -86,7 +91,7 @@
                         </v-col>
                         <v-col cols="12" sm="12" text="left">
                           <label class="d-block text-left input-label mb-2 font-weight-bold">Email Address</label>
-                          <v-text-field label="example@email.com" single-line outlined type="email" v-model="email"></v-text-field>
+                          <v-text-field placeholder="example@email.com" single-line outlined type="email" v-model="email"></v-text-field>
                         </v-col>
                         <v-col cols="12" sm="12" text="left">
                           <label class="d-block text-left input-label mb-2 font-weight-bold">Title</label>
@@ -162,15 +167,17 @@
                         </v-col>
                         <v-col cols="12" sm="6" text="left">
                           <label class="d-block text-left input-label mb-2 font-weight-bold">Company HQ Country</label>
-                          <v-select :items="countries" outlined v-model="companyHqCountry" placeholder="Select"></v-select>
+                          <!-- <v-select :items="countries" outlined v-model="companyHqCountry" placeholder="Select"></v-select> -->
+                          <country-select v-model="country" :country="country" topCountry="US" className="countrySelect" placeholder="Select Country" />
                         </v-col>
                         <v-col cols="12" sm="6" text="left">
                           <label class="d-block text-left input-label mb-2 font-weight-bold">Company HQ State</label>
-                          <v-select outlined placeholder="Select" v-model="companyHqState"></v-select>
+                          <!-- <v-select outlined placeholder="Select" v-model="companyHqState"></v-select> -->
+                          <region-select v-model="region" :country="country" :region="region" className="countrySelect" />
                         </v-col>
                         <v-col cols="12" sm="6" text="left">
                           <label class="d-block text-left input-label mb-2 font-weight-bold">Company HQ City</label>
-                          <v-select outlined placeholder="Select" v-model="companyHqCity"></v-select>
+                          <v-text-field placeholder="Company HQ City" single-line outlined type="text" v-model="companyHqCity"></v-text-field>
                         </v-col>
                         <v-col cols="12" sm="6" text="left">
                           <label class="d-block text-left input-label mb-2 font-weight-bold">Company HQ ZIP</label>
@@ -188,7 +195,7 @@
                         </v-col>
                         <v-col cols="12" sm="12" text="left">
                           <label class="d-block text-left input-label mb-2 font-weight-bold">Email Address</label>
-                          <v-text-field label="example@email.com" single-line outlined type="email" v-model="email"></v-text-field>
+                          <v-text-field placeholder="example@email.com" single-line outlined type="email" v-model="email"></v-text-field>
                         </v-col>
                         <v-col cols="12" sm="12" text="left">
                           <label class="d-block text-left input-label mb-2 font-weight-bold">Title</label>
@@ -265,20 +272,21 @@
 <script>
   import NavbarBeforeLogin from '../Layout/NavbarBeforeLogin.vue'
   import Footer from '../Layout/Footer.vue'
-  
+  import vueCountryRegionSelect from 'vue-country-region-select'
+  import { allCountries } from 'country-region-data';
   import { mapActions } from "vuex";
 export default {
   name : "GetStarted",
   components: {
     NavbarBeforeLogin,
     Footer,
-    
+    vueCountryRegionSelect,
   },
   
   data() {
     return {
       isActivity : false,
-      currentItem: null,
+      currentItem: '',
       items: [
         'Buyer', 'Supplier',
       ],
@@ -293,7 +301,7 @@ export default {
         'Brazil',
         'Australia',
       ],
-      companyHqCountry: 'Uninted States',
+      companyName: '',
       companyHq: '',
       companyHq2: '',
       companyHqState: '',
@@ -308,8 +316,8 @@ export default {
       confirmPassword: '',
       successPass: false,
       successPass1: false,
-      country: '',
-      region: ''
+      country: "US",
+      region: "CA"
     };
   },
   computed:{
@@ -384,7 +392,6 @@ export default {
     },
   },
   mounted() {
-    
   }
 };
 </script>

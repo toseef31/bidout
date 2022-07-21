@@ -18,11 +18,11 @@
               <v-list class="px-7">
                 <router-link to="/" class="text-decoration-none"><v-list-item-title class="font-weight-bold">OFS Directory</v-list-item-title></router-link>
               </v-list>
-              <router-link to="get-started" color="white" large height="56" class="font-weight-bold text-capitalize mr-3 text-decoration-none pa-3 white">
+              <router-link to="get-started" color="white" large height="56" class="font-weight-bold text-capitalize mr-3 text-decoration-none pa-3 white menu-btn">
                 Get Started Now  <v-icon class="pl-2" color="#0D9647">mdi-arrow-right-circle</v-icon>
               </router-link>
               
-              <router-link to="/login" color="white" large height="56" class="font-weight-bold text-capitalize ml-3 text-decoration-none pa-3 white">
+              <router-link to="/login" color="white" large height="56" class="font-weight-bold text-capitalize ml-3 text-decoration-none pa-3 white menu-btn">
                 Log In<v-icon class="pl-2" color="#0D9647">mdi-arrow-right-circle</v-icon>
               </router-link>
             </div>
