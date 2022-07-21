@@ -50,7 +50,7 @@
                 <v-row>
                   <v-col cols="12" sm="12" text="left">
                     <label class="d-block text-left input-label mb-2 font-weight-bold">Payment Type</label>
-                    <v-select outlined placeholder="Select" :item-value="paymentTypes.value" :items="paymentTypes" @change="payment(type)" v-model="type" align="left"></v-select>
+                    <v-select outlined placeholder="Select" :item-value="paymentTypes.value" :items="paymentTypes" @change="payment(type)" v-model="type" class="text-left"></v-select>
                   </v-col>
                 </v-row>
               </div>
