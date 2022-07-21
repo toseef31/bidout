@@ -86,7 +86,7 @@
           <v-row justify="center">
             <v-col cols="12" md="6" v-for="category in allcategories">
               <div class="ofs-listing text-left">
-                <h1 class="font-weight-bold mb-3 text-break"><router-link :to="category.slug" class="text-decoration-none">{{category.name}}</router-link></h1>
+                <h1 class="font-weight-bold mb-3 text-break"><router-link :to="'/ofs-directory/'+category.slug" class="text-decoration-none">{{category.name}}</router-link></h1>
                 <p><span v-for="subcategry in category.subCategories"><font class="font-weight-bold">{{subcategry.name}} </font> <font class="font-weight-medium">({{subcategry.spCount}}) </font> </span></p>
               </div>
             </v-col>

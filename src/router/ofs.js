@@ -10,7 +10,7 @@ const routes = [
         component: () => import('@/views/Ofs/OFSHome.vue'),
       },
       {
-        path: '/:slug',
+        path: '/ofs-directory/:slug',
         name: 'CategoryListing',
         component: () => import('@/views/Ofs/CategoryListing.vue'),
       },
