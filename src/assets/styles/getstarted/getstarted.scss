@@ -18,12 +18,13 @@
 			color: #0D1139;
 		}
 		.v-slide-group{
-			background-color: transparent;
+			background-color: transparent !important;
 			.v-tab{
-				border: 1px solid #B8B8B8;
+				border: 1px solid #0D1139;
 				font-size: 16px;
 				line-height: 16px;
 				color: #0D1139 !important;
+				background: white;
 				&:hover{
 					border: 1px solid #0D9647;
 					color: #0D9647 !important;
@@ -75,6 +76,17 @@
 				}
 				.v-text-field__details{
 					display: none;
+				}
+			}
+		}
+		.company-list{
+			cursor: pointer;
+			position: absolute;
+			width: 94.4%;
+			z-index: 10;
+			.v-list-item{
+				&:not(&:last-Child){
+					border-bottom: 1px solid #e7e5e5;
 				}
 			}
 		}

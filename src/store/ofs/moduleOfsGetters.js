@@ -3,4 +3,5 @@ export default {
       // console.log(state);
       return state.categories
    },
+   
 }

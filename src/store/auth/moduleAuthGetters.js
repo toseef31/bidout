@@ -11,4 +11,10 @@ export default {
     errorMessage (state){
     	return state.errorMessage
     },
+    supplier (state){
+       return state.supplier
+    },
+    emailExists (state){
+       return state.emailExists
+    },
 }

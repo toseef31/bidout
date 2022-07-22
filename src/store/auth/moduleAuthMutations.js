@@ -14,4 +14,10 @@ export default {
     setEmailError (state, payload){
     	state.errorMessage = payload
     },
+    setSupplierList (state, payload){
+      state.supplier = payload
+    },
+    setEmailExistSuccess (state, payload){
+      state.emailExists = payload
+    },
 }

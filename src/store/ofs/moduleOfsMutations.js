@@ -3,4 +3,5 @@ export default {
       // console.log(payload);
    	state.categories = payload
   },
+  
 }

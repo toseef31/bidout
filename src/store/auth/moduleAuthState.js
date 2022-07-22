@@ -6,4 +6,6 @@ export default {
     error: null,
     successMessage: null,
     errorMessage: null,
+    supplier: [],
+    emailExists: null,
 }

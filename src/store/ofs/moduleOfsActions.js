@@ -7,6 +7,6 @@ export default {
         // console.log(responce);
       commit('setCatgeoryList',responce.data)
     })
-  }, 
+  },
   
 }

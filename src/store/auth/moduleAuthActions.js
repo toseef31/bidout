@@ -54,27 +54,63 @@ export default {
       else{
         commit('setEmailError', 'Something wrong please try again')
       }
-      
-     // this.singleChate = responce.data;
     })
   },
 
-  signUpAction({ commit }, payload) {
-
+  checkEmail({ commit }, payload) {
+    // console.log(payload);
+    // Try to sigin
+    if(payload.indexOf('@') != -1){
+      axios.post('/user/checkIfUserWithEmailExists',{'email': payload})
+       .then(responce => {
+        console.log(responce.data.exists);
+        if(responce.data.exists == true){
+          commit('setEmailExistSuccess', 'Email aleardy Exists! Please try different one')
+        }else{
+          commit('setEmailExistSuccess', '')
+        }
+        
+       
+      })
+    }
+    
+  },
+  supplierSignUpAction({ commit }, payload) {
     console.log(payload);
     // Try to sigin
-    // axios.post('/ofs/createProvider',{'email': payload.email})
-    //  .then(responce => {
-    //   console.log(responce);
-    //   if(responce.status == 200){
-    //     commit('setEmailSuccess', 'Email sent successfully! Please check your email')
-    //   }
-    //   else{
-    //     commit('setEmailError', 'Something wrong please try again')
-    //   }
-      
-     
-    // })
+    if(payload.email.indexOf('@') != -1){
+      axios.post('/user/checkIfUserWithEmailExists',{'email': payload.email})
+       .then(responce => {
+        if(responce.data.exists == true){
+          // commit('setEmailExistSuccess', 'Email aleardy Exists! Please try different one')
+          router.replace({
+          name: "ExistingAccount"
+        });
+        }else{
+          commit('setEmailExistSuccess', '')
+          axios.post('/ofs/queueSupplierUser',{payload})
+           .then(responce => {
+            if(responce.status == 200){
+              commit('setEmailSuccess', 'Email sent successfully! Please check your email')
+            }
+            else{
+              commit('setEmailError', 'Something wrong please try again')
+            }
+            
+           
+          })
+        }
+        
+       
+      })
+    }
+    
+  },
+  searchSupplier({commit}, payload){
+    axios.get('/ofs/searchSuppliers/'+payload)
+      .then(responce => {
+      commit('setSupplierList',responce.data)
+    })
   },
   
 }

@@ -84,74 +84,56 @@
             </v-col>
           </v-row>
           <v-row justify="center">
-            <v-col cols="12" md="6" v-for="category in allcategories">
+            <v-col cols="12" md="6" v-if="loading">
+              <v-skeleton-loader
+                v-bind="attrs"
+                type="heading, text"
+              ></v-skeleton-loader>
+            </v-col>
+            <v-col cols="12" md="6" v-if="loading">
+              <v-skeleton-loader
+                v-bind="attrs"
+                type="heading, text"
+              ></v-skeleton-loader>
+            </v-col>
+            <v-col cols="12" md="6" v-if="loading">
+              <v-skeleton-loader
+                v-bind="attrs"
+                type="heading, text"
+              ></v-skeleton-loader>
+            </v-col>
+            <v-col cols="12" md="6" v-if="loading">
+              <v-skeleton-loader
+                v-bind="attrs"
+                type="heading, text"
+              ></v-skeleton-loader>
+            </v-col>
+            <v-col cols="12" md="6" v-for="category in allcategories" :key="category.id">
+              
               <div class="ofs-listing text-left">
                 <h1 class="font-weight-bold mb-3 text-break"><router-link :to="'/ofs-directory/'+category.slug" class="text-decoration-none">{{category.name}}</router-link></h1>
-                <p><span v-for="subcategry in category.subCategories"><font class="font-weight-bold">{{subcategry.name}} </font> <font class="font-weight-medium">({{subcategry.spCount}}) </font> </span></p>
+                <p><span v-for="subcategry in subCategories(category.subCategories)"><font class="font-weight-bold">{{subcategry.name}} </font> <font class="font-weight-medium">({{subcategry.spCount}}) </font> </span></p>
               </div>
             </v-col>
-            <!-- <v-col cols="12" md="6">
-              <div class="ofs-listing text-left">
-                <h1 class="font-weight-bold mb-3">Completion Services</h1>
-                <p>Water Service (23) Water Transfer (13) Chemicals (92) Wireline (99)
-                  Wireline (99) Coiled Tubbing (44) Chemicals (92) Water Service (23)
-                  Water Service (23) Water Transfer (13) Coiled Tubbing (44)
-                  Wireline (99) Coiled Tubbing (44) Chemicals (92)</p>
-              </div>
-            </v-col>
-            <v-col cols="12" md="6">
-              <div class="ofs-listing text-left">
-                <h1 class="font-weight-bold mb-3">Land & Legal Services</h1>
-                <p>Pad Construction (23) Drilling Companies (13) Drilling Companies (13)
-                  Pipe Service (99) Pad Construction (23) Pad Construction (23)
-                  Drilling Companies (13) Pad Construction (23) Pad Construction (23)
-                  Trucking Companies (12)</p>
-              </div>
-            </v-col>
-            <v-col cols="12" md="6">
-              <div class="ofs-listing text-left">
-                <h1 class="font-weight-bold mb-3">Equipment & Rental Companies</h1>
-                <p>Pad Construction (23) Drilling Companies (13) Drilling Companies (13)
-                  Pipe Service (99) Pad Construction (23) Pad Construction (23)
-                  Drilling Companies (13) Pad Construction (23) Pad Construction (23)
-                  Trucking Companies (12)</p>
-              </div>
-            </v-col>
-            <v-col cols="12" md="6">
-              <div class="ofs-listing text-left">
-                <h1 class="font-weight-bold mb-3">Environmental & HSE</h1>
-                <p>Pad Construction (23) Drilling Companies (13) Drilling Companies (13)
-                  Pipe Service (99) Pad Construction (23) Pad Construction (23)
-                  Drilling Companies (13) Pad Construction (23) Pad Construction (23)
-                  Trucking Companies (12)</p>
-              </div>
-            </v-col>
-            <v-col cols="12" md="6">
-              <div class="ofs-listing text-left">
-                <h1 class="font-weight-bold mb-3">Engineering</h1>
-                <p>Pad Construction (23) Drilling Companies (13) Drilling Companies (13)
-                  Pipe Service (99) Pad Construction (23) Pad Construction (23)
-                  Drilling Companies (13) Pad Construction (23) Pad Construction (23)
-                  Trucking Companies (12)</p>
-              </div>
-            </v-col> -->
           </v-row>
           <v-row justify="center" class="mb-15 mt-16">
             <v-col cols="12" md="12">
               <div class="ofs-bottom-section text-left">
-                <div class="ofs-bottom-content d-flex justify-space-between">
-                  <div class="ml-5 ml-sm-5 my-5 my-sm-12">
-                    <h1 class="mb-4 font-weight-medium white--text">OFS DIRECTORY</h1>
-                    <h1 class="white--text font-weight-bold mb-0 title">Get listed today<br>
-                    For free</h1>
+                <router-link to="/get-started" class="text-decoration-none">
+                  <div class="ofs-bottom-content d-flex justify-space-between">
+                    <div class="ml-5 ml-sm-5 my-5 my-sm-12">
+                      <h1 class="mb-4 font-weight-medium white--text">OFS DIRECTORY</h1>
+                      <h1 class="white--text font-weight-bold mb-0 title">Get listed today<br>
+                      For free</h1>
+                    </div>
+                    <div class="mt-5 mt-sm-5 mr-5 mr-sm-8">
+                      <img
+                        :src="require('@/assets/images/green-black.png')"
+                         width="102px"
+                      >
+                    </div>
                   </div>
-                  <div class="mt-5 mt-sm-5 mr-5 mr-sm-8">
-                    <img
-                      :src="require('@/assets/images/green-black.png')"
-                       width="102px"
-                    >
-                  </div>
-                </div>
+                </router-link>
               </div>
             </v-col>
           </v-row>
@@ -167,6 +149,7 @@
   import 'vue-slick-carousel/dist/vue-slick-carousel.css'
     // optional style for arrows & dots
   import 'vue-slick-carousel/dist/vue-slick-carousel-theme.css'
+  import _ from 'lodash';
   import { mapActions } from "vuex"
 export default {
   name : "ModuleSelection",
@@ -223,19 +206,24 @@ export default {
             }
           ]
       },
+      loading: true,
     };
   },
   computed:{
-   allcategories(){
-       return this.$store.getters.categories;
-   },
+    allcategories(){
+      setTimeout(() => this.loading = false, 500);
+      return _.orderBy(this.$store.getters.categories, 'orderNumber', 'asc'); 
+    },
   },
   methods: {
     ...mapActions(["getCategories"]),
     getAllCategories(){
       this.getCategories();
-    }
-    
+      
+    },
+    subCategories(subCats){
+     return _.orderBy(subCats, 'orderNumber', 'asc');
+    },
   },
   mounted() {
     this.getCategories();
