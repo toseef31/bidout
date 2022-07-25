@@ -14,6 +14,16 @@ const routes = [
         name: 'CategoryListing',
         component: () => import('@/views/Ofs/CategoryListing.vue'),
       },
+      {
+        path: '/company-profile',
+        name: 'CompanyProfile',
+        component: () => import('@/views/Ofs/CompanyProfile.vue'),
+      },
+      {
+        path: '/subcompany-profile',
+        name: 'SubCompanyProfile',
+        component: () => import('@/views/Ofs/SubCompany.vue'),
+      },
     ],
   },
 ];
