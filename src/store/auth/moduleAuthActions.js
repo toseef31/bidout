@@ -82,22 +82,23 @@ export default {
       axios.post('/user/checkIfUserWithEmailExists',{'email': payload.email})
        .then(responce => {
         if(responce.data.exists == true){
-          // commit('setEmailExistSuccess', 'Email aleardy Exists! Please try different one')
+          commit('setEmailExistSuccess', 'Email aleardy Exists! Please try different one')
           router.replace({
           name: "ExistingAccount"
         });
         }else{
-          commit('setEmailExistSuccess', '')
+          
           axios.post('/ofs/queueSupplierUser',{payload})
            .then(responce => {
             if(responce.status == 200){
+              router.replace({
+                name: "ModuleSelection"
+              });
               commit('setEmailSuccess', 'Email sent successfully! Please check your email')
             }
             else{
               commit('setEmailError', 'Something wrong please try again')
             }
-            
-           
           })
         }
         
@@ -109,7 +110,7 @@ export default {
   searchSupplier({commit}, payload){
     axios.get('/ofs/searchSuppliers/'+payload)
       .then(responce => {
-      commit('setSupplierList',responce.data)
+      commit('setSupplierList',responce.data.hits)
     })
   },
   

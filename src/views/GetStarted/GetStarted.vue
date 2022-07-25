@@ -48,6 +48,7 @@
                           <label class="d-block text-left input-label mb-2 font-weight-bold">Company Name</label>
                           <v-text-field placeholder="Company name" single-line outlined type="text" v-model="companyName">
                           </v-text-field>
+                          <input type="hidden" v-model="type">
                         </v-col>
                       </v-row>
                       <v-row class="mt-12 bg-light pa-3">
@@ -154,13 +155,14 @@
                           <label class="d-block text-left input-label mb-2 font-weight-bold">Company Name</label>
                           <v-text-field prepend-inner-icon="search" placeholder="Company name" single-line outlined type="text" v-model="company" @keyup="getSupplierList">
                           </v-text-field>
+                          <input type="hidden" v-model="companyId">
                           <v-list v-if="hideList == true" class="company-list">
                             <template v-for="(item, index) in suppliers">
                               <v-list-item
                                 :key="item.title"
                               >
                                 <v-list-item-content>
-                                  <v-list-item-title v-html="item.company" @click="companyList(item.company); hideList = !hideList" class="text-left"></v-list-item-title>
+                                  <v-list-item-title v-html="item.company" @click="companyList(item.company,item.objectID); hideList = !hideList" class="text-left"></v-list-item-title>
                                 </v-list-item-content>
                               </v-list-item>
                             </template>
@@ -312,6 +314,7 @@ export default {
         'Australia',
       ],
       company: '',
+      companyId: '',
       searchCompany: '',
       companyName: '',
       companyHq: '',
@@ -326,6 +329,7 @@ export default {
       title: '',
       password: '',
       confirmPassword: '',
+      type: 'buyer',
       successPass: false,
       successPass1: false,
       country: "US",
@@ -389,6 +393,7 @@ export default {
     ...mapActions(["supplierSignUpAction","searchSupplier","checkEmail"]),
     registerRequest() {
       var supplierData = {
+        id: this.companyId,
         firstName: this.firstName,
         lastName: this.lastName,
         email: this.email,
@@ -425,8 +430,10 @@ export default {
         return 'Passwords does not match.';
       }
     },
-    companyList(title){
+    companyList(title,id){
+      console.log(id);
       this.company = title;
+      this.companyId = id;
       // this.hideList = true;
       setTimeout(() => this.hideList = false, 1000);
       this.hideList = false;

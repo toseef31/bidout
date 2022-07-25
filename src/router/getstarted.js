@@ -30,6 +30,11 @@ const routes = [
         name: 'payment',
         component: () => import('@/views/GetStarted/Payment.vue'),
       },
+      {
+        path: '/get-started/confirmation',
+        name: 'Confirmation',
+        component: () => import('@/views/GetStarted/Confirmation.vue'),
+      },
       
       { path: "*", 
         component: () => import('@/views/PageNotFound.vue'), 
