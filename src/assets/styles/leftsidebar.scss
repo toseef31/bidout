@@ -37,7 +37,7 @@
   }
   .v-list-item-group .v-list-item--active::after{
     background: #FBFBFB;
-    border-right: 4px solid #0d9648;
+    /*border-right: 4px solid #0d9648;*/
     opacity: 1;
   }
   .main-menu{
@@ -110,14 +110,50 @@
       }
     }
   }
-  .toggleLeft-sidebar{
-    .sub-menu-item {
+  
+}
+.toggleLeft-sidebar{
+  .sidebar-bottomMenu{
+    .sub-menu-item{
+      padding-top: 20px;
+      .v-list-item{
+        padding: 0 10px
+      }
+      ::v-deep .v-list-item{
+        padding:  0 8px;
+      }
+      ::v-deep .v-list-item--active .v-icon {
+          color: #0d9648;
+      }
       .v-list-group__items > .v-list-item{
-        padding-left: 9px;
+        padding-left: 10px;
+      }
+      .v-list .v-list-item--active {
+          color: #0d9648;
+      }
+      .v-list-item--link:before{
+        background-color: transparent;
+      }
+      .v-list-group__header{
+        padding: 0 8px;
+        .v-list-item__icon{
+          margin-right: 2px !important;
+          min-width: 20px;
+          margin-left: 0;
+        }
       } 
+      .v-list-group .v-list-group__header .v-list-item__icon.v-list-group__header__append-icon .material-icons{
+        caret-color: red;
+      }
+      .router-link-exact-active{
+        .v-list-item__title{
+          color: #0d9648;
+        }
+      }
     }
-
   }
+  
+
 }
 @media(max-width:  768px){
   .leftSide-module{

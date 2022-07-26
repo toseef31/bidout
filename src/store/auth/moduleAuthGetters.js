@@ -1,6 +1,7 @@
 export default {
-    user (state){
-    	return state.user
+    userss (state){
+        console.log('sdsdfsd',state.userInfo);
+    	return state.userInfo
     },
     error (state){
     	return state.error

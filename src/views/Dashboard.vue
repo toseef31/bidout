@@ -158,7 +158,8 @@ export default {
       bidss:{},
       mapOptions: {},
       markerOptions: {},
-      map: ''
+      map: '',
+      users: ''
     };
   },
   computed:{
@@ -170,7 +171,10 @@ export default {
     },
     allbids(){
         return this.$store.getters.bids;
-    }
+    },
+    userData(){
+        return this.$store.getters.userss;
+    },
   },
   methods: {
     ...mapActions(["getAllBids"]),
@@ -202,6 +206,8 @@ export default {
   mounted() {
     this.getBids();
     this.shipMap();
+    this.users = JSON.parse(localStorage.getItem("userData")).user;
+    console.log(this.users);
 }
 };
 </script>

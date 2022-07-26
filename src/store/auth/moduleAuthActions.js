@@ -12,10 +12,10 @@ export default {
     firebase.auth().signInWithEmailAndPassword(payload.email, payload.password)
 
       .then((result) => {
-
-        commit('setUser', result.user.multiFactor.user.uid)
+        console.log(result.user.multiFactor);
+        commit('setUser', result.user.multiFactor.user)
         commit('setError', null)
-        localStorage.setItem("userData",result.user.multiFactor.user);
+        localStorage.setItem("userData",JSON.stringify(result.user.multiFactor));
         router.replace({ name: "Dashboard" });
         
       }, (err) => {

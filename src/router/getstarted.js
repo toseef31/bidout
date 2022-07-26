@@ -9,35 +9,85 @@ const routes = [
         path: '/get-started',
         name: 'GetStarted',
         component: () => import('@/views/GetStarted/GetStarted.vue'),
+        beforeEnter: (to, from, next) => {
+            if(localStorage.getItem("userData") == null) {
+                
+                next();
+            }else{
+              next('/dashboard');
+            }
+        }
       },
       {
         path: '/get-started/existing-account',
         name: 'ExistingAccount',
         component: () => import('@/views/GetStarted/ExistingAccount.vue'),
+        beforeEnter: (to, from, next) => {
+            if(localStorage.getItem("userData") == null) {
+                
+                next();
+            }else{
+              next('/dashboard');
+            }
+        }
       },
       {
         path: '/get-started/module-selection',
         name: 'ModuleSelection',
         component: () => import('@/views/GetStarted/ModuleSelection.vue'),
+        beforeEnter: (to, from, next) => {
+            if(localStorage.getItem("userData") == null) {
+                
+                next();
+            }else{
+              next('/dashboard');
+            }
+        }
       },
       {
         path: '/get-started/contract',
         name: 'Contract',
         component: () => import('@/views/GetStarted/Contract.vue'),
+        beforeEnter: (to, from, next) => {
+            if(localStorage.getItem("userData") == null) {
+                
+                next();
+            }else{
+              next('/dashboard');
+            }
+        }
       },
       {
         path: '/get-started/payment',
         name: 'payment',
         component: () => import('@/views/GetStarted/Payment.vue'),
+        beforeEnter: (to, from, next) => {
+          if(localStorage.getItem("userData") == null) {
+              
+              next();
+          }else{
+            next('/dashboard');
+          }
+        }
       },
       {
         path: '/get-started/confirmation',
         name: 'Confirmation',
         component: () => import('@/views/GetStarted/Confirmation.vue'),
+        beforeEnter: (to, from, next) => {
+            if(localStorage.getItem("userData") == null) {
+                
+                next();
+            }else{
+              next('/dashboard');
+            }
+        }
       },
       
-      { path: "*", 
+      { 
+        path: "*", 
         component: () => import('@/views/PageNotFound.vue'), 
+       
       }
     ],
   },

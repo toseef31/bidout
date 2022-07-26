@@ -1,10 +1,9 @@
 export default {
     setUser (state, payload){
-    	state.user = payload
+      console.log('ffff',payload);
+    	state.userInfo = payload
     },
-    removeUser (state){
-    	state.user = null
-    },
+    
     setError (state, payload){
     	state.error = payload
     },

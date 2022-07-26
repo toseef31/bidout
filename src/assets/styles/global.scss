@@ -1,6 +1,15 @@
 .section-container{
 	background: #FBFBFB;
 }
+.left-sidebar{
+	background-color: #fff !important;
+	position: relative !important;
+	flex: 0 0 22% !important;
+	max-width: 22% !important;
+	height: 90vh !important;
+	position: sticky !important;
+	top: 92px;
+}
 .toggleLeft-sidebar{
 	flex: 0 0 5% !important;
   	max-width: 5% !important;
@@ -69,16 +78,9 @@
   	outline: 1px solid #B8B8B8;
   }
 }
+
 @media (min-width: 769px) {
-	.left-sidebar{
-		background-color: #fff !important;
-		position: relative !important;
-		flex: 0 0 22% !important;
-  	max-width: 22% !important;
-  	height: 91vh !important;
-  	position: sticky !important;
-  	top: 92px;
-	}
+	
 }
 @media(max-width:  768px){
 	.get-topHeader{

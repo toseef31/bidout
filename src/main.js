@@ -3,6 +3,8 @@ import App from './App.vue';
 import router from './router';
 import Vuex from "vuex"
 import store from './store';
+import * as Sentry from '@sentry/vue'
+import { BrowserTracing } from "@sentry/tracing";
 import vuetify from './plugins/vuetify';
 import firebase from 'firebase/compat/app';
 import 'firebase/compat/auth';
@@ -26,8 +28,23 @@ var firebaseConfig = {
 firebase.initializeApp(firebaseConfig);
 
 axios.defaults.baseURL = import.meta.env.VITE_API_BASE_URL;
-Vue.use(vueCountryRegionSelect)
-Vue.use(Vuex,axios,vueCountryRegionSelect);
+Vue.use(vueCountryRegionSelect);
+Vue.use(Vuex,axios);
+
+Sentry.init({
+  Vue: Vue,
+  dsn: "https://d0c77b4dc8a44c08aef179eee86f1635@o1327357.ingest.sentry.io/6601536",
+  integrations: [
+    new BrowserTracing({
+      routingInstrumentation: Sentry.vueRouterInstrumentation(router),
+      tracingOrigins: ["localhost", "http://localhost:8080/", /^\//],
+    }),
+  ],
+  // Set tracesSampleRate to 1.0 to capture 100%
+  // of transactions for performance monitoring.
+  // We recommend adjusting this value in production
+  tracesSampleRate: 1.0,
+})
 
 new Vue({
   vuetify,

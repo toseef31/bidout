@@ -8,21 +8,52 @@ const routes = [
         path: '/',
         name: 'OFSHome',
         component: () => import('@/views/Ofs/OFSHome.vue'),
+        beforeEnter: (to, from, next) => {
+          if(localStorage.getItem("userData") == null) {
+              
+              next();
+          }else{
+            next('/dashboard');
+          }
+        }
       },
       {
         path: '/ofs-directory/:slug',
         name: 'CategoryListing',
         component: () => import('@/views/Ofs/CategoryListing.vue'),
+        beforeEnter: (to, from, next) => {
+          if(localStorage.getItem("userData") == null) {
+              
+              next();
+          }else{
+            next('/dashboard');
+          }
+        }
       },
       {
         path: '/company-profile',
         name: 'CompanyProfile',
         component: () => import('@/views/Ofs/CompanyProfile.vue'),
+        beforeEnter: (to, from, next) => {
+          if(localStorage.getItem("userData") == null) {
+              
+              next();
+          }else{
+            next('/dashboard');
+          }
+        }
       },
       {
         path: '/subcompany-profile',
         name: 'SubCompanyProfile',
         component: () => import('@/views/Ofs/SubCompany.vue'),
+        beforeEnter: (to, from, next) => {
+          if(localStorage.getItem("userData") == null) {
+            next();
+          }else{
+            next('/dashboard');
+          }
+        }
       },
     ],
   },
