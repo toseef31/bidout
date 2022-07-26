@@ -1,10 +1,9 @@
 export default {
     setUser (state, payload){
-    	state.user = payload
+      console.log('ffff',payload);
+    	state.userInfo = payload
     },
-    removeUser (state){
-    	state.user = null
-    },
+    
     setError (state, payload){
     	state.error = payload
     },
@@ -13,5 +12,14 @@ export default {
     },
     setEmailError (state, payload){
     	state.errorMessage = payload
+    },
+    setSupplierList (state, payload){
+      state.supplier = payload
+    },
+    setEmailExistSuccess (state, payload){
+      state.emailExists = payload
+    },
+    setCompanyError (state, payload){
+      state.companyError = payload
     },
 }

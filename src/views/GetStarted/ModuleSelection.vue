@@ -2,20 +2,22 @@
   <section class="fill-height module-selection white">
     <NavbarBeforeLogin></NavbarBeforeLogin>
       <div class="get-topHeader d-flex">
-        <v-row
-          align="center"
-          justify="center"
-          no-gutters
-        >
-          <v-col
-            class="text-left pl-16"
-            cols="12"
+        <v-container fill-height>
+          <v-row
+            align="center"
+            justify="center"
+            no-gutters
           >
-            <h1 class="font-weight-bolder white--text">
-              Get Started
-            </h1>
-          </v-col>
-        </v-row>
+            <v-col
+              class="text-left"
+              cols="12"
+            >
+              <h1 class="font-weight-bolder white--text">
+                Get Started
+              </h1>
+            </v-col>
+          </v-row>
+        </v-container>
       </div>
       <v-container>
         <v-main>
@@ -100,7 +102,7 @@
                   </v-row>
                   <v-row>
                     <v-col cols="12" sm="4" text="left">
-                      <router-link to="/contract"width="100%" class="font-weight-bold white--text text-capitalize text-decoration-none agreement-link pa-4">Execute Agreement Now <v-icon class="pl-2" color="#fff">mdi-arrow-right-circle</v-icon></router-link>
+                      <router-link to="/get-started/contract"width="100%" class="font-weight-bold white--text text-capitalize text-decoration-none agreement-link pa-4">Execute Agreement Now <v-icon class="pl-2" color="#fff">mdi-arrow-right-circle</v-icon></router-link>
                       <!-- <v-btn color="#0D9647" large dense width="100%" height="56" class="font-weight-bold white--text text-capitalize">Execute Agreement Now <v-icon class="pl-2" color="#fff">mdi-arrow-right-circle</v-icon></v-btn> -->
                     </v-col>
                   </v-row>

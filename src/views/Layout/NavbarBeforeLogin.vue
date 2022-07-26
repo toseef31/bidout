@@ -18,11 +18,11 @@
               <v-list class="px-7">
                 <router-link to="/" class="text-decoration-none"><v-list-item-title class="font-weight-bold">OFS Directory</v-list-item-title></router-link>
               </v-list>
-              <router-link to="get-started" color="white" large height="56" class="font-weight-bold text-capitalize mr-3 text-decoration-none pa-3 white">
+              <router-link to="/get-started" color="white" large height="56" class="font-weight-bold text-capitalize mr-3 text-decoration-none pa-3 white menu-btn">
                 Get Started Now  <v-icon class="pl-2" color="#0D9647">mdi-arrow-right-circle</v-icon>
               </router-link>
               
-              <router-link to="/login" color="white" large height="56" class="font-weight-bold text-capitalize ml-3 text-decoration-none pa-3 white">
+              <router-link to="/login" color="white" large height="56" class="font-weight-bold text-capitalize ml-3 text-decoration-none pa-3 white menu-btn">
                 Log In<v-icon class="pl-2" color="#0D9647">mdi-arrow-right-circle</v-icon>
               </router-link>
             </div>
@@ -40,6 +40,11 @@
           >
             <v-list-item-group
             >
+              <v-list-item>
+                <a href="https://bidout.app" class="text-decoration-none">
+                  <v-list-item-title @click="tab = index" class="text-left">Home</v-list-item-title>
+                </a>
+              </v-list-item>
               <v-list-item v-for="(item, index) in items" :key="index">
                 <router-link :to="item.link" class="text-decoration-none">
                   <v-list-item-title @click="tab = index" class="text-left">{{ item.title }}</v-list-item-title>
@@ -63,8 +68,7 @@ export default {
       drawer: false,
       tab: null,
         items: [
-          {title: 'Home', link:''},
-          {title: 'OFS Directory', link: ''},
+          {title: 'OFS Directory', link: '/'},
           {title: 'Get started Now', link: '/get-started'},
           {title: 'Log In', link: '/login'}
         ],

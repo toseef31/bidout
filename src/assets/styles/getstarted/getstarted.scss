@@ -18,12 +18,13 @@
 			color: #0D1139;
 		}
 		.v-slide-group{
-			background-color: transparent;
+			background-color: transparent !important;
 			.v-tab{
-				border: 1px solid #B8B8B8;
+				border: 1px solid #0D1139;
 				font-size: 16px;
 				line-height: 16px;
 				color: #0D1139 !important;
+				background: white;
 				&:hover{
 					border: 1px solid #0D9647;
 					color: #0D9647 !important;
@@ -78,6 +79,60 @@
 				}
 			}
 		}
+		.company-list{
+			cursor: pointer;
+			position: absolute;
+			width: 94.4%;
+			z-index: 10;
+			max-height: 320px;
+			overflow: auto;
+			&::-webkit-scrollbar {
+			  width: 6px;
+			  height: 6px;
+			}
+			&::-webkit-scrollbar-thumb {
+			  background: #e1e1e1;
+			  border: 14px solid #0d9647;
+			  border-radius: 26px;
+			}
+			&::-webkit-scrollbar-thumb:hover {
+			  background: #ffffff;
+			}
+			&::-webkit-scrollbar-thumb:active {
+			  background: #0d9647;
+			}
+			&::-webkit-scrollbar-track {
+			  background: #666666;
+			  border: 36px solid #c7c7c7;
+			  border-radius: 42px;
+			}
+			&::-webkit-scrollbar-track:hover {
+			  background: #666666;
+			}
+			&::-webkit-scrollbar-track:active {
+			  background: #0d9647;
+			}
+			&::-webkit-scrollbar-corner {
+			  background: transparent;
+			}
+			.v-list-item{
+				&:not(&:last-Child){
+					border-bottom: 1px solid #e7e5e5;
+				}
+			}
+		}
+		.countrySelect{
+			border: 1px solid #B8B8B8;
+	    height: 56px;
+	    background-color: #fff;
+	    align-items: center;
+	    padding: 0 12px;
+	    width: 100%;
+	    -webkit-appearance: auto;
+	    &:focus-visible{
+	    	outline: 1px solid #B8B8B8;
+	    }
+		}
 	}
 	.alert-section{
 		.v-img{
@@ -86,6 +141,14 @@
 		p{
 			font-size: 21px;
 			font-weight: 500;
+		}
+	}
+	.confirm-box{
+		h1{
+			color: #989C9A;
+		}
+		.v-btn{
+			border-radius: 0;
 		}
 	}
 }

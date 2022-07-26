@@ -522,7 +522,9 @@
         }
       }
     }
+
   }
+
   .net30-form{
     .v-input{
       .v-input__control{
@@ -546,4 +548,8 @@
     color: #0D9647;
   }
 }
-
+#list-38{
+  .v-list-item{
+    text-align: left;
+  }
+}

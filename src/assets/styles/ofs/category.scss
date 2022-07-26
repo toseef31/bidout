@@ -1,0 +1,140 @@
+.catgeory-module{
+	.category-list{
+		.service-title{
+			font-size: 32px;
+			color: #013D3A;
+		}
+		.v-tabs{
+			&-bar{
+				height: auto;
+			}
+			.v-tab{
+				min-width: auto;
+				height: 28px;
+				span{
+					font-size: 12px;
+					color: #888888;
+					font-weight: 600;
+				}
+				&--active{
+					background: rgba(13, 150, 71, 0.2);
+					border-radius: 16px;
+					color: #0D9647;
+					
+					span{
+						color: #0D9647;
+						font-weight: 700;
+					}
+				}
+
+			}
+		}
+		.v-tabs-items{
+			.company-table{
+				border: 1px solid #B8B8B8;
+				border-radius: 0;
+			}
+		}
+		&__searchBox{
+			.v-input{
+				padding-top: 0;
+				margin-top: 0;
+				&__slot{
+					width: 310px;
+					border-radius: 0;
+					fieldset{
+						border-bottom: 0;
+					}
+				}
+			}
+		}
+		.company-table{
+			table{
+				thead{
+					tr{
+						height: 52px;
+						th{
+							font-size: 16px;
+							color: #0D9648;
+							line-height: 20px;
+							font-weight: 700;
+							text-align: left;
+						}
+					}
+				}
+				tbody{
+					tr{
+						height: 36px;
+						&:nth-child(odd){
+							background: #F4F5F7;
+						}
+						td{
+							color: #0D1139;
+							font-size: 16px;
+							line-height: 20px;
+							font-weight: 700;
+							text-align: left;
+							border-bottom: 0 !important;
+							&:first-child{
+								display: flex;
+								align-items: center;
+							}
+						}
+					}
+				}
+			}
+		}
+		.v-pagination{
+			&__item{
+				box-shadow: none;
+				border-radius: 0;
+				color: #888888;
+				font-weight: 600;
+				&--active{
+					color: #fff;
+				}
+			}
+			&__navigation{
+				box-shadow: none;
+				.v-icon{
+					color: #0D9647;
+				}
+			}
+		}
+	}
+}
+@media(max-width: 768px){
+	.catgeory-module{
+		.category-list{
+			.tabs-header{
+				flex-direction: column;
+				.v-tabs{
+					.v-slide-group{
+						&__prev{
+							display: none !important;
+						}
+					}
+				}
+			}
+			.company-table{
+				table{
+					thead{
+						tr{
+							th{
+								font-size: 14px;
+							}
+						}
+					}
+					tbody{
+						tr{
+							td{
+								font-size: 13px;
+							}
+						}
+					}
+				}
+			}
+		}
+		
+	}
+}

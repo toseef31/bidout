@@ -15,6 +15,34 @@
           line-height: 20px;
           color: #013D3A;
         }
+        .router-link-exact-active{
+          border-bottom: 5px solid #0D9647;
+          padding: 31px 0;
+          display: block;
+          .v-list-item__title{
+            color: #0D9647 !important;
+          }
+        }
+        a{
+          &:hover{
+            border-bottom: 5px solid #0D9647;
+            padding: 31px 0;
+            display: block;
+            .v-list-item__title{
+              color: #0D9647 !important;
+            }
+          }
+        }
+        
+      }
+      .menu-btn{
+        &:hover{
+          background-color: #0D9647 !important;
+          color: #fff !important;
+          .v-icon{
+            color: #fff !important;
+          }
+        }
       }
       a{
         font-size: 18px;

@@ -2,29 +2,32 @@
   <section class="fill-height getstarted-module">
     <NavbarBeforeLogin></NavbarBeforeLogin>
       <div class="get-topHeader d-flex">
-        <v-row
-          align="center"
-          justify="center"
-          no-gutters
-        >
-          <v-col
-            class="text-left pl-16"
-            cols="12"
+        <v-container fill-height>
+          <v-row
+            align="center"
+            justify="center"
+            no-gutters
           >
-            <h1 class="font-weight-bolder white--text">
-              Get Started
-            </h1>
-          </v-col>
-        </v-row>
+            <v-col
+              class="text-left"
+              cols="12"
+            >
+              <h1 class="font-weight-bolder white--text">
+                Get Started
+              </h1>
+            </v-col>
+          </v-row>
+        </v-container>
       </div>
       <v-container>
         <v-main>
           <v-row justify="center">
             <v-col cols="12" md="9">
               <div class="tabs-head pa-6">
+                
                 <h4 class="text-left mb-4 font-weight-bold">Choose an option</h4>
                 <template>
-                  <v-tabs
+                  <v-tabs optional
                     v-model="currentItem"
                     centered
                     hide-slider grow  height="56"
@@ -38,61 +41,67 @@
               </div>
               <v-tabs-items v-model="currentItem">
                 <v-tab-item>
-                  <v-form @submit.prevent="registerRequest" ref="form">
+                  <v-form @submit.prevent="buyerRequest" ref="form">
                     <v-container>
                       <v-row class="mt-8 bg-light">
                         <v-col cols="12" sm="12" text="left" class="pa-6">
                           <label class="d-block text-left input-label mb-2 font-weight-bold">Company Name</label>
-                          <v-text-field placeholder="Compnay name" single-line outlined type="text" v-model="companyName">
+                          <v-text-field placeholder="Company name" single-line outlined type="text" v-model="buyer.companyName">
+                            <span class="d-block red--text text-left">{{companyMsg}}</span>
                           </v-text-field>
                         </v-col>
                       </v-row>
                       <v-row class="mt-12 bg-light pa-3">
                         <v-col cols="12" sm="12" text="left">
                           <label class="d-block text-left input-label mb-2 font-weight-bold">Company HQ Address 1</label>
-                          <v-text-field placeholder="Company HQ Address 1" single-line outlined type="text" v-model="companyHq" color="#ffffff"></v-text-field>
+                          <v-text-field placeholder="Company HQ Address 1" single-line outlined type="text" v-model="buyer.companyHq" color="#ffffff"></v-text-field>
                         </v-col>
                         <v-col cols="12" sm="12" text="left">
                           <label class="d-block text-left input-label mb-2 font-weight-bold">Company HQ Address 2</label>
-                          <v-text-field placeholder="Company HQ Address 2" single-line outlined type="text" v-model="companyHq2"></v-text-field>
+                          <v-text-field placeholder="Company HQ Address 2" single-line outlined type="text" v-model="buyer.companyHq2"></v-text-field>
                         </v-col>
                         <v-col cols="12" sm="6" text="left">
                           <label class="d-block text-left input-label mb-2 font-weight-bold">Company HQ Country</label>
-                          <v-select :items="countries" outlined v-model="companyHqCountry" placeholder="Select"></v-select>
+                          <!-- <v-select :items="countries" outlined v-model="companyHqCountry" placeholder="Select"></v-select> -->
+                          <country-select v-model="country" :country="country" topCountry="US" className="countrySelect" placeholder="Select Country" />
+                            
                         </v-col>
+                        
                         <v-col cols="12" sm="6" text="left">
                           <label class="d-block text-left input-label mb-2 font-weight-bold">Company HQ State</label>
-                          <v-select outlined placeholder="Select" v-model="companyHqState"></v-select>
+                          <!-- <v-select outlined placeholder="Select" v-model="companyHqState"></v-select> -->
+                          <region-select v-model="region" :country="country" :region="region" className="countrySelect" />
                         </v-col>
                         <v-col cols="12" sm="6" text="left">
                           <label class="d-block text-left input-label mb-2 font-weight-bold">Company HQ City</label>
-                          <v-select outlined placeholder="Select" v-model="companyHqCity"></v-select>
+                          <v-text-field placeholder="Company HQ City" single-line outlined type="text" v-model="buyer.companyHqCity"></v-text-field>
                         </v-col>
                         <v-col cols="12" sm="6" text="left">
                           <label class="d-block text-left input-label mb-2 font-weight-bold">Company HQ ZIP</label>
-                          <v-text-field placeholder="ZIP Code" single-line outlined type="text" v-model="companyHqZip"></v-text-field>
+                          <v-text-field placeholder="ZIP Code" single-line outlined type="text" v-model="buyer.companyHqZip"></v-text-field>
                         </v-col>
                       </v-row>
                       <v-row class="mt-12 bg-light pa-3">
                         <v-col cols="12" sm="12" text="left">
                           <label class="d-block text-left input-label mb-2 font-weight-bold">First Name</label>
-                          <v-text-field placeholder="First Name" single-line outlined type="text" color="#ffffff" v-model="firstName"></v-text-field>
+                          <v-text-field placeholder="First Name" single-line outlined type="text" color="#ffffff" v-model="buyer.firstName"></v-text-field>
                         </v-col>
                         <v-col cols="12" sm="12" text="left">
                           <label class="d-block text-left input-label mb-2 font-weight-bold">Last Name</label>
-                          <v-text-field placeholder="Last Name" single-line outlined type="text" v-model="lastName"></v-text-field>
+                          <v-text-field placeholder="Last Name" single-line outlined type="text" v-model="buyer.lastName"></v-text-field>
                         </v-col>
                         <v-col cols="12" sm="12" text="left">
                           <label class="d-block text-left input-label mb-2 font-weight-bold">Email Address</label>
-                          <v-text-field label="example@email.com" single-line outlined type="email" v-model="email"></v-text-field>
+                          <v-text-field placeholder="example@email.com" single-line outlined type="email" v-model="email" @keyup="emailCheck()"></v-text-field>
+                          <span class="d-block red--text text-left">{{emailMsg}}</span>
                         </v-col>
                         <v-col cols="12" sm="12" text="left">
                           <label class="d-block text-left input-label mb-2 font-weight-bold">Title</label>
-                          <v-text-field placeholder="Title" single-line outlined type="text" v-model="title"></v-text-field>
+                          <v-text-field placeholder="Title" single-line outlined type="text" v-model="buyer.title"></v-text-field>
                         </v-col>
                         <v-col cols="12" sm="12" text="left">
                           <label class="d-block text-left input-label mb-2 font-weight-bold">Direct Phone Number</label>
-                          <v-text-field placeholder="(832) 786-2400" single-line outlined type="text" v-model="phoneNumber"></v-text-field>
+                          <v-text-field placeholder="(832) 786-2400" single-line outlined type="text" v-model="buyer.phoneNumber"></v-text-field>
                         </v-col>
                       </v-row>
                       <v-row class="mt-12 bg-light pa-3">
@@ -131,7 +140,7 @@
                           </v-text-field>
                         </v-col>
                       </v-row>
-                      <v-row justify="center mt-10">
+                      <v-row justify="center" class="mt-10">
                         <v-col cols="12" md="3">
                           <v-btn color="#0D9647" large dense width="100%" height="56" class="font-weight-bold white--text text-capitalize" type="submit">Next <v-icon class="pl-2" color="#fff">mdi-arrow-right-circle</v-icon></v-btn>
                         </v-col>
@@ -145,56 +154,72 @@
                       <v-row class="mt-8 bg-light">
                         <v-col cols="12" sm="12" text="left" class="pa-6">
                           <label class="d-block text-left input-label mb-2 font-weight-bold">Company Name</label>
-                          <v-text-field prepend-inner-icon="search" placeholder="Compnay name" single-line outlined type="text">
+                          <v-text-field prepend-inner-icon="search" placeholder="Company name" single-line outlined type="text" v-model="company" @keyup="getSupplierList">
                           </v-text-field>
+                          <input type="hidden" v-model="companyId">
+
+                          <v-list v-if="hideList == true" class="company-list">
+                            <template v-for="(item, index) in suppliers">
+                              <v-list-item
+                                :key="item.title"
+                              >
+                                <v-list-item-content>
+                                  <v-list-item-title v-html="item.company" @click="companyList(item.company,item.objectID); hideList = !hideList" class="text-left"></v-list-item-title>
+                                </v-list-item-content>
+                              </v-list-item>
+                            </template>
+                          </v-list>
                         </v-col>
                       </v-row>
-                      <v-row class="mt-12 bg-light pa-3">
+                      <v-row class="mt-12 bg-light pa-3" v-if="companyInfo">
                         <v-col cols="12" sm="12" text="left">
                           <label class="d-block text-left input-label mb-2 font-weight-bold">Company HQ Address 1</label>
-                          <v-text-field placeholder="Company HQ Address 1" single-line outlined type="text" v-model="companyHq" color="#ffffff"></v-text-field>
+                          <v-text-field placeholder="Company HQ Address 1" single-line outlined type="text" v-model="supplier.companyHq" color="#ffffff"></v-text-field>
                         </v-col>
                         <v-col cols="12" sm="12" text="left">
                           <label class="d-block text-left input-label mb-2 font-weight-bold">Company HQ Address 2</label>
-                          <v-text-field placeholder="Company HQ Address 2" single-line outlined type="text" v-model="companyHq2"></v-text-field>
+                          <v-text-field placeholder="Company HQ Address 2" single-line outlined type="text" v-model="supplier.companyHq2"></v-text-field>
                         </v-col>
                         <v-col cols="12" sm="6" text="left">
                           <label class="d-block text-left input-label mb-2 font-weight-bold">Company HQ Country</label>
-                          <v-select :items="countries" outlined v-model="companyHqCountry" placeholder="Select"></v-select>
+                          <!-- <v-select :items="countries" outlined v-model="companyHqCountry" placeholder="Select"></v-select> -->
+                          <country-select v-model="country" :country="country" topCountry="US" className="countrySelect" placeholder="Select Country" />
                         </v-col>
                         <v-col cols="12" sm="6" text="left">
                           <label class="d-block text-left input-label mb-2 font-weight-bold">Company HQ State</label>
-                          <v-select outlined placeholder="Select" v-model="companyHqState"></v-select>
+                          <!-- <v-select outlined placeholder="Select" v-model="companyHqState"></v-select> -->
+                          <region-select v-model="region" :country="country" :region="region" className="countrySelect" />
                         </v-col>
                         <v-col cols="12" sm="6" text="left">
                           <label class="d-block text-left input-label mb-2 font-weight-bold">Company HQ City</label>
-                          <v-select outlined placeholder="Select" v-model="companyHqCity"></v-select>
+                          <v-text-field placeholder="Company HQ City" single-line outlined type="text" v-model="supplier.companyHqCity"></v-text-field>
                         </v-col>
                         <v-col cols="12" sm="6" text="left">
                           <label class="d-block text-left input-label mb-2 font-weight-bold">Company HQ ZIP</label>
-                          <v-text-field placeholder="ZIP Code" single-line outlined type="text" v-model="companyHqZip"></v-text-field>
+                          <v-text-field placeholder="ZIP Code" single-line outlined type="text" v-model="supplier.companyHqZip"></v-text-field>
                         </v-col>
                       </v-row>
                       <v-row class="mt-12 bg-light pa-3">
                         <v-col cols="12" sm="12" text="left">
                           <label class="d-block text-left input-label mb-2 font-weight-bold">First Name</label>
-                          <v-text-field placeholder="First Name" single-line outlined type="text" color="#ffffff" v-model="firstName"></v-text-field>
+                          <v-text-field placeholder="First Name" single-line outlined type="text" color="#ffffff" v-model="supplier.firstName"></v-text-field>
                         </v-col>
                         <v-col cols="12" sm="12" text="left">
                           <label class="d-block text-left input-label mb-2 font-weight-bold">Last Name</label>
-                          <v-text-field placeholder="Last Name" single-line outlined type="text" v-model="lastName"></v-text-field>
+                          <v-text-field placeholder="Last Name" single-line outlined type="text" v-model="supplier.lastName"></v-text-field>
                         </v-col>
                         <v-col cols="12" sm="12" text="left">
                           <label class="d-block text-left input-label mb-2 font-weight-bold">Email Address</label>
-                          <v-text-field label="example@email.com" single-line outlined type="email" v-model="email"></v-text-field>
+                          <v-text-field placeholder="example@email.com" single-line outlined type="email" v-model="email" @keyup="emailCheck()"></v-text-field>
+                          <span class="d-block red--text text-left">{{emailMsg}}</span>
                         </v-col>
                         <v-col cols="12" sm="12" text="left">
                           <label class="d-block text-left input-label mb-2 font-weight-bold">Title</label>
-                          <v-text-field placeholder="Title" single-line outlined type="text" v-model="title"></v-text-field>
+                          <v-text-field placeholder="Title" single-line outlined type="text" v-model="supplier.title"></v-text-field>
                         </v-col>
                         <v-col cols="12" sm="12" text="left">
                           <label class="d-block text-left input-label mb-2 font-weight-bold">Direct Phone Number</label>
-                          <v-text-field placeholder="(832) 786-2400" single-line outlined type="text" v-model="phoneNumber"></v-text-field>
+                          <v-text-field placeholder="(832) 786-2400" single-line outlined type="text" v-model="supplier.phoneNumber"></v-text-field>
                         </v-col>
                       </v-row>
                       <v-row class="mt-12 bg-light pa-3">
@@ -233,7 +258,7 @@
                           </v-text-field>
                         </v-col>
                       </v-row>
-                      <v-row justify="center mt-10">
+                      <v-row justify="center" class="mt-10">
                         <v-col cols="12" md="3">
                           <v-btn color="#0D9647" large dense width="100%" height="56" class="font-weight-bold white--text text-capitalize" type="submit">Next <v-icon class="pl-2" color="#fff">mdi-arrow-right-circle</v-icon></v-btn>
                         </v-col>
@@ -263,20 +288,19 @@
 <script>
   import NavbarBeforeLogin from '../Layout/NavbarBeforeLogin.vue'
   import Footer from '../Layout/Footer.vue'
-  
+  import _ from 'lodash';
   import { mapActions } from "vuex";
 export default {
   name : "GetStarted",
   components: {
     NavbarBeforeLogin,
     Footer,
-    
   },
   
   data() {
     return {
       isActivity : false,
-      currentItem: null,
+      currentItem: '',
       items: [
         'Buyer', 'Supplier',
       ],
@@ -291,24 +315,58 @@ export default {
         'Brazil',
         'Australia',
       ],
-      companyHqCountry: 'Uninted States',
-      companyHq: '',
-      companyHq2: '',
-      companyHqState: '',
-      companyHqCity: '',
-      companyHqZip: '',
-      firstName: '',
-      lastName: '',
+      supplier: {
+        searchCompany: '',
+        companyHq: '',
+        companyHq2: '',
+        companyHqState: '',
+        companyHqCity: '',
+        companyHqZip: '',
+        firstName: '',
+        lastName: '',
+        phoneNumber: '',
+        title: '',
+        region: "",
+        country: ""
+      },
+      buyer: {
+        companyName: '',
+        companyHq: '',
+        companyHq2: '',
+        companyHqState: '',
+        companyHqCity: '',
+        companyHqZip: '',
+        firstName: '',
+        lastName: '',
+        phoneNumber: '',
+        title: '',
+        region: "",
+        country: ""
+      },
       email: '',
-      phoneNumber: '',
-      title: '',
-      password: '',
-      confirmPassword: '',
+      company: '',
+      companyId: '',
       successPass: false,
       successPass1: false,
-      country: '',
-      region: ''
+      password: '',
+      confirmPassword: '',
+      region: "CA",
+      country: "US",
+      hideList: false,
+      list: false,
+      companyInfo: true,
+      emailExist: false,
     };
+  },
+  watch:{
+    company: _.debounce(function(){
+      if(this.company < 1){
+        this.hideList = false;
+        this.companyInfo = true;
+      }else{
+        this.hideList = true;
+      }
+    },500),
   },
   computed:{
     activityPanel(){
@@ -340,24 +398,56 @@ export default {
         return 'mdi-close';
       }
     },
+    suppliers(){
+      this.hideList = true;
+      return this.$store.getters.supplier;
+    },
+    emailMsg(){
+      this.emailExist= true;
+      return this.$store.getters.emailExists;
+    },
+    companyMsg(){
+      return this.$store.getters.companyError;
+    },
   },
   methods: {
-    ...mapActions(["signUpAction"]),
+    ...mapActions(["supplierSignUpAction","searchSupplier","checkEmail","buyerSignUpAction"]),
     registerRequest() {
-      var providerData = {
-        companyHq: this.companyHq,
-        companyHq2: this.companyHq2,
-        companyHqCountry: this.companyHqCountry,
-        companyHqState: this.companyHqState,
-        companyHqCity: this.companyHqCity,
-        companyHqZip: this.companyHqZip,
-        firstName: this.firstName,
-        lastName: this.lastName,
+      var supplierData = {
+        id: this.companyId,
+        firstName: this.supplier.firstName,
+        lastName: this.supplier.lastName,
         email: this.email,
-        phoneNumber: this.phoneNumber,
-        title: this.title
+        phoneNumber: this.supplier.phoneNumber,
+        title: this.supplier.title,
+        password: this.password
       }
-      this.signUpAction(providerData);
+      this.supplierSignUpAction(supplierData);
+    },
+    buyerRequest() {
+      // alert('ffff');
+      var buyerData = {
+        company: this.buyer.companyName,
+        companyHq: this.buyer.companyHq,
+        companyHq2: this.buyer.companyHq2,
+        companyHqCountry: this.country,
+        companyHqState: this.region,
+        companyHqCity: this.buyer.companyHqCity,
+        companyHqZip: this.buyer.companyHqZip,
+        firstName: this.buyer.firstName,
+        lastName: this.buyer.lastName,
+        email: this.email,
+        phoneNumber: this.buyer.phoneNumber,
+        title: this.buyer.title,
+        password: this.password
+      }
+      this.buyerSignUpAction(buyerData);
+    },
+    getSupplierList(){
+      this.searchSupplier(this.company);
+    },
+    emailCheck(){
+      this.checkEmail(this.email);
     },
     required: function(value) {
       if (value) {
@@ -380,9 +470,17 @@ export default {
         return 'Passwords does not match.';
       }
     },
+    companyList(title,id){
+      console.log(id);
+      this.company = title;
+      this.companyId = id;
+      // this.hideList = true;
+      setTimeout(() => this.hideList = false, 1000);
+      this.hideList = false;
+      this.companyInfo = false;
+    }
   },
   mounted() {
-    
   }
 };
 </script>

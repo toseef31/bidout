@@ -32,14 +32,14 @@
               <router-link to="/login" class="text-decoration-none white--text"><v-list-item-title>Login</v-list-item-title></router-link>
             </v-list>
             <v-list>
-              <router-link to="/faq" class="text-decoration-none white--text"><v-list-item-title>FAQ</v-list-item-title></router-link>
+              <a href="https://bidoutapp.com/faq/" class="text-decoration-none white--text"><v-list-item-title>FAQ</v-list-item-title></a>
             </v-list>
             <v-divider></v-divider>
             <v-list class="pt-7">
               <router-link to="/get-started" class="text-decoration-none white--text"><v-list-item-title>Get Started</v-list-item-title></router-link>
             </v-list>
             <v-list>
-              <router-link to="/privacy-policy" class="text-decoration-none white--text"><v-list-item-title>Privacy Policy</v-list-item-title></router-link>
+              <a href="https://bidout.app/privacy-policy/" class="text-decoration-none white--text"><v-list-item-title>Privacy Policy</v-list-item-title></a>
             </v-list>
           </div>
         </div>

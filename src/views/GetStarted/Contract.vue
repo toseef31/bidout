@@ -2,20 +2,22 @@
   <section class="fill-height module-selection white">
     <NavbarBeforeLogin></NavbarBeforeLogin>
       <div class="get-topHeader d-flex">
-        <v-row
-          align="center"
-          justify="center"
-          no-gutters
-        >
-          <v-col
-            class="text-left pl-16"
-            cols="12"
+        <v-container fill-height>
+          <v-row
+            align="center"
+            justify="center"
+            no-gutters
           >
-            <h1 class="font-weight-bolder white--text">
-              Get Started
-            </h1>
-          </v-col>
-        </v-row>
+            <v-col
+              class="text-left"
+              cols="12"
+            >
+              <h1 class="font-weight-bolder white--text">
+                Get Started
+              </h1>
+            </v-col>
+          </v-row>
+        </v-container>
       </div>
       <v-container>
         <v-main>
@@ -23,10 +25,10 @@
             <v-col cols="12" md="9">
               <div class="bg-light pa-8">
                 <div class="title-head text-left">
-                  <h4 class="mb-2">RPF Platfmor - Create Bids</h4>
+                  <h4 class="mb-2">RPF Platform - Create Bids</h4>
                   <h1 class="mb-8">Execute Contract</h1>
                 </div>
-                <div class="white text-left pa-4 font-weight-medium mb-5">
+                <div class="white text-left pa-4 font-weight-medium mb-5 contract-section">
                   <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut ornare, dolor ac pulvinar varius, magna risus volutpat velit, quis porta nibh nulla eu risus. Maecenas congue a nibh tempus molestie. Phasellus vitae orci in sem gravida pretium. Nam nibh risus, consectetur eget erat sed, dapibus porta mauris. Vestibulum ut imperdiet turpis, non auctor magna. Quisque id lorem mollis, aliquet libero eu, sagittis velit. Quisque a arcu vel dolor placerat pretium eget at odio. Suspendisse potenti. Phasellus pulvinar, turpis ut placerat tincidunt, velit leo serat scelerisque nisl, ac posuere elit sem a urna. Duis hendrerit a quam ut vehicula. Nullam risus nunc, scelerisque id rhoncus ut, hendrerit ac nulla. Suspendisse cursus nisl id neque fringilla, eu tincidunt nisl fringilla. Duis eget elit diam. Aliquam mi erat, vulputate id lorem sed, lacinia luctus erat. Vivamus auctor lacus in sapien viverra, vitae eleifend odio volutpat.</p>
                   <p>Nam vestibulum vel nisi nec scelerisque. Fusce nec tortor vel magna imperdiet tempor eget et nulla. Cras in nisl rutrum eros ornare auctor. Quisque sapien enim, sodales eu tempus ege, varius id libero. Sed dapibus hendrerit ex sit amet ultrices. Nulla nec leo in ex euismod onite, vulputate. Donec ullamcorper orci quis leo rhoncus tempus. Curabitur facilisis orci a viverra consequat. Vestibulum in lectus eget lorem tincidunt accumsan. Vestibulum purus orci, mola faucibus id ante ut, elementum dapibus nulla. Duis felis mi, lacinia vel dui in, hendrerit septna venenatis dui. Proin rhoncus turpis id velit consectetur hendrerit eu ut mauris. Nullam in orle orci vecta yoma.</p>
 

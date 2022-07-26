@@ -2,20 +2,22 @@
   <section class="fill-height payment-module white">
     <NavbarBeforeLogin></NavbarBeforeLogin>
       <div class="get-topHeader d-flex">
-        <v-row
-          align="center"
-          justify="center"
-          no-gutters
-        >
-          <v-col
-            class="text-left pl-16"
-            cols="12"
+        <v-container fill-height>
+          <v-row
+            align="center"
+            justify="center"
+            no-gutters
           >
-            <h1 class="font-weight-bolder white--text">
-              Get Started
-            </h1>
-          </v-col>
-        </v-row>
+            <v-col
+              class="text-left"
+              cols="12"
+            >
+              <h1 class="font-weight-bolder white--text">
+                Get Started
+              </h1>
+            </v-col>
+          </v-row>
+        </v-container>
       </div>
       <v-container>
         <v-main>
@@ -48,7 +50,7 @@
                 <v-row>
                   <v-col cols="12" sm="12" text="left">
                     <label class="d-block text-left input-label mb-2 font-weight-bold">Payment Type</label>
-                    <v-select outlined placeholder="Select" :item-value="paymentTypes.value" :items="paymentTypes" @change="payment(type)" v-model="type"></v-select>
+                    <v-select outlined placeholder="Select" :item-value="paymentTypes.value" :items="paymentTypes" @change="payment(type)" v-model="type" class="text-left"></v-select>
                   </v-col>
                 </v-row>
               </div>
@@ -87,7 +89,7 @@
                       </v-col>
                       <v-col cols="12" sm="6" text="left">
                         <label class="d-block text-left input-label mb-2 font-weight-bold">Country</label>
-                        <v-select :items="countries" outlined v-model="country"></v-select>
+                        <country-select v-model="country" :country="country" topCountry="US" className="countrySelect" placeholder="Select Country" />
                       </v-col>
                       <v-col cols="12" sm="6" text="left">
                         <label class="d-block text-left input-label mb-2 font-weight-bold">ZIP Code</label>
@@ -201,7 +203,7 @@
                     <v-row class="mt-12">
                       <v-col cols="12" sm="12" text="left">
                         <label class="d-block text-left input-label mb-2 font-weight-bold">Billing Contact Name</label>
-                        <v-text-field label="Billing Contact Name" single-line outlined type="text" color="#ffffff"></v-text-field>
+                        <v-text-field placeholder="Billing Contact Name" single-line outlined type="text"></v-text-field>
                         <v-checkbox
                           v-model="billingNameCheck"
                           label="Same as you"
@@ -211,7 +213,7 @@
                       </v-col>
                       <v-col cols="12" sm="12" text="left">
                         <label class="d-block text-left input-label mb-2 font-weight-bold">Billing Contact Phone</label>
-                        <v-text-field label="Billing Contact Phone" single-line outlined type="text"></v-text-field>
+                        <v-text-field placeholder="Billing Contact Phone" single-line outlined type="text"></v-text-field>
                         <v-checkbox
                           v-model="billingPhoneCheck"
                           label="Same as you"
@@ -221,7 +223,7 @@
                       </v-col>
                       <v-col cols="12" sm="12" text="left">
                         <label class="d-block text-left input-label mb-2 font-weight-bold">Billing Contact Email</label>
-                        <v-text-field label="Billing Contact Email" single-line outlined type="email"></v-text-field>
+                        <v-text-field placeholder="Billing Contact Email" single-line outlined type="email"></v-text-field>
                         <v-checkbox
                           v-model="billingEmailCheck"
                           label="Same as you"
@@ -332,18 +334,7 @@
         billingEmailCheck: true,
         billingNameCheck: true,
         billingPhoneCheck: true,
-        countries: [
-          'Uninted States',
-          'United Kingdom',
-          'China',
-          'Russia',
-          'Germany',
-          'Pakistan',
-          'India',
-          'Brazil',
-          'Australia',
-        ],
-        country: 'Uninted States'
+        country: "US",
       }
     },
     computed: {

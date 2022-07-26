@@ -43,6 +43,10 @@
 			}
 		}
 	}
+	.contract-section{
+		height: 65vh;
+		overflow: auto;
+	}
 }
 @media(max-width: 768px){
 	.module-selection{
