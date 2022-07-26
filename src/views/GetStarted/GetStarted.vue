@@ -27,7 +27,7 @@
                 
                 <h4 class="text-left mb-4 font-weight-bold">Choose an option</h4>
                 <template>
-                  <v-tabs optional="false"
+                  <v-tabs optional
                     v-model="currentItem"
                     centered
                     hide-slider grow  height="56"
@@ -46,19 +46,20 @@
                       <v-row class="mt-8 bg-light">
                         <v-col cols="12" sm="12" text="left" class="pa-6">
                           <label class="d-block text-left input-label mb-2 font-weight-bold">Company Name</label>
-                          <v-text-field placeholder="Company name" single-line outlined type="text" v-model="companyName">
+                          <v-text-field placeholder="Company name" single-line outlined type="text" v-model="buyer.companyName">
+                            <span class="d-block red--text text-left">{{companyMsg}}</span>
                           </v-text-field>
-                          <input type="hidden" v-model="type">
+                          <input type="hidden" v-model="buyer.type">
                         </v-col>
                       </v-row>
                       <v-row class="mt-12 bg-light pa-3">
                         <v-col cols="12" sm="12" text="left">
                           <label class="d-block text-left input-label mb-2 font-weight-bold">Company HQ Address 1</label>
-                          <v-text-field placeholder="Company HQ Address 1" single-line outlined type="text" v-model="companyHq" color="#ffffff"></v-text-field>
+                          <v-text-field placeholder="Company HQ Address 1" single-line outlined type="text" v-model="buyer.companyHq" color="#ffffff"></v-text-field>
                         </v-col>
                         <v-col cols="12" sm="12" text="left">
                           <label class="d-block text-left input-label mb-2 font-weight-bold">Company HQ Address 2</label>
-                          <v-text-field placeholder="Company HQ Address 2" single-line outlined type="text" v-model="companyHq2"></v-text-field>
+                          <v-text-field placeholder="Company HQ Address 2" single-line outlined type="text" v-model="buyer.companyHq2"></v-text-field>
                         </v-col>
                         <v-col cols="12" sm="6" text="left">
                           <label class="d-block text-left input-label mb-2 font-weight-bold">Company HQ Country</label>
@@ -74,33 +75,34 @@
                         </v-col>
                         <v-col cols="12" sm="6" text="left">
                           <label class="d-block text-left input-label mb-2 font-weight-bold">Company HQ City</label>
-                          <v-text-field placeholder="Company HQ City" single-line outlined type="text" v-model="companyHqCity"></v-text-field>
+                          <v-text-field placeholder="Company HQ City" single-line outlined type="text" v-model="buyer.companyHqCity"></v-text-field>
                         </v-col>
                         <v-col cols="12" sm="6" text="left">
                           <label class="d-block text-left input-label mb-2 font-weight-bold">Company HQ ZIP</label>
-                          <v-text-field placeholder="ZIP Code" single-line outlined type="text" v-model="companyHqZip"></v-text-field>
+                          <v-text-field placeholder="ZIP Code" single-line outlined type="text" v-model="buyer.companyHqZip"></v-text-field>
                         </v-col>
                       </v-row>
                       <v-row class="mt-12 bg-light pa-3">
                         <v-col cols="12" sm="12" text="left">
                           <label class="d-block text-left input-label mb-2 font-weight-bold">First Name</label>
-                          <v-text-field placeholder="First Name" single-line outlined type="text" color="#ffffff" v-model="firstName"></v-text-field>
+                          <v-text-field placeholder="First Name" single-line outlined type="text" color="#ffffff" v-model="buyer.firstName"></v-text-field>
                         </v-col>
                         <v-col cols="12" sm="12" text="left">
                           <label class="d-block text-left input-label mb-2 font-weight-bold">Last Name</label>
-                          <v-text-field placeholder="Last Name" single-line outlined type="text" v-model="lastName"></v-text-field>
+                          <v-text-field placeholder="Last Name" single-line outlined type="text" v-model="buyer.lastName"></v-text-field>
                         </v-col>
                         <v-col cols="12" sm="12" text="left">
                           <label class="d-block text-left input-label mb-2 font-weight-bold">Email Address</label>
-                          <v-text-field placeholder="example@email.com" single-line outlined type="email" v-model="email"></v-text-field>
+                          <v-text-field placeholder="example@email.com" single-line outlined type="email" v-model="email" @keyup="emailCheck()"></v-text-field>
+                          <span class="d-block red--text text-left">{{emailMsg}}</span>
                         </v-col>
                         <v-col cols="12" sm="12" text="left">
                           <label class="d-block text-left input-label mb-2 font-weight-bold">Title</label>
-                          <v-text-field placeholder="Title" single-line outlined type="text" v-model="title"></v-text-field>
+                          <v-text-field placeholder="Title" single-line outlined type="text" v-model="buyer.title"></v-text-field>
                         </v-col>
                         <v-col cols="12" sm="12" text="left">
                           <label class="d-block text-left input-label mb-2 font-weight-bold">Direct Phone Number</label>
-                          <v-text-field placeholder="(832) 786-2400" single-line outlined type="text" v-model="phoneNumber"></v-text-field>
+                          <v-text-field placeholder="(832) 786-2400" single-line outlined type="text" v-model="buyer.phoneNumber"></v-text-field>
                         </v-col>
                       </v-row>
                       <v-row class="mt-12 bg-light pa-3">
@@ -156,6 +158,7 @@
                           <v-text-field prepend-inner-icon="search" placeholder="Company name" single-line outlined type="text" v-model="company" @keyup="getSupplierList">
                           </v-text-field>
                           <input type="hidden" v-model="companyId">
+
                           <v-list v-if="hideList == true" class="company-list">
                             <template v-for="(item, index) in suppliers">
                               <v-list-item
@@ -172,11 +175,11 @@
                       <v-row class="mt-12 bg-light pa-3" v-if="companyInfo">
                         <v-col cols="12" sm="12" text="left">
                           <label class="d-block text-left input-label mb-2 font-weight-bold">Company HQ Address 1</label>
-                          <v-text-field placeholder="Company HQ Address 1" single-line outlined type="text" v-model="companyHq" color="#ffffff"></v-text-field>
+                          <v-text-field placeholder="Company HQ Address 1" single-line outlined type="text" v-model="supplier.companyHq" color="#ffffff"></v-text-field>
                         </v-col>
                         <v-col cols="12" sm="12" text="left">
                           <label class="d-block text-left input-label mb-2 font-weight-bold">Company HQ Address 2</label>
-                          <v-text-field placeholder="Company HQ Address 2" single-line outlined type="text" v-model="companyHq2"></v-text-field>
+                          <v-text-field placeholder="Company HQ Address 2" single-line outlined type="text" v-model="supplier.companyHq2"></v-text-field>
                         </v-col>
                         <v-col cols="12" sm="6" text="left">
                           <label class="d-block text-left input-label mb-2 font-weight-bold">Company HQ Country</label>
@@ -190,21 +193,21 @@
                         </v-col>
                         <v-col cols="12" sm="6" text="left">
                           <label class="d-block text-left input-label mb-2 font-weight-bold">Company HQ City</label>
-                          <v-text-field placeholder="Company HQ City" single-line outlined type="text" v-model="companyHqCity"></v-text-field>
+                          <v-text-field placeholder="Company HQ City" single-line outlined type="text" v-model="supplier.companyHqCity"></v-text-field>
                         </v-col>
                         <v-col cols="12" sm="6" text="left">
                           <label class="d-block text-left input-label mb-2 font-weight-bold">Company HQ ZIP</label>
-                          <v-text-field placeholder="ZIP Code" single-line outlined type="text" v-model="companyHqZip"></v-text-field>
+                          <v-text-field placeholder="ZIP Code" single-line outlined type="text" v-model="supplier.companyHqZip"></v-text-field>
                         </v-col>
                       </v-row>
                       <v-row class="mt-12 bg-light pa-3">
                         <v-col cols="12" sm="12" text="left">
                           <label class="d-block text-left input-label mb-2 font-weight-bold">First Name</label>
-                          <v-text-field placeholder="First Name" single-line outlined type="text" color="#ffffff" v-model="firstName"></v-text-field>
+                          <v-text-field placeholder="First Name" single-line outlined type="text" color="#ffffff" v-model="supplier.firstName"></v-text-field>
                         </v-col>
                         <v-col cols="12" sm="12" text="left">
                           <label class="d-block text-left input-label mb-2 font-weight-bold">Last Name</label>
-                          <v-text-field placeholder="Last Name" single-line outlined type="text" v-model="lastName"></v-text-field>
+                          <v-text-field placeholder="Last Name" single-line outlined type="text" v-model="supplier.lastName"></v-text-field>
                         </v-col>
                         <v-col cols="12" sm="12" text="left">
                           <label class="d-block text-left input-label mb-2 font-weight-bold">Email Address</label>
@@ -213,11 +216,11 @@
                         </v-col>
                         <v-col cols="12" sm="12" text="left">
                           <label class="d-block text-left input-label mb-2 font-weight-bold">Title</label>
-                          <v-text-field placeholder="Title" single-line outlined type="text" v-model="title"></v-text-field>
+                          <v-text-field placeholder="Title" single-line outlined type="text" v-model="supplier.title"></v-text-field>
                         </v-col>
                         <v-col cols="12" sm="12" text="left">
                           <label class="d-block text-left input-label mb-2 font-weight-bold">Direct Phone Number</label>
-                          <v-text-field placeholder="(832) 786-2400" single-line outlined type="text" v-model="phoneNumber"></v-text-field>
+                          <v-text-field placeholder="(832) 786-2400" single-line outlined type="text" v-model="supplier.phoneNumber"></v-text-field>
                         </v-col>
                       </v-row>
                       <v-row class="mt-12 bg-light pa-3">
@@ -313,27 +316,45 @@ export default {
         'Brazil',
         'Australia',
       ],
+      supplier: {
+        searchCompany: '',
+        companyHq: '',
+        companyHq2: '',
+        companyHqState: '',
+        companyHqCity: '',
+        companyHqZip: '',
+        firstName: '',
+        lastName: '',
+        phoneNumber: '',
+        title: '',
+        type: 'supplier',
+        region: "",
+        country: ""
+      },
+      buyer: {
+        companyName: '',
+        companyHq: '',
+        companyHq2: '',
+        companyHqState: '',
+        companyHqCity: '',
+        companyHqZip: '',
+        firstName: '',
+        lastName: '',
+        phoneNumber: '',
+        title: '',
+        type: 'buyer',
+        region: "",
+        country: ""
+      },
+      email: '',
       company: '',
       companyId: '',
-      searchCompany: '',
-      companyName: '',
-      companyHq: '',
-      companyHq2: '',
-      companyHqState: '',
-      companyHqCity: '',
-      companyHqZip: '',
-      firstName: '',
-      lastName: '',
-      email: '',
-      phoneNumber: '',
-      title: '',
-      password: '',
-      confirmPassword: '',
-      type: 'buyer',
       successPass: false,
       successPass1: false,
-      country: "US",
+      password: '',
+      confirmPassword: '',
       region: "CA",
+      country: "US",
       hideList: false,
       list: false,
       companyInfo: true,
@@ -388,20 +409,42 @@ export default {
       this.emailExist= true;
       return this.$store.getters.emailExists;
     },
+    companyMsg(){
+      return this.$store.getters.companyError;
+    },
   },
   methods: {
-    ...mapActions(["supplierSignUpAction","searchSupplier","checkEmail"]),
+    ...mapActions(["supplierSignUpAction","searchSupplier","checkEmail","buyerSignUpAction"]),
     registerRequest() {
       var supplierData = {
         id: this.companyId,
-        firstName: this.firstName,
-        lastName: this.lastName,
+        firstName: this.supplier.firstName,
+        lastName: this.supplier.lastName,
         email: this.email,
-        phoneNumber: this.phoneNumber,
-        title: this.title,
+        phoneNumber: this.supplier.phoneNumber,
+        title: this.supplier.title,
         password: this.password
       }
       this.supplierSignUpAction(supplierData);
+    },
+    buyerRequest() {
+      // alert('ffff');
+      var buyerData = {
+        company: this.buyer.companyName,
+        companyHq: this.buyer.companyHq,
+        companyHq2: this.buyer.companyHq2,
+        companyHqCountry: this.country,
+        companyHqState: this.region,
+        companyHqCity: this.buyer.companyHqCity,
+        companyHqZip: this.buyer.companyHqZip,
+        firstName: this.buyer.firstName,
+        lastName: this.buyer.lastName,
+        email: this.email,
+        phoneNumber: this.buyer.phoneNumber,
+        title: this.buyer.title,
+        password: this.password
+      }
+      this.buyerSignUpAction(buyerData);
     },
     getSupplierList(){
       this.searchSupplier(this.company);

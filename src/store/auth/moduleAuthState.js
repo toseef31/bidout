@@ -8,4 +8,5 @@ export default {
     errorMessage: null,
     supplier: [],
     emailExists: null,
+    companyError: null,
 }

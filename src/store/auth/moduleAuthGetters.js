@@ -18,4 +18,7 @@ export default {
     emailExists (state){
        return state.emailExists
     },
+    companyError (state){
+       return state.companyError
+    },
 }

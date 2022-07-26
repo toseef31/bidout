@@ -19,4 +19,7 @@ export default {
     setEmailExistSuccess (state, payload){
       state.emailExists = payload
     },
+    setCompanyError (state, payload){
+      state.companyError = payload
+    },
 }
