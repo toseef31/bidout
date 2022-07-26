@@ -49,7 +49,6 @@
                           <v-text-field placeholder="Company name" single-line outlined type="text" v-model="buyer.companyName">
                             <span class="d-block red--text text-left">{{companyMsg}}</span>
                           </v-text-field>
-                          <input type="hidden" v-model="buyer.type">
                         </v-col>
                       </v-row>
                       <v-row class="mt-12 bg-light pa-3">
@@ -327,7 +326,6 @@ export default {
         lastName: '',
         phoneNumber: '',
         title: '',
-        type: 'supplier',
         region: "",
         country: ""
       },
@@ -342,7 +340,6 @@ export default {
         lastName: '',
         phoneNumber: '',
         title: '',
-        type: 'buyer',
         region: "",
         country: ""
       },

@@ -141,6 +141,7 @@ export default {
               })
             }
             else{
+              console.log(responce.data.message);
               commit('setCompanyError', 'Please try with different Company details')
             }
           })
