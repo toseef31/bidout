@@ -13,6 +13,7 @@ import 'firebase/compat/auth';
 import 'firebase/compat/firestore';
 import axios from 'axios';
 import vueCountryRegionSelect from 'vue-country-region-select';
+import moment from 'vue-moment'
 import '@/assets/styles/index.scss';
 // Your web app's Firebase configuration
 var firebaseConfig = {
@@ -36,7 +37,7 @@ const logrocketPlugin = createPlugin(LogRocket);
 
 Vue.use(vueCountryRegionSelect);
 Vue.use(Vuex,axios);
-
+Vue.use(moment);
 Sentry.init({
   Vue: Vue,
   dsn: "https://d0c77b4dc8a44c08aef179eee86f1635@o1327357.ingest.sentry.io/6601536",

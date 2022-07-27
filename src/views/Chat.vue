@@ -13,7 +13,7 @@
                   <div class="chat-search">
                   <div>
                     <v-text-field
-                      v-model="message"
+                      v-model="searchUsers"
                       clearable
                       type="text" align-center
                       class="pt-0 mt-0"
@@ -38,8 +38,8 @@
                       active-class="grey--text"
                       multiple
                     >
-                      <template v-for="(group, index) in groups">
-                        <v-list-item :key="group.title" @click="openChat">
+                      <template v-for="(group, index) in conversationsList" v-if="group.type == 'GROUP'">
+                        <v-list-item :key="group.company" @click="openChat(group._id)">
                           <template v-slot:default="{ active }">
                             <v-list-item-avatar>
                               <v-icon>mdi-account-group-outline</v-icon>
@@ -48,7 +48,7 @@
                               </v-avatar> -->
                             </v-list-item-avatar>
                             <v-list-item-content>
-                              <v-list-item-title v-text="group.title"></v-list-item-title>
+                              <v-list-item-title v-text="group.company"></v-list-item-title>
 
                               <v-list-item-subtitle
                                 class="text--primary"
@@ -105,6 +105,7 @@
                   <div class="msg-header pa-5">
                     <v-icon class="back-arrow" v-if="backArrow" @click="closeChat">mdi-chevron-left</v-icon>
                     <v-row>
+
                       <v-col cols="6">
                         <div class="title-section text-left">
                           <h4 class="mb-0 font-weight-bold">Huges Tool Company</h4>
@@ -173,7 +174,7 @@
                   </div>
                   <!-- Message Area -->
                   <div class="messages-section">
-                    <v-list two-line class="own-user message-list">
+                    <v-list two-line class="own-user message-list" v-for="message in messagesList" :key="message._id">
                       <v-list-item-group
                         multiple
                       >
@@ -181,21 +182,21 @@
                           <v-list-item class="text-left px-5">
                             <template>
                               <v-list-item-content>
-                                <v-list-item-title>Aubrey McClendon</v-list-item-title>
+                                <v-list-item-title>{{message.sender.name}}</v-list-item-title>
                                 <v-list-item-subtitle
                                   class="text--primary"
-                                >Hello John!</v-list-item-subtitle>
+                                >{{message.content}}</v-list-item-subtitle>
                               </v-list-item-content>
 
                               <v-list-item-action class="mt-n6">
-                                <v-list-item-action-text>4:20 pm</v-list-item-action-text>
+                                <v-list-item-action-text>{{ message.updatedAt | moment("h:mm a") }}</v-list-item-action-text>
                               </v-list-item-action>
                             </template>
                           </v-list-item>
                         </template>
                       </v-list-item-group>
                     </v-list>
-                    <p class="text-center mb-0 text--primary">Apr 23rd</p>
+                    <!-- <p class="text-center mb-0 text--primary">Apr 23</p> -->
                     <v-list two-line class="message-list">
                       <v-list-item-group
                         multiple
@@ -344,17 +345,22 @@
                             name="input-7-4"
                             label="Message here ..."
                             rows="3"
+                            v-model="message"
                           ></v-textarea>
                         </div>
                       </v-col>
                       <v-col cols="12" sm="2" md="2">
                         <div class="msg-send-btn">
                           <v-btn block tile  height="43px"
-                            color="#0D9648">Send</v-btn>
+                            color="#0D9648" @click="messageSend">Send</v-btn>
                           <v-btn block tile
-                            color="rgba(13, 150, 72, 0.1)" class="mt-2 attach-btn" height="43px">
+                            color="rgba(13, 150, 72, 0.1)" type="file" class="mt-2 attach-btn" height="43px">
                             <v-img :src="require('@/assets/images/chat/attach.png')" max-width="28px" height="32px"></v-img>   
                           </v-btn>
+                          <!-- <v-file-input class="mt-2 attach-btn" height="43px"
+                            hide-input
+                            truncate-length="8" ref="msgFile"
+                          ><v-img :src="require('@/assets/images/chat/attach.png')" max-width="28px" height="32px"></v-img></v-file-input> -->
                         </div>
                       </v-col>
                     </v-row> 
@@ -372,6 +378,7 @@
   import Navbar from './Layout/Navbar.vue'
   import LeftSidebar from './Layout/Dashboard/LeftSidebar.vue'
   import axios from 'axios'
+  import { mapActions } from "vuex";
 export default {
   name : "Chat",
   components: {
@@ -388,6 +395,8 @@ export default {
       userList : true,
       searchMessage: '',
       message: '',
+      conversationId : '',
+      searchUsers: '',
       selected: [0],
         groups: [
           {
@@ -457,6 +466,7 @@ export default {
             title: 'Britta Holt',
           },
         ],
+        user: '',
     };
   },
   computed:{
@@ -466,14 +476,23 @@ export default {
     activityPanel(){
         return this.$store.getters.g_activityPanel;
     },
+    conversationsList(){
+      return this.$store.getters.conversations;
+    },
+    messagesList(){
+      return this.$store.getters.messages;
+    }
   },
   methods: {
-    openChat(){
+    ...mapActions(["getAllConversations","getAllMessages","sendMessage"]),
+    openChat(convId){
       if(screen.width < 767){
         this.userList = false;
         this.showMsgBlock = true;
         this.backArrow= true;
       }
+      this.conversationId = convId;
+      this.getAllMessages(convId)
     },
     closeChat(){
       if(screen.width < 767){
@@ -482,6 +501,24 @@ export default {
         this.backArrow = false;
       }
     },
+    getConversations(id){
+      this.getAllConversations(id);
+    },
+    messageSend(){
+      console.log(this.conversationId);
+      var data = {
+        'conversationId': this.conversationId,
+        'sender': {
+            'name': "Abdul Aziz",
+            'id': this.user.uid,
+            'company': "Standard Oil Co",
+            'profilePicture': ""
+        },
+        content: this.message,
+        attachment: this.msgFile
+      }
+      this.sendMessage(data);
+    },
   },
   mounted() {
     if(screen.width < 767){
@@ -489,6 +526,8 @@ export default {
       this.showMsgBlock = false;
       this.backArrow = false;
     }
+    this.user = JSON.parse(localStorage.getItem("userData")).user;
+    this.getConversations(this.user.uid);
   }
 };
 </script>
