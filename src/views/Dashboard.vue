@@ -169,18 +169,18 @@ export default {
     activityPanel(){
         return this.$store.getters.g_activityPanel;
     },
-    allbids(){
-        return this.$store.getters.bids;
-    },
+    // allbids(){
+    //     return this.$store.getters.bids;
+    // },
     userData(){
         return this.$store.getters.userss;
     },
   },
   methods: {
-    ...mapActions(["getAllBids"]),
-    getBids(){
-      this.getAllBids();
-    },
+    // ...mapActions(["getAllBids"]),
+    // getBids(){
+    //   this.getAllBids();
+    // },
     shipMap(){
       this.mapOptions = {
         center: new google.maps.LatLng(29.721085, -95.342049),
@@ -204,7 +204,8 @@ export default {
     }
   },
   mounted() {
-    this.getBids();
+    
+    // this.getBids();
     this.shipMap();
     this.users = JSON.parse(localStorage.getItem("userData")).user;
     console.log(this.users);
