@@ -499,6 +499,7 @@ export default {
     }
   },
   mounted() {
+    document.title = "Get Started - BidOut"
   }
 };
 </script>

@@ -123,7 +123,7 @@ export default {
     },
   },
   mounted() {
-    
+    document.title = "Add Users - BidOut";
   }
 };
 </script>

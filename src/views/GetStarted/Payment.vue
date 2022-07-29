@@ -351,6 +351,7 @@
       }
     },
     mounted () {
+       document.title = "Payment - BidOut"
       this.maskCardNumber()
     },
     methods: {

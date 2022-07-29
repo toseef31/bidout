@@ -107,7 +107,7 @@ export default {
     
   },
   mounted() {
-    
+     document.title = "Contract - BidOut"
 }
 };
 </script>

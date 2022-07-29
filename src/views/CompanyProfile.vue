@@ -57,7 +57,7 @@
                         <label class="d-block text-left main-label">Services Portfolio</label>
                       <v-row>
                         <v-col cols="10" sm="10">
-                          <v-text-field label="Add a service here ..." single-line outlined></v-text-field>
+                          <v-text-field placeholder="Add a service here ..." single-line outlined></v-text-field>
                         </v-col>
                         <v-col cols="2" sm="2" class="pl-0">
                         <v-btn color="#0D9648" class="text-capitalize mr-2 white--text" width="100%" height="54px">Add</v-btn>
@@ -77,7 +77,7 @@
                       <v-row>
                         <label class="d-block text-left main-label pl-3">Services Location</label>
                         <v-col cols="10" sm="10">
-                          <v-text-field label="Add a location here ..." single-line outlined></v-text-field>
+                          <v-text-field placeholder="Add a location here ..." single-line outlined></v-text-field>
                         </v-col>
                         <v-col cols="2" sm="2" class="pl-0 pt-0 pb-0">
                           <v-btn color="#0D9648" class="text-capitalize mr-2 white--text" width="100%" height="54px">Add</v-btn>
@@ -143,7 +143,7 @@
                       <v-row>
                         <label class="d-block text-left main-label mb-4 pl-3">Corporate News & Press Releases</label>
                         <v-col cols="10" sm="10">
-                          <v-text-field label="Add a corporate news here ..." single-line outlined v-model="corporateNews"></v-text-field>
+                          <v-text-field placeholder="Add a corporate news here ..." single-line outlined v-model="corporateNews"></v-text-field>
                         </v-col>
                         <v-col cols="2" sm="2" class="pb-0 pl-0 pt-0">
                         <v-btn color="#0D9648" class="text-capitalize mr-2 white--text" width="100%" height="54px">Add</v-btn>
@@ -170,17 +170,17 @@
                         <v-row>
                           <v-col cols="12" sm="6" text="left">
                             <label class="d-block text-left input-label mb-2">Executive's name</label>
-                            <v-text-field label="Full name ..." single-line outlined></v-text-field>
+                            <v-text-field placeholder="Full name ..." single-line outlined></v-text-field>
                           </v-col>
                           <v-col cols="12" sm="6" text="left">
                             <label class="d-block text-left input-label mb-2">Role</label>
-                            <v-text-field label="Role ..." single-line outlined></v-text-field>
+                            <v-text-field placeholder="Role ..." single-line outlined></v-text-field>
                           </v-col>
                         </v-row>
                         <v-row>
                           <v-col cols="12" sm="6" text="left">
                             <label class="d-block text-left input-label mb-2">LinkedIn Profile</label>
-                            <v-text-field label="Paste link here ..." single-line outlined></v-text-field>
+                            <v-text-field placeholder="Paste link here ..." single-line outlined></v-text-field>
                           </v-col>
                           <v-col cols="12" sm="6" text="left">
                             <label class="d-block text-left input-label mb-2">Profile</label>
@@ -239,7 +239,7 @@
                           <v-row>
                             <v-col cols="12" sm="6" text="left">
                               <label class="d-block text-left input-label mb-2">Title</label>
-                              <v-text-field label="Full name ..." single-line outlined></v-text-field>
+                              <v-text-field placeholder="Full name ..." single-line outlined></v-text-field>
                             </v-col>
                             <v-col cols="12" sm="6" text="left">
                               <label class="d-block text-left input-label mb-2">Document</label>
@@ -281,37 +281,37 @@
                           <v-row>
                             <v-col cols="12"sm="6" text="left">
                               <label class="d-block text-left input-label mb-2">Founded</label>
-                              <v-text-field label="Enter year ..." single-line outlined type="text"></v-text-field>
+                              <v-text-field placeholder="Enter year ..." single-line outlined type="text"></v-text-field>
                             </v-col>
                             <v-col cols="12" sm="6" text="left">
                               <label class="d-block text-left input-label mb-2">Employess</label>
-                              <v-text-field label="Enter Employees ..." single-line outlined type="text"></v-text-field>
+                              <v-text-field placeholder="Enter Employees ..." single-line outlined type="text"></v-text-field>
                             </v-col>
                           </v-row>
                           <v-row>
                             <v-col cols="12" sm="6" text="left" >
                               <label class="d-block text-left input-label mb-2">HQ Location</label>
-                              <v-text-field label="Enter year ..." single-line outlined type="text"></v-text-field>
+                              <v-text-field placeholder="Enter year ..." single-line outlined type="text"></v-text-field>
                             </v-col>
                             <v-col cols="12" sm="6" text="left">
                               <label class="d-block text-left input-label mb-2">Stock Price</label>
-                              <v-text-field label="Enter Employees ..." single-line outlined type="text"></v-text-field>
+                              <v-text-field placeholder="Enter Employees ..." single-line outlined type="text"></v-text-field>
                             </v-col>
                           </v-row>
                           <v-row>
                             <v-col cols="12" sm="6" text="left">
                               <label class="d-block text-left input-label mb-2">Website</label>
-                              <v-text-field label="Enter year ..." single-line outlined type="text"></v-text-field>
+                              <v-text-field placeholder="Enter year ..." single-line outlined type="text"></v-text-field>
                             </v-col>
                             <v-col cols="12" sm="6" text="left">
                               <label class="d-block text-left input-label mb-2">Company's LinkedIn</label>
-                              <v-text-field label="Enter Employees ..." single-line outlined type="text"></v-text-field>
+                              <v-text-field placeholder="Enter Employees ..." single-line outlined type="text"></v-text-field>
                             </v-col>
                           </v-row>
                           <v-row>
                             <v-col cols="12" sm="6" text="left">
                               <label class="d-block text-left input-label mb-2">Careers Page</label>
-                              <v-text-field label="Enter Employees ..." single-line outlined type="text"></v-text-field>
+                              <v-text-field placeholder="Enter Employees ..." single-line outlined type="text"></v-text-field>
                             </v-col>
                           </v-row>
                         </v-container>
@@ -325,27 +325,27 @@
                           <v-row>
                             <v-col cols="12" sm="6" text="left">
                               <label class="d-block text-left input-label mb-2">Name</label>
-                              <v-text-field label="Full name ..." single-line outlined type="text"></v-text-field>
+                              <v-text-field placeholder="Full name ..." single-line outlined type="text"></v-text-field>
                             </v-col>
                             <v-col cols="12" sm="6" text="left">
                               <label class="d-block text-left input-label mb-2">Role</label>
-                              <v-text-field label="Role ..." single-line outlined type="text"></v-text-field>
+                              <v-text-field placeholder="Role ..." single-line outlined type="text"></v-text-field>
                             </v-col>
                           </v-row>
                           <v-row>
                             <v-col cols="12" sm="6" text="left">
                               <label class="d-block text-left input-label mb-2">Email</label>
-                              <v-text-field label="Enter Email ..." single-line outlined type="email"></v-text-field>
+                              <v-text-field placeholder="Enter Email ..." single-line outlined type="email"></v-text-field>
                             </v-col>
                             <v-col cols="12" sm="6" text="left">
                               <label class="d-block text-left input-label mb-2">Phone Number</label>
-                              <v-text-field label="Phone Number ..." single-line outlined type="text"></v-text-field>
+                              <v-text-field placeholder="Phone Number ..." single-line outlined type="text"></v-text-field>
                             </v-col>
                           </v-row>
                           <v-row>
                             <v-col cols="12" sm="6" text="left">
                               <label class="d-block text-left input-label mb-2">LinkedIn Profile</label>
-                              <v-text-field label="LinkedIn Profile ..." single-line outlined type="text"></v-text-field>
+                              <v-text-field placeholder="LinkedIn Profile ..." single-line outlined type="text"></v-text-field>
                             </v-col>
                           </v-row>
                           <v-row>
@@ -512,6 +512,7 @@ export default {
     },
   },
   mounted() {
+    document.title = "Company Profile - BidOut";
   }
 };
 </script>

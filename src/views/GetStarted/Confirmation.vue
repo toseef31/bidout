@@ -76,7 +76,7 @@ export default {
     
   },
   mounted() {
-    
+     document.title = "Confirmation - BidOut"
 }
 };
 </script>

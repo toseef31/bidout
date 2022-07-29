@@ -245,8 +245,8 @@ export default {
     
   },
   mounted() {
-    
-}
+    document.title = "Categories - BidOut" 
+  }
 };
 </script>
 <style scoped lang="scss">

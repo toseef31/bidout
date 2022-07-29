@@ -279,8 +279,8 @@ export default {
     
   },
   mounted() {
-    
-}
+    document.title = "Subsidaries - BidOut";
+  }
 };
 </script>
 <style scoped lang="scss">
