@@ -26,6 +26,7 @@ export default {
 		    "Content-Type": "multipart/form-data",
 		  },
 		};
+		console.log(payload);
 		axios.post('/chat/sendMessage/',{'conversationId': payload.conversationId, 'content': payload.content,'attachment':payload.attachment, 'sender': payload.sender, config})
 		 .then(responce => {
 		 	commit('setNewMessages',responce.data.message)

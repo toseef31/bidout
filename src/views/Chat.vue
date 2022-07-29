@@ -369,9 +369,10 @@ export default {
         content: this.message,
         attachment: this.filename,
       }
-      var container = this.$el.querySelector("#messages-section");
-      container.scrollTop = container.scrollHeight;
+      
       this.sendMessage(data);
+      var container = this.$refs.messagesSection;
+      container.scrollTop = 3 * container.scrollHeight;
       this.message = '';
       this.filename = '';
     },
