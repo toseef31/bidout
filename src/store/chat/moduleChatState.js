@@ -3,4 +3,7 @@ export default {
     conversations: [],
     messages: [],
     messageSend: null,
+    unMessageCount: null,
+    lastMessageRead: null,
+    userId: '',
 }

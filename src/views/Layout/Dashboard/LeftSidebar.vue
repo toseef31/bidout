@@ -141,7 +141,7 @@ export default {
     }
   },
   mounted() {
-    this.userId = localStorage.getItem('userId');
+    this.userId = JSON.parse(localStorage.getItem("userData")).user.uid;
     this.getUnreadMessages();
   },
 };

@@ -6,9 +6,18 @@ export default {
     state.conversations = payload
   }, 
   setMessagesList (state, payload){
-    state.messages = payload
+    state.messages= payload
+  },
+  setNewMessages (state, payload){
+    state.messages.push(payload)
   },
   setSendMessage (state, payload){
     state.messageSend = payload
+  }, 
+  setUnMessageCount (state, payload){
+    state.unMessageCount = payload
+  }, 
+  setLastMessageRead (state, payload){
+    state.unMessageCount = payload
   }, 
 }

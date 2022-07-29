@@ -2,7 +2,7 @@ import axios from 'axios'
 
 export default {
 	unreadMessagesCount({commit}, payload){
-		axios.post('/chat/countUnreadMessages',{payload})
+		axios.post('/chat/countUnreadMessages',{'userId':payload.userId})
 		 .then(responce => {
 		 	commit('setUnreadCount',responce.data.totalUnreadMessages)
 		})
@@ -10,6 +10,7 @@ export default {
 	getAllConversations({commit}, payload){
 		axios.get('/chat/getConversations/'+payload)
 		 .then(responce => {
+		 	
 		 	commit('setConverstaionList',responce.data.conversations)
 		})
 	},
@@ -20,10 +21,26 @@ export default {
 		})
 	},
 	sendMessage({commit}, payload){
-		axios.post('/chat/sendMessage/',{'conversationId': payload.conversationId, 'content': payload.content, 'sender': payload.sender})
+		var config = {
+		  header: {
+		    "Content-Type": "multipart/form-data",
+		  },
+		};
+		axios.post('/chat/sendMessage/',{'conversationId': payload.conversationId, 'content': payload.content,'attachment':payload.attachment, 'sender': payload.sender, config})
 		 .then(responce => {
-		 	// console.log(responce.data.message);
-		 	commit('setMessagesList',responce.data.message)
+		 	commit('setNewMessages',responce.data.message)
 		})
 	},   
+	unreadMessagesCountCon({commit}, payload){
+		axios.post('/chat/countUnreadMessagesInConversation',{'userId':payload.userId,'conversationId':payload.conversationId})
+		 .then(responce => {
+		 	commit('setUnMessageCount',responce.data.count)
+		})
+	}, 
+	lastMessageRead({commit}, payload){
+		axios.post('/chat/setLastMessageReadAt',{'userId':payload.userId,'conversationId':payload.conversationId})
+		 .then(responce => {
+		 	commit('setLastMessageRead',responce.data.count)
+		})
+	},
 }

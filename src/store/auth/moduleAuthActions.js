@@ -86,18 +86,43 @@ export default {
           name: "ExistingAccount"
         });
         }else{
-          axios.post('/ofs/queueSupplierUser',{'id': payload.id, 'email': payload.email, 'firstName': payload.firstName, 'lastName': payload.lastName,'phoneNumber':payload.phoneNumber, 'title': payload.title, 'password': payload.password})
-           .then(responce => {
-            if(responce.status == 200){
-              router.replace({
-                name: "ModuleSelection"
-              });
-              commit('setEmailSuccess', 'Email sent successfully! Please check your email')
-            }
-            else{
-              commit('setEmailError', 'Something wrong please try again')
-            }
-          })
+          if(payload.id){
+            axios.post('/ofs/queueSupplierUser',{'id': payload.id, 'email': payload.email, 'firstName': payload.firstName, 'lastName': payload.lastName,'phoneNumber':payload.phoneNumber, 'title': payload.title, 'password': payload.password})
+             .then(responce => {
+              if(responce.status == 200){
+                router.replace({
+                  name: "ModuleSelection"
+                });
+                commit('setEmailSuccess', 'Email sent successfully! Please check your email')
+              }
+              else{
+                commit('setEmailError', 'Something wrong please try again')
+              }
+            })
+           }else{
+            axios.post('/ofs/createCompany',{'company': payload.company, 'companyHq': payload.companyHq, 'companyHq2': payload.companyHq2, 'companyHqCountry': payload.companyHqCountry,'companyHqState':payload.companyHqState, 'companyHqCity': payload.companyHqCity, 'companyHqZip': payload.companyHqZip})
+             .then(responce => {
+              if(responce.status == 200){
+                axios.post('/ofs/createUser',{'company': payload.company,'firstName': payload.firstName, 'lastName': payload.lastName,'email': payload.email,'phoneNumber':payload.phoneNumber, 'title': payload.title, 'password': payload.password})
+                 .then(responce => {
+                  if(responce.status == 200){
+                    router.replace({
+                      name: "ModuleSelection"
+                    });
+                    commit('setEmailSuccess', 'Email sent successfully! Please check your email')
+                  }
+                  else{
+                    commit('setEmailError', 'Something wrong please try again')
+                  }
+                })
+              }
+              else{
+                console.log(responce.data.message);
+                commit('setCompanyError', 'Please try with different Company details')
+              }
+            })
+           }
+            
         }
         
        

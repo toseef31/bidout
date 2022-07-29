@@ -154,7 +154,7 @@
                       <v-row class="mt-8 bg-light">
                         <v-col cols="12" sm="12" text="left" class="pa-6">
                           <label class="d-block text-left input-label mb-2 font-weight-bold">Company Name</label>
-                          <v-text-field prepend-inner-icon="search" placeholder="Company name" single-line outlined type="text" v-model="company" @keyup="getSupplierList">
+                          <v-text-field prepend-inner-icon="search" placeholder="Company name" single-line outlined type="text" v-model="company" @keyup="getSupplierList" clearable>
                           </v-text-field>
                           <input type="hidden" v-model="companyId">
 
@@ -413,14 +413,32 @@ export default {
   methods: {
     ...mapActions(["supplierSignUpAction","searchSupplier","checkEmail","buyerSignUpAction"]),
     registerRequest() {
-      var supplierData = {
-        id: this.companyId,
-        firstName: this.supplier.firstName,
-        lastName: this.supplier.lastName,
-        email: this.email,
-        phoneNumber: this.supplier.phoneNumber,
-        title: this.supplier.title,
-        password: this.password
+      if(this.companyId){
+        var supplierData = {
+          id: this.companyId,
+          firstName: this.supplier.firstName,
+          lastName: this.supplier.lastName,
+          email: this.email,
+          phoneNumber: this.supplier.phoneNumber,
+          title: this.supplier.title,
+          password: this.password
+        }
+      }else{
+        var supplierData = {
+          company: this.buyer.company,
+          companyHq: this.buyer.companyHq,
+          companyHq2: this.buyer.companyHq2,
+          companyHqCountry: this.country,
+          companyHqState: this.region,
+          companyHqCity: this.buyer.companyHqCity,
+          companyHqZip: this.buyer.companyHqZip,
+          firstName: this.supplier.firstName,
+          lastName: this.supplier.lastName,
+          email: this.email,
+          phoneNumber: this.supplier.phoneNumber,
+          title: this.supplier.title,
+          password: this.password
+        }
       }
       this.supplierSignUpAction(supplierData);
     },

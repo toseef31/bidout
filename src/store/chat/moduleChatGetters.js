@@ -10,5 +10,11 @@ export default {
   },
   messageSend (state){
     return state.messageSend
+  }, 
+  unMessageCount (state){
+    return state.unMessageCount
+  },
+  lastMessageRead (state){
+    return state.lastMessageRead
   },  
 }

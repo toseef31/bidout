@@ -204,7 +204,7 @@ export default {
     }
   },
   mounted() {
-    
+    document.title = "Dashboard - BidOut";
     // this.getBids();
     this.shipMap();
     this.users = JSON.parse(localStorage.getItem("userData")).user;

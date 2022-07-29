@@ -164,8 +164,43 @@
 	  				line-height: 20px;
 	  			}
 	  		}
+	  		&::-webkit-scrollbar {
+	  		  width: 5px;
+	  		  height: 5px;
+	  		}
+	  		&::-webkit-scrollbar-thumb {
+	  		  background: #e1e1e1;
+	  		  border: 14px solid #0d9647;
+	  		  border-radius: 26px;
+	  		}
+	  		&::-webkit-scrollbar-thumb:hover {
+	  		  background: #ffffff;
+	  		}
+	  		&::-webkit-scrollbar-thumb:active {
+	  		  background: #0d9647;
+	  		}
+	  		&::-webkit-scrollbar-track {
+	  		  /*background: #666666;*/
+	  		  border: 36px solid #e3e3e3;
+	  		  border-radius: 42px;
+	  		}
+	  		&::-webkit-scrollbar-track:hover {
+	  		  background: #666666;
+	  		}
+	  		&::-webkit-scrollbar-track:active {
+	  		  background: #0d9647;
+	  		}
+	  		&::-webkit-scrollbar-corner {
+	  		  background: transparent;
+	  		}
 	  	}
 	  	.message-send-area{
+	  		position: relative;
+	  		.fileName{
+	  			position: absolute;
+	  			left: 20px;
+			    top: -5px;
+	  		}
 	  		.v-btn{
 	  			border-radius: 8px;
 	  			color: #fff;
@@ -177,14 +212,18 @@
 	  		.attach-btn{
 		  		background-color: rgba(13, 150, 72, 0.1);
 		  		border-color: rgba(13, 150, 72, 0.1);
+		  		border-radius: 8px;
+		  		height: 43px;
+		  		cursor: pointer;
 		  	}
 		  	.v-text-field__details{
 		  		display: none;
 		  	}
 		  	.v-input__slot{
-		  		box-shadow: none;
-			    border: 1px solid #B8B8B8;
+		  		box-shadow: 1px -1px 1px 0px rgb(0 0 0 / 7%), 0px 2px 2px 0px rgb(0 0 0 / 12%), 0px 1px 5px 0px rgb(0 0 0 / 9%);
+			    /*border: 1px solid #B8B8B8;*/
 			    margin-bottom: 0;
+			    border-radius: 8px;
 		  	}
 	  	}
 	  }
