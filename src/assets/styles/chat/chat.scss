@@ -228,11 +228,12 @@
 	  	}
 	  }
 	}
+	.mid-content-collapse{
+		flex: 0 0 95%;
+	  max-width: 95%;
+	}
 }
-.mid-content-collapse{
-	flex: 0 0 95%;
-  max-width: 95%;
-}
+
 @media (max-width: 768px) {
 	.chat-module{
 		.mid-content {

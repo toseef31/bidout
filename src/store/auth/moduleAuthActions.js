@@ -12,10 +12,13 @@ export default {
     firebase.auth().signInWithEmailAndPassword(payload.email, payload.password)
 
       .then((result) => {
-        console.log(result.user.multiFactor);
-        commit('setUser', result.user.multiFactor.user)
         commit('setError', null)
-        localStorage.setItem("userData",JSON.stringify(result.user.multiFactor));
+        
+        axios.get('/user/getUserData/'+result.user.multiFactor.user.email)
+         .then(responce => {
+          commit('setUser',responce.data)
+          localStorage.setItem("userData",JSON.stringify(responce.data));
+        })
         router.replace({ name: "Dashboard" });
         
       }, (err) => {

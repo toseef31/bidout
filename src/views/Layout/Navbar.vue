@@ -43,12 +43,17 @@
                         v-for="(item, i) in items"
                         :key="i"
                       >
-                        <v-list-item-icon class="mr-2 my-2">
-                          <v-icon color="#0D9648" v-text="item.icon"></v-icon>
-                        </v-list-item-icon>
+                        <router-link :to="item.link" class="text-decoration-none">
+                          <v-list-item-icon class="mr-2 my-2">
+                            <v-icon color="#0D9648" v-text="item.icon"></v-icon>
+                          </v-list-item-icon>
+                        </router-link>
                         <v-list-item-content align-start color="#0D9648" class="pa-0">
-                          <v-list-item-title v-text="item.text" color="#0D9648"></v-list-item-title>
+                          <router-link :to="item.link" class="text-decoration-none">
+                            <v-list-item-title v-text="item.text" color="#0D9648"></v-list-item-title>
+                          </router-link>
                         </v-list-item-content>
+                        
                       </v-list-item>
                     </v-list-item-group>
                   </v-list>
@@ -196,7 +201,7 @@ export default {
       menuText: 'Dashboard',
       select: {text: 'Create a new Bid', icon: 'mdi-gavel'},
       items: [
-        { text: 'Create a new Bid', icon: 'mdi-gavel' },
+        { text: 'Create a new Bid', link: '/create-bid' , icon: 'mdi-gavel' },
         // { text: 'Create a new Shipment', icon: 'mdi-truck' },
       ],
         itemss: [

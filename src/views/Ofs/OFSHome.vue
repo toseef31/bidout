@@ -38,7 +38,7 @@
                 <div class="slide-item">
                   <div class="slide-img d-flex align-center justify-center flex-column">
                     <img
-                      :src="require('@/assets/images/ofs/tetra.png')" class="mx-auto"
+                      :src="require('@/assets/images/ofs/tetra.png')" class="mx-auto" height="120"
                     >
                   </div>
                   <div class="slide-caption">

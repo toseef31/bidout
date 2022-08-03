@@ -361,7 +361,7 @@ export default {
       var data = {
         'conversationId': this.conversationId,
         'sender': {
-            'name': "Abdul Aziz",
+            'name': this.user.firstName + this.user.LastName,
             'id': this.user.uid,
             'company': this.chatData.company,
             'profilePicture': ""

@@ -1,5 +1,5 @@
 export default {
-    userss (state){
+    userInfo (state){
         console.log('sdsdfsd',state.userInfo);
     	return state.userInfo
     },
