@@ -38,25 +38,25 @@
                       active-class="grey--text"
                       multiple v-bind:class="{ active: isActive }"
                     >
-                      <template v-for="(group, index) in conversationsList" v-if="group.type == 'GROUP'">
-                        <v-list-item :key="group.company" @click="openChat(group)">
+                      <template v-for="(conversation, index) in conversationsList">
+                        <v-list-item v-if="conversation.type == 'GROUP'"  @click="openChat(conversation,conversation.company)">
                           <template v-slot:default="{ active }">
                             <v-list-item-avatar>
                               <v-icon>mdi-account-group-outline</v-icon>
                             </v-list-item-avatar>
                             <v-list-item-content>
-                              <v-list-item-title v-text="group.company"></v-list-item-title>
+                              <v-list-item-title v-text="conversation.company"></v-list-item-title>
 
                               <v-list-item-subtitle
                                 class="text--primary"
-                                v-text="group.headline"
+                                v-text="conversation.headline"
                               ></v-list-item-subtitle>
 
-                              <v-list-item-subtitle v-text="group.subtitle"></v-list-item-subtitle>
+                              <v-list-item-subtitle v-text="conversation.subtitle"></v-list-item-subtitle>
                             </v-list-item-content>
 
                             <v-list-item-action class="mt-n5">
-                              <v-list-item-action-text>{{group.latestMessage | moment("
+                              <v-list-item-action-text>{{conversation.latestMessage | moment("
                               h:mm a")}}</v-list-item-action-text>
                             </v-list-item-action>
                             <!-- <v-badge
@@ -66,16 +66,38 @@
                               ></v-badge> -->
                           </template>
                         </v-list-item>
+                        <v-list-item v-if="conversation.type == 'PRIVATE' && participant.id != user.id"  v-for="participant in conversation.participantDetails" @click="openChat(conversation,participant.name)">
+                          <template>
+                              <v-list-item-avatar>
+                                <v-avatar>
+                                  <v-img v-if="participant.image != null" :src="require('@/assets/images/user.png')"></v-img>
+                                  <v-img v-if="participant.image == null" :src="require('@/assets/images/chat/chatUser.png')"></v-img>
+                                </v-avatar>
+                              </v-list-item-avatar>
+                              <v-list-item-content align-center>
+                                <v-list-item-title v-text="participant.name"></v-list-item-title>
+                              </v-list-item-content>
+
+                            <v-list-item-action>
+                              <v-list-item-action-text>{{conversation.latestMessage | moment("
+                              h:mm a")}}</v-list-item-action-text>
+                            </v-list-item-action>
+                          </template>
+                        </v-list-item>
+                        <v-divider
+                          v-if="index < conversation.length - 1"
+                          :key="index"
+                        ></v-divider>
                       </template>
                     </v-list-item-group>
                   </v-list>
-                  <v-list class="py-0">
+                  <!-- <v-list class="py-0">
                     <v-list-item-group
                       active-class="grey--text"
                       multiple
                     >
-                      <template v-for="(user, index) in users">
-                        <v-list-item :key="user.title" @click="openChat">
+                      <template v-for="(conversation, index) in conversationsList">
+                        <v-list-item :key="user.title" @click="openChat" v-for="user in conversation.participantDetails">
                           <template v-slot:default="{ active }">
                             <v-list-item-avatar>
                               <v-avatar>
@@ -98,7 +120,7 @@
                         ></v-divider>
                       </template>
                     </v-list-item-group>
-                  </v-list>
+                  </v-list> -->
                 </div>
                 </div>
               </v-col>
@@ -111,7 +133,7 @@
 
                       <v-col cols="6">
                         <div class="title-section text-left">
-                          <h4 class="mb-0 font-weight-bold">{{this.chatData.company}}</h4>
+                          <h4 class="mb-0 font-weight-bold">{{this.chatData.name}}</h4>
                           <!-- <p class="sub-title mb-0 font-weight-regular">Compressor Separator Bid</p> -->
                           <!-- <p class="sub-title mb-0 ">Bid #120320</p> -->
                         </div>
@@ -272,35 +294,11 @@ export default {
       searchUsers: '',
       chatData: {},
       selected: [0],
-        groups: [
-          {
-            action: '15 min ago',
-            headline: 'Compressor Separator Bid',
-            subtitle: 'Bid #120320',
-            title: 'Huges Tool Company',
-          },
-          {
-            action: '2 hr ago',
-            headline: 'Compressor Separator Bid',
-            subtitle: 'Bid #120320',
-            title: 'Company Group',
-          },
-        ],
-        users: [
-          {
-            action: '15 min ago',
-            title: 'Aubrey  McClendon',
-          },
-          {
-            action: '2 hr ago',
-            title: 'McClendon',
-          },
-        ],
-        toggleMenu: [
-          { text: 'Manage Members', icon: 'mdi-account-star-outline' },
-          { text: 'Archive Chat', icon: 'mdi-archive-outline' },
-        ],
-        user: '',
+      toggleMenu: [
+        { text: 'Manage Members', icon: 'mdi-account-star-outline' },
+        { text: 'Archive Chat', icon: 'mdi-archive-outline' },
+      ],
+      user: '',
     };
   },
   computed:{
@@ -311,10 +309,24 @@ export default {
         return this.$store.getters.g_activityPanel;
     },
     conversationsList(){
-      return this.$store.getters.conversations;
+      // return _.orderBy(this.$store.getters.conversations, 'latestMessage', 'desc');
+      
+      if(this.searchUsers){
+        return this.$store.getters.conversations.filter((item)=>{
+          return this.searchUsers.toLowerCase().split(' ').every(v => item.company.toLowerCase().includes(v)) 
+        })
+      }else{
+        return this.$store.getters.conversations;
+      }
     },
     messagesList(){
-      return this.$store.getters.messages;
+      if(this.searchMessage){
+        return this.$store.getters.messages.filter((item)=>{
+          return this.searchMessage.toLowerCase().split(' ').every(v => item.content.toLowerCase().includes(v))
+        })
+      }else{
+        return this.$store.getters.messages;
+      }
     },
     // msgCount(){
     //   return this.$store.getters.unMessageCount;
@@ -322,17 +334,21 @@ export default {
   },
   methods: {
     ...mapActions(["getAllConversations","getAllMessages","sendMessage","unreadMessagesCountCon","lastMessageRead"]),
-    openChat(group){
+    openChat(group,name){
       if(screen.width < 767){
         this.userList = false;
         this.showMsgBlock = true;
         this.backArrow= true;
       }
+      var obj = {
+        'group': group,
+        'name': name,
+      }
       this.conversationId = group._id;
-      this.chatData = group;
+      this.chatData = obj;
       this.getAllMessages(this.conversationId);
       var ids = {
-        userId: this.user.uid,
+        userId: this.user.id,
         conversationId: this.conversationId,
       }
       this.lastMessageRead(ids);
@@ -361,9 +377,9 @@ export default {
       var data = {
         'conversationId': this.conversationId,
         'sender': {
-            'name': this.user.firstName + this.user.LastName,
+            'name': this.user.firstName+' '+this.user.lastName,
             'id': this.user.uid,
-            'company': this.chatData.company,
+            'company': this.chatData.group.company,
             'profilePicture': ""
         },
         content: this.message,
@@ -391,9 +407,8 @@ export default {
       this.showMsgBlock = false;
       this.backArrow = false;
     }
-    this.user = JSON.parse(localStorage.getItem("userData")).user;
-    this.getConversations(this.user.uid);
-    // this.unreadMessagesCount(this.user.uid);
+    this.user = this.$store.getters.userInfo;
+    this.getConversations(this.user.id);
   }
 };
 </script>

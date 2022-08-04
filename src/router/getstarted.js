@@ -84,11 +84,11 @@ const routes = [
         }
       },
       
-      // { 
-      //   path: "*", 
-      //   component: () => import('@/views/PageNotFound.vue'), 
+      { 
+        path: "*", 
+        component: () => import('@/views/PageNotFound.vue'), 
        
-      // }
+      }
     ],
   },
 ];

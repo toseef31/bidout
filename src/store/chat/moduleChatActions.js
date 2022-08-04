@@ -8,9 +8,10 @@ export default {
 		})
 	},
 	getAllConversations({commit}, payload){
+		console.log(payload,'Payload');
 		axios.get('/chat/getConversations/'+payload)
 		 .then(responce => {
-		 	
+		 	console.log(responce);
 		 	commit('setConverstaionList',responce.data.conversations)
 		})
 	},

@@ -34,7 +34,7 @@
                 <v-tab
                   v-for="item in tabs"
                   :key="item"
-                  :href="'#tab-' + item" class="text-capitalize"
+                  :href="'#tab-' + item" class="text-capitalize black--text font-weight-bold"
                 >
                   {{ item }}
                 </v-tab>
@@ -95,6 +95,7 @@ export default {
       tabs: [
         'Bid Detail', 'Supplier Invitation', 'Team Members', 'Line Items', 'Attachment', 'Questions',
       ],
+      text: 'lorem '
     };
   },
   computed:{

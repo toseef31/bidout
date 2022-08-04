@@ -13,13 +13,13 @@ export default {
 
       .then((result) => {
         commit('setError', null)
-        
+        console.log(result.user.multiFactor.user);
         axios.get('/user/getUserData/'+result.user.multiFactor.user.email)
          .then(responce => {
           commit('setUser',responce.data)
           localStorage.setItem("userData",JSON.stringify(responce.data));
+          router.replace({ name: "Dashboard" });
         })
-        router.replace({ name: "Dashboard" });
         
       }, (err) => {
         commit('setError',err.message)

@@ -13,7 +13,7 @@ import store from '@/store';
 Vue.use(VueRouter);
 
 var allRoutes = []
-allRoutes = allRoutes.concat(Ofs, AuthRoutes, Dashboard, Chat, Profile, GetStarted, Bids )
+allRoutes = allRoutes.concat(Ofs, AuthRoutes, Dashboard, Chat, Profile, Bids , GetStarted)
 
 const routes = allRoutes
 

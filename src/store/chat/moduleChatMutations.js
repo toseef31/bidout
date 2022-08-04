@@ -18,6 +18,6 @@ export default {
     state.unMessageCount = payload
   }, 
   setLastMessageRead (state, payload){
-    state.unMessageCount = payload
+    state.lastMessageRead = payload
   }, 
 }

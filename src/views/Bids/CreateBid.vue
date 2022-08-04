@@ -21,15 +21,17 @@
             		</div>
             	</v-col>
             	<v-col cols="12" md="4" class="mt-16">
-            		<div class="bid-box">
-            			<div class="icon-box pa-8">
-            				<img :src="require('@/assets/images/bids/FileArrowDown.png')">
-            			</div>
-            			<div class="title-box pa-8 text-left">
-            				<h4 class="font-weight-bold">Create Bid from Template</h4>
-            				<small>RFx: RFP or RFI</small>
-            			</div>
-            		</div>
+            		<router-link to="/templates">
+	            		<div class="bid-box">
+	            			<div class="icon-box pa-8">
+	            				<img :src="require('@/assets/images/bids/FileArrowDown.png')">
+	            			</div>
+	            			<div class="title-box pa-8 text-left">
+	            				<h4 class="font-weight-bold">Create Bid from Template</h4>
+	            				<small>RFx: RFP or RFI</small>
+	            			</div>
+	            		</div>
+	            	</router-link>	
             	</v-col>
             </v-row>
           </div>

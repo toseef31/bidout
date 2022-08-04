@@ -66,9 +66,9 @@
         <v-list>
           <v-list-item class="pr-0">
             <router-link to="/edit-profile" class="d-flex text-decoration-none">
-              <v-list-item-title class="mr-3">Aubrey  McClendon</v-list-item-title>
+              <v-list-item-title class="mr-3">{{userDatas.firstName}} {{userDatas.lastName}}</v-list-item-title>
               <v-avatar>
-                <v-img :src="require('@/assets/images/user.png')"></v-img>
+                <v-img v-if="userDatas.image == null" :src="require('@/assets/images/user.png')"></v-img>
               </v-avatar>
             </router-link>
           </v-list-item>
@@ -234,7 +234,10 @@ export default {
   computed: {
     activityPanel(){
         return this.$store.getters.g_activityPanel;
-    }
+    },
+    userDatas(){
+        return this.$store.getters.userInfo;
+    },
   },
   methods: {
     openBox(){
