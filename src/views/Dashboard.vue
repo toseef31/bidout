@@ -8,7 +8,6 @@
        <v-col class="mid-content pa-0 pa-sm-3" :class="[ showSideBar ? 'col-md-6 col-12 col-sm-7' : 'mid-content-collapse', activityPanel ? 'd-sm-block' : 'd-md-block']" v-show="!activityPanel">
           <div class="content-section">
             <div class="title-block">
-              {{userDatas}}
               <h3 class="font-weight-bold">Active Bids</h3>
               <a href="">View all</a>
             </div>
