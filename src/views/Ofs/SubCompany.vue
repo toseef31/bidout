@@ -232,6 +232,7 @@
 <script>
   import NavbarBeforeLogin from '../Layout/NavbarBeforeLogin.vue'
   import Footer from '../Layout/Footer.vue'
+  
 export default {
   name : "ModuleSelection",
   components: {
