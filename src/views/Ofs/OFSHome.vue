@@ -73,7 +73,7 @@
               <v-form class="search-form">
                 <v-row class="mt-8">
                   <v-col cols="10" sm="11" text="left">
-                    <v-text-field label="Search here ..." single-line outlined type="text" placeholder="Search here">
+                    <v-text-field label="Search here ..." single-line outlined type="text" placeholder="Search here" v-model="searchCategory">
                     </v-text-field>
                   </v-col>
                   <v-col cols="2" sm="1" text="left" class="pl-0">
@@ -107,8 +107,15 @@
             <v-col cols="12" md="6" v-for="category in allcategories" :key="category.id">
               
               <div class="ofs-listing text-left">
-                <h1 class="font-weight-bold mb-3 text-break"><router-link :to="'/ofs-directory/'+category.slug" class="text-decoration-none">{{category.name}}</router-link></h1>
-                <p><span v-for="subcategry in subCategories(category.subCategories)"><font class="font-weight-bold">{{subcategry.name}} </font> <font class="font-weight-medium">({{subcategry.spCount}}) </font> </span></p>
+                <h1 class="font-weight-bold mb-3 text-break">{{category.name}}</h1>
+                <p>
+                  <span v-for="subcategry in subCategories(category.subCategories)" class="sub-catLink">
+                    <span @click="getCompanies(category.slug,subcategry.name)">  
+                      <font class="font-weight-bold">{{subcategry.name}} </font> 
+                      <font class="font-weight-medium">({{subcategry.spCount}}) </font> 
+                    </span>
+                  </span>
+                </p>
               </div>
             </v-col>
           </v-row>
@@ -157,6 +164,7 @@ export default {
   
   data() {
     return {
+      searchCategory: '',
       settings: {
         "arrows": true,
         "dots": false,
@@ -207,12 +215,18 @@ export default {
   },
   computed:{
     allcategories(){
-      setTimeout(() => this.loading = false, 500);
-      return _.orderBy(this.$store.getters.categories, 'orderNumber', 'asc'); 
+      if(this.searchCategory){
+        return _.orderBy(this.$store.getters.categories.filter((category)=>{
+          return this.searchCategory.toLowerCase().split(' ').every(v => category.name.toLowerCase().includes(v))
+        }), 'orderNumber', 'asc')
+      }else{
+        setTimeout(() => this.loading = false, 500);
+        return _.orderBy(this.$store.getters.categories, 'orderNumber', 'asc');
+      }
     },
   },
   methods: {
-    ...mapActions(["getCategories"]),
+    ...mapActions(["getCategories","getCompanyByservice"]),
     getAllCategories(){
       this.getCategories();
       
@@ -220,6 +234,9 @@ export default {
     subCategories(subCats){
      return _.orderBy(subCats, 'orderNumber', 'asc');
     },
+    getCompanies(slug,subName){
+      this.getCompanyByservice({slug:slug, service:subName});
+    }
   },
   mounted() {
     this.getCategories();

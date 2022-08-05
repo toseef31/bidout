@@ -1,7 +1,8 @@
 export default {
    categories (state){
-      // console.log(state);
       return state.categories
    },
-   
+   serviceCompanies (state){
+      return state.serviceCompanies
+   }
 }

@@ -238,6 +238,7 @@
                             placeholder="Message here ..."
                             rows="3"
                             v-model="message"
+                            @keyup.enter="messageSend"
                           ></v-textarea>
                         </div>
                       </v-col>
@@ -249,6 +250,7 @@
                             <input id="attach-file"
                                type="file" class="d-none" 
                               truncate-length="8" ref="msgFile" @change="fileUpload"
+
                             >
                             <v-img :src="require('@/assets/images/chat/attach.png')" max-width="28px" height="32px"></v-img>
                           </label>
@@ -271,6 +273,7 @@
   import Navbar from './Layout/Navbar.vue'
   import LeftSidebar from './Layout/Dashboard/LeftSidebar.vue'
   import axios from 'axios'
+  import _ from 'lodash';
   import { mapActions } from "vuex";
 export default {
   name : "Chat",
@@ -312,11 +315,11 @@ export default {
       // return _.orderBy(this.$store.getters.conversations, 'latestMessage', 'desc');
       
       if(this.searchUsers){
-        return this.$store.getters.conversations.filter((item)=>{
-          return this.searchUsers.toLowerCase().split(' ').every(v => item.company.toLowerCase().includes(v)) 
-        })
+        return _.orderBy(this.$store.getters.conversations.filter((item)=>{
+          return this.searchUsers.toLowerCase().split(' ').every(v => item.company.toLowerCase().includes(v))
+        }), 'latestMessage', 'desc')
       }else{
-        return this.$store.getters.conversations;
+        return _.orderBy(this.$store.getters.conversations, 'latestMessage', 'desc');
       }
     },
     messagesList(){

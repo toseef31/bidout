@@ -18,7 +18,7 @@ const routes = [
         }
       },
       {
-        path: '/ofs-directory/:slug',
+        path: '/ofs-directory/:slug/:name',
         name: 'CategoryListing',
         component: () => import('@/views/Ofs/CategoryListing.vue'),
         beforeEnter: (to, from, next) => {
