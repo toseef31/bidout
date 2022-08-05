@@ -25,7 +25,8 @@
     "vue-router": "^3.5.2",
     "vue-slick-carousel": "^1.0.6",
     "vuetify": "^2.5.8",
-    "vuex": "^3.6.2"
+    "vuex": "^3.6.2",
+    "yarn": "^1.22.19"
   },
   "devDependencies": {
     "eslint": "7.32.0",
