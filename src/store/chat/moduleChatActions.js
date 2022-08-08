@@ -18,6 +18,7 @@ export default {
 	getAllMessages({commit}, payload){
 		axios.get('/chat/getMessages/'+payload)
 		 .then(responce => {
+		 	console.log(responce,'messages');
 		 	commit('setMessagesList',responce.data.messages)
 		})
 	},
@@ -27,8 +28,17 @@ export default {
 		    "Content-Type": "multipart/form-data",
 		  },
 		};
-		console.log(payload);
-		axios.post('/chat/sendMessage/',{'conversationId': payload.conversationId, 'content': payload.content,'attachment':payload.attachment, 'sender': payload.sender, config})
+		console.log('send',payload);
+		const formData = new FormData()
+		formData.append('conversationId', payload.conversationId)
+		formData.append('sender[id]', payload.sender.id)
+		formData.append('sender[name]', payload.sender.name)
+		formData.append('sender[company]', payload.sender.company)
+		formData.append('sender[profilePicture]', payload.sender.profilePicture)
+		formData.append('content', payload.content)
+		formData.append('attachment', payload.attachment)
+		console.log(formData,'formData');
+		axios.post('chat/sendMessage',formData, config)
 		 .then(responce => {
 		 	commit('setNewMessages',responce.data.message)
 		})

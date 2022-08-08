@@ -9,7 +9,7 @@
 			border: 1px solid #B8B8B8;
 			border-radius: 8px;
 			margin-bottom: 20px;
-			padding: 3px;
+			/*padding: 3px;*/
 			.bid-box{
 				border: 1px solid #B8B8B8;
 				border-radius: 8px;
@@ -28,6 +28,9 @@
 								color: #000000;
 								font-size: 16px;
 								font-weight: 700;
+								&:first-child{
+									padding-left: 12px;
+								}
 							}
 						}
 					}
@@ -74,10 +77,47 @@
 				.v-tabs{
 					.v-tab{
 						font-size: 12px;
+						border-bottom: 1px solid #B8B8B8;
 						&--active{
 							background: rgba(13, 150, 72, 0.1);
 							border-bottom: 2px solid #0D9648;
 							color: #0D9648 !important;
+						}
+					}
+				}
+				.v-tabs-items{
+					.v-form{
+						.v-input{
+							border-radius: 8px;
+							&--selection-controls{
+								&__ripple{
+									color: #0d9648 !important;
+									caret-color: #0d9648 !important;
+								}
+								&__input{
+									i{
+										color: #0d9648 !important;
+										caret-color: #0d9648 !important;
+									}
+								}
+							}
+						}
+						.adtn-btn{
+							color: #0d9648;
+							box-shadow: none;
+						}
+						.save-btn{
+							font-size: 20px;
+							border-radius: 8px;
+						}
+					}
+				}
+				.supplier-tabs{
+					.v-tab{
+						border-bottom: 0;
+						&--active{
+							background: transparent;
+							border-bottom: 2px solid #0D9648;
 						}
 					}
 				}

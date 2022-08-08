@@ -208,7 +208,9 @@
                             <template>
                               <v-list-item-content>
                                 <v-list-item-title>{{message.sender.name}}</v-list-item-title>
-                                <v-img v-if="message.attachment" :src="require('@/assets/images/chat/thumbnail.png')" max-height="125px" max-width="245px" class="mt-2"></v-img>
+                                
+                                <v-img v-if="message.attachment" :src="message.attachment" max-height="125px" max-width="245px" class="mt-2"></v-img>
+                                
                                 <v-list-item-subtitle
                                   class="text--primary"
                                 >{{message.content}}</v-list-item-subtitle>
@@ -381,12 +383,12 @@ export default {
         'conversationId': this.conversationId,
         'sender': {
             'name': this.user.firstName+' '+this.user.lastName,
-            'id': this.user.uid,
+            'id': this.user.id,
             'company': this.chatData.group.company,
             'profilePicture': ""
         },
         content: this.message,
-        attachment: this.filename,
+        attachment: chat_file[0],
       }
       
       this.sendMessage(data);

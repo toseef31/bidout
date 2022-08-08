@@ -7,7 +7,7 @@
        </v-col>
        <v-col class="mid-content pa-0 pa-sm-3" :class="[ showSideBar ? 'col-md-9 col-12 col-sm-7' : 'mid-content-collapse', activityPanel ? 'd-sm-block' : 'd-md-block']" v-show="!activityPanel">
           <div class="content-section fill-height pa-0">
-            <v-row align="center" justify="space-between" no-gutters class="px-6 py-4 not-completd-title">
+            <v-row align="center" justify="space-between" no-gutters class="px-6 my-4 not-completd-title">
               <v-col cols="6" class="text-left">
                 <div class="d-flex align-center">
                   <h3 class="pl-1 mr-4">Annual Chemical Bid</h3>
@@ -27,30 +27,124 @@
             </v-row>
             <div class="bidtabs-section">
               <v-tabs
-                v-model="currentItem"
+                v-model="currentItem" class="bids-tabs"
                 fixed-tabs
                 hide-slider
               >
                 <v-tab
-                  v-for="item in tabs"
-                  :key="item"
-                  :href="'#tab-' + item" class="text-capitalize black--text font-weight-bold"
+                  v-for="(item, index) in tabs"
+                  :key="item.value"
+                  :href="'#tab-' + item.value" class="text-capitalize black--text font-weight-bold"
                 >
-                  {{ item }}
+                  {{ item.text }} {{item.index}}
+                  <v-icon right small color="#F32349">
+                    {{item.icon}}
+                  </v-icon>
                 </v-tab>
               </v-tabs>
               <v-tabs-items v-model="currentItem">
                 <v-tab-item
-                  v-for="item in tabs"
-                  :key="item"
-                  :value="'tab-' + item"
+                  value="tab-1"
                 >
-                  <v-card flat>
-                    <v-card-text>
-                      <h2>{{ item }}</h2>
-                      {{ text }}
-                    </v-card-text>
-                  </v-card>
+                  <v-row class="my-8" justify="center">
+                    <v-col cols="12" sm="9">
+                      <v-form @submit.prevent="bidForm" ref="form">
+                        <v-container>
+                          <v-row justify="center">
+                            <v-col cols="12" sm="12" text="left">
+                              <label class="d-block text-left input-label mb-2 font-weight-bold">Bid Title</label>
+                              <v-text-field placeholder="Bid Title" single-line outlined type="text" hide-details>
+                              </v-text-field>
+                            </v-col>
+                          </v-row>
+                          <v-row justify="center">
+                            <v-col cols="12" sm="6" text="left">
+                              <label class="d-block text-left input-label mb-2 font-weight-bold">Bid Type <v-icon small>mdi-information-outline</v-icon></label>
+                              <v-select outlined hide-details :items="bidType">
+                                
+                              </v-select>
+                            </v-col>
+                            <v-col cols="12" sm="6" text="left">
+                              <label class="d-block text-left input-label mb-2 font-weight-bold">Due/Date Time</label>
+                              <v-text-field placeholder="Bid Title" single-line outlined type="date" hide-details>
+                              </v-text-field>
+                            </v-col>
+                          </v-row>
+                          <v-row justify="center">
+                            <v-col cols="12" sm="6" text="left">
+                              <label class="d-block text-left input-label mb-2 font-weight-bold">Region </label>
+                              <v-select outlined hide-details>
+                                
+                              </v-select>
+                            </v-col>
+                            <v-col cols="12" sm="6" text="left">
+                              <label class="d-block text-left input-label mb-2 font-weight-bold">Q&A <v-icon small>mdi-information-outline</v-icon></label>
+                              <v-radio-group
+                                row
+                                v-model="qa"
+                              >
+                                <v-radio
+                                  label="Yes"
+                                  value="yes" checked
+                                ></v-radio>
+                                <v-radio
+                                  label="No"
+                                  value="no"
+                                ></v-radio>
+                              </v-radio-group>
+                            </v-col>
+                          </v-row>
+                          <v-row justify="center">
+                            <v-col cols="12" sm="12" text="left">
+                              <label class="d-block text-left input-label mb-2 font-weight-bold">Bid Description</label>
+                              <v-textarea placeholder="Describe here..." single-line outlined type="text" hide-details>
+                              </v-textarea>
+                            </v-col>
+                          </v-row>
+                          <v-row justify="center">
+                            <v-col cols="12" sm="12" text="left" v-show="showAdditional">
+                              <label class="d-block text-left input-label mb-2 font-weight-bold">Additional Information <v-icon color="#F32349">mdi-trash-can-outline</v-icon></label> 
+                              <v-text-field placeholder="Title" single-line outlined type="text">
+                              </v-text-field>
+                              <v-textarea placeholder="Desribe here" single-line outlined type="text" hide-details>
+                              </v-textarea>
+                            </v-col>
+                            <v-col cols="12" sm="12" class="text-left">
+                              <v-btn color="rgba(13, 150, 72, 0.1)" rounded class="text-capitalize adtn-btn font-weight-bold" @click="showAdditional = !showAdditional"><v-icon>mdi-plus</v-icon>Add Aditional Description</v-btn>
+                            </v-col>
+                          </v-row>
+                          <v-row justify="center">
+                            <v-col cols="12">
+                              <v-btn color="#0D9648" height="56" class="text-capitalize white--text font-weight-bold save-btn px-9" large>Save Changes</v-btn>
+                            </v-col>
+                          </v-row>
+                        </v-container>
+                      </v-form>
+                    </v-col>
+                  </v-row>
+                </v-tab-item>
+                <v-tab-item
+                  value="tab-2"
+                >
+                  <v-row class="my-4">
+                    <v-col cols="12" sm="6">
+                      <div class="d-flex justify-space-between align-center">
+                        <div>
+                          <h4 class="mb-0">Available Suppliers</h4>
+                        </div>
+                        <div>
+                          <v-tabs class="supplier-tabs">
+                            <v-tab class="text-capitalize">Company Name</v-tab>
+                            <v-tab class="text-capitalize">Sales Rep</v-tab>
+                            <v-tab class="text-capitalize">Service Category</v-tab>
+                          </v-tabs>
+                        </div>
+                      </div>
+                    </v-col>
+                    <v-col cols="12" sm="6">
+                      
+                    </v-col>
+                  </v-row>
                 </v-tab-item>
               </v-tabs-items>
             </div>
@@ -93,9 +187,16 @@ export default {
       ],
       currentItem: 'tab-Web',
       tabs: [
-        'Bid Detail', 'Supplier Invitation', 'Team Members', 'Line Items', 'Attachment', 'Questions',
+        { text: 'Bid Detail', icon: 'mdi-information-outline', value: 1 },
+        { text: 'Supplier Invitation', icon: 'mdi-information-outline', value: 2}, 
+        { text: 'Team Members', icon: 'mdi-information-outline', value: 3}, 
+        { text: 'Line Items', icon: 'mdi-information-outline', value: 4}, 
+        { text: 'Attachment', icon: 'mdi-information-outline', value: 5}, 
+        { text: 'Questions', icon: 'mdi-information-outline', value: 6},
       ],
-      text: 'lorem '
+      qa: 'yes',
+      showAdditional: false,
+      bidType: ['RFP','RFI']
     };
   },
   computed:{
