@@ -10,15 +10,16 @@ export default {
     })
   },
   getCompanyByservice({commit}, payload){
-    // console.log("ddd",payload);
-    axios.get('/company/getCompaniesByService/'+payload.service)
+    var url = encodeURIComponent(payload.service);
+    console.log(url);
+    axios.get('/company/getCompaniesByService/'+url)
       .then(responce => {
         var data = {
           'data': responce.data,
           'name': payload.service
         }
       commit('setCompanies',data)
-      router.replace('/ofs-directory/'+payload.slug+'/'+payload.service);
+      router.replace('/ofs-directory/'+payload.slug+'/'+url);
     })
   },
   
