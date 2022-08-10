@@ -112,15 +112,57 @@
 						}
 					}
 				}
-				.supplier-tabs{
-					.v-tab{
-						border-bottom: 0;
-						&--active{
-							background: transparent;
-							border-bottom: 2px solid #0D9648;
+				.supplier-row{
+					border-bottom: 1px solid #B8B8B8;
+					.available-data{
+						border-right: 1px solid #B8B8B8;
+						min-height: 70vh;
+						.supplier-head{
+							background: #FBFBFB;
+							.supplier-tabs{
+								.v-tab{
+									border-bottom: 0;
+									background: #FBFBFB;
+									color: #959595;
+									&--active{
+										border-bottom: 3px solid #0D9648;
+									}
+								}
+							}
+						}
+						.available-search{
+							.v-input{
+								&__slot{
+									min-height: 44px;
+								}
+								&__prepend-inner{
+									margin-top: 14px;
+								}
+							}
+							.available-select{
+								width: 150px;
+								min-height: 28px;
+								font-size: 12px;
+							}
+						}
+						.companies-list{
+							.list-company{
+								.company-title{
+									p{
+										font-size: 12px;
+										font-weight: 600;
+									}
+								}
+							}
+						}
+					}
+					.invited-data{
+						.invited-head{
+							background: #FBFBFB;
 						}
 					}
 				}
+				
 			}
 		}
 	}
