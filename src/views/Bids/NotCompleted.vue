@@ -602,48 +602,215 @@
                   </v-row>
                 </v-tab-item>
                 <v-tab-item
-                  value="tab-4"
+                  value="tab-4" class="bidline-tab"
                 >
-                <div class="bidline-section">
-                  <h4 class="text-left pl-6 font-weight-bold black--text mb-4">Bid Line Items</h4>
-                  <div class="bidline-list d-flex align-center px-6">
-                    <div>
-                      <img :src="require('@/assets/images/bids/DotsSix.png')">
+                  <div class="bidline-section">
+                    <h4 class="text-left pl-6 font-weight-bold black--text my-4">Bid Line Items</h4>
+                    <div class="bidline-list d-flex align-center px-6 my-2">
+                      <div class="mt-6 mr-2">
+                        <img :src="require('@/assets/images/bids/DotsSix.png')">
+                      </div>
+                      <div class="mr-2">
+                        <label class="d-block input-label text-left">Line Item Description</label>
+                        <v-text-field placeholder="Line Item Description" height="31pxx" single-line outlined type="text" hide-details>
+                        </v-text-field>
+                      </div>
+                      <div class="mr-2">
+                        <label class="d-block input-label text-left">Unit/Measure</label>
+                        <v-select outlined hide-details :items="units"></v-select>
+                      </div>
+                      <div class="mr-2">
+                        <label class="d-block input-label text-left">Input Type</label>
+                        <v-select outlined hide-details :items="inputType"></v-select>
+                      </div>
+                      <div class="mr-2">
+                        <label class="d-block input-label text-left">QTY</label>
+                        <v-text-field placeholder="Line Item Description" height="31pxx" single-line outlined type="text" hide-details>
+                        </v-text-field>
+                      </div>
+                      <div class="mr-2">
+                        <label class="d-block input-label text-left">Buyer Comment</label>
+                        <v-text-field placeholder="Line Item Description" height="31pxx" single-line outlined type="text" hide-details>
+                        </v-text-field>
+                      </div>
+                      <div class="mr-2 d-flex">
+                        <v-switch
+                          v-model="switch1"
+                          inset class="mr-4"
+                        ></v-switch>
+                        <v-icon color="#0D9648" class="mr-4">mdi-content-copy</v-icon>
+                        <v-icon color="#F32349" class="mr-4">mdi-trash-can-outline</v-icon>
+                      </div>
                     </div>
-                    <div>
-                      <label class="d-block input-label text-left">Line Item Description</label>
-                      <v-text-field placeholder="Line Item Description" height="31pxx" single-line outlined type="text" hide-details>
-                      </v-text-field>
-                    </div>
-                    <div>
-                      <label class="d-block input-label text-left">Unit/Measure</label>
-                      <v-select outlined hide-details></v-select>
-                    </div>
-                    <div>
-                      <label class="d-block input-label text-left">Input Type</label>
-                      <v-select outlined hide-details></v-select>
-                    </div>
-                    <div>
-                      <label class="d-block input-label text-left">QTY</label>
-                      <v-text-field placeholder="Line Item Description" height="31pxx" single-line outlined type="text" hide-details>
-                      </v-text-field>
-                    </div>
-                    <div>
-                      <label class="d-block input-label text-left">Buyer Comment</label>
-                      <v-text-field placeholder="Line Item Description" height="31pxx" single-line outlined type="text" hide-details>
-                      </v-text-field>
-                    </div>
-                    <div>
-                      <v-switch
-                        v-model="switch1"
-                        inset
-                      ></v-switch>
-                      <v-icon color="#0D9648">mdi-content-copy</v-icon>
-                      <v-icon color="#F32349">mdi-trash-can-outline</v-icon>
+                    <div class="bidline-list d-flex align-center px-6 my-2">
+                      <div class="mt-6 mr-2">
+                        <img :src="require('@/assets/images/bids/DotsSix.png')">
+                      </div>
+                      <div class="mr-2">
+                        <label class="d-block input-label text-left">Line Item Description</label>
+                        <v-text-field placeholder="Line Item Description" height="31pxx" single-line outlined type="text" hide-details>
+                        </v-text-field>
+                      </div>
+                      <div class="mr-2">
+                        <label class="d-block input-label text-left">Unit/Measure</label>
+                        <v-select outlined hide-details :items="units"></v-select>
+                      </div>
+                      <div class="mr-2">
+                        <label class="d-block input-label text-left">Input Type</label>
+                        <v-select outlined hide-details :items="inputType"></v-select>
+                      </div>
+                      <div class="mr-2">
+                        <label class="d-block input-label text-left">QTY</label>
+                        <v-text-field placeholder="Line Item Description" height="31pxx" single-line outlined type="text" hide-details>
+                        </v-text-field>
+                      </div>
+                      <div class="mr-2">
+                        <label class="d-block input-label text-left">Buyer Comment</label>
+                        <v-text-field placeholder="Line Item Description" height="31pxx" single-line outlined type="text" hide-details>
+                        </v-text-field>
+                      </div>
+                      <div class="mr-2 d-flex">
+                        <v-switch
+                          v-model="switch1"
+                          inset class="mr-4"
+                        ></v-switch>
+                        <v-icon color="#0D9648" class="mr-4">mdi-content-copy</v-icon>
+                        <v-icon color="#F32349" class="mr-4">mdi-trash-can-outline</v-icon>
+                      </div>
                     </div>
                   </div>
-                </div>
-              </v-tab-item>
+                  <v-row justify="center" align="center" class="my-8" no-gutters>
+                    <v-col cols="12">
+                      <v-btn rounded color="rgba(13, 150, 72, 0.1)" elevation="0" class="text-capitalize font-weight-bold"><v-icon color="#0D9648" class="pr-2">mdi-plus</v-icon> Add 5 Line Items</v-btn>
+                    </v-col>
+                  </v-row>
+                  <div class="bidline-section bid-list">
+                    <h4 class="text-left pl-6 font-weight-bold black--text my-4">Bid Example</h4>
+                    <div class="bidline-list d-flex align-center px-6 my-2">
+                      <div class="mt-6 mr-2">
+                        <img :src="require('@/assets/images/bids/DotsSix.png')">
+                      </div>
+                      <div class="mr-2">
+                        <label class="d-block input-label text-left">Line Item Description</label>
+                        <v-text-field placeholder="Line Item Description" height="31pxx" single-line outlined type="text" hide-details>
+                        </v-text-field>
+                      </div>
+                      <div class="mr-2">
+                        <label class="d-block input-label text-left">Unit/Measure</label>
+                        <v-select outlined hide-details :items="units"></v-select>
+                      </div>
+                      <div class="mr-2">
+                        <label class="d-block input-label text-left">Input Type</label>
+                        <v-select outlined hide-details :items="inputType"></v-select>
+                      </div>
+                      <div class="mr-2">
+                        <label class="d-block input-label text-left">QTY</label>
+                        <v-text-field placeholder="Line Item Description" height="31pxx" single-line outlined type="text" hide-details>
+                        </v-text-field>
+                      </div>
+                      <div class="mr-2">
+                        <label class="d-block input-label text-left">Buyer Comment</label>
+                        <v-text-field placeholder="Line Item Description" height="31pxx" single-line outlined type="text" hide-details>
+                        </v-text-field>
+                      </div>
+                      <div class="mr-2 d-flex">
+                        <v-switch
+                          v-model="switch1"
+                          inset class="mr-4"
+                        ></v-switch>
+                        <v-icon color="#0D9648" class="mr-4">mdi-content-copy</v-icon>
+                        <v-icon color="#F32349" class="mr-4">mdi-trash-can-outline</v-icon>
+                      </div>
+                    </div>
+                  </div>
+                  <v-row justify="center" align="center" no-gutters class="mt-16">
+                    <v-col cols="12">
+                      <v-btn color="#0D9648" elevation="0" class="white--text text-capitalize font-weight-bold save-btn py-4 px-9" large height="56px">Save Changes</v-btn>
+                    </v-col>
+                  </v-row>
+                </v-tab-item>
+                <v-tab-item
+                  value="tab-5" class="attachment-tab mt-5"
+                >
+                  <div class="attachment-list">
+                    <v-simple-table
+                        fixed-header
+                        height="300px"
+                      >
+                      <template v-slot:default>
+                        <thead>
+                          <tr>
+                            <th class="text-left">
+                              
+                            </th>
+                            <th class="text-left">
+                              File Name
+                            </th>
+                            <th class="text-left">
+                              Comment
+                            </th>
+                            <th class="text-left">
+                              File Size
+                            </th>
+                            <th class="text-left">
+                              Uploaded By
+                            </th>
+                            <th class="text-left">
+                              Uploaded Date
+                            </th>
+                            <th class="text-left">
+                              
+                            </th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          <tr>
+                            <td class="text-left"><img :src="require('@/assets/images/bids/FilePdf.png')"></td>
+                            <td class="text-left">SafetyPlan.pdf</td>
+                            <td class="text-left">Safety Plan</td>
+                            <td class="text-left">16kb</td>
+                            <td class="text-left">Tyler Cherry</td>
+                            <td class="text-left">08/08/2022 1:29 pm</td>
+                            <td>
+                              <div class="d-flex">
+                                <img :src="require('@/assets/images/bids/chatdots.png')" class="mr-3"><v-icon color="#F32349">mdi-trash-can-outline</v-icon>
+                              </div>
+                            </td>
+                          </tr>
+                          <tr>
+                            <td class="text-left"><img :src="require('@/assets/images/bids/FilePdf.png')"></td>
+                            <td class="text-left">SafetyPlan.pdf</td>
+                            <td class="text-left">Safety Plan</td>
+                            <td class="text-left">16kb</td>
+                            <td class="text-left">Tyler Cherry</td>
+                            <td class="text-left">08/08/2022 1:29 pm</td>
+                            <td>
+                              <div class="d-flex">
+                                <img :src="require('@/assets/images/bids/chatdots.png')" class="mr-3"><v-icon color="#F32349">mdi-trash-can-outline</v-icon>
+                              </div>
+                            </td>
+                          </tr>
+                        </tbody>
+                      </template>
+                    </v-simple-table>
+                  </div>
+                  <div class="row">
+                    <v-col cols="9">
+                      <div class="upload-attach">
+                        <label for="uploadFile">
+                          <v-file-input
+                              label="File input"
+                              filled
+                              color="#fff" id="uploadFile"
+                            ></v-file-input>
+                        </label>
+                      </div>
+                    </v-col>
+                    <v-col cols="3">
+                      <v-btn large elevation="0" color="#0D9648" height="56px" class="white--text font-weight-bold text-capitalize py-4 px-9">Save Changes</v-btn>
+                    </v-col>
+                  </div>
+                </v-tab-item>
               </v-tabs-items>
             </div>
           </div>
@@ -700,6 +867,8 @@ export default {
       inviteTeam: null,
       subCompany: false,
       switch1: true,
+      inputType: ['USD','EUR'],
+      units: ['Gallon','Liter'],
     };
   },
   computed:{
