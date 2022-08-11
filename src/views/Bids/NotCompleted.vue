@@ -1,14 +1,14 @@
 <template>
   <section class="section-container fill-height createBid-module">
-    <Navbar></Navbar>
+    <navbar></navbar>
      <v-row class="mx-0">
        <v-col :class="[ showSideBar ? 'col-12' : 'toggleLeft-sidebar']" class="left-sidebar pr-1">
-          <LeftSidebar></LeftSidebar>
+          <left-sidebar></left-sidebar>
        </v-col>
        <v-col class="mid-content pa-0 pa-sm-3" :class="[ showSideBar ? 'col-md-9 col-12 col-sm-7' : 'mid-content-collapse', activityPanel ? 'd-sm-block' : 'd-md-block']" v-show="!activityPanel">
           <div class="content-section fill-height pa-0">
-            <v-row align="center" justify="space-between" no-gutters class="px-6 my-4 not-completd-title">
-              <v-col cols="6" class="text-left">
+            <v-row align="center" justify="space-between" no-gutters class="px-2 px-sm-6 my-4 not-completd-title">
+              <v-col cols="12" md="6" class="text-left">
                 <div class="d-flex align-center">
                   <h3 class="pl-1 mr-4">Annual Chemical Bid</h3>
                   <p class="preview-text mb-0 ml-3">
@@ -16,7 +16,7 @@
                   </p>
                 </div>
               </v-col>
-              <v-col cols="6" class="text-right">
+              <v-col cols="12" md="6" class="text-right">
                 <div class="d-flex align-center justify-end">
                   <p class="mb-0 mr-4 auto-text"><strong>Autosaved Draft:</strong> 07/22/2022 12:51 pm</p>
                   <v-btn color="#B8B8B8" class="white--text text-capitalize publish-btn" width="250px" height="52px" large>
@@ -126,608 +126,17 @@
                 <v-tab-item
                   value="tab-2"
                 >
-                  <v-row class="my-4 supplier-row fill-height" no-gutters>
-                    <v-col cols="12" sm="6" class="available-data">
-                      <div class="d-flex justify-space-between align-center pl-4 supplier-head">
-                        <div>
-                          <h4 class="mb-0 black--text font-weight-bold">Available Suppliers</h4>
-                        </div>
-                        <div>
-                          <v-tabs class="supplier-tabs" hide-slider v-model="availableSuppl">
-                            <v-tab class="text-capitalize font-weight-bold" href="#companyName" >Company Name</v-tab>
-                            <v-tab class="text-capitalize font-weight-bold" href="#salesRep">Sales Rep</v-tab>
-                            <v-tab class="text-capitalize font-weight-bold" href="#serviceCategory">Service Category</v-tab>
-                          </v-tabs>
-                        </div>
-                      </div>
-                      
-                      <v-tabs-items v-model="availableSuppl">
-                        <v-tab-item value="companyName">
-                          <div class="available-search d-flex justify-space-between align-center mt-5 px-4">
-                            <div>
-                              <v-text-field
-                                type="text" hide-details
-                                outlined
-                                placeholder="Search"
-                                prepend-inner-icon="mdi-magnify"
-                              >
-                              </v-text-field>
-                            </div>
-                            <div class="d-flex align-center">
-                              <label class="input-label black--text pr-2 font-weight-bold">Basin</label>
-                              <v-select rounded hide-details outlined class="available-select" :items="availableSearch" width="122px"></v-select>
-                            </div>
-                          </div>
-                          <div class="companies-list">
-                            <div class="d-flex align-center justify-space-between list-company pa-4">
-                              <div class="comapny-data d-flex align-center">
-                                <div class="company-img">
-                                  <img :src="require('@/assets/images/bids/patterson.png')">
-                                </div>
-                                <div class="company-title text-left pl-4">
-                                  <h4>Patterson-UTI, Inc</h4>
-                                  <p class="mb-0"><router-link to="">View Profile</router-link></p>
-                                </div>
-                              </div>
-                              <div class="add-company">
-                                <v-btn color="rgba(13, 150, 72, 0.1)" tile min-width="32px" height="32" class="pa-0" elevation="0"> <v-icon color="#0D9648">mdi-plus</v-icon></v-btn>
-                              </div>
-                            </div>
-                            <div class="d-flex align-center justify-space-between list-company pa-4 bg-light">
-                              <div class="comapny-data d-flex align-center">
-                                <div class="company-img">
-                                  <img :src="require('@/assets/images/bids/ms.png')">
-                                </div>
-                                <div class="company-title text-left pl-4">
-                                  <h4>MS Directional, Inc</h4>
-                                  <p class="mb-0"><router-link to="">View Profile</router-link></p>
-                                </div>
-                              </div>
-                              <div class="add-company">
-                                <v-btn color="rgba(13, 150, 72, 0.1)" tile min-width="32px" height="32" class="pa-0" elevation="0"> <v-icon color="#0D9648">mdi-plus</v-icon></v-btn>
-                              </div>
-                            </div>
-                            <div class="d-flex align-center justify-space-between list-company pa-4">
-                              <div class="comapny-data d-flex align-center">
-                                <div class="company-img">
-                                  <img :src="require('@/assets/images/bids/superior.png')">
-                                </div>
-                                <div class="company-title text-left pl-4">
-                                  <h4>Superior QC</h4>
-                                  <p class="mb-0"><router-link to="">View Profile</router-link></p>
-                                </div>
-                              </div>
-                              <div class="add-company">
-                                <v-btn color="rgba(13, 150, 72, 0.1)" tile min-width="32px" height="32" class="pa-0" elevation="0"> <v-icon color="#0D9648">mdi-plus</v-icon></v-btn>
-                              </div>
-                            </div>
-                          </div>
-                        </v-tab-item>
-                        <v-tab-item value="salesRep">
-                          <div class="available-search d-flex justify-space-between align-center mt-5 px-4">
-                            <div>
-                              <v-text-field
-                                type="text" hide-details
-                                outlined
-                                placeholder="Search"
-                                prepend-inner-icon="mdi-magnify"
-                              >
-                              </v-text-field>
-                            </div>
-                            <div class="d-flex align-center">
-                              <label class="input-label black--text pr-2 font-weight-bold">Basin</label>
-                              <v-select rounded hide-details outlined class="available-select" :items="availableSearch" width="122px"></v-select>
-                            </div>
-                          </div>
-                          <div class="companies-list">
-                            <div class="d-flex align-center justify-space-between list-company pa-4">
-                              <div class="comapny-data d-flex align-center">
-                                <div class="company-img">
-                                  <img :src="require('@/assets/images/chat/chatUser.png')">
-                                </div>
-                                <div class="company-title text-left pl-4">
-                                  <h4>Patrick Smith</h4>
-                                  <p class="mb-0">Baker Hughes <router-link to="">View Profile</router-link></p>
-                                </div>
-                              </div>
-                              <div class="add-company">
-                                <v-btn color="rgba(13, 150, 72, 0.1)" tile min-width="32px" height="32" class="pa-0" elevation="0"> <v-icon color="#0D9648">mdi-plus</v-icon></v-btn>
-                              </div>
-                            </div>
-                            <div class="d-flex align-center justify-space-between list-company pa-4 bg-light">
-                              <div class="comapny-data d-flex align-center">
-                                <div class="company-img">
-                                  <img :src="require('@/assets/images/chat/chatUser.png')">
-                                </div>
-                                <div class="company-title text-left pl-4">
-                                  <h4>Pat Hodges</h4>
-                                  <p class="mb-0">Halli Burton <router-link to="">View Profile</router-link></p>
-                                </div>
-                              </div>
-                              <div class="add-company">
-                                <v-btn color="rgba(13, 150, 72, 0.1)" tile min-width="32px" height="32" class="pa-0" elevation="0"> <v-icon color="#0D9648">mdi-plus</v-icon></v-btn>
-                              </div>
-                            </div>
-                          </div>
-                        </v-tab-item>
-                        <v-tab-item value="serviceCategory">
-                          <div class="available-search d-flex justify-space-between align-center mt-5 px-4">
-                            <div>
-                              <v-text-field
-                                type="text" hide-details
-                                outlined
-                                placeholder="Search"
-                                prepend-inner-icon="mdi-magnify"
-                              >
-                              </v-text-field>
-                            </div>
-                            <div class="d-flex align-center">
-                              <label class="input-label black--text pr-2 font-weight-bold">Basin</label>
-                              <v-select rounded hide-details outlined class="available-select" :items="availableSearch" width="122px"></v-select>
-                            </div>
-                          </div>
-                          <div class="companies-list">
-                            <div>
-                              <div class="d-flex align-center justify-space-between list-company pa-4">
-                                <div class="comapny-data d-flex align-center">
-                                  <div class="pr-4">
-                                    <v-icon>mdi-chevron-down</v-icon>
-                                  </div>
-                                  <div class="company-img">
-                                    <img :src="require('@/assets/images/bids/patterson.png')">
-                                  </div>
-                                  <div class="company-title text-left pl-4">
-                                    <h4>Patterson-UTI, Inc</h4>
-                                    <p class="mb-0"><router-link to="">View Profile</router-link></p>
-                                  </div>
-                                </div>
-                                <div class="add-company">
-                                  <v-btn color="rgba(13, 150, 72, 0.1)" tile min-width="32px" height="32" class="pa-0" elevation="0"> <v-icon color="#0D9648">mdi-plus</v-icon></v-btn>
-                                </div>
-                              </div>
-                              <div class="d-flex align-center justify-space-between list-company pa-4 pl-16">
-                                <div class="comapny-data d-flex align-center">
-                                  <div class="company-img">
-                                    <img :src="require('@/assets/images/chat/chatUser.png')">
-                                  </div>
-                                  <div class="company-title text-left pl-4">
-                                    <h4>Pat Hodges</h4>
-                                    <p class="mb-0">Patterson-UTI<router-link to="">View Profile</router-link></p>
-                                  </div>
-                                </div>
-                                <div class="add-company">
-                                  <v-btn color="rgba(13, 150, 72, 0.1)" tile min-width="32px" height="32" class="pa-0" elevation="0"> <v-icon color="#0D9648">mdi-plus</v-icon></v-btn>
-                                </div>
-                              </div>
-                            </div>
-                            <div>
-                              <div class="d-flex align-center justify-space-between list-company pa-4">
-                                <div class="comapny-data d-flex align-center">
-                                  <div class="pr-4">
-                                    <v-icon>mdi-chevron-down</v-icon>
-                                  </div>
-                                  <div class="company-img">
-                                    <img :src="require('@/assets/images/bids/greatplans.png')">
-                                  </div>
-                                  <div class="company-title text-left pl-4">
-                                    <h4>Great Plains Oilfield Rental </h4>
-                                    <p class="mb-0"><router-link to="">View Profile</router-link></p>
-                                  </div>
-                                </div>
-                                <div class="add-company">
-                                  <v-btn color="rgba(13, 150, 72, 0.1)" tile min-width="32px" height="32" class="pa-0" elevation="0"> <v-icon color="#0D9648">mdi-plus</v-icon></v-btn>
-                                </div>
-                              </div>
-                              <div class="d-flex align-center justify-space-between list-company pa-4 pl-16">
-                                <div class="comapny-data d-flex align-center">
-                                  <div class="company-img">
-                                    <img :src="require('@/assets/images/chat/chatUser.png')">
-                                  </div>
-                                  <div class="company-title text-left pl-4">
-                                    <h4>Pat Hodges</h4>
-                                    <p class="mb-0">Great Plains Oilfield Rental <router-link to="">View Profile</router-link></p>
-                                  </div>
-                                </div>
-                                <div class="add-company">
-                                  <v-btn color="rgba(13, 150, 72, 0.1)" tile min-width="32px" height="32" class="pa-0" elevation="0"> <v-icon color="#0D9648">mdi-plus</v-icon></v-btn>
-                                </div>
-                              </div>
-                            </div>
-                            
-                          </div>
-                          
-                        </v-tab-item>
-                      </v-tabs-items>
-                    </v-col>
-                    <v-col cols="12" sm="6" class="invited-data">
-                      <div class="d-flex justify-space-between align-center pl-4 py-3 invited-head">
-                        <div>
-                          <h4 class="mb-0 black--text font-weight-bold">Invited Services Suppliers</h4>
-                        </div>
-                      </div>
-                      <div>
-                        <div class="companies-list">
-                          <div class="d-flex align-center justify-space-between list-company pa-4">
-                            <div class="comapny-data d-flex align-center">
-                              <div class="company-img">
-                                <img :src="require('@/assets/images/bids/greatplans.png')">
-                              </div>
-                              <div class="company-title text-left pl-4">
-                                <h4>Great Plains Oilfield Rental </h4>
-                                <p class="mb-0"><router-link to="">View Profile</router-link></p>
-                              </div>
-                            </div>
-                            <div class="add-company">
-                              <v-btn color="rgba(243, 35, 73, 0.1)" tile min-width="32px" height="32" class="pa-0" elevation="0"> <v-icon color="#F32349">mdi-minus</v-icon></v-btn>
-                            </div>
-                          </div>
-                          <div class="d-flex align-center justify-space-between list-company pa-4">
-                            <div class="comapny-data d-flex align-center">
-                              <div class="company-img">
-                                <img :src="require('@/assets/images/chat/chatUser.png')">
-                              </div>
-                              <div class="company-title text-left pl-4">
-                                <h4>Pat Hodges</h4>
-                                <p class="mb-0">Halli Burton <router-link to="">View Profile</router-link></p>
-                              </div>
-                            </div>
-                            <div class="add-company">
-                              <v-btn color="rgba(243, 35, 73, 0.1)" tile min-width="32px" height="32" class="pa-0" elevation="0"> <v-icon color="#F32349">mdi-minus</v-icon></v-btn>
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                    </v-col>
-                  </v-row>
-                  <v-row justify="center" align="center" no-gutters>
-                    <v-col cols="12" md="12">
-                      <v-btn color="#0D9648" elevation="0" height="56px" width="220px" large class="white--text text-capitalize font-weight-bold mt-8 mb-8">Save Changes</v-btn>
-                    </v-col>
-                  </v-row>
+                  <SupplierSection></SupplierSection>
                 </v-tab-item>
                 <v-tab-item
                   value="tab-3"
                 >
-                  <v-row class="my-4 supplier-row fill-height" no-gutters>
-                    <v-col cols="12" sm="6" class="available-data">
-                      <div class="d-flex justify-space-between align-center pl-4 supplier-head">
-                        <div>
-                          <h4 class="mb-0 black--text font-weight-bold">Invite Team Members</h4>
-                        </div>
-                        <div>
-                          <v-tabs class="supplier-tabs" hide-slider v-model="inviteTeam">
-                            <v-tab class="text-capitalize font-weight-bold" href="#inviteCompanyName" >Company Name</v-tab>
-                            <v-tab class="text-capitalize font-weight-bold" href="#inviteSalesRep">Sales Rep</v-tab>
-                            <v-tab class="text-capitalize font-weight-bold" href="#inviteServiceCategory">Service Category</v-tab>
-                          </v-tabs>
-                        </div>
-                      </div>
-                      
-                      <v-tabs-items v-model="inviteTeam">
-                        <v-tab-item value="inviteCompanyName">
-                          <div class="available-search mt-5 px-4">
-                            <div>
-                              <v-text-field
-                                type="text" hide-details
-                                outlined
-                                placeholder="Search"
-                                prepend-inner-icon="mdi-magnify"
-                              >
-                              </v-text-field>
-                            </div>
-                          </div>
-                          <div class="companies-list">
-                            <div class="d-flex align-center justify-space-between list-company pa-4">
-                              <div class="comapny-data d-flex align-center">
-                                <div class="company-img">
-                                  <img :src="require('@/assets/images/chat/chatUser.png')">
-                                </div>
-                                <div class="company-title text-left pl-4">
-                                  <h4>Patrick Smith</h4>
-                                  <p class="mb-0">Baker Hughes <router-link to="">View Profile</router-link></p>
-                                </div>
-                              </div>
-                              <div class="add-company">
-                                <v-btn color="rgba(13, 150, 72, 0.1)" tile min-width="32px" height="32" class="pa-0" elevation="0"> <v-icon color="#0D9648">mdi-plus</v-icon></v-btn>
-                              </div>
-                            </div>
-                            <div class="d-flex align-center justify-space-between list-company pa-4 bg-light">
-                              <div class="comapny-data d-flex align-center">
-                                <div class="company-img">
-                                  <img :src="require('@/assets/images/chat/chatUser.png')">
-                                </div>
-                                <div class="company-title text-left pl-4">
-                                  <h4>Patrick Smith</h4>
-                                  <p class="mb-0">Baker Hughes <router-link to="">View Profile</router-link></p>
-                                </div>
-                              </div>
-                              <div class="add-company">
-                                <v-btn color="rgba(13, 150, 72, 0.1)" tile min-width="32px" height="32" class="pa-0" elevation="0"> <v-icon color="#0D9648">mdi-plus</v-icon></v-btn>
-                              </div>
-                            </div>
-                            <div class="d-flex align-center justify-space-between list-company pa-4">
-                              <div class="comapny-data d-flex align-center">
-                                <div class="company-img">
-                                  <img :src="require('@/assets/images/chat/chatUser.png')">
-                                </div>
-                                <div class="company-title text-left pl-4">
-                                  <h4>Patrick Smith</h4>
-                                  <p class="mb-0">Baker Hughes <router-link to="">View Profile</router-link></p>
-                                </div>
-                              </div>
-                              <div class="add-company">
-                                <v-btn color="rgba(13, 150, 72, 0.1)" tile min-width="32px" height="32" class="pa-0" elevation="0"> <v-icon color="#0D9648">mdi-plus</v-icon></v-btn>
-                              </div>
-                            </div>
-                          </div>
-                        </v-tab-item>
-                        <v-tab-item value="inviteSalesRep">
-                          <div class="available-search mt-5 px-4">
-                            <div>
-                              <v-text-field
-                                type="text" hide-details
-                                outlined
-                                placeholder="Search"
-                                prepend-inner-icon="mdi-magnify"
-                              >
-                              </v-text-field>
-                            </div>
-                          </div>
-                          <div class="companies-list">
-                            <div class="d-flex align-center justify-space-between list-company pa-4">
-                              <div class="comapny-data d-flex align-center">
-                                <div class="company-img">
-                                  <img :src="require('@/assets/images/chat/chatUser.png')">
-                                </div>
-                                <div class="company-title text-left pl-4">
-                                  <h4>Patrick Smith</h4>
-                                  <p class="mb-0">Baker Hughes <router-link to="">View Profile</router-link></p>
-                                </div>
-                              </div>
-                              <div class="add-company">
-                                <v-btn color="rgba(13, 150, 72, 0.1)" tile min-width="32px" height="32" class="pa-0" elevation="0"> <v-icon color="#0D9648">mdi-plus</v-icon></v-btn>
-                              </div>
-                            </div>
-                            <div class="d-flex align-center justify-space-between list-company pa-4 bg-light">
-                              <div class="comapny-data d-flex align-center">
-                                <div class="company-img">
-                                  <img :src="require('@/assets/images/chat/chatUser.png')">
-                                </div>
-                                <div class="company-title text-left pl-4">
-                                  <h4>Pat Hodges</h4>
-                                  <p class="mb-0">Halli Burton <router-link to="">View Profile</router-link></p>
-                                </div>
-                              </div>
-                              <div class="add-company">
-                                <v-btn color="rgba(13, 150, 72, 0.1)" tile min-width="32px" height="32" class="pa-0" elevation="0"> <v-icon color="#0D9648">mdi-plus</v-icon></v-btn>
-                              </div>
-                            </div>
-                          </div>
-                        </v-tab-item>
-                        <v-tab-item value="inviteServiceCategory">
-                          <div class="available-search  mt-5 px-4">
-                            <div>
-                              <v-text-field
-                                type="text" hide-details
-                                outlined
-                                placeholder="Search"
-                                prepend-inner-icon="mdi-magnify"
-                              >
-                              </v-text-field>
-                            </div>
-                          </div>
-                          <div class="companies-list">
-                            <div>
-                              <div class="d-flex align-center justify-space-between list-company pa-4">
-                                <div class="comapny-data d-flex align-center">
-                                  <div class="pr-4">
-                                    <v-icon>mdi-chevron-down</v-icon>
-                                  </div>
-                                  <div class="company-img">
-                                    <img :src="require('@/assets/images/bids/patterson.png')">
-                                  </div>
-                                  <div class="company-title text-left pl-4">
-                                    <h4>Patterson-UTI, Inc</h4>
-                                    <p class="mb-0"><router-link to="">View Profile</router-link></p>
-                                  </div>
-                                </div>
-                                <div class="add-company">
-                                  <v-btn color="rgba(13, 150, 72, 0.1)" tile min-width="32px" height="32" class="pa-0" elevation="0"> <v-icon color="#0D9648">mdi-plus</v-icon></v-btn>
-                                </div>
-                              </div>
-                              <div class="d-flex align-center justify-space-between list-company pa-4 pl-16">
-                                <div class="comapny-data d-flex align-center">
-                                  <div class="company-img">
-                                    <img :src="require('@/assets/images/chat/chatUser.png')">
-                                  </div>
-                                  <div class="company-title text-left pl-4">
-                                    <h4>Pat Hodges</h4>
-                                    <p class="mb-0">Patterson-UTI<router-link to="">View Profile</router-link></p>
-                                  </div>
-                                </div>
-                                <div class="add-company">
-                                  <v-btn color="rgba(13, 150, 72, 0.1)" tile min-width="32px" height="32" class="pa-0" elevation="0"> <v-icon color="#0D9648">mdi-plus</v-icon></v-btn>
-                                </div>
-                              </div>
-                            </div>
-                            <div>
-                              <div class="d-flex align-center justify-space-between list-company pa-4">
-                                <div class="comapny-data d-flex align-center">
-                                  <div class="pr-4">
-                                    <v-icon>mdi-chevron-down</v-icon>
-                                  </div>
-                                  <div class="company-img">
-                                    <img :src="require('@/assets/images/bids/greatplans.png')">
-                                  </div>
-                                  <div class="company-title text-left pl-4">
-                                    <h4>Great Plains Oilfield Rental </h4>
-                                    <p class="mb-0"><router-link to="">View Profile</router-link></p>
-                                  </div>
-                                </div>
-                                <div class="add-company">
-                                  <v-btn color="rgba(13, 150, 72, 0.1)" tile min-width="32px" height="32" class="pa-0" elevation="0"> <v-icon color="#0D9648">mdi-plus</v-icon></v-btn>
-                                </div>
-                              </div>
-                              <div class="d-flex align-center justify-space-between list-company pa-4 pl-16">
-                                <div class="comapny-data d-flex align-center">
-                                  <div class="company-img">
-                                    <img :src="require('@/assets/images/chat/chatUser.png')">
-                                  </div>
-                                  <div class="company-title text-left pl-4">
-                                    <h4>Pat Hodges</h4>
-                                    <p class="mb-0">Great Plains Oilfield Rental <router-link to="">View Profile</router-link></p>
-                                  </div>
-                                </div>
-                                <div class="add-company">
-                                  <v-btn color="rgba(13, 150, 72, 0.1)" tile min-width="32px" height="32" class="pa-0" elevation="0"> <v-icon color="#0D9648">mdi-plus</v-icon></v-btn>
-                                </div>
-                              </div>
-                            </div>
-                          </div>
-                        </v-tab-item>
-                      </v-tabs-items>
-                    </v-col>
-                    <v-col cols="12" sm="6" class="invited-data">
-                      <div class="d-flex justify-space-between align-center pl-4 py-3 invited-head">
-                        <div>
-                          <h4 class="mb-0 black--text font-weight-bold">Added</h4>
-                        </div>
-                      </div>
-                    </v-col>
-                  </v-row>
-                  <v-row justify="center" align="center" no-gutters>
-                    <v-col cols="12" md="12">
-                      <v-btn color="#0D9648" elevation="0" height="56px" width="220px" large class="white--text text-capitalize font-weight-bold mt-8 mb-8">Save Changes</v-btn>
-                    </v-col>
-                  </v-row>
+                  <team-members></team-members>
                 </v-tab-item>
                 <v-tab-item
                   value="tab-4" class="bidline-tab"
                 >
-                  <div class="bidline-section">
-                    <h4 class="text-left pl-6 font-weight-bold black--text my-4">Bid Line Items</h4>
-                    <div class="bidline-list d-flex align-center px-6 my-2">
-                      <div class="mt-6 mr-2">
-                        <img :src="require('@/assets/images/bids/DotsSix.png')">
-                      </div>
-                      <div class="mr-2">
-                        <label class="d-block input-label text-left">Line Item Description</label>
-                        <v-text-field placeholder="Line Item Description" height="31pxx" single-line outlined type="text" hide-details>
-                        </v-text-field>
-                      </div>
-                      <div class="mr-2">
-                        <label class="d-block input-label text-left">Unit/Measure</label>
-                        <v-select outlined hide-details :items="units"></v-select>
-                      </div>
-                      <div class="mr-2">
-                        <label class="d-block input-label text-left">Input Type</label>
-                        <v-select outlined hide-details :items="inputType"></v-select>
-                      </div>
-                      <div class="mr-2">
-                        <label class="d-block input-label text-left">QTY</label>
-                        <v-text-field placeholder="Line Item Description" height="31pxx" single-line outlined type="text" hide-details>
-                        </v-text-field>
-                      </div>
-                      <div class="mr-2">
-                        <label class="d-block input-label text-left">Buyer Comment</label>
-                        <v-text-field placeholder="Line Item Description" height="31pxx" single-line outlined type="text" hide-details>
-                        </v-text-field>
-                      </div>
-                      <div class="mr-2 d-flex">
-                        <v-switch
-                          v-model="switch1"
-                          inset class="mr-4"
-                        ></v-switch>
-                        <v-icon color="#0D9648" class="mr-4">mdi-content-copy</v-icon>
-                        <v-icon color="#F32349" class="mr-4">mdi-trash-can-outline</v-icon>
-                      </div>
-                    </div>
-                    <div class="bidline-list d-flex align-center px-6 my-2">
-                      <div class="mt-6 mr-2">
-                        <img :src="require('@/assets/images/bids/DotsSix.png')">
-                      </div>
-                      <div class="mr-2">
-                        <label class="d-block input-label text-left">Line Item Description</label>
-                        <v-text-field placeholder="Line Item Description" height="31pxx" single-line outlined type="text" hide-details>
-                        </v-text-field>
-                      </div>
-                      <div class="mr-2">
-                        <label class="d-block input-label text-left">Unit/Measure</label>
-                        <v-select outlined hide-details :items="units"></v-select>
-                      </div>
-                      <div class="mr-2">
-                        <label class="d-block input-label text-left">Input Type</label>
-                        <v-select outlined hide-details :items="inputType"></v-select>
-                      </div>
-                      <div class="mr-2">
-                        <label class="d-block input-label text-left">QTY</label>
-                        <v-text-field placeholder="Line Item Description" height="31pxx" single-line outlined type="text" hide-details>
-                        </v-text-field>
-                      </div>
-                      <div class="mr-2">
-                        <label class="d-block input-label text-left">Buyer Comment</label>
-                        <v-text-field placeholder="Line Item Description" height="31pxx" single-line outlined type="text" hide-details>
-                        </v-text-field>
-                      </div>
-                      <div class="mr-2 d-flex">
-                        <v-switch
-                          v-model="switch1"
-                          inset class="mr-4"
-                        ></v-switch>
-                        <v-icon color="#0D9648" class="mr-4">mdi-content-copy</v-icon>
-                        <v-icon color="#F32349" class="mr-4">mdi-trash-can-outline</v-icon>
-                      </div>
-                    </div>
-                  </div>
-                  <v-row justify="center" align="center" class="my-8" no-gutters>
-                    <v-col cols="12">
-                      <v-btn rounded color="rgba(13, 150, 72, 0.1)" elevation="0" class="text-capitalize font-weight-bold"><v-icon color="#0D9648" class="pr-2">mdi-plus</v-icon> Add 5 Line Items</v-btn>
-                    </v-col>
-                  </v-row>
-                  <div class="bidline-section bid-list">
-                    <h4 class="text-left pl-6 font-weight-bold black--text my-4">Bid Example</h4>
-                    <div class="bidline-list d-flex align-center px-6 my-2">
-                      <div class="mt-6 mr-2">
-                        <img :src="require('@/assets/images/bids/DotsSix.png')">
-                      </div>
-                      <div class="mr-2">
-                        <label class="d-block input-label text-left">Line Item Description</label>
-                        <v-text-field placeholder="Line Item Description" height="31pxx" single-line outlined type="text" hide-details>
-                        </v-text-field>
-                      </div>
-                      <div class="mr-2">
-                        <label class="d-block input-label text-left">Unit/Measure</label>
-                        <v-select outlined hide-details :items="units"></v-select>
-                      </div>
-                      <div class="mr-2">
-                        <label class="d-block input-label text-left">Input Type</label>
-                        <v-select outlined hide-details :items="inputType"></v-select>
-                      </div>
-                      <div class="mr-2">
-                        <label class="d-block input-label text-left">QTY</label>
-                        <v-text-field placeholder="Line Item Description" height="31pxx" single-line outlined type="text" hide-details>
-                        </v-text-field>
-                      </div>
-                      <div class="mr-2">
-                        <label class="d-block input-label text-left">Buyer Comment</label>
-                        <v-text-field placeholder="Line Item Description" height="31pxx" single-line outlined type="text" hide-details>
-                        </v-text-field>
-                      </div>
-                      <div class="mr-2 d-flex">
-                        <v-switch
-                          v-model="switch1"
-                          inset class="mr-4"
-                        ></v-switch>
-                        <v-icon color="#0D9648" class="mr-4">mdi-content-copy</v-icon>
-                        <v-icon color="#F32349" class="mr-4">mdi-trash-can-outline</v-icon>
-                      </div>
-                    </div>
-                  </div>
-                  <v-row justify="center" align="center" no-gutters class="mt-16">
-                    <v-col cols="12">
-                      <v-btn color="#0D9648" elevation="0" class="white--text text-capitalize font-weight-bold save-btn py-4 px-9" large height="56px">Save Changes</v-btn>
-                    </v-col>
-                  </v-row>
+                  <bid-lines></bid-lines>
                 </v-tab-item>
                 <v-tab-item
                   value="tab-5" class="attachment-tab mt-5"
@@ -794,22 +203,216 @@
                       </template>
                     </v-simple-table>
                   </div>
-                  <div class="row">
+                  <v-row no-gutters align="center" class="px-6 mt-16">
                     <v-col cols="9">
                       <div class="upload-attach">
-                        <label for="uploadFile">
+                        <label for="uploadFile" class="upload-file pa-8 d-block font-weight-medium">
                           <v-file-input
                               label="File input"
                               filled
                               color="#fff" id="uploadFile"
-                            ></v-file-input>
+                            ></v-file-input> Upload or Drop Attachments Here
                         </label>
                       </div>
                     </v-col>
-                    <v-col cols="3">
-                      <v-btn large elevation="0" color="#0D9648" height="56px" class="white--text font-weight-bold text-capitalize py-4 px-9">Save Changes</v-btn>
+                    <v-col cols="3" class="pl-6">
+                      <v-btn large elevation="0" color="#0D9648" height="56px" width="100%" class="white--text font-weight-bold text-capitalize py-4 px-9 attach-btn">Save Changes</v-btn>
                     </v-col>
-                  </div>
+                  </v-row>
+                </v-tab-item>
+                <v-tab-item
+                  value="tab-6" class="question-tab mt-5"
+                >
+                  <v-row align="center" justify="space-between" no-gutters class="px-6 my-4">
+                    <v-col cols="3">
+                      <h4 class="text-left">Questions</h4>
+                    </v-col>
+                    <v-col cols="6" class="text-right">
+                      <v-btn color="#0D9648" large class="text-capitalize py-4 px-11 font-weight-bold white--text add-question" height="56px">Add Question</v-btn>
+                    </v-col>
+                  </v-row>
+                  <v-row justify="center" no-gutters class="mx-3">
+                      <v-expansion-panels accordion>
+                        <v-expansion-panel
+                        >
+                          <v-expansion-panel-header>
+                            <div class="d-flex align-center justify-space-between question-header">
+                              <div class="d-flex align-center question-title">
+                                <img :src="require('@/assets/images/bids/DotsSix.png')" class="mr-4"> 
+                                <h4>Operational Questions</h4>
+                                <div class="ml-5">
+                                  <v-icon color="#0D9648" class="mr-6">mdi-square-edit-outline</v-icon>
+                                  <v-icon color="#F32349">mdi-trash-can-outline</v-icon>
+                                </div>
+                              </div>
+                              <div class="d-flex align-center mr-9">
+                                <v-switch
+                                  v-model="switch1"
+                                  inset class="mr-4 mt-0" hide-details
+                                ></v-switch>
+                                <span class="text-muted">Required Question </span>
+                              </div>
+                            </div>
+                          </v-expansion-panel-header>
+                          <v-expansion-panel-content class="ml-4 question-body">
+                            <div class="d-flex ">
+                              <img :src="require('@/assets/images/bids/DotsSix.png')" class="mr-4"> 
+                              <p class="mb-0">I agree that this pricing is valid and Supplier Name can performe the work?</p>
+                            </div>
+                            <div class="d-flex align-center ml-10 mt-5 ">
+                              <div class="option-box"> 
+                                <v-checkbox
+                                    v-model="ex4"
+                                    label="Yes"
+                                    color="#0D9648"
+                                    value="yes"
+                                    hide-details
+                                  ></v-checkbox>
+                              </div>
+                              <div class="ml-8">
+                                <a href="" class="mr-3 text-muted">Edit</a>
+                                <a href="" class="text-muted">Delete</a>
+                              </div>
+                            </div>
+                            <div class="text-left ml-10 mt-5 text-muted">
+                              <a href="" class="text-muted">Add Option</a>
+                            </div>
+                          </v-expansion-panel-content>
+                        </v-expansion-panel>
+                        <v-expansion-panel
+                        >
+                          <v-expansion-panel-header>
+                            <div class="d-flex align-center justify-space-between question-header">
+                              <div class="d-flex align-center">
+                                <img :src="require('@/assets/images/bids/DotsSix.png')" class="mr-4"> 
+                                <h4>Legal Questions</h4>
+                                <div class="ml-5">
+                                  <v-icon color="#0D9648" class="mr-6">mdi-square-edit-outline</v-icon>
+                                  <v-icon color="#F32349">mdi-trash-can-outline</v-icon>
+                                </div>
+                              </div>
+                              
+                            </div>
+                          </v-expansion-panel-header>
+                          <v-expansion-panel-content class="ml-4 question-body">
+                            <div class="d-flex align-center justify-space-between question-subbody">
+                              <div class="d-flex">
+                                <img :src="require('@/assets/images/bids/DotsSix.png')" class="mr-4"> 
+                                <p class="mb-0">Do you curently have a MSA with buyer?</p>
+                              </div>
+                              <div class="d-flex align-center">
+                                <v-switch
+                                  v-model="switch1"
+                                  inset class="mr-4 mt-0" hide-details
+                                ></v-switch>
+                                <span class="text-muted">Required Question </span>
+                              </div>
+                            </div>
+                            <div class="d-flex align-center ml-10 mt-5 ">
+                              <div class="option-box mr-8"> 
+                                <v-checkbox
+                                    v-model="ex4"
+                                    label="Yes"
+                                    color="#0D9648"
+                                    value="yes"
+                                    hide-details
+                                  ></v-checkbox>
+                              </div>
+                              <div>
+                                <a href="" class="mr-3 text-muted">Edit</a>
+                              </div>
+                            </div>
+                            <div class="d-flex align-center ml-10 mt-5 ">
+                              <div class="option-box mr-8"> 
+                                <v-checkbox
+                                    v-model="ex4"
+                                    label="No"
+                                    color="#0D9648"
+                                    value="no"
+                                    hide-details
+                                  ></v-checkbox>
+                              </div>
+                                <div>
+                                  <a href="" class="mr-3 text-muted">Edit</a>
+                                  <a href="" class="text-muted">Delete</a>
+                                </div>
+                            </div>
+                            <div class="text-left ml-10 mt-5 text-muted">
+                              <a href="" class="text-muted">Add Option</a>
+                            </div>
+                            
+                          </v-expansion-panel-content>
+                        </v-expansion-panel>
+                      </v-expansion-panels>
+                    </v-row>
+                    <div class="text-left ml-4 ml-sm-10 mt-5 mr-4 mr-sm-6">
+                      <div class="d-flex justify-space-between mb-2 question-header">
+                        <div class="d-flex align-center mb-2">
+                          <label class="d-block input-label black--text">Please explain your Previous safety incident </label>
+                          <a href="" class="text-muted ml-5">Delete</a>
+                        </div>
+                        <div class="d-flex align-center mb-2">
+                          <v-switch
+                            v-model="switch1"
+                            inset class="mr-4 mt-0" hide-details
+                          ></v-switch>
+                          <span class="text-muted">Required Question </span>
+                        </div>
+                      </div>
+                      <v-text-field single-line outlined type="text" height="56px" hide-details class="mb-8">
+                      </v-text-field>
+                      <hr>
+                      <div class="d-flex justify-space-between mb-2 mt-8 question-header">
+                        <div class="d-flex align-center mb-2">
+                          <label class="d-block input-label black--text">Upload your certificate of insurance </label>
+                          <a href="" class="text-muted ml-5">Delete</a>
+                        </div>
+                        <div class="d-flex align-center mb-2">
+                          <v-switch
+                            v-model="switch1"
+                            inset class="mr-4 mt-0" hide-details
+                          ></v-switch>
+                          <span class="text-muted">Required Question </span>
+                        </div>
+                      </div>
+                      <div class="upload-attach mb-8">
+                        <label for="uploadFile" class="upload-file pa-4 d-block font-weight-medium text-center">
+                          <v-file-input
+                              label="File input"
+                              filled
+                              color="#fff" id="uploadFile"
+                            ></v-file-input> Upload or Drop Attachments Here
+                        </label>
+                      </div>
+                      <hr>
+                      <div class="d-flex justify-space-between mb-2 mt-8 question-header">
+                        <div class="d-flex align-center mb-2">
+                          <label class="d-block input-label black--text">Upload your certificate of insurance </label>
+                          <a href="" class="text-muted ml-5">Delete</a>
+                        </div>
+                        <div class="d-flex align-center">
+                          <v-switch
+                            v-model="switch1"
+                            inset class="mr-4 mt-0" hide-details
+                          ></v-switch>
+                          <span class="text-muted">Required Question </span>
+                        </div>
+                      </div>
+                      <div class="upload-attach">
+                        <label for="uploadFile" class="upload-file pa-4 d-block font-weight-medium text-center">
+                          <v-file-input
+                              label="File input"
+                              filled
+                              color="#fff" id="uploadFile"
+                            ></v-file-input> Upload or Drop Attachments Here
+                        </label>
+                      </div>
+                    </div>
+                    <v-row justify="center" no-gutters class="mt-10"> 
+                      <v-col cols="12">
+                        <v-btn color="#0D9648" large height="56px" class="white--text text-capitalize font-weight-bold save-btn px-9">Save Changes</v-btn>
+                      </v-col>
+                    </v-row>
                 </v-tab-item>
               </v-tabs-items>
             </div>
@@ -822,34 +425,24 @@
   import Navbar from '../Layout/Navbar.vue'
   import LeftSidebar from '../Layout/Dashboard/LeftSidebar.vue'
   import RightSidebar from '../Layout/Dashboard/RightSidebar.vue'
+  import SupplierSection from './SupplierSection.vue'
+  import TeamMembers from './TeamMembers.vue'
+  import BidLines from './BidLines.vue'
   import { mapActions } from "vuex";
 export default {
-  name : "Dashboard",
+  name : "NotCompleted",
   components: {
     Navbar,
     LeftSidebar,
     RightSidebar,
+    SupplierSection,
+    TeamMembers,
+    BidLines
   },
   
   data() {
     return {
       users: '',
-      templates: [
-        {
-          name: 'Water Transfer Bid - Egle Ford',
-          type: 'RFI',
-          createdDate: '06/01/2022',
-          creator: 'Jennifer Hazelton',
-          notes: 'This is Lewis’ primary water template used in the Eagle Ford, please only update mileage and date requested.',
-        },
-        {
-          name: 'Wireline Services - Annual',
-          type: 'RFP',
-          createdDate: '03/10/2022',
-          creator: 'John Jones',
-          notes: '-',
-        },
-      ],
       currentItem: 'tab-Web',
       tabs: [
         { text: 'Bid Detail', icon: 'mdi-information-outline', value: 1 },
@@ -869,6 +462,7 @@ export default {
       switch1: true,
       inputType: ['USD','EUR'],
       units: ['Gallon','Liter'],
+      ex4: '',
     };
   },
   computed:{
@@ -888,7 +482,7 @@ export default {
   mounted() {
     document.title = "Create Bid - BidOut";
     this.users = JSON.parse(localStorage.getItem("userData")).user;
-}
+  }
 };
 </script>
 <style scoped lang="scss">

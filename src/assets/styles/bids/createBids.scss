@@ -143,6 +143,12 @@
 								width: 150px;
 								min-height: 28px;
 								font-size: 12px;
+								.v-input__slot{
+									min-height: 44px;
+								}
+								.v-input__prepend-inner{
+									margin-top: 14px;
+								}
 							}
 						}
 						.companies-list{
@@ -172,7 +178,7 @@
 								&__slot{
 									min-height: 34px;
 									height: 34px;
-									width: 163px;
+									/*width: 163px;*/
 								}
 								&__append-inner{
 									margin-top: 7px;
@@ -244,6 +250,73 @@
 							}
 						}
 					}
+					.upload-file{
+						border: 1px solid #B8B8B8;
+						border-radius: 4px;
+						font-size: 16px;
+						.v-input{
+							display: none;
+						}
+					}
+					.attach-btn{
+						font-size: 20px;
+					}
+				}
+				.question-tab{
+					.add-question{
+						font-size: 20px;
+					}
+					.v-expansion-panels{
+						.v-expansion-panel-content{
+							&__wrap{
+								a{
+									font-size: 12px;
+								}
+								.option-box{
+									.v-input{
+										margin-top: -4px;
+									}
+								}
+							}
+						}
+					}
+					.v-input{
+						&__slot{
+							fieldset{
+								border: 1px solid #B8B8B8;
+								border-radius: 8px;
+							}
+						}
+					}
+					hr{
+						border: 1px solid #F1F1F1;
+					}
+					.v-input--is-label-active{
+						color: #0D9648 !important;
+						opacity: 1;
+						.v-input--switch__track.primary--text{
+							color: #0D9648 !important;
+							opacity: 1;
+						}
+						.v-input--switch__thumb.primary--text{
+							color: #fff !important;
+						}
+						.v-input--selection-controls__ripple.primary--text{
+							color: #0D9648 !important;
+						}
+					}
+					.upload-file{
+						border: 1px solid #B8B8B8;
+						border-radius: 4px;
+						font-size: 16px;
+						.v-input{
+							display: none;
+						}
+					}
+					.attach-btn{
+						font-size: 20px;
+					}
+
 				}
 			}
 		}
@@ -258,6 +331,142 @@
 		.mid-content {
 			flex: 0 0 100%;
 	  	max-width: 100%;
+	  	.content-section{
+	  		border: 0px;
+	  		padding: 0;
+	  		.template-table{
+	  			table{
+	  				thead{
+	  					tr{
+	  						th{
+	  							font-size: 12px;
+	  						}
+	  					}
+	  				}
+	  				tbody{
+	  					tr{
+	  						td{
+	  							font-size: 12px;
+	  						}
+	  					}
+	  				}
+	  			}
+	  		}
+	  		.not-completd-title{
+	  			border-left: 4px solid #0D9648;
+	  			.col-12{
+	  				margin-bottom: 12px;
+	  				margin-top: 10px;
+	  				h3{
+	  					font-size: 16px;
+	  				}
+	  			}
+	  			.preview-text{
+	  				a{
+	  					font-size: 12px;
+	  					.v-icon{
+	  						font-size: 18px;
+	  					}
+	  				}
+	  			}
+	  			.auto-text{
+	  				color: #959595;
+	  				font-size: 12px;
+	  				text-align: left;
+	  			}
+	  			.publish-btn{
+	  				font-size: 14px;
+	  				font-weight: 700;
+	  				width: 165px !important;
+				    height: 35px !important;
+	  			}
+	  		}
+	  		.bids-tabs{
+	  			.v-slide-group__next, .v-slide-group__prev{
+	  				display: none !important;
+	  			}
+	  		}
+	  		.supplier-tabs{
+	  			.v-slide-group__next, .v-slide-group__prev{
+	  				display: none !important;
+	  			}
+	  			.available-data{
+	  				.supplier-head{
+	  					h4{
+	  						font-size: 13px;
+	  						text-align: left;
+	  					}
+	  				}
+	  				.available-search{
+	  					.available-select{
+	  						/*.v-input__control{*/
+	  							.v-input__append-inner{
+	  								margin-top: 14px;
+	  							}
+	  						/*}*/
+	  					}
+	  				}
+	  			}
+	  		}
+	  	}
+	  	.bidline-tab{
+	  		.bidline-section{
+	  			.bidline-list{
+	  				display: block !important;
+	  				.bid-item:not(last-child){
+	  					margin-bottom: 5px;
+	  				}
+	  			}
+	  		}
+	  	}
+	  	.attachment-tab{
+	  		.attachment-list{
+	  			table{
+	  				thead{
+	  					tr{
+	  						th{
+	  							font-size: 13px !important;
+	  						}
+	  					}
+	  				}
+	  				tbody{
+	  					tr{
+	  						td{
+	  							font-size: 12px !important;
+	  						}
+	  					}
+	  				}
+	  			}
+	  		}
+	  	}
+	  	.question-tab{
+	  		.add-question{
+	  			font-size: 14px !important;
+	  			height: 44px !important;
+	  		}
+	  		.question-header{
+	  			display: block !important;
+	  			.question-title{
+	  				margin-bottom: 8px;
+	  			}
+	  		}
+	  		.question-body{
+	  			.v-expansion-panel-content__wrap{
+	  				padding: 0 10px 16px;
+	  				p{
+	  					text-align: left;
+	  					font-size: 12px;
+	  				}
+	  				.question-subbody{
+	  					display: block !important;
+	  				}
+	  			}
+	  		}
+	  	}
+  		.save-btn{
+  			height: 45px !important;
+  			font-size: 15px !important;
+  		}
 		}
 	}
 }

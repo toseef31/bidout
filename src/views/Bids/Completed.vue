@@ -1,5 +1,5 @@
 <template>
-  <section class="section-container fill-height createBid-module">
+  <section class="section-container fill-height completed-module">
     <Navbar></Navbar>
      <v-row class="mx-0">
        <v-col :class="[ showSideBar ? 'col-12' : 'toggleLeft-sidebar']" class="left-sidebar pr-1">
@@ -7,32 +7,23 @@
        </v-col>
        <v-col class="mid-content pa-0 pa-sm-3" :class="[ showSideBar ? 'col-md-9 col-12 col-sm-7' : 'mid-content-collapse', activityPanel ? 'd-sm-block' : 'd-md-block']" v-show="!activityPanel">
           <div class="content-section fill-height">
-            <v-row align="center" justify="center" class="fill-height mx-0">
-            	<v-col cols="12" md="4">
-            		<h1 class="text-left mb-7">Create Bid</h1>
-            		<div class="bid-box">
-            			<div class="icon-box pa-8">
-            				<img :src="require('@/assets/images/bids/FileX.png')">
-            			</div>
-            			<div class="title-box pa-8 text-left">
-            				<h4 class="font-weight-bold">Create a new Bid</h4>
-            				<small>RFx: RFP or RFI</small>
-            			</div>
-            		</div>
-            	</v-col>
-            	<v-col cols="12" md="4" class="mt-16">
-            		<router-link to="/templates" class="text-decoration-none">
-	            		<div class="bid-box">
-	            			<div class="icon-box pa-8">
-	            				<img :src="require('@/assets/images/bids/FileArrowDown.png')">
-	            			</div>
-	            			<div class="title-box pa-8 text-left">
-	            				<h4 class="font-weight-bold">Create Bid from Template</h4>
-	            				<small>RFx: RFP or RFI</small>
-	            			</div>
-	            		</div>
-	            	</router-link>	
-            	</v-col>
+            <v-row align="center" justify="space-between" no-gutters class="pa-6 mb-10 mx-0">
+              <v-col cols="12">
+                <div class="completed-banner d-flex justify-center align-center">
+                  <img :src="require('@/assets/images/bids/tick.png')" width="88px" height="88px">
+                </div>
+                
+              </v-col>
+            </v-row>
+            <v-row justify="center" align="center" class="mx-0">
+              <v-col cols="12" md="6">
+                <div class="completed-content">
+                  <h1 class="font-weight-bold mb-4">Annual Chemical Bid</h1>
+                  <h4 class="mb-4">RFP #103831</h4>
+                  <h4 class="mb-12">Due Date: 08/11/2022 1pm CST</h4>
+                  <v-btn color="rgba(13, 150, 72, 0.1)" rounded elevation="0" class="text-capitalize">Loading Bid Page in 3s</v-btn>
+                </div>
+              </v-col>
             </v-row>
           </div>
        </v-col>
@@ -45,7 +36,7 @@
   import RightSidebar from '../Layout/Dashboard/RightSidebar.vue'
   import { mapActions } from "vuex";
 export default {
-  name : "Create Bid",
+  name : "Completed",
   components: {
     Navbar,
     LeftSidebar,
@@ -54,7 +45,8 @@ export default {
   
   data() {
     return {
-      users: ''
+      users: '',
+      
     };
   },
   computed:{

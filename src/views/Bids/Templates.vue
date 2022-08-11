@@ -7,11 +7,11 @@
        </v-col>
        <v-col class="mid-content pa-0 pa-sm-3" :class="[ showSideBar ? 'col-md-9 col-12 col-sm-7' : 'mid-content-collapse', activityPanel ? 'd-sm-block' : 'd-md-block']" v-show="!activityPanel">
           <div class="content-section fill-height">
-            <v-row align="center" justify="space-between" class="px-6 mb-4 mt-2">
-              <v-col cols="6" class="text-left pl-3">
+            <v-row align="center" justify="space-between" class="px-6 mb-4 mt-2 mx-0">
+              <v-col cols="6" class="text-left pl-0">
                 <h4>Templates</h4>
               </v-col>
-              <v-col cols="6" class="text-right pr-4">
+              <v-col cols="6" class="text-right pr-0">
                 <p class="mb-0"><router-link to="">View all</router-link></p>
               </v-col>
             </v-row>
@@ -46,7 +46,7 @@
                     <td class="text-left">{{template.createdDate}}</td>
                     <td class="text-left">{{template.creator}}</td>
                     <td class="text-left">{{template.notes}}</td>
-                    <td class="text-left pr-6"><v-btn color="#0D9648" class="white--text text-capitalize">Use Template</v-btn></td>
+                    <td class="text-left pr-6"><v-btn color="#0D9648" elevation="0" class="white--text text-capitalize">Use Template</v-btn></td>
                   </tr>
                 </tbody>
               </template>
@@ -62,7 +62,7 @@
   import RightSidebar from '../Layout/Dashboard/RightSidebar.vue'
   import { mapActions } from "vuex";
 export default {
-  name : "Dashboard",
+  name : "Template",
   components: {
     Navbar,
     LeftSidebar,

@@ -175,13 +175,15 @@
           </template>
         </div>
         <div class="menu-bottom-bar" :class="[ activityPanel ? 'd-none' : '']">
-          <v-select
-            :items="items"
-            v-model="select"
-            success
-            outlined 
-            class="mb-0"
-          ></v-select>
+          <router-link to="/create-bid" class="text-decoration-none">
+            <v-select
+              :items="items"
+              v-model="select"
+              success
+              outlined 
+              class="mb-0"
+            ></v-select>
+          </router-link>
         </div>
       </div>
   </div>
@@ -199,7 +201,7 @@ export default {
       isActivity : false,
       iconText: 'mdi-view-dashboard-outline',
       menuText: 'Dashboard',
-      select: {text: 'Create a new Bid', icon: 'mdi-gavel'},
+      select: {text: 'Create a new Bid',link: '/create-bid' , icon: 'mdi-gavel'},
       items: [
         { text: 'Create a new Bid', link: '/create-bid' , icon: 'mdi-gavel' },
         // { text: 'Create a new Shipment', icon: 'mdi-truck' },

@@ -41,6 +41,18 @@ const routes = [
           }
         }
       },
+      {
+        path: '/completed',
+        name: 'Completed',
+        component: () => import('@/views/Bids/Completed.vue'),
+        beforeEnter: (to, from, next) => {
+          if(localStorage.getItem("userData") == null) {
+              next('/login');
+          } else {
+              next();
+          }
+        }
+      },
       
       // { 
       //   path: "*", 
