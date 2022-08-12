@@ -71,8 +71,8 @@ export default {
     
   },
   mounted() {
-    
-}
+     document.title = "Existing Account - BidOut"
+  }
 };
 </script>
 <style scoped lang="scss">

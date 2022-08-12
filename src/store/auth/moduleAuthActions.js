@@ -12,11 +12,13 @@ export default {
     firebase.auth().signInWithEmailAndPassword(payload.email, payload.password)
 
       .then((result) => {
-        console.log(result.user.multiFactor);
-        commit('setUser', result.user.multiFactor.user)
         commit('setError', null)
-        localStorage.setItem("userData",JSON.stringify(result.user.multiFactor));
-        router.replace({ name: "Dashboard" });
+        axios.get('/user/getUserData/'+result.user.multiFactor.user.email)
+         .then(responce => {
+          commit('setUser',responce.data)
+          localStorage.setItem("userData",JSON.stringify(responce.data));
+          router.replace({ name: "Dashboard" });
+        })
         
       }, (err) => {
         commit('setError',err.message)
@@ -47,7 +49,6 @@ export default {
     // Try to sendForgot email
     axios.post('/auth/sendPasswordResetEmail',{'email': payload.email})
      .then(responce => {
-      console.log(responce);
       if(responce.status == 200){
         commit('setEmailSuccess', 'Email sent successfully! Please check your email')
       }
@@ -63,7 +64,6 @@ export default {
     if(payload.indexOf('@') != -1){
       axios.post('/user/checkIfUserWithEmailExists',{'email': payload})
        .then(responce => {
-        console.log(responce.data.exists);
         if(responce.data.exists == true){
           commit('setEmailExistSuccess', 'Email aleardy Exists! Please try different one')
         }else{
@@ -86,18 +86,42 @@ export default {
           name: "ExistingAccount"
         });
         }else{
-          axios.post('/ofs/queueSupplierUser',{'id': payload.id, 'email': payload.email, 'firstName': payload.firstName, 'lastName': payload.lastName,'phoneNumber':payload.phoneNumber, 'title': payload.title, 'password': payload.password})
-           .then(responce => {
-            if(responce.status == 200){
-              router.replace({
-                name: "ModuleSelection"
-              });
-              commit('setEmailSuccess', 'Email sent successfully! Please check your email')
-            }
-            else{
-              commit('setEmailError', 'Something wrong please try again')
-            }
-          })
+          if(payload.id){
+            axios.post('/ofs/queueSupplierUser',{'id': payload.id, 'email': payload.email, 'firstName': payload.firstName, 'lastName': payload.lastName,'phoneNumber':payload.phoneNumber, 'title': payload.title, 'password': payload.password})
+             .then(responce => {
+              if(responce.status == 200){
+                router.replace({
+                  name: "ModuleSelection"
+                });
+                commit('setEmailSuccess', 'Email sent successfully! Please check your email')
+              }
+              else{
+                commit('setEmailError', 'Something wrong please try again')
+              }
+            })
+           }else{
+            axios.post('/ofs/createCompany',{'company': payload.company, 'companyHq': payload.companyHq, 'companyHq2': payload.companyHq2, 'companyHqCountry': payload.companyHqCountry,'companyHqState':payload.companyHqState, 'companyHqCity': payload.companyHqCity, 'companyHqZip': payload.companyHqZip})
+             .then(responce => {
+              if(responce.status == 200){
+                axios.post('/ofs/createUser',{'company': payload.company,'firstName': payload.firstName, 'lastName': payload.lastName,'email': payload.email,'phoneNumber':payload.phoneNumber, 'title': payload.title, 'password': payload.password})
+                 .then(responce => {
+                  if(responce.status == 200){
+                    router.replace({
+                      name: "ModuleSelection"
+                    });
+                    commit('setEmailSuccess', 'Email sent successfully! Please check your email')
+                  }
+                  else{
+                    commit('setEmailError', 'Something wrong please try again')
+                  }
+                })
+              }
+              else{
+                commit('setCompanyError', 'Please try with different Company details')
+              }
+            })
+           }
+            
         }
         
        
@@ -113,17 +137,14 @@ export default {
   },
   // Buyer SignUp Acton
   buyerSignUpAction({ commit }, payload) {
-    console.log(payload);
     // Try to sigin
     if(payload.email.indexOf('@') != -1){
       axios.post('/user/checkIfUserWithEmailExists',{'email': payload.email})
        .then(responce => {
-        console.log(responce);
         if(responce.data.exists == true){
           commit('setEmailExistSuccess', 'Email aleardy Exists! Please try different one')
           
         }else{
-          console.log(payload);
           axios.post('/ofs/createCompany',{'company': payload.company, 'companyHq': payload.companyHq, 'companyHq2': payload.companyHq2, 'companyHqCountry': payload.companyHqCountry,'companyHqState':payload.companyHqState, 'companyHqCity': payload.companyHqCity, 'companyHqZip': payload.companyHqZip})
            .then(responce => {
             if(responce.status == 200){
@@ -141,7 +162,6 @@ export default {
               })
             }
             else{
-              console.log(responce.data.message);
               commit('setCompanyError', 'Please try with different Company details')
             }
           })
@@ -150,5 +170,27 @@ export default {
        
       })
     }
+  },
+  // Get IP
+  getIpAddress({ commit }, payload){
+    axios.get('https://api.ipify.org')
+      .then(responce => {
+       commit('setLocalIp', responce.data)
+       // return responce;
+    })  
+  },
+
+  // signAgreement
+  signAgreement({commit}, payload){
+    // Try to store Agreement
+    axios.post('/ofs/generateContract',{'ip': payload.email,'sign': payload.sign})
+     .then(responce => {
+      if(responce.status == 200){
+        commit('setContract', 'Contract generated successfully!')
+      }
+      else{
+        commit('setEmailError', 'Something wrong please try again')
+      }
+    })
   }
 }

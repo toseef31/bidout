@@ -13,7 +13,7 @@
                   <div class="chat-search">
                   <div>
                     <v-text-field
-                      v-model="message"
+                      v-model="searchUsers"
                       clearable
                       type="text" align-center
                       class="pt-0 mt-0"
@@ -36,61 +36,56 @@
                     <v-list-item-group
                       v-model="selected"
                       active-class="grey--text"
-                      multiple
+                      multiple v-bind:class="{ active: isActive }"
                     >
-                      <template v-for="(group, index) in groups">
-                        <v-list-item :key="group.title" @click="openChat">
+                      <template v-for="(conversation, index) in conversationsList">
+                        <v-list-item v-if="conversation.type == 'GROUP'"  @click="openChat(conversation,conversation.company)">
                           <template v-slot:default="{ active }">
                             <v-list-item-avatar>
                               <v-icon>mdi-account-group-outline</v-icon>
-                              <!-- <v-avatar>
-                                <v-img :src="require('@/assets/images/user.png')"></v-img>
-                              </v-avatar> -->
                             </v-list-item-avatar>
                             <v-list-item-content>
-                              <v-list-item-title v-text="group.title"></v-list-item-title>
+                              <v-list-item-title v-text="conversation.company"></v-list-item-title>
 
                               <v-list-item-subtitle
                                 class="text--primary"
-                                v-text="group.headline"
+                                v-text="conversation.headline"
                               ></v-list-item-subtitle>
 
-                              <v-list-item-subtitle v-text="group.subtitle"></v-list-item-subtitle>
+                              <v-list-item-subtitle v-text="conversation.subtitle"></v-list-item-subtitle>
                             </v-list-item-content>
 
                             <v-list-item-action class="mt-n5">
-                              <v-list-item-action-text v-text="group.action"></v-list-item-action-text>
+                              <v-list-item-action-text>{{conversation.latestMessage | moment("
+                              h:mm a")}}</v-list-item-action-text>
                             </v-list-item-action>
+                            <!-- <v-badge
+                                color="#0D9648"
+                                :value="msgCount"
+                                :content="msgCount" overlap
+                              ></v-badge> -->
                           </template>
                         </v-list-item>
-                      </template>
-                    </v-list-item-group>
-                  </v-list>
-                  <v-list class="py-0">
-                    <v-list-item-group
-                      active-class="grey--text"
-                      multiple
-                    >
-                      <template v-for="(user, index) in users">
-                        <v-list-item :key="user.title" @click="openChat">
-                          <template v-slot:default="{ active }">
-                            <v-list-item-avatar>
-                              <v-avatar>
-                                <v-img :src="require('@/assets/images/user.png')"></v-img>
-                              </v-avatar>
-                            </v-list-item-avatar>
-                            <v-list-item-content align-center>
-                              <v-list-item-title v-text="user.title"></v-list-item-title>
-                            </v-list-item-content>
+                        <v-list-item v-if="conversation.type == 'PRIVATE' && participant.id != user.id"  v-for="participant in conversation.participantDetails" @click="openChat(conversation,participant.name)">
+                          <template>
+                              <v-list-item-avatar>
+                                <v-avatar>
+                                  <v-img v-if="participant.image != null" :src="require('@/assets/images/user.png')"></v-img>
+                                  <v-img v-if="participant.image == null" :src="require('@/assets/images/chat/chatUser.png')"></v-img>
+                                </v-avatar>
+                              </v-list-item-avatar>
+                              <v-list-item-content align-center>
+                                <v-list-item-title v-text="participant.name"></v-list-item-title>
+                              </v-list-item-content>
 
                             <v-list-item-action>
-                              <v-list-item-action-text v-text="user.action"></v-list-item-action-text>
+                              <v-list-item-action-text>{{conversation.latestMessage | moment("
+                              h:mm a")}}</v-list-item-action-text>
                             </v-list-item-action>
                           </template>
                         </v-list-item>
-
                         <v-divider
-                          v-if="index < user.length - 1"
+                          v-if="index < conversation.length - 1"
                           :key="index"
                         ></v-divider>
                       </template>
@@ -104,12 +99,13 @@
                   <!-- Message Header -->
                   <div class="msg-header pa-5">
                     <v-icon class="back-arrow" v-if="backArrow" @click="closeChat">mdi-chevron-left</v-icon>
-                    <v-row>
+                    <v-row align="center">
+
                       <v-col cols="6">
                         <div class="title-section text-left">
-                          <h4 class="mb-0 font-weight-bold">Huges Tool Company</h4>
-                          <p class="sub-title mb-0 font-weight-regular">Compressor Separator Bid</p>
-                          <p class="sub-title mb-0 ">Bid #120320</p>
+                          <h4 class="mb-0 font-weight-bold">{{this.chatData.name}}</h4>
+                          <!-- <p class="sub-title mb-0 font-weight-regular">Compressor Separator Bid</p> -->
+                          <!-- <p class="sub-title mb-0 ">Bid #120320</p> -->
                         </div>
                       </v-col>
                       <v-col cols="6">
@@ -172,8 +168,8 @@
                     </v-row>
                   </div>
                   <!-- Message Area -->
-                  <div class="messages-section">
-                    <v-list two-line class="own-user message-list">
+                  <div class="messages-section" ref="messagesSection">
+                    <v-list two-line class="own-user message-list" v-for="message in messagesList" :key="message._id">
                       <v-list-item-group
                         multiple
                       >
@@ -181,180 +177,57 @@
                           <v-list-item class="text-left px-5">
                             <template>
                               <v-list-item-content>
-                                <v-list-item-title>Aubrey McClendon</v-list-item-title>
+                                <v-list-item-title>{{message.sender.name}}</v-list-item-title>
+                                
+                                <v-img v-if="message.attachment" :src="message.attachment" max-height="125px" max-width="245px" class="mt-2"></v-img>
+                                
                                 <v-list-item-subtitle
                                   class="text--primary"
-                                >Hello John!</v-list-item-subtitle>
+                                >{{message.content}}</v-list-item-subtitle>
                               </v-list-item-content>
 
+
                               <v-list-item-action class="mt-n6">
-                                <v-list-item-action-text>4:20 pm</v-list-item-action-text>
+                                <v-list-item-action-text>{{ message.updatedAt | moment("h:mm a") }}</v-list-item-action-text>
                               </v-list-item-action>
                             </template>
                           </v-list-item>
                         </template>
                       </v-list-item-group>
                     </v-list>
-                    <p class="text-center mb-0 text--primary">Apr 23rd</p>
-                    <v-list two-line class="message-list">
-                      <v-list-item-group
-                        multiple
-                      >
-                        <template>
-                          <v-list-item class="text-left px-5">
-                            <template>
-                              <v-list-item-content>
-                                <v-list-item-title>John Rockefeller</v-list-item-title>
-                                <v-list-item-subtitle
-                                  class="text--primary"
-                                >Can you bid on next job? <br>Please call me when you can.</v-list-item-subtitle>
-                              </v-list-item-content>
-
-                              <v-list-item-action class="mt-n6">
-                                <v-list-item-action-text>4:20 pm</v-list-item-action-text>
-                              </v-list-item-action>
-                            </template>
-                          </v-list-item>
-                        </template>
-                      </v-list-item-group>
-                    </v-list>
-                    <v-list two-line class="own-user message-list">
-                      <v-list-item-group
-                        multiple
-                      >
-                        <template>
-                          <v-list-item class="text-left px-5">
-                            <template>
-                              <v-list-item-content>
-                                <v-list-item-title>Aubrey McClendon</v-list-item-title>
-                                <v-list-item-subtitle
-                                  class="text--primary"
-                                >Sure</v-list-item-subtitle>
-                              </v-list-item-content>
-
-                              <v-list-item-action class="mt-n6">
-                                <v-list-item-action-text>10:30 am</v-list-item-action-text>
-                              </v-list-item-action>
-                            </template>
-                          </v-list-item>
-                        </template>
-                      </v-list-item-group>
-                    </v-list>
-                    <v-list two-line class="own-user message-list">
-                      <v-list-item-group
-                        multiple
-                      >
-                        <template>
-                          <v-list-item class="text-left px-5">
-                            <template>
-                              <v-list-item-content>
-                                <v-list-item-title>Aubrey McClendon</v-list-item-title>
-                                <v-list-item-subtitle
-                                  class="text--primary"
-                                >Sure</v-list-item-subtitle>
-                              </v-list-item-content>
-
-                              <v-list-item-action class="mt-n6">
-                                <v-list-item-action-text>10:30 am</v-list-item-action-text>
-                              </v-list-item-action>
-                            </template>
-                          </v-list-item>
-                        </template>
-                      </v-list-item-group>
-                    </v-list>
-                    <v-list two-line class="own-user message-list">
-                      <v-list-item-group
-                        multiple
-                      >
-                        <template>
-                          <v-list-item class="text-left px-5">
-                            <template>
-                              <v-list-item-content>
-                                <v-list-item-title>Aubrey McClendon</v-list-item-title>
-                                <v-list-item-subtitle
-                                  class="text--primary"
-                                >Sure</v-list-item-subtitle>
-                              </v-list-item-content>
-
-                              <v-list-item-action class="mt-n6">
-                                <v-list-item-action-text>10:30 am</v-list-item-action-text>
-                              </v-list-item-action>
-                            </template>
-                          </v-list-item>
-                        </template>
-                      </v-list-item-group>
-                    </v-list>
-                    <v-list two-line class="own-user message-list">
-                      <v-list-item-group
-                        multiple
-                      >
-                        <template>
-                          <v-list-item class="text-left px-5">
-                            <template>
-                              <v-list-item-content>
-                                <v-list-item-title>Aubrey McClendon</v-list-item-title>
-                                <v-list-item-subtitle
-                                  class="text--primary"
-                                >Sure</v-list-item-subtitle>
-                              </v-list-item-content>
-
-                              <v-list-item-action class="mt-n6">
-                                <v-list-item-action-text>10:30 am</v-list-item-action-text>
-                              </v-list-item-action>
-                            </template>
-                          </v-list-item>
-                        </template>
-                      </v-list-item-group>
-                    </v-list>
-                    <v-list two-line class="message-list">
-                      <v-list-item-group
-                        multiple
-                      >
-                        <template>
-                          <v-list-item class="text-left px-5">
-                            <template>
-                              <v-list-item-content>
-                                <v-list-item-title>John Rockefeller</v-list-item-title>
-                                <!-- <v-list-item-subtitle
-                                  class="text--primary"
-                                >Sure</v-list-item-subtitle> -->
-                                <!-- <v-list-item-avatar> -->
-                                  <v-img :src="require('@/assets/images/chat/thumbnail.png')" max-height="125px" max-width="245px" class="mt-2"></v-img>
-                                <!-- </v-list-item-avatar> -->
-                              </v-list-item-content>
-                              
-
-                              <v-list-item-action class="mt-n6">
-                                <v-list-item-action-text>10:30 am</v-list-item-action-text>
-                              </v-list-item-action>
-                            </template>
-                          </v-list-item>
-                        </template>
-                      </v-list-item-group>
-                    </v-list>
+                    <!-- <p class="text-center mb-0 text--primary">Apr 23</p> -->
                   </div>
                   <!-- End Message Area -->
                   <!-- Message Send Area -->
-                  <div class="message-send-area px-5">
-                    <v-row>
+                  <div class="message-send-area px-5 pt-5">
+                    <span class="fileName" v-if="filename">{{filename}}</span>
+                    <v-row>  
                       <v-col cols="12" sm="10" md="10">
                         <div class="msg-text-box">
                           <v-textarea
                             solo
                             name="input-7-4"
-                            label="Message here ..."
+                            placeholder="Message here ..."
                             rows="3"
+                            v-model="message"
+                            @keyup.enter="messageSend"
                           ></v-textarea>
                         </div>
                       </v-col>
                       <v-col cols="12" sm="2" md="2">
                         <div class="msg-send-btn">
                           <v-btn block tile  height="43px"
-                            color="#0D9648">Send</v-btn>
-                          <v-btn block tile
-                            color="rgba(13, 150, 72, 0.1)" class="mt-2 attach-btn" height="43px">
-                            <v-img :src="require('@/assets/images/chat/attach.png')" max-width="28px" height="32px"></v-img>   
-                          </v-btn>
+                            color="#0D9648" @click="messageSend">Send</v-btn>
+                          <label for="attach-file" class="mt-2 attach-btn d-flex justify-center align-center">
+                            <input id="attach-file"
+                               type="file" class="d-none" 
+                              truncate-length="8" ref="msgFile" @change="fileUpload"
+
+                            >
+                            <v-img :src="require('@/assets/images/chat/attach.png')" max-width="28px" height="32px"></v-img>
+                          </label>
+                          
+                          
                         </div>
                       </v-col>
                     </v-row> 
@@ -372,6 +245,8 @@
   import Navbar from './Layout/Navbar.vue'
   import LeftSidebar from './Layout/Dashboard/LeftSidebar.vue'
   import axios from 'axios'
+  import _ from 'lodash';
+  import { mapActions } from "vuex";
 export default {
   name : "Chat",
   components: {
@@ -381,6 +256,7 @@ export default {
   
   data() {
     return {
+      isActive: false,
       isHidden : false,
       isChatMenu : false,
       showMsgBlock : true,
@@ -388,75 +264,16 @@ export default {
       userList : true,
       searchMessage: '',
       message: '',
+      conversationId : '',
+      filename: '',
+      searchUsers: '',
+      chatData: {},
       selected: [0],
-        groups: [
-          {
-            action: '15 min ago',
-            headline: 'Compressor Separator Bid',
-            subtitle: 'Bid #120320',
-            title: 'Huges Tool Company',
-          },
-          {
-            action: '2 hr ago',
-            headline: 'Compressor Separator Bid',
-            subtitle: 'Bid #120320',
-            title: 'Company Group',
-          },
-        ],
-        users: [
-          {
-            action: '15 min ago',
-            title: 'Aubrey  McClendon',
-          },
-          {
-            action: '2 hr ago',
-            title: 'Aubrey  McClendon',
-          },
-          {
-            action: '2 hr ago',
-            title: 'Aubrey  McClendon',
-          },
-          {
-            action: '2 hr ago',
-            title: 'Aubrey  McClendon',
-          },
-        ],
-        toggleMenu: [
-          { text: 'Manage Members', icon: 'mdi-account-star-outline' },
-          { text: 'Archive Chat', icon: 'mdi-archive-outline' },
-        ],
-        messages: [
-          {
-            action: '4:20 pm',
-            headline: 'Hello John!',
-            subtitle: '',
-            title: 'Aubrey  McClendon',
-          },
-          {
-            action: '2 hr',
-            headline: 'Summer BBQ',
-            subtitle: `Wish I could come, but I'm out of town this weekend.`,
-            title: 'me, Scrott, Jennifer',
-          },
-          {
-            action: '6 hr',
-            headline: 'Oui oui',
-            subtitle: 'Do you have Paris recommendations? Have you ever been?',
-            title: 'Sandra Adams',
-          },
-          {
-            action: '12 hr',
-            headline: 'Birthday gift',
-            subtitle: 'Have any ideas about what we should get Heidi for her birthday?',
-            title: 'Trevor Hansen',
-          },
-          {
-            action: '18hr',
-            headline: 'Recipe to try',
-            subtitle: 'We should eat this: Grate, Squash, Corn, and tomatillo Tacos.',
-            title: 'Britta Holt',
-          },
-        ],
+      toggleMenu: [
+        { text: 'Manage Members', icon: 'mdi-account-star-outline' },
+        { text: 'Archive Chat', icon: 'mdi-archive-outline' },
+      ],
+      user: '',
     };
   },
   computed:{
@@ -466,14 +283,52 @@ export default {
     activityPanel(){
         return this.$store.getters.g_activityPanel;
     },
+    conversationsList(){
+      // return _.orderBy(this.$store.getters.conversations, 'latestMessage', 'desc');
+      
+      if(this.searchUsers){
+        return _.orderBy(this.$store.getters.conversations.filter((item)=>{
+          return this.searchUsers.toLowerCase().split(' ').every(v => item.company.toLowerCase().includes(v))
+        }), 'latestMessage', 'desc')
+      }else{
+        return _.orderBy(this.$store.getters.conversations, 'latestMessage', 'desc');
+      }
+    },
+    messagesList(){
+      if(this.searchMessage){
+        return this.$store.getters.messages.filter((item)=>{
+          return this.searchMessage.toLowerCase().split(' ').every(v => item.content.toLowerCase().includes(v))
+        })
+      }else{
+        return this.$store.getters.messages;
+      }
+    },
+    // msgCount(){
+    //   return this.$store.getters.unMessageCount;
+    // },
   },
   methods: {
-    openChat(){
+    ...mapActions(["getAllConversations","getAllMessages","sendMessage","unreadMessagesCountCon","lastMessageRead"]),
+    openChat(group,name){
       if(screen.width < 767){
         this.userList = false;
         this.showMsgBlock = true;
         this.backArrow= true;
       }
+      var obj = {
+        'group': group,
+        'name': name,
+      }
+      this.conversationId = group._id;
+      this.chatData = obj;
+      this.getAllMessages(this.conversationId);
+      var ids = {
+        userId: this.user.id,
+        conversationId: this.conversationId,
+      }
+      this.lastMessageRead(ids);
+      var container = this.$refs.messagesSection;
+      container.scrollTop = 3 * container.scrollHeight;
     },
     closeChat(){
       if(screen.width < 767){
@@ -482,13 +337,53 @@ export default {
         this.backArrow = false;
       }
     },
+    getConversations(id){
+      this.getAllConversations(id);
+    },
+    fileUpload(){
+      this.filename = this.$refs.msgFile.files[0].name;
+    },
+    messageSend(){
+       this.filename = "";
+      var chat_file = this.$refs.msgFile.files;
+      if (chat_file.length > 0) {
+        this.filename = chat_file[0].name;
+      }
+      var data = {
+        'conversationId': this.conversationId,
+        'sender': {
+            'name': this.user.firstName+' '+this.user.lastName,
+            'id': this.user.id,
+            'company': this.chatData.group.company,
+            'profilePicture': ""
+        },
+        content: this.message,
+        attachment: chat_file[0],
+      }
+      
+      this.sendMessage(data);
+      var container = this.$refs.messagesSection;
+      container.scrollTop = 3 * container.scrollHeight;
+      this.message = '';
+      this.filename = '';
+    },
+    // unreadCountMsg(conId){
+    //   var Ids = {
+    //     'userId': this.user.uid,
+    //     'conversationId': conId,
+    //   }
+    //   // this.unreadMessagesCountCon(Ids);
+    // },
   },
   mounted() {
+    document.title = "Messages - BidOut";
     if(screen.width < 767){
       this.userList = true;
       this.showMsgBlock = false;
       this.backArrow = false;
     }
+    this.user = this.$store.getters.userInfo;
+    this.getConversations(this.user.id);
   }
 };
 </script>

@@ -27,7 +27,6 @@
                             >
                               <v-text-field
                                 v-model="title"
-                                :rules="rules"
                                 counter="25"
                                 hint="This field uses counter prop"
                                 label="Regular"
@@ -40,7 +39,6 @@
                             >
                               <v-text-field
                                 v-model="description"
-                                :rules="rules"
                                 counter
                                 maxlength="25"
                                 hint="This field uses maxlength attribute"
@@ -54,11 +52,9 @@
                             >
                               <v-text-field
                                 v-model="title"
-                                :rules="wordsRules"
                                 counter="5"
                                 hint="This field counts words instead of characters"
                                 label="Custom counter from prop"
-                                :counter-value="v => v.trim().split(' ').length"
                               ></v-text-field>
                             </v-col>
 
@@ -68,14 +64,10 @@
                             >
                               <v-text-field
                                 v-model="title"
-                                :rules="wordsRules"
                                 counter="5"
                                 hint="This field counts words instead of characters"
                                 label="Custom counter from slot"
                               >
-                                <template v-slot:counter="{ props }">
-                                  <v-counter v-bind="props" :value="title.trim().split(' ').length"></v-counter>
-                                </template>
                               </v-text-field>
                             </v-col>
                           </v-row>

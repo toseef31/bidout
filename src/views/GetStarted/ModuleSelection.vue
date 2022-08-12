@@ -157,8 +157,8 @@ export default {
     
   },
   mounted() {
-    
-}
+     document.title = "Module Selection - BidOut" 
+  }
 };
 </script>
 <style scoped lang="scss">

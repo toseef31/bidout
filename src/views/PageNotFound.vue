@@ -1,8 +1,8 @@
 <template>
   <section class="fill-height error-module white">
-    <NavbarBeforeLogin v-if="!users"></NavbarBeforeLogin>
+    <NavbarBeforeLogin v-if="!userDatas"></NavbarBeforeLogin>
     <Navbar v-else></Navbar>
-      <v-container v-if="!users">
+      <v-container v-if="!userDatas">
         <v-main>
           <v-row justify="center">
             <v-col cols="12" md="9">
@@ -94,6 +94,9 @@ export default {
     activityPanel(){
         return this.$store.getters.g_activityPanel;
     },
+    userDatas(){
+        return this.$store.getters.userInfo;
+    },
   },
   methods: {
     
@@ -101,7 +104,6 @@ export default {
   mounted() {
     document.title = "Opps! - BidOut";  
     this.users = JSON.parse(localStorage.getItem("userData")).user;
-    console.log(this.users);
   }
 };
 </script>

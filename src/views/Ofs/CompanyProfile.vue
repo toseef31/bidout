@@ -279,8 +279,8 @@ export default {
     
   },
   mounted() {
-    
-}
+    document.title = "Company Profile - BidOut" 
+  }
 };
 </script>
 <style scoped lang="scss">

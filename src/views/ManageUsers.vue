@@ -114,7 +114,7 @@ export default {
     
   },
   mounted() {
-    
+    document.title = "Manage Users - BidOut";
   }
 };
 </script>

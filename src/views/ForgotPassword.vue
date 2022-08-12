@@ -4,7 +4,7 @@
        <v-col cols="12" md="6" class="left">
           <div class="form-section mb-15 mt-n16 ">
             <div class="logo mb-15">
-              <img :src="require('@/assets/images/logo.png')" width="100%">
+              <router-link to="/"><img :src="require('@/assets/images/logo.png')" width="100%"></router-link>
             </div>
             <v-alert type="error" v-if="emailError !== null">
               {{ emailError }}
@@ -80,6 +80,9 @@ export default {
       this.forgotEmail({ 'email': this.email});
     }
   },
+  mounted(){
+    document.title = "Forgot Password - BidOut";
+  }
 };
 </script>
 <style scoped lang="scss">

@@ -140,7 +140,7 @@ export default {
     
   },
   mounted() {
-    
+    document.title = "Manage Modules - BidOut";
   }
 };
 </script>

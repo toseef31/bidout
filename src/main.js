@@ -1,16 +1,20 @@
 import Vue from 'vue';
 import App from './App.vue';
 import router from './router';
-import Vuex from "vuex"
+import Vuex from "vuex";
+import LogRocket from 'logrocket';
+import createPlugin from 'logrocket-vuex';
 import store from './store';
-import * as Sentry from '@sentry/vue'
+import * as Sentry from '@sentry/vue';
 import { BrowserTracing } from "@sentry/tracing";
 import vuetify from './plugins/vuetify';
 import firebase from 'firebase/compat/app';
 import 'firebase/compat/auth';
 import 'firebase/compat/firestore';
 import axios from 'axios';
-import vueCountryRegionSelect from 'vue-country-region-select'
+import vueCountryRegionSelect from 'vue-country-region-select';
+import moment from 'vue-moment'
+import VueSignaturePad from 'vue-signature-pad';
 import '@/assets/styles/index.scss';
 // Your web app's Firebase configuration
 var firebaseConfig = {
@@ -28,23 +32,41 @@ var firebaseConfig = {
 firebase.initializeApp(firebaseConfig);
 
 axios.defaults.baseURL = import.meta.env.VITE_API_BASE_URL;
+
+LogRocket.init('voayxx/v2-ib4bb');
+const logrocketPlugin = createPlugin(LogRocket);
+
 Vue.use(vueCountryRegionSelect);
 Vue.use(Vuex,axios);
-
+Vue.use(moment);
+Vue.use(VueSignaturePad);
 Sentry.init({
   Vue: Vue,
-  dsn: "https://d0c77b4dc8a44c08aef179eee86f1635@o1327357.ingest.sentry.io/6601536",
+  dsn: import.meta.env.VITE_SENTRY_DSN,
   integrations: [
     new BrowserTracing({
       routingInstrumentation: Sentry.vueRouterInstrumentation(router),
       tracingOrigins: ["localhost", "http://localhost:8080/", /^\//],
     }),
   ],
-  // Set tracesSampleRate to 1.0 to capture 100%
-  // of transactions for performance monitoring.
-  // We recommend adjusting this value in production
-  // tracesSampleRate: 1.0,
+  
 })
+
+LogRocket.getSessionURL(sessionURL => {
+  Sentry.configureScope(scope => {
+    scope.setExtra("sessionURL", sessionURL);
+  });
+});
+
+var userData = store.getters.userInfo;
+
+LogRocket.identify(userData.id, {
+  name: userData.firstName+' '+userData.lastName,
+  email: userData.email,
+
+  // Add your own custom user variables here, ie:
+  subscriptionType: 'pro'
+});
 
 new Vue({
   vuetify,

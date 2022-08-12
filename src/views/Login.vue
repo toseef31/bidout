@@ -4,7 +4,7 @@
        <v-col cols="12" md="6" class="left">
           <div class="form-section mb-15">
             <div class="logo mb-15">
-              <img :src="require('@/assets/images/logo.png')" width="100%">
+              <router-link to="/"><img :src="require('@/assets/images/logo.png')" width="100%"></router-link>
             </div> 
             <v-alert type="error" v-if="logInError !== null">
               {{ logInError }}
@@ -104,6 +104,9 @@ export default {
       this.signInAction({ email: this.email, password: this.password });
     },
   },
+  mounted(){
+    document.title = "Login - BidOut";
+  }
 };
 </script>
 <style scoped lang="scss">

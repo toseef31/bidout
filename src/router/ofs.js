@@ -18,7 +18,7 @@ const routes = [
         }
       },
       {
-        path: '/ofs-directory/:slug',
+        path: '/ofs-directory/:slug/:name',
         name: 'CategoryListing',
         component: () => import('@/views/Ofs/CategoryListing.vue'),
         beforeEnter: (to, from, next) => {
@@ -31,8 +31,8 @@ const routes = [
         }
       },
       {
-        path: '/company-profile',
-        name: 'CompanyProfile',
+        path: '/company-profiles',
+        name: 'CompanyProfiles',
         component: () => import('@/views/Ofs/CompanyProfile.vue'),
         beforeEnter: (to, from, next) => {
           if(localStorage.getItem("userData") == null) {

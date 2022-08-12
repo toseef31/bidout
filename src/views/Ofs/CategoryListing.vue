@@ -6,7 +6,7 @@
           <v-row justify="center">
             <v-col cols="12" md="12">
               <div class="category-list">
-                <h1 class="text-left service-title mb-8">Drilling Services</h1>
+                <h1 class="text-left service-title mb-8">{{allcompanies.name}}</h1>
                 <div class="d-flex align-center tabs-header">
                   <v-tabs
                     v-model="tab"
@@ -22,9 +22,9 @@
                   </v-tabs>
                   <div class="category-list__searchBox">
                     <v-text-field
-                      v-model="search"
+                      v-model="searchCompany"
                       prepend-inner-icon="search"
-                      label="Search here..."
+                      placeholder="Search here..."
                       single-line
                       outlined height="56"
                       hide-details
@@ -50,28 +50,28 @@
                         </thead>
                         <tbody>
                           <tr
-                            v-for="item in desserts"
-                            :key="item.companies"
+                            v-for="company in allcompanies.data"
+                            :key="company.objectID"
                           >
-                            <td class="pl-8">{{ item.companies }} 
+                            <td class="pl-8">{{ company.company }} 
                               
                             </td>
-                            <td>{{ item.hQLocation }}</td>
-                            <td>{{ item.employees }}</td>
-                            <td>{{ item.fieldLocations }}</td>
-                            <td>{{ item.accountContacts }}</td>
+                            <td>{{ company.hQLocation }}</td>
+                            <td>{{ company.employees }}</td>
+                            <td>{{ company.fieldLocations }}</td>
+                            <td>{{ company.accountContacts }}</td>
                             <td>View Details</td>
                           </tr>
                         </tbody>
                       </template>
                     </v-simple-table>
-                    <v-pagination
+                    <!-- <v-pagination
                       v-model="page"
                       :length="4"
                       color="#0D9647"
                       next-icon="mdi-arrow-right"
                       prev-icon="mdi-arrow-left"
-                    ></v-pagination>
+                    ></v-pagination> -->
                   </v-tab-item>
                 </v-tabs-items>
               </div>
@@ -85,6 +85,8 @@
 <script>
   import NavbarBeforeLogin from '../Layout/NavbarBeforeLogin.vue'
   import Footer from '../Layout/Footer.vue'
+  import _ from 'lodash';
+  import { mapActions } from "vuex";
 export default {
   name : "ModuleSelection",
   components: {
@@ -95,158 +97,42 @@ export default {
   data() {
     return {
       tab: null,
-      search: '',
+      searchCompany: '',
       page: 1,
       items: [
-        'All', 'Gulf Coast', 'Northwest', 'Rockies', 'Mid-Con', 'Permian', 'Arklatex', 'Offshore',
+        'All', 'Gulf Coast', 'Northwest', 'Rockies', 'Mid-Con', 'Permian', 'Arklatex', 'Offshore', 'Other',
       ],
-      text: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.',
       headers: [
         {
           text: 'Companies',
           align: 'start',
-          sortable: false,
           value: 'companies',
         },
-        { text: 'HQ Location', value: 'hQLocation' ,sortable: false},
-        { text: 'Employees', value: 'employees' ,sortable: false},
-        { text: 'Field Locations', value: 'fieldLocations' ,sortable: false },
-        { text: 'Account Contacts', value: 'accountContacts' ,sortable: false},
-        { text: '', value: 'iron' ,sortable: false},
-      ],
-      desserts: [
-        {
-          companies: 'Peterson-UTI',
-          image: 'badge.png',
-          hQLocation: 'Houston TX USA',
-          employees: '2100+',
-          fieldLocations: 11,
-          accountContacts: 1,
-        },
-        {
-          companies: 'Nabors',
-          image: 'badge.png',
-          hQLocation: 'Houston TX USA',
-          employees: '1800+',
-          fieldLocations: 4,
-          accountContacts: 7,
-        },
-        {
-          companies: 'Cactus Drilling',
-          image: 'badge.png',
-          hQLocation: 'Oklahoma City OK USA',
-          employees: '22+',
-          fieldLocations: 4,
-          accountContacts: 2,
-        },
-        {
-          companies: 'Peterson-UTI',
-          image: 'badge.png',
-          hQLocation: 'Houston TX USA',
-          employees: '2100+',
-          fieldLocations: 11,
-          accountContacts: 1,
-        },
-        {
-          companies: 'Nabors',
-          image: 'badge.png',
-          hQLocation: 'Houston TX USA',
-          employees: '1800+',
-          fieldLocations: 4,
-          accountContacts: 7,
-        },
-        {
-          companies: 'Cactus Drilling',
-          image: 'badge.png',
-          hQLocation: 'Oklahoma City OK USA',
-          employees: '22+',
-          fieldLocations: 4,
-          accountContacts: 2,
-        },
-        {
-          companies: 'Peterson-UTI',
-          image: 'badge.png',
-          hQLocation: 'Houston TX USA',
-          employees: '2100+',
-          fieldLocations: 11,
-          accountContacts: 1,
-        },
-        {
-          companies: 'Nabors',
-          image: 'badge.png',
-          hQLocation: 'Houston TX USA',
-          employees: '1800+',
-          fieldLocations: 4,
-          accountContacts: 7,
-        },
-        {
-          companies: 'Cactus Drilling',
-          image: 'badge.png',
-          hQLocation: 'Oklahoma City OK USA',
-          employees: '22+',
-          fieldLocations: 4,
-          accountContacts: 2,
-        },
-        {
-          companies: 'Peterson-UTI',
-          image: 'badge.png',
-          hQLocation: 'Houston TX USA',
-          employees: '2100+',
-          fieldLocations: 11,
-          accountContacts: 1,
-        },
-        {
-          companies: 'Nabors',
-          image: 'badge.png',
-          hQLocation: 'Houston TX USA',
-          employees: '1800+',
-          fieldLocations: 4,
-          accountContacts: 7,
-        },
-        {
-          companies: 'Cactus Drilling',
-          image: 'badge.png',
-          hQLocation: 'Oklahoma City OK USA',
-          employees: '22+',
-          fieldLocations: 4,
-          accountContacts: 2,
-        },
-        {
-          companies: 'Peterson-UTI',
-          image: 'badge.png',
-          hQLocation: 'Houston TX USA',
-          employees: '2100+',
-          fieldLocations: 11,
-          accountContacts: 1,
-        },
-        {
-          companies: 'Nabors',
-          image: 'badge.png',
-          hQLocation: 'Houston TX USA',
-          employees: '1800+',
-          fieldLocations: 4,
-          accountContacts: 7,
-        },
-        {
-          companies: 'Cactus Drilling',
-          image: 'badge.png',
-          hQLocation: 'Oklahoma City OK USA',
-          employees: '22+',
-          fieldLocations: 4,
-          accountContacts: 2,
-        },
+        { text: 'HQ Location', value: 'hQLocation'},
+        { text: 'Employees', value: 'employees'},
+        { text: 'Field Locations', value: 'fieldLocations' },
+        { text: 'Account Contacts', value: 'accountContacts'},
+        { text: '', value: 'link'},
       ],
     };
   },
   computed:{
-   
+   allcompanies(){
+    if(this.searchCompany){
+      return this.$store.getters.serviceCompanies.filter((companies)=>{
+        return this.searchCompany.toLowerCase().split(' ').every(v => companies.name.toLowerCase().includes(v))
+      })
+    }else{
+      return this.$store.getters.serviceCompanies;
+    }
+   },
   },
   methods: {
     
   },
   mounted() {
-    
-}
+    document.title = "Categories - BidOut" 
+  }
 };
 </script>
 <style scoped lang="scss">

@@ -28,6 +28,7 @@
 		  	height: 180px;
 		  	.slide-img{
 		  		height: 140px;
+		  		overflow: hidden;
 		  		img{
 		  			width: 100%;
 		  		}
@@ -54,6 +55,9 @@
 		p{
 			color: #4A4242;
 			font-weight: 600;
+			.sub-catLink{
+				cursor: pointer;
+			}
 		}
 	}
 }

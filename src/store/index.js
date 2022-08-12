@@ -1,4 +1,6 @@
 import Vue from 'vue';
+import LogRocket from 'logrocket';
+import createPlugin from 'logrocket-vuex';
 import Vuex from 'vuex';
 import toast from './moduleToast';
 import dialog from './moduleDialog';
@@ -12,7 +14,7 @@ import mutations from './mutations'
 import actions from './actions'
 
 Vue.use(Vuex);
-
+const logrocketPlugin = createPlugin(LogRocket);
 export default new Vuex.Store({
   namespaced: true,
   getters,
@@ -20,7 +22,7 @@ export default new Vuex.Store({
   state,
   actions,
   strict: process.env.NODE_ENV !== 'production',
-
+  plugins: [logrocketPlugin],
   modules: {
     toast,
     dialog,

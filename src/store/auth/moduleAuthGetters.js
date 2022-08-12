@@ -1,6 +1,5 @@
 export default {
-    userss (state){
-        console.log('sdsdfsd',state.userInfo);
+    userInfo (state){
     	return state.userInfo
     },
     error (state){
@@ -20,5 +19,8 @@ export default {
     },
     companyError (state){
        return state.companyError
+    },
+    userIp (state){
+       return state.userIp
     },
 }

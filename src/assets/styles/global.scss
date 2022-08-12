@@ -29,6 +29,13 @@
 .v-label{
 	color: #0D1139 !important;
 }
+.text-muted{
+	color: #959595 !important;
+}
+.save-btn{
+	font-size: 20px !important;
+	border-radius: 8px;
+}
 /*Get Started Selection*/
 .get-topHeader{
 	background-image: url(@/assets/images/topheader.png);
@@ -83,6 +90,9 @@
 	
 }
 @media(max-width:  768px){
+	.left-sidebar{
+		display: none;
+	}
 	.get-topHeader{
 		height: 200px;
 		h1{
