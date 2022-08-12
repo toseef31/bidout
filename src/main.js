@@ -49,10 +49,7 @@ Sentry.init({
       tracingOrigins: ["localhost", "http://localhost:8080/", /^\//],
     }),
   ],
-  // Set tracesSampleRate to 1.0 to capture 100%
-  // of transactions for performance monitoring.
-  // We recommend adjusting this value in production
-  // tracesSampleRate: 1.0,
+  
 })
 
 LogRocket.getSessionURL(sessionURL => {
@@ -60,9 +57,12 @@ LogRocket.getSessionURL(sessionURL => {
     scope.setExtra("sessionURL", sessionURL);
   });
 });
-LogRocket.identify('KwWt77ohqDTWHm9Ad9aQnyxTEQy1', {
-  name: 'abdulazizyesuf',
-  email: 'abdulazizyesuf7+sp12@gmail.com',
+
+var userData = store.getters.userInfo;
+
+LogRocket.identify(userData.id, {
+  name: userData.firstName+' '+userData.lastName,
+  email: userData.email,
 
   // Add your own custom user variables here, ie:
   subscriptionType: 'pro'

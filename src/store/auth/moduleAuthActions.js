@@ -13,7 +13,6 @@ export default {
 
       .then((result) => {
         commit('setError', null)
-        console.log(result.user.multiFactor.user);
         axios.get('/user/getUserData/'+result.user.multiFactor.user.email)
          .then(responce => {
           commit('setUser',responce.data)
@@ -50,7 +49,6 @@ export default {
     // Try to sendForgot email
     axios.post('/auth/sendPasswordResetEmail',{'email': payload.email})
      .then(responce => {
-      console.log(responce);
       if(responce.status == 200){
         commit('setEmailSuccess', 'Email sent successfully! Please check your email')
       }
@@ -66,7 +64,6 @@ export default {
     if(payload.indexOf('@') != -1){
       axios.post('/user/checkIfUserWithEmailExists',{'email': payload})
        .then(responce => {
-        console.log(responce.data.exists);
         if(responce.data.exists == true){
           commit('setEmailExistSuccess', 'Email aleardy Exists! Please try different one')
         }else{
@@ -120,7 +117,6 @@ export default {
                 })
               }
               else{
-                console.log(responce.data.message);
                 commit('setCompanyError', 'Please try with different Company details')
               }
             })
@@ -141,17 +137,14 @@ export default {
   },
   // Buyer SignUp Acton
   buyerSignUpAction({ commit }, payload) {
-    console.log(payload);
     // Try to sigin
     if(payload.email.indexOf('@') != -1){
       axios.post('/user/checkIfUserWithEmailExists',{'email': payload.email})
        .then(responce => {
-        console.log(responce);
         if(responce.data.exists == true){
           commit('setEmailExistSuccess', 'Email aleardy Exists! Please try different one')
           
         }else{
-          console.log(payload);
           axios.post('/ofs/createCompany',{'company': payload.company, 'companyHq': payload.companyHq, 'companyHq2': payload.companyHq2, 'companyHqCountry': payload.companyHqCountry,'companyHqState':payload.companyHqState, 'companyHqCity': payload.companyHqCity, 'companyHqZip': payload.companyHqZip})
            .then(responce => {
             if(responce.status == 200){
@@ -169,7 +162,6 @@ export default {
               })
             }
             else{
-              console.log(responce.data.message);
               commit('setCompanyError', 'Please try with different Company details')
             }
           })
@@ -190,11 +182,9 @@ export default {
 
   // signAgreement
   signAgreement({commit}, payload){
-    console.log(payload);
     // Try to store Agreement
     axios.post('/ofs/generateContract',{'ip': payload.email,'sign': payload.sign})
      .then(responce => {
-      console.log(responce);
       if(responce.status == 200){
         commit('setContract', 'Contract generated successfully!')
       }
