@@ -42,7 +42,7 @@ Vue.use(moment);
 Vue.use(VueSignaturePad);
 Sentry.init({
   Vue: Vue,
-  dsn: "https://d0c77b4dc8a44c08aef179eee86f1635@o1327357.ingest.sentry.io/6601536",
+  dsn: import.meta.env.VITE_SENTRY_DSN,
   integrations: [
     new BrowserTracing({
       routingInstrumentation: Sentry.vueRouterInstrumentation(router),
