@@ -178,5 +178,29 @@ export default {
        
       })
     }
+  },
+  // Get IP
+  getIpAddress({ commit }, payload){
+    axios.get('https://api.ipify.org')
+      .then(responce => {
+       commit('setLocalIp', responce.data)
+       // return responce;
+    })  
+  },
+
+  // signAgreement
+  signAgreement({commit}, payload){
+    console.log(payload);
+    // Try to store Agreement
+    axios.post('/ofs/generateContract',{'ip': payload.email,'sign': payload.sign})
+     .then(responce => {
+      console.log(responce);
+      if(responce.status == 200){
+        commit('setContract', 'Contract generated successfully!')
+      }
+      else{
+        commit('setEmailError', 'Something wrong please try again')
+      }
+    })
   }
 }

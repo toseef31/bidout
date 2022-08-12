@@ -43,18 +43,20 @@
                 <v-row justify="center" align="center">
                   <v-col cols="12" md="8" class="pb-1">
                     <div class="white">
-                      <img :src="require('@/assets/images/getStarted/sign.png')" class="py-6 mx-auto">
+                      <!-- <img :src="require('@/assets/images/getStarted/sign.png')" class="py-6 mx-auto"> -->
+                      <VueSignaturePad width="500px" height="130px" ref="signaturePad" />
                     </div>
                   </v-col>
                   <v-col cols="12" md="4" class="text-right">
-                    <v-btn color="#0D9647" large dense class="white--text text-capitalize" width="100%" height="56">Sign Agreement <v-icon class="pl-2" color="#fff">mdi-arrow-right-circle</v-icon></v-btn>
+                    <v-btn color="#0D9647" large dense class="white--text text-capitalize mb-2" width="100%" height="56" @click="sign()">Sign Agreement <v-icon class="pl-2" color="#fff">mdi-arrow-right-circle</v-icon></v-btn>
+                    <v-btn color="#0D9647" large dense class="white--text text-capitalize" width="100%" height="56" @click="undo()">Undo Sign </v-btn>
                   </v-col>
                 </v-row>
                 <v-row>
                   <v-col cols="12" md="8">
                     <div class="d-flex justify-center">
-                      <small class="mr-4"><strong>Date:</strong> 07/11/22 8:53pm</small>
-                      <small class="ml-4 mb-0"><strong>Ip Address:</strong> 238.393.3.22</small>
+                      <small class="mr-4"><strong>Date:</strong> {{ new Date() | moment("MM/D/YYYY h:mm a") }}</small>
+                      <small class="ml-4 mb-0"><strong>Ip Address:</strong> {{ip}}</small>
                     </div>
                   </v-col>
                 </v-row>
@@ -86,6 +88,7 @@
 <script>
   import NavbarBeforeLogin from '../Layout/NavbarBeforeLogin.vue'
   import Footer from '../Layout/Footer.vue'
+  import { mapActions } from "vuex";
 export default {
   name : "Contract",
   components: {
@@ -98,19 +101,37 @@ export default {
       createBid: true,
       bidRespond: false,
       providerListing: true,
-      editions : 'premium',
-      packages: ['1-5 Staff Members - $79.99 month or $800/year', '5-10 Staff Members - $159.99 month or $1600/year', '10-15 Staff Members - $139.99 month or $2400/year'],
+      results: [],
     };
   },
   computed:{
    
+   ip(){
+    return this.$store.getters.userIp;
+   }
   },
   methods: {
-    
+    ...mapActions(["getIpAddress","signAgreement"]),
+    sign() {
+      const { isEmpty, data } = this.$refs.signaturePad.saveSignature();
+      
+      var agreement = {
+        ipAddress: this.$store.getters.userIp,
+        sign: data
+      }
+      this.signAgreement(agreement);
+    },
+    undo() {
+      this.$refs.signaturePad.undoSignature();
+    },
+    getIP(){
+      this.getIpAddress();
+    }
   },
   mounted() {
-     document.title = "Contract - BidOut"
-}
+    document.title = "Contract - BidOut" ;
+    this.getIP();  
+  }
 };
 </script>
 <style scoped lang="scss">

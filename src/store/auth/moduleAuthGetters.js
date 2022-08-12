@@ -21,4 +21,7 @@ export default {
     companyError (state){
        return state.companyError
     },
+    userIp (state){
+       return state.userIp
+    },
 }

@@ -9,4 +9,5 @@ export default {
     supplier: [],
     emailExists: null,
     companyError: null,
+    userIp: null,
 }

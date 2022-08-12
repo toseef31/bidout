@@ -22,4 +22,7 @@ export default {
     setCompanyError (state, payload){
       state.companyError = payload
     },
+    setLocalIp (state, payload){
+      state.userIp = payload
+    },
 }

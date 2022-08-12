@@ -91,36 +91,6 @@
                       </template>
                     </v-list-item-group>
                   </v-list>
-                  <!-- <v-list class="py-0">
-                    <v-list-item-group
-                      active-class="grey--text"
-                      multiple
-                    >
-                      <template v-for="(conversation, index) in conversationsList">
-                        <v-list-item :key="user.title" @click="openChat" v-for="user in conversation.participantDetails">
-                          <template v-slot:default="{ active }">
-                            <v-list-item-avatar>
-                              <v-avatar>
-                                <v-img :src="require('@/assets/images/user.png')"></v-img>
-                              </v-avatar>
-                            </v-list-item-avatar>
-                            <v-list-item-content align-center>
-                              <v-list-item-title v-text="user.title"></v-list-item-title>
-                            </v-list-item-content>
-
-                            <v-list-item-action>
-                              <v-list-item-action-text v-text="user.action"></v-list-item-action-text>
-                            </v-list-item-action>
-                          </template>
-                        </v-list-item>
-
-                        <v-divider
-                          v-if="index < user.length - 1"
-                          :key="index"
-                        ></v-divider>
-                      </template>
-                    </v-list-item-group>
-                  </v-list> -->
                 </div>
                 </div>
               </v-col>

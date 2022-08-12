@@ -204,7 +204,7 @@
                     </v-simple-table>
                   </div>
                   <v-row no-gutters align="center" class="px-6 mt-16">
-                    <v-col cols="9">
+                    <v-col cols="12" sm="8" md="9">
                       <div class="upload-attach">
                         <label for="uploadFile" class="upload-file pa-8 d-block font-weight-medium">
                           <v-file-input
@@ -215,7 +215,7 @@
                         </label>
                       </div>
                     </v-col>
-                    <v-col cols="3" class="pl-6">
+                    <v-col cols="12" sm="4" md="3" class="pl-0 pl-sm-6 mt-3 mt-sm-0">
                       <v-btn large elevation="0" color="#0D9648" height="56px" width="100%" class="white--text font-weight-bold text-capitalize py-4 px-9 attach-btn">Save Changes</v-btn>
                     </v-col>
                   </v-row>
