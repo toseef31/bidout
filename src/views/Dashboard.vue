@@ -169,18 +169,21 @@ export default {
     activityPanel(){
         return this.$store.getters.g_activityPanel;
     },
-    // allbids(){
-    //     return this.$store.getters.bids;
-    // },
+    allbids(){
+        return this.$store.getters.bids;
+    },
     userDatas(){
         return this.$store.getters.userInfo;
     },
+    userToken(){
+      return this.$store.getters.userToken;
+    }
   },
   methods: {
-    // ...mapActions(["getAllBids"]),
-    // getBids(){
-    //   this.getAllBids();
-    // },
+    ...mapActions(["getAllBids"]),
+    getBids(){
+      this.getAllBids();
+    },
     shipMap(){
       this.mapOptions = {
         center: new google.maps.LatLng(29.721085, -95.342049),
@@ -205,7 +208,7 @@ export default {
   },
   mounted() {
     document.title = "Dashboard - BidOut";
-    // this.getBids();
+    this.getBids();
     this.shipMap();
     this.users = JSON.parse(localStorage.getItem("userData")).user;
     console.log(this.users);

@@ -105,9 +105,11 @@ export default {
     };
   },
   computed:{
-   
    ip(){
     return this.$store.getters.userIp;
+   },
+   userid(){
+     return this.$store.getters.userId;
    }
   },
   methods: {
@@ -117,7 +119,8 @@ export default {
       
       var agreement = {
         ipAddress: this.$store.getters.userIp,
-        sign: data
+        sign: data,
+        id: this.$store.getters.userId,
       }
       this.signAgreement(agreement);
     },

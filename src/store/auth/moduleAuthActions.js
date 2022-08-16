@@ -13,6 +13,8 @@ export default {
 
       .then((result) => {
         commit('setError', null)
+        commit('setToken',result.user.multiFactor.user.accessToken);
+        localStorage.setItem("token",JSON.stringify(result.user.multiFactor.user.accessToken));
         axios.get('/user/getUserData/'+result.user.multiFactor.user.email)
          .then(responce => {
           commit('setUser',responce.data)
@@ -32,9 +34,13 @@ export default {
       .signOut()
       .then((result) => {
         commit('setUser', null)
+        commit('setToken', null)
+        commit('setUserId', null)
         commit('setError', null)
         // console.log(result);
         localStorage.removeItem("userData");
+        localStorage.removeItem("userId");
+        localStorage.removeItem("token");
         router.replace({
           name: "Login"
         });
@@ -90,6 +96,8 @@ export default {
             axios.post('/ofs/queueSupplierUser',{'id': payload.id, 'email': payload.email, 'firstName': payload.firstName, 'lastName': payload.lastName,'phoneNumber':payload.phoneNumber, 'title': payload.title, 'password': payload.password})
              .then(responce => {
               if(responce.status == 200){
+                localStorage.setItem("userId",JSON.stringify(responce.data));
+                commit('setUserId', responce.data);
                 router.replace({
                   name: "ModuleSelection"
                 });
@@ -106,6 +114,8 @@ export default {
                 axios.post('/ofs/createUser',{'company': payload.company,'firstName': payload.firstName, 'lastName': payload.lastName,'email': payload.email,'phoneNumber':payload.phoneNumber, 'title': payload.title, 'password': payload.password})
                  .then(responce => {
                   if(responce.status == 200){
+                    localStorage.setItem("userId",JSON.stringify(responce.data));
+                    commit('setUserId', responce.data);
                     router.replace({
                       name: "ModuleSelection"
                     });
@@ -151,6 +161,8 @@ export default {
               axios.post('/ofs/createUser',{'company': payload.company,'firstName': payload.firstName, 'lastName': payload.lastName,'email': payload.email,'phoneNumber':payload.phoneNumber, 'title': payload.title, 'password': payload.password})
                .then(responce => {
                 if(responce.status == 200){
+                  localStorage.setItem("userId",JSON.stringify(responce.data));
+                  commit('setUserId', responce.data);
                   router.replace({
                     name: "ModuleSelection"
                   });
@@ -183,10 +195,14 @@ export default {
   // signAgreement
   signAgreement({commit}, payload){
     // Try to store Agreement
-    axios.post('/ofs/generateContract',{'ip': payload.email,'sign': payload.sign})
+    alert(payload.id);
+    axios.post('/ofs/generateContract',{'id': payload.id,'ip': payload.ipAddress,'sign': payload.sign})
      .then(responce => {
       if(responce.status == 200){
         commit('setContract', 'Contract generated successfully!')
+        router.replace({
+          name: "Payment"
+        });
       }
       else{
         commit('setEmailError', 'Something wrong please try again')

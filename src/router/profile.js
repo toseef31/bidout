@@ -56,6 +56,18 @@ const routes = [
        }
       },
       {
+        path: '/edit-user/:id',
+        name: 'EditUser',
+        component: () => import('@/views/EditUser.vue'),
+        beforeEnter: (to, from, next) => {
+           if(localStorage.getItem("userData") == null) {
+               next('/login');
+           } else {
+               next();
+           }
+       }
+      },
+      {
         path: '/manage-module',
         name: 'ManageModules',
         component: () => import('@/views/ManageModule.vue'),

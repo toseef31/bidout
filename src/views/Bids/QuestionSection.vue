@@ -198,6 +198,9 @@ export default {
   data() {
     return {
       ex4: '',
+      questions: [
+
+      ],
     };
   },
   computed:{

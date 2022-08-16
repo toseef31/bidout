@@ -59,14 +59,16 @@ LogRocket.getSessionURL(sessionURL => {
 });
 
 var userData = store.getters.userInfo;
+if(userData){
+  LogRocket.identify(userData.id, {
+    name: userData.firstName+' '+userData.lastName,
+    email: userData.email,
 
-LogRocket.identify(userData.id, {
-  name: userData.firstName+' '+userData.lastName,
-  email: userData.email,
+    // Add your own custom user variables here, ie:
+    subscriptionType: 'pro'
+  });
+}
 
-  // Add your own custom user variables here, ie:
-  subscriptionType: 'pro'
-});
 
 new Vue({
   vuetify,

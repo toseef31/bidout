@@ -8,25 +8,25 @@
         </div>
         <div class="mr-2 bid-item">
           <label class="d-block input-label text-left">Line Item Description</label>
-          <v-text-field placeholder="Line Item Description" height="31pxx" single-line outlined type="text" hide-details>
+          <v-text-field placeholder="Line Item Description" height="31pxx" single-line outlined type="text" v-model="lineItems.description" hide-details>
           </v-text-field>
         </div>
         <div class="mr-2 bid-item">
           <label class="d-block input-label text-left">Unit/Measure</label>
-          <v-select outlined hide-details :items="units"></v-select>
+          <v-select outlined hide-details :items="units" v-model="lineItems.unit"></v-select>
         </div>
         <div class="mr-2 bid-item">
           <label class="d-block input-label text-left">Input Type</label>
-          <v-select outlined hide-details :items="inputType"></v-select>
+          <v-select outlined hide-details :items="inputType" v-model="lineItems.inputType"></v-select>
         </div>
         <div class="mr-2 bid-item">
           <label class="d-block input-label text-left">QTY</label>
-          <v-text-field placeholder="Line Item Description" height="31pxx" single-line outlined type="text" hide-details>
+          <v-text-field placeholder="Line Item Description" height="31pxx" single-line outlined type="text" v-model="lineItems.quantity" hide-details>
           </v-text-field>
         </div>
         <div class="mr-2 bid-item">
           <label class="d-block input-label text-left">Buyer Comment</label>
-          <v-text-field placeholder="Line Item Description" height="31pxx" single-line outlined type="text" hide-details>
+          <v-text-field placeholder="Line Item Description" height="31pxx" single-line outlined type="text" v-model="lineItems.buyerComment" hide-details>
           </v-text-field>
         </div>
         <div class="mr-2 d-flex">
@@ -88,25 +88,25 @@
         </div>
         <div class="mr-2 bid-item">
           <label class="d-block input-label text-left">Line Item Description</label>
-          <v-text-field placeholder="Line Item Description" height="31pxx" single-line outlined type="text" hide-details>
+          <v-text-field placeholder="Line Item Description" height="31pxx" single-line outlined type="text" v-model="exampleItems.description" hide-details>
           </v-text-field>
         </div>
         <div class="mr-2 bid-item">
           <label class="d-block input-label text-left">Unit/Measure</label>
-          <v-select outlined hide-details :items="units"></v-select>
+          <v-select outlined hide-details :items="units" v-model="exampleItems.unit"></v-select>
         </div>
         <div class="mr-2 bid-item">
           <label class="d-block input-label text-left">Input Type</label>
-          <v-select outlined hide-details :items="inputType"></v-select>
+          <v-select outlined hide-details :items="inputType" v-model="exampleItems.inputType"></v-select>
         </div>
         <div class="mr-2 bid-item">
           <label class="d-block input-label text-left">QTY</label>
-          <v-text-field placeholder="Line Item Description" height="31pxx" single-line outlined type="text" hide-details>
+          <v-text-field placeholder="Line Item Description" height="31px" single-line outlined type="text" v-model="exampleItems.quantity" hide-details>
           </v-text-field>
         </div>
         <div class="mr-2 bid-item">
           <label class="d-block input-label text-left">Buyer Comment</label>
-          <v-text-field placeholder="Line Item Description" height="31pxx" single-line outlined type="text" hide-details>
+          <v-text-field placeholder="Line Item Description" height="31pxx" single-line outlined type="text" v-model="exampleItems.buyerComment" hide-details>
           </v-text-field>
         </div>
         <div class="mr-2 d-flex">
@@ -133,6 +133,28 @@ export default {
     return {
       availableSearch: ['All','Company'],
       availableSuppl: null,
+      
+      switch1: true,
+      inputType: ['USD','EUR'],
+      units: ['Gallon','Liter'],
+      lineItems : [
+      	{
+      		description: '',
+      		unit: '',
+      		inputType: '',
+      		quantity: '',
+      		buyerComment: ''
+      	}
+      ],
+      exampleItems : [
+      	{
+      		description: '',
+      		unit: '',
+      		inputType: '',
+      		quantity: '',
+      		buyerComment: ''
+      	}
+      ],
     };
   },
   computed:{

@@ -57,7 +57,7 @@
                 <v-icon v-text="child.icon"></v-icon>
               </v-list-item-icon>
               <v-list-item-content class="text-left py-1" v-show="showSideBar">
-                <router-link :to="child.link" class="text-decoration-none">
+                <router-link :to="'/'+child.link" class="text-decoration-none">
                   <v-list-item-title class="font-weight-bold" v-text="child.title"></v-list-item-title>
                 </router-link>
               </v-list-item-content>

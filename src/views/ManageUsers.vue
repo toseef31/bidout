@@ -20,6 +20,9 @@
                     class="text-capitalize">Add User</v-btn></router-link>
                   </div>
                   <div class="userlist-table mt-16">
+                    <v-alert type="success" v-if="statusMessage !== null">
+                      {{ statusMessage }}
+                    </v-alert>
                     <v-simple-table>
                       <template v-slot:default>
                         <thead>
@@ -43,16 +46,38 @@
                             v-for="(user, i) in users"
                             :key="user.i"
                           >
-                            <td class="text-left font-weight-medium">{{ user.name }}</td>
+
+                            <td class="text-left font-weight-medium">{{ user.firstName }} {{ user.lastName }}</td>
                             <td class="text-left font-weight-medium">{{ user.email }}</td>
-                            <td class="text-left font-weight-medium">{{ user.lastLogin }}</td>
+                            <td class="text-left font-weight-medium"></td>
                             <td class="text-left">
-                              <v-btn depressed color="transparent" class="text-capitalize">
+                              <router-link :to="'/edit-user/'+ user.id" class="text-decoration-none"><v-btn depressed color="transparent" class="text-capitalize edit-btn">
                                 <v-icon>mdi-square-edit-outline</v-icon>
-                              Edit Details</v-btn>
-                              <v-btn depressed color="transparent" class="text-capitalize">
-                                <v-icon>mdi-window-close</v-icon>
-                              Disable</v-btn>
+                              Edit Details</v-btn></router-link>
+                             
+                              <template v-if="user.status == true">
+                                <v-btn depressed color="transparent" class="text-capitalize" @click="disable(user.id)" v-if="user.id == responseId && userStatus == true">
+                                  <v-icon color="#F32349">mdi-window-close</v-icon>
+                                Disable </v-btn>
+                                <v-btn depressed color="transparent" class="text-capitalize" @click="enable(user.id)" v-else-if="user.id == responseId && userStatus == false">
+                                  <v-icon color="#F32349">mdi-check</v-icon>
+                                Enable </v-btn>
+                                <v-btn depressed color="transparent" class="text-capitalize" @click="disable(user.id)" v-else>
+                                  <v-icon color="#F32349">mdi-window-close</v-icon>
+                                Disable </v-btn>
+                              </template>
+                              <template v-else>
+                                <v-btn depressed color="transparent" class="text-capitalize" @click="enable(user.id)" v-if="responseId == user.id && userStatus == false">
+                                  <v-icon>mdi-check</v-icon>
+                                Enable </v-btn>
+                                <v-btn depressed color="transparent" class="text-capitalize" @click="disable(user.id)" v-else-if="responseId == user.id && userStatus == true">
+                                  <v-icon>mdi-window-close</v-icon>
+                                Disable </v-btn>
+                                <v-btn depressed color="transparent" class="text-capitalize" @click="enable(user.id)" v-else>
+                                  <v-icon>mdi-check</v-icon>
+                                Enable </v-btn>
+                              </template>
+
                             </td>
                           </tr>
                         </tbody>
@@ -71,7 +96,7 @@
   import Navbar from './Layout/Navbar.vue'
   import LeftSidebar from './Layout/Dashboard/LeftSidebar.vue'
   import RightSidebar from './Layout/Dashboard/RightSidebar.vue'
-  import axios from 'axios'
+  import { mapActions } from "vuex";
 export default {
   name : "ManageUsers",
   components: {
@@ -83,23 +108,6 @@ export default {
   data() {
     return {
       isHidden : false,
-      users: [
-        {
-          name: 'Jerry Jones',
-          email: 'jjones@bidout.app',
-          lastLogin: '04/04/2022 at 12:51 pm'
-        },
-        {
-          name: 'Rodney Giles',
-          email: 'rgiles@bidout.app',
-          lastLogin: '04/04/2022 at 12:51 pm'
-        },
-        {
-          name: 'Julia Parker',
-          email: 'jparker@bidout.app',
-          lastLogin: '04/04/2022 at 12:51 pm'
-        },
-      ],
     };
   },
   computed:{
@@ -109,12 +117,36 @@ export default {
     activityPanel(){
         return this.$store.getters.g_activityPanel;
     },
+    users(){
+      return this.$store.getters.userList;
+    },
+    userStatus () {
+      return this.$store.getters.userStatus
+    },
+    statusMessage () {
+      return this.$store.getters.statusMessage
+    },
+    responseId () {
+      return this.$store.getters.responseId
+    },
   },
   methods: {
-    
+    ...mapActions(["manageUsers","disableUser","enableUser"]),
+    getUsers(company){
+      this.manageUsers(company);
+    },
+    disable(id){
+      this.disableUser(id);
+    },
+    enable(id){
+      this.enableUser(id);
+    }
   },
   mounted() {
     document.title = "Manage Users - BidOut";
+    this.user = this.$store.getters.userInfo;
+
+    this.getUsers(this.user.company);
   }
 };
 </script>

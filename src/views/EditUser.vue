@@ -11,7 +11,7 @@
               <v-col cols="12" sm="12" md="12" class="d-sm-block">
                 <div class="manage-sections pa-4 pa-sm-16">
                   <div class="top-section d-flex">
-                    <h4>Add Users</h4>
+                    <h4>Update Users</h4>
                   </div>
                   <div class="addUser-form mt-16">
                     <v-form
@@ -87,14 +87,12 @@
 <script>
   import Navbar from './Layout/Navbar.vue'
   import LeftSidebar from './Layout/Dashboard/LeftSidebar.vue'
-  import RightSidebar from './Layout/Dashboard/RightSidebar.vue'
-  import axios from 'axios'
+  import { mapActions } from "vuex";
 export default {
-  name : "ManageUsers",
+  name : "EditUser",
   components: {
     Navbar,
     LeftSidebar,
-    RightSidebar
   },
   
   data() {
@@ -131,7 +129,7 @@ export default {
     },
   },
   mounted() {
-    document.title = "Add Users - BidOut";
+    document.title = "Update User - BidOut";
   }
 };
 </script>
