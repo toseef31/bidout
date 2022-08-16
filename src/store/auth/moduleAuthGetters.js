@@ -2,6 +2,9 @@ export default {
     userInfo (state){
     	return state.userInfo
     },
+    userToken (state){
+      return state.userToken
+    },
     error (state){
     	return state.error
     },

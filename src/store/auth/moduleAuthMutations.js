@@ -3,7 +3,9 @@ export default {
       console.log('ffff',payload);
     	state.userInfo = payload
     },
-    
+    setToken (state, payload){
+      state.userToken = payload
+    },
     setError (state, payload){
     	state.error = payload
     },

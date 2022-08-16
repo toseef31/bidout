@@ -6,43 +6,66 @@
           <v-row justify="center">
             <v-col cols="12" sm="12" text="left">
               <label class="d-block text-left input-label mb-2 font-weight-bold">Bid Title</label>
-              <v-text-field placeholder="Bid Title" single-line outlined type="text" hide-details>
+              <v-text-field placeholder="Bid Title" v-model="title" single-line outlined type="text" hide-details>
               </v-text-field>
             </v-col>
           </v-row>
           <v-row justify="center">
             <v-col cols="12" sm="6" text="left">
-              <label class="d-block text-left input-label mb-2 font-weight-bold">Bid Type <v-icon small>mdi-information-outline</v-icon></label>
-              <v-select outlined hide-details :items="bidType">
+              <label class="d-block text-left input-label mb-2 font-weight-bold">Bid Type 
+                <v-tooltip right>
+                  <template v-slot:activator="{ on, attrs }">
+                    <v-icon small v-bind="attrs"
+                      v-on="on">mdi-information-outline</v-icon>
+                  </template>
+                  <span>Choose Bid Type</span>
+                </v-tooltip>
+              </label>
+              <v-select outlined hide-details :items="type" v-model="type">
                 
               </v-select>
             </v-col>
             <v-col cols="12" sm="6" text="left">
-              <label class="d-block text-left input-label mb-2 font-weight-bold">Due/Date Time</label>
-              <v-text-field placeholder="Bid Title" single-line outlined type="date" hide-details>
+              <label class="d-block text-left input-label mb-2 font-weight-bold">Due Date </label>
+              <v-text-field placeholder="Bid Title" single-line outlined type="date" v-model="dueDate" hide-details>
               </v-text-field>
             </v-col>
           </v-row>
           <v-row justify="center">
+            <v-col cols="12" sm="6" text="left">
+              <label class="d-block text-left input-label mb-2 font-weight-bold">Due Time </label>
+              <v-text-field placeholder="Bid Title" single-line outlined type="time" v-model="dueTime" hide-details>
+              </v-text-field>
+            </v-col>
             <v-col cols="12" sm="6" text="left">
               <label class="d-block text-left input-label mb-2 font-weight-bold">Region </label>
-              <v-select outlined hide-details>
-                
-              </v-select>
+              <v-text-field placeholder="Region" single-line outlined type="text" v-model="regions" hide-details>
+              </v-text-field>
             </v-col>
+          </v-row>
+          <v-row>
             <v-col cols="12" sm="6" text="left">
-              <label class="d-block text-left input-label mb-2 font-weight-bold">Q&A <v-icon small>mdi-information-outline</v-icon></label>
+              <label class="d-block text-left input-label mb-2 font-weight-bold">Q&A 
+                <v-tooltip right>
+                  <template v-slot:activator="{ on, attrs }">
+                    <v-icon small v-bind="attrs"
+                      v-on="on">mdi-information-outline</v-icon>
+                  </template>
+                  <span>Check the Q&A options</span>
+                </v-tooltip>
+              </label>
+              
               <v-radio-group
                 row
-                v-model="qa"
+                v-model="qAndAEnabled"
               >
                 <v-radio
                   label="Yes"
-                  value="yes" checked
+                  value="true" checked
                 ></v-radio>
                 <v-radio
                   label="No"
-                  value="no"
+                  value="false"
                 ></v-radio>
               </v-radio-group>
             </v-col>
@@ -50,7 +73,7 @@
           <v-row justify="center">
             <v-col cols="12" sm="12" text="left">
               <label class="d-block text-left input-label mb-2 font-weight-bold">Bid Description</label>
-              <v-textarea placeholder="Describe here..." single-line outlined type="text" hide-details>
+              <v-textarea placeholder="Describe here..." single-line outlined type="text" v-model="bidDescriptions" hide-details>
               </v-textarea>
             </v-col>
           </v-row>
@@ -68,7 +91,7 @@
           </v-row>
           <v-row justify="center">
             <v-col cols="12">
-              <v-btn color="#0D9648" height="56" class="text-capitalize white--text font-weight-bold save-btn px-9" large>Save Changes</v-btn>
+              <v-btn href="#tab-2" color="#0D9648" height="56" class="text-capitalize white--text font-weight-bold save-btn px-9" large>Save Changes</v-btn>
             </v-col>
           </v-row>
         </v-container>
@@ -81,9 +104,15 @@
 export default {
   data() {
     return {
-      qa: 'yes',
+      title: '',
+      type: '',
+      dueDate: '',
+      dueTime: '',
+      regions: '',
+      bidDescriptions: '',
+      qAndAEnabled: 'yes',
       showAdditional: false,
-      bidType: ['RFP','RFI'],
+      type: ['RFP','RFI'],
     };
   },
   computed:{

@@ -13,6 +13,8 @@ export default {
 
       .then((result) => {
         commit('setError', null)
+        commit('setToken',result.user.multiFactor.user.accessToken);
+        localStorage.setItem("token",JSON.stringify(result.user.multiFactor.user.accessToken));
         axios.get('/user/getUserData/'+result.user.multiFactor.user.email)
          .then(responce => {
           commit('setUser',responce.data)

@@ -123,8 +123,6 @@ export default {
       inviteTeam: null,
       subCompany: false,
       switch1: true,
-      inputType: ['USD','EUR'],
-      units: ['Gallon','Liter'],
       ex4: '',
     };
   },
