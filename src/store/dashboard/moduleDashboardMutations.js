@@ -11,4 +11,7 @@ export default {
    setStatusMessage (state, payload){
       state.statusMessage = payload
   },
+   setResponseId (state, payload){
+      state.responseId = payload
+  },
 }

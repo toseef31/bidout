@@ -11,4 +11,7 @@ export default {
    statusMessage (state){
       return state.statusMessage
    },
+   responseId (state){
+      return state.responseId
+   },
 }

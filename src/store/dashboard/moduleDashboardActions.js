@@ -22,6 +22,7 @@ export default {
       .then(responce => {
       commit('setStatusMessage', responce.data)
       commit('setUserStatus',false)
+      commit('setResponseId', payload);
     })
   }, 
 
@@ -30,6 +31,7 @@ export default {
       .then(responce => {
       commit('setStatusMessage',responce.data)
       commit('setUserStatus',true)
+      commit('setResponseId', payload);
     })
   }, 
   

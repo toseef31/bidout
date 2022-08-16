@@ -5,6 +5,9 @@ export default {
     userToken (state){
       return state.userToken
     },
+    userId (state){
+      return state.userId
+    },
     error (state){
     	return state.error
     },

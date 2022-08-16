@@ -6,6 +6,9 @@ export default {
     setToken (state, payload){
       state.userToken = payload
     },
+    setUserId (state, payload){
+      state.userId = payload
+    },
     setError (state, payload){
     	state.error = payload
     },

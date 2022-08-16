@@ -59,7 +59,7 @@ const routes = [
       },
       {
         path: '/get-started/payment',
-        name: 'payment',
+        name: 'Payment',
         component: () => import('@/views/GetStarted/Payment.vue'),
         beforeEnter: (to, from, next) => {
           if(localStorage.getItem("userData") == null) {

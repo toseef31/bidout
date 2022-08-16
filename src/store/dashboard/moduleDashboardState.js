@@ -3,4 +3,5 @@ export default {
    userList: [], 
    userStatus: null, 
    statusMessage: null, 
+   responseId: null, 
 }

@@ -51,15 +51,33 @@
                             <td class="text-left font-weight-medium">{{ user.email }}</td>
                             <td class="text-left font-weight-medium"></td>
                             <td class="text-left">
-                              <v-btn depressed color="transparent" class="text-capitalize">
+                              <router-link :to="'/edit-user/'+ user.id" class="text-decoration-none"><v-btn depressed color="transparent" class="text-capitalize edit-btn">
                                 <v-icon>mdi-square-edit-outline</v-icon>
-                              Edit Details</v-btn>
-                              <v-btn depressed color="transparent" class="text-capitalize" @click="disable(user.id)" v-if="user.status == true || userStatus == true">
-                                <v-icon color="#F32349">mdi-window-close</v-icon>
-                              Disable</v-btn>
-                              <v-btn depressed color="transparent" class="text-capitalize" @click="enable(user.id)" v-else>
-                                <v-icon>mdi-check</v-icon>
-                              Enable</v-btn>
+                              Edit Details</v-btn></router-link>
+                             
+                              <template v-if="user.status == true">
+                                <v-btn depressed color="transparent" class="text-capitalize" @click="disable(user.id)" v-if="user.id == responseId && userStatus == true">
+                                  <v-icon color="#F32349">mdi-window-close</v-icon>
+                                Disable </v-btn>
+                                <v-btn depressed color="transparent" class="text-capitalize" @click="enable(user.id)" v-else-if="user.id == responseId && userStatus == false">
+                                  <v-icon color="#F32349">mdi-check</v-icon>
+                                Enable </v-btn>
+                                <v-btn depressed color="transparent" class="text-capitalize" @click="disable(user.id)" v-else>
+                                  <v-icon color="#F32349">mdi-window-close</v-icon>
+                                Disable </v-btn>
+                              </template>
+                              <template v-else>
+                                <v-btn depressed color="transparent" class="text-capitalize" @click="enable(user.id)" v-if="responseId == user.id && userStatus == false">
+                                  <v-icon>mdi-check</v-icon>
+                                Enable </v-btn>
+                                <v-btn depressed color="transparent" class="text-capitalize" @click="disable(user.id)" v-else-if="responseId == user.id && userStatus == true">
+                                  <v-icon>mdi-window-close</v-icon>
+                                Disable </v-btn>
+                                <v-btn depressed color="transparent" class="text-capitalize" @click="enable(user.id)" v-else>
+                                  <v-icon>mdi-check</v-icon>
+                                Enable </v-btn>
+                              </template>
+
                             </td>
                           </tr>
                         </tbody>
@@ -107,6 +125,9 @@ export default {
     },
     statusMessage () {
       return this.$store.getters.statusMessage
+    },
+    responseId () {
+      return this.$store.getters.responseId
     },
   },
   methods: {
