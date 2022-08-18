@@ -96,8 +96,8 @@ export default {
             axios.post('/ofs/queueSupplierUser',{'id': payload.id, 'email': payload.email, 'firstName': payload.firstName, 'lastName': payload.lastName,'phoneNumber':payload.phoneNumber, 'title': payload.title, 'password': payload.password})
              .then(responce => {
               if(responce.status == 200){
-                localStorage.setItem("userId",JSON.stringify(responce.data));
-                commit('setUserId', responce.data);
+                localStorage.setItem("userId",payload.id);
+                commit('setUserId', payload.id);
                 router.replace({
                   name: "ModuleSelection"
                 });
@@ -195,7 +195,6 @@ export default {
   // signAgreement
   signAgreement({commit}, payload){
     // Try to store Agreement
-    alert(payload.id);
     axios.post('/ofs/generateContract',{'id': payload.id,'ip': payload.ipAddress,'sign': payload.sign})
      .then(responce => {
       if(responce.status == 200){
