@@ -239,6 +239,7 @@ export default {
     }
   },
   mounted() {
+  document.title = "OFS - BidOut"
     this.getCategories();
   }
 };

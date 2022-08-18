@@ -46,27 +46,27 @@
                 <v-tab-item
                   value="tab-1"
                 >
-                  <bid-details></bid-details>
+                  <bid-details @changetab="ChangeT($event)"></bid-details>
                 </v-tab-item>
                 <v-tab-item
                   value="tab-2"
                 >
-                  <SupplierSection></SupplierSection>
+                  <SupplierSection @changetab="ChangeT($event)"></SupplierSection>
                 </v-tab-item>
                 <v-tab-item
                   value="tab-3"
                 >
-                  <team-members></team-members>
+                  <team-members  @changetab="ChangeT($event)"></team-members>
                 </v-tab-item>
                 <v-tab-item
                   value="tab-4" class="bidline-tab"
                 >
-                  <bid-lines></bid-lines>
+                  <bid-lines  @changetab="ChangeT($event)"></bid-lines>
                 </v-tab-item>
                 <v-tab-item
                   value="tab-5" class="attachment-tab mt-5"
                 >
-                  <attachment></attachment>
+                  <attachment  @changetab="ChangeT($event)"></attachment>
                 </v-tab-item>
                 <v-tab-item
                   value="tab-6" class="question-tab mt-5"
@@ -108,7 +108,7 @@ export default {
   data() {
     return {
       users: '',
-      currentItem: 'tab-Web',
+      currentItem: 'tab-1',
       tabs: [
         { text: 'Bid Detail', icon: 'mdi-information-outline', value: 1 },
         { text: 'Supplier Invitation', icon: 'mdi-information-outline', value: 2}, 
@@ -138,7 +138,10 @@ export default {
     },
   },
   methods: {
-    
+    ChangeT(tab)
+    {
+      this.currentItem=tab;
+    },
   },
   mounted() {
     document.title = "Create Bid - BidOut";

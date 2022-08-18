@@ -63,7 +63,7 @@
         </template>
         <v-spacer></v-spacer>
 
-        <v-list>
+        <v-list v-if="userDatas">
           <v-list-item class="pr-0">
             <router-link to="/edit-profile" class="d-flex text-decoration-none">
               <v-list-item-title class="mr-3">{{userDatas.firstName}} {{userDatas.lastName}}</v-list-item-title>

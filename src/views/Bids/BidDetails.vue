@@ -91,7 +91,7 @@
           </v-row>
           <v-row justify="center">
             <v-col cols="12">
-              <v-btn href="#tab-2" color="#0D9648" height="56" class="text-capitalize white--text font-weight-bold save-btn px-9" large>Save Changes</v-btn>
+              <v-btn color="#0D9648" height="56" class="text-capitalize white--text font-weight-bold save-btn px-9" @click="changeTab" large>Save Changes</v-btn>
             </v-col>
           </v-row>
         </v-container>
@@ -108,7 +108,7 @@ export default {
       type: '',
       dueDate: '',
       dueTime: '',
-      regions: '',
+      regions: [],
       bidDescriptions: '',
       qAndAEnabled: 'yes',
       showAdditional: false,
@@ -119,7 +119,18 @@ export default {
     
   },
   methods: {
-    
+    changeTab(){
+      var bidDetails = {
+        title: this.title,
+        type: this.type,
+        dueDate: this.dueDate,
+        dueTime: this.dueTime,
+        regions: this.regions,
+        bidDescriptions: this.bidDescriptions,
+        qAndAEnabled: this.qAndAEnabled
+      }
+      this.$emit('changetab', 'tab-2');
+    }
   },
   mounted() {
     

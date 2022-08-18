@@ -4,6 +4,7 @@
 	  max-width: 78%;
 	  z-index: 2;
 	  padding-left: 0 !important;
+	  padding-bottom: 0 !important;
 	  .content-section{
 	  	background: #FFFFFF;
 	  	border: 1px solid #B8B8B8;
@@ -145,7 +146,7 @@
 		    }
 	  	}
 	  	.messages-section{
-	  		height: calc(63vh - 11px);
+	  		height: calc(100vh - 329px);
 	  		.own-user{
 	  			background: #FBFBFB;
 	  		}
@@ -265,10 +266,9 @@
 	.chat-module{
 		.mid-content{
 			.userCol{
-				height: calc(89vh - 16px);
+				height: calc(100vh - 110px);
 			}
 			.messages-section{
-				height: calc(63vh - 11px);
 				overflow: auto;
 			}
 		}

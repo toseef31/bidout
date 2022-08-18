@@ -322,13 +322,19 @@ export default {
       this.conversationId = group._id;
       this.chatData = obj;
       this.getAllMessages(this.conversationId);
+      setTimeout(function(){
+        container.scrollTop = container.scrollHeight;
+      }, 100);
       var ids = {
         userId: this.user.id,
         conversationId: this.conversationId,
       }
       this.lastMessageRead(ids);
       var container = this.$refs.messagesSection;
-      container.scrollTop = 3 * container.scrollHeight;
+      // container.scrollTop = 3 * container.scrollHeight;
+      setTimeout(function(){
+        container.scrollTop = container.scrollHeight;
+      }, 100);
     },
     closeChat(){
       if(screen.width < 767){
@@ -363,7 +369,9 @@ export default {
       
       this.sendMessage(data);
       var container = this.$refs.messagesSection;
-      container.scrollTop = 3 * container.scrollHeight;
+      setTimeout(function(){
+        container.scrollTop = container.scrollHeight;
+      }, 500);
       this.message = '';
       this.filename = '';
     },

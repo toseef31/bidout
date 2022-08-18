@@ -1,6 +1,5 @@
 export default {
     setUser (state, payload){
-      console.log('ffff',payload);
     	state.userInfo = payload
     },
     setToken (state, payload){
