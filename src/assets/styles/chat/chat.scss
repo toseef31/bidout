@@ -18,17 +18,22 @@
 	  	.userlist-col{
 		  	.chat-search{
 		  		padding: 12px 15px;
-		  		.v-text-field{
-		  			align-items: center;
-		  			.v-input__append-inner{
-		  				align-self: center;
-		  			}
-			  		.v-input__slot:before{
-			  			border-width: 0;
+		  		.search-box{
+		  			width: 90%;
+			  		.v-text-field{
+			  			align-items: center;
+			  			.v-input__append-inner{
+			  				align-self: center;
+			  			}
+				  		.v-input__slot:before{
+				  			border-width: 0;
+				  		}
+				  		.v-text-field__details{
+				  			display: none;
+				  		}
 			  		}
-			  		.v-text-field__details{
-			  			display: none;
-			  		}
+		  		}
+		  		.add-people{
 			  		.icon-box{
 			  			background: #0d964814;
 					    border-radius: 4px;
@@ -134,6 +139,7 @@
 	        top: 100%;
 		      border: 2px solid #B8B8B8;
 		      border-radius: 8px 0px 8px 8px !important;
+		      z-index: 10;
 		      .menu-card .v-list{
 		        padding: 0;
 		      }

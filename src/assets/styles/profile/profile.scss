@@ -9,21 +9,94 @@
 	  	border: 1px solid #B8B8B8;
 	  	border-radius: 8px;
 	  	margin-bottom: 0px;
-	  	padding: 10px 4px;
-	  	height: calc(88vh - 20px);
+	  	padding: 10px 0px;
 	  	.manage-sections{
 	  		.top-section{
 	  			justify-content: center;
 	  			align-items: center;
+	  			.user-info{
+	  				.user-name{
+	  					h3{
+	  						font-size: 24px;
+	  					}
+	  				}
+	  			}
 	  			.admin-tag{
-	  				box-shadow: none;
 	  				color: #0D9648;
-	  				border-radius: 0px 0px 8px 8px;
-	  				margin-top: 2px;
 	  			}
 	  		}
-	  		.module-content{
-	  			
+	  		.editprofile-section{
+	  			.v-form{
+	  				.v-input{
+	  					&__slot{
+	  						fieldset{
+	  							border-radius: 8px;
+	  							border-color: #B8B8B8;
+	  						}
+	  					}
+	  				}
+	  			}
+	  			.v-input--switch{
+	  				float: right;
+	  			}
+	  			.v-input{
+	  				border-radius: 8px;
+	  				&--selection-controls{
+	  					&__ripple{
+	  						color: #0d9648 !important;
+	  						caret-color: #0d9648 !important;
+	  					}
+	  					&__input{
+	  						i{
+	  							color: #0d9648 !important;
+	  							caret-color: #0d9648 !important;
+	  						}
+	  					}
+	  				}
+	  			}
+	  			.v-input--is-label-active{
+	  				color: #0D9648 !important;
+	  				opacity: 1;
+	  				.v-input--switch__track.primary--text{
+	  					color: #0D9648 !important;
+	  					opacity: 1;
+	  				}
+	  				.v-input--switch__thumb.primary--text{
+	  					color: #fff !important;
+	  				}
+	  				.v-input--selection-controls__ripple.primary--text{
+	  					color: #0D9648 !important;
+	  				}
+	  			}
+	  			.v-data-table{
+	  				thead{
+	  					.head-title{
+	  						font-size: 24px;
+	  						line-height: 30px;
+	  						color: #201B1B;
+	  					}
+	  					th{
+	  						font-size: 16px;
+	  						border-bottom: 0;
+	  					}
+	  				}
+	  				tbody{
+	  					tr{
+	  						td{
+	  							color: #201B1B;
+	  							font-size: 16px;
+	  							font-weight: 500;
+	  							border-bottom: 0;
+	  							.v-input--checkbox{
+	  								float: right;
+	  							}
+	  						}
+	  					}
+	  					tr:nth-child(odd){
+	  						background: #FBFBFB;
+	  					}
+	  				}
+	  			}
 	  		}
 	  	}
 	  }
@@ -47,7 +120,25 @@
 					.top-section{
 						display: block !important;
 					}
-					.module-content{
+					.editprofile-section{
+						.v-data-table{
+							thead{
+								.head-title{
+									font-size: 14px;
+							    line-height: 18px;
+								}
+								th{
+									font-size: 13px;
+								}
+							}
+							tbody{
+								tr{
+									td{
+										font-size: 13px;
+									}
+								}
+							}
+						}
 					}
 				}
 			}

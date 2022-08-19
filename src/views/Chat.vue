@@ -10,25 +10,25 @@
             <v-row>
               <v-col cols="12" sm="4" md="4" class="userCol  d-sm-block" v-if="userList">
                 <div class="userlist-col">
-                  <div class="chat-search">
-                  <div>
+                  <div class="chat-search d-flex">
+                  <div class="search-box">
                     <v-text-field
                       v-model="searchUsers"
                       clearable
                       type="text" align-center
-                      class="pt-0 mt-0"
+                      class="pt-0 mt-0" height="44px"
                     >
                       <template v-slot:prepend>
                         <v-icon>mdi-magnify</v-icon>
                       </template>
-                      <template v-slot:append>
-                        <v-fade-transition leave-absolute>
-                          <span class="icon-box">
-                            <v-icon>mdi-plus</v-icon>
-                          </span>
-                        </v-fade-transition>
-                      </template>
                     </v-text-field>
+                  </div>
+                  <div class="add-people">
+                    <template>
+                      <span class="icon-box">
+                        <v-icon>mdi-plus</v-icon>
+                      </span>
+                    </template>
                   </div>
                 </div>
                 <div class="users-lists">
@@ -70,8 +70,8 @@
                           <template>
                               <v-list-item-avatar>
                                 <v-avatar>
-                                  <v-img v-if="participant.image != null" :src="require('@/assets/images/user.png')"></v-img>
-                                  <v-img v-if="participant.image == null" :src="require('@/assets/images/chat/chatUser.png')"></v-img>
+                                  <img v-if="participant.image != null" :src="require('@/assets/images/user.png')">
+                                  <img v-if="participant.image == null" :src="require('@/assets/images/chat/chatUser.png')">
                                 </v-avatar>
                               </v-list-item-avatar>
                               <v-list-item-content align-center>
@@ -324,7 +324,7 @@ export default {
       this.getAllMessages(this.conversationId);
       setTimeout(function(){
         container.scrollTop = container.scrollHeight;
-      }, 100);
+      }, 400);
       var ids = {
         userId: this.user.id,
         conversationId: this.conversationId,
@@ -382,6 +382,10 @@ export default {
     //   }
     //   // this.unreadMessagesCountCon(Ids);
     // },
+  },
+  beforeMount() {
+    this.user = this.$store.getters.userInfo;
+    this.$router.push("/messages?room_id="+this.user);
   },
   mounted() {
     document.title = "Messages - BidOut";
