@@ -385,7 +385,7 @@ export default {
   },
   beforeMount() {
     this.user = this.$store.getters.userInfo;
-    this.$router.push("/messages?room_id="+this.user);
+    // this.$router.push("/messages?room_id="+this.user);
   },
   mounted() {
     document.title = "Messages - BidOut";

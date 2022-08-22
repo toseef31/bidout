@@ -19,18 +19,18 @@ const routes = [
            }
        }
       },
-      {
-        path: '/messages?room_id=:id',
-        name: 'Message',
-        component: () => import('@/views/Chat.vue'),
-        beforeEnter: (to, from, next) => {
-           if(localStorage.getItem("userData") == null) {
-               next('/login');
-           } else {
-               next();
-           }
-       }
-      },
+      // {
+      //   path: '/messages?room_id=:id',
+      //   name: 'Message',
+      //   component: () => import('@/views/Chat.vue'),
+      //   beforeEnter: (to, from, next) => {
+      //      if(localStorage.getItem("userData") == null) {
+      //          next('/login');
+      //      } else {
+      //          next();
+      //      }
+      //  }
+      // },
       
     ],
   },
