@@ -6,4 +6,6 @@ export default {
     unMessageCount: null,
     lastMessageRead: null,
     userId: '',
+    archiveStatus: null,
+    membersList: [],
 }

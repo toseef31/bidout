@@ -66,7 +66,7 @@
                               ></v-badge> -->
                           </template>
                         </v-list-item>
-                        <v-list-item v-if="conversation.type == 'PRIVATE' && participant.id != user.id"  v-for="participant in conversation.participantDetails" @click="openChat(conversation,participant.name)">
+                        <v-list-item v-if="conversation.type == 'PRIVATE' && participant.id != user.id"  v-for="(participant, index) in conversation.participantDetails" @click="openChat(conversation,participant.name)" :key="index">
                           <template>
                               <v-list-item-avatar>
                                 <v-avatar>
@@ -103,9 +103,12 @@
 
                       <v-col cols="6">
                         <div class="title-section text-left">
-                          <h4 class="mb-0 font-weight-bold">{{this.chatData.name}}</h4>
-                          <!-- <p class="sub-title mb-0 font-weight-regular">Compressor Separator Bid</p> -->
-                          <!-- <p class="sub-title mb-0 ">Bid #120320</p> -->
+                          <h4 class="mb-0 font-weight-bold">{{chatData.name}}</h4>
+                          <template v-if="chatData.isBid == true">
+                            <p class="sub-title mb-0 font-weight-regular">{{chatData.bidTitle}}</p>
+                            <p class="sub-title mb-0 ">Bid #{{chatData.bidSerial}}</p>
+                          </template>
+                          
                         </div>
                       </v-col>
                       <v-col cols="6">
@@ -124,7 +127,8 @@
                               </template>
                             </v-text-field>
                           </div>
-                          <div class="toggle-btn">
+                          
+                          <div class="toggle-btn ml-5">
                             <v-btn
                               fab
                               small
@@ -147,11 +151,78 @@
                                   <v-list-item-group
                                     color="success"
                                   >
+                                    <v-dialog
+                                      v-model="dialog"
+                                      width="700"
+                                    >
+                                      <template v-slot:activator="{ on, attrs }">
+                                        <v-btn
+                                          color="transparent"
+                                          v-bind="attrs"
+                                          v-on="on" class="text-capitalize text-left justify-start manage-btn"
+                                          height="48px" width="100%" @click="memberList()"
+                                        >
+                                          <v-icon class="mr-2" color="#0D9648">mdi-account-star-outline</v-icon>Manage Members
+                                        </v-btn>
+                                      </template>
+
+                                      <v-card>
+                                        <v-card-title class="text-h6 lighten-2 justify-space-between">
+                                          Add Members
+                                          <v-icon @click="dialog = false" color="#0D9648"> mdi-close</v-icon>
+                                        </v-card-title>
+                                        <v-divider></v-divider>
+                                        <v-card-text class="my-8">
+                                          
+                                          <label class="d-block text-left input-label font-weight-bold black--text">Add Members</label>
+                                          <v-autocomplete
+                                            v-model="selected"
+                                            :items="membersLists"
+                                            item-value="id" item-text="firstName"
+                                            chips
+                                            outlined
+                                            full-width
+                                            hide-details
+                                            hide-no-data
+                                            hide-selected
+                                            multiple
+                                            single-line 
+                                            deletable-chips
+                                            search-input
+                                            return-object
+                                            class="text-left"
+                                          >
+                                          </v-autocomplete>
+                                        </v-card-text>
+
+                                        <v-divider></v-divider>
+
+                                        <v-card-actions>
+                                          <v-spacer></v-spacer>
+                                          <v-btn
+                                            color="#0D9648"
+                                            text
+                                            @click="dialog = false"
+                                            class="text-capitalize"
+                                          >
+                                            Cancel
+                                          </v-btn>
+                                          <v-btn
+                                            color="#0D9648"
+                                            rounded
+                                            class="text-capitalize white--text px-3"
+                                            min-width="100px"
+                                          >
+                                            Invite
+                                          </v-btn>
+                                        </v-card-actions>
+                                      </v-card>
+                                    </v-dialog>
                                     <v-list-item
                                       v-for="(menu, i) in toggleMenu"
-                                      :key="i"
+                                      :key="i" @click="chatActions(chatData.group._id)"
                                     >
-                                      <v-list-item-icon class="mr-2 my-2">
+                                      <v-list-item-icon class="mr-2 my-3">
                                         <v-icon color="#0D9648" v-text="menu.icon"></v-icon>
                                       </v-list-item-icon>
                                       <v-list-item-content align-start color="#0D9648" class="pa-0">
@@ -262,6 +333,7 @@ export default {
       showMsgBlock : true,
       backArrow : false,
       userList : true,
+      dialog: false,
       searchMessage: '',
       message: '',
       conversationId : '',
@@ -270,10 +342,10 @@ export default {
       chatData: {},
       selected: [0],
       toggleMenu: [
-        { text: 'Manage Members', icon: 'mdi-account-star-outline' },
         { text: 'Archive Chat', icon: 'mdi-archive-outline' },
       ],
       user: '',
+      
     };
   },
   computed:{
@@ -303,18 +375,22 @@ export default {
         return this.$store.getters.messages;
       }
     },
+    membersLists(){
+      return this.$store.getters.membersList;
+    }
     // msgCount(){
     //   return this.$store.getters.unMessageCount;
     // },
   },
   methods: {
-    ...mapActions(["getAllConversations","getAllMessages","sendMessage","unreadMessagesCountCon","lastMessageRead"]),
+    ...mapActions(["getAllConversations","getAllMessages","sendMessage","unreadMessagesCountCon","lastMessageRead","archiveChat","supplierList"]),
     openChat(group,name){
       if(screen.width < 767){
         this.userList = false;
         this.showMsgBlock = true;
         this.backArrow= true;
       }
+
       var obj = {
         'group': group,
         'name': name,
@@ -331,7 +407,6 @@ export default {
       }
       this.lastMessageRead(ids);
       var container = this.$refs.messagesSection;
-      // container.scrollTop = 3 * container.scrollHeight;
       setTimeout(function(){
         container.scrollTop = container.scrollHeight;
       }, 100);
@@ -375,6 +450,16 @@ export default {
       this.message = '';
       this.filename = '';
     },
+    chatActions(data){
+      var archive = {
+        conversationId: data,
+        userId: this.user.id,
+      }
+      this.archiveChat(archive);
+    },
+    memberList(){
+      this.supplierList();
+    },
     // unreadCountMsg(conId){
     //   var Ids = {
     //     'userId': this.user.uid,
@@ -382,6 +467,7 @@ export default {
     //   }
     //   // this.unreadMessagesCountCon(Ids);
     // },
+    getText: (item) => `${item.firstName} ${item.lastName}`,
   },
   beforeMount() {
     this.user = this.$store.getters.userInfo;
@@ -395,7 +481,8 @@ export default {
       this.backArrow = false;
     }
     this.user = this.$store.getters.userInfo;
-    this.getConversations(this.user.id);
+    var userss = 'sM4m4MzFky6AUCbKkKEB';
+    this.getConversations(userss);
   }
 };
 </script>

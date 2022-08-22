@@ -51,6 +51,37 @@
 		  		
 		  	}
 		  	.users-lists{
+		  		height: calc(100vh - 195px);
+  		    overflow: auto;
+  		    &::-webkit-scrollbar {
+  		      width: 5px;
+  		      height: 5px;
+  		    }
+  		    &::-webkit-scrollbar-thumb {
+  		      background: #e1e1e1;
+  		      border: 14px solid #0d9647;
+  		      border-radius: 26px;
+  		    }
+  		    &::-webkit-scrollbar-thumb:hover {
+  		      background: #ffffff;
+  		    }
+  		    &::-webkit-scrollbar-thumb:active {
+  		      background: #0d9647;
+  		    }
+  		    &::-webkit-scrollbar-track {
+  		      /*background: #666666;*/
+  		      border: 36px solid #e3e3e3;
+  		      border-radius: 42px;
+  		    }
+  		    &::-webkit-scrollbar-track:hover {
+  		      background: #666666;
+  		    }
+  		    &::-webkit-scrollbar-track:active {
+  		      background: #0d9647;
+  		    }
+  		    &::-webkit-scrollbar-corner {
+  		      background: transparent;
+  		    }
 		  		.v-list-item{
 		  			height: 80px;
 		  			border-bottom: 1px solid #F1F1F1;
@@ -89,7 +120,6 @@
 	  		}
 	  	}
 	  	.msg-options{
-	  		justify-content: space-between;
 	  		align-items: center;
 	  		.search{
 	  			.v-text-field{
@@ -148,6 +178,13 @@
 		      }
 		      .v-list-item__content{
 		        text-align: left;
+		        color: #0D1139;
+		      }
+		      .manage-btn{
+		      	color: #0D1139;
+		      	&:hover::before{
+		      		opacity: 0.04;
+		      	}
 		      }
 		    }
 	  	}
@@ -267,6 +304,9 @@
 			}
 		}
 	}
+}
+.v-menu__content{
+	text-align: left;
 }
 @media (min-width: 769px) {
 	.chat-module{

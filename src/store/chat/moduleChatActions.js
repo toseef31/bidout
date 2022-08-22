@@ -11,14 +11,12 @@ export default {
 		console.log(payload,'Payload');
 		axios.get('/chat/getConversations/'+payload)
 		 .then(responce => {
-		 	console.log(responce);
 		 	commit('setConverstaionList',responce.data.conversations)
 		})
 	},
 	getAllMessages({commit}, payload){
 		axios.get('/chat/getMessages/'+payload)
 		 .then(responce => {
-		 	console.log(responce,'messages');
 		 	commit('setMessagesList',responce.data.messages)
 		})
 	},
@@ -53,6 +51,21 @@ export default {
 		axios.post('/chat/setLastMessageReadAt',{'userId':payload.userId,'conversationId':payload.conversationId})
 		 .then(responce => {
 		 	commit('setLastMessageRead',responce.data.count)
+		})
+	},
+	// Archive Chat
+	archiveChat({commit}, payload){
+		axios.post('/chat/archiveConversation',{'userId':payload.userId,'conversationId':payload.conversationId})
+		 .then(responce => {
+		 	commit('setArchiveStatus',responce.data.count)
+		})
+	},
+	// Supplier List
+	supplierList({commit}, payload){
+		axios.get('/company/getSupplierCompaniesAndUsers')
+		 .then(responce => {
+		 	console.log(responce);
+		 	commit('setMembersList',responce.data)
 		})
 	},
 }
