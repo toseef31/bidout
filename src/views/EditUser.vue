@@ -110,8 +110,8 @@ export default {
         ],
         select: null,
         items: [
-          'Admin',
-          'Customer',
+          'Administrator',
+          'User',
         ],
     };
   },

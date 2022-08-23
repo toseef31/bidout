@@ -24,6 +24,33 @@
 	  			.admin-tag{
 	  				color: #0D9648;
 	  			}
+	  			.user {
+	  			  width: 112px;
+	  			  height: 112px;
+	  			  border-radius: 100%;
+	  			  border: 1px solid #0D9648;
+	  			  position: relative;
+	  			}
+	  			.profile-img {
+	  			  height: 100%;
+	  			  width: 100%;
+	  			  border-radius: 50%;
+	  			}
+	  			.icon {
+	  			  position: absolute;
+	  			  top: 10px;
+	  			  right: 0;
+	  			  background: #0D9648;
+	  			  border-radius: 100%;
+	  			  width: 30px;
+	  			  height: 30px;
+	  			  line-height: 30px;
+	  			  vertical-align: middle;
+	  			  text-align: center;
+	  			  color: #fff;
+	  			  font-size: 14px;
+	  			  cursor: pointer;
+	  			}
 	  		}
 	  		.editprofile-section{
 	  			.v-form{
@@ -32,6 +59,21 @@
 	  						fieldset{
 	  							border-radius: 8px;
 	  							border-color: #B8B8B8;
+	  						}
+	  					}
+	  				}
+	  				#MazPhoneNumberInput{
+	  					margin-bottom: 0!important;
+	  					.country-selector{
+	  						&__input{
+	  							height: 56px;
+	  							min-height: 56px;
+	  						}
+	  					}
+	  					.input-tel{
+	  						&__input{
+	  							height: 56px;
+	  							min-height: 56px;
 	  						}
 	  					}
 	  				}

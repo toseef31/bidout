@@ -34,7 +34,7 @@ const routes = [
       {
         path: '/ofs-supplier/:slug/:name',
         name: 'SupplierListing',
-        component: () => import('@/views/Ofs/CategoryListing.vue'),
+        component: () => import('@/views/Ofs/SupplierListing.vue'),
          beforeEnter: (to, from, next) => {
             if(localStorage.getItem("userData") == null) {
                 next('/login');

@@ -7,26 +7,7 @@
       </v-col>
       <v-col class="mid-content pa-0 pa-sm-3" :class="[ showSideBar ? 'col-md-9 col-12 col-sm-7' : 'mid-content-collapse', activityPanel ? 'd-sm-block' : 'd-md-block']" v-show="!activityPanel">
         <div class="content-section fill-height">
-          <div class="get-topHeader d-flex">
-            <v-container fill-height>
-              <v-row
-                align="center"
-                justify="center"
-                no-gutters
-              >
-                <v-col
-                  class="text-left pl-sm-6"
-                  cols="12"
-                >
-                  <h1 class="font-weight-bolder white--text">
-                    OFS Provider Directory
-                  </h1>
-                </v-col>
-              </v-row>
-            </v-container>
-          </div>
           <v-container class="px-sm-8">
-            <v-main>
               <v-row>
                 <v-col cols="12" md="12">
                   <VueSlickCarousel v-bind="settings" class="company-slider">
@@ -139,7 +120,6 @@
                   </div>
                 </v-col>
               </v-row>
-            </v-main>
           </v-container>
         </div>
       </v-col>
@@ -233,7 +213,7 @@ export default {
     },
   },
   methods: {
-    ...mapActions(["getCategories","getCompanyByservice"]),
+    ...mapActions(["getCategories","getCompanyByservice","getSupplierCompanyByservice"]),
     getAllCategories(){
       this.getCategories();
       
@@ -242,7 +222,7 @@ export default {
      return _.orderBy(subCats, 'orderNumber', 'asc');
     },
     getCompanies(slug,subName){
-      this.getCompanyByservice({slug:slug, service:subName});
+      this.getSupplierCompanyByservice({slug:slug, service:subName});
     }
   },
   mounted() {

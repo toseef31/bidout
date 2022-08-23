@@ -26,7 +26,6 @@
 	              <v-checkbox
 	                v-model="bidResponseAll"
 	                color="#0D9648"
-	                value="bidResponseAll"
 	                class="mt-0"
 	                hide-details
 	              ></v-checkbox>
@@ -35,7 +34,6 @@
 	              <v-checkbox
 	                v-model="bidResponseEmail"
 	                color="#0D9648"
-	                value="bidResponseEmail"
 	                class="mt-0"
 	                hide-details
 	              ></v-checkbox>
@@ -44,7 +42,6 @@
 	              <v-checkbox
 	                v-model="bidResponseSMS"
 	                color="#0D9648"
-	                value="bidResponseSMS"
 	                class="mt-0"
 	                hide-details
 	              ></v-checkbox>
@@ -56,7 +53,6 @@
 	              <v-checkbox
 	                v-model="qAAll"
 	                color="#0D9648"
-	                value="qAAll"
 	                class="mt-0"
 	                hide-details
 	              ></v-checkbox>
@@ -65,7 +61,6 @@
 	              <v-checkbox
 	                v-model="qAEmail"
 	                color="#0D9648"
-	                value="qAEmail"
 	                class="mt-0"
 	                hide-details
 	              ></v-checkbox>
@@ -74,7 +69,6 @@
 	              <v-checkbox
 	                v-model="qASMS"
 	                color="#0D9648"
-	                value="qASMS"
 	                class="mt-0"
 	                hide-details
 	              ></v-checkbox>
@@ -86,7 +80,6 @@
 	              <v-checkbox
 	                v-model="bidCompletionAll"
 	                color="#0D9648"
-	                value="bidCompletionAll"
 	                class="mt-0"
 	                hide-details
 	              ></v-checkbox>
@@ -95,7 +88,6 @@
 	              <v-checkbox
 	                v-model="bidCompletionEmail"
 	                color="#0D9648"
-	                value="bidCompletionEmail"
 	                class="mt-0"
 	                hide-details
 	              ></v-checkbox>
@@ -104,7 +96,6 @@
 	              <v-checkbox
 	                v-model="bidCompletionSMS"
 	                color="#0D9648"
-	                value="bidCompletionSMS"
 	                class="mt-0"
 	                hide-details
 	              ></v-checkbox>
@@ -121,15 +112,15 @@
 export default {
   data() {
     return {
-      bidResponseAll: '',
-      bidResponseEmail: '',
-      bidResponseSMS: '',
-      qAAll: '',
-      qAEmail: 'qAEmail',
-      qASMS: '',
-      bidCompletionAll: 'bidCompletionAll',
-      bidCompletionEmail: 'bidCompletionEmail',
-      bidCompletionSMS: 'bidCompletionSMS'
+      bidResponseAll: true,
+      bidResponseEmail: true,
+      bidResponseSMS: true,
+      qAAll: true,
+      qAEmail: true,
+      qASMS: true,
+      bidCompletionAll: true,
+      bidCompletionEmail: true,
+      bidCompletionSMS: true
     };
   },
   computed:{

@@ -481,8 +481,7 @@ export default {
       this.backArrow = false;
     }
     this.user = this.$store.getters.userInfo;
-    var userss = 'sM4m4MzFky6AUCbKkKEB';
-    this.getConversations(userss);
+    this.getConversations(this.user.id);
   }
 };
 </script>
