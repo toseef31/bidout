@@ -28,11 +28,24 @@
 	  			&__slot{
 	  				width: auto;
 	  				min-height: 45px;
+	  				fieldset{
+	  					border-bottom: 1px solid;
+	  					border-color: #F1F1F1;
+	  				}
 	  			}
 	  			&__prepend-inner{
 	  				margin-top: 13px;
 	  			}
 		  	}
+	  	}
+	  	.category-list{
+	  		.v-tabs-items{
+	  			 .company-table{
+  			 	    border-width: 1px 0 0 0;
+  			 	    border-top-color: #B8B8B8;
+
+	  			 }
+	  		}
 	  	}
 		}
 	}

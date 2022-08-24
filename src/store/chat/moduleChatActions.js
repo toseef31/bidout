@@ -8,7 +8,6 @@ export default {
 		})
 	},
 	getAllConversations({commit}, payload){
-		console.log(payload,'Payload');
 		axios.get('/chat/getConversations/'+payload)
 		 .then(responce => {
 		 	commit('setConverstaionList',responce.data.conversations)
@@ -35,7 +34,6 @@ export default {
 		formData.append('sender[profilePicture]', payload.sender.profilePicture)
 		formData.append('content', payload.content)
 		formData.append('attachment', payload.attachment)
-		console.log(formData,'formData');
 		axios.post('chat/sendMessage',formData, config)
 		 .then(responce => {
 		 	commit('setNewMessages',responce.data.message)
@@ -64,7 +62,6 @@ export default {
 	supplierList({commit}, payload){
 		axios.get('/company/getSupplierCompaniesAndUsers')
 		 .then(responce => {
-		 	console.log(responce);
 		 	commit('setMembersList',responce.data)
 		})
 	},

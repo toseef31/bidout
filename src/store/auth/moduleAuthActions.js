@@ -98,6 +98,7 @@ export default {
               if(responce.status == 200){
                 localStorage.setItem("userId",payload.id);
                 commit('setUserId', payload.id);
+                commit('setCompanyName', payload.companyName);
                 router.replace({
                   name: "ModuleSelection"
                 });
@@ -116,6 +117,7 @@ export default {
                   if(responce.status == 200){
                     localStorage.setItem("userId",JSON.stringify(responce.data));
                     commit('setUserId', responce.data);
+                    commit('setCompanyName', payload.company);
                     router.replace({
                       name: "ModuleSelection"
                     });
@@ -163,6 +165,7 @@ export default {
                 if(responce.status == 200){
                   localStorage.setItem("userId",JSON.stringify(responce.data));
                   commit('setUserId', responce.data);
+                  commit('setCompanyName', payload.company);
                   router.replace({
                     name: "ModuleSelection"
                   });

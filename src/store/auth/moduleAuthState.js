@@ -12,4 +12,5 @@ export default {
     emailExists: null,
     companyError: null,
     userIp: null,
+    companyName: '',
 }

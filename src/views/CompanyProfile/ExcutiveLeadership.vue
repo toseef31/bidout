@@ -23,7 +23,7 @@
         </v-col>
         <v-col cols="12" sm="6" text="left">
           <label class="d-block text-left input-label mb-2">Profile</label>
-          <v-file-input outlined class="logo-input text-center profile-input" placeholder="Add Image" color="#0D9648"
+          <v-file-input outlined class="logo-input text-center profile-input" placeholder="Add Image" color="#0D9648" append-icon="mdi-paperclip"
             ></v-file-input>
         </v-col>
       </v-row>

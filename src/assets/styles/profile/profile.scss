@@ -78,6 +78,10 @@
 	  					}
 	  				}
 	  			}
+	  			.admin-title{
+	  				font-size: 24px;
+	  				color: #201B1B;
+	  			}
 	  			.v-input--switch{
 	  				float: right;
 	  			}
@@ -163,6 +167,10 @@
 						display: block !important;
 					}
 					.editprofile-section{
+						.admin-title{
+							font-size: 18px;
+							color: #201B1B;
+						}
 						.v-data-table{
 							thead{
 								.head-title{

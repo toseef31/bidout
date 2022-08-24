@@ -31,11 +31,11 @@
                       <v-row>
                         <v-col cols="9" sm="9" class="pt-10">
                           <label class="d-block text-left input-label">Company's Logo</label>
-                          <v-file-input outlined class="logo-input"></v-file-input>
+                          <v-file-input outlined class="logo-input" append-icon="mdi-paperclip" hide-details></v-file-input>
                         </v-col>
                         <v-col cols="3" sm="3" class="pt-10 mt-4 btn-col pl-0">
-                          <v-btn color="#0D9648" class="text-capitalize mr-2 white--text add-logo" width="48%" height="48px">Add Image</v-btn>
-                          <v-btn color="rgb(243, 35, 73, 0.1)" class="text-capitalize del-btn" width="48%" height="48px">Delete</v-btn>
+                          <v-btn color="#0D9648" class="text-capitalize mr-2 white--text add-logo" width="48%" height="56px">Add Image</v-btn>
+                          <v-btn color="rgb(243, 35, 73, 0.1)" class="text-capitalize del-btn" width="48%" height="56px">Delete</v-btn>
                         </v-col>
                       </v-row>
                     </v-container>
@@ -44,11 +44,11 @@
                       <v-row>
                         <v-col cols="12" sm="12">
                         <label class="d-block text-left input-label">Company's Name</label>
-                          <v-text-field label="Company's Name" single-line outlined></v-text-field>
+                          <v-text-field label="Company's Name" single-line outlined hide-details></v-text-field>
                         </v-col>
                         <v-col cols="12" sm="12">
                         <label class="d-block text-left input-label">Corporate Summary</label>
-                          <v-textarea outlined name="input-7-4"></v-textarea>
+                          <v-textarea outlined name="input-7-4" hide-details></v-textarea>
                         </v-col>
                       </v-row>
                     </v-container>
@@ -57,7 +57,7 @@
                         <label class="d-block text-left main-label">Services Portfolio</label>
                       <v-row>
                         <v-col cols="10" sm="10">
-                          <v-text-field placeholder="Add a service here ..." single-line outlined></v-text-field>
+                          <v-text-field placeholder="Add a service here ..." single-line outlined hide-details></v-text-field>
                         </v-col>
                         <v-col cols="2" sm="2" class="pl-0">
                         <v-btn color="#0D9648" class="text-capitalize mr-2 white--text" width="100%" height="54px">Add</v-btn>
@@ -77,7 +77,7 @@
                       <v-row>
                         <label class="d-block text-left main-label pl-3">Services Location</label>
                         <v-col cols="10" sm="10">
-                          <v-text-field placeholder="Add a location here ..." single-line outlined></v-text-field>
+                          <v-text-field placeholder="Add a location here ..." single-line outlined hide-details></v-text-field>
                         </v-col>
                         <v-col cols="2" sm="2" class="pl-0 pt-0 pb-0">
                           <v-btn color="#0D9648" class="text-capitalize mr-2 white--text" width="100%" height="54px">Add</v-btn>
@@ -143,7 +143,7 @@
                       <v-row>
                         <label class="d-block text-left main-label mb-4 pl-3">Corporate News & Press Releases</label>
                         <v-col cols="10" sm="10">
-                          <v-text-field placeholder="Add a corporate news here ..." single-line outlined v-model="corporateNews"></v-text-field>
+                          <v-text-field placeholder="Add a corporate news here ..." single-line outlined v-model="corporateNews" hide-details></v-text-field>
                         </v-col>
                         <v-col cols="2" sm="2" class="pb-0 pl-0 pt-0">
                         <v-btn color="#0D9648" class="text-capitalize mr-2 white--text" width="100%" height="54px">Add</v-btn>
@@ -168,7 +168,7 @@
                           <v-col cols="10" sm="10">
                             <v-file-input
                               outlined class="logo-input text-center profile-input" 
-                              placeholder="Add Image"   color="#0D9648"
+                              placeholder="Add Image"   color="#0D9648" hide-details
                             ></v-file-input>
                           </v-col>
                           <v-col

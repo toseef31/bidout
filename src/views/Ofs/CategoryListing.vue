@@ -60,7 +60,7 @@
                             <td>{{ company.employees }}</td>
                             <td>{{ company.fieldLocations }}</td>
                             <td>{{ company.accountContacts }}</td>
-                            <td>View Details</td>
+                            <td><router-link to="/company-profiles" class="text-decoration-none">View Details</router-link></td>
                           </tr>
                         </tbody>
                       </template>

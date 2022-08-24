@@ -15,54 +15,68 @@
                     <v-row justify="center">
                       <v-col cols="12" sm="10" md="10">
                         <v-form @submit.prevent="editForm" ref="form">
-                          <v-container>
-                            <v-row justify="center">
-                              <v-col cols="12" sm="6" text="left">
-                                <label class="d-block text-left input-label mb-2 font-weight-bold">First Name</label>
-                                <v-text-field placeholder="First Name" v-model="firstName" single-line outlined type="text" hide-details>
-                                </v-text-field>
-                              </v-col>
-                              <v-col cols="12" sm="6" text="left">
-                                <label class="d-block text-left input-label mb-2 font-weight-bold">Last Name </label>
-                                <v-text-field placeholder="Last Name" v-model="lastName" single-line outlined type="text" hide-details>
-                                </v-text-field>
-                              </v-col>
-                            </v-row>
-                            <v-row justify="center">
-                              <v-col cols="12" sm="6" text="left">
-                                <label class="d-block text-left input-label mb-2 font-weight-bold">Title </label>
-                                <v-text-field placeholder="Title" v-model="title" single-line outlined type="text" hide-details>
-                                </v-text-field>
-                              </v-col>
-                              <v-col cols="12" sm="6" text="left">
-                                <label class="d-block text-left input-label mb-2 font-weight-bold">Mobile Number </label>
-                                <VuePhoneNumberInput :border-radius="8" size="lg" v-model="mobileNumber"
-                                :translations="translations"
-                                :loader="hasLoaderActive"
-                                :error="hasErrorActive"
-                                class="mb-2"
-                                @update="onUpdate"
-                                />
-                              </v-col>
-                            </v-row>
-                            <v-row justify="center">
-                              <v-col cols="12" sm="12" text="left">
-                                <label class="d-block text-left input-label mb-2 font-weight-bold">Email Address </label>
-                                <v-text-field placeholder="Email Address  " single-line outlined type="email" v-model="email" s hide-details>
-                                </v-text-field>
-                              </v-col>
-                            </v-row>
-                            <v-row justify="center">
-                              <v-col cols="12">
-                                <v-btn color="#0D9648" type="submit" height="56" min-width="220px" class="text-capitalize white--text font-weight-bold save-btn px-9"  large>Save</v-btn>
-                              </v-col>
-                            </v-row>
-                          </v-container>
+                          <v-row justify="center">
+                            <v-col cols="12" sm="6" text="left">
+                              <label class="d-block text-left input-label mb-2 font-weight-bold">First Name</label>
+                              <v-text-field placeholder="First Name" v-model="firstName" single-line outlined type="text" hide-details>
+                              </v-text-field>
+                            </v-col>
+                            <v-col cols="12" sm="6" text="left">
+                              <label class="d-block text-left input-label mb-2 font-weight-bold">Last Name </label>
+                              <v-text-field placeholder="Last Name" v-model="lastName" single-line outlined type="text" hide-details>
+                              </v-text-field>
+                            </v-col>
+                          </v-row>
+                          <v-row justify="center">
+                            <v-col cols="12" sm="6" text="left">
+                              <label class="d-block text-left input-label mb-2 font-weight-bold">Title </label>
+                              <v-text-field placeholder="Title" v-model="title" single-line outlined type="text" hide-details>
+                              </v-text-field>
+                            </v-col>
+                            <v-col cols="12" sm="6" text="left">
+                              <label class="d-block text-left input-label mb-2 font-weight-bold">Mobile Number </label>
+                              <VuePhoneNumberInput :border-radius="8" size="lg" v-model="mobileNumber"
+                              :translations="translations"
+                              :loader="hasLoaderActive"
+                              :error="hasErrorActive"
+                              class="mb-2"
+                              @update="onUpdate"
+                              />
+                            </v-col>
+                          </v-row>
+                          <v-row justify="center">
+                            <v-col cols="12" sm="12" text="left">
+                              <label class="d-block text-left input-label mb-2 font-weight-bold">Email Address </label>
+                              <v-text-field placeholder="Email Address  " single-line outlined type="email" v-model="email" s hide-details>
+                              </v-text-field>
+                            </v-col>
+                          </v-row>
+                          <v-row justify="center">
+                            <v-col cols="12">
+                              <v-btn color="#0D9648" type="submit" height="56" min-width="220px" class="text-capitalize white--text font-weight-bold save-btn px-9"  large>Save</v-btn>
+                            </v-col>
+                          </v-row>
                         </v-form>
                       </v-col>
                     </v-row>
                     <v-divider class="my-12"></v-divider>
                     <change-password></change-password>
+                    <v-divider class="my-12"></v-divider>
+                    <v-row justify="center">
+                      <v-col cols="12" sm="10" md="10">
+                        <v-row justify="center">
+                          <v-col cols="10" sm="6">
+                            <h3 class="text-left font-weight-bold admin-title">Organization Administrators</h3>
+                          </v-col>
+                          <v-col cols="2" sm="6">
+                            <v-switch
+                              v-model="twoFactor"
+                              inset class="mr-4 mt-0 text-right" hide-details
+                            ></v-switch>
+                          </v-col>
+                        </v-row>
+                      </v-col>
+                    </v-row>
                     <v-divider class="my-12"></v-divider>
                     <notifications></notifications>
                     <v-divider class="my-12"></v-divider>
@@ -167,8 +181,6 @@ export default {
       mobileNumber: this.$store.getters.userInfo.phone,
       email: this.$store.getters.userInfo.email,
       defaultCountry: 'US',
-      // countriesList: ['US', 'BE', 'DE'],
-      // countriesIgnored: ['AF', 'AD', 'AL'],
       translations: {
         countrySelectorLabel: 'Country Code',
         countrySelectorError: 'Choose country',
@@ -178,6 +190,7 @@ export default {
       hasLoaderActive: false,
       hasErrorActive: false,
       results: {},
+      twoFactor: true,
     };
   },
   computed:{
@@ -193,17 +206,15 @@ export default {
   },
   methods: {
     onUpdate (payload) {
-      this.results = payload.formattedNumber
-      console.log(this.results);
+      this.results = payload.formattedNumber;
     },
     editForm(){
       this.mobileNumber = this.results;
-      alert(this.mobileNumber);
     },
     
   },
   mounted() {
-    
+    document.title = "Edit Profile - BidOut"
   }
 };
 </script>

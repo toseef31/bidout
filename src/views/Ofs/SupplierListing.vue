@@ -7,12 +7,24 @@
       </v-col>
       <v-col class="mid-content pa-0 pa-sm-3" :class="[ showSideBar ? 'col-md-9 col-12 col-sm-7' : 'mid-content-collapse', activityPanel ? 'd-sm-block' : 'd-md-block']" v-show="!activityPanel">
         <div class="content-section fill-height">
-          <v-container>
+          <v-container class="px-sm-0">
             <v-row justify="center">
               <v-col cols="12" md="12">
                 <div class="category-list">
-                  <h1 class="text-left service-title mb-8">{{allcompanies.name}}</h1>
-                  <div class="d-flex align-center tabs-header">
+                  <div class="d-flex justify-space-between px-4">
+                    <h1 class="text-left service-title mb-8">{{allcompanies.name}}</h1>
+                    <div class="category-list__searchBox">
+                      <v-text-field
+                        v-model="searchCompany"
+                        prepend-inner-icon="search"
+                        placeholder="Search here..."
+                        single-line
+                        outlined min-height="40px" min-width="100%"
+                        hide-details
+                      ></v-text-field>
+                    </div>
+                  </div>
+                  <div class="d-flex align-center tabs-header mb-3 px-4">
                     <v-tabs
                       v-model="tab"
                       hide-slider class="service-tabs"
@@ -25,16 +37,7 @@
                         <span class="text-capitalize">{{ item }}</span>
                       </v-tab>
                     </v-tabs>
-                    <div class="category-list__searchBox">
-                      <v-text-field
-                        v-model="searchCompany"
-                        prepend-inner-icon="search"
-                        placeholder="Search here..."
-                        single-line
-                        outlined min-height="40px" min-width="100%"
-                        hide-details
-                      ></v-text-field>
-                    </div>
+                    
                   </div>
                   <v-tabs-items v-model="tab">
                     <v-tab-item
@@ -44,8 +47,8 @@
                       <v-simple-table dense class="company-table mb-12">
                         <template v-slot:default>
                           <thead>
-                            <tr class="py-4 px-8">
-                              <th class=" pl-8">Companies</th>
+                            <tr class="py-4 px-6">
+                              <th class=" pl-6">Companies</th>
                               <th>HQ Location</th>
                               <th>Employees</th>
                               <th>Field Locations</th>
@@ -58,14 +61,14 @@
                               v-for="company in allcompanies.data"
                               :key="company.objectID"
                             >
-                              <td class="pl-8">{{ company.company }} 
+                              <td class="pl-6">{{ company.company }} 
                                 
                               </td>
                               <td>{{ company.hQLocation }}</td>
                               <td>{{ company.employees }}</td>
                               <td>{{ company.fieldLocations }}</td>
                               <td>{{ company.accountContacts }}</td>
-                              <td>View Details</td>
+                              <td><router-link to="/company-profile" class="text-decoration-none">View Details</router-link></td>
                             </tr>
                           </tbody>
                         </template>

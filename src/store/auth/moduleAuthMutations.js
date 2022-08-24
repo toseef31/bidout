@@ -29,4 +29,7 @@ export default {
     setLocalIp (state, payload){
       state.userIp = payload
     },
+    setCompanyName (state, payload){
+      state.companyName = payload
+    },
 }

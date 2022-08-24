@@ -25,13 +25,13 @@
             <v-col cols="12" md="9">
               <div class="title-head text-left">
                 <h3 class="mb-4">New Account Setup:</h3>
-                <h1 class="mb-8">Tetra Technologies</h1>
+                <h1 class="mb-8">{{companyName}}</h1>
                 <h4 class="font-weight-bold">BidOut Modules</h4>
               </div>
               <v-form>
                 <div class="create-bid text-left mt-5 pa-4">
                   <div class="d-flex justify-space-between align-center mb-5 label-title">
-                    <h1 class="font-weight-bold">RFP Platform - Create Bids</h1>
+                    <h1 class="font-weight-bold">RFx Platform - Create Bids</h1>
                     <v-sheet>
                       <v-switch
                         v-model="createBid"
@@ -44,13 +44,13 @@
                     <div class="d-flex">
                       <v-icon color="#0D9647">mdi-check-circle-outline</v-icon>
                       <div class="pl-2">
-                        <p class="mb-0">Agreement Executed </p>
-                        <p class="mb-0">07/05/2022 12:52pm </p>
+                        <p class="mb-0">Execute Agreement Now</p>
+                        <p class="mb-0">{{ new Date() | moment("MM/D/YYYY h:mm a") }} </p>
                       </div>
                     </div>
                   </div>
                 </div>
-                <div class="create-bid text-left mt-5 pa-4">
+                <!-- <div class="create-bid text-left mt-5 pa-4">
                   <div class="d-flex justify-space-between align-center mb-5 label-title">
                     <h1 class="font-weight-bold">RFP Platform - Respond to Bids</h1>
                     <v-sheet>
@@ -62,11 +62,11 @@
                     </v-sheet>
                   </div>
                   <p class="font-weight-medium">Signup today as a service provider to get access to more work trhoughout BidOut Platform. By <br> enabling this module, Operators can invite your business to respond to bids.</p>
-                </div>
-                <div class="create-bid text-left mt-5 pa-4">
+                </div> -->
+                <div class="create-bid text-left mt-10 pa-4">
                   <div class="d-flex justify-space-between align-center mb-5 label-title">
-                    <h1 class="font-weight-bold">OFS Directory - Service Provider Listing </h1>
-                    <h1 class="price-text">$79/month</h1>
+                    <h1 class="font-weight-bold">Respond to Bids - OFS Directory</h1>
+                    <h1 class="price-text">$79.99/month</h1>
                     <v-sheet>
                       <v-switch
                         v-model="providerListing"
@@ -75,7 +75,7 @@
                       ></v-switch>
                     </v-sheet>
                   </div>
-                  <p class="font-weight-medium">Showcase your Service Provide to oil and gas operators to gain access to more visibility and more <br>work.</p>
+                  <p class="font-weight-medium">Respond to bid invitiations & showcase your services to oil and gas operators to gain access to <br>greater visibility.</p>
                   <div class="d-flex">
                     <v-radio-group
                       v-model="editions"
@@ -95,8 +95,8 @@
                     </v-radio-group>
                   </div>
                   <v-row>
-                    <v-col cols="12" sm="12" text="left">
-                      <label class="d-block text-left input-label mb-2 font-weight-bold">Sale Contact</label>
+                    <v-col cols="12" sm="12" text="left" v-show="editions == 'premium'">
+                      <label class="d-block text-left input-label mb-2 font-weight-bold">Sale Contacts</label>
                       <v-select outlined placeholder="Select" :items="packages"></v-select>
                     </v-col>
                   </v-row>
@@ -147,11 +147,13 @@ export default {
       bidRespond: false,
       providerListing: true,
       editions : 'premium',
-      packages: ['1-5 Staff Members - $79.99 month or $800/year', '5-10 Staff Members - $159.99 month or $1600/year', '10-15 Staff Members - $139.99 month or $2400/year'],
+      packages: ['1-5 Users - $79.99/month or $800/year prepaid', '6-10 Users - $99.99/month or $1,000/year prepaid', '11-15 Users - $119.99/month or $1,200/year prepaid','16+ Users or Unlimited - $2,400/year prepaid'],
     };
   },
   computed:{
-   
+   companyName(){
+    return this.$store.getters.companyName;
+   }
   },
   methods: {
     

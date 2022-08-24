@@ -3284,6 +3284,11 @@ vue-observe-visibility@^0.4.4:
   resolved "https://registry.yarnpkg.com/vue-observe-visibility/-/vue-observe-visibility-0.4.6.tgz#878cb8ebcf3078e40807af29774e97105ebd519e"
   integrity sha512-xo0CEVdkjSjhJoDdLSvoZoQrw/H2BlzB5jrCBKGZNXN2zdZgMuZ9BKrxXDjNP2AxlcCoKc8OahI3F3r3JGLv2Q==
 
+vue-pdf-embed@^1.1.4:
+  version "1.1.4"
+  resolved "https://registry.yarnpkg.com/vue-pdf-embed/-/vue-pdf-embed-1.1.4.tgz#80a95c313ffc4f76c14d9c90ca28c567d5469729"
+  integrity sha512-d4c7nM3LneWUiL4MssIyPHfGgVMRPh4Z7UgLsXMZ+lbAtH/6SBUFHdzZQLY2BASdh16BM/v6YCbmtQU+KIQdrg==
+
 vue-phone-number-input@^1.1.12:
   version "1.1.12"
   resolved "https://registry.yarnpkg.com/vue-phone-number-input/-/vue-phone-number-input-1.1.12.tgz#bb2c5fa453d0dbfe6d70a666f9db5fd54ce3f7df"

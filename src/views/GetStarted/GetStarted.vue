@@ -101,7 +101,14 @@
                         </v-col>
                         <v-col cols="12" sm="12" text="left">
                           <label class="d-block text-left input-label mb-2 font-weight-bold">Direct Phone Number</label>
-                          <v-text-field placeholder="(832) 786-2400" single-line outlined type="text" v-model="buyer.phoneNumber"></v-text-field>
+                          <!-- <v-text-field placeholder="(832) 786-2400" single-line outlined type="text" v-model="buyer.phoneNumber"></v-text-field> -->
+                          <VuePhoneNumberInput :border-radius="0" size="lg" v-model="buyer.phoneNumber"
+                          :translations="translations"
+                          :loader="hasLoaderActive"
+                          :error="hasErrorActive"
+                          class="mb-2"
+                          @update="onUpdate"
+                          />
                         </v-col>
                       </v-row>
                       <v-row class="mt-12 bg-light pa-3">
@@ -219,7 +226,14 @@
                         </v-col>
                         <v-col cols="12" sm="12" text="left">
                           <label class="d-block text-left input-label mb-2 font-weight-bold">Direct Phone Number</label>
-                          <v-text-field placeholder="(832) 786-2400" single-line outlined type="text" v-model="supplier.phoneNumber"></v-text-field>
+                          <!-- <v-text-field placeholder="(832) 786-2400" single-line outlined type="text" v-model="supplier.phoneNumber"></v-text-field> -->
+                          <VuePhoneNumberInput :border-radius="0" size="lg" v-model="supplier.phoneNumber"
+                          :translations="translations"
+                          :loader="hasLoaderActive"
+                          :error="hasErrorActive"
+                          class="mb-2"
+                          @update="onUpdate2"
+                          />
                         </v-col>
                       </v-row>
                       <v-row class="mt-12 bg-light pa-3">
@@ -289,12 +303,15 @@
   import NavbarBeforeLogin from '../Layout/NavbarBeforeLogin.vue'
   import Footer from '../Layout/Footer.vue'
   import _ from 'lodash';
+  import VuePhoneNumberInput from 'vue-phone-number-input';
+  import 'vue-phone-number-input/dist/vue-phone-number-input.css';
   import { mapActions } from "vuex";
 export default {
   name : "GetStarted",
   components: {
     NavbarBeforeLogin,
     Footer,
+    VuePhoneNumberInput,
   },
   
   data() {
@@ -303,17 +320,6 @@ export default {
       currentItem: '',
       items: [
         'Buyer', 'Supplier',
-      ],
-      countries: [
-        'Uninted States',
-        'United Kingdom',
-        'China',
-        'Russia',
-        'Germany',
-        'Pakistan',
-        'India',
-        'Brazil',
-        'Australia',
       ],
       supplier: {
         searchCompany: '',
@@ -350,12 +356,23 @@ export default {
       successPass1: false,
       password: '',
       confirmPassword: '',
-      region: "CA",
+      region: "TX",
       country: "US",
       hideList: false,
       list: false,
       companyInfo: true,
       emailExist: false,
+      defaultCountry: 'US',
+      translations: {
+        countrySelectorLabel: 'Country Code',
+        countrySelectorError: 'Choose country',
+        phoneNumberLabel: 'Phone Number',
+        example: 'Example'
+      },
+      hasLoaderActive: false,
+      hasErrorActive: false,
+      results: {},
+      results2: {},
     };
   },
   watch:{
@@ -412,14 +429,21 @@ export default {
   },
   methods: {
     ...mapActions(["supplierSignUpAction","searchSupplier","checkEmail","buyerSignUpAction"]),
+    onUpdate (payload) {
+      this.results = payload.formattedNumber
+    },
+    onUpdate2 (payload) {
+      this.results2 = payload.formattedNumber
+    },
     registerRequest() {
       if(this.companyId){
         var supplierData = {
           id: this.companyId,
+          companyName: this.company,
           firstName: this.supplier.firstName,
           lastName: this.supplier.lastName,
           email: this.email,
-          phoneNumber: this.supplier.phoneNumber,
+          phoneNumber: this.results2,
           title: this.supplier.title,
           password: this.password
         }
@@ -435,7 +459,7 @@ export default {
           firstName: this.supplier.firstName,
           lastName: this.supplier.lastName,
           email: this.email,
-          phoneNumber: this.supplier.phoneNumber,
+          phoneNumber: this.results2,
           title: this.supplier.title,
           password: this.password
         }
@@ -443,7 +467,6 @@ export default {
       this.supplierSignUpAction(supplierData);
     },
     buyerRequest() {
-      // alert('ffff');
       var buyerData = {
         company: this.buyer.companyName,
         companyHq: this.buyer.companyHq,
@@ -455,7 +478,7 @@ export default {
         firstName: this.buyer.firstName,
         lastName: this.buyer.lastName,
         email: this.email,
-        phoneNumber: this.buyer.phoneNumber,
+        phoneNumber: this.results,
         title: this.buyer.title,
         password: this.password
       }
