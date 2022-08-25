@@ -485,7 +485,9 @@ export default {
       this.buyerSignUpAction(buyerData);
     },
     getSupplierList(){
-      this.searchSupplier(this.company);
+      if(this.company.length > 2){
+        this.searchSupplier(this.company);
+      }
     },
     emailCheck(){
       this.checkEmail(this.email);

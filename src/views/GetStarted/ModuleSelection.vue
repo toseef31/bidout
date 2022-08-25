@@ -66,7 +66,7 @@
                 <div class="create-bid text-left mt-10 pa-4">
                   <div class="d-flex justify-space-between align-center mb-5 label-title">
                     <h1 class="font-weight-bold">Respond to Bids - OFS Directory</h1>
-                    <h1 class="price-text">$79.99/month</h1>
+                    <h1 class="price-text"><span v-if="editions == 'standard'">Free</span><span v-else>$79.99/month</span></h1>
                     <v-sheet>
                       <v-switch
                         v-model="providerListing"
@@ -97,7 +97,7 @@
                   <v-row>
                     <v-col cols="12" sm="12" text="left" v-show="editions == 'premium'">
                       <label class="d-block text-left input-label mb-2 font-weight-bold">Sale Contacts</label>
-                      <v-select outlined placeholder="Select" :items="packages"></v-select>
+                      <v-select outlined placeholder="Select" v-model="package" :items="packages" item-text="name"></v-select>
                     </v-col>
                   </v-row>
                   <v-row>
@@ -147,7 +147,13 @@ export default {
       bidRespond: false,
       providerListing: true,
       editions : 'premium',
-      packages: ['1-5 Users - $79.99/month or $800/year prepaid', '6-10 Users - $99.99/month or $1,000/year prepaid', '11-15 Users - $119.99/month or $1,200/year prepaid','16+ Users or Unlimited - $2,400/year prepaid'],
+      package: { name: '1-5 Users - $79.99/month or $800/year prepaid'},
+      packages: [
+        { name: '1-5 Users - $79.99/month or $800/year prepaid'},
+        { name: '6-10 Users - $99.99/month or $1,000/year prepaid'},
+        { name: '11-15 Users - $119.99/month or $1,200/year prepaid'},
+        { name: '16+ Users or Unlimited - $2,400/year prepaid', abbr: 'CA' },
+      ],
     };
   },
   computed:{

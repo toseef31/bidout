@@ -29,13 +29,45 @@
                     <hr>
                     <v-container class="pa-sm-10 pa-4">
                       <v-row>
-                        <v-col cols="9" sm="9" class="pt-10">
+                        <v-col cols="8" sm="6" class="pt-10 text-left">
                           <label class="d-block text-left input-label">Company's Logo</label>
-                          <v-file-input outlined class="logo-input" append-icon="mdi-paperclip" hide-details></v-file-input>
+                          
+                          <v-dialog
+                            v-model="dialog"
+                            width="700"
+                          >
+                            <v-card>
+                              <v-card-title class="text-h5">
+                                Crop Image
+                              </v-card-title>
+                              <v-card-text>
+                                <vue-croppie ref="croppieRef" :enableOrientation="true" :boundary="{ width: 500, height: 350}" :viewport="{ width:365, height:90, 'type':'square' }">
+                                </vue-croppie>
+                              </v-card-text>
+
+                              <v-divider></v-divider>
+
+                              <v-card-actions>
+                                <v-spacer></v-spacer>
+                                <v-btn
+                                  color="#0D9648"
+                                  rounded
+                                  @click="crop"
+                                  class="px-7 white--text text-capitalize"
+                                >
+                                  Crop
+                                </v-btn>
+                              </v-card-actions>
+                            </v-card>
+                          </v-dialog>
+                          <!-- the result -->
+                          <img :src="cropped">
                         </v-col>
-                        <v-col cols="3" sm="3" class="pt-10 mt-4 btn-col pl-0">
-                          <v-btn color="#0D9648" class="text-capitalize mr-2 white--text add-logo" width="48%" height="56px">Add Image</v-btn>
-                          <v-btn color="rgb(243, 35, 73, 0.1)" class="text-capitalize del-btn" width="48%" height="56px">Delete</v-btn>
+                        <v-col cols="4" sm="6" class="pt-10 mt-4 btn-col pl-0 d-flex align-center">
+                          <label for="logo-input" class="text-capitalize mr-2 white--text add-logo d-flex align-center font-weight-bold">Add Image
+                            <input type="file" accept="image/*" class="logo-input d-none" id="logo-input" @change="croppie($event)">
+                          </label>
+                          <v-btn color="rgb(243, 35, 73, 0.1)" class="text-capitalize del-btn" width="48%" height="56px" @click="deleteLogo">Delete</v-btn>
                         </v-col>
                       </v-row>
                     </v-container>
@@ -57,7 +89,21 @@
                         <label class="d-block text-left main-label">Services Portfolio</label>
                       <v-row>
                         <v-col cols="10" sm="10">
-                          <v-text-field placeholder="Add a service here ..." single-line outlined hide-details></v-text-field>
+                          <!-- <v-text-field placeholder="Add a service here ..." single-line outlined hide-details ></v-text-field> -->
+                          <v-autocomplete
+                            v-model="services"
+                            :items="allcategories"
+                            item-value="id" item-text="name"
+                            chips
+                            outlined
+                            full-width
+                            hide-details
+                            hide-no-data
+                            hide-selected
+                            multiple
+                            single-line
+                            deletable-chips
+                          ></v-autocomplete>
                         </v-col>
                         <v-col cols="2" sm="2" class="pl-0">
                         <v-btn color="#0D9648" class="text-capitalize mr-2 white--text" width="100%" height="54px">Add</v-btn>
@@ -166,21 +212,23 @@
                         <label class="d-block text-left main-label mb-4">Subsidaries</label>
                         <v-row>
                           <v-col cols="10" sm="10">
-                            <v-file-input
-                              outlined class="logo-input text-center profile-input" 
-                              placeholder="Add Image"   color="#0D9648" hide-details
-                            ></v-file-input>
+                            <label for="subs-img">
+                              <v-file-input
+                                outlined class="logo-input text-center profile-input" 
+                                placeholder="Add Image" id="subs-img"  color="#0D9648" hide-details
+                              ></v-file-input>
+                            </label>
                           </v-col>
                           <v-col
                             cols="2" sm="2" class="pb-0 pt-0 pl-0">
                           <v-btn color="#0D9648" class="text-capitalize mr-2 white--text" width="100%" height="54px">Add</v-btn>
                           </v-col>
                         </v-row>
-                        <v-row align="center" justify="space-between" class="news-list">
-                          <v-col cols="6" sm="4" text="left" v-for="subs in subsidaries">
+                        <v-row align="center" justify="space-between" class="news-list white">
+                          <v-col cols="6" sm="3" text="left" v-for="(subs, i) in subsidaries" :key="i">
                             <div class="subsid-list">
                               <v-btn absolute left top  color="#F32349" outlined small min-width="32px" height="32px" class="pa-0"><v-icon>mdi-trash-can-outline</v-icon></v-btn>
-                              <v-img :src="require('@/assets/images/profile/demo1.png')"></v-img>
+                              <v-img :src="require('@/assets/images/ofs/company/subs-1.png')"></v-img>
                             </div>
                           </v-col>
                         </v-row>
@@ -205,7 +253,8 @@
   import ESGComponent from './CompanyProfile/ESGComponent.vue'
   import KeyFacts from './CompanyProfile/KeyFacts.vue'
   import ExcutiveLeadership from './CompanyProfile/ExcutiveLeadership.vue'
-  import axios from 'axios'
+  import _ from 'lodash';
+  import { mapActions } from "vuex"
 export default {
   name : "CompanyProfile",
   components: {
@@ -214,7 +263,7 @@ export default {
     RightSidebar,
     ESGComponent,
     KeyFacts,
-    ExcutiveLeadership
+    ExcutiveLeadership,
   },
   
   data() {
@@ -226,9 +275,9 @@ export default {
       fileName: '',
       fileExt: '',
       corporateNews:'',
-      
+      services: '',
       subsidaries: [
-        { image: '' },{ image: '' },{ image: '' },{ image: '' },
+        { image: 'subs-1' },{ image: 'subs-2' },{ image: 'subs-3' },{ image: 'subs-4' },
       ],
       drillingService: [
         {title: 'Drilling Services'},
@@ -242,6 +291,9 @@ export default {
         {title: 'Downhole Performance Motors'},
         {title: 'Horizontal Drilling'},
       ],
+      croppieImage: '',
+      cropped: null,
+      dialog: false,
     };
   },
   computed:{
@@ -251,8 +303,20 @@ export default {
     activityPanel(){
         return this.$store.getters.g_activityPanel;
     },
+    allcategories(){
+      return this.$store.getters.categories;
+      // if(this.searchCategory){
+      //   return _.orderBy(this.$store.getters.categories.filter((category)=>{
+      //     return this.searchCategory.toLowerCase().split(' ').every(v => category.name.toLowerCase().includes(v))
+      //   }), 'orderNumber', 'asc')
+      // }else{
+        // setTimeout(() => this.loading = false, 500);
+        // return _.orderBy(this.$store.getters.categories, 'orderNumber', 'asc');
+      // }
+    },
   },
   methods: {
+     ...mapActions(["getCategories"]),
     uploadVideo() {
       this.isSelecting = true
       window.addEventListener('focus', () => {
@@ -303,9 +367,49 @@ export default {
         console.log(this.fileExt);
         this.previewDoc();
     },
+
+    croppie (e) {
+      console.log(e);
+      var files = e.target.files || e.dataTransfer.files;
+      // alert(files);
+      if (!files.length) return;
+      this.dialog = true;
+      var reader = new FileReader();
+      reader.onload = e => {
+        this.$refs.croppieRef.bind({
+          url: e.target.result
+
+        });
+      };
+
+    reader.readAsDataURL(files[0]);
+    },
+    crop() {
+      // Options can be updated.
+      // Current option will return a base64 version of the uploaded image with a size of 600px X 450px.
+      let options = {
+        type: 'base64',
+        size: { width: 370, height: 90 },
+        format: 'jpeg'
+      };
+      this.$refs.croppieRef.result(options, output => {
+        this.cropped = this.croppieImage = output;
+          console.log(this.croppieImage);
+          this.dialog = false;
+        });
+      },
+
+      getAllCategories(){
+        this.getCategories();
+        
+      },
+      deleteLogo(){
+        this.cropped == null;
+      }
   },
   mounted() {
     document.title = "Company Profile - BidOut";
+    this.getCategories();
   }
 };
 </script>

@@ -39,10 +39,10 @@ export default {
         commit('setError', null)
         // console.log(result);
         localStorage.removeItem("userData");
-        localStorage.removeItem("userId");
+        // localStorage.removeItem("userId");
         localStorage.removeItem("token");
         router.replace({
-          name: "Login"
+          name: "OFSHome"
         });
       })
       .catch((error) => {
@@ -96,7 +96,7 @@ export default {
             axios.post('/ofs/queueSupplierUser',{'id': payload.id, 'email': payload.email, 'firstName': payload.firstName, 'lastName': payload.lastName,'phoneNumber':payload.phoneNumber, 'title': payload.title, 'password': payload.password})
              .then(responce => {
               if(responce.status == 200){
-                localStorage.setItem("userId",payload.id);
+                // localStorage.setItem("userId",payload.id);
                 commit('setUserId', payload.id);
                 commit('setCompanyName', payload.companyName);
                 router.replace({
@@ -115,7 +115,7 @@ export default {
                 axios.post('/ofs/createUser',{'company': payload.company,'firstName': payload.firstName, 'lastName': payload.lastName,'email': payload.email,'phoneNumber':payload.phoneNumber, 'title': payload.title, 'password': payload.password})
                  .then(responce => {
                   if(responce.status == 200){
-                    localStorage.setItem("userId",JSON.stringify(responce.data));
+                    // localStorage.setItem("userId",JSON.stringify(responce.data));
                     commit('setUserId', responce.data);
                     commit('setCompanyName', payload.company);
                     router.replace({
@@ -163,7 +163,7 @@ export default {
               axios.post('/ofs/createUser',{'company': payload.company,'firstName': payload.firstName, 'lastName': payload.lastName,'email': payload.email,'phoneNumber':payload.phoneNumber, 'title': payload.title, 'password': payload.password})
                .then(responce => {
                 if(responce.status == 200){
-                  localStorage.setItem("userId",JSON.stringify(responce.data));
+                  // localStorage.setItem("userId",JSON.stringify(responce.data));
                   commit('setUserId', responce.data);
                   commit('setCompanyName', payload.company);
                   router.replace({

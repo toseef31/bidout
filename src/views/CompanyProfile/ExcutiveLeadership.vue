@@ -1,5 +1,5 @@
 <template>
-  <v-form>
+  <v-form class="excutive-form">
     <v-container class="pa-sm-10 pa-4">
       <v-row>
         <v-col cols="12" sm="12">
@@ -19,12 +19,43 @@
       <v-row>
         <v-col cols="12" sm="6" text="left">
           <label class="d-block text-left input-label mb-2">LinkedIn Profile</label>
-          <v-text-field placeholder="Paste link here ..." single-line outlined></v-text-field>
+          <v-text-field placeholder="Paste link here ..." single-line outlined hide-details></v-text-field>
         </v-col>
         <v-col cols="12" sm="6" text="left">
           <label class="d-block text-left input-label mb-2">Profile</label>
-          <v-file-input outlined class="logo-input text-center profile-input" placeholder="Add Image" color="#0D9648" append-icon="mdi-paperclip"
-            ></v-file-input>
+          <label class="profile-input font-weight-bold" for="profile-input">
+          <input type="file" id="profile-input" accept="image/*" class="d-none"  @change="cropProfile($event)">
+          Add Image</label>
+          <v-dialog
+            v-model="dialogProfile"
+            width="700"
+          >
+            <v-card>
+              <v-card-title class="text-h5">
+                Crop Image
+              </v-card-title>
+              <v-card-text>
+                <vue-croppie ref="croppieRefProfile" :enableOrientation="true" :boundary="{ width: 400, height: 250}" :viewport="{ width:175, height:175, 'type':'square' }">
+                </vue-croppie>
+              </v-card-text>
+
+              <v-divider></v-divider>
+
+              <v-card-actions>
+                <v-spacer></v-spacer>
+                <v-btn
+                  color="#0D9648"
+                  rounded
+                  @click="cropImage"
+                  class="px-7 white--text"
+                >
+                  Crop
+                </v-btn>
+              </v-card-actions>
+            </v-card>
+          </v-dialog>
+          <!-- the result -->
+          <!-- <img :src="croppedProfile"> -->
         </v-col>
       </v-row>
       <v-row>
@@ -33,9 +64,10 @@
         </v-col>
       </v-row>
       <div class="service-list text-left mt-10">
+        <img :src="croppedProfile" v-if="croppedProfile">
         <div class="profile-list" v-for="excutive in excutiveLeadership">
-          <v-icon color="#F32349">mdi-trash-can-outline</v-icon>
-          <v-img :src="require('@/assets/images/profile/demo.png')" width="100"></v-img>
+          <v-icon color="#F32349" class="pa-1 white">mdi-trash-can-outline</v-icon>
+          <v-img :src="require('@/assets/images/ofs/company/leader-1.png')" width="173"></v-img>
           <h6>{{excutive.name}}</h6>
           <p>{{excutive.designation}}</p>
           <v-icon color="#013D3A">mdi-linkedin</v-icon>
@@ -50,18 +82,49 @@ export default {
   data() {
     return {
       excutiveLeadership: [
-        { name: 'William A. (Andy) Hendricks, Jr.',designation: 'President and CEO',},
-        { name: 'William A. (Andy) Hendricks, Jr.',designation: 'President and CEO',},
-        { name: 'William A. (Andy) Hendricks, Jr.', designation: 'President and CEO',},
-        { name: 'William A. (Andy) Hendricks, Jr.',designation: 'President and CEO',},
+        { name: 'William A. (Andy) Hendricks, Jr.',designation: 'President and CEO',image: 'leader-1.png'},
+        { name: 'William A. (Andy) Hendricks, Jr.',designation: 'President and CEO',image: 'leader-2.png'},
+        { name: 'William A. (Andy) Hendricks, Jr.', designation: 'President and CEO',image: 'leader-3.png'},
+        { name: 'William A. (Andy) Hendricks, Jr.',designation: 'President and CEO',image: 'leader-4.png'},
       ],
+      croppieProfile: '',
+      croppedProfile: null,
+      dialogProfile: false,
     };
   },
   computed:{
     
   },
   methods: {
-    
+    cropProfile (e) {
+      console.log(e);
+      var files = e.target.files || e.dataTransfer.files;
+      // alert(files);
+      if (!files.length) return;
+      this.dialogProfile = true;
+      var reader = new FileReader();
+      reader.onload = e => {
+        this.$refs.croppieRefProfile.bind({
+          url: e.target.result
+
+        });
+      };
+
+    reader.readAsDataURL(files[0]);
+    },
+    cropImage() {
+      
+      let options = {
+        type: 'base64',
+        size: { width: 175, height: 175 },
+        format: 'jpeg'
+      };
+      this.$refs.croppieRefProfile.result(options, output => {
+        this.croppedProfile = this.croppieProfile = output;
+          console.log(this.croppieProfile);
+          this.dialogProfile = false;
+        });
+    }
   },
   mounted() {
     
