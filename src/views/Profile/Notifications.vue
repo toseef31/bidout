@@ -8,7 +8,7 @@
 	            <th class="text-left head-title">
 	              Notification Settings
 	            </th>
-	            <th class="text-right black--text">
+	            <th class="text-right black--text pr-6">
 	              All
 	            </th>
 	            <th class="text-right black--text">
@@ -21,7 +21,7 @@
 	        </thead>
 	        <tbody>
 	          <tr>
-	            <td class="text-left">Bid Response (None)</td>
+	            <td class="text-left">Bid Response</td>
 	            <td class="text-right">
 	              <v-checkbox
 	                v-model="bidResponseAll"

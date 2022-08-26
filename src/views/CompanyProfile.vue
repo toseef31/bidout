@@ -41,7 +41,7 @@
                                 Crop Image
                               </v-card-title>
                               <v-card-text>
-                                <vue-croppie ref="croppieRef" :enableOrientation="true" :boundary="{ width: 500, height: 350}" :viewport="{ width:365, height:90, 'type':'square' }">
+                                <vue-croppie ref="croppieRef" :enableOrientation="true" :boundary="{ width: 500, height: 350}" :viewport="{ width:365, height:90, 'type':'circle' }">
                                 </vue-croppie>
                               </v-card-text>
 

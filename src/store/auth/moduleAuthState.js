@@ -13,4 +13,5 @@ export default {
     companyError: null,
     userIp: null,
     companyName: '',
+    verifyData: {},
 }

@@ -5,16 +5,18 @@
 	    <div size="120" class="user">
       	<v-img :src="image_name" class="profile-img"></v-img>
         <v-icon class="icon white--text" @click="$refs.FileInput.click()">mdi-upload</v-icon>
-        <input ref="FileInput" type="file" style="display: none;" @change="onFileSelect" />
+        <input ref="FileInput" type="file" style="display: none;" @change="croppie($event)" />
       </div>
       <v-dialog v-model="dialog" width="500">
         <v-card class="px-0">
           <v-card-text class="px-0 pb-0">
-            <VueCropper v-show="selectedFile" ref="cropper" :src="selectedFile" alt="Source Image"></VueCropper>
+            <vue-croppie ref="croppieRef" :enableOrientation="true" :boundary="{ width: 500, height: 350}" :viewport="{ width:112, height:112, 'type':'circle' }">
+            </vue-croppie>
+            <!-- <VueCropper v-show="selectedFile" ref="cropper" :src="selectedFile" alt="Source Image" :scalable="false" :cropBoxResizable="false" :rounded="true"></VueCropper> -->
           </v-card-text>
           <v-card-actions class="justify-end">
             <v-btn color="#0D9648" rounded class="text-capitalize" width="100px" text @click="dialog = false">Cancel</v-btn>
-            <v-btn color="#0D9648" class="white--text text-capitalize" width="100px" rounded @click="saveImage(), (dialog = false)">Crop</v-btn>
+            <v-btn color="#0D9648" class="white--text text-capitalize" width="100px" rounded @click="crop()">Crop</v-btn>
           </v-card-actions>
         </v-card>
       </v-dialog>
@@ -48,6 +50,9 @@ export default {
       dialog: false,
       files: '',
       image_name: '',
+      croppieImage: '',
+      cropped: null,
+      dialog: false,
     };
   },
   computed:{
@@ -82,13 +87,43 @@ export default {
         const reader = new FileReader()
         reader.onload = (event) => {
           this.selectedFile = event.target.result
-          this.$refs.cropper.replace(this.selectedFile)
+          this.$refs.croppieRef.replace(this.selectedFile)
         }
         reader.readAsDataURL(file)
       } else {
         alert('Sorry, FileReader API not supported')
       }
     },
+    croppie (e) {
+      console.log(e);
+      var files = e.target.files || e.dataTransfer.files;
+      // alert(files);
+      if (!files.length) return;
+      this.dialog = true;
+      var reader = new FileReader();
+      reader.onload = e => {
+        this.$refs.croppieRef.bind({
+          url: e.target.result
+
+        });
+      };
+
+    reader.readAsDataURL(files[0]);
+    },
+    crop() {
+      // Options can be updated.
+      // Current option will return a base64 version of the uploaded image with a size of 600px X 450px.
+      let options = {
+        type: 'base64',
+        size: { width: 112, height: 112 },
+        format: 'jpeg'
+      };
+      this.$refs.croppieRef.result(options, output => {
+        this.image_name = this.croppieImage = output;
+          console.log(this.croppieImage);
+          this.dialog = false;
+        });
+      },
   },
   mounted() {
     

@@ -9,17 +9,17 @@
       <v-row>
         <v-col cols="12" sm="6" text="left">
           <label class="d-block text-left input-label mb-2">Executive's name</label>
-          <v-text-field placeholder="Full name ..." single-line outlined></v-text-field>
+          <v-text-field placeholder="Full name ..." v-model="excutiveName" single-line outlined></v-text-field>
         </v-col>
         <v-col cols="12" sm="6" text="left">
           <label class="d-block text-left input-label mb-2">Role</label>
-          <v-text-field placeholder="Role ..." single-line outlined></v-text-field>
+          <v-text-field placeholder="Role ..." v-model="excutiveRole" single-line outlined></v-text-field>
         </v-col>
       </v-row>
       <v-row>
         <v-col cols="12" sm="6" text="left">
           <label class="d-block text-left input-label mb-2">LinkedIn Profile</label>
-          <v-text-field placeholder="Paste link here ..." single-line outlined hide-details></v-text-field>
+          <v-text-field placeholder="Paste link here ..." v-model="linkdinProfile" single-line outlined hide-details></v-text-field>
         </v-col>
         <v-col cols="12" sm="6" text="left">
           <label class="d-block text-left input-label mb-2">Profile</label>
@@ -64,7 +64,13 @@
         </v-col>
       </v-row>
       <div class="service-list text-left mt-10">
-        <img :src="croppedProfile" v-if="croppedProfile">
+        <div class="profile-list" v-if="croppedProfile">
+          <v-icon color="#F32349" class="pa-1 white">mdi-trash-can-outline</v-icon>
+          <v-img :src="croppedProfile" width="173"></v-img>
+          <h6>{{excutiveName}}</h6>
+          <p>{{excutiveRole}}</p>
+          <v-icon color="#013D3A">mdi-linkedin</v-icon>
+        </div>
         <div class="profile-list" v-for="excutive in excutiveLeadership">
           <v-icon color="#F32349" class="pa-1 white">mdi-trash-can-outline</v-icon>
           <v-img :src="require('@/assets/images/ofs/company/leader-1.png')" width="173"></v-img>

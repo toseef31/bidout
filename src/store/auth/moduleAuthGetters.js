@@ -32,4 +32,7 @@ export default {
     companyName (state){
        return state.companyName
     },
+    verifyData (state){
+       return state.verifyData
+    },
 }

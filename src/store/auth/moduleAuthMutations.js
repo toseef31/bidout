@@ -32,4 +32,7 @@ export default {
     setCompanyName (state, payload){
       state.companyName = payload
     },
+    setVerifyData (state, payload){
+      state.verifyData = payload
+    },
 }

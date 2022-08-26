@@ -56,16 +56,33 @@ export default {
     axios.post('/auth/sendPasswordResetEmail',{'email': payload.email})
      .then(responce => {
       if(responce.status == 200){
-        commit('setEmailSuccess', 'Email sent successfully! Please check your email')
+        commit('setEmailSuccess', 'Email sent successfully! Please check your email');
       }
       else{
         commit('setEmailError', 'Something wrong please try again')
       }
     })
   },
-
+  verifyToken({commit}, payload){
+    axios.get('/auth/verifyPasswordResetToken/'+payload)
+     .then(responce => {
+      commit('setVerifyData',responce.data)
+    })
+  },
+  resetPassword({commit}, payload){
+    console.log(payload,'reset password');
+    axios.post('/auth/updatePassword',{'email': payload.email, 'oobCode': payload.oobCode, 'password': payload.password})
+     .then(responce => {
+      if(responce.status == 200){
+        commit('setEmailSuccess', 'Password reset successfully!');
+        commit('setVerifyData', {})
+      }
+      else{
+        commit('setEmailError', 'Something wrong please try again')
+      }
+    })
+  },
   checkEmail({ commit }, payload) {
-    // console.log(payload);
     // Try to sigin
     if(payload.indexOf('@') != -1){
       axios.post('/user/checkIfUserWithEmailExists',{'email': payload})

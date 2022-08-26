@@ -29,7 +29,7 @@
               <v-tabs
                 v-model="currentItem" class="bids-tabs"
                 fixed-tabs
-                hide-slider
+                hide-slider mobile-breakpoint="767px"
               >
                 <v-tab
                   v-for="(item, index) in tabs"

@@ -3,7 +3,7 @@
     <v-col cols="12" sm="10" md="10">
       <v-row justify="start" class="mb-8">
         <v-col cols="12" sm="12" text="left">
-          <h2 class="text-left pl-3">Change Password</h2>
+          <h2 class="text-left">Change Password</h2>
         </v-col>
       </v-row>
       <v-form @submit.prevent="passwordForm" ref="form" v-model="valid">

@@ -66,7 +66,7 @@
                       <v-col cols="12" sm="10" md="10">
                         <v-row justify="center">
                           <v-col cols="10" sm="6">
-                            <h3 class="text-left font-weight-bold admin-title">Organization Administrators</h3>
+                            <h3 class="text-left font-weight-bold admin-title">Two Factor Authentication</h3>
                           </v-col>
                           <v-col cols="2" sm="6">
                             <v-switch
@@ -82,12 +82,17 @@
                     <v-divider class="my-12"></v-divider>
                     <v-row justify="center">
                       <v-col cols="12" sm="10" md="10">
+                        <v-row justify="start" class="mb-4">
+                          <v-col cols="12" sm="12" text="left">
+                            <h2 class="text-left pl-3">Organization Administrators</h2>
+                          </v-col>
+                        </v-row>
                         <v-simple-table>
                           <template v-slot:default>
                             <thead>
                               <tr>
-                                <th class="text-left head-title">
-                                  Organization Administrators
+                                <th class="text-left black--text">
+                                  Name
                                 </th>
                                 <th class="text-left black--text">
                                   Email Address

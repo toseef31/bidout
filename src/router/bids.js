@@ -6,6 +6,18 @@ const routes = [
     component: Base,
     children: [
       {
+        path: '/view-bids',
+        name: 'ViewBids',
+        component: () => import('@/views/Bids/ViewBids.vue'),
+        beforeEnter: (to, from, next) => {
+          if(localStorage.getItem("userData") == null) {
+              next('/login');
+          } else {
+              next();
+          }
+        }
+      },
+      {
         path: '/create-bid',
         name: 'CreateBid',
         component: () => import('@/views/Bids/CreateBid.vue'),
