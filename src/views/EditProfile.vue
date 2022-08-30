@@ -166,6 +166,7 @@
   import Notifications from './Profile/Notifications.vue'
   import VuePhoneNumberInput from 'vue-phone-number-input';
   import 'vue-phone-number-input/dist/vue-phone-number-input.css';
+  import { mapActions } from "vuex";
 export default {
   name : "EditProfile",
   components: {
@@ -210,11 +211,21 @@ export default {
     },
   },
   methods: {
+    ...mapActions(["updateUser"]),
     onUpdate (payload) {
       this.results = payload.formattedNumber;
     },
     editForm(){
       this.mobileNumber = this.results;
+      var user = {
+        firstName: this.firstName,
+        lastName: this.lastName,
+        email: this.email,
+        phoneNumber: this.mobileNumber,
+        title: this.title,
+        userid: this.$store.getters.userInfo.id
+      }
+      this.updateUser(user);
     },
     
   },

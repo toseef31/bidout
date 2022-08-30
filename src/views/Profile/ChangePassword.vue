@@ -6,7 +6,7 @@
           <h2 class="text-left">Change Password</h2>
         </v-col>
       </v-row>
-      <v-form @submit.prevent="passwordForm" ref="form" v-model="valid">
+      <v-form @submit.prevent="passwordForm" ref="passForm" v-model="valid">
         <v-row justify="center">
           <v-col cols="12" sm="12" text="left">
             <label class="d-block text-left input-label mb-2 font-weight-bold">Current Password</label>
@@ -54,7 +54,7 @@
         </v-row>
         <v-row justify="center">
           <v-col cols="12">
-            <v-btn color="#0D9648" height="56" min-width="220px" class="text-capitalize white--text font-weight-bold save-btn px-9" :disabled="!valid" large>Change Password</v-btn>
+            <v-btn color="#0D9648" type="submit" height="56" min-width="220px" class="text-capitalize white--text font-weight-bold save-btn px-9" :disabled="!valid" large>Change Password</v-btn>
           </v-col>
         </v-row>
       </v-form>
@@ -103,6 +103,7 @@ export default {
     },
   },
   methods: {
+  ...mapActions(["changePassword"]),
     required: function(value) {
       if (value) {
         return true;
@@ -124,6 +125,16 @@ export default {
         return 'Passwords does not match.';
       }
     },
+    passwordForm(){
+      console.log(this.currentPassword,'sdasdas');
+      var data = {
+        userid: this.$store.getters.userInfo.id,
+        currentPassword: this.currentPassword,
+        newPassword: this.newPassword,
+      }
+      console.log(data);
+      this.changePassword(data);
+    }
   },
   mounted() {
     

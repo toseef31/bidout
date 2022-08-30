@@ -1,5 +1,6 @@
 <template>
 	<div class="top-section d-flex my-12">
+
 	  <div class="user-info d-flex align-center">
 	    
 	    <div size="120" class="user">
@@ -49,59 +50,29 @@ export default {
       image: '',
       dialog: false,
       files: '',
-      image_name: '',
+      image_name: this.$store.getters.userInfo.image,
       croppieImage: '',
       cropped: null,
       dialog: false,
+      fileName: ''
     };
   },
   computed:{
-   userDatas(){
-       return this.$store.getters.userInfo;
-   },
+    userDatas(){
+      return this.$store.getters.userInfo;
+    },
+    userImg(){
+      return this.$store.getters.userImg;
+    }
   },
   methods: {
     ...mapActions(["updateProfileImg"]),
-    // saveImage() {
-    //   const userId = this.$route.params.user_id
-    //   this.cropedImage = this.$refs.cropper.getCroppedCanvas().toDataURL()
-    //   this.$refs.cropper.getCroppedCanvas().toBlob((blob) => {
-    //     const formData = new FormData()
-        
-    //     this.image_name = this.cropedImage;
-    //     // formData.append('profile_photo', blob, 'name.jpeg')
-    //     // axios
-    //     //   .post('/api/user/' + userId + '/profile-photo', formData)
-    //     //   .then((response) => {
-    //     //   })
-    //     //   .catch(function (error) {
-    //     //     console.log(error)
-    //     //   })
-    //   }, this.mime_type)
-    // },
-    // onFileSelect(e) {
-    //   const file = e.target.files[0]
-    //   this.mime_type = file.type
-    //   console.log(this.mime_type)
-    //   if (typeof FileReader === 'function') {
-    //     this.dialog = true
-    //     const reader = new FileReader()
-    //     reader.onload = (event) => {
-    //       this.selectedFile = event.target.result
-    //       this.$refs.croppieRef.replace(this.selectedFile)
-    //     }
-    //     reader.readAsDataURL(file)
-    //   } else {
-    //     alert('Sorry, FileReader API not supported')
-    //   }
-    // },
     croppie (e) {
       var files = e.target.files || e.dataTransfer.files;
-      // alert(files);
       if (!files.length) return;
       this.dialog = true;
       console.log(files[0].name);
-
+      this.fileName = files[0];
       var reader = new FileReader();
       reader.onload = e => {
         this.$refs.croppieRef.bind({
@@ -117,7 +88,7 @@ export default {
       // Options can be updated.
       // Current option will return a base64 version of the uploaded image with a size of 600px X 450px.
       let options = {
-        type: 'base64',
+        type: 'file',
         size: { width: 112, height: 112 },
         format: 'jpeg'
       };
@@ -126,11 +97,7 @@ export default {
           console.log(this.image_name,'image name');
           this.dialog = false;
 
-          // this.filename = "";
-          // var chat_file = this.$refs.msgFile.files;
-          // if (chat_file.length > 0) {
-          //   this.filename = chat_file[0].name;
-          // }
+          
           var data = {
             userid: this.$store.getters.userInfo.id,
             files: this.image_name,

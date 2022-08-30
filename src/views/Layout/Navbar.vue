@@ -69,6 +69,7 @@
               <v-list-item-title class="mr-3">{{userDatas.firstName}} {{userDatas.lastName}}</v-list-item-title>
               <v-avatar>
                 <v-img v-if="userDatas.image == null" :src="require('@/assets/images/user.png')"></v-img>
+                <v-img v-else :src="userDatas.image"></v-img>
               </v-avatar>
             </router-link>
           </v-list-item>
