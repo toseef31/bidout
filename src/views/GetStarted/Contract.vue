@@ -28,10 +28,15 @@
                   <h4 class="mb-2">RPF Platform - Create Bids</h4>
                   <h1 class="mb-8">Execute Contract</h1>
                 </div>
-                <div class="white text-left pa-4 font-weight-medium mb-5 contract-section">
-                  <iframe src="https://secure.na4.adobesign.com/public/esignWidget?wid=CBFCIBAA3AAABLblqZhDT0_wRVtyZBChhOqPrTIn40SxaOO8QNDZk74wgPBadN2q8qV2YwI29jLlKRjTvhic*&hosted=false" width="100%" height="100%" frameborder="0" style="border: 0; overflow: hidden; min-height: 700px; min-width: 600px;"></iframe>
-
-                </div>
+                <!-- <div class="white text-left pa-4 font-weight-medium mb-5 contract-section"> -->
+                  <!-- <iframe src="https://secure.na4.adobesign.com/public/esignWidget?wid=CBFCIBAA3AAABLblqZhDT0_wRVtyZBChhOqPrTIn40SxaOO8QNDZk74wgPBadN2q8qV2YwI29jLlKRjTvhic*&hosted=false" width="100%" height="100%" frameborder="0" style="border: 0; overflow: hidden; min-height: 700px; min-width: 600px;"></iframe> -->
+                  
+                <!-- </div> -->
+                  <vue-pdf-embed class="white text-left pa-4 font-weight-medium mb-5 contract-section"
+                      ref="pdfRef"
+                      :source="pdfSource"
+                    />
+                
                 <v-row justify="center" align="center">
                   <v-col cols="12" md="8" class="pb-1">
                     <div class="white">
@@ -59,13 +64,7 @@
                   <p class="font-weight-medium">No problem, our legal team will work directly with your legal team with the purchase of an Enterprise Licesing agreement, please reach out to our Sales Team at <strong>832-786-2400</strong> to disuss a package appropriate for you.</p>
                 </div>
               </div>
-              <vue-pdf-embed
-                ref="pdfRef"
-                :source="pdfSource"
-                :page="page"
-                @password-requested="handlePasswordRequest"
-                @rendered="handleDocumentRender"
-              />
+              
             </v-col>
           </v-row>
           <v-row justify="center">
@@ -105,7 +104,7 @@ export default {
       results: [],
       page: null,
       pageCount: 1,
-      pdfSource: '',
+      pdfSource: this.$store.getters.contractData.pdfFile,
       showAllPages: true,
     };
   },
@@ -115,6 +114,9 @@ export default {
    },
    userid(){
      return this.$store.getters.userId;
+   },
+   contractData(){
+    return this.$store.getters.contractData;
    }
   },
   methods: {
@@ -123,9 +125,12 @@ export default {
       const { isEmpty, data } = this.$refs.signaturePad.saveSignature();
       
       var agreement = {
+        contractType : this.$store.getters.contractData.contractType,
+        fileName : this.$store.getters.contractData.fileName,
         ipAddress: this.$store.getters.userIp,
         sign: data,
-        id: this.$store.getters.userId,
+        plan: 3,
+        cbUserId: this.$store.getters.userId,
       }
       this.signAgreement(agreement);
     },
@@ -139,6 +144,7 @@ export default {
   mounted() {
     document.title = "Contract - BidOut" ;
     this.getIP();  
+    console.log('contract',this.$store.getters.contractData);
   }
 };
 </script>

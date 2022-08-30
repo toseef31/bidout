@@ -35,4 +35,7 @@ export default {
     verifyData (state){
        return state.verifyData
     },
+    contractData (state){
+       return state.contractData
+    },
 }

@@ -8,6 +8,7 @@ import auth from './auth/moduleAuth';
 import dashboard from './dashboard/moduleDashboard';
 import chat from './chat/moduleChat';
 import ofs from './ofs/moduleOfs';
+import profile from './profile/moduleProfile';
 import state from './state'
 import getters from './getters'
 import mutations from './mutations'
@@ -30,5 +31,6 @@ export default new Vuex.Store({
     dashboard,
     chat,
     ofs,
+    profile
   },
 });

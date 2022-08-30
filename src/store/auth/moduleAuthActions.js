@@ -158,10 +158,12 @@ export default {
     }
     
   },
-  searchSupplier({commit}, payload){
-    axios.get('/ofs/searchSuppliers/'+payload)
+  searchSupplier({commit}){
+    console.log("dfdsfsdfs");
+    axios.get('/company/getAllSuppliersPublic/')
       .then(responce => {
-      commit('setSupplierList',responce.data.hits)
+        console.log(responce.data,'dddasd');
+      commit('setSupplierList',responce.data)
     })
   },
   // Buyer SignUp Acton
@@ -213,14 +215,30 @@ export default {
   },
 
   // signAgreement
-  signAgreement({commit}, payload){
-    // Try to store Agreement
-    axios.post('/ofs/generateContract',{'id': payload.id,'ip': payload.ipAddress,'sign': payload.sign})
+  contractGenerate({commit}, payload){
+    axios.post('/ofs/generateContract',{'id': payload.id,'ip': payload.ip,'contractType': payload.contractType, 'plan': payload.plan})
      .then(responce => {
       if(responce.status == 200){
+        localStorage.setItem('contractData', JSON.stringify(responce.data));
+        commit('setContract', responce.data)
+        router.replace({
+          name: "Contract"
+        });
+      }
+      else{
+        commit('setEmailError', 'Something wrong please try again')
+      }
+    })
+  },
+  signAgreement({commit}, payload){
+    // Try to store Agreement
+    axios.post('/ofs/signContract',{'sign': payload.sign,'contractType': payload.contractType,'fileName':payload.fileName,'plan':payload.plan,'cbUserId':payload.cbUserId})
+     .then(responce => {
+      if(responce.status == 200){
+        localStorage.removeItem('contractData');
         commit('setContract', 'Contract generated successfully!')
         router.replace({
-          name: "Payment"
+          name: "ModuleSelection"
         });
       }
       else{

@@ -95,15 +95,16 @@
                     </v-radio-group>
                   </div>
                   <v-row>
-                    <v-col cols="12" sm="12" text="left" v-show="editions == 'premium'">
+                    <v-col cols="12" sm="12" v-show="editions == 'premium'">
                       <label class="d-block text-left input-label mb-2 font-weight-bold">Sale Contacts</label>
-                      <v-select outlined placeholder="Select" v-model="package" :items="packages" item-text="name"></v-select>
+                      <v-select outlined placeholder="Select" v-model="package" :items="packages" item-text="name" item-value="id"></v-select>
+                      {{package.id}}
                     </v-col>
                   </v-row>
                   <v-row>
                     <v-col cols="12" sm="4" text="left">
-                      <router-link to="/get-started/contract"width="100%" class="font-weight-bold white--text text-capitalize text-decoration-none agreement-link pa-4">Execute Agreement Now <v-icon class="pl-2" color="#fff">mdi-arrow-right-circle</v-icon></router-link>
-                      <!-- <v-btn color="#0D9647" large dense width="100%" height="56" class="font-weight-bold white--text text-capitalize">Execute Agreement Now <v-icon class="pl-2" color="#fff">mdi-arrow-right-circle</v-icon></v-btn> -->
+                      <!-- <router-link to="/get-started/contract"width="100%" class="font-weight-bold white--text text-capitalize text-decoration-none agreement-link pa-4">Execute Agreement Now <v-icon class="pl-2" color="#fff">mdi-arrow-right-circle</v-icon></router-link> -->
+                      <v-btn color="#0D9647" large dense width="100%" height="56" class="font-weight-bold white--text text-capitalize pa-4" @click="generateContract">Execute Agreement Now <v-icon class="pl-2" color="#fff">mdi-arrow-right-circle</v-icon></v-btn>
                     </v-col>
                   </v-row>
                 </div>
@@ -134,6 +135,7 @@
 <script>
   import NavbarBeforeLogin from '../Layout/NavbarBeforeLogin.vue'
   import Footer from '../Layout/Footer.vue'
+  import { mapActions } from "vuex";
 export default {
   name : "ModuleSelection",
   components: {
@@ -147,25 +149,42 @@ export default {
       bidRespond: false,
       providerListing: true,
       editions : 'premium',
-      package: { name: '1-5 Users - $79.99/month or $800/year prepaid'},
+      package: { name: '1-5 Users - $79.99/month or $800/year prepaid', id: 0},
       packages: [
-        { name: '1-5 Users - $79.99/month or $800/year prepaid'},
-        { name: '6-10 Users - $99.99/month or $1,000/year prepaid'},
-        { name: '11-15 Users - $119.99/month or $1,200/year prepaid'},
-        { name: '16+ Users or Unlimited - $2,400/year prepaid', abbr: 'CA' },
+        { name: '1-5 Users - $79.99/month or $800/year prepaid', id: 0},
+        { name: '6-10 Users - $99.99/month or $1,000/year prepaid', id: 1},
+        { name: '11-15 Users - $119.99/month or $1,200/year prepaid', id: 2},
+        { name: '16+ Users or Unlimited - $2,400/year prepaid', id: 3},
       ],
     };
   },
   computed:{
    companyName(){
     return this.$store.getters.companyName;
+   },
+   contractData(){
+    return this.$store.getters.contractData;
    }
   },
   methods: {
+    ...mapActions(["contractGenerate","getIpAddress"]),
+    getIP(){
+      this.getIpAddress();
+    },
+    generateContract(){
+      var contract = {
+        ip: this.$store.getters.userIp,
+        contractType: 'ofs',
+        plan: 3,
+        id: this.$store.getters.userId,
+      }
+      this.contractGenerate(contract);
+    }
     
   },
   mounted() {
-     document.title = "Module Selection - BidOut" 
+    document.title = "Module Selection - BidOut" 
+    console.log('pckg',this.$store.getters.userId);
   }
 };
 </script>

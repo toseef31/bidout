@@ -61,51 +61,54 @@ export default {
    },
   },
   methods: {
-    saveImage() {
-      const userId = this.$route.params.user_id
-      this.cropedImage = this.$refs.cropper.getCroppedCanvas().toDataURL()
-      this.$refs.cropper.getCroppedCanvas().toBlob((blob) => {
-        const formData = new FormData()
+    ...mapActions(["updateProfileImg"]),
+    // saveImage() {
+    //   const userId = this.$route.params.user_id
+    //   this.cropedImage = this.$refs.cropper.getCroppedCanvas().toDataURL()
+    //   this.$refs.cropper.getCroppedCanvas().toBlob((blob) => {
+    //     const formData = new FormData()
         
-        this.image_name = this.cropedImage;
-        // formData.append('profile_photo', blob, 'name.jpeg')
-        // axios
-        //   .post('/api/user/' + userId + '/profile-photo', formData)
-        //   .then((response) => {
-        //   })
-        //   .catch(function (error) {
-        //     console.log(error)
-        //   })
-      }, this.mime_type)
-    },
-    onFileSelect(e) {
-      const file = e.target.files[0]
-      this.mime_type = file.type
-      console.log(this.mime_type)
-      if (typeof FileReader === 'function') {
-        this.dialog = true
-        const reader = new FileReader()
-        reader.onload = (event) => {
-          this.selectedFile = event.target.result
-          this.$refs.croppieRef.replace(this.selectedFile)
-        }
-        reader.readAsDataURL(file)
-      } else {
-        alert('Sorry, FileReader API not supported')
-      }
-    },
+    //     this.image_name = this.cropedImage;
+    //     // formData.append('profile_photo', blob, 'name.jpeg')
+    //     // axios
+    //     //   .post('/api/user/' + userId + '/profile-photo', formData)
+    //     //   .then((response) => {
+    //     //   })
+    //     //   .catch(function (error) {
+    //     //     console.log(error)
+    //     //   })
+    //   }, this.mime_type)
+    // },
+    // onFileSelect(e) {
+    //   const file = e.target.files[0]
+    //   this.mime_type = file.type
+    //   console.log(this.mime_type)
+    //   if (typeof FileReader === 'function') {
+    //     this.dialog = true
+    //     const reader = new FileReader()
+    //     reader.onload = (event) => {
+    //       this.selectedFile = event.target.result
+    //       this.$refs.croppieRef.replace(this.selectedFile)
+    //     }
+    //     reader.readAsDataURL(file)
+    //   } else {
+    //     alert('Sorry, FileReader API not supported')
+    //   }
+    // },
     croppie (e) {
-      console.log(e);
       var files = e.target.files || e.dataTransfer.files;
       // alert(files);
       if (!files.length) return;
       this.dialog = true;
+      console.log(files[0].name);
+
       var reader = new FileReader();
       reader.onload = e => {
         this.$refs.croppieRef.bind({
           url: e.target.result
 
         });
+
       };
 
     reader.readAsDataURL(files[0]);
@@ -120,8 +123,19 @@ export default {
       };
       this.$refs.croppieRef.result(options, output => {
         this.image_name = this.croppieImage = output;
-          console.log(this.croppieImage);
+          console.log(this.image_name,'image name');
           this.dialog = false;
+
+          // this.filename = "";
+          // var chat_file = this.$refs.msgFile.files;
+          // if (chat_file.length > 0) {
+          //   this.filename = chat_file[0].name;
+          // }
+          var data = {
+            userid: this.$store.getters.userInfo.id,
+            files: this.image_name,
+          }
+          this.updateProfileImg(data);
         });
       },
   },

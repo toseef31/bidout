@@ -7,14 +7,14 @@
        </v-col>
        <v-col class="mid-content pa-0 pa-sm-3" :class="[ showSideBar ? 'col-md-9 col-12 col-sm-7' : 'mid-content-collapse', activityPanel ? 'd-sm-block' : 'd-md-block']" v-show="!activityPanel">
           <div class="content-section fill-height">
-            <div class="title-block d-flex justify-space-between pa-6 align-center">
+            <div class="title-block d-block d-sm-flex justify-space-between pa-4 pa-sm-6 align-center">
               <div>
-                <h3 class="font-weight-bold">All Bids <font color="#B8B8B8">(6)</font></h3>
+                <h3 class="font-weight-bold text-left mb-4 mb-sm-0">All Bids <font color="#B8B8B8">(6)</font></h3>
               </div>
-              <div class="d-flex align-center">
+              <div class="d-block d-sm-flex align-center">
                 <v-tabs
-                    v-model="tab" class="bid-tab"
-                    align-with-title hide-slider centered center-active mobile-breakpoint
+                    v-model="tab" class="bid-tab mb-4 mb-sm-0"
+                     hide-slider centered center-active mobile-breakpoint
                   >
                     <v-tabs-slider color="yellow"></v-tabs-slider>
 
@@ -46,7 +46,7 @@
                   <template v-slot:default>
                     <thead>
                       <tr>
-                        <th class="text-left pl-6 black--text font-weight-bold">
+                        <th class="text-left pl-sm-6 black--text font-weight-bold">
                           Bid ID
                         </th>
                         <th class="text-left black--text font-weight-bold">
@@ -71,7 +71,7 @@
                         v-for="bid in bids"
                         :key="bid.id"
                       >
-                        <td class="text-left pl-6">{{ bid.id }}</td>
+                        <td class="text-left pl-sm-6">{{ bid.id }}</td>
                         <td class="text-left">{{ bid.title }}</td>
                         <td class="text-left">{{ bid.creator }}</td>
                         <td class="text-left">{{ bid.entries }}</td>
@@ -81,41 +81,19 @@
                     </tbody>
                   </template>
                 </v-simple-table>
-                <div class="title-block d-flex justify-space-between pa-6 align-center">
+                <div class="title-block d-flex justify-space-between px-4 px-sm-6 py-4 align-center">
                   <div>
                     <h3 class="font-weight-bold">Draft Bids <font color="#B8B8B8">(3)</font></h3>
                   </div>
                 </div>
                 <v-simple-table class="bids-table draft-table">
                   <template v-slot:default>
-                    <thead>
-                      <tr>
-                        <th class="text-left pl-6 black--text font-weight-bold">
-                          Bid ID
-                        </th>
-                        <th class="text-left black--text font-weight-bold">
-                          Title
-                        </th>
-                        <th class="text-left black--text font-weight-bold">
-                          Creator
-                        </th>
-                        <th class="text-left black--text font-weight-bold">
-                          Entries
-                        </th>
-                        <th class="text-left black--text font-weight-bold">
-                          End Time
-                        </th>
-                        <th class="text-left black--text font-weight-bold">
-                          <span class=" d-none d-sm-block">Action</span>
-                        </th>
-                      </tr>
-                    </thead>
                     <tbody>
                       <tr
                         v-for="bid in draftbids"
                         :key="bid.id"
                       >
-                        <td class="text-left pl-6">{{ bid.id }}</td>
+                        <td class="text-left pl-sm-6">{{ bid.id }}</td>
                         <td class="text-left">{{ bid.title }}</td>
                         <td class="text-left">{{ bid.creator }}</td>
                         <td class="text-left">{{ bid.entries }}</td>
@@ -133,7 +111,7 @@
                   <template v-slot:default>
                     <thead>
                       <tr>
-                        <th class="text-left pl-6 black--text font-weight-bold">
+                        <th class="text-left pl-sm-6 black--text font-weight-bold">
                           Bid ID
                         </th>
                         <th class="text-left black--text font-weight-bold">
@@ -158,7 +136,7 @@
                         v-for="bid in bids"
                         :key="bid.id"
                       >
-                        <td class="text-left pl-6">{{ bid.id }}</td>
+                        <td class="text-left pl-sm-6">{{ bid.id }}</td>
                         <td class="text-left">{{ bid.title }}</td>
                         <td class="text-left">{{ bid.creator }}</td>
                         <td class="text-left">{{ bid.entries }}</td>

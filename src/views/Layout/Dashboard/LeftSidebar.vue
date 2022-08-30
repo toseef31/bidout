@@ -142,6 +142,9 @@ export default {
     },
     getUnreadMessages() {
       this.unreadMessagesCount({'userId':this.userId});
+    },
+    getImgUrl(pic) {
+        return require('@/assets/images/'+pic)
     }
   },
   mounted() {

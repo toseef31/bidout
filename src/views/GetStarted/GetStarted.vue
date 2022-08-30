@@ -32,9 +32,9 @@
                     centered
                     hide-slider grow  height="56"
                   >
-                    <v-tab class="mr-4 text-capitalize" v-for="item in items"
-                      :key="item">
-                      {{item}}
+                    <v-tab class="mr-4 text-capitalize" v-for="tab in tabitems"
+                      :key="tab">
+                      {{tab}}
                     </v-tab>
                   </v-tabs>
                 </template>
@@ -161,11 +161,83 @@
                       <v-row class="mt-8 bg-light">
                         <v-col cols="12" sm="12" text="left" class="pa-6">
                           <label class="d-block text-left input-label mb-2 font-weight-bold">Company Name</label>
-                          <v-text-field prepend-inner-icon="search" placeholder="Company name" single-line outlined type="text" v-model="company" @keyup="getSupplierList" clearable>
-                          </v-text-field>
+                          <v-combobox
+                            v-model="companyData"
+                            :filter="filter"
+                            :hide-no-data="!search"
+                            :items="items"
+                            :search-input.sync="search"
+                            hide-selected
+                            label="Search for an option"
+                            small-chips item-value="id" item-text="company" @focus="getSupplierList"
+                            solo height="56px"
+                            hide-details flat @click="companyList(company,id)"
+                          > 
+                            <template v-slot:no-data>
+                              <v-list-item>
+                                <span class="subheading">Create</span>
+                                <v-chip
+                                  :color="`${colors[nonce - 1]} lighten-3`"
+                                  label
+                                  small
+                                >
+                                  {{ search }}
+                                </v-chip>
+                              </v-list-item>
+                            </template>
+                            <template v-slot:selection="{ attrs, item, parent, selected }">
+                              <v-chip
+                                v-if="item === Object(item)"
+                                v-bind="attrs"
+                                :input-value="selected"
+                                label
+                                small
+                              >
+                                <span class="pr-2">
+                                  {{ item.company }}
+                                </span>
+                                <v-icon
+                                  small
+                                  @click="parent.selectItem(item)"
+                                >
+                                  $delete
+                                </v-icon>
+                              </v-chip>
+                            </template>
+                            <template v-slot:item="{ index, item }">
+                              <v-text-field
+                                v-if="editing === item"
+                                v-model="editing.company"
+                                autofocus
+                                flat
+                                background-color="transparent"
+                                hide-details
+                                solo
+                                @keyup.enter="edit(index, item)"
+                              ></v-text-field>
+                              <v-chip
+                                v-else
+                                dark
+                                label
+                                small
+                              >
+                                {{ item.company }}
+                              </v-chip>
+                              <v-spacer></v-spacer>
+                              <v-list-item-action @click.stop>
+                                <v-btn
+                                  icon
+                                  @click.stop.prevent="edit(index, item)"
+                                >
+                                  <v-icon>{{ editing !== item ? 'mdi-pencil' : 'mdi-check' }}</v-icon>
+                                </v-btn>
+                              </v-list-item-action>
+                            </template>
+                          </v-combobox>
+
                           <input type="hidden" v-model="companyId">
 
-                          <v-list v-if="hideList == true" class="company-list">
+                          <!-- <v-list v-if="hideList == true" class="company-list">
                             <template v-for="(item, index) in suppliers">
                               <v-list-item
                                 :key="item.title"
@@ -175,7 +247,7 @@
                                 </v-list-item-content>
                               </v-list-item>
                             </template>
-                          </v-list>
+                          </v-list> -->
                         </v-col>
                       </v-row>
                       <v-row class="mt-12 bg-light pa-3" v-if="companyInfo">
@@ -318,7 +390,7 @@ export default {
     return {
       isActivity : false,
       currentItem: '',
-      items: [
+      tabitems: [
         'Buyer', 'Supplier',
       ],
       supplier: {
@@ -373,17 +445,49 @@ export default {
       hasErrorActive: false,
       results: {},
       results2: {},
+      companyData: '',
+      activator: null,
+      attach: null,
+      colors: ['green', 'purple', 'indigo', 'cyan', 'teal', 'orange'],
+      editing: null,
+      editingIndex: -1,
+      items: this.$store.getters.supplier,
+      nonce: 1,
+      menu: false,
+      model: '',
+      x: 0,
+      search: null,
+      y: 0,
     };
   },
   watch:{
-    company: _.debounce(function(){
-      if(this.company < 1){
-        this.hideList = false;
-        this.companyInfo = true;
-      }else{
-        this.hideList = true;
-      }
-    },500),
+    // company: _.debounce(function(){
+    //   if(this.company < 1){
+    //     this.hideList = false;
+    //     this.companyInfo = true;
+    //   }else{
+    //     this.hideList = true;
+    //   }
+    // },500),
+
+    companyData: _.debounce(function(val, prev) {
+      // if (val.length === prev.length) return
+        if(this.companyData == ''){
+          this.companyData = true;
+        }
+      this.companyData = val.map(v => {
+        if (typeof v === 'string') {
+          v = {
+            company: v,
+            color: this.colors[this.nonce - 1],
+          }
+          this.items.push(v)
+          this.nonce++
+        }
+
+        return v
+      })
+    }, 500),
   },
   computed:{
     activityPanel(){
@@ -436,6 +540,7 @@ export default {
       this.results2 = payload.formattedNumber
     },
     registerRequest() {
+      this.companyId = this.model.id;
       if(this.companyId){
         var supplierData = {
           id: this.companyId,
@@ -485,9 +590,7 @@ export default {
       this.buyerSignUpAction(buyerData);
     },
     getSupplierList(){
-      if(this.company.length > 2){
-        this.searchSupplier(this.company);
-      }
+      this.searchSupplier();
     },
     emailCheck(){
       this.checkEmail(this.email);
@@ -521,10 +624,34 @@ export default {
       setTimeout(() => this.hideList = false, 1000);
       this.hideList = false;
       this.companyInfo = false;
-    }
+    },
+    edit (index, item) {
+      if (!this.editing) {
+        this.editing = item
+        this.editingIndex = index
+      } else {
+        this.editing = null
+        this.editingIndex = -1
+      }
+    },
+    filter (item, queryCompany, itemCompany) {
+      console.log(queryCompany,'qesdd',itemCompany);
+      // if (item.header) return false
+
+      const hasValue = val => val != null ? val : ''
+      const text = hasValue(itemCompany)
+      const query = hasValue(queryCompany)
+
+      console.log(query,'sa',item,'text',text);
+      return text.toString()
+        .toLowerCase()
+        .indexOf(query.toString().toLowerCase()) > -1
+    },
+    
   },
   mounted() {
-    document.title = "Get Started - BidOut"
+    document.title = "Get Started - BidOut";
+    console.log(this.model);
   }
 };
 </script>

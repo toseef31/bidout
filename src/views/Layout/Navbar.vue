@@ -11,7 +11,7 @@
         <template>
           <router-link to="/dashboard" class="logo_main"><img
             :src="require('@/assets/images/green-black.png')"
-            class="ml-3"
+            class="ml-sm-3"
           ></router-link>
         </template>
         <template>

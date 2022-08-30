@@ -1,6 +1,11 @@
 .bids-module{
 	.mid-content{
 		.content-section{
+			.title-block{
+				h3{
+					font-size: 20px;
+				}
+			}
 			.__searchBox{
 				.v-input{
 					&__slot{
@@ -19,7 +24,7 @@
 				}
 			}
 			.bid-tab{
-				.v-tab-bar{
+				.v-tabs-bar{
 					align-items: center;
 					height: 31px;
 				}
@@ -39,7 +44,7 @@
 					tr{
 						th{
 							font-size: 16px;
-							border-bottom: thin solid #F1F1F1;
+							border-bottom: thin solid #F1F1F1 !important;
 						}
 					}
 				}
@@ -68,6 +73,45 @@
 						}
 					}
 				}
+			}
+		}
+	}
+}
+@media(max-width: 768px){
+	.bids-module{
+		.mid-content{
+			.content-section{
+				.__searchBox{
+					.v-input__slot{
+						width: 100%;
+					}
+				} 
+				.bid-tab{
+					.v-slide-group{
+						&__next{
+							display: none;
+						}
+						&__prev{
+							display: none;
+						}
+					}
+				}
+				.bids-table{
+					thead{
+						tr{
+							th{
+								font-size: 14px;
+							}	
+						}	
+					}
+					tbody{
+						tr{
+							td{
+								font-size: 14px;
+							}	
+						}	
+					}
+				}   
 			}
 		}
 	}

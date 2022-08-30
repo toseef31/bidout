@@ -35,4 +35,7 @@ export default {
     setVerifyData (state, payload){
       state.verifyData = payload
     },
+    setContract (state, payload){
+      state.contractData = payload
+    },
 }
