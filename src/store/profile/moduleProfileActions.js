@@ -44,5 +44,11 @@ export default {
      .then(responce => {
       commit('setUserImg',responce.data.messages)
     })
+  },  
+  loginHistory({commit}, payload){
+    axios.get('/user/getUserLoginHistory/'+payload.userid)
+     .then(responce => {
+      commit('setLoginHistory',responce.data)
+    })
   }, 
 }

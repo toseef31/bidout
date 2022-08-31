@@ -1,5 +1,8 @@
 export default {
-    userImg (state){
+   userImg (state){
     	return state.userImg
-    },
+   },
+   historyData (state){
+      return state.historyData
+   },
 }

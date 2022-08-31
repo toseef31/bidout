@@ -129,20 +129,10 @@
                         <v-simple-table>
                           <template v-slot:default>
                             <tbody>
-                              <tr>
-                                <td class="text-left">May 28, 2022, 3:45pm</td>
-                                <td class="text-left">San Antonio, TX - USA 108.73.11.1</td>
-                                <td class="text-right">Desktop</td>
-                              </tr>
-                              <tr>
-                                <td class="text-left">May 28, 2022, 1:11pm</td>
-                                <td class="text-left">San Antonio, TX - USA 108.73.11.1</td>
-                                <td class="text-right">Mobile</td>
-                              </tr>
-                              <tr>
-                                <td class="text-left">May 27, 2022, 9:45pm</td>
-                                <td class="text-left">San Antonio, TX - USA 108.73.11.1</td>
-                                <td class="text-right">Desktop</td>
+                              <tr v-for="history in historyData">
+                                <td class="text-left">{{history.date}}</td>
+                                <td class="text-left">{{history.location}}</td>
+                                <td class="text-right">{{history.deviceType}}</td>
                               </tr>
                             </tbody>
                           </template>
@@ -209,9 +199,12 @@ export default {
     userDatas(){
         this.firstName = this.$store.getters.userInfo.firstName;
     },
+    historyData(){
+      return this.$store.getters.historyData;
+    }
   },
   methods: {
-    ...mapActions(["updateUser"]),
+    ...mapActions(["updateUser","loginHistory"]),
     onUpdate (payload) {
       this.results = payload.formattedNumber;
     },
@@ -227,10 +220,16 @@ export default {
       }
       this.updateUser(user);
     },
-    
+    history(){
+      var user = {
+        userid: this.$store.getters.userInfo.id
+      }
+      this.loginHistory(user);
+    }
   },
   mounted() {
     document.title = "Edit Profile - BidOut"
+    this.history();
   }
 };
 </script>
