@@ -17,7 +17,7 @@
           >
             <v-list-item-icon class="mr-6 mt-3">
               <router-link :to="'/'+item.link" class="text-decoration-none">
-                <v-img :src="`src/assets/images/${item.icon}`" width="24px" height="24px"></v-img>
+                <v-img :src="`/images/${item.icon}`" width="24px" height="24px"></v-img>
                 </router-link>
             </v-list-item-icon>
 
@@ -44,7 +44,7 @@
           >
             <template v-slot:activator>
               <v-list-item-icon class="mr-6 mt-3">
-                <v-img :src="`src/assets/images/${item.action}`" width="24px" height="24px"></v-img>
+                <v-img :src="`images/${item.action}`" width="24px" height="24px"></v-img>
               </v-list-item-icon>
               <v-list-item-content  class="text-left py-1" v-show="showSideBar">
                 <v-list-item-title class="font-weight-bold" v-text="item.title"></v-list-item-title>
