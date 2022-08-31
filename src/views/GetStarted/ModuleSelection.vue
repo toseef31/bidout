@@ -66,7 +66,7 @@
                 <div class="create-bid text-left mt-10 pa-4">
                   <div class="d-flex justify-space-between align-center mb-5 label-title">
                     <h1 class="font-weight-bold">Respond to Bids - OFS Directory</h1>
-                    <h1 class="price-text"><span v-if="editions == 'standard'">Free</span><span v-else>$79.99/month</span></h1>
+                    <h1 class="price-text"><span v-if="editions == 'free'">Free</span><span v-else>$79.99/month</span></h1>
                     <v-sheet>
                       <v-switch
                         v-model="providerListing"
@@ -85,20 +85,20 @@
                       <v-radio
                         label="Standard Edition (Free)"
                         color="#0D9647"
-                        value="standard"
+                        value="free"
                       ></v-radio>
                       <v-radio
                         label="Premium Edition"
                         color="#0D9647"
-                        value="premium"
+                        value="ofs"
                       ></v-radio>
                     </v-radio-group>
                   </div>
                   <v-row>
-                    <v-col cols="12" sm="12" v-show="editions == 'premium'">
+                    <v-col cols="12" sm="12" v-show="editions == 'ofs'">
                       <label class="d-block text-left input-label mb-2 font-weight-bold">Sale Contacts</label>
                       <v-select outlined placeholder="Select" v-model="package" :items="packages" item-text="name" item-value="id"></v-select>
-                      {{package.id}}
+                      
                     </v-col>
                   </v-row>
                   <v-row>
@@ -174,11 +174,12 @@ export default {
     generateContract(){
       var contract = {
         ip: this.$store.getters.userIp,
-        contractType: 'ofs',
-        plan: 3,
+        contractType: this.editions,
+        plan: this.package,
         id: this.$store.getters.userId,
       }
-      this.contractGenerate(contract);
+      console.log(contract);
+      // this.contractGenerate(contract);
     }
     
   },

@@ -5,4 +5,7 @@ export default {
    historyData (state){
       return state.historyData
    },
+   companyAdmins (state){
+      return state.companyAdmins
+   },
 }

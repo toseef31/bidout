@@ -15,11 +15,14 @@ export default {
       },
     };
     const formData = new FormData()
-    formData.append('files[0]', payload.files)
+    formData.append('files', payload.files)
     axios.post('/user/updateProfilePicture/'+payload.userid,formData,config)
      .then(responce => {
-      console.log(responce);
-      commit('setUserImg',responce.data.messages)
+      axios.get('/user/getUserData/'+payload.email)
+       .then(responce => {
+        commit('setUser',responce.data)
+        localStorage.setItem("userData",JSON.stringify(responce.data));
+      })
     })
   },  
   updateUser({commit}, payload){
@@ -31,7 +34,11 @@ export default {
     };
     axios.post('/user/updateUser/'+payload.userid,{'email': payload.email,'firstName': payload.firstName,'lastName': payload.lastName,'phoneNumber': payload.phoneNumber,'title':payload.title},config)
      .then(responce => {
-      commit('setUserImg',responce.data.messages)
+      axios.get('/user/getUserData/'+payload.email)
+       .then(responce => {
+        commit('setUser',responce.data)
+        localStorage.setItem("userData",JSON.stringify(responce.data));
+      })
     })
   },  
   changePassword({commit}, payload){
@@ -49,6 +56,33 @@ export default {
     axios.get('/user/getUserLoginHistory/'+payload.userid)
      .then(responce => {
       commit('setLoginHistory',responce.data)
+    })
+  },  
+  adminsCompany({commit}, payload){
+    var config = {
+      headers: {
+        "Authorization": `Bearer ${JSON.parse(localStorage.getItem('token'))}`
+      },
+    };
+    axios.get('/company/getCompanyAdmins/'+payload.company,config)
+     .then(responce => {
+      commit('setCompanyAdmin',responce.data)
+    })
+  },  
+  updateNotifications({commit}, payload){
+    console.log(payload);
+    var config = {
+      headers: {
+        "Authorization": `Bearer ${JSON.parse(localStorage.getItem('token'))}`
+      },
+    };
+    axios.post('/user/updateNotificationPreference/'+payload.userid,{'notificationPreference':payload.notificationPreference},config)
+     .then(responce => {
+      axios.get('/user/getUserData/'+payload.email)
+       .then(responce => {
+        commit('setUser',responce.data)
+        localStorage.setItem("userData",JSON.stringify(responce.data));
+      })
     })
   }, 
 }

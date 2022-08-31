@@ -3,5 +3,6 @@ import store from "../../store";
 
 export default {
    userImg: null,
-   historyData: null,
+   historyData: {},
+   companyAdmins: {},
 }

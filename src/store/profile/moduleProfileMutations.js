@@ -5,4 +5,7 @@ export default {
     setLoginHistory (state, payload){
       state.historyData = payload
     },
+    setCompanyAdmin (state, payload){
+      state.companyAdmins = payload
+    },
 }

@@ -149,21 +149,22 @@ export default {
                 commit('setCompanyError', 'Please try with different Company details')
               }
             })
-           }
-            
-        }
-        
-       
+           }   
+        } 
       })
     }
     
   },
-  searchSupplier({commit}){
-    console.log("dfdsfsdfs");
-    axios.get('/company/getAllSuppliersPublic/')
+  // searchSupplier({commit}){
+  //   axios.get('/company/getAllSuppliersPublic/')
+  //     .then(responce => {
+  //     commit('setSupplierList',responce.data)
+  //   })
+  // },
+  searchSupplier({commit}, payload){
+    axios.get('/ofs/searchSuppliers/'+payload)
       .then(responce => {
-        console.log(responce.data,'dddasd');
-      commit('setSupplierList',responce.data)
+      commit('setSupplierList',responce.data.hits)
     })
   },
   // Buyer SignUp Acton

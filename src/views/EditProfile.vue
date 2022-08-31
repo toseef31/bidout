@@ -103,15 +103,10 @@
                               </tr>
                             </thead>
                             <tbody>
-                              <tr>
-                                <td class="text-left">Tyler Cherry</td>
-                                <td class="text-left">tcherry@bidout.app</td>
-                                <td class="text-left">281-782-5332</td>
-                              </tr>
-                              <tr>
-                                <td class="text-left">Jerry jones</td>
-                                <td class="text-left">jjones@bidout.app</td>
-                                <td class="text-left">932-232-5000</td>
+                              <tr v-for="admins in companyAdmins">
+                                <td class="text-left">{{admins.firstName}} {{admins.lastName}}</td>
+                                <td class="text-left">{{admins.email}}</td>
+                                <td class="text-left">{{admins.phoneNumber}}</td>
                               </tr>
                             </tbody>
                           </template>
@@ -174,7 +169,7 @@ export default {
       firstName: this.$store.getters.userInfo.firstName,
       lastName: this.$store.getters.userInfo.lastName,
       title: this.$store.getters.userInfo.title,
-      mobileNumber: this.$store.getters.userInfo.phone,
+      mobileNumber: this.$store.getters.userInfo.phoneNumber,
       email: this.$store.getters.userInfo.email,
       defaultCountry: 'US',
       translations: {
@@ -201,10 +196,13 @@ export default {
     },
     historyData(){
       return this.$store.getters.historyData;
+    },
+    companyAdmins(){
+      return this.$store.getters.companyAdmins;
     }
   },
   methods: {
-    ...mapActions(["updateUser","loginHistory"]),
+    ...mapActions(["updateUser","loginHistory","adminsCompany"]),
     onUpdate (payload) {
       this.results = payload.formattedNumber;
     },
@@ -225,11 +223,18 @@ export default {
         userid: this.$store.getters.userInfo.id
       }
       this.loginHistory(user);
+    },
+    getAdmins(){
+      var data = {
+        company: this.$store.getters.userInfo.company,
+      }
+      this.adminsCompany(data);
     }
   },
   mounted() {
     document.title = "Edit Profile - BidOut"
     this.history();
+    this.getAdmins();
   }
 };
 </script>

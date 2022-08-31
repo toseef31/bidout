@@ -4,7 +4,7 @@
 	  <div class="user-info d-flex align-center">
 	    
 	    <div size="120" class="user">
-      	<v-img :src="image_name" class="profile-img"></v-img>
+      	<v-img :src="imageSrc" class="profile-img"></v-img>
         <v-icon class="icon white--text" @click="$refs.FileInput.click()">mdi-upload</v-icon>
         <input ref="FileInput" type="file" style="display: none;" @change="croppie($event)" />
       </div>
@@ -13,7 +13,6 @@
           <v-card-text class="px-0 pb-0">
             <vue-croppie ref="croppieRef" :enableOrientation="true" :boundary="{ width: 500, height: 350}" :viewport="{ width:112, height:112, 'type':'circle' }">
             </vue-croppie>
-            <!-- <VueCropper v-show="selectedFile" ref="cropper" :src="selectedFile" alt="Source Image" :scalable="false" :cropBoxResizable="false" :rounded="true"></VueCropper> -->
           </v-card-text>
           <v-card-actions class="justify-end">
             <v-btn color="#0D9648" rounded class="text-capitalize" width="100px" text @click="dialog = false">Cancel</v-btn>
@@ -50,11 +49,13 @@ export default {
       image: '',
       dialog: false,
       files: '',
-      image_name: this.$store.getters.userInfo.image,
+      image_name: '',
       croppieImage: '',
       cropped: null,
       dialog: false,
-      fileName: ''
+      fileName: '',
+      imageSrc: this.$store.getters.userInfo.image,
+      base64data: '',
     };
   },
   computed:{
@@ -71,8 +72,8 @@ export default {
       var files = e.target.files || e.dataTransfer.files;
       if (!files.length) return;
       this.dialog = true;
-      console.log(files[0].name);
-      this.fileName = files[0];
+      console.log(files[0]);
+      this.fileName = files[0].name;
       var reader = new FileReader();
       reader.onload = e => {
         this.$refs.croppieRef.bind({
@@ -88,18 +89,24 @@ export default {
       // Options can be updated.
       // Current option will return a base64 version of the uploaded image with a size of 600px X 450px.
       let options = {
-        type: 'file',
+        type: 'blob',
         size: { width: 112, height: 112 },
-        format: 'jpeg'
+        format: 'png',
+        name: this.fileName
       };
       this.$refs.croppieRef.result(options, output => {
+        var reader = new FileReader();
+        this.base64data = reader.readAsDataURL(output); 
+        reader.onloadend = function() {
+          this.base64data = reader.result;                
+          this.imageSrc = this.base64data;
+        }
         this.image_name = this.croppieImage = output;
-          console.log(this.image_name,'image name');
-          this.dialog = false;
+        this.dialog = false;
 
-          
           var data = {
             userid: this.$store.getters.userInfo.id,
+            email: this.$store.getters.userInfo.email,
             files: this.image_name,
           }
           this.updateProfileImg(data);
