@@ -24,10 +24,10 @@ export default {
     state.archiveStatus = payload
   }, 
   setMembersList (state, payload){
-    console.log(payload);
     var data;
-    // for(data in payload){
       state.membersList = payload;
-    // }
+  }, 
+  setSuppliersUsers (state, payload){
+      state.suppliersUsers = payload;
   }, 
 }

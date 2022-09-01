@@ -34,8 +34,6 @@
 </template>
 <script>
   import { mapActions } from "vuex";
-  import VueCropper from 'vue-cropperjs'
-  import 'cropperjs/dist/cropper.css'
 export default {
 	components: {
 	  VueCropper,

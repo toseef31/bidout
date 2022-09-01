@@ -65,4 +65,20 @@ export default {
 		 	commit('setMembersList',responce.data)
 		})
 	},
+	// Supplier Users List
+	supplierUserList({commit}, payload){
+		console.log(payload);
+		axios.get('/user/searchSupplierUser/'+payload)
+		 .then(responce => {
+		 	commit('setSuppliersUsers',responce.data)
+		})
+	},
+	// Supplier Users List
+	createConversation({commit}, payload){
+		console.log(payload);
+		// axios.post('/chat/createConversation/',{})
+		//  .then(responce => {
+		//  	commit('setSuppliersUsers',responce.data)
+		// })
+	},
 }

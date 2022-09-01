@@ -22,5 +22,8 @@ export default {
   }, 
   membersList (state){
     return state.membersList
+  }, 
+  suppliersUsers (state){
+    return state.suppliersUsers
   },  
 }

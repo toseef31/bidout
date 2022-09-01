@@ -178,14 +178,14 @@ export default {
         plan: this.package,
         id: this.$store.getters.userId,
       }
-      console.log(contract);
-      // this.contractGenerate(contract);
+      // console.log(contract);
+      this.contractGenerate(contract);
     }
     
   },
   mounted() {
     document.title = "Module Selection - BidOut" 
-    console.log('pckg',this.$store.getters.userId);
+    console.log('pckg',this.$store.getters.userIp);
   }
 };
 </script>

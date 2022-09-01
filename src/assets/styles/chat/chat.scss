@@ -34,6 +34,7 @@
 			  		}
 		  		}
 		  		.add-people{
+		  			position: relative;
 			  		.icon-box{
 			  			background: #0d964814;
 					    border-radius: 4px;
@@ -46,6 +47,24 @@
 					    .v-icon{
 					    	color: #0D9648;
 					    }
+			  		}
+			  		.chat-menu-card{
+			  			position: absolute;
+	  			    right: 44px;
+	  			    top: 1px;
+	  			    z-index: 9;
+	  			    border: 2px solid #B8B8B8;
+			        border-radius: 8px 0px 8px 8px !important;
+			        z-index: 10;
+			        .v-list{
+		        		.v-btn{
+		        			color: #0d9648;
+		        			font-weight: 700;
+		        			border-radius: 0;
+		        		}
+
+			        }
+
 			  		}
 		  		}
 		  		
@@ -158,7 +177,7 @@
 	  			.v-btn{
 	  				border-radius: 4px;
 	  				box-shadow: none;
-	  				color: #0D9648;
+	  				color: #0D9648 !important;
 	  				height: 45px;
 				    width: 45px;
 	  			}
@@ -170,15 +189,19 @@
 		      border: 2px solid #B8B8B8;
 		      border-radius: 8px 0px 8px 8px !important;
 		      z-index: 10;
-		      .menu-card .v-list{
+		      .v-list{
 		        padding: 0;
-		      }
-		      .v-list-item__icon{
-		        margin-right: 10px;
-		      }
-		      .v-list-item__content{
-		        text-align: left;
-		        color: #0D1139;
+		        .v-item-group{
+			        .v-list-item{
+			        	&__title{
+	  			      	color: #0D9648;
+	  			      	font-weight: 700;
+	  			      }
+	  			      &__icon{
+	    		        margin-right: 10px;
+	    		      }
+			        }
+		        }
 		      }
 		      .manage-btn{
 		      	color: #0D1139;
@@ -277,7 +300,13 @@
 	  max-width: 95%;
 	}
 }
-
+.v-dialog{
+	.company-list{
+		border-width: 0px 1px 1px 1px;
+    border-style: solid;
+    border-color: #F1F1F1;
+	}
+}
 @media (max-width: 768px) {
 	.chat-module{
 		.mid-content {

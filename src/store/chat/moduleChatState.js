@@ -8,4 +8,5 @@ export default {
     userId: '',
     archiveStatus: null,
     membersList: [],
+    suppliersUsers: [],
 }
