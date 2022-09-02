@@ -35,9 +35,6 @@
 <script>
   import { mapActions } from "vuex";
 export default {
-	components: {
-	  VueCropper,
-	},
   data() {
     return {
       mime_type: '',
