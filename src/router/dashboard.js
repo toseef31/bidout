@@ -43,6 +43,18 @@ const routes = [
             }
         }
       },
+      {
+        path: '/ofs-supplier/:slug',
+        name: 'SupplierName',
+        component: () => import('@/views/Ofs/SupplierListing.vue'),
+         beforeEnter: (to, from, next) => {
+            if(localStorage.getItem("userData") == null) {
+                next('/login');
+            } else {
+                next();
+            }
+        }
+      },
       // { 
       //   path: "*", 
       //   component: () => import('@/views/PageNotFoundLogin.vue'),

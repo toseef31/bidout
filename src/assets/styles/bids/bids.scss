@@ -65,6 +65,21 @@
 			.draft-table{
 				tbody{
 					tr{
+						td:first-child{
+							width: 11.621%;
+						}
+						td:nth-child(2){
+							width: 23.426%;
+						}
+						td:nth-child(3){
+							width: 16.4%;
+						}
+						td:nth-child(4){
+							width: 10.06%;
+						}
+						td:nth-child(5){
+							width: 23.44%;
+						}
 						&:nth-child(odd){
 							background: #FBFBFB;
 						}

@@ -80,6 +80,10 @@
   .sidebar-bottomMenu{
     position: absolute;
     bottom: 2%;
+    width: 94%;
+    .router-link-active{
+      border-right:  4px solid #0d9648;
+    }
   }
   .sub-menu-item{
     padding-top: 20px;

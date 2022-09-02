@@ -55,7 +55,7 @@
                         <th class="text-left black--text font-weight-bold">
                           Creator
                         </th>
-                        <th class="text-left black--text font-weight-bold">
+                        <th class="text-center black--text font-weight-bold">
                           Entries
                         </th>
                         <th class="text-left black--text font-weight-bold">
@@ -74,7 +74,7 @@
                         <td class="text-left pl-sm-6">{{ bid.id }}</td>
                         <td class="text-left">{{ bid.title }}</td>
                         <td class="text-left">{{ bid.creator }}</td>
-                        <td class="text-left">{{ bid.entries }}</td>
+                        <td class="text-center">{{ bid.entries }}</td>
                         <td class="text-left">{{ bid.endTime }}</td>
                         <td class="text-left d-none d-sm-block pt-3"><a href="">View Details</a></td>
                       </tr>
@@ -89,6 +89,7 @@
                 <v-simple-table class="bids-table draft-table">
                   <template v-slot:default>
                     <tbody>
+                      
                       <tr
                         v-for="bid in draftbids"
                         :key="bid.id"
@@ -96,7 +97,7 @@
                         <td class="text-left pl-sm-6">{{ bid.id }}</td>
                         <td class="text-left">{{ bid.title }}</td>
                         <td class="text-left">{{ bid.creator }}</td>
-                        <td class="text-left">{{ bid.entries }}</td>
+                        <td class="text-center">{{ bid.entries }}</td>
                         <td class="text-left">{{ bid.endTime }}</td>
                         <td class="text-left d-none d-sm-block pt-3"><a href="">Edit Draft</a></td>
                       </tr>
@@ -177,42 +178,42 @@ export default {
       text: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.',
       bids: [
         {
-          id: 1064,
+          id: 106411,
           title: 'This is a test template',
           creator: 'Rodney Giles',
           entries: 0,
           endTime: '08/26/2022, 10:00 am',
         },
         {
-          id: 1063,
+          id: 106311,
           title: 'Sheu',
           creator: 'Baker Hughes',
           entries: 0,
           endTime: '08/26/2022, 10:00 am',
         },
         {
-          id: 1062,
+          id: 106211,
           title: 'Water Job',
           creator: 'Rodney Giles',
           entries: 0,
           endTime: '08/26/2022, 10:00 am',
         },
         {
-          id: 1061,
+          id: 106111,
           title: 'Water Job',
           creator: 'Rodney Giles',
           entries: 0,
           endTime: '08/26/2022, 10:00 am',
         },
         {
-          id: 1060,
+          id: 106011,
           title: 'Water Job',
           creator: 'Rodney Giles',
           entries: 0,
           endTime: '08/26/2022, 10:00 am',
         },
         {
-          id: 1059,
+          id: 105911,
           title: 'Water Job',
           creator: 'Rodney Giles',
           entries: 0,
@@ -221,21 +222,21 @@ export default {
       ],
       draftbids: [
         {
-          id: 1058,
+          id: 105811,
           title: 'This is a test template',
           creator: 'Rodney Giles',
           entries: 0,
           endTime: '08/26/2022, 10:00 am',
         },
         {
-          id: 1057,
+          id: 105711,
           title: 'Sheu',
           creator: 'Baker Hughes',
           entries: 0,
           endTime: '08/26/2022, 10:00 am',
         },
         {
-          id: 1056,
+          id: 105611,
           title: 'Water Job',
           creator: 'Rodney Giles',
           entries: 0,

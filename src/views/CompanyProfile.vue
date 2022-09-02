@@ -41,7 +41,7 @@
                                 Crop Image
                               </v-card-title>
                               <v-card-text>
-                                <vue-croppie ref="croppieRef" :enableOrientation="true" :boundary="{ width: 500, height: 350}" :viewport="{ width:365, height:90, 'type':'circle' }">
+                                <vue-croppie ref="croppieRef" :showZoomer="false" :enableOrientation="true" :enableResize="false" :boundary="{ width: 500, height: 350}" :viewport="{ width:365, height:90, 'type':'square' }">
                                 </vue-croppie>
                               </v-card-text>
 
@@ -106,13 +106,13 @@
                           ></v-autocomplete>
                         </v-col>
                         <v-col cols="2" sm="2" class="pl-0">
-                        <v-btn color="#0D9648" class="text-capitalize mr-2 white--text" width="100%" height="54px">Add</v-btn>
+                        <v-btn color="#0D9648" class="text-capitalize mr-2 white--text" width="100%" height="54px" @click="addService">Add</v-btn>
                         </v-col>
                       </v-row>
                       <v-row>
                         <v-col cols="12" sm="10">
                           <div class="service-list text-left">
-                            <label v-for="drill in drillingService"><v-icon>mdi-check</v-icon>{{drill.title}}</label>
+                            <label v-for="drill in drillingService"><v-icon>mdi-check</v-icon>{{drill}}</label>
                           </div>
                           <p class="text-left mt-5 alert-text">*Click in a service above to delete from list.</p>
                         </v-col>
@@ -207,7 +207,7 @@
                     </v-container>
                     <hr>
                     <excutive-leadership></excutive-leadership>
-                      <hr>
+                      <!-- <hr>
                       <v-container class="pa-sm-10 pa-4 corporate-video">
                         <label class="d-block text-left main-label mb-4">Subsidaries</label>
                         <v-row>
@@ -232,7 +232,7 @@
                             </div>
                           </v-col>
                         </v-row>
-                      </v-container>
+                      </v-container> -->
                         <hr>
                       <ESGComponent />
                     <hr>
@@ -279,18 +279,7 @@ export default {
       subsidaries: [
         { image: 'subs-1' },{ image: 'subs-2' },{ image: 'subs-3' },{ image: 'subs-4' },
       ],
-      drillingService: [
-        {title: 'Drilling Services'},
-        {title: 'Contract Drilling Services'},
-        {title: 'Hydralic Fracturing'},
-        {title: 'Measurement-while-drilling'},
-        {title: 'Measurement-while-drilling'},
-        {title: 'Directional Drilling'},
-        {title: 'Pressure Pumping Service'},
-        {title: 'Cementing Services'},
-        {title: 'Downhole Performance Motors'},
-        {title: 'Horizontal Drilling'},
-      ],
+      drillingService: [],
       croppieImage: '',
       cropped: null,
       dialog: false,
@@ -405,6 +394,10 @@ export default {
       },
       deleteLogo(){
         this.cropped == null;
+      },
+      addService(){
+        console.log(this.services.name); 
+        // this.drillingService.push(this.services);
       }
   },
   mounted() {

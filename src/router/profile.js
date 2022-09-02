@@ -79,6 +79,18 @@ const routes = [
            }
        }
       },
+      {
+        path: '/manage-templates',
+        name: 'ManageTemplates',
+        component: () => import('@/views/ManageTemplates.vue'),
+        beforeEnter: (to, from, next) => {
+           if(localStorage.getItem("userData") == null) {
+               next('/login');
+           } else {
+               next();
+           }
+       }
+      },
       
     ],
   },

@@ -64,7 +64,7 @@
            </div>
         </v-col>
       </v-row>
-      <Footer v-if="!users"></Footer>
+      <Footer v-if="!userDatas"></Footer>
    </section>
 </template>
 <script>

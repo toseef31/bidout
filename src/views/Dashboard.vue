@@ -9,7 +9,7 @@
           <div class="content-section">
             <div class="title-block">
               <h3 class="font-weight-bold">Active Bids</h3>
-              <a href="">View all</a>
+              <router-link to="/view-bids">View all</router-link>
             </div>
             <v-simple-table class="bids-table">
               <template v-slot:default>
@@ -32,6 +32,7 @@
                     </th>
                   </tr>
                 </thead>
+                {{allbids}}
                 <tbody>
                   <tr
                     v-for="bid in bids"

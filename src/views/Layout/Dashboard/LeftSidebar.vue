@@ -116,7 +116,7 @@ export default {
             items: [
               { icon: 'mdi-account-multiple',title: 'Manage Users', link: 'manage-users' },
               { icon: 'mdi-cog-outline' ,title: 'Manage Module', link: 'manage-module' },
-              { icon: 'mdi-account-multiple',title: 'Manage Templates', link: 'manage-template' },
+              { icon: 'mdi-account-multiple',title: 'Manage Templates', link: 'manage-templates' },
               { icon: 'mdi-cog-outline' ,title: 'Manage Company Profile', link: 'company-profile' },
             ],
             title: 'Company Settings'

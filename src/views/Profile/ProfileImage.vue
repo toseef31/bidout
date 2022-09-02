@@ -11,7 +11,7 @@
       <v-dialog v-model="dialog" width="500">
         <v-card class="px-0">
           <v-card-text class="px-0 pb-0">
-            <vue-croppie ref="croppieRef" :enableOrientation="true" :boundary="{ width: 500, height: 350}" :viewport="{ width:112, height:112, 'type':'circle' }">
+            <vue-croppie ref="croppieRef" :enableOrientation="true" :enableResize="false" :boundary="{ width: 500, height: 350}" :viewport="{ width:112, height:112, 'type':'circle' }">
             </vue-croppie>
           </v-card-text>
           <v-card-actions class="justify-end">

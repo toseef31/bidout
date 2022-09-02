@@ -35,7 +35,7 @@
                 Crop Image
               </v-card-title>
               <v-card-text>
-                <vue-croppie ref="croppieRefProfile" :enableOrientation="true" :boundary="{ width: 400, height: 250}" :viewport="{ width:175, height:175, 'type':'square' }">
+                <vue-croppie ref="croppieRefProfile" :enableOrientation="true" :enableResize="false" :boundary="{ width: 400, height: 250}" :viewport="{ width:175, height:175, 'type':'square' }">
                 </vue-croppie>
               </v-card-text>
 
@@ -96,6 +96,7 @@ export default {
       croppieProfile: '',
       croppedProfile: null,
       dialogProfile: false,
+      linkdinProfile: '',
     };
   },
   computed:{

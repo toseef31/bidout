@@ -15,14 +15,9 @@
                     <div class="tabs-head">
                       <template>
                         <v-tabs
-                          v-model="tab"
                           align-with-title
-                        >
-                          <v-tabs-slider color="yellow"></v-tabs-slider>
-
-                          <v-tab
-                            v-for="item in items"
-                            :key="item"
+                        > <v-tab
+                            v-for="item in items" disabled
                           >
                             {{ item }}
                           </v-tab>
@@ -34,66 +29,51 @@
                     <v-tabs-items v-model="tab">
                       <v-tab-item>
 
-                        <v-expansion-panels>
-                          <v-expansion-panel>
-                            <v-expansion-panel-header>
-                              <template v-slot:actions>
-                                <v-icon>
-                                  $expand
-                                </v-icon>
-                              </template>
+                        <div class="panels">
+                          <div class="panel">
+                            <div class="d-flex justify-space-between panel-header">
                               <h6>BidOut Procurement Platform</h6>
                               <div class="btn-section">
                                 <a href="" class="text-decoration-none text-right toggle-btn" max-width="150px"><v-icon>mdi-bookmark-outline</v-icon>Upgrade to Enterpise</a>
                                 <a href="" class="text-decoration-none text-right contract-btn" max-width="150px"><v-icon>mdi-file-outline</v-icon>View Contract</a>
                               </div>
-                            </v-expansion-panel-header>
-                            <v-expansion-panel-content>
+                            </div>
+                            <div class="panel-content">
                               <p class="mb-1 black--text">Renewal Date: 07/12/2023</p>
                               <p class="black--text">Annual Fee: $900</p>
-                            </v-expansion-panel-content>
-                          </v-expansion-panel>
-                        </v-expansion-panels>
-                        <v-expansion-panels>
-                          <v-expansion-panel>
-                            <v-expansion-panel-header>
-                              <template v-slot:actions>
-                                <v-icon>
-                                  $expand
-                                </v-icon>
-                              </template>
+                            </div>
+                          </div>
+                        </div>
+                        <div class="panels">
+                          <div class="panel">
+                            <div class="d-flex justify-space-between panel-header">
                               <h6>OFS Directory Profile</h6>
                               <div class="btn-section">
                                 <a href="" class="text-decoration-none text-right toggle-btn" max-width="150px"><v-icon>mdi-bookmark-outline</v-icon>Upgrade to Enterpise</a>
                                 <a href="" class="text-decoration-none text-right contract-btn" max-width="150px"><v-icon>mdi-file-outline</v-icon>View Contract</a>
                               </div>
-                            </v-expansion-panel-header>
-                            <v-expansion-panel-content>
+                            </div>
+                            <div class="panel-content">
                               <p class="mb-1 black--text">Renewal Date: 07/12/2023</p>
                               <p class="black--text">Annual Fee: $900</p>
-                            </v-expansion-panel-content>
-                          </v-expansion-panel>
-                        </v-expansion-panels>
-                        <v-expansion-panels>
-                          <v-expansion-panel>
-                            <v-expansion-panel-header>
-                              <template v-slot:actions>
-                                <v-icon>
-                                  $expand
-                                </v-icon>
-                              </template>
+                            </div>
+                          </div>
+                        </div>
+                        <div class="panels">
+                          <div class="panel">
+                            <div class="d-flex justify-space-between panel-header">
                               <h6>BidOut Procurement Platform</h6>
                               <div class="btn-section">
                                 <a href="" class="text-decoration-none text-right toggle-btn" max-width="150px"><v-icon>mdi-bookmark-outline</v-icon>Upgrade to Enterpise</a>
                                 <a href="" class="text-decoration-none text-right contract-btn" max-width="150px"><v-icon>mdi-file-outline</v-icon>View Contract</a>
                               </div>
-                            </v-expansion-panel-header>
-                            <v-expansion-panel-content>
+                            </div>
+                            <div class="panel-content">
                               <p class="mb-1 black--text">Renewal Date: 07/12/2023</p>
                               <p class="black--text">Annual Fee: $900</p>
-                            </v-expansion-panel-content>
-                          </v-expansion-panel>
-                        </v-expansion-panels>
+                            </div>
+                          </div>
+                        </div>
                       </v-tab-item>
                     </v-tabs-items>
                   </div>
@@ -121,11 +101,10 @@ export default {
   data() {
     return {
       isHidden : false,
-      tab: null,
+      tab: 0,
       items: [
-        'Account Rep', 'Tyler Cherry', 'tcherry@bidout.app', '(281)782-5332'
+        'Account Rep', 'Tyler Cherry', 'tcherry@bidout.app', '(281) 435-6344'
       ],
-      text: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.',
     };
   },
   computed:{

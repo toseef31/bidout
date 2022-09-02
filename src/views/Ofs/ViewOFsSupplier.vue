@@ -60,6 +60,24 @@
                   <v-form class="search-form">
                     <v-text-field label="Search here ..." single-line outlined type="text" placeholder="Search here" v-model="searchCategory" prepend-inner-icon="mdi-magnify">
                     </v-text-field>
+                    <v-list v-if="hideList == true"  class="company-list">
+                      <template v-for="(company, index) in companies">
+                        <v-list-item class="py-1"
+                          :key="company.name"
+                        >
+                          <v-list-item-avatar max-height="31px" max-width="88px" width="88px" tile>
+                            <v-img :src="`/images/companies/${company.image}`" height="auto"></v-img>
+                          </v-list-item-avatar>
+                          <v-list-item-content>
+                            <v-list-item-title @click="addPerson(user); hideMemberList = !hideMemberList" class="text-left">{{company.name}}</v-list-item-title>
+                          </v-list-item-content>
+                          <v-list-item-action>
+                            <v-list-item-action-text class="font-weight-bold"><router-link :to="company.link">View Profile</router-link></v-list-item-action-text>
+                          </v-list-item-action>
+                        </v-list-item>
+                      </template>
+                      <v-btn color="rgba(13, 150, 72, 0.1)" rounded class="all-btn text-capitalize my-4">View all results</v-btn>
+                    </v-list>
                   </v-form>
                 </v-col>
               </v-row>
@@ -87,7 +105,7 @@
                 <v-col cols="12" md="6" v-for="category in allcategories" :key="category.id" class="pl-sm-5 pr-sm-5">
                   
                   <div class="ofs-listing text-left">
-                    <h1 class="font-weight-bold mb-3 text-break">{{category.name}}</h1>
+                    <h1 class="font-weight-bold mb-3 text-break"><router-link :to="'/ofs-supplier/'+category.slug">{{category.name}}</router-link></h1>
                     <p>
                       <span v-for="subcategry in subCategories(category.subCategories)" class="sub-catLink">
                         <span @click="getCompanies(category.slug,subcategry.name)">  
@@ -146,6 +164,12 @@ export default {
   data() {
     return {
       searchCategory: '',
+      companies: [
+        {name: 'Tetra Technologies', link: '/company-profile', image: 'tetra.png'},
+        {name: 'Patterson-UTI', link: '/company-profile', image: 'patterson.png'},
+        {name: 'ChampionX', link: '/company-profile', image: 'champion.png'},
+        {name: 'KLX Energy Services', link: '/company-profile', image: 'klx.png'},
+      ],
       settings: {
         "arrows": true,
         "dots": false,
@@ -192,7 +216,17 @@ export default {
           ]
       },
       loading: true,
+      hideList: false,
     };
+  },
+  watch:{
+    searchCategory: _.debounce(function(){
+      if(this.searchCategory < 1){
+        this.hideList = false;
+      }else{
+        this.hideList = true;
+      }
+    },500),
   },
   computed:{
     showSideBar(){
@@ -202,14 +236,14 @@ export default {
         return this.$store.getters.g_activityPanel;
     },
     allcategories(){
-      if(this.searchCategory){
-        return _.orderBy(this.$store.getters.categories.filter((category)=>{
-          return this.searchCategory.toLowerCase().split(' ').every(v => category.name.toLowerCase().includes(v))
-        }), 'orderNumber', 'asc')
-      }else{
+      // if(this.searchCategory){
+      //   return _.orderBy(this.$store.getters.categories.filter((category)=>{
+      //     return this.searchCategory.toLowerCase().split(' ').every(v => category.name.toLowerCase().includes(v))
+      //   }), 'orderNumber', 'asc')
+      // }else{
         setTimeout(() => this.loading = false, 500);
         return _.orderBy(this.$store.getters.categories, 'orderNumber', 'asc');
-      }
+      // }
     },
   },
   methods: {

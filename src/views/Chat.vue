@@ -272,7 +272,7 @@
                         </div>
                       </v-col>
                       <v-col cols="6">
-                        <div class="msg-options d-flex mt-2">
+                        <div class="msg-options d-flex mt-2 justify-end">
                           <div class="search"> 
                             <v-text-field
                               v-model="searchMessage"
@@ -328,13 +328,13 @@
 
                                       <v-card>
                                         <v-card-title class="text-h6 lighten-2 justify-space-between">
-                                          Add Members
+                                          Manage Members
                                           <v-icon @click="dialog = false" color="#0D9648"> mdi-close</v-icon>
                                         </v-card-title>
                                         <v-divider></v-divider>
                                         <v-card-text class="my-8">
                                           
-                                          <label class="d-block text-left input-label font-weight-bold black--text">Add Members</label>
+                                          <label class="d-block text-left input-label font-weight-bold black--text">Manage Members</label>
                                           <v-autocomplete
                                             v-model="selected"
                                             :items="membersLists"
@@ -373,7 +373,7 @@
                                             class="text-capitalize white--text px-3"
                                             min-width="100px"
                                           >
-                                            Invite
+                                            Save
                                           </v-btn>
                                         </v-card-actions>
                                       </v-card>

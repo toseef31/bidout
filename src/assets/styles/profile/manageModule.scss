@@ -35,6 +35,8 @@
 	  						text-transform: inherit;
 	  						font-size: 14px;
 	  						color: #0D1139;
+	  						font-weight: 700;
+	  						opacity: 1 !important;
 	  					}
 	  					.v-tab--active{
 	  						font-weight: 700;
@@ -43,10 +45,9 @@
 	  			}
 	  		}
 	  		.module-content{
-	  			.v-expansion-panel-header{
+	  			.panel-header{
 	  				min-height: 72px;
-	  				padding: 16px 6px 16px 40px;
-				    background-color: #FBFBFB;
+	  				padding: 16px 6px 16px 0px;
 	  				h6{
 	  					color: #0D1139;
 					    font-size: 16px;
@@ -86,7 +87,7 @@
 	  			.v-expansion-panel-header--active{
 	  				background-color: #fff;
 	  			}
-	  			.v-expansion-panel-content{
+	  			.panel-content{
 	  				text-align: left;
 	  				p{
 	  					font-weight: 600;
