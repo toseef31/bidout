@@ -55,6 +55,18 @@ const routes = [
             }
         }
       },
+      {
+        path: '/edit-profile',
+        name: 'EditProfile',
+        component: () => import('@/views/EditProfile.vue'),
+        beforeEnter: (to, from, next) => {
+           if(localStorage.getItem("userData") == null) {
+               next('/login');
+           } else {
+               next();
+           }
+       }
+      },
       // { 
       //   path: "*", 
       //   component: () => import('@/views/PageNotFoundLogin.vue'),

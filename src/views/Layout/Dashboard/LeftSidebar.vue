@@ -18,7 +18,7 @@
             <v-list-item-icon class="mr-6 mt-3">
               <router-link :to="'/'+item.link" class="text-decoration-none">
                 <v-img :src="`/images/${item.icon}`" width="24px" height="24px"></v-img>
-                </router-link>
+              </router-link>
             </v-list-item-icon>
 
               
@@ -59,7 +59,7 @@
                 <v-icon v-text="child.icon"></v-icon>
               </v-list-item-icon>
               <v-list-item-content class="text-left py-1" v-show="showSideBar">
-                <router-link :to="'/'+child.link" class="text-decoration-none">
+                <router-link :to="'/'+child.link"  @click="isHidden = !isHidden" :class="{ 'active-btn': isHidden}" class="text-decoration-none">
                   <v-list-item-title class="font-weight-bold" v-text="child.title"></v-list-item-title>
                 </router-link>
               </v-list-item-content>
@@ -99,6 +99,7 @@ export default {
     return {
       selectedItem: 0,
       showSide : true,
+      isHidden : false,
         items: [
           { id: 0, text: 'Dashboard', icon: 'dashboard.png', link: 'dashboard' },
           { id: 1, text: 'View Bids', icon: 'bids.png' , link: 'view-bids' },
@@ -115,7 +116,7 @@ export default {
             active: false,
             items: [
               { icon: 'mdi-account-multiple',title: 'Manage Users', link: 'manage-users' },
-              { icon: 'mdi-cog-outline' ,title: 'Manage Module', link: 'manage-module' },
+              { icon: 'mdi-cog-outline' ,title: 'Manage Modules', link: 'manage-module' },
               { icon: 'mdi-account-multiple',title: 'Manage Templates', link: 'manage-templates' },
               { icon: 'mdi-cog-outline' ,title: 'Manage Company Profile', link: 'company-profile' },
             ],

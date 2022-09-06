@@ -213,6 +213,19 @@
 	  	}
 	  	.messages-section{
 	  		height: calc(100vh - 329px);
+	  		.dropzone {
+	  		  box-sizing: border-box;
+	  		  display: none;
+	  		  position: absolute;
+	  		  width: 51.5%;
+	  		  height: 82%;
+	  		  z-index: 99999;
+	  		  background: #80808066;
+	  		  border: 6px dashed #0d9648;
+	  		}
+	  		.dropzoneActive{
+	  			display: block;
+	  		}
 	  		.own-user{
 	  			background: #FBFBFB;
 	  		}

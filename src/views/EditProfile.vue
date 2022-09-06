@@ -52,6 +52,13 @@
                             </v-col>
                           </v-row>
                           <v-row justify="center">
+                            <v-col cols="12" sm="12" text="left">
+                              <label class="d-block text-left input-label mb-2 font-weight-bold">Timezone </label>
+                              </v-text-field>
+                              <v-select :items="timezone" item-text="label" v-model="userTimezone" outlined></v-select>
+                            </v-col>
+                          </v-row>
+                          <v-row justify="center">
                             <v-col cols="12">
                               <v-btn color="#0D9648" type="submit" height="56" min-width="220px" class="text-capitalize white--text font-weight-bold save-btn px-9"  large>Save</v-btn>
                             </v-col>
@@ -151,6 +158,7 @@
   import Notifications from './Profile/Notifications.vue'
   import VuePhoneNumberInput from 'vue-phone-number-input';
   import 'vue-phone-number-input/dist/vue-phone-number-input.css';
+  import timezones from 'timezones-list';
   import { mapActions } from "vuex";
 export default {
   name : "EditProfile",
@@ -165,12 +173,14 @@ export default {
   
   data() {
     return {
+      timezone: timezones,
       isHidden : false,
       firstName: this.$store.getters.userInfo.firstName,
       lastName: this.$store.getters.userInfo.lastName,
       title: this.$store.getters.userInfo.title,
       mobileNumber: this.$store.getters.userInfo.phoneNumber,
       email: this.$store.getters.userInfo.email,
+      userTimezone: this.$store.getters.userInfo.timezone,
       defaultCountry: 'US',
       translations: {
         countrySelectorLabel: 'Country Code',
@@ -199,7 +209,7 @@ export default {
     },
     companyAdmins(){
       return this.$store.getters.companyAdmins;
-    }
+    },
   },
   methods: {
     ...mapActions(["updateUser","loginHistory","adminsCompany"]),
@@ -208,13 +218,15 @@ export default {
     },
     editForm(){
       this.mobileNumber = this.results;
+      // console.log(this.userTimezone);
       var user = {
         firstName: this.firstName,
         lastName: this.lastName,
         email: this.email,
         phoneNumber: this.mobileNumber,
         title: this.title,
-        userid: this.$store.getters.userInfo.id
+        userid: this.$store.getters.userInfo.id,
+        timezone: this.userTimezone,
       }
       this.updateUser(user);
     },

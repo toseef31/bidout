@@ -8,4 +8,10 @@ export default {
     setCompanyAdmin (state, payload){
       state.companyAdmins = payload
     },
+    setInviteUser (state, inviteUser){
+      state.inviteUser = payload
+    },
+    setMessage (state, inviteUser){
+      state.inviteUser = payload
+    },
 }

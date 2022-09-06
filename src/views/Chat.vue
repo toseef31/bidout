@@ -81,7 +81,7 @@
                                         </v-avatar>
                                       </v-list-item-avatar>
                                       <v-list-item-content>
-                                        <v-list-item-title @click="companyList(); hideList = !hideList" class="text-left">{{user.firstName}} {{user.lastName}}</v-list-item-title>
+                                        <v-list-item-title @click="createChat(user); hideList = !hideList" class="text-left">{{user.firstName}} {{user.lastName}}</v-list-item-title>
                                         <v-list-item-subtitle
                                           class="text--primary text-left"
                                           v-text="user.company"
@@ -199,13 +199,14 @@
                       multiple v-bind:class="{ active: isActive }"
                     >
                       <template v-for="(conversation, index) in conversationsList">
-                        <v-list-item v-if="conversation.type == 'GROUP'"  @click="openChat(conversation,conversation.company)">
+                        <v-list-item v-if="conversation.type == 'GROUP'"  @click="openChat(conversation,conversation.groupName)">
                           <template v-slot:default="{ active }">
                             <v-list-item-avatar>
                               <v-icon>mdi-account-group-outline</v-icon>
                             </v-list-item-avatar>
                             <v-list-item-content>
-                              <v-list-item-title v-text="conversation.company"></v-list-item-title>
+                              <v-list-item-title v-if="conversation.company == ''" v-text="conversation.company"></v-list-item-title>
+                              <v-list-item-title v-else v-text="conversation.groupName"></v-list-item-title>
 
                               <v-list-item-subtitle
                                 class="text--primary"
@@ -332,13 +333,14 @@
                                           <v-icon @click="dialog = false" color="#0D9648"> mdi-close</v-icon>
                                         </v-card-title>
                                         <v-divider></v-divider>
-                                        <v-card-text class="my-8">
+                                        <v-card-text class="my-8" v-if="chatData">
                                           
                                           <label class="d-block text-left input-label font-weight-bold black--text">Manage Members</label>
+                                          
                                           <v-autocomplete
                                             v-model="selected"
-                                            :items="membersLists"
-                                            item-value="id" item-text="firstName"
+                                            :items="chatData"
+                                            item-value="id" item-text="name"
                                             chips
                                             outlined
                                             full-width
@@ -400,6 +402,7 @@
                   </div>
                   <!-- Message Area -->
                   <div class="messages-section" ref="messagesSection">
+                    <vue-dropzone ref="myVueDropzone" :class="{dropzoneActive : uploadDrag }" @ondragleave="dragLeave(event)" id="dropzone" @vdropzone-success="afterComplete" v-on:vdropzone-sending="dragfileupload" :options="dropzoneOptions"> @dragstart="startDrag($event, item)" </vue-dropzone>
                     <v-list two-line class="own-user message-list" v-for="message in messagesList" :key="message._id">
                       <v-list-item-group
                         multiple
@@ -477,12 +480,14 @@
   import LeftSidebar from './Layout/Dashboard/LeftSidebar.vue'
   import axios from 'axios'
   import _ from 'lodash';
+  import vueDropzone from 'vue2-dropzone';
   import { mapActions } from "vuex";
 export default {
   name : "Chat",
   components: {
     Navbar,
     LeftSidebar,
+    vueDropzone,
   },
   
   data() {
@@ -516,6 +521,17 @@ export default {
       membersData: [],
       participants: [],
       participantDetails: [],
+      dropzoneOptions: {
+        url: 'https://api-dev-v2-dot-bidout-dev.uc.r.appspot.com/api/chat/sendMessage',
+        thumbnailWidth: 100,
+        thumbnailHeight: 100,
+        maxFiles: 10,
+        maxFilesize: 420,
+        chunking: true,
+        headers: { "My-Awesome-Header": "header value" }
+      },
+      uploadDrag: false,
+      userObject: '',
     };
   },
   computed:{
@@ -525,6 +541,7 @@ export default {
     activityPanel(){
         return this.$store.getters.g_activityPanel;
     },
+
     conversationsList(){
       // return _.orderBy(this.$store.getters.conversations, 'latestMessage', 'desc');
       
@@ -660,13 +677,12 @@ export default {
       this.supplierUserList(this.addMember);
     },
     addPerson(user){
-      console.log(user);
+      this.userObject = user;
       this.membersData.push(user);
       var ids = {
-        id: user.objectID,
-        userid: this.user.id
+        id: user.objectID
       }
-      this.participants.push(user.objectID,this.user.id);
+      this.participants.push(user.objectID);
       var userData = [
         {
           id : user.objectID,
@@ -682,14 +698,41 @@ export default {
       this.participantDetails.push(userData);
     },
     createGroup(){
+
+      var partDasta = this.participants.push(this.user.id);
       var data = {
-        participants: this.participants,
+        participants: [
+          this.userObject.objectID, this.user.id
+        ],
         messages: [],
         participantDetails: this.participantDetails,
         type: 'GROUP',
         groupName: this.groupName
       }
-      console.log(data);
+      // this.createConversation(data);
+    },
+    createChat(user){
+      var data = {
+        participants: [
+           user.objectID, this.user.id,
+        ],
+        messages: [],
+        participantDetails: [
+          {
+            id: user.objectID,
+            name: user.firstName+' '+user.lastName,
+            lastMessageReadAt: null,
+          },
+          {
+            id: this.user.id,
+            name: this.user.firstName+' '+this.user.lastName,
+            lastMessageReadAt: null,
+          }
+        ],
+        type: 'PRIVATE',
+        groupName: '',
+      }
+      // console.log(data);
       this.createConversation(data);
     },
     // unreadCountMsg(conId){
@@ -700,6 +743,49 @@ export default {
     //   // this.unreadMessagesCountCon(Ids);
     // },
     getText: (item) => `${item.firstName} ${item.lastName}`,
+    dragfileupload(file, xhr, formData) {
+      formData.append('conversationId', this.conversationId)
+      formData.append('sender[id]', this.user.id)
+      formData.append('sender[name]', this.user.firstName+' '+this.user.lastName)
+      formData.append('sender[company]', this.chatData.group.groupName)
+      formData.append('sender[profilePicture]', this.user.image)
+      formData.append('content', this.message)
+    },
+    afterComplete(file, response) {
+      console.log(response.message);
+      this.message = "";
+      this.$refs.msgFile.value=null;
+      this.$refs.myVueDropzone.removeFile(file);
+      document.getElementById('dropzone').style.display = "none";
+    },
+    uploadfile(event) {
+      this.filename = "";
+      var chat_file = this.$refs.msgFile.files;
+      if (chat_file.length > 0) {
+        this.filename = chat_file[0].name;
+      }
+      var data = {
+        'conversationId': this.conversationId,
+        'sender': {
+            'name': this.user.firstName+' '+this.user.lastName,
+            'id': this.user.id,
+            'company': this.chatData.group.company,
+            'profilePicture': this.user.image,
+        },
+        content: this.message,
+        attachment: chat_file[0],
+      }
+      // this.$store.commit('setMessagesList');
+      this.sendMessage(data);
+      var container = this.$refs.messagesSection;
+      setTimeout(function(){
+        container.scrollTop = container.scrollHeight;
+      }, 500);
+      this.message = '';
+      this.filename = '';
+      // })
+    },
+
   },
   beforeMount() {
     this.user = this.$store.getters.userInfo;
@@ -714,6 +800,18 @@ export default {
     }
     this.user = this.$store.getters.userInfo;
     this.getConversations(this.user.id);
+
+
+    document.addEventListener('dragenter', function(e) {
+      console.log(e.target.className);
+     if (e.target.className == 'message-area' || e.target.className == 'messages-section' || e.target.className == 'v-list-item__content' || e.target.className == 'v-list-item__title' || e.target.className == 'own-user message-list' || e.target.className == 'message-send-area' || e.target.className == 'row' || e.target.className == 'col-sm-10 col-md-10' || e.target.className == 'msg-text-box' ) {
+        document.getElementById('dropzone').style.display = "block";
+      }
+      else {
+        document.getElementById('dropzone').style.display = "none";
+      }
+
+    });
   }
 };
 </script>

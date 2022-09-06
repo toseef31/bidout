@@ -5,4 +5,6 @@ export default {
    userImg: null,
    historyData: {},
    companyAdmins: {},
+   inviteUser: {},
+   message: null,
 }

@@ -76,9 +76,10 @@ export default {
 	// Supplier Users List
 	createConversation({commit}, payload){
 		console.log(payload);
-		// axios.post('/chat/createConversation/',{})
-		//  .then(responce => {
-		//  	commit('setSuppliersUsers',responce.data)
-		// })
+		axios.post('/chat/createConversation/',payload)
+		 .then(responce => {
+		 	// console.log(responce);
+		 	commit('setConverstaionList',responce.data.conversation)
+		})
 	},
 }

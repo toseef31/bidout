@@ -26,13 +26,12 @@ export default {
     })
   },  
   updateUser({commit}, payload){
-    console.log(payload);
     var config = {
       headers: {
         "Authorization": `Bearer ${JSON.parse(localStorage.getItem('token'))}`
       },
     };
-    axios.post('/user/updateUser/'+payload.userid,{'email': payload.email,'firstName': payload.firstName,'lastName': payload.lastName,'phoneNumber': payload.phoneNumber,'title':payload.title},config)
+    axios.post('/user/updateUser/'+payload.userid,{'email': payload.email,'firstName': payload.firstName,'lastName': payload.lastName,'phoneNumber': payload.phoneNumber,'title':payload.title,'timezone':payload.timezone},config)
      .then(responce => {
       axios.get('/user/getUserData/'+payload.email)
        .then(responce => {
@@ -70,7 +69,6 @@ export default {
     })
   },  
   updateNotifications({commit}, payload){
-    console.log(payload);
     var config = {
       headers: {
         "Authorization": `Bearer ${JSON.parse(localStorage.getItem('token'))}`
@@ -85,4 +83,16 @@ export default {
       })
     })
   }, 
+  inviteUser({commit},payload){
+    var config = {
+      headers: {
+        "Authorization": `Bearer ${JSON.parse(localStorage.getItem('token'))}`
+      },
+    };
+    axios.post('/company/addInvitedUser/',{'firstName':payload.firstName,'lastName': payload.lastName,'company': payload.company,'email':payload.email,'parent': payload.parent,'role': payload.role},config)
+     .then(responce => {
+        commit('setMessage',responce.data)
+        router.replace({ name: "ManageUsers" });
+    })
+  }
 }

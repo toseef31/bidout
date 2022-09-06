@@ -13,7 +13,7 @@ import 'firebase/compat/auth';
 import 'firebase/compat/firestore';
 import axios from 'axios';
 import vueCountryRegionSelect from 'vue-country-region-select';
-import moment from 'vue-moment'
+import moment from 'vue-moment';
 import VueSignaturePad from 'vue-signature-pad';
 import '@/assets/styles/index.scss';
 import VueCroppie from 'vue-croppie';
@@ -60,7 +60,6 @@ LogRocket.getSessionURL(sessionURL => {
     scope.setExtra("sessionURL", sessionURL);
   });
 });
-
 var userData = store.getters.userInfo;
 if(userData){
   LogRocket.identify(userData.id, {

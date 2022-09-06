@@ -17,6 +17,9 @@ export default {
         localStorage.setItem("token",JSON.stringify(result.user.multiFactor.user.accessToken));
         axios.get('/user/getUserData/'+result.user.multiFactor.user.email)
          .then(responce => {
+          axios.get('/auth/addUserLoginHistory/'+responce.data.id)
+           .then(responce => {
+          })
           commit('setUser',responce.data)
           localStorage.setItem("userData",JSON.stringify(responce.data));
           router.replace({ name: "Dashboard" });

@@ -8,4 +8,7 @@ export default {
    companyAdmins (state){
       return state.companyAdmins
    },
+   message (state){
+      return state.message
+   },
 }

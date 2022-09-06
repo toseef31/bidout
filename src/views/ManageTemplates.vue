@@ -1,11 +1,6 @@
 <template>
-  <section class="section-container fill-height createBid-module">
-    <Navbar></Navbar>
-     <v-row class="mx-0">
-       <v-col :class="[ showSideBar ? 'col-12' : 'toggleLeft-sidebar']" class="left-sidebar pr-1">
-          <LeftSidebar></LeftSidebar>
-       </v-col>
-       <v-col class="mid-content pa-0 pa-sm-3" :class="[ showSideBar ? 'col-md-9 col-12 col-sm-7' : 'mid-content-collapse', activityPanel ? 'd-sm-block' : 'd-md-block']" v-show="!activityPanel">
+       <v-col class="createBid-module manage-template  pa-0 pa-sm-3 pl-sm-0" :class="[ showSideBar ? 'col-md-9 col-12 col-sm-7' : 'mid-content-collapse', activityPanel ? 'd-sm-block' : 'd-md-block']" v-show="!activityPanel">
+        <div class="mid-content fill-height">
           <div class="content-section fill-height">
             <v-row align="center" justify="space-between" class="px-6 mb-4 mt-2 mx-0">
               <v-col cols="6" class="text-left pl-0">
@@ -54,10 +49,9 @@
                 </tbody>
               </template>
             </v-simple-table>
-          </div>
+          </div>  
+        </div>
        </v-col>
-     </v-row>
-   </section>
 </template>
 <script>
   import Navbar from './Layout/Navbar.vue'
