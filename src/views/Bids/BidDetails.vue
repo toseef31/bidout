@@ -34,13 +34,15 @@
           <v-row justify="center">
             <v-col cols="12" sm="6" text="left">
               <label class="d-block text-left input-label mb-2 font-weight-bold">Due Time </label>
-              <v-text-field placeholder="Bid Title" single-line outlined type="time" v-model="dueTime" hide-details>
-              </v-text-field>
+              <v-select outlined hide-details :items="time" v-model="dueTime">
+                              
+              </v-select>
             </v-col>
             <v-col cols="12" sm="6" text="left">
               <label class="d-block text-left input-label mb-2 font-weight-bold">Region </label>
-              <v-text-field placeholder="Region" single-line outlined type="text" v-model="regions" hide-details>
-              </v-text-field>
+              <v-select outlined hide-details :items="region" v-model="regions">
+                              
+              </v-select>
             </v-col>
           </v-row>
           <v-row>
@@ -91,7 +93,7 @@
           </v-row>
           <v-row justify="center">
             <v-col cols="12">
-              <v-btn href="#tab-2" color="#0D9648" height="56" class="text-capitalize white--text font-weight-bold save-btn px-9" large>Save Changes</v-btn>
+              <v-btn color="#0D9648" height="56" class="text-capitalize white--text font-weight-bold save-btn px-9" @click="changeTab" large>Save Changes</v-btn>
             </v-col>
           </v-row>
         </v-container>
@@ -108,18 +110,31 @@ export default {
       type: '',
       dueDate: '',
       dueTime: '',
-      regions: '',
+      regions: [],
       bidDescriptions: '',
       qAndAEnabled: 'yes',
       showAdditional: false,
-      type: ['RFP','RFI'],
+      type: ['RFP','RFI','BidOut Process'],
+      time: ['1pm CST','2pm CST','3pm CST','4pm CST'],
+      region: ['Gulf Coast','Northwest','Rockies','Mid-Con','Permian','Arklatex','Offshore','Other'],
     };
   },
   computed:{
     
   },
   methods: {
-    
+    changeTab(){
+      var bidDetails = {
+        title: this.title,
+        type: this.type,
+        dueDate: this.dueDate,
+        dueTime: this.dueTime,
+        regions: this.regions,
+        bidDescriptions: this.bidDescriptions,
+        qAndAEnabled: this.qAndAEnabled
+      }
+      this.$emit('changetab', 'tab-2');
+    }
   },
   mounted() {
     

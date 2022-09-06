@@ -16,15 +16,17 @@
             :key="i"
           >
             <v-list-item-icon class="mr-6 mt-3">
-              <router-link :to="item.link" class="text-decoration-none"><v-icon v-text="item.icon"></v-icon></router-link>
+              <router-link :to="'/'+item.link" class="text-decoration-none">
+                <v-img :src="`/images/${item.icon}`" width="24px" height="24px"></v-img>
+              </router-link>
             </v-list-item-icon>
 
               
             <v-list-item-content class="text-left py-1">
-              <router-link :to="item.link" class="text-decoration-none"><v-list-item-title class="font-weight-bold" v-text="item.text" v-show="showSideBar"> 
+              <router-link :to="'/'+item.link" class="text-decoration-none"><v-list-item-title class="font-weight-bold" v-text="item.text" v-show="showSideBar"> 
                 
               </v-list-item-title></router-link>
-              <span class="badge" :class="[ showSideBar ? 'msg-badge' : 'mobile-badge']" v-if="i == 3"
+              <span class="badge" :class="[ showSideBar ? 'msg-badge' : 'mobile-badge']" v-if="i == 3 && showMsgCount > 0"
                 >{{showMsgCount}}</span>
             </v-list-item-content>
           </v-list-item>
@@ -42,7 +44,7 @@
           >
             <template v-slot:activator>
               <v-list-item-icon class="mr-6 mt-3">
-                <v-icon v-text="item.action"></v-icon>
+                <v-img :src="`images/${item.action}`" width="24px" height="24px"></v-img>
               </v-list-item-icon>
               <v-list-item-content  class="text-left py-1" v-show="showSideBar">
                 <v-list-item-title class="font-weight-bold" v-text="item.title"></v-list-item-title>
@@ -57,7 +59,7 @@
                 <v-icon v-text="child.icon"></v-icon>
               </v-list-item-icon>
               <v-list-item-content class="text-left py-1" v-show="showSideBar">
-                <router-link :to="'/'+child.link" class="text-decoration-none">
+                <router-link :to="'/'+child.link"  @click="isHidden = !isHidden" :class="{ 'active-btn': isHidden}" class="text-decoration-none">
                   <v-list-item-title class="font-weight-bold" v-text="child.title"></v-list-item-title>
                 </router-link>
               </v-list-item-content>
@@ -75,7 +77,7 @@
           >
             <v-list-item>
               <v-list-item-icon class="mr-6 mt-3">
-                <v-icon>mdi-logout {{showSideBar}}</v-icon>
+                <v-icon color="#959595">mdi-logout {{showSideBar}}</v-icon>
               </v-list-item-icon>
 
               <v-list-item-content class="text-left py-1" v-show="showSideBar">
@@ -97,25 +99,28 @@ export default {
     return {
       selectedItem: 0,
       showSide : true,
+      isHidden : false,
         items: [
-          { id: 0, text: 'Dashboard', icon: 'mdi-view-dashboard-outline', link: 'dashboard' },
-          { id: 1, text: 'View Bids', icon: 'mdi-gavel' , link: 'view-bids' },
+          { id: 0, text: 'Dashboard', icon: 'dashboard.png', link: 'dashboard' },
+          { id: 1, text: 'View Bids', icon: 'bids.png' , link: 'view-bids' },
           // { id: 2, text: 'View Shipments', icon: 'mdi-truck' },
-          { id: 3, text: 'View OFS Suppliers', icon: 'mdi-tag-outline' , link: 'view-ofs-suppliers'},
-          { id: 4, text: 'Messages', icon: 'mdi-email-outline', link: 'messages' },
+          { id: 3, text: 'View OFS Suppliers', icon: 'tag.png' , link: 'view-ofs-suppliers'},
+          { id: 4, text: 'Messages', icon: 'message.png', link: 'messages' },
           // { id: 5, text: "Browse Public RFx's", icon: 'mdi-compass-outline' },
           // { id: 6, text: 'Manage Invoices', icon: 'mdi-calendar-text-outline' },
           // { id: 7, text: 'Reporting', icon: 'mdi-note-multiple-outline' },
         ],
         subitems: [
           {
-            action: 'mdi-clipboard-account-outline',
+            action: 'setting.png',
             active: false,
             items: [
               { icon: 'mdi-account-multiple',title: 'Manage Users', link: 'manage-users' },
-              { icon: 'mdi-cog-outline' ,title: 'Manage Module', link: 'manage-module' },
+              { icon: 'mdi-cog-outline' ,title: 'Manage Modules', link: 'manage-module' },
+              { icon: 'mdi-account-multiple',title: 'Manage Templates', link: 'manage-templates' },
+              { icon: 'mdi-cog-outline' ,title: 'Manage Company Profile', link: 'company-profile' },
             ],
-            title: 'Edit Corporate Profile'
+            title: 'Company Settings'
           },
         ],
         userData: '',
@@ -138,6 +143,9 @@ export default {
     },
     getUnreadMessages() {
       this.unreadMessagesCount({'userId':this.userId});
+    },
+    getImgUrl(pic) {
+        return require('@/assets/images/'+pic)
     }
   },
   mounted() {

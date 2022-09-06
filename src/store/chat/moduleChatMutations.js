@@ -20,4 +20,14 @@ export default {
   setLastMessageRead (state, payload){
     state.lastMessageRead = payload
   }, 
+  setArchiveStatus (state, payload){
+    state.archiveStatus = payload
+  }, 
+  setMembersList (state, payload){
+    var data;
+      state.membersList = payload;
+  }, 
+  setSuppliersUsers (state, payload){
+      state.suppliersUsers = payload;
+  }, 
 }

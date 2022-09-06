@@ -8,17 +8,14 @@ export default {
 		})
 	},
 	getAllConversations({commit}, payload){
-		console.log(payload,'Payload');
 		axios.get('/chat/getConversations/'+payload)
 		 .then(responce => {
-		 	console.log(responce);
 		 	commit('setConverstaionList',responce.data.conversations)
 		})
 	},
 	getAllMessages({commit}, payload){
 		axios.get('/chat/getMessages/'+payload)
 		 .then(responce => {
-		 	console.log(responce,'messages');
 		 	commit('setMessagesList',responce.data.messages)
 		})
 	},
@@ -37,7 +34,6 @@ export default {
 		formData.append('sender[profilePicture]', payload.sender.profilePicture)
 		formData.append('content', payload.content)
 		formData.append('attachment', payload.attachment)
-		console.log(formData,'formData');
 		axios.post('chat/sendMessage',formData, config)
 		 .then(responce => {
 		 	commit('setNewMessages',responce.data.message)
@@ -53,6 +49,37 @@ export default {
 		axios.post('/chat/setLastMessageReadAt',{'userId':payload.userId,'conversationId':payload.conversationId})
 		 .then(responce => {
 		 	commit('setLastMessageRead',responce.data.count)
+		})
+	},
+	// Archive Chat
+	archiveChat({commit}, payload){
+		axios.post('/chat/archiveConversation',{'userId':payload.userId,'conversationId':payload.conversationId})
+		 .then(responce => {
+		 	commit('setArchiveStatus',responce.data.count)
+		})
+	},
+	// Supplier List
+	supplierList({commit}, payload){
+		axios.get('/company/getSupplierCompaniesAndUsers')
+		 .then(responce => {
+		 	commit('setMembersList',responce.data)
+		})
+	},
+	// Supplier Users List
+	supplierUserList({commit}, payload){
+		console.log(payload);
+		axios.get('/user/searchSupplierUser/'+payload)
+		 .then(responce => {
+		 	commit('setSuppliersUsers',responce.data)
+		})
+	},
+	// Supplier Users List
+	createConversation({commit}, payload){
+		console.log(payload);
+		axios.post('/chat/createConversation/',payload)
+		 .then(responce => {
+		 	// console.log(responce);
+		 	commit('setConverstaionList',responce.data.conversation)
 		})
 	},
 }

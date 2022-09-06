@@ -1,7 +1,9 @@
 .manage-module{
+	flex: 0 0 78%;
+    max-width: 78%;
 	.mid-content{
-		flex: 0 0 78%;
-	  max-width: 78%;
+		flex: 0 0 100%;
+	  max-width: 100%;
 	  z-index: 2;
 	  padding-left: 0 !important;
 	  .content-section{
@@ -10,7 +12,7 @@
 	  	border-radius: 8px;
 	  	margin-bottom: 0px;
 	  	padding: 10px 4px;
-	  	height: calc(88vh - 20px);
+	  	height: calc(100vh - 110px);
 	  	.manage-sections{
 	  		.top-section{
 	  			justify-content: space-between;
@@ -35,6 +37,8 @@
 	  						text-transform: inherit;
 	  						font-size: 14px;
 	  						color: #0D1139;
+	  						font-weight: 700;
+	  						opacity: 1 !important;
 	  					}
 	  					.v-tab--active{
 	  						font-weight: 700;
@@ -43,10 +47,9 @@
 	  			}
 	  		}
 	  		.module-content{
-	  			.v-expansion-panel-header{
+	  			.panel-header{
 	  				min-height: 72px;
-	  				padding: 16px 6px 16px 40px;
-				    background-color: #FBFBFB;
+	  				padding: 16px 6px 16px 0px;
 	  				h6{
 	  					color: #0D1139;
 					    font-size: 16px;
@@ -86,7 +89,7 @@
 	  			.v-expansion-panel-header--active{
 	  				background-color: #fff;
 	  			}
-	  			.v-expansion-panel-content{
+	  			.panel-content{
 	  				text-align: left;
 	  				p{
 	  					font-weight: 600;

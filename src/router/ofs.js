@@ -18,6 +18,19 @@ const routes = [
         }
       },
       {
+        path: '/ofs-directory/:slug',
+        name: 'CategoryName',
+        component: () => import('@/views/Ofs/CategoryListing.vue'),
+        beforeEnter: (to, from, next) => {
+          if(localStorage.getItem("userData") == null) {
+              
+              next();
+          }else{
+            next('/dashboard');
+          }
+        }
+      },
+      {
         path: '/ofs-directory/:slug/:name',
         name: 'CategoryListing',
         component: () => import('@/views/Ofs/CategoryListing.vue'),

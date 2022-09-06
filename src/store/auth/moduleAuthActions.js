@@ -17,6 +17,9 @@ export default {
         localStorage.setItem("token",JSON.stringify(result.user.multiFactor.user.accessToken));
         axios.get('/user/getUserData/'+result.user.multiFactor.user.email)
          .then(responce => {
+          axios.get('/auth/addUserLoginHistory/'+responce.data.id)
+           .then(responce => {
+          })
           commit('setUser',responce.data)
           localStorage.setItem("userData",JSON.stringify(responce.data));
           router.replace({ name: "Dashboard" });
@@ -39,10 +42,10 @@ export default {
         commit('setError', null)
         // console.log(result);
         localStorage.removeItem("userData");
-        localStorage.removeItem("userId");
+        // localStorage.removeItem("userId");
         localStorage.removeItem("token");
         router.replace({
-          name: "Login"
+          name: "OFSHome"
         });
       })
       .catch((error) => {
@@ -56,16 +59,33 @@ export default {
     axios.post('/auth/sendPasswordResetEmail',{'email': payload.email})
      .then(responce => {
       if(responce.status == 200){
-        commit('setEmailSuccess', 'Email sent successfully! Please check your email')
+        commit('setEmailSuccess', 'Email sent successfully! Please check your email');
       }
       else{
         commit('setEmailError', 'Something wrong please try again')
       }
     })
   },
-
+  verifyToken({commit}, payload){
+    axios.get('/auth/verifyPasswordResetToken/'+payload)
+     .then(responce => {
+      commit('setVerifyData',responce.data)
+    })
+  },
+  resetPassword({commit}, payload){
+    console.log(payload,'reset password');
+    axios.post('/auth/updatePassword',{'email': payload.email, 'oobCode': payload.oobCode, 'password': payload.password})
+     .then(responce => {
+      if(responce.status == 200){
+        commit('setEmailSuccess', 'Password reset successfully!');
+        commit('setVerifyData', {})
+      }
+      else{
+        commit('setEmailError', 'Something wrong please try again')
+      }
+    })
+  },
   checkEmail({ commit }, payload) {
-    // console.log(payload);
     // Try to sigin
     if(payload.indexOf('@') != -1){
       axios.post('/user/checkIfUserWithEmailExists',{'email': payload})
@@ -96,8 +116,9 @@ export default {
             axios.post('/ofs/queueSupplierUser',{'id': payload.id, 'email': payload.email, 'firstName': payload.firstName, 'lastName': payload.lastName,'phoneNumber':payload.phoneNumber, 'title': payload.title, 'password': payload.password})
              .then(responce => {
               if(responce.status == 200){
-                localStorage.setItem("userId",JSON.stringify(responce.data));
-                commit('setUserId', responce.data);
+                // localStorage.setItem("userId",payload.id);
+                commit('setUserId', payload.id);
+                commit('setCompanyName', payload.companyName);
                 router.replace({
                   name: "ModuleSelection"
                 });
@@ -114,8 +135,9 @@ export default {
                 axios.post('/ofs/createUser',{'company': payload.company,'firstName': payload.firstName, 'lastName': payload.lastName,'email': payload.email,'phoneNumber':payload.phoneNumber, 'title': payload.title, 'password': payload.password})
                  .then(responce => {
                   if(responce.status == 200){
-                    localStorage.setItem("userId",JSON.stringify(responce.data));
+                    // localStorage.setItem("userId",JSON.stringify(responce.data));
                     commit('setUserId', responce.data);
+                    commit('setCompanyName', payload.company);
                     router.replace({
                       name: "ModuleSelection"
                     });
@@ -130,15 +152,18 @@ export default {
                 commit('setCompanyError', 'Please try with different Company details')
               }
             })
-           }
-            
-        }
-        
-       
+           }   
+        } 
       })
     }
     
   },
+  // searchSupplier({commit}){
+  //   axios.get('/company/getAllSuppliersPublic/')
+  //     .then(responce => {
+  //     commit('setSupplierList',responce.data)
+  //   })
+  // },
   searchSupplier({commit}, payload){
     axios.get('/ofs/searchSuppliers/'+payload)
       .then(responce => {
@@ -161,8 +186,9 @@ export default {
               axios.post('/ofs/createUser',{'company': payload.company,'firstName': payload.firstName, 'lastName': payload.lastName,'email': payload.email,'phoneNumber':payload.phoneNumber, 'title': payload.title, 'password': payload.password})
                .then(responce => {
                 if(responce.status == 200){
-                  localStorage.setItem("userId",JSON.stringify(responce.data));
+                  // localStorage.setItem("userId",JSON.stringify(responce.data));
                   commit('setUserId', responce.data);
+                  commit('setCompanyName', payload.company);
                   router.replace({
                     name: "ModuleSelection"
                   });
@@ -193,15 +219,30 @@ export default {
   },
 
   // signAgreement
-  signAgreement({commit}, payload){
-    // Try to store Agreement
-    alert(payload.id);
-    axios.post('/ofs/generateContract',{'id': payload.id,'ip': payload.ipAddress,'sign': payload.sign})
+  contractGenerate({commit}, payload){
+    axios.post('/ofs/generateContract',{'id': payload.id,'ip': payload.ip,'contractType': payload.contractType, 'plan': payload.plan})
      .then(responce => {
       if(responce.status == 200){
+        localStorage.setItem('contractData', JSON.stringify(responce.data));
+        commit('setContract', responce.data)
+        router.replace({
+          name: "Contract"
+        });
+      }
+      else{
+        commit('setEmailError', 'Something wrong please try again')
+      }
+    })
+  },
+  signAgreement({commit}, payload){
+    // Try to store Agreement
+    axios.post('/ofs/signContract',{'sign': payload.sign,'contractType': payload.contractType,'fileName':payload.fileName,'plan':payload.plan,'cbUserId':payload.cbUserId})
+     .then(responce => {
+      if(responce.status == 200){
+        localStorage.removeItem('contractData');
         commit('setContract', 'Contract generated successfully!')
         router.replace({
-          name: "Payment"
+          name: "ModuleSelection"
         });
       }
       else{

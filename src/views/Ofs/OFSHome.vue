@@ -20,12 +20,12 @@
         </v-container>
       </div>
       <v-container>
-        <v-main>
-          <v-row>
+        <v-main class="pt-0">
+          <v-row class="mt-n16">
             <v-col cols="12" md="12">
               <VueSlickCarousel v-bind="settings" class="company-slider">
 
-                <div class="slide-item">
+                <div class="slide-item ">
                   <div class="slide-img d-flex align-center justify-center flex-column">
                     <img
                       :src="require('@/assets/images/ofs/patterson.png')" class="mx-auto"
@@ -35,7 +35,7 @@
                     <h3 class="font-weight-bold">Premium Service Provider</h3>
                   </div>
                 </div>
-                <div class="slide-item">
+                <div class="slide-item ">
                   <div class="slide-img d-flex align-center justify-center flex-column">
                     <img
                       :src="require('@/assets/images/ofs/tetra.png')" class="mx-auto" height="120"
@@ -45,7 +45,7 @@
                     <h3 class="font-weight-bold">Premium Service Provider</h3>
                   </div>
                 </div>
-                <div class="slide-item">
+                <div class="slide-item ">
                   <div class="slide-img d-flex align-center justify-center flex-column">
                     <img
                       :src="require('@/assets/images/ofs/champion.png')" class="mx-auto"
@@ -239,6 +239,7 @@ export default {
     }
   },
   mounted() {
+  document.title = "OFS - BidOut"
     this.getCategories();
   }
 };

@@ -14,4 +14,7 @@ export default {
    setResponseId (state, payload){
       state.responseId = payload
   },
+  setActivityList (state, payload){
+      state.activities = payload
+  },
 }

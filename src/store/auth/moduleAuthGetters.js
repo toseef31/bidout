@@ -29,4 +29,13 @@ export default {
     userIp (state){
        return state.userIp
     },
+    companyName (state){
+       return state.companyName
+    },
+    verifyData (state){
+       return state.verifyData
+    },
+    contractData (state){
+       return state.contractData
+    },
 }

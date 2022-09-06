@@ -34,5 +34,12 @@ export default {
       commit('setResponseId', payload);
     })
   }, 
+  getActivities({commit},payload){
+    axios.get('/activity/getActivities/'+payload,{ headers: {"Authorization" : `Bearer ${JSON.parse(localStorage.getItem('token'))}`} })
+      .then(responce => {
+        console.log(responce);
+      commit('setActivityList',responce.data)
+    })
+  }, 
   
 }

@@ -44,8 +44,9 @@
 		}
 	}
 	.contract-section{
-		/*height: 65vh;
-		overflow: auto;*/
+		height: 700px;
+		overflow-x: hidden;
+		overflow-y: auto;
 	}
 }
 @media(max-width: 768px){

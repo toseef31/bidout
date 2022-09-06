@@ -4,4 +4,5 @@ export default {
    userStatus: null, 
    statusMessage: null, 
    responseId: null, 
+   activities: null, 
 }

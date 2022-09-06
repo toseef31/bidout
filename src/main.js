@@ -13,9 +13,11 @@ import 'firebase/compat/auth';
 import 'firebase/compat/firestore';
 import axios from 'axios';
 import vueCountryRegionSelect from 'vue-country-region-select';
-import moment from 'vue-moment'
+import moment from 'vue-moment';
 import VueSignaturePad from 'vue-signature-pad';
 import '@/assets/styles/index.scss';
+import VueCroppie from 'vue-croppie';
+import 'croppie/croppie.css'
 // Your web app's Firebase configuration
 var firebaseConfig = {
   apiKey: import.meta.env.VITE_FIREBASE_API_KEY,
@@ -40,6 +42,7 @@ Vue.use(vueCountryRegionSelect);
 Vue.use(Vuex,axios);
 Vue.use(moment);
 Vue.use(VueSignaturePad);
+Vue.use(VueCroppie);
 Sentry.init({
   Vue: Vue,
   dsn: import.meta.env.VITE_SENTRY_DSN,
@@ -57,7 +60,6 @@ LogRocket.getSessionURL(sessionURL => {
     scope.setExtra("sessionURL", sessionURL);
   });
 });
-
 var userData = store.getters.userInfo;
 if(userData){
   LogRocket.identify(userData.id, {

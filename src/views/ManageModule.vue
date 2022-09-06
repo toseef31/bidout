@@ -1,109 +1,83 @@
 <template>
-  <section class="section-container fill-height manage-module">
-    <Navbar></Navbar>
-     <v-row class="mx-0">
-       <v-col :class="[ showSideBar ? 'col-12' : 'toggleLeft-sidebar']" class="left-sidebar pr-1">
-          <LeftSidebar></LeftSidebar>
-       </v-col>
-       <v-col class="mid-content pa-0 pa-sm-3" :class="[ showSideBar ? 'col-md-9 col-12 col-sm-9' : 'mid-content-collapse', activityPanel ? 'd-sm-block' : 'd-md-block']" v-show="!activityPanel">
-          <div class="content-section">
-            <v-row class="mx-0">
-              <v-col cols="12" sm="12" md="12" class="d-sm-block">
-                <div class="manage-sections pa-4">
-                  <div class="top-section d-flex">
-                    <h4>Manage Modules</h4>
-                    <div class="tabs-head">
-                      <template>
-                        <v-tabs
-                          v-model="tab"
-                          align-with-title
+   <v-col class="manage-module pa-0 pa-sm-3 pl-sm-0" :class="[ showSideBar ? 'col-md-9 col-12 col-sm-9' : 'mid-content-collapse', activityPanel ? 'd-sm-block' : 'd-md-block']" v-show="!activityPanel">
+      <div class="mid-content">
+        <div class="content-section">
+          <v-row class="mx-0">
+            <v-col cols="12" sm="12" md="12" class="d-sm-block">
+              <div class="manage-sections pa-4">
+                <div class="top-section d-flex">
+                  <h4>Manage Modules</h4>
+                  <div class="tabs-head">
+                    <template>
+                      <v-tabs
+                        align-with-title
+                      > <v-tab
+                          v-for="item in items" disabled
                         >
-                          <v-tabs-slider color="yellow"></v-tabs-slider>
-
-                          <v-tab
-                            v-for="item in items"
-                            :key="item"
-                          >
-                            {{ item }}
-                          </v-tab>
-                        </v-tabs>
-                      </template>
-                    </div>
-                  </div>
-                  <div class="module-content mt-16">
-                    <v-tabs-items v-model="tab">
-                      <v-tab-item>
-
-                        <v-expansion-panels>
-                          <v-expansion-panel>
-                            <v-expansion-panel-header>
-                              <template v-slot:actions>
-                                <v-icon>
-                                  $expand
-                                </v-icon>
-                              </template>
-                              <h6>BidOut Procurement Platform</h6>
-                              <div class="btn-section">
-                                <a href="" class="text-decoration-none text-right toggle-btn" max-width="150px"><v-icon>mdi-bookmark-outline</v-icon>Upgrade to Enterpise</a>
-                                <a href="" class="text-decoration-none text-right contract-btn" max-width="150px"><v-icon>mdi-file-outline</v-icon>View Contract</a>
-                              </div>
-                            </v-expansion-panel-header>
-                            <v-expansion-panel-content>
-                              <p class="mb-1 black--text">Renewal Date: 07/12/2023</p>
-                              <p class="black--text">Annual Fee: $900</p>
-                            </v-expansion-panel-content>
-                          </v-expansion-panel>
-                        </v-expansion-panels>
-                        <v-expansion-panels>
-                          <v-expansion-panel>
-                            <v-expansion-panel-header>
-                              <template v-slot:actions>
-                                <v-icon>
-                                  $expand
-                                </v-icon>
-                              </template>
-                              <h6>OFS Directory Profile</h6>
-                              <div class="btn-section">
-                                <a href="" class="text-decoration-none text-right toggle-btn" max-width="150px"><v-icon>mdi-bookmark-outline</v-icon>Upgrade to Enterpise</a>
-                                <a href="" class="text-decoration-none text-right contract-btn" max-width="150px"><v-icon>mdi-file-outline</v-icon>View Contract</a>
-                              </div>
-                            </v-expansion-panel-header>
-                            <v-expansion-panel-content>
-                              <p class="mb-1 black--text">Renewal Date: 07/12/2023</p>
-                              <p class="black--text">Annual Fee: $900</p>
-                            </v-expansion-panel-content>
-                          </v-expansion-panel>
-                        </v-expansion-panels>
-                        <v-expansion-panels>
-                          <v-expansion-panel>
-                            <v-expansion-panel-header>
-                              <template v-slot:actions>
-                                <v-icon>
-                                  $expand
-                                </v-icon>
-                              </template>
-                              <h6>BidOut Procurement Platform</h6>
-                              <div class="btn-section">
-                                <a href="" class="text-decoration-none text-right toggle-btn" max-width="150px"><v-icon>mdi-bookmark-outline</v-icon>Upgrade to Enterpise</a>
-                                <a href="" class="text-decoration-none text-right contract-btn" max-width="150px"><v-icon>mdi-file-outline</v-icon>View Contract</a>
-                              </div>
-                            </v-expansion-panel-header>
-                            <v-expansion-panel-content>
-                              <p class="mb-1 black--text">Renewal Date: 07/12/2023</p>
-                              <p class="black--text">Annual Fee: $900</p>
-                            </v-expansion-panel-content>
-                          </v-expansion-panel>
-                        </v-expansion-panels>
-                      </v-tab-item>
-                    </v-tabs-items>
+                          {{ item }}
+                        </v-tab>
+                      </v-tabs>
+                    </template>
                   </div>
                 </div>
-              </v-col>
-            </v-row>
-          </div>
-       </v-col>
-     </v-row>
-   </section>
+                <div class="module-content mt-16">
+                  <v-tabs-items v-model="tab">
+                    <v-tab-item>
+
+                      <div class="panels">
+                        <div class="panel">
+                          <div class="d-flex justify-space-between panel-header">
+                            <h6>BidOut Procurement Platform</h6>
+                            <div class="btn-section">
+                              <a href="" class="text-decoration-none text-right toggle-btn" max-width="150px"><v-icon>mdi-bookmark-outline</v-icon>Upgrade to Enterpise</a>
+                              <a href="" class="text-decoration-none text-right contract-btn" max-width="150px"><v-icon>mdi-file-outline</v-icon>View Contract</a>
+                            </div>
+                          </div>
+                          <div class="panel-content">
+                            <p class="mb-1 black--text">Renewal Date: 07/12/2023</p>
+                            <p class="black--text">Annual Fee: $900</p>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="panels">
+                        <div class="panel">
+                          <div class="d-flex justify-space-between panel-header">
+                            <h6>OFS Directory Profile</h6>
+                            <div class="btn-section">
+                              <a href="" class="text-decoration-none text-right toggle-btn" max-width="150px"><v-icon>mdi-bookmark-outline</v-icon>Upgrade to Enterpise</a>
+                              <a href="" class="text-decoration-none text-right contract-btn" max-width="150px"><v-icon>mdi-file-outline</v-icon>View Contract</a>
+                            </div>
+                          </div>
+                          <div class="panel-content">
+                            <p class="mb-1 black--text">Renewal Date: 07/12/2023</p>
+                            <p class="black--text">Annual Fee: $900</p>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="panels">
+                        <div class="panel">
+                          <div class="d-flex justify-space-between panel-header">
+                            <h6>BidOut Procurement Platform</h6>
+                            <div class="btn-section">
+                              <a href="" class="text-decoration-none text-right toggle-btn" max-width="150px"><v-icon>mdi-bookmark-outline</v-icon>Upgrade to Enterpise</a>
+                              <a href="" class="text-decoration-none text-right contract-btn" max-width="150px"><v-icon>mdi-file-outline</v-icon>View Contract</a>
+                            </div>
+                          </div>
+                          <div class="panel-content">
+                            <p class="mb-1 black--text">Renewal Date: 07/12/2023</p>
+                            <p class="black--text">Annual Fee: $900</p>
+                          </div>
+                        </div>
+                      </div>
+                    </v-tab-item>
+                  </v-tabs-items>
+                </div>
+              </div>
+            </v-col>
+          </v-row>
+        </div>
+      </div>
+   </v-col>
 </template>
 <script>
   import Navbar from './Layout/Navbar.vue'
@@ -121,11 +95,10 @@ export default {
   data() {
     return {
       isHidden : false,
-      tab: null,
+      tab: 0,
       items: [
-        'Account Rep', 'Tyler Cherry', 'tcherry@bidout.app', '(281)782-5332'
+        'Account Rep', 'Tyler Cherry', 'tcherry@bidout.app', '(281) 435-6344'
       ],
-      text: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.',
     };
   },
   computed:{

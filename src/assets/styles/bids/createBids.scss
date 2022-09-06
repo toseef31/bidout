@@ -4,6 +4,7 @@
     max-width: 78%;
     z-index: 2;
     padding-left: 0 !important;
+    padding-bottom: 0 !important;
 		.content-section{
 			background: #FFFFFF;
 			border: 1px solid #B8B8B8;
@@ -107,9 +108,10 @@
 							box-shadow: none;
 						}
 						.save-btn{
-							font-size: 20px;
+							font-size: 16px;
 							border-radius: 8px;
 						}
+
 					}
 				}
 				.supplier-row{
@@ -317,6 +319,11 @@
 						font-size: 20px;
 					}
 
+				}
+				.invite-btn{
+					font-size: 16px;
+					border-radius: 8px;
+					color: #0D9648;
 				}
 			}
 		}

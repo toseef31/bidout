@@ -255,7 +255,8 @@
 		</v-row>
 		<v-row justify="center" align="center" no-gutters>
 		  <v-col cols="12" md="12">
-		    <v-btn color="#0D9648" elevation="0" height="56px" width="220px" large class="white--text text-capitalize font-weight-bold mt-8 mb-8 save-btn">Save Changes</v-btn>
+		    <v-btn color="rgba(13, 150, 72, 0.1)" elevation="0" height="56px" width="220px" large class="text-capitalize font-weight-bold mt-8 mb-8 invite-btn mr-5">Invite  New Supplier </v-btn>
+		    <v-btn color="#0D9648" elevation="0" height="56px" width="220px" large class="white--text text-capitalize font-weight-bold mt-8 mb-8 save-btn" @click="changeTab">Save Changes</v-btn>
 		  </v-col>
 		</v-row>
 	</div>
@@ -273,7 +274,9 @@ export default {
     
   },
   methods: {
-    
+    changeTab(){
+      this.$emit('changetab', 'tab-3');
+    }
   },
   mounted() {
     

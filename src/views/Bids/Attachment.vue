@@ -75,7 +75,7 @@
 		    </div>
 		  </v-col>
 		  <v-col cols="12" sm="4" md="3" class="pl-0 pl-sm-6 mt-3 mt-sm-0">
-		    <v-btn large elevation="0" color="#0D9648" height="56px" width="100%" class="white--text font-weight-bold text-capitalize py-4 px-9 attach-btn">Save Changes</v-btn>
+		    <v-btn large elevation="0" color="#0D9648" height="56px" width="100%" class="white--text font-weight-bold text-capitalize py-4 px-9 attach-btn" @click="changeTab">Save Changes</v-btn>
 		  </v-col>
 		</v-row>
 	</div>
@@ -91,7 +91,9 @@ export default {
     
   },
   methods: {
-    
+    changeTab(){
+      this.$emit('changetab', 'tab-6');
+    },
   },
   mounted() {
     

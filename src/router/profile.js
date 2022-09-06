@@ -1,24 +1,14 @@
-import Base from '@/views/Layout/Base.vue';
+// import Settings from '@/views/Layout/Base.vue';
+import Settings from '@/views/Layout/Settings.vue';
 import store from '@/store';
 
 const routes = [
   {
-    path: '',
-    component: Base,
+    path: '/seeting/',
+    component: Settings,
     meta: { requiresAuth: true },
     children: [
-      {
-        path: '/edit-profile',
-        name: 'EditProfile',
-        component: () => import('@/views/EditProfile.vue'),
-        beforeEnter: (to, from, next) => {
-           if(localStorage.getItem("userData") == null) {
-               next('/login');
-           } else {
-               next();
-           }
-       }
-      },
+      
       {
         path: '/company-profile',
         name: 'CompanyProfile',
@@ -71,6 +61,18 @@ const routes = [
         path: '/manage-module',
         name: 'ManageModules',
         component: () => import('@/views/ManageModule.vue'),
+        beforeEnter: (to, from, next) => {
+           if(localStorage.getItem("userData") == null) {
+               next('/login');
+           } else {
+               next();
+           }
+       }
+      },
+      {
+        path: '/manage-templates',
+        name: 'ManageTemplates',
+        component: () => import('@/views/ManageTemplates.vue'),
         beforeEnter: (to, from, next) => {
            if(localStorage.getItem("userData") == null) {
                next('/login');

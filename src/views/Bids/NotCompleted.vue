@@ -11,9 +11,9 @@
               <v-col cols="12" md="6" class="text-left">
                 <div class="d-flex align-center">
                   <h3 class="pl-1 mr-4">Annual Chemical Bid</h3>
-                  <p class="preview-text mb-0 ml-3">
+                  <!-- <p class="preview-text mb-0 ml-3">
                     <a href="" class="text-decoration-none"><v-icon color="#0D9648" class="pr-2">mdi-open-in-new</v-icon>Preview Bid in Supplier View</a>
-                  </p>
+                  </p> -->
                 </div>
               </v-col>
               <v-col cols="12" md="6" class="text-right">
@@ -29,7 +29,7 @@
               <v-tabs
                 v-model="currentItem" class="bids-tabs"
                 fixed-tabs
-                hide-slider
+                hide-slider mobile-breakpoint="767px"
               >
                 <v-tab
                   v-for="(item, index) in tabs"
@@ -46,27 +46,27 @@
                 <v-tab-item
                   value="tab-1"
                 >
-                  <bid-details></bid-details>
+                  <bid-details @changetab="ChangeT($event)"></bid-details>
                 </v-tab-item>
                 <v-tab-item
                   value="tab-2"
                 >
-                  <SupplierSection></SupplierSection>
+                  <SupplierSection @changetab="ChangeT($event)"></SupplierSection>
                 </v-tab-item>
                 <v-tab-item
                   value="tab-3"
                 >
-                  <team-members></team-members>
+                  <team-members  @changetab="ChangeT($event)"></team-members>
                 </v-tab-item>
                 <v-tab-item
                   value="tab-4" class="bidline-tab"
                 >
-                  <bid-lines></bid-lines>
+                  <bid-lines  @changetab="ChangeT($event)"></bid-lines>
                 </v-tab-item>
                 <v-tab-item
                   value="tab-5" class="attachment-tab mt-5"
                 >
-                  <attachment></attachment>
+                  <attachment  @changetab="ChangeT($event)"></attachment>
                 </v-tab-item>
                 <v-tab-item
                   value="tab-6" class="question-tab mt-5"
@@ -108,7 +108,7 @@ export default {
   data() {
     return {
       users: '',
-      currentItem: 'tab-Web',
+      currentItem: 'tab-1',
       tabs: [
         { text: 'Bid Detail', icon: 'mdi-information-outline', value: 1 },
         { text: 'Supplier Invitation', icon: 'mdi-information-outline', value: 2}, 
@@ -138,7 +138,10 @@ export default {
     },
   },
   methods: {
-    
+    ChangeT(tab)
+    {
+      this.currentItem=tab;
+    },
   },
   mounted() {
     document.title = "Create Bid - BidOut";

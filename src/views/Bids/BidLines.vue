@@ -8,7 +8,7 @@
         </div>
         <div class="mr-2 bid-item">
           <label class="d-block input-label text-left">Line Item Description</label>
-          <v-text-field placeholder="Line Item Description" height="31pxx" single-line outlined type="text" v-model="lineItems.description" hide-details>
+          <v-text-field placeholder="Line Item Description" height="31px" single-line outlined type="text" v-model="lineItems.description" hide-details>
           </v-text-field>
         </div>
         <div class="mr-2 bid-item">
@@ -121,7 +121,7 @@
     </div>
     <v-row justify="center" align="center" no-gutters class="mt-16">
       <v-col cols="12">
-        <v-btn color="#0D9648" elevation="0" class="white--text text-capitalize font-weight-bold save-btn py-4 px-9" large height="56px">Save Changes</v-btn>
+        <v-btn color="#0D9648" elevation="0" class="white--text text-capitalize font-weight-bold save-btn py-4 px-9" large height="56px" @click="changeTab">Save Changes</v-btn>
       </v-col>
     </v-row>
 	</div>
@@ -161,7 +161,10 @@ export default {
     
   },
   methods: {
-    
+    changeTab(){
+    	
+      this.$emit('changetab', 'tab-5');
+    }
   },
   mounted() {
     

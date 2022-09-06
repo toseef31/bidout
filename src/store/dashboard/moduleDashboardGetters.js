@@ -14,4 +14,7 @@ export default {
    responseId (state){
       return state.responseId
    },
+   activities (state){
+      return state.activities
+   },
 }

@@ -16,5 +16,14 @@ export default {
   },
   lastMessageRead (state){
     return state.lastMessageRead
+  }, 
+  archiveStatus (state){
+    return state.archiveStatus
+  }, 
+  membersList (state){
+    return state.membersList
+  }, 
+  suppliersUsers (state){
+    return state.suppliersUsers
   },  
 }

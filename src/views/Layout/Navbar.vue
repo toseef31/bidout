@@ -11,7 +11,7 @@
         <template>
           <router-link to="/dashboard" class="logo_main"><img
             :src="require('@/assets/images/green-black.png')"
-            class="ml-3"
+            class="ml-sm-3"
           ></router-link>
         </template>
         <template>
@@ -45,7 +45,8 @@
                       >
                         <router-link :to="item.link" class="text-decoration-none">
                           <v-list-item-icon class="mr-2 my-2">
-                            <v-icon color="#0D9648" v-text="item.icon"></v-icon>
+                            <!-- <v-icon color="#0D9648" v-text="item.icon"></v-icon> -->
+                            <v-img :src="`/images/${item.icon}`" width="24px" height="24px"></v-img>
                           </v-list-item-icon>
                         </router-link>
                         <v-list-item-content align-start color="#0D9648" class="pa-0">
@@ -63,12 +64,13 @@
         </template>
         <v-spacer></v-spacer>
 
-        <v-list>
+        <v-list v-if="userDatas">
           <v-list-item class="pr-0">
             <router-link to="/edit-profile" class="d-flex text-decoration-none">
               <v-list-item-title class="mr-3">{{userDatas.firstName}} {{userDatas.lastName}}</v-list-item-title>
               <v-avatar>
                 <v-img v-if="userDatas.image == null" :src="require('@/assets/images/user.png')"></v-img>
+                <v-img v-else :src="userDatas.image"></v-img>
               </v-avatar>
             </router-link>
           </v-list-item>
@@ -201,9 +203,9 @@ export default {
       isActivity : false,
       iconText: 'mdi-view-dashboard-outline',
       menuText: 'Dashboard',
-      select: {text: 'Create a new Bid',link: '/create-bid' , icon: 'mdi-gavel'},
+      select: {text: 'Create a new Bid',link: '/create-bid' , icon: 'bids.png'},
       items: [
-        { text: 'Create a new Bid', link: '/create-bid' , icon: 'mdi-gavel' },
+        { text: 'Create a new Bid', link: '/create-bid' , icon: 'bids.png' },
         // { text: 'Create a new Shipment', icon: 'mdi-truck' },
       ],
         itemss: [

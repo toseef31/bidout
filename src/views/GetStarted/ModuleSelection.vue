@@ -25,13 +25,13 @@
             <v-col cols="12" md="9">
               <div class="title-head text-left">
                 <h3 class="mb-4">New Account Setup:</h3>
-                <h1 class="mb-8">Tetra Technologies</h1>
+                <h1 class="mb-8">{{companyName}}</h1>
                 <h4 class="font-weight-bold">BidOut Modules</h4>
               </div>
               <v-form>
                 <div class="create-bid text-left mt-5 pa-4">
                   <div class="d-flex justify-space-between align-center mb-5 label-title">
-                    <h1 class="font-weight-bold">RFP Platform - Create Bids</h1>
+                    <h1 class="font-weight-bold">RFx Platform - Create Bids</h1>
                     <v-sheet>
                       <v-switch
                         v-model="createBid"
@@ -44,13 +44,13 @@
                     <div class="d-flex">
                       <v-icon color="#0D9647">mdi-check-circle-outline</v-icon>
                       <div class="pl-2">
-                        <p class="mb-0">Agreement Executed </p>
-                        <p class="mb-0">07/05/2022 12:52pm </p>
+                        <p class="mb-0">Execute Agreement Now</p>
+                        <p class="mb-0">{{ new Date() | moment("MM/D/YYYY h:mm a") }} </p>
                       </div>
                     </div>
                   </div>
                 </div>
-                <div class="create-bid text-left mt-5 pa-4">
+                <!-- <div class="create-bid text-left mt-5 pa-4">
                   <div class="d-flex justify-space-between align-center mb-5 label-title">
                     <h1 class="font-weight-bold">RFP Platform - Respond to Bids</h1>
                     <v-sheet>
@@ -62,11 +62,11 @@
                     </v-sheet>
                   </div>
                   <p class="font-weight-medium">Signup today as a service provider to get access to more work trhoughout BidOut Platform. By <br> enabling this module, Operators can invite your business to respond to bids.</p>
-                </div>
-                <div class="create-bid text-left mt-5 pa-4">
+                </div> -->
+                <div class="create-bid text-left mt-10 pa-4">
                   <div class="d-flex justify-space-between align-center mb-5 label-title">
-                    <h1 class="font-weight-bold">OFS Directory - Service Provider Listing </h1>
-                    <h1 class="price-text">$79/month</h1>
+                    <h1 class="font-weight-bold">Respond to Bids - OFS Directory</h1>
+                    <h1 class="price-text"><span v-if="editions == 'free'">Free</span><span v-else>$79.99/month</span></h1>
                     <v-sheet>
                       <v-switch
                         v-model="providerListing"
@@ -75,7 +75,7 @@
                       ></v-switch>
                     </v-sheet>
                   </div>
-                  <p class="font-weight-medium">Showcase your Service Provide to oil and gas operators to gain access to more visibility and more <br>work.</p>
+                  <p class="font-weight-medium">Respond to bid invitiations & showcase your services to oil and gas operators to gain access to <br>greater visibility.</p>
                   <div class="d-flex">
                     <v-radio-group
                       v-model="editions"
@@ -85,25 +85,26 @@
                       <v-radio
                         label="Standard Edition (Free)"
                         color="#0D9647"
-                        value="standard"
+                        value="free"
                       ></v-radio>
                       <v-radio
                         label="Premium Edition"
                         color="#0D9647"
-                        value="premium"
+                        value="ofs"
                       ></v-radio>
                     </v-radio-group>
                   </div>
                   <v-row>
-                    <v-col cols="12" sm="12" text="left">
-                      <label class="d-block text-left input-label mb-2 font-weight-bold">Sale Contact</label>
-                      <v-select outlined placeholder="Select" :items="packages"></v-select>
+                    <v-col cols="12" sm="12" v-show="editions == 'ofs'">
+                      <label class="d-block text-left input-label mb-2 font-weight-bold">Sale Contacts</label>
+                      <v-select outlined placeholder="Select" v-model="package" :items="packages" item-text="name" item-value="id"></v-select>
+                      
                     </v-col>
                   </v-row>
                   <v-row>
                     <v-col cols="12" sm="4" text="left">
-                      <router-link to="/get-started/contract"width="100%" class="font-weight-bold white--text text-capitalize text-decoration-none agreement-link pa-4">Execute Agreement Now <v-icon class="pl-2" color="#fff">mdi-arrow-right-circle</v-icon></router-link>
-                      <!-- <v-btn color="#0D9647" large dense width="100%" height="56" class="font-weight-bold white--text text-capitalize">Execute Agreement Now <v-icon class="pl-2" color="#fff">mdi-arrow-right-circle</v-icon></v-btn> -->
+                      <!-- <router-link to="/get-started/contract"width="100%" class="font-weight-bold white--text text-capitalize text-decoration-none agreement-link pa-4">Execute Agreement Now <v-icon class="pl-2" color="#fff">mdi-arrow-right-circle</v-icon></router-link> -->
+                      <v-btn color="#0D9647" large dense width="100%" height="56" class="font-weight-bold white--text text-capitalize pa-4" @click="generateContract">Execute Agreement Now <v-icon class="pl-2" color="#fff">mdi-arrow-right-circle</v-icon></v-btn>
                     </v-col>
                   </v-row>
                 </div>
@@ -134,6 +135,7 @@
 <script>
   import NavbarBeforeLogin from '../Layout/NavbarBeforeLogin.vue'
   import Footer from '../Layout/Footer.vue'
+  import { mapActions } from "vuex";
 export default {
   name : "ModuleSelection",
   components: {
@@ -147,17 +149,43 @@ export default {
       bidRespond: false,
       providerListing: true,
       editions : 'premium',
-      packages: ['1-5 Staff Members - $79.99 month or $800/year', '5-10 Staff Members - $159.99 month or $1600/year', '10-15 Staff Members - $139.99 month or $2400/year'],
+      package: { name: '1-5 Users - $79.99/month or $800/year prepaid', id: 0},
+      packages: [
+        { name: '1-5 Users - $79.99/month or $800/year prepaid', id: 0},
+        { name: '6-10 Users - $99.99/month or $1,000/year prepaid', id: 1},
+        { name: '11-15 Users - $119.99/month or $1,200/year prepaid', id: 2},
+        { name: '16+ Users or Unlimited - $2,400/year prepaid', id: 3},
+      ],
     };
   },
   computed:{
-   
+   companyName(){
+    return this.$store.getters.companyName;
+   },
+   contractData(){
+    return this.$store.getters.contractData;
+   }
   },
   methods: {
+    ...mapActions(["contractGenerate","getIpAddress"]),
+    getIP(){
+      this.getIpAddress();
+    },
+    generateContract(){
+      var contract = {
+        ip: this.$store.getters.userIp,
+        contractType: this.editions,
+        plan: this.package,
+        id: this.$store.getters.userId,
+      }
+      // console.log(contract);
+      this.contractGenerate(contract);
+    }
     
   },
   mounted() {
-     document.title = "Module Selection - BidOut" 
+    document.title = "Module Selection - BidOut" 
+    console.log('pckg',this.$store.getters.userIp);
   }
 };
 </script>

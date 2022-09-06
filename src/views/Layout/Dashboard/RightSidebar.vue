@@ -69,7 +69,7 @@
             <h4 class="social-text text-left">Stay up to date!</h4>
           </v-col>
           <v-col cols="8">
-            <v-btn class="follow-btn pa-2 white--text" href="https://www.linkedin.com/company/bidout">Follow us on LinkedIn 
+            <v-btn class="follow-btn pa-2 white--text" href="https://www.linkedin.com/company/bidout" target="_blank">Follow us on LinkedIn 
                 <v-icon>mdi-chevron-right</v-icon>
             </v-btn> 
           </v-col>
@@ -83,6 +83,7 @@
 import firebase from 'firebase/compat/app';
 import 'firebase/compat/auth';
 import 'firebase/compat/firestore';
+import { mapActions } from "vuex";
 export default {
   name : "RightSidebar",
   data() {
@@ -158,8 +159,14 @@ export default {
     }
   },
   methods: {
-    
+    ...mapActions(["getActivities"]),
+    activities(id){
+      this.getActivities(id);
+    }
   },
+  mounted() {
+    this.activities(this.$store.getters.userInfo.id);
+  }
 };
 </script>
 <style scoped lang="scss">

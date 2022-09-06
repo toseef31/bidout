@@ -1,6 +1,5 @@
 export default {
     setUser (state, payload){
-      console.log('ffff',payload);
     	state.userInfo = payload
     },
     setToken (state, payload){
@@ -29,5 +28,14 @@ export default {
     },
     setLocalIp (state, payload){
       state.userIp = payload
+    },
+    setCompanyName (state, payload){
+      state.companyName = payload
+    },
+    setVerifyData (state, payload){
+      state.verifyData = payload
+    },
+    setContract (state, payload){
+      state.contractData = payload
     },
 }
