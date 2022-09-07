@@ -68,7 +68,7 @@
                     </v-row>
                     <v-divider class="my-12"></v-divider>
                     <change-password></change-password>
-                    <v-divider class="my-12"></v-divider>
+                    <!-- <v-divider class="my-12"></v-divider>
                     <v-row justify="center">
                       <v-col cols="12" sm="10" md="10">
                         <v-row justify="center">
@@ -83,7 +83,7 @@
                           </v-col>
                         </v-row>
                       </v-col>
-                    </v-row>
+                    </v-row> -->
                     <v-divider class="my-12"></v-divider>
                     <notifications></notifications>
                     <v-divider class="my-12"></v-divider>

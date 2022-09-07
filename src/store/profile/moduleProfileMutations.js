@@ -11,7 +11,13 @@ export default {
     setInviteUser (state, inviteUser){
       state.inviteUser = payload
     },
-    setMessage (state, inviteUser){
-      state.inviteUser = payload
+    setMessage (state, payload){
+      state.message = payload
+    },
+    setEditData (state, payload){
+      state.userData = payload
+    },
+    setDisableUsersList (state, payload){
+      state.disableList = payload
     },
 }

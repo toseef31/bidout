@@ -8,8 +8,10 @@ export default {
 		})
 	},
 	getAllConversations({commit}, payload){
+		console.log(payload);
 		axios.get('/chat/getConversations/'+payload)
 		 .then(responce => {
+		 	console.log(responce.data.conversations,'cffsfas');
 		 	commit('setConverstaionList',responce.data.conversations)
 		})
 	},
@@ -75,6 +77,15 @@ export default {
 	},
 	// Supplier Users List
 	createConversation({commit}, payload){
+		console.log(payload);
+		axios.post('/chat/createConversation/',payload)
+		 .then(responce => {
+		 	// console.log(responce);
+		 	commit('setConverstaionList',responce.data.conversation)
+		})
+	},
+
+	removeUser({commit}, payload){
 		console.log(payload);
 		axios.post('/chat/createConversation/',payload)
 		 .then(responce => {

@@ -32,7 +32,6 @@
                     </th>
                   </tr>
                 </thead>
-                {{allbids}}
                 <tbody>
                   <tr
                     v-for="bid in bids"

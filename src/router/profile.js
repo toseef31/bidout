@@ -34,6 +34,18 @@ const routes = [
        }
       },
       {
+        path: '/disabled-users',
+        name: 'DisabledUsers',
+        component: () => import('@/views/DisabledUsers.vue'),
+        beforeEnter: (to, from, next) => {
+           if(localStorage.getItem("userData") == null) {
+               next('/login');
+           } else {
+               next();
+           }
+       }
+      },
+      {
         path: '/add-users',
         name: 'AddUsers',
         component: () => import('@/views/AddUsers.vue'),
@@ -46,7 +58,7 @@ const routes = [
        }
       },
       {
-        path: '/edit-user/:id',
+        path: '/edit-user/',
         name: 'EditUser',
         component: () => import('@/views/EditUser.vue'),
         beforeEnter: (to, from, next) => {

@@ -24,7 +24,7 @@
                   <v-tabs-items v-model="tab">
                     <v-tab-item>
 
-                      <div class="panels">
+                      <div class="panels pb-4">
                         <div class="panel">
                           <div class="d-flex justify-space-between panel-header">
                             <h6>BidOut Procurement Platform</h6>
@@ -34,12 +34,12 @@
                             </div>
                           </div>
                           <div class="panel-content">
-                            <p class="mb-1 black--text">Renewal Date: 07/12/2023</p>
-                            <p class="black--text">Annual Fee: $900</p>
+                            <p class="mb-1 black--text">Renewal Date: 01/12/2023</p>
+                            <p class="black--text mb-0">Annual Fee: $800</p>
                           </div>
                         </div>
                       </div>
-                      <div class="panels">
+                      <div class="panels pb-4">
                         <div class="panel">
                           <div class="d-flex justify-space-between panel-header">
                             <h6>OFS Directory Profile</h6>
@@ -50,11 +50,11 @@
                           </div>
                           <div class="panel-content">
                             <p class="mb-1 black--text">Renewal Date: 07/12/2023</p>
-                            <p class="black--text">Annual Fee: $900</p>
+                            <p class="black--text mb-0">Annual Fee: $900</p>
                           </div>
                         </div>
                       </div>
-                      <div class="panels">
+                      <div class="panels pb-4">
                         <div class="panel">
                           <div class="d-flex justify-space-between panel-header">
                             <h6>BidOut Procurement Platform</h6>
@@ -64,8 +64,8 @@
                             </div>
                           </div>
                           <div class="panel-content">
-                            <p class="mb-1 black--text">Renewal Date: 07/12/2023</p>
-                            <p class="black--text">Annual Fee: $900</p>
+                            <p class="mb-1 black--text">Renewal Date: 29/12/2023</p>
+                            <p class="black--text mb-0">Annual Fee: $600</p>
                           </div>
                         </div>
                       </div>

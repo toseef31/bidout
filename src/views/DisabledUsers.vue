@@ -6,25 +6,19 @@
               <v-row class="mx-0">
                 <v-col cols="12" sm="12" md="12" class="d-sm-block">
                   <div class="manage-sections pa-4">
-                    <v-alert type="success" v-if="message != null" class="text-left">
-                      {{ message }}
-                    </v-alert>
                     <div class="top-section d-flex">
-                      <h4>Manage Users</h4>
+                      <h4>Disabled Users</h4>
                       <div>
-                        <router-link to="/disabled-users" class="pr-8 font-weight-bold">Show Disable Users</router-link>
-                        <router-link to="/add-users" class="text-decoration-none"><v-btn 
+                        <router-link to="/manage-users" class="pr-8 font-weight-bold">Manage Users</router-link>
+                        <!-- <router-link to="/add-users" class="text-decoration-none"><v-btn 
                         color="#0D9648" 
                         large 
                         dark 
                         min-width="200px"
-                        class="text-capitalize">Add User</v-btn></router-link>
+                        class="text-capitalize">Add User</v-btn></router-link> -->
                       </div>
                     </div>
                     <div class="userlist-table mt-16">
-                      <v-alert type="success" v-if="statusMessage !== null">
-                        {{ statusMessage }}
-                      </v-alert>
                       <v-simple-table>
                         <template v-slot:default>
                           <thead>
@@ -41,9 +35,9 @@
                               <th class="text-left black--text font-weight-bold">
                                 User Permissions
                               </th>
-                              <th class="text-left black--text font-weight-bold">
+                              <!-- <th class="text-left black--text font-weight-bold">
                                 
-                              </th>
+                              </th> -->
                             </tr>
                           </thead>
                           <tbody>
@@ -56,7 +50,7 @@
                               <td class="text-left font-weight-medium">{{ user.email }}</td>
                               <td class="text-left font-weight-medium"><span v-if="user.lastSeen">{{ user.lastSeen | moment("MM/D/YYYY") }}</span><span v-else>no history</span></td>
                               <td class="text-left font-weight-medium text-capitalize">{{user.role}}</td>
-                              <td class="text-left">
+                              <!-- <td class="text-left">
                                 <v-btn depressed color="transparent" @click="editUser(user)" class="text-capitalize edit-btn">
                                   <v-icon>mdi-square-edit-outline</v-icon>
                                 Edit Details</v-btn>
@@ -84,7 +78,7 @@
                                   Enable </v-btn>
                                 </template>
 
-                              </td>
+                              </td> -->
                             </tr>
                           </tbody>
                         </template>
@@ -103,7 +97,7 @@
   import RightSidebar from './Layout/Dashboard/RightSidebar.vue'
   import { mapActions, mapState } from "vuex";
 export default {
-  name : "ManageUsers",
+  name : "DisabledUsers",
   components: {
     Navbar,
     LeftSidebar,
@@ -123,41 +117,20 @@ export default {
         return this.$store.getters.g_activityPanel;
     },
     users(){
-      return this.$store.getters.userList;
-    },
-    userStatus () {
-      return this.$store.getters.userStatus
-    },
-    statusMessage () {
-      return this.$store.getters.statusMessage
-    },
-    responseId () {
-      return this.$store.getters.responseId
-    },
-    message () {
-      return this.$store.getters.message
+      return this.$store.getters.disableList;
     },
   },
   methods: {
-    ...mapActions(["manageUsers","disableUser","enableUser","editData"]),
-    getUsers(company){
-      this.manageUsers(company);
+    ...mapActions(["getDisabledUsers"]),
+    getDisableUsers(company){
+      this.getDisabledUsers(company);
     },
-    disable(id){
-      this.disableUser(id);
-    },
-    enable(id){
-      this.enableUser(id);
-    },
-    editUser(user){
-      this.editData(user);
-    }
   },
   mounted() {
-    document.title = "Manage Users - BidOut";
+    document.title = "Disabled Users - BidOut";
     this.user = this.$store.getters.userInfo;
 
-    this.getUsers(this.user.company);
+    this.getDisableUsers(this.user.company);
   }
 };
 </script>

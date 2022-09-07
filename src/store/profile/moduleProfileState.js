@@ -7,4 +7,6 @@ export default {
    companyAdmins: {},
    inviteUser: {},
    message: null,
+   userData: {},
+   disableList: {},
 }

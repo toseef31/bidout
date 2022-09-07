@@ -194,13 +194,13 @@
                 <div class="users-lists">
                   <v-list two-line  class="py-0">
                     <v-list-item-group
-                      v-model="selected"
+                      v-model="selectedUser"
                       active-class="grey--text"
-                      multiple v-bind:class="{ active: isActive }"
+                      
                     >
                       <template v-for="(conversation, index) in conversationsList">
-                        <v-list-item v-if="conversation.type == 'GROUP'"  @click="openChat(conversation,conversation.groupName)">
-                          <template v-slot:default="{ active }">
+                        <v-list-item @click="openChat(conversation,conversation.groupName)" :key="conversation._id" v-if="conversation.type == 'GROUP'">
+                          <template>
                             <v-list-item-avatar>
                               <v-icon>mdi-account-group-outline</v-icon>
                             </v-list-item-avatar>
@@ -226,12 +226,13 @@
                                 :content="msgCount" overlap
                               ></v-badge> -->
                           </template>
+                          
                         </v-list-item>
-                        <v-list-item v-if="conversation.type == 'PRIVATE' && participant.id != user.id"  v-for="(participant, index) in conversation.participantDetails" @click="openChat(conversation,participant.name)" :key="index">
-                          <template>
+                        <v-list-item v-if="conversation.type == 'PRIVATE' && participant.id != user.id"  v-for="participant in conversation.participantDetails" @click="openChat(conversation,participant.name)">
+                          <template >
                               <v-list-item-avatar>
                                 <v-avatar>
-                                  <img v-if="participant.image != null" :src="require('@/assets/images/user.png')">
+                                  <img v-if="participant.image != null" :src="participant.image">
                                   <img v-if="participant.image == null" :src="require('@/assets/images/chat/chatUser.png')">
                                 </v-avatar>
                               </v-list-item-avatar>
@@ -333,13 +334,13 @@
                                           <v-icon @click="dialog = false" color="#0D9648"> mdi-close</v-icon>
                                         </v-card-title>
                                         <v-divider></v-divider>
-                                        <v-card-text class="my-8" v-if="chatData">
+                                        <v-card-text class="my-8" v-if="!chatData">
                                           
                                           <label class="d-block text-left input-label font-weight-bold black--text">Manage Members</label>
                                           
                                           <v-autocomplete
-                                            v-model="selected"
-                                            :items="chatData"
+                                            v-model="removeMember"
+                                            :items="chatData.group.participantDetails"
                                             item-value="id" item-text="name"
                                             chips
                                             outlined
@@ -347,7 +348,6 @@
                                             hide-details
                                             hide-no-data
                                             hide-selected
-                                            multiple
                                             single-line 
                                             deletable-chips
                                             search-input
@@ -373,7 +373,7 @@
                                             color="#0D9648"
                                             rounded
                                             class="text-capitalize white--text px-3"
-                                            min-width="100px"
+                                            min-width="100px" @click="removeUser(chatData.group._id)"
                                           >
                                             Save
                                           </v-btn>
@@ -405,10 +405,9 @@
                     <vue-dropzone ref="myVueDropzone" :class="{dropzoneActive : uploadDrag }" @ondragleave="dragLeave(event)" id="dropzone" @vdropzone-success="afterComplete" v-on:vdropzone-sending="dragfileupload" :options="dropzoneOptions"> @dragstart="startDrag($event, item)" </vue-dropzone>
                     <v-list two-line class="own-user message-list" v-for="message in messagesList" :key="message._id">
                       <v-list-item-group
-                        multiple
                       >
                         <template>
-                          <v-list-item class="text-left px-5">
+                          <v-list-item class="text-left px-5" disabled>
                             <template>
                               <v-list-item-content>
                                 <v-list-item-title>{{message.sender.name}}</v-list-item-title>
@@ -492,6 +491,7 @@ export default {
   
   data() {
     return {
+      selectedUser: null,
       isActive: false,
       isHidden : false,
       isChatMenu : false,
@@ -508,7 +508,7 @@ export default {
       filename: '',
       searchUsers: '',
       chatData: {},
-      selected: [0],
+      selected: null,
       toggleMenu: [
         { text: 'Archive Chat', icon: 'mdi-archive-outline' },
       ],
@@ -532,6 +532,7 @@ export default {
       },
       uploadDrag: false,
       userObject: '',
+      removeMember: '',
     };
   },
   computed:{
@@ -592,17 +593,17 @@ export default {
   },
   methods: {
     ...mapActions(["getAllConversations","getAllMessages","sendMessage","unreadMessagesCountCon","lastMessageRead","archiveChat","supplierList","supplierUserList","createConversation"]),
-    openChat(group,name){
+    openChat(group,name,id){
       if(screen.width < 767){
         this.userList = false;
         this.showMsgBlock = true;
         this.backArrow= true;
       }
-
       var obj = {
         'group': group,
         'name': name,
       }
+      
       this.conversationId = group._id;
       this.chatData = obj;
       this.getAllMessages(this.conversationId);
@@ -627,6 +628,7 @@ export default {
       }
     },
     getConversations(id){
+      console.log(id,'dsdasdas');
       this.getAllConversations(id);
     },
     fileUpload(){
@@ -785,13 +787,38 @@ export default {
       this.filename = '';
       // })
     },
-
+    removeUser(id){
+      var data = {
+        userIds: [
+           this.removeMember.id
+        ],
+        conversationId: id,
+      }
+      console.log(data);
+    }
   },
   beforeMount() {
     this.user = this.$store.getters.userInfo;
     // this.$router.push("/messages?room_id="+this.user);
   },
   mounted() {
+    var convo =this.$store.getters.conversations[0];
+    
+    if(convo.type == 'PRIVATE'){
+      var membr = convo.participantDetails.filter((item)=>{
+       
+       if(this.user.id != item.id){
+        return item;
+       }
+        // return this.searchUsers.toLowerCase().split(' ').every(v => item.company.toLowerCase().includes(v))
+      })
+      var grpName = membr[0].name;
+    }else{
+      var grpName = convo.groupName;
+    }
+    if(convo){
+      this.openChat(convo,grpName);
+    }
     document.title = "Messages - BidOut";
     if(screen.width < 767){
       this.userList = true;
@@ -799,6 +826,7 @@ export default {
       this.backArrow = false;
     }
     this.user = this.$store.getters.userInfo;
+    alert('daaaaaaaaaaa');
     this.getConversations(this.user.id);
 
 

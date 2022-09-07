@@ -17,12 +17,18 @@ export default {
         localStorage.setItem("token",JSON.stringify(result.user.multiFactor.user.accessToken));
         axios.get('/user/getUserData/'+result.user.multiFactor.user.email)
          .then(responce => {
-          axios.get('/auth/addUserLoginHistory/'+responce.data.id)
-           .then(responce => {
-          })
-          commit('setUser',responce.data)
-          localStorage.setItem("userData",JSON.stringify(responce.data));
-          router.replace({ name: "Dashboard" });
+          if(responce.data.status == false){
+            commit('setError', 'Disabled account! You cannot login with this account');
+            router.replace({ name: "Login" });
+          }else{
+            axios.get('/auth/addUserLoginHistory/'+responce.data.id)
+              .then(responce => {
+            })
+            commit('setUser',responce.data)
+            localStorage.setItem("userData",JSON.stringify(responce.data));
+            router.replace({ name: "Dashboard" });
+          }
+          
         })
         
       }, (err) => {
@@ -59,7 +65,7 @@ export default {
     axios.post('/auth/sendPasswordResetEmail',{'email': payload.email})
      .then(responce => {
       if(responce.status == 200){
-        commit('setEmailSuccess', 'Email sent successfully! Please check your email');
+        commit('setEmailSuccess', 'If this account exists, a password reset email has been sent to the email address for the account.');
       }
       else{
         commit('setEmailError', 'Something wrong please try again')
