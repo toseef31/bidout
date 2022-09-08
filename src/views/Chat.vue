@@ -402,7 +402,7 @@
                   </div>
                   <!-- Message Area -->
                   <div class="messages-section" ref="messagesSection">
-                    <vue-dropzone ref="myVueDropzone" :class="{dropzoneActive : uploadDrag }" @ondragleave="dragLeave(event)" id="dropzone" @vdropzone-success="afterComplete" v-on:vdropzone-sending="dragfileupload" :options="dropzoneOptions"> @dragstart="startDrag($event, item)" </vue-dropzone>
+                    <vue-dropzone ref="myVueDropzone" :class="{dropzoneActive : uploadDrag }" @ondragleave="dragLeave(event)" id="dropzone" @vdropzone-success="afterComplete" v-on:vdropzone-sending="dragfileupload" :options="dropzoneOptions" @dragstart="startDrag($event, item)" acceptedFiles="image/*,application/pdf"> </vue-dropzone>
                     <v-list two-line class="own-user message-list" v-for="message in messagesList" :key="message._id">
                       <v-list-item-group
                       >
@@ -412,7 +412,9 @@
                               <v-list-item-content>
                                 <v-list-item-title>{{message.sender.name}}</v-list-item-title>
                                 
-                                <v-img v-if="message.attachment" :src="message.attachment" max-height="125px" max-width="245px" class="mt-2"></v-img>
+                                <template>
+                                  <v-img v-if="message.attachment" :src="message.attachment" max-height="125px" max-width="245px" class="mt-2"></v-img>
+                                </template>
                                 
                                 <v-list-item-subtitle
                                   class="text--primary"
@@ -533,6 +535,7 @@ export default {
       uploadDrag: false,
       userObject: '',
       removeMember: '',
+      fileExt: '',
     };
   },
   computed:{
@@ -795,6 +798,10 @@ export default {
         conversationId: id,
       }
       console.log(data);
+    },
+    checkFile(name){
+      this.fileExt =  name.split('.').pop();
+      console.log(this.fileExt,'extension');
     }
   },
   beforeMount() {
@@ -802,7 +809,9 @@ export default {
     // this.$router.push("/messages?room_id="+this.user);
   },
   mounted() {
-    var convo =this.$store.getters.conversations[0];
+    this.user = this.$store.getters.userInfo;
+    this.getConversations(this.user.id);
+    var convo = this.$store.getters.conversations[0];
     
     if(convo.type == 'PRIVATE'){
       var membr = convo.participantDetails.filter((item)=>{
@@ -825,9 +834,7 @@ export default {
       this.showMsgBlock = false;
       this.backArrow = false;
     }
-    this.user = this.$store.getters.userInfo;
-    alert('daaaaaaaaaaa');
-    this.getConversations(this.user.id);
+    
 
 
     document.addEventListener('dragenter', function(e) {
@@ -838,7 +845,7 @@ export default {
       else {
         document.getElementById('dropzone').style.display = "none";
       }
-
+      this.checkFile(name);
     });
   }
 };

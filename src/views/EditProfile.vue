@@ -58,7 +58,6 @@
                              
                               <v-autocomplete
                                 v-model="userTimezone"
-                                :loading="loading"
                                 :items="timezone"
                                 :search-input.sync="searchTimezone"
                                 item-text="label"
@@ -122,14 +121,18 @@
                               </tr>
                             </thead>
                             <tbody>
-                              <tr v-for="admins in companyAdmins" v-if="companyAdmins == ''">
-                                <td class="text-left">{{admins.firstName}} {{admins.lastName}}</td>
-                                <td class="text-left">{{admins.email}}</td>
-                                <td class="text-left"><span v-if="admins.phoneNumber">{{admins.phoneNumber}}</span><span v-else>Not Provided</span></td>
-                              </tr>
-                              <tr v-else>
-                                <td>There is no Administrator of this company.</td>
-                              </tr>
+                              <template v-if="companyAdmins.length > 0 ">
+                                <tr v-for="admins in companyAdmins">
+                                  <td class="text-left">{{admins.firstName}} {{admins.lastName}}</td>
+                                  <td class="text-left">{{admins.email}}</td>
+                                  <td class="text-left"><span v-if="admins.phoneNumber">{{admins.phoneNumber}}</span><span v-else>Not Provided</span></td>
+                                </tr>
+                              </template>
+                              <template v-else>
+                                <tr>
+                                  <td colspan="3">There is no Administrator of this company.</td>
+                                </tr>
+                              </template>
                             </tbody>
                           </template>
                         </v-simple-table>

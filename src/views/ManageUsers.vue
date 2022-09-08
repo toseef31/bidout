@@ -57,7 +57,7 @@
                               <td class="text-left font-weight-medium"><span v-if="user.lastSeen">{{ user.lastSeen | moment("MM/D/YYYY") }}</span><span v-else>no history</span></td>
                               <td class="text-left font-weight-medium text-capitalize">{{user.role}}</td>
                               <td class="text-left">
-                                <v-btn depressed color="transparent" @click="editUser(user)" class="text-capitalize edit-btn">
+                                <v-btn depressed color="transparent" @click="editUser(user,'general')" class="text-capitalize edit-btn">
                                   <v-icon>mdi-square-edit-outline</v-icon>
                                 Edit Details</v-btn>
                                
@@ -77,7 +77,7 @@
                               <td class="text-left font-weight-medium"><span v-if="user.lastSeen">{{ user.lastSeen | moment("MM/D/YYYY") }}</span><span v-else>no history</span></td>
                               <td class="text-left font-weight-medium text-capitalize">{{user.role}}</td>
                               <td class="text-left">
-                                <v-btn depressed color="transparent" @click="editUser(user)" class="text-capitalize edit-btn">
+                                <v-btn depressed color="transparent" @click="editUser(user,'invited')" class="text-capitalize edit-btn">
                                   <v-icon>mdi-square-edit-outline</v-icon>
                                 Edit Details</v-btn>
                                
@@ -153,8 +153,9 @@ export default {
     enable(id){
       this.enableUser(id);
     },
-    editUser(user){
-      this.editData(user);
+    editUser(user,type){
+      var data = {user,type};
+      this.editData(data);
     },
     invitedUsers(company){
       this.getInvitedList(company);

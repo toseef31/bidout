@@ -56,7 +56,7 @@
                     placeholder="Select"
                     required
                     outlined
-                    solo-flat
+                    solo-flat class="text-capitalize"
                   ></v-select>
 
                   <v-btn
@@ -109,8 +109,8 @@ export default {
         ],
         select: null,
         items: [
-          'Administrator',
-          'User',
+          'admin',
+          'user',
         ],
         user: '',
     };

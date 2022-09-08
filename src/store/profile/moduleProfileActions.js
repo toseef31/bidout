@@ -98,8 +98,7 @@ export default {
         router.replace({ name: "ManageUsers" });
     })
   },
-  editData({commit},payload){
-    console.log(payload);
+  editData({commit},payload,type){
     commit('setEditData',payload);
     router.replace({ name: "EditUser" });
   },
@@ -110,6 +109,19 @@ export default {
       },
     };
     axios.post('/company/updateUser/'+payload.id,{'firstName':payload.firstName,'lastName': payload.lastName,'role': payload.role},config)
+     .then(responce => {
+        console.log(responce);
+        commit('setMessage','User updated successfully')
+        router.replace({ name: "ManageUsers" });
+    })
+  },
+  updateInvite({commit},payload){
+    var config = {
+      headers: {
+        "Authorization": `Bearer ${JSON.parse(localStorage.getItem('token'))}`
+      },
+    };
+    axios.post('/company/updateInvitedUser/'+payload.id,{'firstName':payload.firstName,'lastName': payload.lastName,'role': payload.role},config)
      .then(responce => {
         console.log(responce);
         commit('setMessage','User updated successfully')

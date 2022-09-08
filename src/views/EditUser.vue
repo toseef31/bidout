@@ -104,8 +104,8 @@ export default {
         ],
         role: this.$store.getters.userData.role,
         items: [
-          'Administrator',
-          'User'
+          'admin',
+          'user'
         ],
     };
   },
@@ -118,11 +118,11 @@ export default {
         return this.$store.getters.g_activityPanel;
     },
     userData(){
-      return this.$store.getters.userData;
+      return this.$store.getters.userData.user;
     }
   },
   methods: {
-    ...mapActions(['updateUser']),
+    ...mapActions(['updateUser',"updateInvite"]),
     validate() {
       this.$refs.form.validate();
       // console.log()
@@ -132,7 +132,11 @@ export default {
         role: this.userData.role,
         id: this.userData.id
       }
-      this.updateUser(data);
+      if(this.$store.getters.userData.type == 'general'){
+        this.updateUser(data);
+      }else{
+        this.updateInvite(data);
+      }
     },
   },
   mounted() {
