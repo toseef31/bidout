@@ -5,4 +5,5 @@ export default {
    statusMessage: null, 
    responseId: null, 
    activities: null, 
+   invitedList: [], 
 }

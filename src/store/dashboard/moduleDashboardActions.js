@@ -12,33 +12,36 @@ export default {
   manageUsers({commit},payload){
     axios.get('/company/getUsersByCompany/'+ payload,{ headers: {"Authorization" : `Bearer ${JSON.parse(localStorage.getItem('token'))}`} })
       .then(responce => {
-      console.log(responce.data);
       commit('getUsersList',responce.data)
     })
   }, 
- 
+  getInvitedList({commit},payload){
+    axios.get('/company/getCompanyInvitedUsers/'+ payload,{ headers: {"Authorization" : `Bearer ${JSON.parse(localStorage.getItem('token'))}`} })
+      .then(responce => {
+      commit('setInvitedUsersList',responce.data)
+    })
+  },
 
   disableUser({commit},payload){
-    axios.post('/admin/disableUser/',{'id': payload},{ headers: {"Authorization" : `Bearer ${JSON.parse(localStorage.getItem('token'))}`} })
+    axios.get('/company/disableUser/'+ payload,{ headers: {"Authorization" : `Bearer ${JSON.parse(localStorage.getItem('token'))}`} })
       .then(responce => {
-      commit('setStatusMessage', responce.data)
+      commit('setStatusMessage', 'User disabled sucessfully!')
       commit('setUserStatus',false)
-      commit('setResponseId', payload);
+      router.replace({ name: "DisabledUsers" });
     })
   }, 
 
   enableUser({commit},payload){
-    axios.post('/admin/enableUser/',{'id': payload},{ headers: {"Authorization" : `Bearer ${JSON.parse(localStorage.getItem('token'))}`} })
+    axios.get('/company/enableUser/'+payload,{ headers: {"Authorization" : `Bearer ${JSON.parse(localStorage.getItem('token'))}`} })
       .then(responce => {
-      commit('setStatusMessage',responce.data)
+      commit('setStatusMessage','User enabled sucessfully!')
       commit('setUserStatus',true)
-      commit('setResponseId', payload);
+      router.replace({ name: "ManageUsers" });
     })
   }, 
   getActivities({commit},payload){
     axios.get('/activity/getActivities/'+payload,{ headers: {"Authorization" : `Bearer ${JSON.parse(localStorage.getItem('token'))}`} })
       .then(responce => {
-        console.log(responce);
       commit('setActivityList',responce.data)
     })
   }, 

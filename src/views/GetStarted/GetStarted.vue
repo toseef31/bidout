@@ -449,13 +449,13 @@ export default {
         }
       }else{
         var supplierData = {
-          company: this.buyer.company,
-          companyHq: this.buyer.companyHq,
-          companyHq2: this.buyer.companyHq2,
+          company: this.company,
+          companyHq: this.supplier.companyHq,
+          companyHq2: this.supplier.companyHq2,
           companyHqCountry: this.country,
           companyHqState: this.region,
-          companyHqCity: this.buyer.companyHqCity,
-          companyHqZip: this.buyer.companyHqZip,
+          companyHqCity: this.supplier.companyHqCity,
+          companyHqZip: this.supplier.companyHqZip,
           firstName: this.supplier.firstName,
           lastName: this.supplier.lastName,
           email: this.email,
@@ -464,6 +464,7 @@ export default {
           password: this.password
         }
       }
+      // console.log(supplierData);
       this.supplierSignUpAction(supplierData);
     },
     buyerRequest() {

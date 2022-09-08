@@ -55,7 +55,7 @@
                     placeholder="Select"
                     required
                     outlined
-                    solo-flat
+                    solo-flat class="text-capitalize"
                   ></v-select>
 
                   <v-btn
@@ -104,8 +104,8 @@ export default {
         ],
         role: this.$store.getters.userData.role,
         items: [
-          'administrator',
-          'user'
+          'Administrator',
+          'User'
         ],
     };
   },

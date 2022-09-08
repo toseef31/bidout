@@ -17,4 +17,7 @@ export default {
   setActivityList (state, payload){
       state.activities = payload
   },
+  setInvitedUsersList (state, payload){
+      state.invitedList = payload
+  },
 }

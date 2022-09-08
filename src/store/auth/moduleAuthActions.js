@@ -255,5 +255,16 @@ export default {
         commit('setEmailError', 'Something wrong please try again')
       }
     })
+  },
+  getToken({commit}){
+    firebase.auth().onAuthStateChanged(user => {
+      user.getIdToken(/* forceRefresh */ true)
+        .then(idToken => {
+          commit('setToken',idToken);
+          localStorage.setItem("token",JSON.stringify(idToken));
+        }).catch(function(error) {
+           // Handle error
+        });
+    });
   }
 }

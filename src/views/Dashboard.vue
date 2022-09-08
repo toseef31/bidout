@@ -204,14 +204,15 @@ export default {
         scaledSize: {width: 30, height: 45, f: 'px', b: 'px',},
       },
       this.map = new google.maps.Map(document.getElementById("map"), this.mapOptions);
-    }
+    },
+    
   },
   mounted() {
     document.title = "Dashboard - BidOut";
     this.getBids();
     this.shipMap();
     this.users = JSON.parse(localStorage.getItem("userData")).user;
-    console.log(this.users);
+    
 }
 };
 </script>

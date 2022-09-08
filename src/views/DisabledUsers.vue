@@ -6,6 +6,9 @@
               <v-row class="mx-0">
                 <v-col cols="12" sm="12" md="12" class="d-sm-block">
                   <div class="manage-sections pa-4">
+                    <v-alert type="success" v-if="statusMessage !== null" class="text-left" dismissible>
+                      {{ statusMessage }}
+                    </v-alert>
                     <div class="top-section d-flex">
                       <h4>Disabled Users</h4>
                       <div>
@@ -35,9 +38,9 @@
                               <th class="text-left black--text font-weight-bold">
                                 User Permissions
                               </th>
-                              <!-- <th class="text-left black--text font-weight-bold">
+                              <th class="text-left black--text font-weight-bold">
                                 
-                              </th> -->
+                              </th>
                             </tr>
                           </thead>
                           <tbody>
@@ -50,35 +53,11 @@
                               <td class="text-left font-weight-medium">{{ user.email }}</td>
                               <td class="text-left font-weight-medium"><span v-if="user.lastSeen">{{ user.lastSeen | moment("MM/D/YYYY") }}</span><span v-else>no history</span></td>
                               <td class="text-left font-weight-medium text-capitalize">{{user.role}}</td>
-                              <!-- <td class="text-left">
-                                <v-btn depressed color="transparent" @click="editUser(user)" class="text-capitalize edit-btn">
-                                  <v-icon>mdi-square-edit-outline</v-icon>
-                                Edit Details</v-btn>
-                               
-                                <template v-if="user.status == true">
-                                  <v-btn depressed color="transparent" class="text-capitalize" @click="disable(user.id)" v-if="user.id == responseId && userStatus == true">
-                                    <v-icon color="#F32349">mdi-window-close</v-icon>
-                                  Disable </v-btn>
-                                  <v-btn depressed color="transparent" class="text-capitalize" @click="enable(user.id)" v-else-if="user.id == responseId && userStatus == false">
-                                    <v-icon color="#F32349">mdi-check</v-icon>
-                                  Enable </v-btn>
-                                  <v-btn depressed color="transparent" class="text-capitalize" @click="disable(user.id)" v-else>
-                                    <v-icon color="#F32349">mdi-window-close</v-icon>
-                                  Disable </v-btn>
-                                </template>
-                                <template v-else>
-                                  <v-btn depressed color="transparent" class="text-capitalize" @click="enable(user.id)" v-if="responseId == user.id && userStatus == false">
+                              <td class="text-center">
+                                <v-btn depressed color="transparent" class="text-capitalize" @click="enable(user.id)" >
                                     <v-icon>mdi-check</v-icon>
                                   Enable </v-btn>
-                                  <v-btn depressed color="transparent" class="text-capitalize" @click="disable(user.id)" v-else-if="responseId == user.id && userStatus == true">
-                                    <v-icon>mdi-window-close</v-icon>
-                                  Disable </v-btn>
-                                  <v-btn depressed color="transparent" class="text-capitalize" @click="enable(user.id)" v-else>
-                                    <v-icon>mdi-check</v-icon>
-                                  Enable </v-btn>
-                                </template>
-
-                              </td> -->
+                              </td>
                             </tr>
                           </tbody>
                         </template>
@@ -111,19 +90,25 @@ export default {
   },
   computed:{
     showSideBar(){
-        return this.$store.getters.g_sideBarOpen;
+      return this.$store.getters.g_sideBarOpen;
     },
     activityPanel(){
-        return this.$store.getters.g_activityPanel;
+      return this.$store.getters.g_activityPanel;
+    },
+    statusMessage () {
+      return this.$store.getters.statusMessage
     },
     users(){
       return this.$store.getters.disableList;
     },
   },
   methods: {
-    ...mapActions(["getDisabledUsers"]),
+    ...mapActions(["getDisabledUsers","enableUser"]),
     getDisableUsers(company){
       this.getDisabledUsers(company);
+    },
+    enable(id){
+      this.enableUser(id);
     },
   },
   mounted() {

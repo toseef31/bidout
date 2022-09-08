@@ -55,7 +55,19 @@
                             <v-col cols="12" sm="12" text="left">
                               <label class="d-block text-left input-label mb-2 font-weight-bold">Timezone </label>
                               </v-text-field>
-                              <v-select :items="timezone" item-text="label" v-model="userTimezone" outlined></v-select>
+                             
+                              <v-autocomplete
+                                v-model="userTimezone"
+                                :loading="loading"
+                                :items="timezone"
+                                :search-input.sync="searchTimezone"
+                                item-text="label"
+                                flat
+                                hide-details
+                                outlined
+                              ></v-autocomplete>
+                              
+                              <!-- <v-select :items="timezone" item-text="label" v-model="userTimezone" outlined></v-select> -->
                             </v-col>
                           </v-row>
                           <v-row justify="center">
@@ -110,10 +122,13 @@
                               </tr>
                             </thead>
                             <tbody>
-                              <tr v-for="admins in companyAdmins">
+                              <tr v-for="admins in companyAdmins" v-if="companyAdmins == ''">
                                 <td class="text-left">{{admins.firstName}} {{admins.lastName}}</td>
                                 <td class="text-left">{{admins.email}}</td>
-                                <td class="text-left">{{admins.phoneNumber}}</td>
+                                <td class="text-left"><span v-if="admins.phoneNumber">{{admins.phoneNumber}}</span><span v-else>Not Provided</span></td>
+                              </tr>
+                              <tr v-else>
+                                <td>There is no Administrator of this company.</td>
                               </tr>
                             </tbody>
                           </template>
@@ -159,6 +174,7 @@
   import VuePhoneNumberInput from 'vue-phone-number-input';
   import 'vue-phone-number-input/dist/vue-phone-number-input.css';
   import timezones from 'timezones-list';
+  import _ from 'lodash';
   import { mapActions } from "vuex";
 export default {
   name : "EditProfile",
@@ -181,6 +197,7 @@ export default {
       mobileNumber: this.$store.getters.userInfo.phoneNumber,
       email: this.$store.getters.userInfo.email,
       userTimezone: this.$store.getters.userInfo.timezone,
+      searchTimezone: null,
       defaultCountry: 'US',
       translations: {
         countrySelectorLabel: 'Country Code',
@@ -194,6 +211,11 @@ export default {
       twoFactor: true,
     };
   },
+  watch: {
+    searchTimezone (val) {
+      val && val !== this.userTimezone && this.querySelections(val)
+    },
+  },
   computed:{
     showSideBar(){
         return this.$store.getters.g_sideBarOpen;
@@ -205,7 +227,7 @@ export default {
         this.firstName = this.$store.getters.userInfo.firstName;
     },
     historyData(){
-      return this.$store.getters.historyData;
+      return _.orderBy(this.$store.getters.historyData, 'date','desc');
     },
     companyAdmins(){
       return this.$store.getters.companyAdmins;
@@ -241,7 +263,14 @@ export default {
         company: this.$store.getters.userInfo.company,
       }
       this.adminsCompany(data);
-    }
+    },
+    querySelections (v) {
+      setTimeout(() => {
+        this.timezone = this.timezon.filter(e => {
+          return (e || '').toLowerCase().indexOf((v || '').toLowerCase()) > -1
+        })
+      }, 500)
+    },
   },
   mounted() {
     document.title = "Edit Profile - BidOut"

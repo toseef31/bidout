@@ -137,7 +137,7 @@ export default {
     }
   },
   methods: {
-    ...mapActions(["signOutAction","unreadMessagesCount"]),
+    ...mapActions(["signOutAction","unreadMessagesCount","getToken"]),
     signout() {
       this.signOutAction();
     },
@@ -146,11 +146,15 @@ export default {
     },
     getImgUrl(pic) {
         return require('@/assets/images/'+pic)
-    }
+    },
+    token(){
+      this.getToken();
+    },
   },
   mounted() {
     this.userId = JSON.parse(localStorage.getItem("userData")).id;
     this.getUnreadMessages();
+    this.token();
   },
 };
 </script>
