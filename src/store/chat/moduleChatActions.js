@@ -76,21 +76,18 @@ export default {
 		})
 	},
 	// Supplier Users List
-	createConversation({commit}, payload){
-		console.log(payload);
+	createConversation({commit, state,dispatch}, payload){
 		axios.post('/chat/createConversation/',payload)
 		 .then(responce => {
-		 	// console.log(responce);
-		 	commit('setConverstaionList',responce.data.conversation)
+		 	dispatch("getAllConversations",state.userId);
 		})
 	},
 
-	removeUser({commit}, payload){
+	removeConvUser({commit}, payload){
 		console.log(payload);
-		axios.post('/chat/createConversation/',payload)
+		axios.post('/chat/removeParticipantsFromConversation/',payload)
 		 .then(responce => {
-		 	// console.log(responce);
-		 	commit('setConverstaionList',responce.data.conversation)
+		 	console.log(responce);
 		})
 	},
 }

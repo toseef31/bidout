@@ -90,7 +90,7 @@ export default {
   },
   computed: {
     logInError () {
-      return this.$store.getters.error
+      return this.$store.getters.error  
     }
   },
   methods: {
@@ -98,7 +98,6 @@ export default {
     login() {
       this.$refs.form.validate()
       const { email } = this;
-      console.log(email + "logged in")
     },
     loginRequest() {
       this.signInAction({ email: this.email, password: this.password });
@@ -106,6 +105,7 @@ export default {
   },
   mounted(){
     document.title = "Login - BidOut";
+
   }
 };
 </script>

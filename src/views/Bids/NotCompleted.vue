@@ -1,84 +1,78 @@
 <template>
-  <section class="section-container fill-height createBid-module">
-    <navbar></navbar>
-     <v-row class="mx-0">
-       <v-col :class="[ showSideBar ? 'col-12' : 'toggleLeft-sidebar']" class="left-sidebar pr-1">
-          <left-sidebar></left-sidebar>
-       </v-col>
-       <v-col class="mid-content pa-0 pa-sm-3" :class="[ showSideBar ? 'col-md-9 col-12 col-sm-7' : 'mid-content-collapse', activityPanel ? 'd-sm-block' : 'd-md-block']" v-show="!activityPanel">
-          <div class="content-section fill-height pa-0">
-            <v-row align="center" justify="space-between" no-gutters class="px-2 px-sm-6 my-4 not-completd-title">
-              <v-col cols="12" md="6" class="text-left">
-                <div class="d-flex align-center">
-                  <h3 class="pl-1 mr-4">Annual Chemical Bid</h3>
-                  <!-- <p class="preview-text mb-0 ml-3">
-                    <a href="" class="text-decoration-none"><v-icon color="#0D9648" class="pr-2">mdi-open-in-new</v-icon>Preview Bid in Supplier View</a>
-                  </p> -->
-                </div>
-              </v-col>
-              <v-col cols="12" md="6" class="text-right">
-                <div class="d-flex align-center justify-end">
-                  <p class="mb-0 mr-4 auto-text"><strong>Autosaved Draft:</strong> 07/22/2022 12:51 pm</p>
-                  <v-btn color="#B8B8B8" class="white--text text-capitalize publish-btn" width="250px" height="52px" large>
-                    Publish Bid
-                  </v-btn>
-                </div>
-              </v-col>
-            </v-row>
-            <div class="bidtabs-section">
-              <v-tabs
-                v-model="currentItem" class="bids-tabs"
-                fixed-tabs
-                hide-slider mobile-breakpoint="767px"
+   <v-col class="createBid-module pa-0 pa-sm-3" :class="[ showSideBar ? 'col-md-9 col-12 col-sm-7' : 'mid-content-collapse', activityPanel ? 'd-sm-block' : 'd-md-block']" v-show="!activityPanel">
+      <div class="mid-content">
+        <div class="content-section fill-height pa-0">
+          <v-row align="center" justify="space-between" no-gutters class="px-2 px-sm-6 my-4 not-completd-title">
+            <v-col cols="12" md="6" class="text-left">
+              <div class="d-flex align-center">
+                <h3 class="pl-1 mr-4">Annual Chemical Bid</h3>
+                <!-- <p class="preview-text mb-0 ml-3">
+                  <a href="" class="text-decoration-none"><v-icon color="#0D9648" class="pr-2">mdi-open-in-new</v-icon>Preview Bid in Supplier View</a>
+                </p> -->
+              </div>
+            </v-col>
+            <v-col cols="12" md="6" class="text-right">
+              <div class="d-flex align-center justify-end">
+                <p class="mb-0 mr-4 auto-text"><strong>Autosaved Draft:</strong> 07/22/2022 12:51 pm</p>
+                <v-btn color="#B8B8B8" class="white--text text-capitalize publish-btn" width="250px" height="52px" large>
+                  Publish Bid
+                </v-btn>
+              </div>
+            </v-col>
+          </v-row>
+          <div class="bidtabs-section">
+            <v-tabs
+              v-model="currentItem" class="bids-tabs"
+              fixed-tabs
+              hide-slider mobile-breakpoint="767px"
+            >
+              <v-tab
+                v-for="(item, index) in tabs"
+                :key="item.value"
+                :href="'#tab-' + item.value" class="text-capitalize black--text font-weight-bold"
               >
-                <v-tab
-                  v-for="(item, index) in tabs"
-                  :key="item.value"
-                  :href="'#tab-' + item.value" class="text-capitalize black--text font-weight-bold"
-                >
-                  {{ item.text }} {{item.index}}
-                  <v-icon right small color="#F32349">
-                    {{item.icon}}
-                  </v-icon>
-                </v-tab>
-              </v-tabs>
-              <v-tabs-items v-model="currentItem">
-                <v-tab-item
-                  value="tab-1"
-                >
-                  <bid-details @changetab="ChangeT($event)"></bid-details>
-                </v-tab-item>
-                <v-tab-item
-                  value="tab-2"
-                >
-                  <SupplierSection @changetab="ChangeT($event)"></SupplierSection>
-                </v-tab-item>
-                <v-tab-item
-                  value="tab-3"
-                >
-                  <team-members  @changetab="ChangeT($event)"></team-members>
-                </v-tab-item>
-                <v-tab-item
-                  value="tab-4" class="bidline-tab"
-                >
-                  <bid-lines  @changetab="ChangeT($event)"></bid-lines>
-                </v-tab-item>
-                <v-tab-item
-                  value="tab-5" class="attachment-tab mt-5"
-                >
-                  <attachment  @changetab="ChangeT($event)"></attachment>
-                </v-tab-item>
-                <v-tab-item
-                  value="tab-6" class="question-tab mt-5"
-                >
-                  <question-section></question-section>
-                </v-tab-item>
-              </v-tabs-items>
-            </div>
+                {{ item.text }} {{item.index}}
+                <v-icon right small color="#F32349">
+                  {{item.icon}}
+                </v-icon>
+              </v-tab>
+            </v-tabs>
+            <v-tabs-items v-model="currentItem">
+              <v-tab-item
+                value="tab-1"
+              >
+                <bid-details @changetab="ChangeT($event)"></bid-details>
+              </v-tab-item>
+              <v-tab-item
+                value="tab-2"
+              >
+                <SupplierSection @changetab="ChangeT($event)"></SupplierSection>
+              </v-tab-item>
+              <v-tab-item
+                value="tab-3"
+              >
+                <team-members  @changetab="ChangeT($event)"></team-members>
+              </v-tab-item>
+              <v-tab-item
+                value="tab-4" class="bidline-tab"
+              >
+                <bid-lines  @changetab="ChangeT($event)"></bid-lines>
+              </v-tab-item>
+              <v-tab-item
+                value="tab-5" class="attachment-tab mt-5"
+              >
+                <attachment  @changetab="ChangeT($event)"></attachment>
+              </v-tab-item>
+              <v-tab-item
+                value="tab-6" class="question-tab mt-5"
+              >
+                <question-section></question-section>
+              </v-tab-item>
+            </v-tabs-items>
           </div>
-       </v-col>
-     </v-row>
-   </section>
+        </div>
+      </div>
+   </v-col>
 </template>
 <script>
   import Navbar from '../Layout/Navbar.vue'
