@@ -4,7 +4,7 @@
 	  <div class="user-info d-flex align-center">
 	    
 	    <div size="120" class="user">
-      	<v-img :src="imageSrc" class="profile-img"></v-img>
+      	<v-img :src="userDatas.image" class="profile-img"></v-img>
         <v-icon class="icon white--text" @click="$refs.FileInput.click()">mdi-upload</v-icon>
         <input ref="FileInput" type="file" style="display: none;" @change="croppie($event)" />
       </div>
@@ -29,7 +29,7 @@
 	  <v-btn 
 	  color="#0d964814" 
 	  rounded elevation="0"
-	  class="text-capitalize admin-tag ml-8 font-weight-bold"><v-icon>mdi-check-decagram-outline</v-icon> Admin</v-btn>
+	  class="text-capitalize admin-tag ml-8 font-weight-bold"><v-icon>mdi-check-decagram-outline</v-icon>{{userDatas.role}}</v-btn>
 	</div>
 </template>
 <script>

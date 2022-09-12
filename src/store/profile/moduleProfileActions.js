@@ -69,6 +69,7 @@ export default {
     })
   },  
   updateNotifications({commit}, payload){
+    console.log(payload);
     var config = {
       headers: {
         "Authorization": `Bearer ${JSON.parse(localStorage.getItem('token'))}`
@@ -76,10 +77,9 @@ export default {
     };
     axios.post('/user/updateNotificationPreference/'+payload.userid,{'notificationPreference':payload.notificationPreference},config)
      .then(responce => {
-      console.log(responce.data);
       axios.get('/user/getUserData/'+payload.email)
        .then(responce => {
-        console.log(responce.data);
+        console.log(responce.data,'after uodate');
         commit('setUser',responce.data)
         localStorage.setItem("userData",JSON.stringify(responce.data));
       })

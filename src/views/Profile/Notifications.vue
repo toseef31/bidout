@@ -167,7 +167,6 @@ export default {
   methods: {
     ...mapActions(["updateNotifications"]),
     updateNoti(){
-    	console.log(this.notificationPreference);
     	var data = {
     		userid: this.$store.getters.userInfo.id,
     		email: this.$store.getters.userInfo.email,

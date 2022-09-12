@@ -11,6 +11,9 @@ export default {
     error (state){
     	return state.error
     },
+    showErrorAlert (state) {
+      return state.alerts.showErrorAlert;
+    },
     successMessage (state){
     	return state.successMessage
     },

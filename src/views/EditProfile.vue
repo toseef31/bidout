@@ -41,8 +41,21 @@
                         </v-row>
                         <v-row justify="center">
                           <v-col cols="12" sm="12" text="left">
-                            <label class="d-block text-left input-label mb-2 font-weight-bold">Email Address </label>
-                            <v-text-field placeholder="Email Address  " single-line outlined type="email" v-model="email" s hide-details>
+                            <label class="d-block text-left input-label mb-2 font-weight-bold">Email Address 
+                              <v-tooltip right>
+                                <template v-slot:activator="{ on, attrs }">
+                                  <v-icon small
+                                    v-bind="attrs"
+                                    v-on="on"
+                                  >
+                                    mdi-information-outline
+                                  </v-icon>
+                                </template>
+                                <span>You can't edit your email</span>
+                              </v-tooltip>
+                            </label>
+                            
+                            <v-text-field placeholder="Email Address" single-line outlined type="email" v-model="email" hide-details readonly>
                             </v-text-field>
                           </v-col>
                         </v-row>

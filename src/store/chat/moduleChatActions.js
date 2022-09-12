@@ -8,10 +8,8 @@ export default {
 		})
 	},
 	getAllConversations({commit}, payload){
-		console.log(payload);
 		axios.get('/chat/getConversations/'+payload)
 		 .then(responce => {
-		 	console.log(responce.data.conversations,'cffsfas');
 		 	commit('setConverstaionList',responce.data.conversations)
 		})
 	},
@@ -27,7 +25,6 @@ export default {
 		    "Content-Type": "multipart/form-data",
 		  },
 		};
-		console.log('send',payload);
 		const formData = new FormData()
 		formData.append('conversationId', payload.conversationId)
 		formData.append('sender[id]', payload.sender.id)
@@ -58,7 +55,7 @@ export default {
 		axios.post('/chat/archiveConversation',{'userId':payload.userId,'conversationId':payload.conversationId})
 		 .then(responce => {
 		 	commit('setArchiveStatus',responce.data.count)
-		 	dispatch("getAllConversations",state.userId);
+		 	dispatch("getAllConversations",state.userId.id);
 		})
 	},
 	// Supplier List
@@ -70,7 +67,6 @@ export default {
 	},
 	// Supplier Users List
 	supplierUserList({commit}, payload){
-		console.log(payload);
 		axios.get('/user/searchSupplierUser/'+payload)
 		 .then(responce => {
 		 	commit('setSuppliersUsers',responce.data)
@@ -80,14 +76,15 @@ export default {
 	createConversation({commit, state,dispatch}, payload){
 		axios.post('/chat/createConversation/',payload)
 		 .then(responce => {
-		 	dispatch("getAllConversations",state.userId);
+		 	dispatch("getAllConversations",state.userId.id);
 		})
 	},
 
 	removeConvUser({commit,state,dispatch}, payload){
 		axios.post('/chat/removeParticipantsFromConversation/',payload)
 		 .then(responce => {
-		 	dispatch("getAllConversations",state.userId);
+		 	console.log(state.userId.id);
+		 	dispatch("getAllConversations",state.userId.id);
 		})
 	},
 }

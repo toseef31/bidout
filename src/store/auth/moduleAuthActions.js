@@ -19,7 +19,8 @@ export default {
          .then(responce => {
           if(responce.data.status == false){
             commit('setError', 'Disabled account! You cannot login with this account');
-            router.replace({ name: "Login" });
+            // router.replace({ name: "Login" });
+            commit('showErrorAlert')
           }else{
             axios.get('/auth/addUserLoginHistory/'+responce.data.id)
               .then(responce => {

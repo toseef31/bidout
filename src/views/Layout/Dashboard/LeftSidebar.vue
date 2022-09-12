@@ -56,7 +56,7 @@
               :key="child.title"
             >
               <v-list-item-icon class="mr-6 mt-3" v-show="!showSideBar">
-                <v-icon v-text="child.icon"></v-icon>
+                <router-link :to="'/'+child.link" class="text-decoration-none"><v-icon v-text="child.icon"></v-icon></router-link>
               </v-list-item-icon>
               <v-list-item-content class="text-left py-1" v-show="showSideBar">
                 <router-link :to="'/'+child.link"  @click="isHidden = !isHidden" :class="{ 'active-btn': isHidden}" class="text-decoration-none">

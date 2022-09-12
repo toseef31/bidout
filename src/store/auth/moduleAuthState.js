@@ -6,6 +6,9 @@ export default {
     userToken: JSON.parse(localStorage.getItem('token')),
     userId: '',
     error: null,
+    alerts: {
+      showErrorAlert: false
+    },
     successMessage: null,
     errorMessage: null,
     supplier: [],

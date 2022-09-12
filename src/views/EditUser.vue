@@ -30,7 +30,19 @@
                     required
                     outlined
                   ></v-text-field>
-                  <label class="d-block text-left font-weight-bold mb-2">Email Address</label>
+                  <label class="d-block text-left font-weight-bold mb-2">Email Address
+                      <v-tooltip right>
+                        <template v-slot:activator="{ on, attrs }">
+                          <v-icon small
+                            v-bind="attrs"
+                            v-on="on"
+                          >
+                            mdi-information-outline
+                          </v-icon>
+                        </template>
+                        <span>Email is not editable</span>
+                      </v-tooltip>
+                  </label>
                   <v-text-field
                     v-model="userData.email"
                     :rules="emailRules"
@@ -39,7 +51,7 @@
                     outlined disabled
                   ></v-text-field>
                   <label class="d-block text-left font-weight-bold mb-2">Privileges
-                    <v-tooltip top>
+                    <v-tooltip right>
                       <template v-slot:activator="{ on, attrs }">
                         <v-icon small 
                           v-bind="attrs"

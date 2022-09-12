@@ -40,7 +40,7 @@
                     outlined
                   ></v-text-field>
                   <label class="d-block text-left font-weight-bold mb-2">Privileges
-                    <v-tooltip top>
+                    <v-tooltip right>
                       <template v-slot:activator="{ on, attrs }">
                         <v-icon small 
                           v-bind="attrs"

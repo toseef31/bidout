@@ -561,7 +561,7 @@ export default {
     },
     suppliersUsers(){
       return this.$store.getters.suppliersUsers;
-    }
+    },
     // msgCount(){
     //   return this.$store.getters.unMessageCount;
     // },
