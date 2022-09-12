@@ -4,7 +4,7 @@ import store from '@/store';
 
 const routes = [
   {
-    path: '/seeting/',
+    path: '/setting/',
     component: Settings,
     meta: { requiresAuth: true },
     children: [
@@ -34,7 +34,19 @@ const routes = [
        }
       },
       {
-        path: '/add-users',
+        path: '/manage-users/disabled-users',
+        name: 'DisabledUsers',
+        component: () => import('@/views/DisabledUsers.vue'),
+        beforeEnter: (to, from, next) => {
+           if(localStorage.getItem("userData") == null) {
+               next('/login');
+           } else {
+               next();
+           }
+       }
+      },
+      {
+        path: '/manage-users/add-users',
         name: 'AddUsers',
         component: () => import('@/views/AddUsers.vue'),
         beforeEnter: (to, from, next) => {
@@ -46,7 +58,7 @@ const routes = [
        }
       },
       {
-        path: '/edit-user/:id',
+        path: '/manage-users/edit-user/',
         name: 'EditUser',
         component: () => import('@/views/EditUser.vue'),
         beforeEnter: (to, from, next) => {

@@ -1,7 +1,9 @@
 .chat-module{
-	.mid-content{
 		flex: 0 0 78%;
 	  max-width: 78%;
+	.mid-content{
+		flex: 0 0 100%;
+	  max-width: 100%;
 	  z-index: 2;
 	  padding-left: 0 !important;
 	  padding-bottom: 0 !important;
@@ -36,6 +38,7 @@
 		  		.add-people{
 		  			position: relative;
 			  		.icon-box{
+			  			cursor: pointer;
 			  			background: #0d964814;
 					    border-radius: 4px;
 					    height: 44px;

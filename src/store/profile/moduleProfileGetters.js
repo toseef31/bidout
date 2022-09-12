@@ -11,4 +11,10 @@ export default {
    message (state){
       return state.message
    },
+   userData (state){
+      return state.userData
+   },
+   disableList (state){
+      return state.disableList
+   },
 }

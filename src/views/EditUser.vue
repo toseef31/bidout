@@ -1,5 +1,5 @@
 <template>
-  <v-col class="addUsers-module pa-0 pa-sm-3" :class="[ showSideBar ? 'col-md-9 col-12 col-sm-9' : 'mid-content-collapse', activityPanel ? 'd-sm-block' : 'd-md-block']" v-show="!activityPanel">
+  <v-col class="addUsers-module pa-0 pa-sm-3 pl-sm-0" :class="[ showSideBar ? 'col-md-9 col-12 col-sm-9' : 'mid-content-collapse', activityPanel ? 'd-sm-block' : 'd-md-block']" v-show="!activityPanel">
     <div class="mid-content">
       <div class="content-section">
         <v-row class="mx-0">
@@ -16,7 +16,7 @@
                 >
                   <label class="d-block text-left font-weight-bold mb-2">First Name</label>
                   <v-text-field
-                    v-model="firstName"
+                    v-model="userData.firstName"
                     :rules="nameRules"
                     placeholder="First Name"
                     required
@@ -24,22 +24,34 @@
                   ></v-text-field>
                   <label class="d-block text-left font-weight-bold mb-2">Last Name</label>
                   <v-text-field
-                    v-model="lastName"
+                    v-model="userData.lastName"
                     :rules="nameRules"
                     placeholder="Last Name"
                     required
                     outlined
                   ></v-text-field>
-                  <label class="d-block text-left font-weight-bold mb-2">Email Address</label>
+                  <label class="d-block text-left font-weight-bold mb-2">Email Address
+                      <v-tooltip right>
+                        <template v-slot:activator="{ on, attrs }">
+                          <v-icon small
+                            v-bind="attrs"
+                            v-on="on"
+                          >
+                            mdi-information-outline
+                          </v-icon>
+                        </template>
+                        <span>Email is not editable</span>
+                      </v-tooltip>
+                  </label>
                   <v-text-field
-                    v-model="email"
+                    v-model="userData.email"
                     :rules="emailRules"
                     placeholder="Example@email.com"
                     required
-                    outlined
+                    outlined disabled
                   ></v-text-field>
                   <label class="d-block text-left font-weight-bold mb-2">Privileges
-                    <v-tooltip top>
+                    <v-tooltip right>
                       <template v-slot:activator="{ on, attrs }">
                         <v-icon small 
                           v-bind="attrs"
@@ -49,13 +61,13 @@
                     </v-tooltip>
                   </label>
                   <v-select
-                    v-model="select"
+                    v-model="userData.role"
                     :items="items"
                     :rules="[v => !!v || 'Privileges is required']"
                     placeholder="Select"
                     required
                     outlined
-                    solo-flat
+                    solo-flat class="text-capitalize"
                   ></v-select>
 
                   <v-btn
@@ -67,7 +79,7 @@
                     height="50px"
                     min-width="220px"
                   >
-                    Invite User
+                    Update User
                   </v-btn>
                 </v-form>
               </div>
@@ -81,7 +93,7 @@
 <script>
   import Navbar from './Layout/Navbar.vue'
   import LeftSidebar from './Layout/Dashboard/LeftSidebar.vue'
-  import { mapActions } from "vuex";
+  import { mapActions,mapState } from "vuex";
 export default {
   name : "EditUser",
   components: {
@@ -102,24 +114,41 @@ export default {
           v => !!v || 'E-mail is required',
           v => /.+@.+\..+/.test(v) || 'E-mail must be valid',
         ],
-        select: null,
+        role: this.$store.getters.userData.role,
         items: [
-          'Administrator',
-          'User',
+          'admin',
+          'user'
         ],
     };
   },
   computed:{
+    ...mapState(["userData"]),
     showSideBar(){
         return this.$store.getters.g_sideBarOpen;
     },
     activityPanel(){
         return this.$store.getters.g_activityPanel;
     },
+    userData(){
+      return this.$store.getters.userData.user;
+    }
   },
   methods: {
+    ...mapActions(['updateUser',"updateInvite"]),
     validate() {
-      this.$refs.form.validate()
+      this.$refs.form.validate();
+      // console.log()
+      var data = {
+        firstName: this.userData.firstName,
+        lastName: this.userData.lastName,
+        role: this.userData.role,
+        id: this.userData.id
+      }
+      if(this.$store.getters.userData.type == 'general'){
+        this.updateUser(data);
+      }else{
+        this.updateInvite(data);
+      }
     },
   },
   mounted() {

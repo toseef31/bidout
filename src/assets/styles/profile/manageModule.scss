@@ -12,7 +12,7 @@
 	  	border-radius: 8px;
 	  	margin-bottom: 0px;
 	  	padding: 10px 4px;
-	  	height: calc(100vh - 110px);
+	  	min-height: calc(100vh - 110px);
 	  	.manage-sections{
 	  		.top-section{
 	  			justify-content: space-between;
@@ -47,9 +47,12 @@
 	  			}
 	  		}
 	  		.module-content{
+	  			.panels:nth-child(odd){
+	  				background: #FBFBFB;
+	  			}
 	  			.panel-header{
 	  				min-height: 72px;
-	  				padding: 16px 6px 16px 0px;
+	  				padding: 16px;
 	  				h6{
 	  					color: #0D1139;
 					    font-size: 16px;
@@ -91,6 +94,7 @@
 	  			}
 	  			.panel-content{
 	  				text-align: left;
+	  				padding: 0 30px;
 	  				p{
 	  					font-weight: 600;
 	  				}

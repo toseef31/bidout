@@ -40,7 +40,7 @@
                     outlined
                   ></v-text-field>
                   <label class="d-block text-left font-weight-bold mb-2">Privileges
-                    <v-tooltip top>
+                    <v-tooltip right>
                       <template v-slot:activator="{ on, attrs }">
                         <v-icon small 
                           v-bind="attrs"
@@ -56,7 +56,7 @@
                     placeholder="Select"
                     required
                     outlined
-                    solo-flat
+                    solo-flat class="text-capitalize"
                   ></v-select>
 
                   <v-btn
@@ -109,8 +109,8 @@ export default {
         ],
         select: null,
         items: [
-          'Administrator',
-          'User',
+          'admin',
+          'user',
         ],
         user: '',
     };

@@ -56,7 +56,7 @@
               :key="child.title"
             >
               <v-list-item-icon class="mr-6 mt-3" v-show="!showSideBar">
-                <v-icon v-text="child.icon"></v-icon>
+                <router-link :to="'/'+child.link" class="text-decoration-none"><v-icon v-text="child.icon"></v-icon></router-link>
               </v-list-item-icon>
               <v-list-item-content class="text-left py-1" v-show="showSideBar">
                 <router-link :to="'/'+child.link"  @click="isHidden = !isHidden" :class="{ 'active-btn': isHidden}" class="text-decoration-none">
@@ -137,7 +137,7 @@ export default {
     }
   },
   methods: {
-    ...mapActions(["signOutAction","unreadMessagesCount"]),
+    ...mapActions(["signOutAction","unreadMessagesCount","getToken"]),
     signout() {
       this.signOutAction();
     },
@@ -146,11 +146,15 @@ export default {
     },
     getImgUrl(pic) {
         return require('@/assets/images/'+pic)
-    }
+    },
+    token(){
+      this.getToken();
+    },
   },
   mounted() {
     this.userId = JSON.parse(localStorage.getItem("userData")).id;
     this.getUnreadMessages();
+    this.token();
   },
 };
 </script>

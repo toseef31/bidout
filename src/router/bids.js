@@ -1,9 +1,10 @@
-import Base from '@/views/Layout/Base.vue';
+// import Base from '@/views/Layout/Base.vue';
+import Settings from '@/views/Layout/Settings.vue';
 
 const routes = [
   {
     path: '',
-    component: Base,
+    component: Settings,
     children: [
       {
         path: '/view-bids',

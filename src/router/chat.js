@@ -1,10 +1,11 @@
-import Base from '@/views/Layout/Base.vue';
+// import Base from '@/views/Layout/Base.vue';
+import Settings from '@/views/Layout/Settings.vue';
 import store from '@/store';
 
 const routes = [
   {
     path: '',
-    component: Base,
+    component: Settings,
     meta: { requiresAuth: true },
     children: [
       {

@@ -58,7 +58,7 @@
                         <!-- the result -->
                         <img :src="cropped">
                       </v-col>
-                      <v-col cols="4" sm="6" class="pt-10 mt-4 btn-col pl-0 d-flex align-center">
+                      <v-col cols="4" sm="6" class="pt-10 mt-4 btn-col pl-0 d-flex align-center justify-end">
                         <label for="logo-input" class="text-capitalize mr-2 white--text add-logo d-flex align-center font-weight-bold">Add Image
                           <input type="file" accept="image/*" class="logo-input d-none" id="logo-input" @change="croppie($event)">
                         </label>
@@ -115,8 +115,8 @@
                   </v-container>
                   <hr>
                   <v-container class="pa-sm-10 pa-4">
+                      <label class="d-block text-left main-label">Services Location</label>
                     <v-row>
-                      <label class="d-block text-left main-label pl-3">Services Location</label>
                       <v-col cols="10" sm="10">
                         <v-text-field placeholder="Add a location here ..." single-line outlined hide-details></v-text-field>
                       </v-col>
@@ -137,7 +137,7 @@
                     <v-row>
                       <v-col cols="12" sm="12" class="d-flex align-center justify-space-between">
                       <label class="text-left main-label">Corporate Video</label>
-                        <v-btn color="#0D9648" class="text-capitalize white--text mt-5" width="140px" height="54px" @click="uploadVideo">Add Video</v-btn>
+                        <v-btn color="#0D9648" class="text-capitalize white--text mt-5" width="176px" height="54px" @click="uploadVideo">Add Video</v-btn>
                         <input ref="uploader" class="d-none" type="file"
                           accept="video/*"
                           @change="handleFileUpload($event)"
@@ -159,7 +159,7 @@
                     <v-row>
                       <v-col cols="12" sm="12" class="d-flex align-center justify-space-between">
                       <label class="text-left main-label">Corporate Documents</label>
-                        <v-btn color="#0D9648" class="text-capitalize white--text mt-5"height="54px" @click="uploadDocument">Add Document</v-btn>
+                        <v-btn color="#0D9648" class="text-capitalize white--text mt-5" width="176px" height="54px" @click="uploadDocument">Add Document</v-btn>
                         <input ref="documentUploader" class="d-none" type="file"
                           accept="application/msword, application/vnd.ms-excel, application/vnd.ms-powerpoint, application/pdf"
                           @change="handleDocumentUpload($event)"
@@ -390,8 +390,8 @@ export default {
         this.cropped == null;
       },
       addService(){
-        console.log(this.services.name); 
-        // this.drillingService.push(this.services);
+        console.log(this.services); 
+        this.drillingService = this.services;
       }
   },
   mounted() {

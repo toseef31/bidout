@@ -1,148 +1,142 @@
 <template>
-  <section class="fill-height ofs-module ofsSupplier-module white">
-    <Navbar></Navbar>
-    <v-row class="mx-0">
-      <v-col :class="[ showSideBar ? 'col-12' : 'toggleLeft-sidebar']" class="left-sidebar pr-1">
-         <LeftSidebar></LeftSidebar>
-      </v-col>
-      <v-col class="mid-content pa-0 pa-sm-3" :class="[ showSideBar ? 'col-md-9 col-12 col-sm-7' : 'mid-content-collapse', activityPanel ? 'd-sm-block' : 'd-md-block']" v-show="!activityPanel">
-        <div class="content-section fill-height">
-          <v-container class="px-sm-8">
-              <v-row>
-                <v-col cols="12" md="12">
-                  <VueSlickCarousel v-bind="settings" class="company-slider">
+  <v-col class="ofs-module ofsSupplier-module white pa-0 pa-sm-3" :class="[ showSideBar ? 'col-md-9 col-12 col-sm-7' : 'mid-content-collapse', activityPanel ? 'd-sm-block' : 'd-md-block']" v-show="!activityPanel">
+    <div class="mid-content">
+      <div class="content-section fill-height">
+        <v-container class="px-sm-8">
+            <v-row>
+              <v-col cols="12" md="12">
+                <VueSlickCarousel v-bind="settings" class="company-slider">
 
-                    <div class="slide-item">
-                      <div class="slide-img d-flex align-center justify-center flex-column">
-                        <img
-                          :src="require('@/assets/images/ofs/patterson.png')" class="mx-auto"
-                        >
-                      </div>
-                      <div class="slide-caption">
-                        <h3 class="font-weight-bold">Premium Service Provider</h3>
-                      </div>
+                  <div class="slide-item">
+                    <div class="slide-img d-flex align-center justify-center flex-column">
+                      <img
+                        :src="require('@/assets/images/ofs/patterson.png')" class="mx-auto"
+                      >
                     </div>
-                    <div class="slide-item">
-                      <div class="slide-img d-flex align-center justify-center flex-column">
-                        <img
-                          :src="require('@/assets/images/ofs/tetra.png')" class="mx-auto" height="120"
-                        >
-                      </div>
-                      <div class="slide-caption">
-                        <h3 class="font-weight-bold">Premium Service Provider</h3>
-                      </div>
+                    <div class="slide-caption">
+                      <h3 class="font-weight-bold">Premium Service Provider</h3>
                     </div>
-                    <div class="slide-item">
-                      <div class="slide-img d-flex align-center justify-center flex-column">
-                        <img
-                          :src="require('@/assets/images/ofs/champion.png')" class="mx-auto"
-                        >
-                      </div>
-                      <div class="slide-caption">
-                        <h3 class="font-weight-bold">Premium Service Provider</h3>
-                      </div>
+                  </div>
+                  <div class="slide-item">
+                    <div class="slide-img d-flex align-center justify-center flex-column">
+                      <img
+                        :src="require('@/assets/images/ofs/tetra.png')" class="mx-auto" height="120"
+                      >
                     </div>
-                    <div class="slide-item">
-                      <div class="slide-img d-flex align-center justify-center flex-column">
-                        <img
-                          :src="require('@/assets/images/ofs/patterson.png')" class="mx-auto"
-                        >
-                      </div>
-                      <div class="slide-caption">
-                        <h3 class="font-weight-bold">Premium Service Provider</h3>
-                      </div>
+                    <div class="slide-caption">
+                      <h3 class="font-weight-bold">Premium Service Provider</h3>
                     </div>
-                  </VueSlickCarousel>
-                </v-col>
-              </v-row>
-              <v-row justify="center">
-                <v-col cols="12" md="12" class="pl-sm-5 pr-sm-5">
-                  <v-form class="search-form">
-                    <v-text-field label="Search here ..." single-line outlined type="text" placeholder="Search here" v-model="searchCategory" prepend-inner-icon="mdi-magnify">
-                    </v-text-field>
-                    <v-list v-if="hideList == true"  class="company-list">
-                      <template v-for="(company, index) in companies">
-                        <v-list-item class="py-1"
-                          :key="company.name"
-                        >
-                          <v-list-item-avatar max-height="31px" max-width="88px" width="88px" tile>
-                            <v-img :src="`/images/companies/${company.image}`" height="auto"></v-img>
-                          </v-list-item-avatar>
-                          <v-list-item-content>
-                            <v-list-item-title @click="addPerson(user); hideMemberList = !hideMemberList" class="text-left">{{company.name}}</v-list-item-title>
-                          </v-list-item-content>
-                          <v-list-item-action>
-                            <v-list-item-action-text class="font-weight-bold"><router-link :to="company.link">View Profile</router-link></v-list-item-action-text>
-                          </v-list-item-action>
-                        </v-list-item>
-                      </template>
-                      <v-btn color="rgba(13, 150, 72, 0.1)" rounded class="all-btn text-capitalize my-4">View all results</v-btn>
-                    </v-list>
-                  </v-form>
-                </v-col>
-              </v-row>
-              <v-row justify="center">
-                <v-col cols="12" md="6" v-if="loading">
-                  <v-skeleton-loader
-                    type="heading, text"
-                  ></v-skeleton-loader>
-                </v-col>
-                <v-col cols="12" md="6" v-if="loading">
-                  <v-skeleton-loader
-                    type="heading, text"
-                  ></v-skeleton-loader>
-                </v-col>
-                <v-col cols="12" md="6" v-if="loading">
-                  <v-skeleton-loader
-                    type="heading, text"
-                  ></v-skeleton-loader>
-                </v-col>
-                <v-col cols="12" md="6" v-if="loading">
-                  <v-skeleton-loader
-                    type="heading, text"
-                  ></v-skeleton-loader>
-                </v-col>
-                <v-col cols="12" md="6" v-for="category in allcategories" :key="category.id" class="pl-sm-5 pr-sm-5">
-                  
-                  <div class="ofs-listing text-left">
-                    <h1 class="font-weight-bold mb-3 text-break"><router-link :to="'/ofs-supplier/'+category.slug">{{category.name}}</router-link></h1>
-                    <p>
-                      <span v-for="subcategry in subCategories(category.subCategories)" class="sub-catLink">
-                        <span @click="getCompanies(category.slug,subcategry.name)">  
-                          <font class="font-weight-bold">{{subcategry.name}} </font> 
-                          <font class="font-weight-medium">({{subcategry.spCount}}) </font> 
-                        </span>
+                  </div>
+                  <div class="slide-item">
+                    <div class="slide-img d-flex align-center justify-center flex-column">
+                      <img
+                        :src="require('@/assets/images/ofs/champion.png')" class="mx-auto"
+                      >
+                    </div>
+                    <div class="slide-caption">
+                      <h3 class="font-weight-bold">Premium Service Provider</h3>
+                    </div>
+                  </div>
+                  <div class="slide-item">
+                    <div class="slide-img d-flex align-center justify-center flex-column">
+                      <img
+                        :src="require('@/assets/images/ofs/patterson.png')" class="mx-auto"
+                      >
+                    </div>
+                    <div class="slide-caption">
+                      <h3 class="font-weight-bold">Premium Service Provider</h3>
+                    </div>
+                  </div>
+                </VueSlickCarousel>
+              </v-col>
+            </v-row>
+            <v-row justify="center">
+              <v-col cols="12" md="12" class="pl-sm-5 pr-sm-5">
+                <v-form class="search-form">
+                  <v-text-field label="Search here ..." single-line outlined type="text" placeholder="Search here" v-model="searchCategory" prepend-inner-icon="mdi-magnify">
+                  </v-text-field>
+                  <v-list v-if="hideList == true"  class="company-list">
+                    <template v-for="(company, index) in companies">
+                      <v-list-item class="py-1"
+                        :key="company.name"
+                      >
+                        <v-list-item-avatar max-height="31px" max-width="88px" width="88px" tile>
+                          <v-img :src="`/images/companies/${company.image}`" height="auto"></v-img>
+                        </v-list-item-avatar>
+                        <v-list-item-content>
+                          <v-list-item-title @click="addPerson(user); hideMemberList = !hideMemberList" class="text-left">{{company.name}}</v-list-item-title>
+                        </v-list-item-content>
+                        <v-list-item-action>
+                          <v-list-item-action-text class="font-weight-bold"><router-link :to="company.link">View Profile</router-link></v-list-item-action-text>
+                        </v-list-item-action>
+                      </v-list-item>
+                    </template>
+                    <v-btn color="rgba(13, 150, 72, 0.1)" rounded class="all-btn text-capitalize my-4">View all results</v-btn>
+                  </v-list>
+                </v-form>
+              </v-col>
+            </v-row>
+            <v-row justify="center">
+              <v-col cols="12" md="6" v-if="loading">
+                <v-skeleton-loader
+                  type="heading, text"
+                ></v-skeleton-loader>
+              </v-col>
+              <v-col cols="12" md="6" v-if="loading">
+                <v-skeleton-loader
+                  type="heading, text"
+                ></v-skeleton-loader>
+              </v-col>
+              <v-col cols="12" md="6" v-if="loading">
+                <v-skeleton-loader
+                  type="heading, text"
+                ></v-skeleton-loader>
+              </v-col>
+              <v-col cols="12" md="6" v-if="loading">
+                <v-skeleton-loader
+                  type="heading, text"
+                ></v-skeleton-loader>
+              </v-col>
+              <v-col cols="12" md="6" v-for="category in allcategories" :key="category.id" class="pl-sm-5 pr-sm-5">
+                
+                <div class="ofs-listing text-left">
+                  <h1 class="font-weight-bold mb-3 text-break"><router-link :to="'/ofs-supplier/'+category.slug">{{category.name}}</router-link></h1>
+                  <p>
+                    <span v-for="subcategry in subCategories(category.subCategories)" class="sub-catLink">
+                      <span @click="getCompanies(category.slug,subcategry.name)">  
+                        <font class="font-weight-bold">{{subcategry.name}} </font> 
+                        <font class="font-weight-medium">({{subcategry.spCount}}) </font> 
                       </span>
-                    </p>
-                  </div>
-                </v-col>
-              </v-row>
-              <v-row justify="center" class="mt-16">
-                <v-col cols="12" md="12" class="pl-sm-5 pr-sm-5">
-                  <div class="ofs-bottom-section text-left pl-2">
-                    <router-link to="/get-started" class="text-decoration-none">
-                      <div class="ofs-bottom-content d-flex justify-space-between">
-                        <div class="ml-5 ml-sm-5 my-5 my-sm-12">
-                          <h1 class="mb-4 font-weight-medium white--text">OFS DIRECTORY</h1>
-                          <h1 class="white--text font-weight-bold mb-0 title">Get listed today<br>
-                          For free</h1>
-                        </div>
-                        <div class="mt-5 mt-sm-5 mr-5 mr-sm-8">
-                          <img
-                            :src="require('@/assets/images/green-black.png')"
-                             width="102px"
-                          >
-                        </div>
+                    </span>
+                  </p>
+                </div>
+              </v-col>
+            </v-row>
+            <v-row justify="center" class="mt-16">
+              <v-col cols="12" md="12" class="pl-sm-5 pr-sm-5">
+                <div class="ofs-bottom-section text-left pl-2">
+                  <router-link to="/get-started" class="text-decoration-none">
+                    <div class="ofs-bottom-content d-flex justify-space-between">
+                      <div class="ml-5 ml-sm-5 my-5 my-sm-12">
+                        <h1 class="mb-4 font-weight-medium white--text">OFS DIRECTORY</h1>
+                        <h1 class="white--text font-weight-bold mb-0 title">Get listed today<br>
+                        For free</h1>
                       </div>
-                    </router-link>
-                  </div>
-                </v-col>
-              </v-row>
-          </v-container>
-        </div>
-      </v-col>
-    </v-row>
-   </section>
+                      <div class="mt-5 mt-sm-5 mr-5 mr-sm-8">
+                        <img
+                          :src="require('@/assets/images/green-black.png')"
+                           width="102px"
+                        >
+                      </div>
+                    </div>
+                  </router-link>
+                </div>
+              </v-col>
+            </v-row>
+        </v-container>
+      </div>
+    </div>
+  </v-col>
 </template>
 <script>
   import Navbar from '../Layout/Navbar.vue'

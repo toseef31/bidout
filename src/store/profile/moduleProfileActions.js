@@ -69,6 +69,7 @@ export default {
     })
   },  
   updateNotifications({commit}, payload){
+    console.log(payload);
     var config = {
       headers: {
         "Authorization": `Bearer ${JSON.parse(localStorage.getItem('token'))}`
@@ -78,6 +79,7 @@ export default {
      .then(responce => {
       axios.get('/user/getUserData/'+payload.email)
        .then(responce => {
+        console.log(responce.data,'after uodate');
         commit('setUser',responce.data)
         localStorage.setItem("userData",JSON.stringify(responce.data));
       })
@@ -91,8 +93,46 @@ export default {
     };
     axios.post('/company/addInvitedUser/',{'firstName':payload.firstName,'lastName': payload.lastName,'company': payload.company,'email':payload.email,'parent': payload.parent,'role': payload.role},config)
      .then(responce => {
-        commit('setMessage',responce.data)
+        console.log(responce);
+        commit('setMessage','User invited successfully')
         router.replace({ name: "ManageUsers" });
     })
-  }
+  },
+  editData({commit},payload,type){
+    commit('setEditData',payload);
+    router.replace({ name: "EditUser" });
+  },
+  updateUser({commit},payload){
+    var config = {
+      headers: {
+        "Authorization": `Bearer ${JSON.parse(localStorage.getItem('token'))}`
+      },
+    };
+    axios.post('/company/updateUser/'+payload.id,{'firstName':payload.firstName,'lastName': payload.lastName,'role': payload.role},config)
+     .then(responce => {
+        console.log(responce);
+        commit('setMessage','User updated successfully')
+        router.replace({ name: "ManageUsers" });
+    })
+  },
+  updateInvite({commit},payload){
+    var config = {
+      headers: {
+        "Authorization": `Bearer ${JSON.parse(localStorage.getItem('token'))}`
+      },
+    };
+    axios.post('/company/updateInvitedUser/'+payload.id,{'firstName':payload.firstName,'lastName': payload.lastName,'role': payload.role},config)
+     .then(responce => {
+        console.log(responce);
+        commit('setMessage','User updated successfully')
+        router.replace({ name: "ManageUsers" });
+    })
+  },
+  getDisabledUsers({commit},payload){
+    axios.get('/company/getDisabledUsersByCompany/'+ payload,{ headers: {"Authorization" : `Bearer ${JSON.parse(localStorage.getItem('token'))}`} })
+      .then(responce => {
+      console.log(responce.data);
+      commit('setDisableUsersList',responce.data)
+    })
+  }, 
 }

@@ -11,6 +11,13 @@ export default {
     setError (state, payload){
     	state.error = payload
     },
+    showErrorAlert(state){
+      console.log(state,'dasdas');
+      state.alerts.showErrorAlert = true
+      setTimeout(() => {
+        state.alerts.showErrorAlert = false
+      }, 2000);
+    },
     setEmailSuccess (state, payload){
     	state.successMessage = payload
     },

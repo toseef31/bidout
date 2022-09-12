@@ -5,7 +5,7 @@ export default {
     messageSend: null,
     unMessageCount: null,
     lastMessageRead: null,
-    userId: '',
+    userId: JSON.parse(localStorage.getItem('userData')),
     archiveStatus: null,
     membersList: [],
     suppliersUsers: [],

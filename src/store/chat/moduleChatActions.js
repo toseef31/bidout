@@ -25,7 +25,6 @@ export default {
 		    "Content-Type": "multipart/form-data",
 		  },
 		};
-		console.log('send',payload);
 		const formData = new FormData()
 		formData.append('conversationId', payload.conversationId)
 		formData.append('sender[id]', payload.sender.id)
@@ -52,10 +51,11 @@ export default {
 		})
 	},
 	// Archive Chat
-	archiveChat({commit}, payload){
+	archiveChat({commit,state,dispatch}, payload){
 		axios.post('/chat/archiveConversation',{'userId':payload.userId,'conversationId':payload.conversationId})
 		 .then(responce => {
 		 	commit('setArchiveStatus',responce.data.count)
+		 	dispatch("getAllConversations",state.userId.id);
 		})
 	},
 	// Supplier List
@@ -67,19 +67,24 @@ export default {
 	},
 	// Supplier Users List
 	supplierUserList({commit}, payload){
-		console.log(payload);
 		axios.get('/user/searchSupplierUser/'+payload)
 		 .then(responce => {
 		 	commit('setSuppliersUsers',responce.data)
 		})
 	},
 	// Supplier Users List
-	createConversation({commit}, payload){
-		console.log(payload);
+	createConversation({commit, state,dispatch}, payload){
 		axios.post('/chat/createConversation/',payload)
 		 .then(responce => {
-		 	// console.log(responce);
-		 	commit('setConverstaionList',responce.data.conversation)
+		 	dispatch("getAllConversations",state.userId.id);
+		})
+	},
+
+	removeConvUser({commit,state,dispatch}, payload){
+		axios.post('/chat/removeParticipantsFromConversation/',payload)
+		 .then(responce => {
+		 	console.log(state.userId.id);
+		 	dispatch("getAllConversations",state.userId.id);
 		})
 	},
 }

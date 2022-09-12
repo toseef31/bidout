@@ -6,14 +6,14 @@
               <v-row class="mx-0">
                 <v-col cols="12" sm="12" md="12" class="d-sm-block">
                   <div class="manage-sections pa-4">
-                    <v-alert type="success" v-if="message != null">
+                    <v-alert type="success" v-if="message != null" class="text-left" dismissible>
                       {{ message }}
                     </v-alert>
                     <div class="top-section d-flex">
                       <h4>Manage Users</h4>
                       <div>
-                        <router-link to="" class="pr-8 font-weight-bold">Show Disable Users</router-link>
-                        <router-link to="/add-users" class="text-decoration-none"><v-btn 
+                        <router-link to="/manage-users/disabled-users" class="pr-8 font-weight-bold">Show Disable Users</router-link>
+                        <router-link to="/manage-users/add-users" class="text-decoration-none"><v-btn 
                         color="#0D9648" 
                         large 
                         dark 
@@ -22,7 +22,7 @@
                       </div>
                     </div>
                     <div class="userlist-table mt-16">
-                      <v-alert type="success" v-if="statusMessage !== null">
+                      <v-alert type="success" v-if="statusMessage !== null" class="text-left" dismissible>
                         {{ statusMessage }}
                       </v-alert>
                       <v-simple-table>
@@ -49,40 +49,41 @@
                           <tbody>
                             <tr
                               v-for="(user, i) in users"
+                              :key="user.i" v-if="user.status == true"
+                            >
+
+                              <td class="text-left font-weight-medium">{{ user.firstName }} {{ user.lastName }}</td>
+                              <td class="text-left font-weight-medium">{{ user.email }}</td>
+                              <td class="text-left font-weight-medium"><span v-if="user.lastSeen">{{ user.lastSeen | moment("MM/D/YYYY") }}</span><span v-else>no history</span></td>
+                              <td class="text-left font-weight-medium text-capitalize">{{user.role}}</td>
+                              <td class="text-left">
+                                <v-btn depressed color="transparent" @click="editUser(user,'general')" class="text-capitalize edit-btn">
+                                  <v-icon>mdi-square-edit-outline</v-icon>
+                                Edit Details</v-btn>
+                               
+                                <v-btn depressed color="transparent" class="text-capitalize" @click="disable(user.id)">
+                                  <v-icon color="#F32349">mdi-window-close</v-icon>
+                                Disable </v-btn>
+
+                              </td>
+                            </tr>
+                            <tr
+                              v-for="(user, i) in invitedList"
                               :key="user.i"
                             >
 
                               <td class="text-left font-weight-medium">{{ user.firstName }} {{ user.lastName }}</td>
                               <td class="text-left font-weight-medium">{{ user.email }}</td>
-                              <td class="text-left font-weight-medium"></td>
-                              <td class="text-left font-weight-medium">{{user.role}}</td>
+                              <td class="text-left font-weight-medium"><span v-if="user.lastSeen">{{ user.lastSeen | moment("MM/D/YYYY") }}</span><span v-else>no history</span></td>
+                              <td class="text-left font-weight-medium text-capitalize">{{user.role}}</td>
                               <td class="text-left">
-                                <router-link :to="'/edit-user/'+ user.id" class="text-decoration-none"><v-btn depressed color="transparent" class="text-capitalize edit-btn">
+                                <v-btn depressed color="transparent" @click="editUser(user,'invited')" class="text-capitalize edit-btn">
                                   <v-icon>mdi-square-edit-outline</v-icon>
-                                Edit Details</v-btn></router-link>
+                                Edit Details</v-btn>
                                
-                                <template v-if="user.status == true">
-                                  <v-btn depressed color="transparent" class="text-capitalize" @click="disable(user.id)" v-if="user.id == responseId && userStatus == true">
-                                    <v-icon color="#F32349">mdi-window-close</v-icon>
-                                  Disable </v-btn>
-                                  <v-btn depressed color="transparent" class="text-capitalize" @click="enable(user.id)" v-else-if="user.id == responseId && userStatus == false">
-                                    <v-icon color="#F32349">mdi-check</v-icon>
-                                  Enable </v-btn>
-                                  <v-btn depressed color="transparent" class="text-capitalize" @click="disable(user.id)" v-else>
-                                    <v-icon color="#F32349">mdi-window-close</v-icon>
-                                  Disable </v-btn>
-                                </template>
-                                <template v-else>
-                                  <v-btn depressed color="transparent" class="text-capitalize" @click="enable(user.id)" v-if="responseId == user.id && userStatus == false">
-                                    <v-icon>mdi-check</v-icon>
-                                  Enable </v-btn>
-                                  <v-btn depressed color="transparent" class="text-capitalize" @click="disable(user.id)" v-else-if="responseId == user.id && userStatus == true">
-                                    <v-icon>mdi-window-close</v-icon>
-                                  Disable </v-btn>
-                                  <v-btn depressed color="transparent" class="text-capitalize" @click="enable(user.id)" v-else>
-                                    <v-icon>mdi-check</v-icon>
-                                  Enable </v-btn>
-                                </template>
+                                <v-btn depressed color="transparent" class="text-capitalize" @click="disable(user.id)">
+                                  <v-icon color="#F32349">mdi-window-close</v-icon>
+                                Disable </v-btn>
 
                               </td>
                             </tr>
@@ -116,7 +117,6 @@ export default {
     };
   },
   computed:{
-    ...mapState(["message"]),
     showSideBar(){
         return this.$store.getters.g_sideBarOpen;
     },
@@ -135,9 +135,15 @@ export default {
     responseId () {
       return this.$store.getters.responseId
     },
+    message () {
+      return this.$store.getters.message
+    },
+    invitedList () {
+      return this.$store.getters.invitedList
+    },
   },
   methods: {
-    ...mapActions(["manageUsers","disableUser","enableUser"]),
+    ...mapActions(["manageUsers","disableUser","enableUser","editData","getInvitedList"]),
     getUsers(company){
       this.manageUsers(company);
     },
@@ -146,6 +152,13 @@ export default {
     },
     enable(id){
       this.enableUser(id);
+    },
+    editUser(user,type){
+      var data = {user,type};
+      this.editData(data);
+    },
+    invitedUsers(company){
+      this.getInvitedList(company);
     }
   },
   mounted() {
@@ -153,6 +166,7 @@ export default {
     this.user = this.$store.getters.userInfo;
 
     this.getUsers(this.user.company);
+    this.invitedUsers(this.user.company);
   }
 };
 </script>

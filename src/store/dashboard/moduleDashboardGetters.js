@@ -17,4 +17,7 @@ export default {
    activities (state){
       return state.activities
    },
+   invitedList (state){
+      return state.invitedList
+   },
 }

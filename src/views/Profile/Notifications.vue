@@ -167,17 +167,31 @@ export default {
   methods: {
     ...mapActions(["updateNotifications"]),
     updateNoti(){
-    	console.log(this.notificationPreference);
     	var data = {
     		userid: this.$store.getters.userInfo.id,
     		email: this.$store.getters.userInfo.email,
     		notificationPreference: this.notificationPreference,
     	}
+    	// console.log(data);
     	this.updateNotifications(data);
     }
   },
   mounted() {
-    
+    var responseEmail = this.notificationPreference.bidResponses.email;
+    var responseSms = this.notificationPreference.bidResponses.sms;
+    if(responseEmail == true && responseSms == true){
+    	this.responseAll = true;
+    }
+    var qaEmail = this.notificationPreference.questionAndAnswers.email;
+    var qaSms = this.notificationPreference.questionAndAnswers.sms;
+    if(qaEmail == true && qaSms == true){
+    	this.questionAndAnswersAll = true;
+    }
+    var bidEmail = this.notificationPreference.bidCompletionEmails.email;
+    var bidSms = this.notificationPreference.bidCompletionEmails.sms;
+    if(bidEmail == true && bidSms == true){
+    	this.bidCompletionEmailsAll = true;
+    }
   } 
 };
 </script>

@@ -5,8 +5,8 @@
           <div class="form-section mb-15">
             <div class="logo mb-15">
               <router-link to="/"><img :src="require('@/assets/images/logo.png')" width="100%"></router-link>
-            </div> 
-            <v-alert type="error" v-if="logInError !== null">
+            </div>
+            <v-alert type="error" v-show="showErrorAlert" v-if="logInError != ''">
               {{ logInError }}
             </v-alert>
             <v-alert type="success" v-if="successMessage !== ''">
@@ -83,29 +83,40 @@ export default {
       ],
       showPass: false,
       xhrRequest: false,
+      showAlert: false,
       errorMessage: "",
       successMessage: "",
-      userData: ""
+      userData: "",
+      errorMsg: ''
     };
   },
   computed: {
     logInError () {
       return this.$store.getters.error
-    }
+    },
+    showErrorAlert(){
+     return this.$store.getters.showErrorAlert;
+   }
   },
   methods: {
     ...mapActions(["signInAction"]),
     login() {
       this.$refs.form.validate()
       const { email } = this;
-      console.log(email + "logged in")
     },
     loginRequest() {
       this.signInAction({ email: this.email, password: this.password });
     },
   },
+  created(){
+    setTimeout(()=>{
+      this.errorMsg = '';
+      this.showAlert = false;
+    },2000)
+  },
   mounted(){
     document.title = "Login - BidOut";
+
   }
 };
 </script>
