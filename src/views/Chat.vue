@@ -659,6 +659,7 @@ export default {
         userId: this.user.id,
       }
       this.archiveChat(archive);
+      this.isChatMenu = false;
     },
     memberList(){
       this.supplierList();
@@ -701,6 +702,7 @@ export default {
       
       this.createConversation(data);
       this.groupChatDialog = false;
+      this.isAddUser = false;
     },
     createChat(user){
       var data = {
@@ -725,6 +727,7 @@ export default {
       }
       this.createConversation(data);
       this.startChatDialog = false;
+      this.isAddUser = false;
     },
     // unreadCountMsg(conId){
     //   var Ids = {
@@ -777,14 +780,15 @@ export default {
       // })
     },
     removeUser(id){
-      var data = {
+      var user = {
         userIds: [
            this.removeMember.id,
         ],
         conversationId: id,
       }
-      console.log(data);
-      // this.removeConvUser(data);
+      this.removeConvUser(user);
+      this.dialog = false;
+      this.isChatMenu = false;
     },
     checkFile(name){
       this.fileExt =  name.split('.').pop();
@@ -835,8 +839,6 @@ export default {
       this.backArrow = false;
     }
     
-
-
     document.addEventListener('dragenter', function(e) {
       console.log(e.target.className);
      if (e.target.className == 'message-area' || e.target.className == 'messages-section' || e.target.className == 'v-list-item__content' || e.target.className == 'v-list-item__title' || e.target.className == 'own-user message-list' || e.target.className == 'message-send-area' || e.target.className == 'row' || e.target.className == 'col-sm-10 col-md-10' || e.target.className == 'msg-text-box' ) {

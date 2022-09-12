@@ -54,10 +54,11 @@ export default {
 		})
 	},
 	// Archive Chat
-	archiveChat({commit}, payload){
+	archiveChat({commit,state,dispatch}, payload){
 		axios.post('/chat/archiveConversation',{'userId':payload.userId,'conversationId':payload.conversationId})
 		 .then(responce => {
 		 	commit('setArchiveStatus',responce.data.count)
+		 	dispatch("getAllConversations",state.userId);
 		})
 	},
 	// Supplier List
@@ -83,11 +84,10 @@ export default {
 		})
 	},
 
-	removeConvUser({commit}, payload){
-		console.log(payload);
+	removeConvUser({commit,state,dispatch}, payload){
 		axios.post('/chat/removeParticipantsFromConversation/',payload)
 		 .then(responce => {
-		 	console.log(responce);
+		 	dispatch("getAllConversations",state.userId);
 		})
 	},
 }
