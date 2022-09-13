@@ -79,7 +79,7 @@ export default {
      .then(responce => {
       axios.get('/user/getUserData/'+payload.email)
        .then(responce => {
-        console.log(responce.data,'after uodate');
+        // console.log(responce.data,'after uodate');
         commit('setUser',responce.data)
         localStorage.setItem("userData",JSON.stringify(responce.data));
       })
@@ -112,6 +112,7 @@ export default {
      .then(responce => {
         console.log(responce);
         commit('setMessage','User updated successfully')
+        commit('showErrorAlert')
         router.replace({ name: "ManageUsers" });
     })
   },
@@ -125,14 +126,16 @@ export default {
      .then(responce => {
         console.log(responce);
         commit('setMessage','User updated successfully')
+        commit('showErrorAlert')
         router.replace({ name: "ManageUsers" });
     })
   },
   getDisabledUsers({commit},payload){
     axios.get('/company/getDisabledUsersByCompany/'+ payload,{ headers: {"Authorization" : `Bearer ${JSON.parse(localStorage.getItem('token'))}`} })
       .then(responce => {
-      console.log(responce.data);
+      // console.log(responce.data);
       commit('setDisableUsersList',responce.data)
+      commit('showErrorAlert')
     })
   }, 
 }

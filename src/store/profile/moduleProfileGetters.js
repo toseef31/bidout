@@ -17,4 +17,7 @@ export default {
    disableList (state){
       return state.disableList
    },
+   showErrorAlert (state) {
+     return state.alerts.showErrorAlert;
+   },
 }

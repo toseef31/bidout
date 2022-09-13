@@ -6,7 +6,7 @@
               <v-row class="mx-0">
                 <v-col cols="12" sm="12" md="12" class="d-sm-block">
                   <div class="manage-sections pa-4">
-                    <v-alert type="success" v-if="message != null" class="text-left" dismissible>
+                    <v-alert type="success" v-show="showErrorAlert" v-if="message != null" class="text-left" dismissible>
                       {{ message }}
                     </v-alert>
                     <div class="top-section d-flex">
@@ -22,7 +22,7 @@
                       </div>
                     </div>
                     <div class="userlist-table mt-16">
-                      <v-alert type="success" v-if="statusMessage !== null" class="text-left" dismissible>
+                      <v-alert type="success" v-show="showErrorAlert" v-if="statusMessage !== null" class="text-left" dismissible>
                         {{ statusMessage }}
                       </v-alert>
                       <v-simple-table>
@@ -67,6 +67,7 @@
 
                               </td>
                             </tr>
+                            <h2 class="my-4">Pending User Invitations</h2>
                             <tr
                               v-for="(user, i) in invitedList"
                               :key="user.i"
@@ -81,9 +82,9 @@
                                   <v-icon>mdi-square-edit-outline</v-icon>
                                 Edit Details</v-btn>
                                
-                                <v-btn depressed color="transparent" class="text-capitalize" @click="disable(user.id)">
+                                <!-- <v-btn depressed color="transparent" class="text-capitalize" @click="disable(user.id)">
                                   <v-icon color="#F32349">mdi-window-close</v-icon>
-                                Disable </v-btn>
+                                Disable </v-btn> -->
 
                               </td>
                             </tr>
@@ -141,6 +142,9 @@ export default {
     invitedList () {
       return this.$store.getters.invitedList
     },
+    showErrorAlert(){
+      return this.$store.getters.showErrorAlert;
+    }
   },
   methods: {
     ...mapActions(["manageUsers","disableUser","enableUser","editData","getInvitedList"]),

@@ -9,4 +9,7 @@ export default {
    message: null,
    userData: {},
    disableList: {},
+   alerts: {
+     showErrorAlert: false
+   },
 }

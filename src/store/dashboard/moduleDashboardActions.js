@@ -27,6 +27,7 @@ export default {
       .then(responce => {
       commit('setStatusMessage', 'User disabled sucessfully!')
       commit('setUserStatus',false)
+      commit('showErrorAlert')
       router.replace({ name: "DisabledUsers" });
     })
   }, 
@@ -36,6 +37,7 @@ export default {
       .then(responce => {
       commit('setStatusMessage','User enabled sucessfully!')
       commit('setUserStatus',true)
+      commit('showErrorAlert')
       router.replace({ name: "ManageUsers" });
     })
   }, 

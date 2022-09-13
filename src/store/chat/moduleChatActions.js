@@ -10,6 +10,7 @@ export default {
 	getAllConversations({commit}, payload){
 		axios.get('/chat/getConversations/'+payload)
 		 .then(responce => {
+		 	console.log(responce.data);
 		 	commit('setConverstaionList',responce.data.conversations)
 		})
 	},
@@ -55,6 +56,7 @@ export default {
 		axios.post('/chat/archiveConversation',{'userId':payload.userId,'conversationId':payload.conversationId})
 		 .then(responce => {
 		 	commit('setArchiveStatus',responce.data.count)
+		 	commit('setMessagesList',[])
 		 	dispatch("getAllConversations",state.userId.id);
 		})
 	},

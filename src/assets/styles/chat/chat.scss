@@ -67,7 +67,6 @@
 		        		}
 
 			        }
-
 			  		}
 		  		}
 		  		
@@ -125,6 +124,11 @@
 					    font-size: 12px;
 					    font-weight: 400;
 		  			}
+		  		}
+		  		.activeChat-tab{
+		  			color: #0d9648;
+  			    font-weight: 700;
+  			    border-bottom: 2px solid #0d9648;
 		  		}
 		  	}
 	  	}
@@ -321,6 +325,18 @@
 		border-width: 0px 1px 1px 1px;
     border-style: solid;
     border-color: #F1F1F1;
+	}
+	.addChat-box{
+		
+		.v-input__slot{
+			fieldset{
+				border-radius: 8px;
+		    border-color: #B8B8B8;
+			}
+		}
+	}
+	.v-btn{
+		border-radius: 8px;
 	}
 }
 @media (max-width: 768px) {

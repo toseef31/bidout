@@ -85,7 +85,8 @@ export default {
      .then(responce => {
       if(responce.status == 200){
         commit('setEmailSuccess', 'Password reset successfully!');
-        commit('setVerifyData', {})
+        commit('setVerifyData', {});
+        router.replace({ name: "Login" });
       }
       else{
         commit('setEmailError', 'Something wrong please try again')

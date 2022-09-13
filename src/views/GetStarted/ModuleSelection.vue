@@ -66,7 +66,7 @@
                 <div class="create-bid text-left mt-10 pa-4">
                   <div class="d-flex justify-space-between align-center mb-5 label-title">
                     <h1 class="font-weight-bold">Respond to Bids - OFS Directory</h1>
-                    <h1 class="price-text"><span v-if="editions == 'free'">Free</span><span v-else>$79.99/month</span></h1>
+                    <h1 class="price-text"><span v-if="trial_end == 'free'">Free</span><span v-else>$79.99/month</span></h1>
                     <v-sheet>
                       <v-switch
                         v-model="providerListing"
@@ -78,7 +78,7 @@
                   <p class="font-weight-medium">Respond to bid invitiations & showcase your services to oil and gas operators to gain access to <br>greater visibility.</p>
                   <div class="d-flex">
                     <v-radio-group
-                      v-model="editions"
+                      v-model="trial_end"
                       mandatory
                       row
                     >
@@ -90,13 +90,13 @@
                       <v-radio
                         label="Premium Edition"
                         color="#0D9647"
-                        value="ofs"
+                        value="paid"
                       ></v-radio>
                     </v-radio-group>
                   </div>
                   <v-row>
-                    <v-col cols="12" sm="12" v-show="editions == 'ofs'">
-                      <label class="d-block text-left input-label mb-2 font-weight-bold">Sale Contacts</label>
+                    <v-col cols="12" sm="12" v-show="trial_end == 'paid'">
+                      <label class="d-block text-left input-label mb-2 font-weight-bold">Sales Team Users</label>
                       <v-select outlined placeholder="Select" v-model="package" :items="packages" item-text="name" item-value="id"></v-select>
                       
                     </v-col>
@@ -148,7 +148,7 @@ export default {
       createBid: true,
       bidRespond: false,
       providerListing: true,
-      editions : 'premium',
+      trial_end : 'premium',
       package: { name: '1-5 Users - $79.99/month or $800/year prepaid', id: 0},
       packages: [
         { name: '1-5 Users - $79.99/month or $800/year prepaid', id: 0},

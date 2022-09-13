@@ -20,4 +20,10 @@ export default {
     setDisableUsersList (state, payload){
       state.disableList = payload
     },
+    showErrorAlert(state){
+      state.alerts.showErrorAlert = true
+      setTimeout(() => {
+        state.alerts.showErrorAlert = false
+      }, 2000);
+    },
 }
