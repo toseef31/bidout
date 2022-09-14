@@ -158,7 +158,7 @@
                         <template v-slot:default>
                           <tbody>
                             <tr v-for="history in historyData">
-                              <td class="text-left">{{history.date}} {{moment.tz("2014-06-01 12:00", "America/New_York")}}</td>
+                              <td class="text-left">{{history.date}}</td>
                               <td class="text-left">{{history.location}}</td>
                               <td class="text-right">{{history.deviceType}}</td>
                             </tr>
