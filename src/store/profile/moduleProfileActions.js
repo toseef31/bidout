@@ -25,7 +25,7 @@ export default {
       })
     })
   },  
-  updateUser({commit}, payload){
+  updateProfile({commit}, payload){
     var config = {
       headers: {
         "Authorization": `Bearer ${JSON.parse(localStorage.getItem('token'))}`
@@ -98,7 +98,7 @@ export default {
         router.replace({ name: "ManageUsers" });
     })
   },
-  editData({commit},payload,type){
+  editData({commit},payload){
     commit('setEditData',payload);
     router.replace({ name: "EditUser" });
   },

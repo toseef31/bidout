@@ -244,7 +244,7 @@ export default {
     },
   },
   methods: {
-    ...mapActions(["updateUser","loginHistory","adminsCompany"]),
+    ...mapActions(["updateProfile","loginHistory","adminsCompany"]),
     onUpdate (payload) {
       this.results = payload.formattedNumber;
     },
@@ -260,7 +260,7 @@ export default {
         userid: this.$store.getters.userInfo.id,
         timezone: this.userTimezone,
       }
-      this.updateUser(user);
+      this.updateProfile(user);
     },
     history(){
       var user = {
