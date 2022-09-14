@@ -80,12 +80,13 @@ export default {
     })
   },
   resetPassword({commit}, payload){
-    console.log(payload,'reset password');
     axios.post('/auth/updatePassword',{'email': payload.email, 'oobCode': payload.oobCode, 'password': payload.password})
      .then(responce => {
       if(responce.status == 200){
         commit('setEmailSuccess', 'Password reset successfully!');
         commit('setVerifyData', {});
+        commit('setResetEmail', payload.email);
+        commit('showSuccessAlert')
         router.replace({ name: "Login" });
       }
       else{

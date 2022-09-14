@@ -130,6 +130,10 @@
   			    font-weight: 700;
   			    border-bottom: 2px solid #0d9648;
 		  		}
+		  		.archive-btn{
+		  			color: #0d9648;
+		  			font-weight: 600;
+		  		}
 		  	}
 	  	}
 	  	.msg-header{
@@ -341,6 +345,8 @@
 }
 @media (max-width: 768px) {
 	.chat-module{
+		flex: 0 0 100%;
+		max-width: 100%;
 		.mid-content {
 			flex: 0 0 100%;
 	  	max-width: 100%;

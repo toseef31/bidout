@@ -9,7 +9,7 @@
             <v-alert type="error" v-show="showErrorAlert" v-if="logInError != ''">
               {{ logInError }}
             </v-alert>
-            <v-alert type="success" v-if="successMessage !== ''">
+            <v-alert type="success" v-show="showSuccessAlert" v-if="successMessage != ''">
               {{ successMessage }}
             </v-alert>
             <v-form @submit.prevent="loginRequest" ref="form" class="login-form" v-model="valid"
@@ -71,7 +71,7 @@ export default {
   data() {
     return {
       valid: true,
-      email: "",
+      email: this.$store.getters.resetEmail,
       emailRules: [
         v => !!v || 'E-mail is required',
         v => /.+@.+\..+/.test(v) || 'E-mail must be valid',
@@ -85,7 +85,6 @@ export default {
       xhrRequest: false,
       showAlert: false,
       errorMessage: "",
-      successMessage: "",
       userData: "",
       errorMsg: ''
     };
@@ -96,7 +95,13 @@ export default {
     },
     showErrorAlert(){
      return this.$store.getters.showErrorAlert;
-   }
+    },
+    showSuccessAlert(){
+     return this.$store.getters.showSuccessAlert;
+    },
+    successMessage () {
+      return this.$store.getters.successMessage
+    },
   },
   methods: {
     ...mapActions(["signInAction"]),

@@ -102,7 +102,7 @@
                               </template>
                             </v-list> -->
                           </v-card-text>
-                          <v-card-actions class="justify-center flex-column">
+                          <v-card-actions class="justify-end flex-column text-right">
                             <v-spacer></v-spacer>
                             <v-btn
                               color="#0D9648"
@@ -221,7 +221,7 @@
 
                 <v-tab
                   v-for="item in chatTab"
-                  :key="item" active-class="activeChat-tab" class=" font-weight-bold"
+                  :key="item" active-class="activeChat-tab" class="ml-0 font-weight-bold"
                 >
                   {{ item }}
                 </v-tab>
@@ -295,8 +295,72 @@
                 <v-tab-item
                   
                 >
+                <v-list two-line  class="py-0" v-if="archiveList">
+                  <v-list-item-group
+                    v-model="selectedUser"
+                    active-class="grey--text"
+                    
+                  >
+                    <template v-for="(conversation, index) in archiveList">
+                      <v-list-item @click="openChat(conversation,conversation.groupName)" :key="conversation._id" v-if="conversation.type == 'GROUP'">
+                        <template>
+                          <v-list-item-avatar>
+                            <v-icon>mdi-account-group-outline</v-icon>
+                          </v-list-item-avatar>
+                          <v-list-item-content>
+                            <v-list-item-title v-if="conversation.company == ''" v-text="conversation.company"></v-list-item-title>
+                            <v-list-item-title v-else v-text="conversation.groupName"></v-list-item-title>
+
+                            <v-list-item-subtitle
+                              class="text--primary"
+                              v-text="conversation.headline"
+                            ></v-list-item-subtitle>
+
+                            <v-list-item-subtitle v-text="conversation.subtitle"></v-list-item-subtitle>
+                          </v-list-item-content>
+
+                          <v-list-item-action>
+                            <v-btn color="rgba(13, 150, 72, 0.1)" elevation="0" class="text-capitalize archive-btn" @click="unarchive(conversation._id)">
+                              Unarchive
+                            </v-btn>
+                          </v-list-item-action>
+                          <!-- <v-badge
+                              color="#0D9648"
+                              :value="msgCount"
+                              :content="msgCount" overlap
+                            ></v-badge> -->
+                        </template>
+                        
+                      </v-list-item>
+                      <v-list-item v-if="conversation.type == 'PRIVATE' && participant.id != user.id"  v-for="participant in conversation.participantDetails" @click="openChat(conversation,participant.name)">
+                        <template >
+                            <v-list-item-avatar>
+                              <v-avatar>
+                                <img v-if="participant.image != null" :src="participant.image">
+                                <img v-if="participant.image == null" :src="require('@/assets/images/chat/chatUser.png')">
+                              </v-avatar>
+                            </v-list-item-avatar>
+                            <v-list-item-content align-center>
+                              <v-list-item-title v-text="participant.name"></v-list-item-title>
+                            </v-list-item-content>
+
+                          
+                          <v-list-item-action>
+                            <v-btn color="rgba(13, 150, 72, 0.1)" elevation="0" class="text-capitalize archive-btn" @click="unarchive(conversation._id)">
+                              Unarchive
+                            </v-btn>
+                          </v-list-item-action>
+                        </template>
+                      </v-list-item>
+                      <v-divider
+                        v-if="index < conversation.length - 1"
+                        :key="index"
+                      ></v-divider>
+                    </template>
+                  </v-list-item-group>
+                </v-list>
                   <v-card
-                    flat
+                    flat v-else
                   >
                     <v-card-text><h3>There is no archive chat</h3></v-card-text>
                   </v-card>
@@ -312,7 +376,7 @@
                 <v-icon class="back-arrow" v-if="backArrow" @click="closeChat">mdi-chevron-left</v-icon>
                 <v-row align="center">
 
-                  <v-col cols="6">
+                  <v-col cols="12" md="6">
                     <div class="title-section text-left">
                       <h4 class="mb-0 font-weight-bold">{{chatData.name}}</h4>
                       <template v-if="chatData.isBid == true">
@@ -322,7 +386,7 @@
                       
                     </div>
                   </v-col>
-                  <v-col cols="6">
+                  <v-col cols="12" md="6">
                     <div class="msg-options d-flex mt-2 justify-end">
                       <div class="search"> 
                         <v-text-field
@@ -619,6 +683,9 @@ export default {
     suppliersUsers(){
       return this.$store.getters.suppliersUsers;
     },
+    archiveList(){
+      return this.$store.getters.archiveList;
+    },
     // msgCount(){
     //   return this.$store.getters.unMessageCount;
     // },
@@ -642,7 +709,7 @@ export default {
     },500),
   },
   methods: {
-    ...mapActions(["getAllConversations","getAllMessages","sendMessage","unreadMessagesCountCon","lastMessageRead","archiveChat","supplierList","supplierUserList","createConversation","removeConvUser"]),
+    ...mapActions(["getAllConversations","getAllMessages","sendMessage","unreadMessagesCountCon","lastMessageRead","archiveChat","supplierList","supplierUserList","createConversation","removeConvUser","getArchiveChats","unArchiveConversation"]),
     openChat(group,name,id){
       if(screen.width < 767){
         this.userList = false;
@@ -678,7 +745,6 @@ export default {
       }
     },
     getConversations(id){
-      console.log(id,'dsdasdas');
       this.getAllConversations(id);
     },
     fileUpload(){
@@ -866,6 +932,16 @@ export default {
        }
         // return this.searchUsers.toLowerCase().split(' ').every(v => item.company.toLowerCase().includes(v))
       })
+    },
+    archiveConversations(id){
+      this.getArchiveChats(id);
+    },
+    unarchive(id){
+      var conv = {
+        conversationId: id,
+        userId: this.user.id,
+      }
+      this.unArchiveConversation(conv);
     }
   },
   beforeMount() {
@@ -875,6 +951,7 @@ export default {
   mounted() {
     this.user = this.$store.getters.userInfo;
     this.getConversations(this.user.id);
+    this.archiveConversations(this.user.id);
     var convo = this.$store.getters.conversations[0];
     
     if(convo.type == 'PRIVATE'){
@@ -903,7 +980,7 @@ export default {
 
     document.addEventListener('dragenter', function(e) {
       console.log(e.target.className);
-     if (e.target.className == 'message-area' || e.target.className == 'messages-section' || e.target.className == 'v-list-item__content' || e.target.className == 'v-list-item__title' || e.target.className == 'own-user message-list' || e.target.className == 'message-send-area' || e.target.className == 'row' || e.target.className == 'col-sm-10 col-md-10' || e.target.className == 'msg-text-box' ) {
+     if (e.target.className == 'message-area' || e.target.className == 'messages-section' || e.target.className == 'v-list-item__content' || e.target.className == 'v-list-item__title' || e.target.className == 'v-list own-user message-list v-sheet theme--light v-list--two-line' || e.target.className == 'v-item-group theme--light v-list-item-group' || e.target.className == 'message-send-area' || e.target.className == 'row' || e.target.className == 'col-sm-10 col-md-10 col-12' || e.target.className == 'msg-text-box' ) {
         document.getElementById('dropzone').style.display = "block";
       }
       else {

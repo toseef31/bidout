@@ -29,4 +29,7 @@ export default {
   setSuppliersUsers (state, payload){
       state.suppliersUsers = payload;
   }, 
+  setArchiveConverstaionList (state, payload){
+      state.archiveList = payload;
+  }, 
 }

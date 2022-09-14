@@ -9,4 +9,5 @@ export default {
     archiveStatus: null,
     membersList: [],
     suppliersUsers: [],
+    archiveList: [],
 }

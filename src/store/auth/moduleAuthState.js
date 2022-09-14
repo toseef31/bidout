@@ -7,7 +7,8 @@ export default {
     userId: '',
     error: null,
     alerts: {
-      showErrorAlert: false
+      showErrorAlert: false,
+      showSuccessAlert: false
     },
     successMessage: null,
     errorMessage: null,

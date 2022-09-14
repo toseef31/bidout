@@ -17,6 +17,12 @@ export default {
         state.alerts.showErrorAlert = false
       }, 2000);
     },
+    showSuccessAlert(state){
+      state.alerts.showSuccessAlert = true
+      setTimeout(() => {
+        state.alerts.showSuccessAlert = false
+      }, 5000);
+    },
     setEmailSuccess (state, payload){
     	state.successMessage = payload
     },
@@ -40,6 +46,9 @@ export default {
     },
     setVerifyData (state, payload){
       state.verifyData = payload
+    },
+    setResetEmail (state, payload){
+      state.resetEmail = payload
     },
     setContract (state, payload){
       state.contractData = payload

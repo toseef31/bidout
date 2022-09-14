@@ -14,6 +14,9 @@ export default {
     showErrorAlert (state) {
       return state.alerts.showErrorAlert;
     },
+    showSuccessAlert (state) {
+      return state.alerts.showSuccessAlert;
+    },
     successMessage (state){
     	return state.successMessage
     },
@@ -37,6 +40,9 @@ export default {
     },
     verifyData (state){
        return state.verifyData
+    },
+    resetEmail (state){
+       return state.resetEmail
     },
     contractData (state){
        return state.contractData

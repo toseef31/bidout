@@ -25,5 +25,8 @@ export default {
   }, 
   suppliersUsers (state){
     return state.suppliersUsers
+  }, 
+  archiveList (state){
+    return state.archiveList
   },  
 }

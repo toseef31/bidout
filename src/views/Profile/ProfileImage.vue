@@ -11,7 +11,7 @@
       <v-dialog v-model="dialog" width="500">
         <v-card class="px-0">
           <v-card-text class="px-0 pb-0">
-            <vue-croppie ref="croppieRef" :enableOrientation="true" :enableResize="false" :boundary="{ width: 500, height: 350}" :viewport="{ width:112, height:112, 'type':'circle' }">
+            <vue-croppie ref="croppieRef" :enableOrientation="true" :enableResize="false" :boundary="{ width: 500, height: 350}" :viewport="{ width:112, height:112, 'type':'circle' }" :enforceBoundry="true">
             </vue-croppie>
           </v-card-text>
           <v-card-actions class="justify-end">
@@ -51,6 +51,7 @@ export default {
       fileName: '',
       imageSrc: this.$store.getters.userInfo.image,
       base64data: '',
+      url: '',
     };
   },
   computed:{
@@ -66,19 +67,26 @@ export default {
     croppie (e) {
       var files = e.target.files || e.dataTransfer.files;
       if (!files.length) return;
-      this.dialog = true;
-      console.log(files[0]);
+      
+      // console.log(files[0]);
       this.fileName = files[0].name;
+      this.dialog = true;
       var reader = new FileReader();
+        
       reader.onload = e => {
-        this.$refs.croppieRef.bind({
-          url: e.target.result
-
-        });
-
+        this.url = e.target.result;
+        setTimeout(() => {
+          this.bind()
+        }, 180)
+        
       };
 
-    reader.readAsDataURL(files[0]);
+      reader.readAsDataURL(files[0]);
+    },
+    bind() {
+      this.$refs.croppieRef.bind({
+        url: this.url,
+      });
     },
     crop() {
       // Options can be updated.

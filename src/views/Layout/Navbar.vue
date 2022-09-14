@@ -105,7 +105,7 @@
                   <v-list-item
                     v-for="(item, i) in itemss"
                     :key="i"
-                    class="mb-0" @click="getData(item); openDashboard(i)"
+                    class="mb-0" 
                   >
                     <v-list-item-icon class="mr-6 mt-3 d-none">
                       <v-icon v-text="item.icon"></v-icon>
@@ -209,11 +209,11 @@ export default {
         // { text: 'Create a new Shipment', icon: 'mdi-truck' },
       ],
         itemss: [
-          { title: 'Dashboard', icon: 'mdi-view-dashboard-outline', link: 'dashboard' },
-          { title: 'View Bids', icon: 'mdi-gavel', link: 'view-bids' },
+          { title: 'Dashboard', icon: 'mdi-view-dashboard-outline', link: '/dashboard' },
+          { title: 'View Bids', icon: 'mdi-gavel', link: '/view-bids' },
           // { title: 'View Shipments', icon: 'mdi-truck' },
-          { title: 'View OFS Suppliers', icon: 'mdi-tag-outline', link:'view-ofs-suppliers' },
-          { title: 'Messages', icon: 'mdi-email-outline', link: 'chat' },
+          { title: 'View OFS Suppliers', icon: 'mdi-tag-outline', link:'/view-ofs-suppliers' },
+          { title: 'Messages', icon: 'mdi-email-outline', link: '/messages' },
           // { title: "Browse Public RFx's", icon: 'mdi-compass-outline' },
           // { title: 'Manage Invoices', icon: 'mdi-calendar-text-outline' },
           // { title: 'Reporting', icon: 'mdi-note-multiple-outline' },

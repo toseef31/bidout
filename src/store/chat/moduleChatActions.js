@@ -85,8 +85,21 @@ export default {
 	removeConvUser({commit,state,dispatch}, payload){
 		axios.post('/chat/removeParticipantsFromConversation/',payload)
 		 .then(responce => {
-		 	console.log(state.userId.id);
 		 	dispatch("getAllConversations",state.userId.id);
 		})
 	},
+	// Get Archive Chat
+	getArchiveChats({commit},payload){
+		axios.get('/chat/getArchivedConversations/'+payload)
+		 .then(responce => {
+		 	commit('setArchiveConverstaionList',responce.data.conversations)
+		})
+	},
+	unArchiveConversation({commit,dispatch},payload){
+		axios.post('/chat/unarchiveConversation/',{'conversationId': payload.conversationId, 'userId': payload.userId})
+		 .then(responce => {
+		 	dispatch("getAllConversations",payload.userId);
+		 	dispatch("getArchiveChats",payload.userId);
+		})
+	}
 }

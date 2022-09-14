@@ -110,6 +110,8 @@
 }
 @media (max-width: 768px) {
 	.manage-module{
+			flex: 0 0 100%;
+	  	max-width: 100%;
 		.mid-content {
 			flex: 0 0 100%;
 	  	max-width: 100%;
@@ -157,6 +159,8 @@
 }
 @media(max-width: 400px){
 	.manage-module{
+		flex: 0 0 100%;
+  	max-width: 100%;
 		.module-content{
 			.v-expansion-panel-header{
 				display: block;
