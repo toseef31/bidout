@@ -57,14 +57,6 @@
                             <v-icon @click="startChatDialog = false" small>mdi-close</v-icon>
                           </v-card-title>
                           <v-card-text class="py-8">
-                            <!-- <v-text-field
-                              v-model="addChat"
-                              outlined
-                              full-width
-                              hide-details class="addChat-box"
-                              prepend-inner-icon="mdi-magnify" @keyup="getSupplierUsers"
-                            >
-                            </v-text-field> -->
                             <v-autocomplete
                               v-model="addChat"
                               :items="membersLists"
@@ -266,7 +258,7 @@
                           </template>
                           
                         </v-list-item>
-                        <v-list-item v-if="conversation.type == 'PRIVATE' && participant.id != user.id"  v-for="participant in conversation.participantDetails" @click="openChat(conversation,participant.name)">
+                        <v-list-item v-if="conversation.type == 'PRIVATE' && participant.id != user.id"  v-for="participant in conversation.participantDetails" @click="openChat(conversation,participant.name)" :key="participant.id">
                           <template >
                               <v-list-item-avatar>
                                 <v-avatar>
@@ -332,7 +324,7 @@
                         </template>
                         
                       </v-list-item>
-                      <v-list-item v-if="conversation.type == 'PRIVATE' && participant.id != user.id"  v-for="participant in conversation.participantDetails" @click="openChat(conversation,participant.name)">
+                      <v-list-item v-if="conversation.type == 'PRIVATE' && participant.id != user.id"  v-for="participant in conversation.participantDetails" @click="openChat(conversation,participant.name)" :key="participant.id">
                         <template >
                             <v-list-item-avatar>
                               <v-avatar>
@@ -658,11 +650,9 @@ export default {
     },
 
     conversationsList(){
-      // return _.orderBy(this.$store.getters.conversations, 'latestMessage', 'desc');
-      
       if(this.searchUsers){
         return _.orderBy(this.$store.getters.conversations.filter((item)=>{
-          return this.searchUsers.toLowerCase().split(' ').every(v => item.company.toLowerCase().includes(v))
+          return this.searchUsers.toLowerCase().split(' ').every(v => item.groupName.toLowerCase().includes(v))
         }), 'latestMessage', 'desc')
       }else{
         return _.orderBy(this.$store.getters.conversations, 'latestMessage', 'desc');

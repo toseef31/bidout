@@ -63,12 +63,12 @@
                           <v-col cols="12" sm="12" text="left">
                             <label class="d-block text-left input-label mb-2 font-weight-bold">Timezone </label>
                             </v-text-field>
-                           
+                            
                             <v-autocomplete
                               v-model="userTimezone"
                               :items="timezone"
                               :search-input.sync="searchTimezone"
-                              item-text="label"
+                              item-text="tzCode"
                               flat
                               hide-details
                               outlined
@@ -158,7 +158,7 @@
                         <template v-slot:default>
                           <tbody>
                             <tr v-for="history in historyData">
-                              <td class="text-left">{{history.date}}</td>
+                              <td class="text-left"> {{ history.date | moment('timezone', userTimezone, 'MMM DD, YYYY, h:mm a')}}</td>
                               <td class="text-left">{{history.location}}</td>
                               <td class="text-right">{{history.deviceType}}</td>
                             </tr>
@@ -184,6 +184,7 @@
   import VuePhoneNumberInput from 'vue-phone-number-input';
   import 'vue-phone-number-input/dist/vue-phone-number-input.css';
   import timezones from 'timezones-list';
+  import moment from 'vue-moment';
   import _ from 'lodash';
   import { mapActions } from "vuex";
 export default {
@@ -281,11 +282,21 @@ export default {
         })
       }, 500)
     },
+    timeInfo(){
+      return moment().format('MMMM Do YYYY, h:mm:ss a');
+      console.log(dates);
+      // return moment.tz("2013-11-18 11:55", "America/Toronto");
+    }
   },
   mounted() {
     document.title = "Edit Profile - BidOut"
     this.history();
     this.getAdmins();
+    var june = moment("2014-06-01T12:00:00Z");
+    console.log("moment");
+    // june.tz('America/Los_Angeles').format('ha z')
+    console.log(moment.tz("2014-06-01T12:00:00Z", "Asia/Taipei"));
+    this.timeInfo();
   }
 };
 </script>

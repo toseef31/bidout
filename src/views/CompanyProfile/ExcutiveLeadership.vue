@@ -19,7 +19,7 @@
       <v-row>
         <v-col cols="12" sm="6" text="left">
           <label class="d-block text-left input-label mb-2">LinkedIn Profile</label>
-          <v-text-field placeholder="Paste link here ..." v-model="linkdinProfile" single-line outlined hide-details></v-text-field>
+          <v-text-field placeholder="Paste link here ..." v-model="excutivelinkdinProfile" single-line outlined hide-details></v-text-field>
         </v-col>
         <v-col cols="12" sm="6" text="left">
           <label class="d-block text-left input-label mb-2">Profile</label>
