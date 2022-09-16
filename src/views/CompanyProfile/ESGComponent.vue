@@ -24,7 +24,7 @@
       </v-row>
       <v-row>
         <v-col cols="12" sm="12">
-        <v-btn color="#0D9648" large class="text-capitalize white--text" width="20%">Add</v-btn>
+        <v-btn color="#0D9648" large class="text-capitalize white--text" width="176px" height="54px">Add</v-btn>
         </v-col>
       </v-row>
       <v-row class="mt-5">

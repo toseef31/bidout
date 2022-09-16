@@ -49,6 +49,10 @@
 		overflow-y: auto;
 	}
 }
+.inviation-module{
+		flex: 0 0 100%;
+	    max-width: 100%;
+}
 @media(max-width: 768px){
 	.module-selection{
 		.create-bid{

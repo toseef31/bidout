@@ -25,7 +25,6 @@ export default {
 
   getSupplierCompanyByservice({commit}, payload){
     var url = encodeURIComponent(payload.service);
-    console.log(url);
     axios.get('/company/getCompaniesByService/'+url)
       .then(responce => {
         var data = {
@@ -36,5 +35,31 @@ export default {
       router.replace('/ofs-supplier/'+payload.slug+'/'+url);
     })
   },
+  getSupplierMainService({commit},payload){
+    var url = encodeURIComponent(payload.name);
+    console.log(url);
+    axios.get('/company/getCompaniesByMainService/'+url)
+      .then(responce => {
+        var data = {
+          'data': responce.data,
+          'name': payload.name
+        }
+      commit('setCompanies',data)
+      router.replace('/ofs-supplier/'+url);
+    })
+  },
+  getCompanyMainService({commit},payload){
+    var url = encodeURIComponent(payload.name);
+    console.log(url);
+    axios.get('/company/getCompaniesByMainService/'+url)
+      .then(responce => {
+        var data = {
+          'data': responce.data,
+          'name': payload.name
+        }
+      commit('setCompanies',data)
+      router.replace('/ofs-directory/'+url);
+    })
+  }
   
 }

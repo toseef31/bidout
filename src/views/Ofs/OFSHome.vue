@@ -72,13 +72,33 @@
             <v-col cols="12" md="9">
               <v-form class="search-form">
                 <v-row class="mt-8">
-                  <v-col cols="10" sm="11" text="left">
-                    <v-text-field label="Search here ..." single-line outlined type="text" placeholder="Search here" v-model="searchCategory">
+                  <v-col cols="12" sm="12" text="left">
+                    <v-text-field label="Search here ..." single-line outlined type="text" placeholder="Search here" v-model="searchCompany" clearable @keyup="getSupplierList">
                     </v-text-field>
+                    <div v-if="hideList == true">
+                      <v-list  class="company-list">
+                        <template v-for="(company, index) in companies">
+                          <v-list-item class="py-1"
+                            :key="company.objectID"
+                          >
+                            <v-list-item-avatar max-height="31px" max-width="88px" width="88px" tile>
+                              <v-img :src="`/images/companies/patterson.png`" height="auto"></v-img>
+                            </v-list-item-avatar>
+                            <v-list-item-content>
+                              <v-list-item-title @click="addPerson(user); hideMemberList = !hideMemberList" class="text-left">{{company.company}}</v-list-item-title>
+                            </v-list-item-content>
+                            <v-list-item-action>
+                              <v-list-item-action-text class="font-weight-bold"><router-link :to="company.objectID">View Profile</router-link></v-list-item-action-text>
+                            </v-list-item-action>
+                          </v-list-item>
+                        </template>
+                        <!-- <v-btn color="rgba(13, 150, 72, 0.1)" rounded class="all-btn text-capitalize my-4">View all results</v-btn> -->
+                      </v-list>
+                    </div>
                   </v-col>
-                  <v-col cols="2" sm="1" text="left" class="pl-0">
+                  <!-- <v-col cols="2" sm="1" text="left" class="pl-0">
                     <v-btn color="#0D9647" class="white--text" height="56" min-width="50"><v-icon>search</v-icon></v-btn>
-                  </v-col>
+                  </v-col> -->
                 </v-row>
               </v-form>
             </v-col>
@@ -107,7 +127,7 @@
             <v-col cols="12" md="6" v-for="category in allcategories" :key="category.id">
               
               <div class="ofs-listing text-left">
-                <h1 class="font-weight-bold mb-3 text-break">{{category.name}}</h1>
+                <h1 class="font-weight-bold mb-3 text-break" @click="getMainCompany(category.slug,category.name)">{{category.name}}</h1>
                 <p>
                   <span v-for="subcategry in subCategories(category.subCategories)" class="sub-catLink">
                     <span @click="getCompanies(category.slug,subcategry.name)">  
@@ -164,7 +184,7 @@ export default {
   
   data() {
     return {
-      searchCategory: '',
+      searchCompany: '',
       settings: {
         "arrows": true,
         "dots": false,
@@ -211,22 +231,36 @@ export default {
           ]
       },
       loading: true,
+      hideList: false,
     };
+  },
+  watch:{
+    searchCompany: _.debounce(function(){
+      if(this.searchCompany < 1){
+        this.hideList = false;
+      }else{
+        this.hideList = true;
+      }
+    },500),
   },
   computed:{
     allcategories(){
-      if(this.searchCategory){
-        return _.orderBy(this.$store.getters.categories.filter((category)=>{
-          return this.searchCategory.toLowerCase().split(' ').every(v => category.name.toLowerCase().includes(v))
-        }), 'orderNumber', 'asc')
-      }else{
+      // if(this.searchCategory){
+      //   return _.orderBy(this.$store.getters.categories.filter((category)=>{
+      //     return this.searchCategory.toLowerCase().split(' ').every(v => category.name.toLowerCase().includes(v))
+      //   }), 'orderNumber', 'asc')
+      // }else{
         setTimeout(() => this.loading = false, 500);
         return _.orderBy(this.$store.getters.categories, 'orderNumber', 'asc');
-      }
+      // }
+    },
+    companies(){
+      this.hideList = true;
+      return this.$store.getters.supplier;
     },
   },
   methods: {
-    ...mapActions(["getCategories","getCompanyByservice"]),
+    ...mapActions(["getCategories","getCompanyByservice","getCompanyMainService","searchSupplier"]),
     getAllCategories(){
       this.getCategories();
       
@@ -236,7 +270,15 @@ export default {
     },
     getCompanies(slug,subName){
       this.getCompanyByservice({slug:slug, service:subName});
-    }
+    },
+    getMainCompany(slug,name){
+      this.getCompanyMainService({slug:slug, name:name});
+    },
+    getSupplierList(){
+      if(this.searchCompany.length > 1){
+        this.searchSupplier(this.searchCompany);
+      }
+    },
   },
   mounted() {
   document.title = "OFS - BidOut"

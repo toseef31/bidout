@@ -40,7 +40,10 @@
                     </v-sheet>
                   </div>
                   <p class="font-weight-medium">BidOut's flagship RFP Platform. The ability to create and distribute RPF's to BidOut's network or <br>service providers.</p>
-                  <div class="d-inline-block agreement-box pa-3">
+                  <div class="d-inline-block">
+                    <v-btn color="#0D9647" large dense width="100%" height="56" class="font-weight-bold white--text text-capitalize pa-4" @click="generateContract('rfx')">Execute Agreement Now <v-icon class="pl-2" color="#fff">mdi-arrow-right-circle</v-icon></v-btn>
+                  </div>
+                  <!-- <div class="d-inline-block agreement-box pa-3">
                     <div class="d-flex">
                       <v-icon color="#0D9647">mdi-check-circle-outline</v-icon>
                       <div class="pl-2">
@@ -48,7 +51,7 @@
                         <p class="mb-0">{{ new Date() | moment("MM/D/YYYY h:mm a") }} </p>
                       </div>
                     </div>
-                  </div>
+                  </div> -->
                 </div>
                 <!-- <div class="create-bid text-left mt-5 pa-4">
                   <div class="d-flex justify-space-between align-center mb-5 label-title">
@@ -66,7 +69,12 @@
                 <div class="create-bid text-left mt-10 pa-4">
                   <div class="d-flex justify-space-between align-center mb-5 label-title">
                     <h1 class="font-weight-bold">Respond to Bids - OFS Directory</h1>
-                    <h1 class="price-text"><span v-if="trial_end == 'free'">Free</span><span v-else>$79.99/month</span></h1>
+                    <h1 class="price-text"><span v-if="trial_end == 'free'">Free</span><span v-else>
+                      <template v-if="package == 1">$99.99/month</template>
+                      <template v-else-if="package == 2">$119.99/month</template>
+                      <template v-else-if="package == 3">$2400/year</template>
+                      <template v-else>$79.99/month</template>
+                    </span></h1>
                     <v-sheet>
                       <v-switch
                         v-model="providerListing"
@@ -103,8 +111,7 @@
                   </v-row>
                   <v-row>
                     <v-col cols="12" sm="4" text="left">
-                      <!-- <router-link to="/get-started/contract"width="100%" class="font-weight-bold white--text text-capitalize text-decoration-none agreement-link pa-4">Execute Agreement Now <v-icon class="pl-2" color="#fff">mdi-arrow-right-circle</v-icon></router-link> -->
-                      <v-btn color="#0D9647" large dense width="100%" height="56" class="font-weight-bold white--text text-capitalize pa-4" @click="generateContract">Execute Agreement Now <v-icon class="pl-2" color="#fff">mdi-arrow-right-circle</v-icon></v-btn>
+                      <v-btn color="#0D9647" large dense width="100%" height="56" class="font-weight-bold white--text text-capitalize pa-4" @click="generateContract('ofs')">Execute Agreement Now <v-icon class="pl-2" color="#fff">mdi-arrow-right-circle</v-icon></v-btn>
                     </v-col>
                   </v-row>
                 </div>
@@ -164,17 +171,17 @@ export default {
    },
    contractData(){
     return this.$store.getters.contractData;
-   }
+   },
+   ip(){
+    return this.$store.getters.userIp;
+   },
   },
   methods: {
     ...mapActions(["contractGenerate","getIpAddress"]),
-    getIP(){
-      this.getIpAddress();
-    },
-    generateContract(){
+    generateContract(type){
       var contract = {
         ip: this.$store.getters.userIp,
-        contractType: this.editions,
+        contractType: type,
         plan: this.package,
         id: this.$store.getters.userId,
       }
@@ -185,7 +192,7 @@ export default {
   },
   mounted() {
     document.title = "Module Selection - BidOut" 
-    console.log('pckg',this.$store.getters.userIp);
+    this.getIpAddress();
   }
 };
 </script>

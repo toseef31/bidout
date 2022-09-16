@@ -1,0 +1,44 @@
+.inviation-module{
+	
+	.mid-content{
+    z-index: 2;
+    padding-left: 0 !important;
+		.content-section{
+			background: #FFFFFF;
+			border: 1px solid #B8B8B8;
+			border-radius: 0px;
+			min-height: calc(100vh - 1px);
+			.completed-banner{
+				height: 245px;
+				background-image: url('@/assets/images/bids/bidBanner.png');
+				background-size: cover;
+				background-repeat: no-repeat;
+				border-radius: 8px;
+			}
+			.completed-content{
+				h1{
+					font-size: 32px;
+				}
+				h4{
+					font-size: 20px;
+					font-weight: 600;
+				}
+				.v-btn{
+					font-size: 16px;
+					color: #0D9648;
+					font-weight: 600;
+				}
+			}
+		}
+	}
+}
+@media (max-width: 768px) {
+	.inviation-module{
+		.mid-content {
+	  	.content-section{
+	  		border: 0px;
+	  		padding: 0;
+	  	}
+	  }
+	}
+}

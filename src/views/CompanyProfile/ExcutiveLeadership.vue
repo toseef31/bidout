@@ -9,11 +9,11 @@
       <v-row>
         <v-col cols="12" sm="6" text="left">
           <label class="d-block text-left input-label mb-2">Executive's name</label>
-          <v-text-field placeholder="Full name ..." v-model="excutiveName" single-line outlined></v-text-field>
+          <v-text-field placeholder="Enter executive's name" v-model="excutiveName" single-line outlined></v-text-field>
         </v-col>
         <v-col cols="12" sm="6" text="left">
           <label class="d-block text-left input-label mb-2">Role</label>
-          <v-text-field placeholder="Role ..." v-model="excutiveRole" single-line outlined></v-text-field>
+          <v-text-field placeholder="Enter role" v-model="excutiveRole" single-line outlined></v-text-field>
         </v-col>
       </v-row>
       <v-row>
@@ -47,7 +47,7 @@
                   color="#0D9648"
                   rounded
                   @click="cropImage"
-                  class="px-7 white--text"
+                  class="px-7 white--text text-capitalize"
                 >
                   Crop
                 </v-btn>
@@ -60,7 +60,7 @@
       </v-row>
       <v-row>
         <v-col cols="12" sm="12">
-          <v-btn color="#0D9648" large class="text-capitalize white--text">Add Executive</v-btn>
+          <v-btn color="#0D9648" large class="text-capitalize white--text" height="54px" width="176px">Add Executive</v-btn>
         </v-col>
       </v-row>
       <div class="service-list text-left mt-10">
@@ -97,6 +97,7 @@ export default {
       croppedProfile: null,
       dialogProfile: false,
       linkdinProfile: '',
+      profileImage: '',
     };
   },
   computed:{
@@ -111,20 +112,25 @@ export default {
       this.dialogProfile = true;
       var reader = new FileReader();
       reader.onload = e => {
-        this.$refs.croppieRefProfile.bind({
-          url: e.target.result
-
-        });
+        this.profileImage = e.target.result
+        setTimeout(() => {
+          this.bind()
+        }, 200)
       };
 
     reader.readAsDataURL(files[0]);
+    },
+    bind() {
+      this.$refs.croppieRefProfile.bind({
+        url: this.profileImage,
+      });
     },
     cropImage() {
       
       let options = {
         type: 'base64',
         size: { width: 175, height: 175 },
-        format: 'jpeg'
+        format: 'png'
       };
       this.$refs.croppieRefProfile.result(options, output => {
         this.croppedProfile = this.croppieProfile = output;

@@ -21,6 +21,11 @@ const routes = [
         name: 'ResetPassword',
         component: () => import('@/views/ResetPassword.vue'),
       },
+      {
+        path: '/invitation/',
+        name: 'Invitation',
+        component: () => import('@/views/Invitation.vue'),
+      },
     ],
   },
 ];

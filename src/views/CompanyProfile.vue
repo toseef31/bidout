@@ -36,7 +36,7 @@
                               Crop Image
                             </v-card-title>
                             <v-card-text>
-                              <vue-croppie ref="croppieRef" :showZoomer="false" :enableOrientation="true" :enableResize="false" :boundary="{ width: 500, height: 350}" :viewport="{ width:365, height:90, 'type':'square' }">
+                              <vue-croppie ref="croppieRef" :showZoomer="false" :enableOrientation="true" :enableResize="false" :boundary="{ width: 600, height: 350}" :viewport="{ width:365, height:90, 'type':'square' }">
                               </vue-croppie>
                             </v-card-text>
 
@@ -71,11 +71,16 @@
                     <v-row>
                       <v-col cols="12" sm="12">
                       <label class="d-block text-left input-label">Company's Name</label>
-                        <v-text-field label="Company's Name" single-line outlined hide-details></v-text-field>
+                        <v-text-field placeholder="Company's Name" single-line outlined hide-details></v-text-field>
                       </v-col>
                       <v-col cols="12" sm="12">
                       <label class="d-block text-left input-label">Corporate Summary</label>
                         <v-textarea outlined name="input-7-4" hide-details></v-textarea>
+                      </v-col>
+                    </v-row>
+                    <v-row>
+                      <v-col cols="12" sm="12">
+                        <v-btn color="#0D9648" large class="text-capitalize white--text" width="176px" height="54px">Add Info</v-btn>
                       </v-col>
                     </v-row>
                   </v-container>
@@ -88,7 +93,7 @@
                         <v-autocomplete
                           v-model="services"
                           :items="allcategories"
-                          item-value="id" item-text="name"
+                          item-value="name" item-text="name"
                           chips
                           outlined
                           full-width
@@ -180,17 +185,36 @@
                     </v-row>
                   </v-container>
                   <hr>
-                  <v-container class="pa-sm-10 pa-4 corporate-video">
+                  <v-container class="pa-sm-10 pa-4">
                     <v-row>
-                      <label class="d-block text-left main-label mb-4 pl-3">Corporate News & Press Releases</label>
                       <v-col cols="10" sm="10">
-                        <v-text-field placeholder="Add a corporate news here ..." single-line outlined v-model="corporateNews" hide-details></v-text-field>
-                      </v-col>
-                      <v-col cols="2" sm="2" class="pb-0 pl-0 pt-0">
-                      <v-btn color="#0D9648" class="text-capitalize mr-2 white--text" width="100%" height="54px">Add</v-btn>
+                        <label class="d-block text-left main-label mb-4">Corporate News & Press Releases</label>
                       </v-col>
                     </v-row>
-                    <v-row align="center" justify="space-between" class="news-list">
+                    <v-form>
+                      <v-row>
+                        <v-col cols="12" sm="6" text="left">
+                          <label class="d-block text-left input-label mb-2">Title</label>
+                          <v-text-field placeholder="Enter news title" v-model="newsTitle" single-line outlined hide-details></v-text-field>
+                        </v-col>
+                        <v-col cols="12" sm="6" text="left">
+                          <label class="d-block text-left input-label mb-2">Date</label>
+                          <v-text-field type="date" placeholder="Role ..." v-model="newsDate" single-line outlined hide-details></v-text-field>
+                        </v-col>
+                      </v-row>
+                      <v-row>
+                        <v-col cols="12" sm="6" text="left">
+                          <label class="d-block text-left input-label mb-2">Url</label>
+                          <v-text-field placeholder="Enter news url" v-model="newsUrl" single-line outlined></v-text-field>
+                        </v-col>
+                      </v-row>
+                      <v-row>
+                        <v-col cols="12" sm="12" class="pb-0 pl-0 pt-0">
+                          <v-btn color="#0D9648" class="text-capitalize mr-2 white--text" width="176px" height="54px">Add</v-btn>
+                        </v-col>
+                      </v-row>
+                    </v-form>
+                    <v-row align="center" justify="space-between" class="news-list mt-10">
                       <v-col cols="12" sm="8" text="left">
                         <p class="text-left mb-0">May 04, 2022 -  Petterson-UTI Reports Drilling Activity for April 2022</p>
                       </v-col>
@@ -277,6 +301,8 @@ export default {
       croppieImage: '',
       cropped: null,
       dialog: false,
+      imageUrl: '',
+      logoName: ''
     };
   },
   computed:{
@@ -288,14 +314,6 @@ export default {
     },
     allcategories(){
       return this.$store.getters.categories;
-      // if(this.searchCategory){
-      //   return _.orderBy(this.$store.getters.categories.filter((category)=>{
-      //     return this.searchCategory.toLowerCase().split(' ').every(v => category.name.toLowerCase().includes(v))
-      //   }), 'orderNumber', 'asc')
-      // }else{
-        // setTimeout(() => this.loading = false, 500);
-        // return _.orderBy(this.$store.getters.categories, 'orderNumber', 'asc');
-      // }
     },
   },
   methods: {
@@ -356,16 +374,23 @@ export default {
       var files = e.target.files || e.dataTransfer.files;
       // alert(files);
       if (!files.length) return;
+      this.logoName = files[0].name;
       this.dialog = true;
       var reader = new FileReader();
       reader.onload = e => {
-        this.$refs.croppieRef.bind({
-          url: e.target.result
-
-        });
+        this.imageUrl = e.target.result
+        setTimeout(() => {
+            this.bind()
+        }, 200)
+        
       };
 
     reader.readAsDataURL(files[0]);
+    },
+    bind() {
+      this.$refs.croppieRef.bind({
+        url: this.imageUrl,
+      });
     },
     crop() {
       // Options can be updated.
@@ -373,7 +398,8 @@ export default {
       let options = {
         type: 'base64',
         size: { width: 370, height: 90 },
-        format: 'jpeg'
+        format: 'png',
+        name: this.logoName
       };
       this.$refs.croppieRef.result(options, output => {
         this.cropped = this.croppieImage = output;

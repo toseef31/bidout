@@ -136,14 +136,11 @@ export default {
     },
     undo() {
       this.$refs.signaturePad.undoSignature();
-    },
-    getIP(){
-      this.getIpAddress();
     }
   },
   mounted() {
     document.title = "Contract - BidOut" ;
-    this.getIP();  
+    this.getIpAddress();  
     console.log('contract',this.$store.getters.contractData);
   }
 };

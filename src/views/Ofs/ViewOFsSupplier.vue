@@ -53,26 +53,28 @@
             <v-row justify="center">
               <v-col cols="12" md="12" class="pl-sm-5 pr-sm-5">
                 <v-form class="search-form">
-                  <v-text-field label="Search here ..." single-line outlined type="text" placeholder="Search here" v-model="searchCategory" prepend-inner-icon="mdi-magnify">
+                  <v-text-field label="Search here ..." single-line outlined type="text" placeholder="Search here" v-model="searchCompany" prepend-inner-icon="mdi-magnify" @keyup="getSupplierList">
                   </v-text-field>
-                  <v-list v-if="hideList == true"  class="company-list">
-                    <template v-for="(company, index) in companies">
-                      <v-list-item class="py-1"
-                        :key="company.name"
-                      >
-                        <v-list-item-avatar max-height="31px" max-width="88px" width="88px" tile>
-                          <v-img :src="`/images/companies/${company.image}`" height="auto"></v-img>
-                        </v-list-item-avatar>
-                        <v-list-item-content>
-                          <v-list-item-title @click="addPerson(user); hideMemberList = !hideMemberList" class="text-left">{{company.name}}</v-list-item-title>
-                        </v-list-item-content>
-                        <v-list-item-action>
-                          <v-list-item-action-text class="font-weight-bold"><router-link :to="company.link">View Profile</router-link></v-list-item-action-text>
-                        </v-list-item-action>
-                      </v-list-item>
-                    </template>
-                    <v-btn color="rgba(13, 150, 72, 0.1)" rounded class="all-btn text-capitalize my-4">View all results</v-btn>
-                  </v-list>
+                  <div v-if="hideList == true">
+                    <v-list  class="company-list">
+                      <template v-for="(company, index) in companies">
+                        <v-list-item class="py-1"
+                          :key="company.objectID"
+                        >
+                          <v-list-item-avatar max-height="31px" max-width="88px" width="88px" tile>
+                            <v-img :src="`/images/companies/patterson.png`" height="auto"></v-img>
+                          </v-list-item-avatar>
+                          <v-list-item-content>
+                            <v-list-item-title class="text-left">{{company.company}}</v-list-item-title>
+                          </v-list-item-content>
+                          <v-list-item-action>
+                            <v-list-item-action-text class="font-weight-bold"><router-link :to="company.objectID">View Profile</router-link></v-list-item-action-text>
+                          </v-list-item-action>
+                        </v-list-item>
+                      </template>
+                      <!-- <v-btn color="rgba(13, 150, 72, 0.1)" rounded class="all-btn text-capitalize my-4">View all results</v-btn> -->
+                    </v-list>
+                  </div>
                 </v-form>
               </v-col>
             </v-row>
@@ -100,7 +102,7 @@
               <v-col cols="12" md="6" v-for="category in allcategories" :key="category.id" class="pl-sm-5 pr-sm-5">
                 
                 <div class="ofs-listing text-left">
-                  <h1 class="font-weight-bold mb-3 text-break"><router-link :to="'/ofs-supplier/'+category.slug">{{category.name}}</router-link></h1>
+                  <h1 class="font-weight-bold mb-3 text-break" @click="getMainCompany(category.slug,category.name)">{{category.name}}</h1>
                   <p>
                     <span v-for="subcategry in subCategories(category.subCategories)" class="sub-catLink">
                       <span @click="getCompanies(category.slug,subcategry.name)">  
@@ -157,8 +159,8 @@ export default {
   
   data() {
     return {
-      searchCategory: '',
-      companies: [
+      searchCompany: '',
+      companiess: [
         {name: 'Tetra Technologies', link: '/company-profile', image: 'tetra.png'},
         {name: 'Patterson-UTI', link: '/company-profile', image: 'patterson.png'},
         {name: 'ChampionX', link: '/company-profile', image: 'champion.png'},
@@ -214,8 +216,8 @@ export default {
     };
   },
   watch:{
-    searchCategory: _.debounce(function(){
-      if(this.searchCategory < 1){
+    searchCompany: _.debounce(function(){
+      if(this.searchCompany < 1){
         this.hideList = false;
       }else{
         this.hideList = true;
@@ -239,9 +241,13 @@ export default {
         return _.orderBy(this.$store.getters.categories, 'orderNumber', 'asc');
       // }
     },
+    companies(){
+      this.hideList = true;
+      return this.$store.getters.supplier;
+    },
   },
   methods: {
-    ...mapActions(["getCategories","getCompanyByservice","getSupplierCompanyByservice"]),
+    ...mapActions(["getCategories","getCompanyByservice","getSupplierCompanyByservice","getSupplierMainService","searchSupplier"]),
     getAllCategories(){
       this.getCategories();
       
@@ -251,7 +257,15 @@ export default {
     },
     getCompanies(slug,subName){
       this.getSupplierCompanyByservice({slug:slug, service:subName});
-    }
+    },
+    getMainCompany(slug,name){
+      this.getSupplierMainService({slug:slug, name:name});
+    },
+    getSupplierList(){
+      if(this.searchCompany.length > 1){
+        this.searchSupplier(this.searchCompany);
+      }
+    },
   },
   mounted() {
   document.title = "View OFS Supplier - BidOut"
