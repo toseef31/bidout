@@ -54,6 +54,7 @@
                     :items="items"
                     :rules="[v => !!v || 'Privileges is required']"
                     placeholder="Select"
+                    item-text="label" item-value="value"
                     required
                     outlined
                     solo-flat class="text-capitalize"
@@ -109,8 +110,8 @@ export default {
         ],
         select: null,
         items: [
-          'admin',
-          'user',
+          {value: 'admin', label: 'Administrator'},
+          {value:'user', label: 'User'},
         ],
         user: '',
     };

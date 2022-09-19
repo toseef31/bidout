@@ -68,7 +68,7 @@
                               v-model="userTimezone"
                               :items="timezone"
                               :search-input.sync="searchTimezone"
-                              item-text="tzCode"
+                              item-text="label" item-value="tzCode"
                               flat
                               hide-details
                               outlined
@@ -158,7 +158,8 @@
                         <template v-slot:default>
                           <tbody>
                             <tr v-for="history in historyData">
-                              <td class="text-left"> {{ history.date | moment('timezone', userTimezone, 'MMM DD, YYYY, h:mm a')}}</td>
+                              <td class="text-left">{{ history.date | moment('timezone', userTimezone, 'MMM DD, YYYY, h:mm a')}} 
+                              </td>
                               <td class="text-left">{{history.location}}</td>
                               <td class="text-right">{{history.deviceType}}</td>
                             </tr>
@@ -220,6 +221,7 @@ export default {
       hasErrorActive: false,
       results: {},
       twoFactor: true,
+      timee: '',
     };
   },
   watch: {
@@ -261,6 +263,7 @@ export default {
         userid: this.$store.getters.userInfo.id,
         timezone: this.userTimezone,
       }
+      // console.log(user);
       this.updateProfile(user);
     },
     history(){
@@ -282,9 +285,11 @@ export default {
         })
       }, 500)
     },
-    timeInfo(){
-      return moment().format('MMMM Do YYYY, h:mm:ss a');
-      console.log(dates);
+    timeInfo(date){
+      // this.timee = moment.utc(date).local().format();
+      // alert(this.timee);
+      // var jun = moment("2014-06-01T12:00:00Z");
+      // return jun.tz('America/Los_Angeles').format('ha z')
       // return moment.tz("2013-11-18 11:55", "America/Toronto");
     }
   },
@@ -292,11 +297,14 @@ export default {
     document.title = "Edit Profile - BidOut"
     this.history();
     this.getAdmins();
-    var june = moment("2014-06-01T12:00:00Z");
-    console.log("moment");
-    // june.tz('America/Los_Angeles').format('ha z')
-    console.log(moment.tz("2014-06-01T12:00:00Z", "Asia/Taipei"));
-    this.timeInfo();
+
+    var newYork    = moment.tz("timezone","2014-06-01 12:00", "America/New_York").format();
+    var losAngeles = newYork.clone().tz("America/Los_Angeles");
+    var london     = newYork.clone().tz("Europe/London");
+
+    console.log(newYork,'dsasdas');   // 2014-06-01T12:00:00-04:00
+    losAngeles.format(); // 2014-06-01T09:00:00-07:00
+    london.format();
   }
 };
 </script>

@@ -12,4 +12,5 @@ export default {
    alerts: {
      showErrorAlert: false
    },
+   inviteData: {},
 }

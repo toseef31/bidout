@@ -65,6 +65,7 @@
                     :items="items"
                     :rules="[v => !!v || 'Privileges is required']"
                     placeholder="Select"
+                    item-text="label" item-value="value"
                     required
                     outlined
                     solo-flat class="text-capitalize"
@@ -116,8 +117,8 @@ export default {
         ],
         role: this.$store.getters.userData.role,
         items: [
-          'admin',
-          'user'
+          {value: 'admin', label: 'Administrator'},
+          {value:'user', label: 'User'},
         ],
     };
   },

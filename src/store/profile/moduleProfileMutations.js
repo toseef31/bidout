@@ -26,4 +26,13 @@ export default {
         state.alerts.showErrorAlert = false
       }, 2000);
     },
+    showSuccessAlert(state){
+      state.alerts.showSuccessAlert = true
+      setTimeout(() => {
+        state.alerts.showSuccessAlert = false
+      }, 3000);
+    },
+    setInviteData(state,payload){
+      state.inviteData = payload;
+    }
 }

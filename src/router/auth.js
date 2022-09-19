@@ -22,7 +22,7 @@ const routes = [
         component: () => import('@/views/ResetPassword.vue'),
       },
       {
-        path: '/invitation/',
+        path: '/invitation/:token',
         name: 'Invitation',
         component: () => import('@/views/Invitation.vue'),
       },

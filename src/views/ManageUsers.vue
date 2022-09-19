@@ -55,7 +55,10 @@
                               <td class="text-left font-weight-medium">{{ user.firstName }} {{ user.lastName }}</td>
                               <td class="text-left font-weight-medium">{{ user.email }}</td>
                               <td class="text-left font-weight-medium"><span v-if="user.lastSeen">{{ user.lastSeen | moment("MM/D/YYYY") }}</span><span v-else>no history</span></td>
-                              <td class="text-left font-weight-medium text-capitalize">{{user.role}}</td>
+                              <td class="text-left font-weight-medium text-capitalize">
+                                <template v-if="user.role == 'admin'">Administrator</template>
+                                <template v-else>User</template>
+                              </td>
                               <td class="text-left">
                                 <v-btn depressed color="transparent" @click="editUser(user,'general')" class="text-capitalize edit-btn">
                                   <v-icon>mdi-square-edit-outline</v-icon>
@@ -67,7 +70,9 @@
 
                               </td>
                             </tr>
-                            <h2 class="my-4">Pending User Invitations</h2>
+                            <tr class="white">
+                              <td colspan="5"><h2 class="my-4 text-left">Pending User Invitations</h2></td>
+                            </tr>
                             <tr
                               v-for="(user, i) in invitedList"
                               :key="user.i"
@@ -76,7 +81,10 @@
                               <td class="text-left font-weight-medium">{{ user.firstName }} {{ user.lastName }}</td>
                               <td class="text-left font-weight-medium">{{ user.email }}</td>
                               <td class="text-left font-weight-medium"><span v-if="user.lastSeen">{{ user.lastSeen | moment("MM/D/YYYY") }}</span><span v-else>no history</span></td>
-                              <td class="text-left font-weight-medium text-capitalize">{{user.role}}</td>
+                              <td class="text-left font-weight-medium text-capitalize">
+                                <template v-if="user.role == 'admin'">Administrator</template>
+                                <template v-else>User</template>
+                              </td>
                               <td class="text-left">
                                 <v-btn depressed color="transparent" @click="editUser(user,'invited')" class="text-capitalize edit-btn">
                                   <v-icon>mdi-square-edit-outline</v-icon>

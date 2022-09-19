@@ -138,4 +138,25 @@ export default {
       commit('showErrorAlert')
     })
   }, 
+  verifyInviteToken({commit}, payload){
+    axios.get('/auth/checkIfInvitationIsValid/'+payload)
+     .then(responce => {
+      commit('setInviteData',responce.data)
+    })
+  },
+  resetInvitePassword({commit}, payload){
+    // console.log(payload);
+    axios.post('/auth/signUpInvitedUser/',{'invitationId': payload.invitationId, 'password': payload.password})
+     .then(responce => {
+      if(responce.status == 200){
+        commit('setEmailSuccess', 'Login here to continue with your account!');
+        commit('setInviteData', {});
+        commit('showSuccessAlert')
+        router.replace({ name: "Login" });
+      }
+      else{
+        commit('setEmailError', 'Something wrong please try again')
+      }
+    })
+  }
 }

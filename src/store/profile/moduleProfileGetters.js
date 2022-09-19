@@ -20,4 +20,7 @@ export default {
    showErrorAlert (state) {
      return state.alerts.showErrorAlert;
    },
+   inviteData (state) {
+     return state.inviteData;
+   },
 }

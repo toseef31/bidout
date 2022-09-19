@@ -15,8 +15,51 @@
             <v-col cols="12" md="6">
               <div class="completed-content">
                 <h1 class="font-weight-bold mb-10">Your have accepted the inviation</h1>
-                <v-btn color="rgba(13, 150, 72)" elevation="0" height="54px" width="220px" large class="text-capitalize white--text"><router-link to="/login" class="text-decoration-none white--text">Click here to login</router-link></v-btn>
+                <!-- <v-btn color="rgba(13, 150, 72)" elevation="0" height="54px" width="220px" large class="text-capitalize white--text"><router-link to="/login" class="text-decoration-none white--text">Click here to login</router-link></v-btn> -->
+                <h2 class="mb-12">Set your account password</h2>
               </div>
+            </v-col>
+          </v-row>
+          <v-row justify="center" align="center" class="mx-0">
+            <v-col cols="12" md="4">
+              <v-form @submit.prevent="resetInvite" ref="form" class="login-form mb-7" v-model="valid"
+               lazy-validation>
+                 <label class="font-weight-bold d-block text-left">New Password</label> 
+                 <input type="hidden" v-model="token">
+                 <v-text-field placeholder="Password" single-line outlined type="password" v-model="password" :rules="[required, min6]">
+                   <template v-slot:append>
+                     <v-icon
+                       v-if="successPass"
+                       color="green"
+                       >{{ passRule }}</v-icon>
+                     <v-icon
+                       v-if="!successPass"
+                       color="red"
+                       >{{ passRule }}</v-icon>
+                   </template>
+                 </v-text-field>
+                 <label class="font-weight-bold d-block text-left">Confirm Password</label> 
+                 <v-text-field placeholder="Confirm Password" single-line outlined type="password" v-model="confirmPassword":rules="[required, min6, matchingPasswords ]">
+                   <template v-slot:append>
+                     <v-icon
+                       v-if="successPass1"
+                       color="green"
+                       >{{ passRule1 }}</v-icon
+                     >
+                     <v-icon
+                        v-if="!successPass1"
+                        color="red"
+                        >{{ passRule1 }}</v-icon
+                     >
+                   </template>
+                 </v-text-field>
+                <div class="text-center">
+                  <v-btn class="signin-btn text-capitalize font-weight-bold white--text px-4"  type="submit" color="#0D9648" width="220px" height="45px" :disabled="!valid">
+                    Set Password
+                  </v-btn>
+                </div>
+
+              </v-form>
             </v-col>
           </v-row>
         </div>
@@ -35,28 +78,78 @@ export default {
   
   data() {
     return {
+      valid: true,
+      token: this.$route.params.token,
       users: '',
-      
+      password: '',
+      confirmPassword: '',
+      successPass: false,
+      successPass1: false,
     };
   },
   computed:{
-    showSideBar(){
-        return this.$store.getters.g_sideBarOpen;
+    passRule: function() {
+      if (this.password === '') {
+        this.successPass = false;
+        return '';
+      } else if (this.min6(this.password) === true) {
+        this.successPass = true;
+        return 'mdi-check';
+      } else {
+        this.successPass = false;
+        return 'mdi-close';
+      }
     },
-    activityPanel(){
-        return this.$store.getters.g_activityPanel;
-    },
-    userDatas(){
-        return this.$store.getters.userInfo;
+    passRule1: function() {
+      if (this.confirmPassword === '') {
+        // field is empty
+        this.successPass1 = false;
+        return '';
+      } else if (this.min6(this.confirmPassword) === true && this.matchingPasswords() === true) {
+        this.successPass1 = true;
+        return 'mdi-check';
+      } else {
+        // password wrong
+        this.successPass1 = false;
+        return 'mdi-close';
+      }
     },
   },
   methods: {
-    
+    ...mapActions(["resetInvitePassword","verifyInviteToken"]),
+    required: function(value) {
+      if (value) {
+        return true;
+      } else {
+        return 'This field is required.';
+      }
+    },
+    min6: function(value) {
+      if (value.length >= 6) {
+        return true;
+      } else {
+        return 'Password should have more than 6 characters.';
+      }
+    },
+    matchingPasswords: function() {
+      if (this.password === this.confirmPassword) {
+        return true;
+      } else {
+        return 'Passwords does not match.';
+      }
+    },
+    verifyInvite(){
+      this.verifyInviteToken(this.token);
+    },
+    resetInvite(){
+      this.$refs.form.validate();
+      this.resetInvitePassword({invitationId: this.token, password: this.password});
+    }
   },
   mounted() {
     document.title = "Create Bid - BidOut";
-    this.users = JSON.parse(localStorage.getItem("userData")).user;
-}
+    this.verifyInvite();
+  }
 };
 </script>
 <style scoped lang="scss">
