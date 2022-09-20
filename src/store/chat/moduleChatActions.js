@@ -7,17 +7,18 @@ export default {
 		 	commit('setUnreadCount',responce.data.totalUnreadMessages)
 		})
 	},
-	getAllConversations({commit}, payload){
-		axios.get('/chat/getConversations/'+payload)
+	async getAllConversations({commit}, payload){
+		await axios.get('/chat/getConversations/'+payload)
 		 .then(responce => {
 		 	console.log(responce.data);
 		 	commit('setConverstaionList',responce.data.conversations)
 		})
 	},
-	getAllMessages({commit}, payload){
-		axios.get('/chat/getMessages/'+payload)
+	getAllMessages({commit,dispatch,state}, payload){
+		axios.get('/chat/getMessages/'+payload.conversationId)
 		 .then(responce => {
 		 	commit('setMessagesList',responce.data.messages)
+		 	dispatch("unreadMessagesCount",{'userId':payload.userId})
 		})
 	},
 	sendMessage({commit}, payload){
@@ -46,9 +47,10 @@ export default {
 		})
 	}, 
 	lastMessageRead({commit}, payload){
+		console.log(payload);
 		axios.post('/chat/setLastMessageReadAt',{'userId':payload.userId,'conversationId':payload.conversationId})
 		 .then(responce => {
-		 	commit('setLastMessageRead',responce.data.count)
+		 	// commit('setLastMessageRead',responce.data)
 		})
 	},
 	// Archive Chat

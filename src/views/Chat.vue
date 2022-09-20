@@ -221,7 +221,8 @@
               <v-tabs-items v-model="convTab">
                 <v-tab-item
                   
-                >
+                > 
+                
                   <v-list two-line  class="py-0">
                     <v-list-item-group
                       v-model="selectedUser"
@@ -229,7 +230,9 @@
                       
                     >
                       <template v-for="(conversation, index) in conversationsList">
-                        <v-list-item @click="openChat(conversation,conversation.groupName)" :key="conversation._id" v-if="conversation.type == 'GROUP'">
+                        
+                        <v-list-item @click="openChat(conversation,conversation.groupName)" :key="conversation._id"  :class="{ 'grey--text v-list-item--active' : conversation._id === chatData.group._id }" v-if="conversation.type == 'GROUP'">
+                          
                           <template>
                             <v-list-item-avatar>
                               <v-icon>mdi-account-group-outline</v-icon>
@@ -258,7 +261,7 @@
                           </template>
                           
                         </v-list-item>
-                        <v-list-item v-if="conversation.type == 'PRIVATE' && participant.id != user.id"  v-for="participant in conversation.participantDetails" @click="openChat(conversation,participant.name)" :key="participant.id">
+                        <v-list-item v-if="conversation.type == 'PRIVATE' && participant.id != user.id"  v-for="participant in conversation.participantDetails" @click="openChat(conversation,participant.name)" :class="{ 'grey--text v-list-item--active' : conversation._id === chatData.group._id }" :key="participant.id">
                           <template >
                               <v-list-item-avatar>
                                 <v-avatar>
@@ -363,6 +366,7 @@
           </v-col>
           <v-col cols="12" sm="8" md="8" class="pl-0 pr-2 pt-0 d-sm-block" v-show="showMsgBlock">
             <div class="message-area">
+
               <!-- Message Header -->
               <div class="msg-header pa-5">
                 <v-icon class="back-arrow" v-if="backArrow" @click="closeChat">mdi-chevron-left</v-icon>
@@ -516,6 +520,7 @@
                         <template>
                           <v-list-item-content>
                             <v-list-item-title>{{message.sender.name}}</v-list-item-title>
+                            
                               <v-img v-if="message.attachment" :src="message.attachment" max-height="125px" max-width="245px" class="mt-2"></v-img>
                             <v-list-item-subtitle
                               class="text--primary"
@@ -710,22 +715,24 @@ export default {
         'group': group,
         'name': name,
       }
-      
       this.conversationId = group._id;
       this.chatData = obj;
-      this.getAllMessages(this.conversationId);
-      setTimeout(function(){
-        container.scrollTop = container.scrollHeight;
-      }, 400);
       var ids = {
         userId: this.user.id,
         conversationId: this.conversationId,
       }
+      this.getAllMessages(ids);
+      var container = this.$refs.messagesSection;
+      setTimeout(function(){
+        container.scrollTop = container.scrollHeight;
+      }, 800);
+      
       this.lastMessageRead(ids);
       var container = this.$refs.messagesSection;
       setTimeout(function(){
         container.scrollTop = container.scrollHeight;
-      }, 100);
+      }, 800);
+      this.isChatMenu  = false;
     },
     closeChat(){
       if(screen.width < 767){
@@ -735,6 +742,7 @@ export default {
       }
     },
     getConversations(id){
+      alert(id);
       this.getAllConversations(id);
     },
     fileUpload(){
@@ -757,8 +765,9 @@ export default {
         content: this.message,
         attachment: chat_file[0],
       }
-      
-      this.sendMessage(data);
+      if(data.content || data.attachment){
+        this.sendMessage(data);
+      }
       var container = this.$refs.messagesSection;
       setTimeout(function(){
         container.scrollTop = container.scrollHeight;
@@ -863,6 +872,7 @@ export default {
       formData.append('content', this.message)
     },
     afterComplete(file, response) {
+      console.log(response,'dasda');
       this.message = "";
       this.$refs.msgFile.value=null;
       this.$refs.myVueDropzone.removeFile(file);
@@ -936,13 +946,13 @@ export default {
   },
   beforeMount() {
     this.user = this.$store.getters.userInfo;
-    // this.$router.push("/messages?room_id="+this.user);
   },
-  mounted() {
-    this.user = this.$store.getters.userInfo;
-    this.getConversations(this.user.id);
+  mounted: async function() {
+    // this.user = this.$store.getters.userInfo;
+    await this.getAllConversations(this.user.id);
     this.archiveConversations(this.user.id);
-    var convo = this.$store.getters.conversations[0];
+
+    var convo = _.orderBy(this.$store.getters.conversations, 'latestMessage', 'desc')[0];
     
     if(convo.type == 'PRIVATE'){
       var membr = convo.participantDetails.filter((item)=>{
