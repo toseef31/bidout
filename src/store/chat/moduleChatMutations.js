@@ -31,5 +31,6 @@ export default {
   }, 
   setArchiveConverstaionList (state, payload){
       state.archiveList = payload;
-  }, 
+  },  
+  
 }

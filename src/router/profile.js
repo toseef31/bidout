@@ -25,11 +25,16 @@ const routes = [
         path: '/manage-users',
         name: 'ManageUsers',
         component: () => import('@/views/ManageUsers.vue'),
+         // meta: { authorize: [localStorage.getItem("userData").role == 'admin'] }
         beforeEnter: (to, from, next) => {
-           if(localStorage.getItem("userData") == null) {
-               next('/login');
+           if(localStorage.getItem("userData") != null) {
+               if(localStorage.getItem("userData").role == 'user'){
+                    next('/dashboard');
+                }else{
+                    next();
+                }
            } else {
-               next();
+               next('/login');
            }
        }
       },

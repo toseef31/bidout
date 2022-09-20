@@ -8,7 +8,10 @@ const mutations = {
     toggleActivityPanel(state){
         return state.activityPanel = !state.activityPanel;
         return state.sideBarOpen = false;
-    }
+    },
+    setPageLoader (state, payload){
+        state.pageLoader = payload;
+    }, 
 }
 
 export default mutations

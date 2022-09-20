@@ -10,4 +10,5 @@ export default {
     membersList: [],
     suppliersUsers: [],
     archiveList: [],
+   
 }

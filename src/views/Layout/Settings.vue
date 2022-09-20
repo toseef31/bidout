@@ -7,6 +7,7 @@
           <v-col :class="[ showSideBar ? 'col-12' : 'toggleLeft-sidebar']" class="left-sidebar pr-1">
             <LeftSidebar></LeftSidebar>
           </v-col>
+          
           <router-view />
         </v-row>
       </section>
@@ -43,6 +44,9 @@ export default {
     },
     responseId () {
       return this.$store.getters.responseId
+    },
+    loader(){
+      return this.$store.getters.pageLoader;
     },
   },
 };

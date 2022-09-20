@@ -4,7 +4,10 @@ const getters = {
     },
     g_activityPanel(state){
         return state.activityPanel
-    }
+    },
+    pageLoader (state){
+      return state.pageLoader
+    }, 
 }
 
 export default getters

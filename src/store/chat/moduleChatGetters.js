@@ -28,5 +28,6 @@ export default {
   }, 
   archiveList (state){
     return state.archiveList
-  },  
+  }, 
+   
 }

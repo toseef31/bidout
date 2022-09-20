@@ -1,7 +1,17 @@
 <template>
-  <v-col class="chat-module pa-0 pa-sm-3 pl-sm-0 pb-sm-0" :class="[ showSideBar ? 'col-md-9 col-12 col-sm-9' : 'mid-content-collapse', activityPanel ? 'd-sm-block' : 'd-md-block']" v-show="!activityPanel">
+  <v-row fill-height align="center" v-if="loader">
+    <v-col cols="12">
+      <v-progress-circular
+            :width="3"
+            color="green"
+            indeterminate
+          ></v-progress-circular>
+    </v-col>
+  </v-row>
+  <v-col class="chat-module pa-0 pa-sm-3 pl-sm-0 pb-sm-0" :class="[ showSideBar ? 'col-md-9 col-12 col-sm-9' : 'mid-content-collapse', activityPanel ? 'd-sm-block' : 'd-md-block']" v-show="!activityPanel" v-else>
     <div class="mid-content">
       <div class="content-section">
+
         <v-row>
           <v-col cols="12" sm="4" md="4" class="userCol  d-sm-block" v-if="userList">
             <div class="userlist-col">
@@ -516,12 +526,15 @@
                   <v-list-item-group
                   >
                     <template>
-                      <v-list-item class="text-left px-5" disabled>
+                      <v-list-item class="text-left px-5" active-class="white--text">
                         <template>
                           <v-list-item-content>
                             <v-list-item-title>{{message.sender.name}}</v-list-item-title>
-                            
-                              <v-img v-if="message.attachment" :src="message.attachment" max-height="125px" max-width="245px" class="mt-2"></v-img>
+                              <template v-if="message.attachment">
+                                <!-- <span v-if="get_url_extension(message.attachment) == 'pdf'">pdf</span> -->
+                                <a :href="message.attachment" target="_blank" v-if="get_url_extension(message.attachment) == 'pdf'"><v-img  :src="require('@/assets/images/chat/pdf.jpg')" max-height="50px" max-width="50px" class="mt-2"></v-img></a>
+                              <v-img v-else :src="message.attachment" max-height="125px" max-width="245px" class="mt-2"></v-img>
+                              </template>
                             <v-list-item-subtitle
                               class="text--primary"
                             >{{message.content}}</v-list-item-subtitle>
@@ -643,7 +656,6 @@ export default {
       chatTab: [
         'All', 'Archive',
       ],
-      text: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.',
     };
   },
   computed:{
@@ -651,7 +663,7 @@ export default {
         return this.$store.getters.g_sideBarOpen;
     },
     activityPanel(){
-        return this.$store.getters.g_activityPanel;
+      return this.$store.getters.g_activityPanel;
     },
 
     conversationsList(){
@@ -662,6 +674,7 @@ export default {
       }else{
         return _.orderBy(this.$store.getters.conversations, 'latestMessage', 'desc');
       }
+      this.loader = false;
     },
     messagesList(){
       if(this.searchMessage){
@@ -680,6 +693,9 @@ export default {
     },
     archiveList(){
       return this.$store.getters.archiveList;
+    },
+    loader(){
+      return this.$store.getters.pageLoader;
     },
     // msgCount(){
     //   return this.$store.getters.unMessageCount;
@@ -717,6 +733,7 @@ export default {
       }
       this.conversationId = group._id;
       this.chatData = obj;
+     
       var ids = {
         userId: this.user.id,
         conversationId: this.conversationId,
@@ -725,13 +742,13 @@ export default {
       var container = this.$refs.messagesSection;
       setTimeout(function(){
         container.scrollTop = container.scrollHeight;
-      }, 800);
+      }, 400);
       
       this.lastMessageRead(ids);
       var container = this.$refs.messagesSection;
       setTimeout(function(){
         container.scrollTop = container.scrollHeight;
-      }, 800);
+      }, 1000);
       this.isChatMenu  = false;
     },
     closeChat(){
@@ -872,11 +889,15 @@ export default {
       formData.append('content', this.message)
     },
     afterComplete(file, response) {
-      console.log(response,'dasda');
       this.message = "";
       this.$refs.msgFile.value=null;
       this.$refs.myVueDropzone.removeFile(file);
       document.getElementById('dropzone').style.display = "none";
+      var ids = {
+        userId: this.user.id,
+        conversationId: response.message.conversationId,
+      }
+      this.getAllMessages(ids);
     },
     uploadfile(event) {
       this.filename = "";
@@ -895,7 +916,6 @@ export default {
         content: this.message,
         attachment: chat_file[0],
       }
-      // this.$store.commit('setMessagesList');
       this.sendMessage(data);
       var container = this.$refs.messagesSection;
       setTimeout(function(){
@@ -942,6 +962,9 @@ export default {
         userId: this.user.id,
       }
       this.unArchiveConversation(conv);
+    },
+    get_url_extension( url ) {
+        return url.split(/[#?]/)[0].split('.').pop().trim();
     }
   },
   beforeMount() {

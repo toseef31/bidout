@@ -12,6 +12,7 @@ export default {
 		 .then(responce => {
 		 	console.log(responce.data);
 		 	commit('setConverstaionList',responce.data.conversations)
+		 	commit('setPageLoader', false)
 		})
 	},
 	getAllMessages({commit,dispatch,state}, payload){

@@ -50,20 +50,36 @@
                 <v-list-item-title class="font-weight-bold" v-text="item.title"></v-list-item-title>
               </v-list-item-content>
             </template>
+            
+            <template v-for="(child,index) in item.items"
+              > 
+                <v-list-item
+                   v-if="userDatas.role == 'admin' && index === 0"
+                >
+                  <v-list-item-icon class="mr-6 mt-3" v-show="!showSideBar">
+                    <router-link :to="'/'+child.link" class="text-decoration-none"><v-icon v-text="child.icon"></v-icon></router-link>
+                  </v-list-item-icon>
+                  <v-list-item-content class="text-left py-1" v-show="showSideBar">
+                    <router-link :to="'/'+child.link"  @click="isHidden = !isHidden" :class="{ 'active-btn': isHidden}" class="text-decoration-none">
+                      <v-list-item-title class="font-weight-bold" v-text="child.title"></v-list-item-title>
+                    </router-link>
+                  </v-list-item-content>
+                </v-list-item>
 
-            <v-list-item
-              v-for="child in item.items"
-              :key="child.title"
-            >
-              <v-list-item-icon class="mr-6 mt-3" v-show="!showSideBar">
-                <router-link :to="'/'+child.link" class="text-decoration-none"><v-icon v-text="child.icon"></v-icon></router-link>
-              </v-list-item-icon>
-              <v-list-item-content class="text-left py-1" v-show="showSideBar">
-                <router-link :to="'/'+child.link"  @click="isHidden = !isHidden" :class="{ 'active-btn': isHidden}" class="text-decoration-none">
-                  <v-list-item-title class="font-weight-bold" v-text="child.title"></v-list-item-title>
-                </router-link>
-              </v-list-item-content>
-            </v-list-item>
+                <v-list-item
+                   v-if="index > 0"
+                >
+                  <v-list-item-icon class="mr-6 mt-3" v-show="!showSideBar">
+                    <router-link :to="'/'+child.link" class="text-decoration-none"><v-icon v-text="child.icon"></v-icon></router-link>
+                  </v-list-item-icon>
+                  <v-list-item-content class="text-left py-1" v-show="showSideBar">
+                    <router-link :to="'/'+child.link"  @click="isHidden = !isHidden" :class="{ 'active-btn': isHidden}" class="text-decoration-none">
+                      <v-list-item-title class="font-weight-bold" v-text="child.title"></v-list-item-title>
+                    </router-link>
+                  </v-list-item-content>
+                </v-list-item>
+            </template>
+              
           </v-list-group>
         </v-list>
         <v-list
@@ -134,7 +150,10 @@ export default {
     },
     showMsgCount(){
         return this.$store.getters.unreadCount;
-    }
+    },
+    userDatas(){
+        return this.$store.getters.userInfo;
+    },
   },
   methods: {
     ...mapActions(["signOutAction","unreadMessagesCount","getToken"]),

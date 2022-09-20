@@ -65,13 +65,15 @@ export default {
     // Try to sendForgot email
     axios.post('/auth/sendPasswordResetEmail',{'email': payload.email})
      .then(responce => {
-      if(responce.status == 200){
+      // console.log(responce.data.message);
+      // if(responce.status == 200){
         commit('setEmailSuccess', 'If this account exists, a password reset email has been sent to the email address for the account.');
-      }
-      else{
-        commit('setEmailError', 'Something wrong please try again')
-      }
-    })
+      
+      
+    }, (err) => {
+
+        commit('setEmailSuccess',"If this account exists, a password reset email has been sent to the email address for the account.")
+      })
   },
   verifyToken({commit}, payload){
     axios.get('/auth/verifyPasswordResetToken/'+payload)
