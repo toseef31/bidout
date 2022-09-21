@@ -77,7 +77,6 @@ if(userData){
   });
 }
 
-
 new Vue({
   vuetify,
   router,

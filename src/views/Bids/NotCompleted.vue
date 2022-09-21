@@ -1,5 +1,5 @@
 <template>
-   <v-col class="createBid-module pa-0 pa-sm-3" :class="[ showSideBar ? 'col-md-9 col-12 col-sm-7' : 'mid-content-collapse', activityPanel ? 'd-sm-block' : 'd-md-block']" v-show="!activityPanel">
+   <v-col class="createBid-module pa-0 pa-sm-3 pl-sm-0" :class="[ showSideBar ? 'col-md-9 col-12 col-sm-7' : 'mid-content-collapse', activityPanel ? 'd-sm-block' : 'd-md-block']" v-show="!activityPanel">
       <div class="mid-content">
         <div class="content-section fill-height pa-0">
           <v-row align="center" justify="space-between" no-gutters class="px-2 px-sm-6 my-4 not-completd-title">
@@ -32,6 +32,7 @@
                 :href="'#tab-' + item.value" class="text-capitalize black--text font-weight-bold"
               >
                 {{ item.text }} {{item.index}}
+                
                 <v-icon right small color="#F32349">
                   {{item.icon}}
                 </v-icon>
@@ -122,13 +123,16 @@ export default {
   },
   computed:{
     showSideBar(){
-        return this.$store.getters.g_sideBarOpen;
+      return this.$store.getters.g_sideBarOpen;
     },
     activityPanel(){
-        return this.$store.getters.g_activityPanel;
+      return this.$store.getters.g_activityPanel;
     },
     userDatas(){
-        return this.$store.getters.userInfo;
+      return this.$store.getters.userInfo;
+    },
+    passRule1(){
+      return this.$store.getters.validate;
     },
   },
   methods: {

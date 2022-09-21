@@ -9,6 +9,10 @@
             <v-alert type="error" v-show="showErrorAlert" v-if="logInError != ''">
               {{ logInError }}
             </v-alert>
+
+            <v-alert type="error" v-if="passwordError != null">
+              Oops! You have entered a incorrect password, try again, if you are still unsure of your password, please <router-link to="/forgot-password" class="white--text">Reset Password</router-link></a>
+            </v-alert>
             <v-alert type="success" v-show="showSuccessAlert" v-if="successMessage != ''">
               {{ successMessage }}
             </v-alert>
@@ -92,6 +96,9 @@ export default {
   computed: {
     logInError () {
       return this.$store.getters.error
+    },
+    passwordError () {
+      return this.$store.getters.passError
     },
     showErrorAlert(){
      return this.$store.getters.showErrorAlert;

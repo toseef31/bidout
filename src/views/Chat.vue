@@ -1,5 +1,5 @@
 <template>
-  <v-row fill-height align="center" v-if="loader">
+  <v-row fill-height align="center" v-if="loading">
     <v-col cols="12">
       <v-progress-circular
             :width="3"
@@ -656,6 +656,7 @@ export default {
       chatTab: [
         'All', 'Archive',
       ],
+      loading: true,
     };
   },
   computed:{
@@ -674,7 +675,6 @@ export default {
       }else{
         return _.orderBy(this.$store.getters.conversations, 'latestMessage', 'desc');
       }
-      this.loader = false;
     },
     messagesList(){
       if(this.searchMessage){
@@ -971,6 +971,10 @@ export default {
     this.user = this.$store.getters.userInfo;
   },
   mounted: async function() {
+    this.loading = false;
+    setTimeout(function(){
+        this.loading = false;
+      }, 1000);
     // this.user = this.$store.getters.userInfo;
     await this.getAllConversations(this.user.id);
     this.archiveConversations(this.user.id);

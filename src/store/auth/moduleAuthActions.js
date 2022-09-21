@@ -33,7 +33,9 @@ export default {
         })
         
       }, (err) => {
-        commit('setError',err.message)
+        console.log("gets");
+        commit('setPassError',"Oops! You have entered a incorrect password, try again, if you are still unsure of your password, please Reset Password")
+        // commit('showErrorAlert')
       })
   },  
   signOutAction({ commit }) {

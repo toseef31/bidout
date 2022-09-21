@@ -139,16 +139,25 @@
                   </v-container>
                   <hr>
                   <v-container class="pa-sm-10 pa-4 corporate-video">
+                    <label class="text-left main-label d-block">Corporate Video</label>
                     <v-row>
+                      <v-col cols="10" sm="10">
+                        <v-text-field placeholder="Add youtube video url ..." single-line outlined hide-details ></v-text-field>
+                        
+                      </v-col>
+                      <v-col cols="2" sm="2" class="pl-0">
+                      <v-btn color="#0D9648" class="text-capitalize mr-2 white--text" width="100%" height="54px">Add Video</v-btn>
+                      </v-col>
+                    </v-row>
+                    <!-- <v-row>
                       <v-col cols="12" sm="12" class="d-flex align-center justify-space-between">
-                      <label class="text-left main-label">Corporate Video</label>
                         <v-btn color="#0D9648" class="text-capitalize white--text mt-5" width="176px" height="54px" @click="uploadVideo">Add Video</v-btn>
                         <input ref="uploader" class="d-none" type="file"
                           accept="video/*"
                           @change="handleFileUpload($event)"
                         >
                       </v-col>
-                    </v-row>
+                    </v-row> -->
                     <v-row>
                       <v-col cols="6" sm="6">
                         <div class="video-col" v-show="videos">

@@ -11,6 +11,9 @@ export default {
     error (state){
     	return state.error
     },
+    passError (state){
+      return state.passError
+    },
     showErrorAlert (state) {
       return state.alerts.showErrorAlert;
     },

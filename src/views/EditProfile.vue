@@ -158,7 +158,8 @@
                         <template v-slot:default>
                           <tbody>
                             <tr v-for="history in historyData">
-                              <td class="text-left">{{ history.date | moment('timezone', userTimezone, 'MMM DD, YYYY, h:mm a')}} 
+                              <td class="text-left">{{ history.date }} 
+
                               </td>
                               <td class="text-left">{{history.location}}</td>
                               <td class="text-right">{{history.deviceType}}</td>
@@ -185,7 +186,8 @@
   import VuePhoneNumberInput from 'vue-phone-number-input';
   import 'vue-phone-number-input/dist/vue-phone-number-input.css';
   import timezones from 'timezones-list';
-  import moment from 'vue-moment';
+  import VueMoment from 'vue-moment';
+  import moment from 'moment-timezone';
   import _ from 'lodash';
   import { mapActions } from "vuex";
 export default {
@@ -239,12 +241,16 @@ export default {
     userDatas(){
         this.firstName = this.$store.getters.userInfo.firstName;
     },
+    userDatss(){
+        return this.$store.getters.userInfo;
+    },
     historyData(){
       return _.orderBy(this.$store.getters.historyData, 'date','desc');
     },
     companyAdmins(){
       return this.$store.getters.companyAdmins;
     },
+    
   },
   methods: {
     ...mapActions(["updateProfile","loginHistory","adminsCompany"]),
@@ -285,12 +291,22 @@ export default {
         })
       }, 500)
     },
-    timeInfo(date){
-      // this.timee = moment.utc(date).local().format();
-      // alert(this.timee);
-      // var jun = moment("2014-06-01T12:00:00Z");
-      // return jun.tz('America/Los_Angeles').format('ha z')
-      // return moment.tz("2013-11-18 11:55", "America/Toronto");
+    timeInfo(){
+      // console.log(moment.tz.names());
+      // return moment.tz.names();
+    },
+    time(newDate,zone){
+      // let date = newDate;
+      // let utc = moment(newDate).utc().format();
+      // // return new Date();
+      // // console.log(utc);
+      // var utcCutoff = moment.tz(utc, 'YYYYMMDD HH:mm:ss');
+      // // console.log(utcCutoff);
+      // var displayCutoff = 
+      //     moment.tz(utcCutoff.format('YYYYMMDD HH:mm:ss'), 'YYYYMMDD HH:mm:ss', zone);
+      // //     console.log(displayCutoff._z.name);
+      // // return moment(displayCutoff).utcOffset('+0500').format('YYYY-MM-DD HH:mm');
+      // return moment.tz(displayCutoff, "MMM Do YYYY hA", "America/New_York");
     }
   },
   mounted() {
@@ -298,13 +314,7 @@ export default {
     this.history();
     this.getAdmins();
 
-    var newYork    = moment.tz("timezone","2014-06-01 12:00", "America/New_York").format();
-    var losAngeles = newYork.clone().tz("America/Los_Angeles");
-    var london     = newYork.clone().tz("Europe/London");
-
-    console.log(newYork,'dsasdas');   // 2014-06-01T12:00:00-04:00
-    losAngeles.format(); // 2014-06-01T09:00:00-07:00
-    london.format();
+   this.timeInfo();
   }
 };
 </script>

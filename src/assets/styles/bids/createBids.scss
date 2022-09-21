@@ -181,7 +181,6 @@
 								&__slot{
 									min-height: 34px;
 									height: 34px;
-									/*width: 163px;*/
 								}
 								&__append-inner{
 									margin-top: 7px;
@@ -203,9 +202,10 @@
 							.v-input--is-label-active{
 								color: #0D9648 !important;
 								opacity: 1;
-								.v-input--switch__track.primary--text{
+								.v-icon.primary--text{
 									color: #0D9648 !important;
 									opacity: 1;
+									font-size: 30px;
 								}
 								.v-input--switch__thumb.primary--text{
 									color: #fff !important;
@@ -326,12 +326,46 @@
 					border-radius: 8px;
 					color: #0D9648;
 				}
+
 			}
 		}
 	}
 	.mid-content-collapse{
 		flex: 0 0 95%;
 	  max-width: 95%;
+	}
+}
+.inviteSupplier-dialog{
+	h2{
+		color: #0D1139;
+		font-size: 20px;
+		line-height: 25px;
+	}
+	.v-form {
+		label{
+			color: #0D1139;
+			font-size: 16px;
+		}
+		.v-input{
+			&__slot{
+				border-radius: 8px;
+			}
+		}
+		#MazPhoneNumberInput{
+			margin-bottom: 0!important;
+			.country-selector{
+				&__input{
+					height: 56px;
+					min-height: 56px;
+				}
+			}
+			.input-tel{
+				&__input{
+					height: 56px;
+					min-height: 56px;
+				}
+			}
+		}
 	}
 }
 @media (max-width: 768px) {
