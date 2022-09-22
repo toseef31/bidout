@@ -123,6 +123,7 @@
                       <label class="d-block text-left main-label">Services Location</label>
                     <v-row>
                       <v-col cols="10" sm="10">
+                        
                         <v-text-field placeholder="Add a location here ..." single-line outlined hide-details></v-text-field>
                       </v-col>
                       <v-col cols="2" sm="2" class="pl-0 pt-0 pb-0">
@@ -280,6 +281,7 @@
   import ESGComponent from './CompanyProfile/ESGComponent.vue'
   import KeyFacts from './CompanyProfile/KeyFacts.vue'
   import ExcutiveLeadership from './CompanyProfile/ExcutiveLeadership.vue'
+  import VueGoogleAutocomplete from "vue-google-autocomplete";
   import _ from 'lodash';
   import { mapActions } from "vuex"
 export default {
@@ -291,6 +293,7 @@ export default {
     ESGComponent,
     KeyFacts,
     ExcutiveLeadership,
+    VueGoogleAutocomplete,
   },
   
   data() {
@@ -311,7 +314,11 @@ export default {
       cropped: null,
       dialog: false,
       imageUrl: '',
-      logoName: ''
+      logoName: '',
+      newsTitle: '',
+      newsDate: '',
+      newsUrl: '',
+      address: "",
     };
   },
   computed:{
@@ -427,11 +434,17 @@ export default {
       addService(){
         console.log(this.services); 
         this.drillingService = this.services;
-      }
+      },
+      getAddressData: function (addressData, placeResultData, id) {
+       this.address = addressData;
+     }
   },
   mounted() {
     document.title = "Company Profile - BidOut";
     this.getCategories();
+    // this.$refs.address.focus();
+    console.log(this.$refs["origin"]);
+    const autocomplete = new google.maps.places.Autocomplete(this.$refs["origin"]);
   }
 };
 </script>

@@ -158,8 +158,8 @@
                         <template v-slot:default>
                           <tbody>
                             <tr v-for="history in historyData">
-                              <td class="text-left">{{ history.date }} 
-
+                              <td class="text-left"> 
+                                {{ time(history.date,userTimezone)}}
                               </td>
                               <td class="text-left">{{history.location}}</td>
                               <td class="text-right">{{history.deviceType}}</td>
@@ -296,6 +296,7 @@ export default {
       // return moment.tz.names();
     },
     time(newDate,zone){
+      return moment.tz(newDate, zone).format('MMM DD YYYY, h:mm:ss a')
       // let date = newDate;
       // let utc = moment(newDate).utc().format();
       // // return new Date();

@@ -96,8 +96,10 @@ export default {
       croppieProfile: '',
       croppedProfile: null,
       dialogProfile: false,
-      linkdinProfile: '',
+      excutivelinkdinProfile: '',
       profileImage: '',
+      excutiveName: '',
+      excutiveRole: '',
     };
   },
   computed:{

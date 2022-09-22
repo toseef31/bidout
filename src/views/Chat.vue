@@ -67,6 +67,7 @@
                             <v-icon @click="startChatDialog = false" small>mdi-close</v-icon>
                           </v-card-title>
                           <v-card-text class="py-8">
+                            
                             <v-autocomplete
                               v-model="addChat"
                               :items="membersLists"
@@ -459,7 +460,7 @@
                                       
                                       <v-autocomplete
                                         v-model="removeMember"
-                                        :items="chatData.group.participantDetails"
+                                        :items="allMembers"
                                         item-value="id" item-text="name"
                                         chips
                                         outlined
@@ -657,6 +658,7 @@ export default {
         'All', 'Archive',
       ],
       loading: true,
+      allMembers: [],
     };
   },
   computed:{
@@ -733,19 +735,31 @@ export default {
       }
       this.conversationId = group._id;
       this.chatData = obj;
-     
+      if(this.chatData){
+        this.allMembers = this.chatData.group.participantDetails;
+      }
       var ids = {
         userId: this.user.id,
         conversationId: this.conversationId,
       }
       this.getAllMessages(ids);
       var container = this.$refs.messagesSection;
+        console.log(container,'dsdad');
+
+      container.scrollTop = container.scrollHeight;
+      
       setTimeout(function(){
+        // var container = this.$refs.messagesSection;
         container.scrollTop = container.scrollHeight;
-      }, 400);
+      // alert(container.scrollTop);
+      }, 4000);
       
       this.lastMessageRead(ids);
       var container = this.$refs.messagesSection;
+      // if(container === undefined){
+      //   var container = this.$refs.messagesSection;
+      //   // alert(container);
+      // }
       setTimeout(function(){
         container.scrollTop = container.scrollHeight;
       }, 1000);
@@ -803,6 +817,7 @@ export default {
       this.chatData = ''; 
     },
     memberList(){
+      alert("members");
       this.supplierList();
     },
     getSupplierUsers(){
@@ -975,6 +990,7 @@ export default {
     setTimeout(function(){
         this.loading = false;
       }, 1000);
+    console.log(this.user.id);
     // this.user = this.$store.getters.userInfo;
     await this.getAllConversations(this.user.id);
     this.archiveConversations(this.user.id);
