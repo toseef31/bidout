@@ -10,5 +10,5 @@ export default {
     membersList: [],
     suppliersUsers: [],
     archiveList: [],
-   
+    createMsg: null,
 }

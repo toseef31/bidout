@@ -19,7 +19,7 @@ import moment from 'moment-timezone';
 import VueSignaturePad from 'vue-signature-pad';
 import '@/assets/styles/index.scss';
 import VueCroppie from 'vue-croppie';
-import 'croppie/croppie.css'
+import 'croppie/croppie.css';
 // Your web app's Firebase configuration
 var firebaseConfig = {
   apiKey: import.meta.env.VITE_FIREBASE_API_KEY,
@@ -60,6 +60,7 @@ Sentry.init({
   ],
   
 })
+
 
 LogRocket.getSessionURL(sessionURL => {
   Sentry.configureScope(scope => {

@@ -28,6 +28,9 @@ export default {
   }, 
   archiveList (state){
     return state.archiveList
+  },
+  createMsg (state){
+    return state.createMsg
   }, 
    
 }

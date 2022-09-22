@@ -70,8 +70,6 @@ export default {
       // console.log(responce.data.message);
       // if(responce.status == 200){
         commit('setEmailSuccess', 'If this account exists, a password reset email has been sent to the email address for the account.');
-      
-      
     }, (err) => {
 
         commit('setEmailSuccess',"If this account exists, a password reset email has been sent to the email address for the account.")

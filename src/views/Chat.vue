@@ -11,7 +11,26 @@
   <v-col class="chat-module pa-0 pa-sm-3 pl-sm-0 pb-sm-0" :class="[ showSideBar ? 'col-md-9 col-12 col-sm-9' : 'mid-content-collapse', activityPanel ? 'd-sm-block' : 'd-md-block']" v-show="!activityPanel" v-else>
     <div class="mid-content">
       <div class="content-section">
+        <v-snackbar
+              v-model="snackbar"
+              :timeout="timeout"
+              color="#0D9648"
+              absolute
+              top
+            >
+              {{createMsg}}
 
+              <template v-slot:action="{ attrs }">
+                <v-btn
+                  color="white"
+                  text
+                  v-bind="attrs"
+                  @click="snackbar = false"
+                >
+                  Close
+                </v-btn>
+              </template>
+            </v-snackbar>
         <v-row>
           <v-col cols="12" sm="4" md="4" class="userCol  d-sm-block" v-if="userList">
             <div class="userlist-col">
@@ -67,7 +86,7 @@
                             <v-icon @click="startChatDialog = false" small>mdi-close</v-icon>
                           </v-card-title>
                           <v-card-text class="py-8">
-                            
+
                             <v-autocomplete
                               v-model="addChat"
                               :items="membersLists"
@@ -464,6 +483,7 @@
                                         item-value="id" item-text="name"
                                         chips
                                         outlined
+                                        auto-select-first
                                         full-width
                                         hide-details
                                         hide-no-data
@@ -541,7 +561,7 @@
                             >{{message.content}}</v-list-item-subtitle>
                           </v-list-item-content>
                           <v-list-item-action class="mt-n6">
-                            <v-list-item-action-text>{{ message.updatedAt | moment("h:mm a") }}</v-list-item-action-text>
+                            <v-list-item-action-text>{{ istoday(message.updatedAt) }}</v-list-item-action-text>
                           </v-list-item-action>
                         </template>
                       </v-list-item>
@@ -599,6 +619,8 @@
   import axios from 'axios'
   import _ from 'lodash';
   import vueDropzone from 'vue2-dropzone';
+  import VueMoment from 'vue-moment';
+  import moment from 'moment-timezone';
   import { mapActions } from "vuex";
 export default {
   name : "Chat",
@@ -659,6 +681,8 @@ export default {
       ],
       loading: true,
       allMembers: [],
+      snackbar: false,
+      timeout: 2000,
     };
   },
   computed:{
@@ -698,6 +722,15 @@ export default {
     },
     loader(){
       return this.$store.getters.pageLoader;
+    },
+    createMsg(){
+      if(this.$store.getters.createMsg != null){
+        this.snackbar = true;
+      }
+      return this.$store.getters.createMsg;
+      setTimeout(function(){
+        this.$store.state.createMsg = null;
+      }, 4000);
     },
     // msgCount(){
     //   return this.$store.getters.unMessageCount;
@@ -744,14 +777,9 @@ export default {
       }
       this.getAllMessages(ids);
       var container = this.$refs.messagesSection;
-        console.log(container,'dsdad');
-
-      container.scrollTop = container.scrollHeight;
       
       setTimeout(function(){
-        // var container = this.$refs.messagesSection;
         container.scrollTop = container.scrollHeight;
-      // alert(container.scrollTop);
       }, 4000);
       
       this.lastMessageRead(ids);
@@ -773,7 +801,6 @@ export default {
       }
     },
     getConversations(id){
-      alert(id);
       this.getAllConversations(id);
     },
     fileUpload(){
@@ -817,7 +844,6 @@ export default {
       this.chatData = ''; 
     },
     memberList(){
-      alert("members");
       this.supplierList();
     },
     getSupplierUsers(){
@@ -840,6 +866,7 @@ export default {
       this.participants.push(user.objectID);
       
       this.hideMemberList = false;
+      this.addMember = '';
     },
     createGroup(){
       var myData = {
@@ -980,7 +1007,13 @@ export default {
     },
     get_url_extension( url ) {
         return url.split(/[#?]/)[0].split('.').pop().trim();
-    }
+    },
+    istoday (date) {
+      return moment(date).calendar();
+    },
+    // time(newDate){
+    //   return moment.tz(newDate, this.user.timezone).format('MMM DD YYYY, h:mm:ss a');
+    // }
   },
   beforeMount() {
     this.user = this.$store.getters.userInfo;
@@ -989,9 +1022,7 @@ export default {
     this.loading = false;
     setTimeout(function(){
         this.loading = false;
-      }, 1000);
-    console.log(this.user.id);
-    // this.user = this.$store.getters.userInfo;
+      }, 1000);      
     await this.getAllConversations(this.user.id);
     this.archiveConversations(this.user.id);
 

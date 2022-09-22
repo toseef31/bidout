@@ -70,6 +70,7 @@
                               :search-input.sync="searchTimezone"
                               item-text="label" item-value="tzCode"
                               flat
+                              auto-select-first
                               hide-details
                               outlined
                             ></v-autocomplete>
@@ -296,18 +297,7 @@ export default {
       // return moment.tz.names();
     },
     time(newDate,zone){
-      return moment.tz(newDate, zone).format('MMM DD YYYY, h:mm:ss a')
-      // let date = newDate;
-      // let utc = moment(newDate).utc().format();
-      // // return new Date();
-      // // console.log(utc);
-      // var utcCutoff = moment.tz(utc, 'YYYYMMDD HH:mm:ss');
-      // // console.log(utcCutoff);
-      // var displayCutoff = 
-      //     moment.tz(utcCutoff.format('YYYYMMDD HH:mm:ss'), 'YYYYMMDD HH:mm:ss', zone);
-      // //     console.log(displayCutoff._z.name);
-      // // return moment(displayCutoff).utcOffset('+0500').format('YYYY-MM-DD HH:mm');
-      // return moment.tz(displayCutoff, "MMM Do YYYY hA", "America/New_York");
+      return moment.tz(newDate, zone).format('MMM DD YYYY, h:mm:ss a');
     }
   },
   mounted() {

@@ -123,8 +123,7 @@
                       <label class="d-block text-left main-label">Services Location</label>
                     <v-row>
                       <v-col cols="10" sm="10">
-                        
-                        <v-text-field placeholder="Add a location here ..." single-line outlined hide-details></v-text-field>
+                        <v-text-field placeholder="Add a location here ..." single-line outlined hide-details v-model="address"></v-text-field>
                       </v-col>
                       <v-col cols="2" sm="2" class="pl-0 pt-0 pb-0">
                         <v-btn color="#0D9648" class="text-capitalize mr-2 white--text" width="100%" height="54px">Add</v-btn>
@@ -435,16 +434,10 @@ export default {
         console.log(this.services); 
         this.drillingService = this.services;
       },
-      getAddressData: function (addressData, placeResultData, id) {
-       this.address = addressData;
-     }
   },
   mounted() {
     document.title = "Company Profile - BidOut";
     this.getCategories();
-    // this.$refs.address.focus();
-    console.log(this.$refs["origin"]);
-    const autocomplete = new google.maps.places.Autocomplete(this.$refs["origin"]);
   }
 };
 </script>

@@ -78,10 +78,14 @@ export default {
 		})
 	},
 	// Supplier Users List
-	createConversation({commit, state,dispatch}, payload){
-		axios.post('/chat/createConversation/',payload)
+	async createConversation({commit, state,dispatch}, payload){
+		await axios.post('/chat/createConversation/',payload)
 		 .then(responce => {
 		 	dispatch("getAllConversations",state.userId.id);
+		 	commit("setCreateMsg", responce.data.message);
+		 	setTimeout(function(){
+ 	        	commit("setCreateMsg", null);
+ 	      	}, 5000);
 		})
 	},
 

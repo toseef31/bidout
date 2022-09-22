@@ -31,6 +31,9 @@ export default {
   }, 
   setArchiveConverstaionList (state, payload){
       state.archiveList = payload;
+  }, 
+  setCreateMsg (state, payload){
+      state.createMsg = payload;
   },  
   
 }
