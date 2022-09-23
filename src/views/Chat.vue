@@ -173,7 +173,7 @@
                             </v-text-field>
                             <label class="d-block text-left input-label font-weight-bold black--text mt-5">Add Users</label>
                             
-                            <v-list class="company-list">
+                            <v-list class="company-list member-lists">
                               <template v-for="(user, index) in membersData">
                                 <v-list-item
                                   :key="user.objectID"
@@ -280,8 +280,7 @@
                             </v-list-item-content>
 
                             <v-list-item-action class="mt-n5">
-                              <v-list-item-action-text>{{conversation.latestMessage | moment("
-                              h:mm a")}}</v-list-item-action-text>
+                              <v-list-item-action-text>{{ istoday(conversation.latestMessage)}}</v-list-item-action-text>
                             </v-list-item-action>
                             <!-- <v-badge
                                 color="#0D9648"
@@ -304,8 +303,7 @@
                               </v-list-item-content>
 
                             <v-list-item-action>
-                              <v-list-item-action-text>{{conversation.latestMessage | moment("
-                              h:mm a")}}</v-list-item-action-text>
+                              <v-list-item-action-text>{{ istoday(conversation.latestMessage) }}</v-list-item-action-text>
                             </v-list-item-action>
                           </template>
                         </v-list-item>
@@ -401,7 +399,6 @@
               <div class="msg-header pa-5">
                 <v-icon class="back-arrow" v-if="backArrow" @click="closeChat">mdi-chevron-left</v-icon>
                 <v-row align="center">
-
                   <v-col cols="12" md="6">
                     <div class="title-section text-left">
                       <h4 class="mb-0 font-weight-bold">{{chatData.name}}</h4>
@@ -648,7 +645,7 @@ export default {
       conversationId : '',
       filename: '',
       searchUsers: '',
-      chatData: {},
+      chatData: '',
       selected: null,
       toggleMenu: [
         { text: 'Archive Chat', icon: 'mdi-archive-outline' },
@@ -756,6 +753,9 @@ export default {
   },
   methods: {
     ...mapActions(["getAllConversations","getAllMessages","sendMessage","unreadMessagesCountCon","lastMessageRead","archiveChat","supplierList","supplierUserList","createConversation","removeConvUser","getArchiveChats","unArchiveConversation"]),
+    getConversations(id){
+      this.getAllConversations(id);
+    },
     openChat(group,name,id){
       if(screen.width < 767){
         this.userList = false;
@@ -800,9 +800,7 @@ export default {
         this.backArrow = false;
       }
     },
-    getConversations(id){
-      this.getAllConversations(id);
-    },
+    
     fileUpload(){
       this.filename = this.$refs.msgFile.files[0].name;
     },
@@ -834,14 +832,13 @@ export default {
       this.filename = '';
     },
     chatActions(data){
-      var archive = {
+      var archivess = {
         conversationId: data,
         userId: this.user.id,
       }
-      this.archiveChat(archive);
+      this.archiveChat(archivess);
       this.isChatMenu = false;
-      // var obj = {};
-      this.chatData = ''; 
+      this.chatData.name = '';
     },
     memberList(){
       this.supplierList();
@@ -889,7 +886,6 @@ export default {
       this.isAddUser = false;
     },
     createChat(){
-      console.log(this.addChat);
       var data = {
         participants: [
            this.addChat.id, this.user.id,
@@ -1011,6 +1007,14 @@ export default {
     istoday (date) {
       return moment(date).calendar();
     },
+    scrollToElement() {
+        const el = this.$refs.messagesSection;
+        if (el) {
+          el.scrollTop = el.scrollHeight;
+          // Use el.scrollIntoView() to instantly scroll to the element
+          el.scrollIntoView({behavior: 'smooth'});
+        }
+      },
     // time(newDate){
     //   return moment.tz(newDate, this.user.timezone).format('MMM DD YYYY, h:mm:ss a');
     // }
@@ -1040,7 +1044,7 @@ export default {
     }else{
       var grpName = convo.groupName;
     }
-    if(convo){
+    if(convo){ 
       this.openChat(convo,grpName);
     }
     document.title = "Messages - BidOut";
@@ -1051,7 +1055,7 @@ export default {
     }
     this.getSupplierUsers();  
     this.memberList();
-
+    this.scrollToElement();
     document.addEventListener('dragenter', function(e) {
       console.log(e.target.className);
      if (e.target.className == 'message-area' || e.target.className == 'messages-section' || e.target.className == 'v-list-item__content' || e.target.className == 'v-list-item__title' || e.target.className == 'v-list own-user message-list v-sheet theme--light v-list--two-line' || e.target.className == 'v-item-group theme--light v-list-item-group' || e.target.className == 'message-send-area' || e.target.className == 'row' || e.target.className == 'col-sm-10 col-md-10 col-12' || e.target.className == 'msg-text-box' ) {

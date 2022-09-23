@@ -8,6 +8,9 @@ export default {
     setUserId (state, payload){
       state.userId = payload
     },
+    setCompanyId (state, payload){
+      state.companyId = payload
+    },
     setError (state, payload){
     	state.error = payload
     },

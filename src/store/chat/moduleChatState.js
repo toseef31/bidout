@@ -1,7 +1,7 @@
 export default {
     unreadCount: 0,
-    conversations: [],
-    messages: [],
+    conversations: null,
+    messages: null,
     messageSend: null,
     unMessageCount: null,
     lastMessageRead: null,

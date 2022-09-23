@@ -56,7 +56,7 @@
                           </v-card>
                         </v-dialog>
                         <!-- the result -->
-                        <img :src="cropped">
+                        <img :src="imageSrc">
                       </v-col>
                       <v-col cols="4" sm="6" class="pt-10 mt-4 btn-col pl-0 d-flex align-center justify-end">
                         <label for="logo-input" class="text-capitalize mr-2 white--text add-logo d-flex align-center font-weight-bold">Add Image
@@ -71,16 +71,16 @@
                     <v-row>
                       <v-col cols="12" sm="12">
                       <label class="d-block text-left input-label">Company's Name</label>
-                        <v-text-field placeholder="Company's Name" single-line outlined hide-details></v-text-field>
+                        <v-text-field placeholder="Company's Name" v-model="profileName" single-line outlined hide-details></v-text-field>
                       </v-col>
                       <v-col cols="12" sm="12">
                       <label class="d-block text-left input-label">Corporate Summary</label>
-                        <v-textarea outlined name="input-7-4" hide-details></v-textarea>
+                        <v-textarea outlined name="input-7-4" v-model="profileSummary" hide-details></v-textarea>
                       </v-col>
                     </v-row>
                     <v-row>
                       <v-col cols="12" sm="12">
-                        <v-btn color="#0D9648" large class="text-capitalize white--text" width="176px" height="54px">Add Info</v-btn>
+                        <v-btn color="#0D9648" large class="text-capitalize white--text" width="176px" height="54px" @click="updateBasic">Add Info</v-btn>
                       </v-col>
                     </v-row>
                   </v-container>
@@ -142,11 +142,10 @@
                     <label class="text-left main-label d-block">Corporate Video</label>
                     <v-row>
                       <v-col cols="10" sm="10">
-                        <v-text-field placeholder="Add youtube video url ..." single-line outlined hide-details ></v-text-field>
-                        
+                        <v-text-field placeholder="Add youtube video url ..." v-model="videoLinks" single-line outlined hide-details></v-text-field>
                       </v-col>
                       <v-col cols="2" sm="2" class="pl-0">
-                      <v-btn color="#0D9648" class="text-capitalize mr-2 white--text" width="100%" height="54px">Add Video</v-btn>
+                      <v-btn color="#0D9648" class="text-capitalize mr-2 white--text" width="100%" height="54px" @click="addVideos">Add Video</v-btn>
                       </v-col>
                     </v-row>
                     <!-- <v-row>
@@ -158,12 +157,11 @@
                         >
                       </v-col>
                     </v-row> -->
-                    <v-row>
+                    <v-row v-if="companyData.corporateVideos">
                       <v-col cols="6" sm="6">
-                        <div class="video-col" v-show="videos">
-                          <video id="video-preview" width="100%" />
+                        <div class="video-col">
+                          <iframe  id="video-preview" :src="companyData.corporateVideos" width="100%" height="350px"></iframe >
                           <v-btn absolute top left><v-icon>mdi-trash-can-outline</v-icon> Delete Video</v-btn>
-                          <p>{{videoName}}</p>
                         </div>
                       </v-col>
                     </v-row>
@@ -219,13 +217,13 @@
                       </v-row>
                       <v-row>
                         <v-col cols="12" sm="12" class="pb-0 pl-0 pt-0">
-                          <v-btn color="#0D9648" class="text-capitalize mr-2 white--text" width="176px" height="54px">Add</v-btn>
+                          <v-btn color="#0D9648" class="text-capitalize mr-2 white--text" width="176px" height="54px" @click="addNews">Add</v-btn>
                         </v-col>
                       </v-row>
                     </v-form>
                     <v-row align="center" justify="space-between" class="news-list mt-10">
                       <v-col cols="12" sm="8" text="left">
-                        <p class="text-left mb-0">May 04, 2022 -  Petterson-UTI Reports Drilling Activity for April 2022</p>
+                        <p class="text-left mb-0">{{corporateNews[1]}} -  {{corporateNews[0]}}</p>
                       </v-col>
                       <v-col cols="12" sm="4" class="text-right">
                         <v-btn default color="transparent" class="text-capitalize edit-btn"><v-icon>mdi-square-edit-outline</v-icon>Edit Details</v-btn>
@@ -299,24 +297,28 @@ export default {
     return {
       isHidden : false,
       file: false,
-      videos: false,
-      videoName: '',
       fileName: '',
       fileExt: '',
+      profileName: this.$store.getters.companyData.company,
+      profileSummary: this.$store.getters.companyData.overview,
       corporateNews:'',
       services: '',
       subsidaries: [
         { image: 'subs-1' },{ image: 'subs-2' },{ image: 'subs-3' },{ image: 'subs-4' },
       ],
-      drillingService: [],
+      drillingService: this.$store.getters.companyData.services,
+      videoLinks: '',
+      videos: [],
       croppieImage: '',
-      cropped: null,
+      imageSrc: this.$store.getters.companyData.image,
+      base64data: '',
       dialog: false,
       imageUrl: '',
       logoName: '',
       newsTitle: '',
       newsDate: '',
       newsUrl: '',
+      corporateNews: this.$store.getters.companyData.corporateNews,
       address: "",
     };
   },
@@ -330,33 +332,12 @@ export default {
     allcategories(){
       return this.$store.getters.categories;
     },
+    companyData(){
+      return this.$store.getters.companyData;
+    }
   },
   methods: {
-     ...mapActions(["getCategories"]),
-    uploadVideo() {
-      this.isSelecting = true
-      window.addEventListener('focus', () => {
-        this.isSelecting = false
-      }, { once: true })
-
-      this.$refs.uploader.click()
-    },
-    previewVideo(){
-        let video = document.getElementById('video-preview');
-        let reader = new FileReader();
-        console.log(reader);
-        reader.readAsDataURL( this.videos );
-        reader.addEventListener('load', function(){
-            video.src = reader.result;
-        });
-    },
-    
-    handleFileUpload( event ){
-        this.videos = event.target.files[0];
-        console.log(this.videos);
-        this.videoName = this.videos.name;
-        this.previewVideo();
-    },
+     ...mapActions(["getCompany","getCategories","companyProfileImg","updateBasicProfile","addCompanyService","addCompanyVideos","addCompanyNews"]),
      uploadDocument() {
       this.isSelecting = true
       window.addEventListener('focus', () => {
@@ -366,26 +347,21 @@ export default {
       this.$refs.documentUploader.click()
     },
     previewDoc(){
-        let video = document.getElementById('doc-preview');
-        let reader = new FileReader();
-        console.log(reader);
-        reader.readAsDataURL( this.file );
-        reader.addEventListener('load', function(){
-            video.src = reader.result;
-        });
+      let video = document.getElementById('doc-preview');
+      let reader = new FileReader();
+      reader.readAsDataURL( this.file );
+      reader.addEventListener('load', function(){
+        video.src = reader.result;
+      });
     },
     
     handleDocumentUpload( event ){
-        this.file = event.target.files[0];
-        console.log(this.file);
-        this.fileName = this.file.name;
-        this.fileExt =  this.fileName.split('.').pop();
-        console.log(this.fileExt);
-        this.previewDoc();
+      this.file = event.target.files[0];
+      this.fileName = this.file.name;
+      this.fileExt =  this.fileName.split('.').pop();
+      this.previewDoc();
     },
-
     croppie (e) {
-      console.log(e);
       var files = e.target.files || e.dataTransfer.files;
       // alert(files);
       if (!files.length) return;
@@ -408,36 +384,71 @@ export default {
       });
     },
     crop() {
-      // Options can be updated.
-      // Current option will return a base64 version of the uploaded image with a size of 600px X 450px.
       let options = {
-        type: 'base64',
+        type: 'blob',
         size: { width: 370, height: 90 },
         format: 'png',
         name: this.logoName
       };
       this.$refs.croppieRef.result(options, output => {
-        this.cropped = this.croppieImage = output;
-          console.log(this.croppieImage);
+        var reader = new FileReader();
+        this.base64data = reader.readAsDataURL(output); 
+        reader.onloadend = function() {
+          this.base64data = reader.result;                
+          this.imageSrc = this.base64data;
+        }
+        this.image_name = this.croppieImage = output;
           this.dialog = false;
+          var data = {
+            companyId: this.$store.getters.userInfo.company.id,
+            files: this.image_name,
+          }
+          this.companyProfileImg(data);
         });
       },
-
+      updateBasic(){
+        var data = {
+          companyId: this.$store.getters.userInfo.company.id,
+          profileName: this.profileName,
+          profileSummary: this.profileSummary,
+        }
+        this.updateBasicProfile(data);
+      },
       getAllCategories(){
         this.getCategories();
         
       },
       deleteLogo(){
-        this.cropped == null;
+        var data = {
+          companyId: this.$store.getters.userInfo.company.id,
+          files: '',
+        }
+        this.companyProfileImg(data);
       },
       addService(){
-        console.log(this.services); 
         this.drillingService = this.services;
+        this.addCompanyService({companyId: this.$store.getters.userInfo.company.id,services: this.drillingService});
+        this.services = '';
       },
+      addVideos(){
+        this.videos = this.videoLinks;
+        this.addCompanyVideos({companyId: this.$store.getters.userInfo.company.id,videoLinks: this.videos});
+        this.videoLinks = '';
+      },
+      addNews(){
+        console.log("dadas");
+        this.corporateNews.push(this.newsTitle,this.newsDate,this.newsUrl);
+        console.log(this.corporateNews);
+        this.addCompanyNews({companyId: this.$store.getters.userInfo.company.id,corporateNews: this.corporateNews});
+        this.newsUrl = '';
+        this.newsTitle = '';
+        this.newsDate = '';
+      }
   },
   mounted() {
     document.title = "Company Profile - BidOut";
     this.getCategories();
+    this.getCompany(this.$store.getters.userInfo.company.id);
   }
 };
 </script>

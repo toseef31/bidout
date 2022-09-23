@@ -328,6 +328,24 @@
 	}
 }
 .v-dialog{
+	.member-lists{
+		padding: 0;
+		.v-list-item{
+			border-bottom: 1px solid #ccc;
+			&::before{
+				background-color: currentColor;
+		    bottom: 0;
+		    content: "";
+		    left: 0;
+		    opacity: 0.12;
+		    pointer-events: none;
+		    position: absolute;
+		    right: 0;
+		    top: 0;
+		    transition: 0.3s cubic-bezier(0.25, 0.8, 0.5, 1);
+			}
+		}
+	}
 	.company-list{
 		border-width: 0px 1px 1px 1px;
     border-style: solid;

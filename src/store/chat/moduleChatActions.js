@@ -48,7 +48,6 @@ export default {
 		})
 	}, 
 	lastMessageRead({commit}, payload){
-		console.log(payload);
 		axios.post('/chat/setLastMessageReadAt',{'userId':payload.userId,'conversationId':payload.conversationId})
 		 .then(responce => {
 		 	// commit('setLastMessageRead',responce.data)
@@ -56,11 +55,13 @@ export default {
 	},
 	// Archive Chat
 	archiveChat({commit,state,dispatch}, payload){
+		
 		axios.post('/chat/archiveConversation',{'userId':payload.userId,'conversationId':payload.conversationId})
 		 .then(responce => {
-		 	commit('setArchiveStatus',responce.data.count)
-		 	commit('setMessagesList',[])
-		 	dispatch("getAllConversations",state.userId.id);
+		 	// commit('setArchiveStatus',responce.data.count)
+		 	commit('setMessagesList',null)
+		 	dispatch("getAllConversations",state.userId.id)
+		 	dispatch("getArchiveChats",state.userId.id)
 		})
 	},
 	// Supplier List
@@ -78,8 +79,8 @@ export default {
 		})
 	},
 	// Supplier Users List
-	async createConversation({commit, state,dispatch}, payload){
-		await axios.post('/chat/createConversation/',payload)
+	 createConversation({commit, state,dispatch}, payload){
+		 axios.post('/chat/createConversation/',payload)
 		 .then(responce => {
 		 	dispatch("getAllConversations",state.userId.id);
 		 	commit("setCreateMsg", responce.data.message);

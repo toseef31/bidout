@@ -41,7 +41,7 @@
                   </div>
                   <p class="font-weight-medium">BidOut's flagship RFP Platform. The ability to create and distribute RPF's to BidOut's network or <br>service providers.</p>
                   <div class="d-inline-block">
-                    <v-btn color="#0D9647" large dense width="100%" height="56" class="font-weight-bold white--text text-capitalize pa-4" @click="generateContract('rfx')">Execute Agreement Now <v-icon class="pl-2" color="#fff">mdi-arrow-right-circle</v-icon></v-btn>
+                    <v-btn color="#0D9647" large dense width="260px" height="56" class="font-weight-bold white--text text-capitalize pa-4" @click="generateContract('rfx')">Execute Agreement Now <v-icon class="pl-2" color="#fff">mdi-arrow-right-circle</v-icon></v-btn>
                   </div>
                   <!-- <div class="d-inline-block agreement-box pa-3">
                     <div class="d-flex">
@@ -70,10 +70,11 @@
                   <div class="d-flex justify-space-between align-center mb-5 label-title">
                     <h1 class="font-weight-bold">Respond to Bids - OFS Directory</h1>
                     <h1 class="price-text"><span v-if="trial_end == 'free'">Free</span><span v-else>
-                      <template v-if="package == 1">$99.99/month</template>
-                      <template v-else-if="package == 2">$119.99/month</template>
-                      <template v-else-if="package == 3">$2400/year</template>
-                      <template v-else>$79.99/month</template>
+                      <template v-if="package.id == 1">$79.99/month</template>
+                      <template v-if="package == 1">$79.99/month</template>
+                      <template v-if="package == 2">$99.99/month</template>
+                      <template v-if="package == 3">$119.99/month</template>
+                      <template v-if="package == 4">$2400/year</template>
                     </span></h1>
                     <v-sheet>
                       <v-switch
@@ -98,12 +99,12 @@
                       <v-radio
                         label="Premium Edition"
                         color="#0D9647"
-                        value="paid"
+                        value="premium"
                       ></v-radio>
                     </v-radio-group>
                   </div>
                   <v-row>
-                    <v-col cols="12" sm="12" v-show="trial_end == 'paid'">
+                    <v-col cols="12" sm="12" v-show="trial_end == 'premium'">
                       <label class="d-block text-left input-label mb-2 font-weight-bold">Sales Team Users</label>
                       <v-select outlined placeholder="Select" v-model="package" :items="packages" item-text="name" item-value="id"></v-select>
                       
@@ -111,7 +112,7 @@
                   </v-row>
                   <v-row>
                     <v-col cols="12" sm="4" text="left">
-                      <v-btn color="#0D9647" large dense width="100%" height="56" class="font-weight-bold white--text text-capitalize pa-4" @click="generateContract('ofs')">Execute Agreement Now <v-icon class="pl-2" color="#fff">mdi-arrow-right-circle</v-icon></v-btn>
+                      <v-btn color="#0D9647" large dense width="260px" height="56" class="font-weight-bold white--text text-capitalize pa-4" @click="generateContract('ofs')">Execute Agreement Now <v-icon class="pl-2" color="#fff">mdi-arrow-right-circle</v-icon></v-btn>
                     </v-col>
                   </v-row>
                 </div>
@@ -156,12 +157,12 @@ export default {
       bidRespond: false,
       providerListing: true,
       trial_end : 'premium',
-      package: { name: '1-5 Users - $79.99/month or $800/year prepaid', id: 0},
+      package: { name: '1-5 Users - $79.99/month or $800/year prepaid', id: 1},
       packages: [
-        { name: '1-5 Users - $79.99/month or $800/year prepaid', id: 0},
-        { name: '6-10 Users - $99.99/month or $1,000/year prepaid', id: 1},
-        { name: '11-15 Users - $119.99/month or $1,200/year prepaid', id: 2},
-        { name: '16+ Users or Unlimited - $2,400/year prepaid', id: 3},
+        { name: '1-5 Users - $79.99/month or $800/year prepaid', id: 1},
+        { name: '6-10 Users - $99.99/month or $1,000/year prepaid', id: 2},
+        { name: '11-15 Users - $119.99/month or $1,200/year prepaid', id: 3},
+        { name: '16+ Users or Unlimited - $2,400/year prepaid', id: 4},
       ],
     };
   },
@@ -179,13 +180,19 @@ export default {
   methods: {
     ...mapActions(["contractGenerate","getIpAddress"]),
     generateContract(type){
+      if(type == 'ofs'){
+        var plan = this.package;
+      }else{
+        var plan = 0;
+      }
       var contract = {
         ip: this.$store.getters.userIp,
         contractType: type,
-        plan: this.package,
-        id: this.$store.getters.userId,
+        plan: plan,
+        id: this.$store.getters.companyId,
+
       }
-      // console.log(contract);
+      console.log(contract);
       this.contractGenerate(contract);
     }
     

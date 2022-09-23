@@ -127,10 +127,7 @@ export default {
       var agreement = {
         contractType : this.$store.getters.contractData.contractType,
         fileName : this.$store.getters.contractData.fileName,
-        ipAddress: this.$store.getters.userIp,
         sign: data,
-        plan: 3,
-        cbUserId: this.$store.getters.userId,
       }
       this.signAgreement(agreement);
     },

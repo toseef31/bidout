@@ -128,7 +128,7 @@ export default {
              .then(responce => {
               if(responce.status == 200){
                 // localStorage.setItem("userId",payload.id);
-                commit('setUserId', payload.id);
+                commit('setCompanyId', payload.id);
                 commit('setCompanyName', payload.companyName);
                 router.replace({
                   name: "ModuleSelection"
@@ -147,7 +147,7 @@ export default {
                  .then(responce => {
                   if(responce.status == 200){
                     // localStorage.setItem("userId",JSON.stringify(responce.data));
-                    commit('setUserId', responce.data);
+                    commit('setCompanyId', responce.data);
                     commit('setCompanyName', payload.company);
                     router.replace({
                       name: "ModuleSelection"
@@ -198,7 +198,7 @@ export default {
                .then(responce => {
                 if(responce.status == 200){
                   // localStorage.setItem("userId",JSON.stringify(responce.data));
-                  commit('setUserId', responce.data);
+                  commit('setCompanyId', responce.data);
                   commit('setCompanyName', payload.company);
                   router.replace({
                     name: "ModuleSelection"
@@ -247,7 +247,7 @@ export default {
   },
   signAgreement({commit}, payload){
     // Try to store Agreement
-    axios.post('/ofs/signContract',{'sign': payload.sign,'contractType': payload.contractType,'fileName':payload.fileName,'plan':payload.plan,'cbUserId':payload.cbUserId})
+    axios.post('/ofs/signContract',{'sign': payload.sign,'contractType': payload.contractType,'fileName':payload.fileName})
      .then(responce => {
       if(responce.status == 200){
         localStorage.removeItem('contractData');

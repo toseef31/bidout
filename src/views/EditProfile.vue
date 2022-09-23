@@ -306,6 +306,9 @@ export default {
     this.getAdmins();
 
    this.timeInfo();
+   if(!this.$store.getters.userInfo.timezone){
+    this.userTimezone = 'America/Chicago';
+   }
   }
 };
 </script>

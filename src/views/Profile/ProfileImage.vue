@@ -23,7 +23,7 @@
       </v-dialog>
 	    <div class="user-name text-left pl-4 mr-6">
 	      <h3>{{userDatas.firstName}}  {{userDatas.lastName}}</h3>
-	      <p class="mb-0">{{userDatas.company}}</p>
+	      <p class="mb-0">{{userDatas.company.company}}</p>
 	    </div>
 	    <v-divider vertical inset class="my-4"></v-divider>
 	  </div>

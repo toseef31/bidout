@@ -8,6 +8,9 @@ export default {
     userId (state){
       return state.userId
     },
+    companyId (state){
+      return state.companyId
+    },
     error (state){
     	return state.error
     },
