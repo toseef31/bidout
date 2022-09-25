@@ -279,7 +279,6 @@
   import ESGComponent from './CompanyProfile/ESGComponent.vue'
   import KeyFacts from './CompanyProfile/KeyFacts.vue'
   import ExcutiveLeadership from './CompanyProfile/ExcutiveLeadership.vue'
-  import VueGoogleAutocomplete from "vue-google-autocomplete";
   import _ from 'lodash';
   import { mapActions } from "vuex"
 export default {
@@ -291,7 +290,6 @@ export default {
     ESGComponent,
     KeyFacts,
     ExcutiveLeadership,
-    VueGoogleAutocomplete,
   },
   
   data() {
