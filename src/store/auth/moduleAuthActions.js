@@ -53,6 +53,7 @@ export default {
         localStorage.removeItem("userData");
         // localStorage.removeItem("userId");
         localStorage.removeItem("token");
+        localStorage.removeItem("companyData");
         router.replace({
           name: "OFSHome"
         });
@@ -142,6 +143,8 @@ export default {
            }else{
             axios.post('/ofs/createCompany',{'company': payload.company, 'companyHq': payload.companyHq, 'companyHq2': payload.companyHq2, 'companyHqCountry': payload.companyHqCountry,'companyHqState':payload.companyHqState, 'companyHqCity': payload.companyHqCity, 'companyHqZip': payload.companyHqZip})
              .then(responce => {
+              commit('setCompanyId', responce.data.companyId);
+              localStorage.setItem("companyId",JSON.stringify(responce.data.companyId));
               if(responce.status == 200){
                 axios.post('/ofs/createUser',{'company': payload.company,'firstName': payload.firstName, 'lastName': payload.lastName,'email': payload.email,'phoneNumber':payload.phoneNumber, 'title': payload.title, 'password': payload.password,'companyId':responce.data.data.companyId})
                  .then(responce => {
@@ -193,12 +196,13 @@ export default {
         }else{
           axios.post('/ofs/createCompany',{'company': payload.company, 'companyHq': payload.companyHq, 'companyHq2': payload.companyHq2, 'companyHqCountry': payload.companyHqCountry,'companyHqState':payload.companyHqState, 'companyHqCity': payload.companyHqCity, 'companyHqZip': payload.companyHqZip})
            .then(responce => {
+            commit('setCompanyId', responce.data.companyId);
+            localStorage.setItem("companyId",JSON.stringify(responce.data.companyId));
             if(responce.status == 200){
               axios.post('/ofs/createUser',{'company': payload.company,'firstName': payload.firstName, 'lastName': payload.lastName,'email': payload.email,'phoneNumber':payload.phoneNumber, 'title': payload.title, 'password': payload.password,'companyId':responce.data.data.companyId})
                .then(responce => {
                 if(responce.status == 200){
                   // localStorage.setItem("userId",JSON.stringify(responce.data));
-                  commit('setCompanyId', responce.data);
                   commit('setCompanyName', payload.company);
                   router.replace({
                     name: "ModuleSelection"
@@ -252,6 +256,7 @@ export default {
       if(responce.status == 200){
         localStorage.removeItem('contractData');
         commit('setContract', 'Contract generated successfully!')
+
         router.replace({
           name: "ModuleSelection"
         });

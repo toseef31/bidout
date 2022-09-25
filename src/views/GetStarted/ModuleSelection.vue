@@ -190,9 +190,7 @@ export default {
         contractType: type,
         plan: plan,
         id: this.$store.getters.companyId,
-
       }
-      console.log(contract);
       this.contractGenerate(contract);
     }
     

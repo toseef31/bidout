@@ -131,9 +131,10 @@
                     </v-row>
                     <v-row>
                       <v-col cols="12" sm="12">
-                        <v-img
+                        <div id="mapss"class="map" style="height:400px"></div>
+                        <!-- <v-img
                           :src="require('@/assets/images/profile/location.png')"
-                        ></v-img>
+                        ></v-img> -->
                       </v-col>
                     </v-row>
                   </v-container>
@@ -320,6 +321,9 @@ export default {
       newsUrl: '',
       corporateNews: this.$store.getters.companyData.corporateNews,
       address: "",
+      mapOptions: {},
+      markerOptions: {},
+      map: '',
     };
   },
   computed:{
@@ -335,6 +339,11 @@ export default {
     companyData(){
       return this.$store.getters.companyData;
     }
+  },
+  watch:{
+    address: _.debounce(function(){
+      const autocomplete = new google.maps.places.autocomplete(this.address);
+    },500),
   },
   methods: {
      ...mapActions(["getCompany","getCategories","companyProfileImg","updateBasicProfile","addCompanyService","addCompanyVideos","addCompanyNews"]),
@@ -436,19 +445,42 @@ export default {
         this.videoLinks = '';
       },
       addNews(){
-        console.log("dadas");
         this.corporateNews.push(this.newsTitle,this.newsDate,this.newsUrl);
-        console.log(this.corporateNews);
         this.addCompanyNews({companyId: this.$store.getters.userInfo.company.id,corporateNews: this.corporateNews});
         this.newsUrl = '';
         this.newsTitle = '';
         this.newsDate = '';
+      },
+      locationMap(){
+        this.mapOptions = {
+          center: new google.maps.LatLng(29.721085, -95.342049),
+          zoom: 19,
+          mapTypeId: 'terrain',
+          mapTypeControl: false,
+          scaleControl: false,
+          streetViewControl: false,
+          rotateControl: false,
+          fullscreenControl: true,
+          disableDefaultUi: false,
+          zoomControl: true,
+          scrollwheel: false,
+        },
+        this.markerOptions = {
+          url: '/assets/images/dashboard/mapMobile.png',
+          size: {width: 60, height: 90, f: 'px', b: 'px',},
+          scaledSize: {width: 30, height: 45, f: 'px', b: 'px',},
+        },
+        console.log(this.mapOptions,'maps');
+        this.map = new google.maps.Map(document.getElementById("mapss"), this.mapOptions);
+        const autocomplete = new google.maps.places.Autocomplete(this.$refs.address);
       }
   },
   mounted() {
     document.title = "Company Profile - BidOut";
     this.getCategories();
     this.getCompany(this.$store.getters.userInfo.company.id);
+    
+    this.locationMap();
   }
 };
 </script>

@@ -69,6 +69,72 @@ export default {
      .then(responce => {
       dispatch("getCompany",payload.companyId)
     })
+  },
+  addCompanyFacts({commit,dispatch}, payload){
+    console.log(payload);
+    var config = {
+      headers: {
+        "Authorization": `Bearer ${JSON.parse(localStorage.getItem('token'))}`
+      },
+    };
+    axios.post('/company/addCompanyKeyfacts/',{'companyId':payload.companyId,'founded':payload.founded,'employees':payload.employees,'hqlocation':payload.hqlocation,'stockPrice':payload.stockPrice,'website':payload.website,'linkedin':payload.linkedin,'careers':payload.careers},config)
+     .then(responce => {
+      dispatch("getCompany",payload.companyId)
+    })
+  },
+  addCompanyContacts({commit,dispatch}, payload){
+    var config = {
+      headers: {
+        "Content-Type": "multipart/form-data",
+        "Authorization": `Bearer ${JSON.parse(localStorage.getItem('token'))}`
+      },
+    };
+    const formData = new FormData()
+    formData.append('companyId', payload.companyId);
+    formData.append('accountContacts[0][name]', payload.contactName);
+    formData.append('accountContacts[0][email]', payload.contactEmail);
+    formData.append('accountContacts[0][phoneNo]', payload.contactPhoneNo);
+    formData.append('accountContacts[0][position]', payload.contactRole);
+    axios.post('/company/addCompanyContact/',formData,config)
+     .then(responce => {
+      dispatch("getCompany",payload.companyId)
+    })
+  },
+  addCompanyExcutive({commit,dispatch}, payload){
+    var config = {
+      headers: {
+        "Content-Type": "multipart/form-data",
+        "Authorization": `Bearer ${JSON.parse(localStorage.getItem('token'))}`
+      },
+    };
+    const formData = new FormData()
+    formData.append('companyId', payload.companyId);
+    formData.append('executiveLeadership[0][name]', payload.name);
+    formData.append('executiveLeadership[0][role]', payload.role);
+    formData.append('executiveLeadership[0][linkedin]', payload.linkedin);
+    formData.append('executiveLeadership[0][profilePicture]', payload.profilePicture);
+    axios.post('/company/addCompanyLeadership/',formData,config)
+     .then(responce => {
+      dispatch("getCompany",payload.companyId)
+    })
+  },
+  addCompanyEsg({commit,dispatch}, payload){
+    var config = {
+      headers: {
+        "Content-Type": "multipart/form-data",
+        "Authorization": `Bearer ${JSON.parse(localStorage.getItem('token'))}`
+      },
+    };
+    const formData = new FormData()
+    formData.append('companyId', payload.companyId);
+    formData.append('esgInitiatives[0][name]', payload.name);
+    formData.append('esgInitiatives[0][description]', payload.description);
+    formData.append('esgInitiatives[0][attachment]', payload.attachment);
+    axios.post('/company/addCompanyDifferentiators/',formData,config)
+     .then(responce => {
+      dispatch("getCompany",payload.companyId)
+    })
   },  
+
   
 }

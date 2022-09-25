@@ -281,7 +281,7 @@ export default {
     },
     getAdmins(){
       var data = {
-        company: this.$store.getters.userInfo.company,
+        company: this.$store.getters.userInfo.company.company,
       }
       this.adminsCompany(data);
     },

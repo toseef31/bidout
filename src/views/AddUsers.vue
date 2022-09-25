@@ -134,7 +134,7 @@ export default {
         lastName: this.lastName,
         email: this.email,
         role: this.select,
-        company: this.user.company,
+        company: this.user.company,company,
         parent: this.user.id,
       }
       this.inviteUser(data);
@@ -143,7 +143,6 @@ export default {
   mounted() {
     document.title = "Add Users - BidOut";
     this.user = this.$store.getters.userInfo;
-    console.log(this.user);
   }
 };
 </script>

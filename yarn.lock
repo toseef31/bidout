@@ -2038,6 +2038,13 @@ globals@^13.6.0, globals@^13.9.0:
   dependencies:
     type-fest "^0.20.2"
 
+google-autocomplete-vue@^1.0.17:
+  version "1.0.17"
+  resolved "https://registry.yarnpkg.com/google-autocomplete-vue/-/google-autocomplete-vue-1.0.17.tgz#9227f125d34bebf0f818961be611108de0a72b10"
+  integrity sha512-R46ZZf26g/kfeup3RZ1DwUAbJeY4SbO0OnkOTxLWjx3EwEr2AKeEPg9M2vVBm8Bwi62TfKUXexV+aebG3UHNqg==
+  dependencies:
+    vuemit "^1.*"
+
 graceful-fs@^4.1.6, graceful-fs@^4.2.0:
   version "4.2.10"
   resolved "https://registry.npmjs.org/graceful-fs/-/graceful-fs-4.2.10.tgz"
@@ -3413,6 +3420,11 @@ vue@^2.6.14:
   dependencies:
     "@vue/compiler-sfc" "2.7.8"
     csstype "^3.1.0"
+
+vuemit@^1.*:
+  version "1.0.9"
+  resolved "https://registry.yarnpkg.com/vuemit/-/vuemit-1.0.9.tgz#dbc7ce3e4dba3f00a71e6674bcc7fbd8994007ac"
+  integrity sha512-UsHkTkFM8FU13N2wIG4WAfKD3pVF/GeoYVC6/slxjphrUyA0/F+ITUJFuSA4WBmIir4YlVinLUETnzEhTqek/Q==
 
 vuetify@^2.5.8:
   version "2.6.7"

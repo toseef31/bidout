@@ -60,7 +60,7 @@
       </v-row>
       <v-row>
         <v-col cols="12" sm="12">
-          <v-btn color="#0D9648" large class="text-capitalize white--text" height="54px" width="176px">Add Executive</v-btn>
+          <v-btn color="#0D9648" large class="text-capitalize white--text" height="54px" width="176px" @click="addExcutive">Add Executive</v-btn>
         </v-col>
       </v-row>
       <div class="service-list text-left mt-10">
@@ -71,12 +71,14 @@
           <p>{{excutiveRole}}</p>
           <v-icon color="#013D3A">mdi-linkedin</v-icon>
         </div>
-        <div class="profile-list" v-for="excutive in excutiveLeadership">
+        <div class="profile-list" v-for="excutive in companyData.executiveLeadership">
           <v-icon color="#F32349" class="pa-1 white">mdi-trash-can-outline</v-icon>
-          <v-img :src="require('@/assets/images/ofs/company/leader-1.png')" width="173"></v-img>
+          <v-img :src="excutive.profilePicture" width="173"></v-img>
           <h6>{{excutive.name}}</h6>
-          <p>{{excutive.designation}}</p>
-          <v-icon color="#013D3A">mdi-linkedin</v-icon>
+          <p>{{excutive.role}}</p>
+          <a v-if="excutive.linkedin" class="text-decoration-none" target="_blank" :href="excutive.linkedin">
+            <v-icon color="#013D3A">mdi-linkedin</v-icon>
+          </a>
         </div>
       </div>
     </v-container>
@@ -100,17 +102,22 @@ export default {
       profileImage: '',
       excutiveName: '',
       excutiveRole: '',
+      logoName: '',
     };
   },
   computed:{
-    
+    companyData(){
+      return this.$store.getters.companyData;
+    }
   },
   methods: {
+    ...mapActions(["addCompanyExcutive"]),
     cropProfile (e) {
       console.log(e);
       var files = e.target.files || e.dataTransfer.files;
       // alert(files);
       if (!files.length) return;
+      this.logoName = files[0].name;
       this.dialogProfile = true;
       var reader = new FileReader();
       reader.onload = e => {
@@ -130,15 +137,32 @@ export default {
     cropImage() {
       
       let options = {
-        type: 'base64',
+        type: 'blob',
         size: { width: 175, height: 175 },
-        format: 'png'
+        format: 'png',
+        name: this.logoName
       };
       this.$refs.croppieRefProfile.result(options, output => {
+        var reader = new FileReader();
+        this.base64data = reader.readAsDataURL(output); 
+        reader.onloadend = function() {
+          this.base64data = reader.result;                
+          this.imageSrc = this.base64data;
+        }
         this.croppedProfile = this.croppieProfile = output;
-          console.log(this.croppieProfile);
+          // console.log(this.croppieProfile);
           this.dialogProfile = false;
         });
+    },
+    addExcutive(){
+      var data = {
+        companyId: this.$store.getters.userInfo.company.id,
+        profilePicture : this.croppieProfile,
+        name: this.excutiveName,
+        role: this.excutiveRole,
+        linkedin: this.excutivelinkdinProfile
+      }
+      this.addCompanyExcutive(data);
     }
   },
   mounted() {

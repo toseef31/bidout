@@ -177,8 +177,8 @@ export default {
     document.title = "Manage Users - BidOut";
     this.user = this.$store.getters.userInfo;
 
-    this.getUsers(this.user.company);
-    this.invitedUsers(this.user.company);
+    this.getUsers(this.user.company.company);
+    this.invitedUsers(this.user.company.company);
   }
 };
 </script>

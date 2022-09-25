@@ -128,6 +128,7 @@ export default {
         contractType : this.$store.getters.contractData.contractType,
         fileName : this.$store.getters.contractData.fileName,
         sign: data,
+        companyId: this.$store.getters.companyId,
       }
       this.signAgreement(agreement);
     },
