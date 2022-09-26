@@ -984,7 +984,6 @@ export default {
       this.membersData.splice(index, 1);
       this.participants.slice(index)
       this.participants.filter((item)=>{
-       console.log(item);
        if(this.user.id != item.id){
         return item;
        }

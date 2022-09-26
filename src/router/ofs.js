@@ -46,7 +46,7 @@ const routes = [
       {
         path: '/company-profiles',
         name: 'CompanyProfiles',
-        component: () => import('@/views/Ofs/CompanyProfile.vue'),
+        component: () => import('@/views/Ofs/ViewCompany.vue'),
         beforeEnter: (to, from, next) => {
           if(localStorage.getItem("userData") == null) {
               

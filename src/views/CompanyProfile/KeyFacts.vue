@@ -11,7 +11,7 @@
         <v-row>
           <v-col cols="12"sm="6" text="left">
             <label class="d-block text-left input-label mb-2">Founded</label>
-            <v-text-field placeholder="Enter year ..." v-model="founded" single-line outlined></v-text-field>
+            <v-text-field placeholder="Enter founded year ..." v-model="founded" single-line outlined></v-text-field>
           </v-col>
           <v-col cols="12" sm="6" text="left">
             <label class="d-block text-left input-label mb-2">Employess</label>
@@ -21,27 +21,27 @@
         <v-row>
           <v-col cols="12" sm="6" text="left" >
             <label class="d-block text-left input-label mb-2">HQ Location</label>
-            <v-text-field placeholder="Enter year ..." v-model="hqLocation" single-line outlined></v-text-field>
+            <v-text-field placeholder="Enter hq location ..." v-model="hqLocation" single-line outlined></v-text-field>
           </v-col>
           <v-col cols="12" sm="6" text="left">
             <label class="d-block text-left input-label mb-2">Stock Price</label>
-            <v-text-field placeholder="Enter Employees ..." v-model="stockPrice" single-line outlined></v-text-field>
+            <v-text-field placeholder="Enter stock price ..." v-model="stockPrice" single-line outlined></v-text-field>
           </v-col>
         </v-row>
         <v-row>
           <v-col cols="12" sm="6" text="left">
             <label class="d-block text-left input-label mb-2">Website</label>
-            <v-text-field placeholder="Enter year ..." v-model="website" single-line outlined></v-text-field>
+            <v-text-field placeholder="Enter website ..." v-model="website" single-line outlined></v-text-field>
           </v-col>
           <v-col cols="12" sm="6" text="left">
             <label class="d-block text-left input-label mb-2">Company's LinkedIn</label>
-            <v-text-field placeholder="Enter Employees ..." v-model="linkedin" single-line outlined></v-text-field>
+            <v-text-field placeholder="Enter company LinkedIn url ..." v-model="linkedin" single-line outlined></v-text-field>
           </v-col>
         </v-row>
         <v-row>
           <v-col cols="12" sm="6" text="left">
             <label class="d-block text-left input-label mb-2">Careers Page</label>
-            <v-text-field placeholder="Enter Employees ..." v-model="careers" single-line outlined></v-text-field>
+            <v-text-field placeholder="Enter career page ..." v-model="careers" single-line outlined></v-text-field>
           </v-col>
         </v-row>
         <v-row>
@@ -91,7 +91,7 @@
       </v-container>
     </v-form>
     <v-container class="pa-sm-10 pa-4">
-      <div class="contact-list text-left mt-5 align-center" v-for="contact in companyData.accountContacts">
+      <div class="contact-list text-left mt-5 align-center" v-for="(contact,index) in accountContacts">
         <div class="profile-list">
           <h6>{{contact.name}}</h6>
         </div>
@@ -105,7 +105,7 @@
           <h6>{{contact.phoneNo}}</h6>
         </div>
         <div class="profile-list text-right">
-          <v-btn default color="transparent" class="text-capitalize dele-btn"><v-icon>mdi-close</v-icon>Delete</v-btn>
+          <v-btn default color="transparent" class="text-capitalize dele-btn" @click="deleteContact(contact.index)"><v-icon>mdi-close</v-icon>Delete</v-btn>
         </div>
       </div>
     </v-container>
@@ -127,12 +127,7 @@ export default {
       contactEmail: '',
       contactRole: '',
       contactPhoneNo: '',
-      contactList: [
-        { name: 'Keith Chometsky', role: 'Sr. Account Rep', email: 'keith@bidout.app', phone: '(281) 782-5332',},
-        { name: 'Randy Jones', role: 'Permian Basin Sales', email: 'randy@bidout.app', phone: '(281) 782-5332', },
-        { name: 'Keith Chometsky', role: 'Sr. Account Rep', email: 'keith@bidout.app', phone: '(281) 782-5332',},
-        { name: 'Rodney Giles', role: 'Inside Sales Cordina', email: 'rodney@bidout.app', phone: '(281) 782-5332',},
-      ],
+      accountContacts: this.$store.getters.companyData.accountContacts,
     };
   },
   computed:{
@@ -157,13 +152,17 @@ export default {
     },
     addContacts(){
       var data = {
-        companyId: this.$store.getters.userInfo.company.id,
-        contactName: this.contactName,
-        contactEmail: this.contactEmail,
-        contactRole: this.contactRole,
-        contactPhoneNo: this.contactPhoneNo,
+        name: this.contactName,
+        email: this.contactEmail,
+        position: this.contactRole,
+        phoneNo: this.contactPhoneNo
       }
-      this.addCompanyContacts(data);
+      this.accountContacts.push(data);
+      this.addCompanyContacts({companyId: this.$store.getters.userInfo.company.id,accountContacts: this.accountContacts});
+    },
+    deleteContact(index){
+      this.accountContacts.splice(index,1);
+      this.addCompanyContacts({companyId: this.$store.getters.userInfo.company.id,accountContacts: this.accountContacts});
     }
   },
   mounted() {

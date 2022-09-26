@@ -56,7 +56,7 @@
                           </v-card>
                         </v-dialog>
                         <!-- the result -->
-                        <img :src="imageSrc">
+                        <img :src="companyData.image">
                       </v-col>
                       <v-col cols="4" sm="6" class="pt-10 mt-4 btn-col pl-0 d-flex align-center justify-end">
                         <label for="logo-input" class="text-capitalize mr-2 white--text add-logo d-flex align-center font-weight-bold">Add Image
@@ -112,7 +112,7 @@
                     <v-row>
                       <v-col cols="12" sm="10">
                         <div class="service-list text-left">
-                          <label v-for="drill in drillingService"><v-icon>mdi-check</v-icon>{{drill}}</label>
+                          <label v-for="(drill,index) in drillingService"><v-icon>mdi-check</v-icon><span @click="deleteService(index)">{{drill}}</span></label>
                         </div>
                         <p class="text-left mt-5 alert-text">*Click in a service above to delete from list.</p>
                       </v-col>
@@ -159,10 +159,10 @@
                       </v-col>
                     </v-row> -->
                     <v-row v-if="companyData.corporateVideos">
-                      <v-col cols="6" sm="6">
+                      <v-col cols="6" sm="6" v-for="(video,key) in companyData.corporateVideos">
                         <div class="video-col">
-                          <iframe  id="video-preview" :src="companyData.corporateVideos" width="100%" height="350px"></iframe >
-                          <v-btn absolute top left><v-icon>mdi-trash-can-outline</v-icon> Delete Video</v-btn>
+                          <iframe  id="video-preview" :src="video" width="100%" height="350px"></iframe >
+                          <v-btn absolute top left @click="deleteVideo(key)"><v-icon>mdi-trash-can-outline</v-icon> Delete Video</v-btn>
                         </div>
                       </v-col>
                     </v-row>
@@ -179,15 +179,15 @@
                         >
                       </v-col>
                     </v-row>
-                    <v-row>
-                      <v-col cols="3" sm="2">
-                        <div class="doc-col" v-show="file">
-                          <div id="doc-preview"></div>
-                          <v-img v-if="fileExt == 'pdf'" :src="require('@/assets/images/profile/pdf.png')" width="80px" class="mx-auto"></v-img>
-                          <v-img v-else-if="fileExt == 'xlsx'" :src="require('@/assets/images/profile/excel.png')" width="80px" class="mx-auto"></v-img>
-                          <v-img v-else :src="require('@/assets/images/profile/other.png')" width="80px" class="mx-auto"></v-img>
-                          <p>{{fileName}}</p>
-                          <v-btn small min-width="36px" min-height="36px"><v-icon>mdi-trash-can-outline</v-icon></v-btn>
+                    <v-row v-show="documents">
+                      <v-col cols="3" sm="2" v-for="(doc,index) in documents">
+                        <div class="doc-col">
+                          <a :href="doc" target="_blank">
+                            <v-img v-if="get_url_extension(doc) == 'pdf'" :src="require('@/assets/images/profile/pdf.png')" width="80px" class="mx-auto"></v-img>
+                            <v-img v-else-if="get_url_extension(doc) == 'xlsx'" :src="require('@/assets/images/profile/excel.png')" width="80px" class="mx-auto"></v-img>
+                            <v-img v-else :src="require('@/assets/images/profile/other.png')" width="80px" class="mx-auto"></v-img>
+                          </a>
+                          <v-btn small min-width="36px" min-height="36px" @click="deleteDoc(index)"><v-icon>mdi-trash-can-outline</v-icon></v-btn>
                         </div>
                       </v-col>
                     </v-row>
@@ -222,13 +222,13 @@
                         </v-col>
                       </v-row>
                     </v-form>
-                    <v-row align="center" justify="space-between" class="news-list mt-10">
+                    <v-row align="center" justify="space-between" class="news-list mt-10" v-for="(news,index) in corporateNews">
                       <v-col cols="12" sm="8" text="left">
-                        <p class="text-left mb-0">{{corporateNews[1]}} -  {{corporateNews[0]}}</p>
+                        <p class="text-left mb-0">{{news.date}} -  {{news.title}}</p>
                       </v-col>
                       <v-col cols="12" sm="4" class="text-right">
-                        <v-btn default color="transparent" class="text-capitalize edit-btn"><v-icon>mdi-square-edit-outline</v-icon>Edit Details</v-btn>
-                        <v-btn default color="transparent" class="text-capitalize dele-btn"><v-icon>mdi-close</v-icon>Delete</v-btn>
+                        <!-- <v-btn default color="transparent" class="text-capitalize edit-btn"><v-icon>mdi-square-edit-outline</v-icon>Edit Details</v-btn> -->
+                        <v-btn default color="transparent" class="text-capitalize dele-btn" @click="deleteNews(news.index)"><v-icon>mdi-close</v-icon>Delete</v-btn>
                       </v-col>
                     </v-row>
                   </v-container>
@@ -307,7 +307,7 @@ export default {
       ],
       drillingService: this.$store.getters.companyData.services,
       videoLinks: '',
-      videos: [],
+      videos: this.$store.getters.companyData.corporateVideos,
       croppieImage: '',
       imageSrc: this.$store.getters.companyData.image,
       base64data: '',
@@ -322,6 +322,7 @@ export default {
       mapOptions: {},
       markerOptions: {},
       map: '',
+      documents: this.$store.getters.companyData.corporateDocuments,
     };
   },
   computed:{
@@ -344,7 +345,7 @@ export default {
     },500),
   },
   methods: {
-     ...mapActions(["getCompany","getCategories","companyProfileImg","updateBasicProfile","addCompanyService","addCompanyVideos","addCompanyNews"]),
+     ...mapActions(["getCompany","getCategories","companyProfileImg","updateBasicProfile","addCompanyService","addCompanyVideos","addCompanyNews","addCompanyDocument"]),
      uploadDocument() {
       this.isSelecting = true
       window.addEventListener('focus', () => {
@@ -366,7 +367,14 @@ export default {
       this.file = event.target.files[0];
       this.fileName = this.file.name;
       this.fileExt =  this.fileName.split('.').pop();
-      this.previewDoc();
+      // this.previewDoc();
+      this.documents = this.$store.getters.companyData.corporateDocuments;
+      this.documents.push(this.file.name);
+      var data = {
+        companyId: this.$store.getters.userInfo.company.id,
+        files: this.documents,
+      }
+      this.addCompanyDocument(data);
     },
     croppie (e) {
       var files = e.target.files || e.dataTransfer.files;
@@ -433,21 +441,75 @@ export default {
         this.companyProfileImg(data);
       },
       addService(){
-        this.drillingService = this.services;
+        const array3 = [...this.drillingService, ...this.services]
+        this.drillingService = array3;
         this.addCompanyService({companyId: this.$store.getters.userInfo.company.id,services: this.drillingService});
         this.services = '';
       },
+      deleteService(index){
+        this.drillingService.splice(index,1);
+        this.addCompanyService({companyId: this.$store.getters.userInfo.company.id,services: this.drillingService});
+      },
       addVideos(){
-        this.videos = this.videoLinks;
-        this.addCompanyVideos({companyId: this.$store.getters.userInfo.company.id,videoLinks: this.videos});
+        this.videos = this.$store.getters.companyData.corporateVideos;
+        this.videos.push(this.videoLinks);
+        var data = {
+          companyId: this.$store.getters.userInfo.company.id,
+          videoLinks: this.videos,
+        }
+        this.addCompanyVideos(data);
         this.videoLinks = '';
       },
+      deleteVideo(index){
+        if(index >= 0){
+          this.videos.splice(index,1);
+          var data = {
+            companyId: this.$store.getters.userInfo.company.id,
+            videoLinks: this.videos,
+          }
+          this.addCompanyVideos(data);
+        }else{
+          alert("error");
+        }
+        
+      },
+      addDocument(){
+        this.documents = this.$store.getters.companyData.corporateDocuments;
+        this.documents.push(this.videoLinks);
+        var data = {
+          companyId: this.$store.getters.userInfo.company.id,
+          files: this.documents,
+        }
+        this.addCompanyDocument(data);
+      },
+      deleteDoc(index){
+        if(index >= 0){
+          this.documents.splice(index,1);
+          var data = {
+            companyId: this.$store.getters.userInfo.company.id,
+            videoLinks: this.videos,
+          }
+          this.addCompanyDocument(data);
+        }else{
+          alert("error");
+        }
+        
+      },
       addNews(){
-        this.corporateNews.push(this.newsTitle,this.newsDate,this.newsUrl);
+        var data = {
+          title: this.newsTitle,
+          date: this.newsDate,
+          url: this.newsUrl,
+        }
+        this.corporateNews.push(data);
         this.addCompanyNews({companyId: this.$store.getters.userInfo.company.id,corporateNews: this.corporateNews});
         this.newsUrl = '';
         this.newsTitle = '';
         this.newsDate = '';
+      },
+      deleteNews(index){
+        this.corporateNews.splice(index,1);
+        this.addCompanyNews({companyId: this.$store.getters.userInfo.company.id,corporateNews: this.corporateNews});
       },
       locationMap(){
         this.mapOptions = {
@@ -471,7 +533,10 @@ export default {
         console.log(this.mapOptions,'maps');
         this.map = new google.maps.Map(document.getElementById("mapss"), this.mapOptions);
         const autocomplete = new google.maps.places.Autocomplete(this.$refs.address);
-      }
+      },
+      get_url_extension( url ) {
+        return url.split(/[#?]/)[0].split('.').pop().trim();
+      },
   },
   mounted() {
     document.title = "Company Profile - BidOut";

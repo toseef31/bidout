@@ -11,7 +11,6 @@ export default {
     })
   },
   companyProfileImg({commit,dispatch}, payload){
-    console.log(payload);
     var config = {
       headers: {
         "Content-Type": "multipart/form-data",
@@ -59,7 +58,24 @@ export default {
       dispatch("getCompany",payload.companyId)
     })
   },
+  addCompanyDocument({commit,dispatch}, payload){
+    console.log(payload,'payload');
+    var config = {
+      headers: {
+        "Content-Type": "multipart/form-data",
+        "Authorization": `Bearer ${JSON.parse(localStorage.getItem('token'))}`
+      },
+    };
+    const formData = new FormData()
+    formData.append('files', payload.files);
+    formData.append('companyId', payload.companyId);
+    axios.post('/company/addCompanyDocuments/',formData,config)
+     .then(responce => {
+      dispatch("getCompany",payload.companyId)
+    })
+  },
   addCompanyNews({commit,dispatch}, payload){
+    console.log(payload);
     var config = {
       headers: {
         "Authorization": `Bearer ${JSON.parse(localStorage.getItem('token'))}`
@@ -83,36 +99,33 @@ export default {
     })
   },
   addCompanyContacts({commit,dispatch}, payload){
+    console.log(payload);
     var config = {
       headers: {
-        "Content-Type": "multipart/form-data",
         "Authorization": `Bearer ${JSON.parse(localStorage.getItem('token'))}`
       },
     };
-    const formData = new FormData()
-    formData.append('companyId', payload.companyId);
-    formData.append('accountContacts[0][name]', payload.contactName);
-    formData.append('accountContacts[0][email]', payload.contactEmail);
-    formData.append('accountContacts[0][phoneNo]', payload.contactPhoneNo);
-    formData.append('accountContacts[0][position]', payload.contactRole);
-    axios.post('/company/addCompanyContact/',formData,config)
+    axios.post('/company/addCompanyContact/',{'companyId':payload.companyId,'accountContacts':payload.accountContacts},config)
      .then(responce => {
       dispatch("getCompany",payload.companyId)
     })
   },
   addCompanyExcutive({commit,dispatch}, payload){
+    console.log(payload,'payload');
     var config = {
       headers: {
         "Content-Type": "multipart/form-data",
         "Authorization": `Bearer ${JSON.parse(localStorage.getItem('token'))}`
       },
     };
+
     const formData = new FormData()
+    formData.append('executiveLeadership', JSON.stringify(payload.executiveLeadership));
+    // formData.append('executiveLeadership[1][role]', payload.role);
+    // formData.append('executiveLeadership[1][linkedin]', payload.linkedin);
+    // formData.append('executiveLeadership[1][profilePicture]', payload.profilePicture);
     formData.append('companyId', payload.companyId);
-    formData.append('executiveLeadership[0][name]', payload.name);
-    formData.append('executiveLeadership[0][role]', payload.role);
-    formData.append('executiveLeadership[0][linkedin]', payload.linkedin);
-    formData.append('executiveLeadership[0][profilePicture]', payload.profilePicture);
+    console.log(formData);
     axios.post('/company/addCompanyLeadership/',formData,config)
      .then(responce => {
       dispatch("getCompany",payload.companyId)

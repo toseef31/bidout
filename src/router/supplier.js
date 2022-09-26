@@ -56,6 +56,18 @@ const routes = [
            }
        }
       },
+      {
+        path: '/company/:name',
+        name: 'Company',
+        component: () => import('@/views/Ofs/Company.vue'),
+        beforeEnter: (to, from, next) => {
+           if(localStorage.getItem("userData") == null) {
+               next('/login');
+           } else {
+               next();
+           }
+       }
+      },
       // { 
       //   path: "*", 
       //   component: () => import('@/views/PageNotFoundLogin.vue'),

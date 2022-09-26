@@ -92,7 +92,7 @@ export default {
       excutiveLeadership: [
         { name: 'William A. (Andy) Hendricks, Jr.',designation: 'President and CEO',image: 'leader-1.png'},
         { name: 'William A. (Andy) Hendricks, Jr.',designation: 'President and CEO',image: 'leader-2.png'},
-        { name: 'William A. (Andy) Hendricks, Jr.', designation: 'President and CEO',image: 'leader-3.png'},
+        { name: 'William A. (Andy) Hendricks, Jr.',designation: 'President and CEO',image: 'leader-3.png'},
         { name: 'William A. (Andy) Hendricks, Jr.',designation: 'President and CEO',image: 'leader-4.png'},
       ],
       croppieProfile: '',
@@ -103,6 +103,8 @@ export default {
       excutiveName: '',
       excutiveRole: '',
       logoName: '',
+      executiveLeadership: this.$store.getters.companyData.executiveLeadership,
+
     };
   },
   computed:{
@@ -155,13 +157,18 @@ export default {
         });
     },
     addExcutive(){
-      var data = {
-        companyId: this.$store.getters.userInfo.company.id,
+      var leader = {
         profilePicture : this.croppieProfile,
         name: this.excutiveName,
         role: this.excutiveRole,
         linkedin: this.excutivelinkdinProfile
       }
+      this.executiveLeadership.push(leader);
+      var data = {
+        companyId: this.$store.getters.userInfo.company.id,
+        executiveLeadership: this.executiveLeadership,
+      }
+      // this.executiveLeadership.push(data);
       this.addCompanyExcutive(data);
     }
   },
