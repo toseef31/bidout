@@ -60,21 +60,28 @@
         <v-row>
           <v-col cols="12" sm="6" text="left">
             <label class="d-block text-left input-label mb-2">Name</label>
-            <v-text-field placeholder="Full name ..." v-model="contactName" single-line outlined></v-text-field>
+            <v-text-field placeholder="Full name ..." v-model="contactName" single-line outlined hide-details></v-text-field>
           </v-col>
           <v-col cols="12" sm="6" text="left">
             <label class="d-block text-left input-label mb-2">Role</label>
-            <v-text-field placeholder="Role ..." v-model="contactRole" single-line outlined></v-text-field>
+            <v-text-field placeholder="Role ..." v-model="contactRole" single-line hide-details outlined></v-text-field>
           </v-col>
         </v-row>
         <v-row>
           <v-col cols="12" sm="6" text="left">
             <label class="d-block text-left input-label mb-2">Email</label>
-            <v-text-field placeholder="Enter Email ..." v-model="contactEmail" single-line outlined type="email"></v-text-field>
+            <v-text-field placeholder="Enter Email ..." v-model="contactEmail" single-line outlined hide-details type="email"></v-text-field>
           </v-col>
           <v-col cols="12" sm="6" text="left">
-            <label class="d-block text-left input-label mb-2">Phone Number</label>
-            <v-text-field placeholder="Phone Number ..." v-model="contactPhoneNo" single-line outlined></v-text-field>
+            <label class="d-block text-left input-label mb-1">Phone Number</label>
+            <!-- <v-text-field placeholder="Phone Number ..." v-model="contactPhoneNo" single-line outlined></v-text-field> -->
+            <VuePhoneNumberInput :border-radius="8" size="lg" v-model="contactPhoneNo"
+            :translations="translations"
+            :loader="hasLoaderActive"
+            :error="hasErrorActive"
+            class="mb-2"
+            @update="onUpdate"
+            />
           </v-col>
         </v-row>
         <!-- <v-row>
@@ -91,7 +98,7 @@
       </v-container>
     </v-form>
     <v-container class="pa-sm-10 pa-4">
-      <div class="contact-list text-left mt-5 align-center" v-for="(contact,index) in accountContacts">
+      <div class="contact-list text-left mt-5 align-center" v-for="(contact,index) in companyData.accountContacts">
         <div class="profile-list">
           <h6>{{contact.name}}</h6>
         </div>
@@ -112,8 +119,13 @@
   </div>
 </template>
 <script>
+  import VuePhoneNumberInput from 'vue-phone-number-input';
+  import 'vue-phone-number-input/dist/vue-phone-number-input.css';
   import { mapActions } from "vuex";
 export default {
+  components: {
+    VuePhoneNumberInput,
+  },
   data() {
     return {
       founded: this.$store.getters.userInfo.company.founded,
@@ -127,7 +139,11 @@ export default {
       contactEmail: '',
       contactRole: '',
       contactPhoneNo: '',
-      accountContacts: this.$store.getters.companyData.accountContacts,
+      accountContacts: [],
+      hasLoaderActive: false,
+      hasErrorActive: false,
+      results: {},
+      results2: {},
     };
   },
   computed:{
@@ -137,6 +153,9 @@ export default {
   },
   methods: {
     ...mapActions(["addCompanyFacts","addCompanyContacts"]),
+    onUpdate (payload) {
+      this.results = payload.formattedNumber
+    },
     addKeyFacts(){
       var data = {
         companyId: this.$store.getters.userInfo.company.id,
@@ -151,16 +170,22 @@ export default {
       this.addCompanyFacts(data);
     },
     addContacts(){
+      if(this.$store.getters.companyData.accountContacts){
+        this.accountContacts = this.$store.getters.companyData.accountContacts;
+      }
       var data = {
         name: this.contactName,
         email: this.contactEmail,
         position: this.contactRole,
-        phoneNo: this.contactPhoneNo
+        phoneNo: this.results
       }
       this.accountContacts.push(data);
       this.addCompanyContacts({companyId: this.$store.getters.userInfo.company.id,accountContacts: this.accountContacts});
     },
     deleteContact(index){
+      if(this.$store.getters.companyData.accountContacts){
+        this.accountContacts = this.$store.getters.companyData.accountContacts;
+      }
       this.accountContacts.splice(index,1);
       this.addCompanyContacts({companyId: this.$store.getters.userInfo.company.id,accountContacts: this.accountContacts});
     }

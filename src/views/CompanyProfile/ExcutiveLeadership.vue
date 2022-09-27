@@ -71,8 +71,8 @@
           <p>{{excutiveRole}}</p>
           <v-icon color="#013D3A">mdi-linkedin</v-icon>
         </div>
-        <div class="profile-list" v-for="excutive in companyData.executiveLeadership">
-          <v-icon color="#F32349" class="pa-1 white">mdi-trash-can-outline</v-icon>
+        <div class="profile-list" v-for="(excutive,index) in companyData.executiveLeadership">
+          <v-icon color="#F32349" class="pa-1 white" @click="deleteExcutive(excutive.index)">mdi-trash-can-outline</v-icon>
           <v-img :src="excutive.profilePicture" width="173"></v-img>
           <h6>{{excutive.name}}</h6>
           <p>{{excutive.role}}</p>
@@ -89,12 +89,6 @@
 export default {
   data() {
     return {
-      excutiveLeadership: [
-        { name: 'William A. (Andy) Hendricks, Jr.',designation: 'President and CEO',image: 'leader-1.png'},
-        { name: 'William A. (Andy) Hendricks, Jr.',designation: 'President and CEO',image: 'leader-2.png'},
-        { name: 'William A. (Andy) Hendricks, Jr.',designation: 'President and CEO',image: 'leader-3.png'},
-        { name: 'William A. (Andy) Hendricks, Jr.',designation: 'President and CEO',image: 'leader-4.png'},
-      ],
       croppieProfile: '',
       croppedProfile: null,
       dialogProfile: false,
@@ -168,7 +162,18 @@ export default {
         companyId: this.$store.getters.userInfo.company.id,
         executiveLeadership: this.executiveLeadership,
       }
-      // this.executiveLeadership.push(data);
+      this.addCompanyExcutive(data);
+      this.croppieProfile = '';
+      this.excutiveName = '';
+      this.excutiveRole = '';
+      this.excutivelinkdinProfile = '';
+    },
+    deleteExcutive(index){
+      this.executiveLeadership.splice(index,1);
+      var data = {
+        companyId: this.$store.getters.userInfo.company.id,
+        executiveLeadership: this.executiveLeadership,
+      }
       this.addCompanyExcutive(data);
     }
   },

@@ -69,6 +69,14 @@ export default {
       localStorage.setItem('companyData', JSON.stringify(responce.data));
       router.replace('/company/'+url);
     })
+  },
+  getPublicCompanyInfo({commit},payload){
+    var url = encodeURIComponent(payload.name);
+    axios.get('company/getCompanyById/'+payload.id)
+     .then(responce => {
+      commit('setCompany',responce.data);
+      localStorage.setItem('companyData', JSON.stringify(responce.data));
+      router.replace('/company-profiles/'+url);
+    })
   }
-  
 }

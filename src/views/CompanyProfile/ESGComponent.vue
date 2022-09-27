@@ -13,7 +13,10 @@
         </v-col>
         <v-col cols="12" sm="6" text="left">
           <label class="d-block text-left input-label mb-2">Document</label>
-          <v-file-input outlined class="logo-input text-center profile-input" ref="attachment" placeholder="Add Document" color="#0D9648"></v-file-input>
+          <v-file-input outlined class="logo-input text-center profile-input" v-model="attachment" placeholder="Add Document" color="#0D9648"></v-file-input>
+          <!-- <input id="attach-file"
+             type="file" 
+            truncate-length="8" ref="attachment"> -->
         </v-col>
       </v-row>
       <v-row>
@@ -28,12 +31,12 @@
         </v-col>
       </v-row>
       <v-row class="mt-5">
-        <v-col cols="12" sm="4" v-for="esg in companyData.esgInitiatives">
+        <v-col cols="12" sm="4" v-for="(esg,index) in companyData.esgInitiatives">
           <div class="esg-list text-left">
             <h4 class="text-left mb-5">{{esg.name}}</h4>
             <p class="text-left">{{esg.description}}</p>
             <a :href="esg.attachment" download class="text-decoration-none" v-if="esg.attachment">Download <v-icon>mdi-tray-arrow-down</v-icon></a><br>
-            <v-btn color="#F32349" outlined small min-width="32px" height="32px" class="pa-0 mt-3"><v-icon>mdi-trash-can-outline</v-icon></v-btn>
+            <v-btn color="#F32349" outlined small min-width="32px" height="32px" class="pa-0 mt-3" @click="deleteEsG(esg.index)"><v-icon>mdi-trash-can-outline</v-icon></v-btn>
           </div>
         </v-col>
       </v-row>
@@ -48,6 +51,7 @@ export default {
       title: '',
       attachment: '',
       description: '',
+      esgInitiatives: [],
     };
   },
   computed:{
@@ -58,11 +62,33 @@ export default {
   methods: {
     ...mapActions(["addCompanyEsg"]),
     addEsG(){
-      var data = {
-        companyId: this.$store.getters.userInfo.company.id,
+      if(this.$store.getters.companyData.esgInitiatives){
+        this.esgInitiatives = this.$store.getters.companyData.esgInitiatives;
+      }
+      
+      var esgData = {
         name: this.title,
         description: this.description,
         attachment: this.attachment,
+      }
+      this.esgInitiatives.push(esgData);
+      var data = {
+        companyId: this.$store.getters.userInfo.company.id,
+        esgInitiatives: this.esgInitiatives,
+      }
+      this.addCompanyEsg(data);
+      this.title = '';
+      this.description = '';
+      this.attachment = '';
+    },
+    deleteEsG(index){
+      if(this.$store.getters.companyData.esgInitiatives){
+        this.esgInitiatives = this.$store.getters.companyData.esgInitiatives;
+      }
+      this.esgInitiatives.splice(index,1);
+      var data = {
+        companyId: this.$store.getters.userInfo.company.id,
+        esgInitiatives: this.esgInitiatives,
       }
       this.addCompanyEsg(data);
     }

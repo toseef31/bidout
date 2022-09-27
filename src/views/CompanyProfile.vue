@@ -112,7 +112,7 @@
                     <v-row>
                       <v-col cols="12" sm="10">
                         <div class="service-list text-left">
-                          <label v-for="(drill,index) in drillingService"><v-icon>mdi-check</v-icon><span @click="deleteService(index)">{{drill}}</span></label>
+                          <label v-for="(drill,index) in companyData.services"><v-icon>mdi-check</v-icon><span @click="deleteService(index)">{{drill}}</span></label>
                         </div>
                         <p class="text-left mt-5 alert-text">*Click in a service above to delete from list.</p>
                       </v-col>
@@ -180,7 +180,7 @@
                       </v-col>
                     </v-row>
                     <v-row v-show="documents">
-                      <v-col cols="3" sm="2" v-for="(doc,index) in documents">
+                      <v-col cols="3" sm="2" v-for="(doc,index) in companyData.corporateDocuments">
                         <div class="doc-col">
                           <a :href="doc" target="_blank">
                             <v-img v-if="get_url_extension(doc) == 'pdf'" :src="require('@/assets/images/profile/pdf.png')" width="80px" class="mx-auto"></v-img>
@@ -222,7 +222,7 @@
                         </v-col>
                       </v-row>
                     </v-form>
-                    <v-row align="center" justify="space-between" class="news-list mt-10" v-for="(news,index) in corporateNews">
+                    <v-row align="center" justify="space-between" class="news-list mt-10" v-for="(news,index) in companyData.corporateNews">
                       <v-col cols="12" sm="8" text="left">
                         <p class="text-left mb-0">{{news.date}} -  {{news.title}}</p>
                       </v-col>
@@ -305,9 +305,9 @@ export default {
       subsidaries: [
         { image: 'subs-1' },{ image: 'subs-2' },{ image: 'subs-3' },{ image: 'subs-4' },
       ],
-      drillingService: this.$store.getters.companyData.services,
+      drillingService: [],
       videoLinks: '',
-      videos: this.$store.getters.companyData.corporateVideos,
+      videos: [],
       croppieImage: '',
       imageSrc: this.$store.getters.companyData.image,
       base64data: '',
@@ -317,12 +317,12 @@ export default {
       newsTitle: '',
       newsDate: '',
       newsUrl: '',
-      corporateNews: this.$store.getters.companyData.corporateNews,
+      corporateNews: [],
       address: "",
       mapOptions: {},
       markerOptions: {},
       map: '',
-      documents: this.$store.getters.companyData.corporateDocuments,
+      documents: [],
     };
   },
   computed:{
@@ -368,12 +368,15 @@ export default {
       this.fileName = this.file.name;
       this.fileExt =  this.fileName.split('.').pop();
       // this.previewDoc();
-      this.documents = this.$store.getters.companyData.corporateDocuments;
-      this.documents.push(this.file.name);
+      if(this.$store.getters.companyData.corporateDocuments){
+        this.documents = this.$store.getters.companyData.corporateDocuments;
+      }
+      this.documents.push(this.file);
       var data = {
         companyId: this.$store.getters.userInfo.company.id,
         files: this.documents,
       }
+      console.log(data);
       this.addCompanyDocument(data);
     },
     croppie (e) {
@@ -441,17 +444,25 @@ export default {
         this.companyProfileImg(data);
       },
       addService(){
+        if(this.$store.getters.companyData.services){
+          this.drillingService = this.$store.getters.companyData.services;
+        }
         const array3 = [...this.drillingService, ...this.services]
         this.drillingService = array3;
         this.addCompanyService({companyId: this.$store.getters.userInfo.company.id,services: this.drillingService});
         this.services = '';
       },
       deleteService(index){
+        if(this.$store.getters.companyData.services){
+          this.drillingService = this.$store.getters.companyData.services;
+        }
         this.drillingService.splice(index,1);
         this.addCompanyService({companyId: this.$store.getters.userInfo.company.id,services: this.drillingService});
       },
       addVideos(){
-        this.videos = this.$store.getters.companyData.corporateVideos;
+        if(this.$store.getters.companyData.corporateVideos){
+          this.videos = this.$store.getters.companyData.corporateVideos;
+        }
         this.videos.push(this.videoLinks);
         var data = {
           companyId: this.$store.getters.userInfo.company.id,
@@ -461,6 +472,9 @@ export default {
         this.videoLinks = '';
       },
       deleteVideo(index){
+        if(this.$store.getters.companyData.corporateVideos){
+          this.videos = this.$store.getters.companyData.corporateVideos;
+        }
         if(index >= 0){
           this.videos.splice(index,1);
           var data = {
@@ -474,7 +488,9 @@ export default {
         
       },
       addDocument(){
-        this.documents = this.$store.getters.companyData.corporateDocuments;
+        if(this.$store.getters.companyData.corporateDocuments){
+          this.documents = this.$store.getters.companyData.corporateDocuments;
+        }
         this.documents.push(this.videoLinks);
         var data = {
           companyId: this.$store.getters.userInfo.company.id,
@@ -483,6 +499,9 @@ export default {
         this.addCompanyDocument(data);
       },
       deleteDoc(index){
+        if(this.$store.getters.companyData.corporateDocuments){
+          this.documents = this.$store.getters.companyData.corporateDocuments;
+        }
         if(index >= 0){
           this.documents.splice(index,1);
           var data = {
@@ -496,6 +515,9 @@ export default {
         
       },
       addNews(){
+        if(this.$store.getters.companyData.corporateNews){
+          this.corporateNews = this.$store.getters.companyData.corporateNews;
+        }
         var data = {
           title: this.newsTitle,
           date: this.newsDate,
@@ -508,6 +530,9 @@ export default {
         this.newsDate = '';
       },
       deleteNews(index){
+        if(this.$store.getters.companyData.corporateNews){
+          this.corporateNews = this.$store.getters.companyData.corporateNews;
+        }
         this.corporateNews.splice(index,1);
         this.addCompanyNews({companyId: this.$store.getters.userInfo.company.id,corporateNews: this.corporateNews});
       },

@@ -36,8 +36,8 @@
                       <p><font class="font-weight-bold">Stock Price:</font> {{companyData.stockPrice}} </p>
                         <div class="company-links mt-6">
                           <p><a :href="companyData.website" target="_blank">Website</a><v-icon class="pl-2" color="#013D3A">mdi-arrow-top-right-bold-box-outline</v-icon></p>
-                          <p><a :href="companyData.linkedin">LinkedIn</a><v-icon class="pl-2" color="#013D3A">mdi-arrow-top-right-bold-box-outline</v-icon></p>
-                          <p><a :href="companyData.careers">Careers</a><v-icon class="pl-2" color="#013D3A">mdi-arrow-top-right-bold-box-outline</v-icon></p>
+                          <p><a :href="companyData.linkedin" target="_blank">LinkedIn</a><v-icon class="pl-2" color="#013D3A">mdi-arrow-top-right-bold-box-outline</v-icon></p>
+                          <p><a :href="companyData.careers" target="_blank">Careers</a><v-icon class="pl-2" color="#013D3A">mdi-arrow-top-right-bold-box-outline</v-icon></p>
                         </div>
                     </div>
                     <div class="facts-data pa-6 text-left">
@@ -77,7 +77,7 @@
                       <div class="service-list text-left mt-4">
                         <label v-for="drill in companyData.services"><v-icon>mdi-check</v-icon>{{drill}}</label>
                       </div>
-                      <p class="text-right">View all services</p>
+                      <!-- <p class="text-right">View all services</p> -->
                     </div>
                     <div class="company-location mb-12">
                       <h1 class="mb-4 font-weight-bold">Service Locations</h1>
@@ -140,14 +140,14 @@
                       <h1 class="mb-4 font-weight-bold">Executive Leadership</h1>
                       <div class="leader-list text-left mt-10">
                         <div class="profile-list" v-for="excutive in companyData.executiveLeadership">
-                          <v-img :src="excutive.profilePicture"></v-img>
+                          <v-img  width="175px" height="175px" :src="excutive.profilePicture"></v-img>
                           <h6>{{excutive.name}}</h6>
                           <p>{{excutive.role}}</p>
                           <a v-if="excutive.linkedin" class="text-decoration-none" target="_blank" :href="excutive.linkedin">
                             <v-icon color="#013D3A">mdi-linkedin</v-icon>
                           </a>
                         </div>
-                        <div class="profile-list">
+                        <!-- <div class="profile-list">
                           <v-img :src="require('@/assets/images/ofs/company/leader-2.png')"></v-img>
                           <h6>C. Andrews Smith</h6>
                           <p>EVP and CFO</p>
@@ -164,7 +164,7 @@
                           <h6>Seth D. Weiser</h6>
                           <p>SVP and General Counsel</p>
                           <v-icon color="#013D3A">mdi-linkedin</v-icon>
-                        </div>
+                        </div> -->
                       </div>
                     </div>
                     <!-- <div class="company-subsi mb-12">
@@ -217,18 +217,6 @@ export default {
   
   data() {
     return {
-      drillingService: [
-        {title: 'Drilling Services'},
-        {title: 'Contract Drilling Services'},
-        {title: 'Hydralic Fracturing'},
-        {title: 'Measurement-while-drilling'},
-        {title: 'Measurement-while-drilling'},
-        {title: 'Directional Drilling'},
-        {title: 'Pressure Pumping Service'},
-        {title: 'Cementing Services'},
-        {title: 'Downhole Performance Motors'},
-        {title: 'Horizontal Drilling'},
-      ],
       esGList: [
         {
           title: 'Environmetal',

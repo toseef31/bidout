@@ -67,6 +67,7 @@ export default {
       },
     };
     const formData = new FormData()
+
     formData.append('files', payload.files);
     formData.append('companyId', payload.companyId);
     axios.post('/company/addCompanyDocuments/',formData,config)
@@ -118,14 +119,14 @@ export default {
         "Authorization": `Bearer ${JSON.parse(localStorage.getItem('token'))}`
       },
     };
-
     const formData = new FormData()
-    formData.append('executiveLeadership', JSON.stringify(payload.executiveLeadership));
-    // formData.append('executiveLeadership[1][role]', payload.role);
-    // formData.append('executiveLeadership[1][linkedin]', payload.linkedin);
-    // formData.append('executiveLeadership[1][profilePicture]', payload.profilePicture);
+    for(let i=0; i<payload.executiveLeadership.length; i++){
+      formData.append('executiveLeadership['+ i +'][name]', payload.executiveLeadership[i].name);
+      formData.append('executiveLeadership['+ i +'][role]', payload.executiveLeadership[i].role);
+      formData.append('executiveLeadership['+ i +'][linkedin]', payload.executiveLeadership[i].linkedin);
+      formData.append('executiveLeadership['+ i +'][profilePicture]', payload.executiveLeadership[i].profilePicture);
+    }
     formData.append('companyId', payload.companyId);
-    console.log(formData);
     axios.post('/company/addCompanyLeadership/',formData,config)
      .then(responce => {
       dispatch("getCompany",payload.companyId)
@@ -140,9 +141,11 @@ export default {
     };
     const formData = new FormData()
     formData.append('companyId', payload.companyId);
-    formData.append('esgInitiatives[0][name]', payload.name);
-    formData.append('esgInitiatives[0][description]', payload.description);
-    formData.append('esgInitiatives[0][attachment]', payload.attachment);
+    for(let i=0; i<payload.esgInitiatives.length; i++){
+      formData.append('esgInitiatives['+ i +'][name]', payload.esgInitiatives[i].name);
+      formData.append('esgInitiatives['+ i +'][description]', payload.esgInitiatives[i].description);
+      formData.append('esgInitiatives['+ i +'][attachment]', payload.esgInitiatives[i].attachment);
+    }
     axios.post('/company/addCompanyDifferentiators/',formData,config)
      .then(responce => {
       dispatch("getCompany",payload.companyId)

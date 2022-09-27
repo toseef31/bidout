@@ -44,7 +44,7 @@ const routes = [
         }
       },
       {
-        path: '/company-profiles',
+        path: '/company-profiles/:name',
         name: 'CompanyProfiles',
         component: () => import('@/views/Ofs/ViewCompany.vue'),
         beforeEnter: (to, from, next) => {

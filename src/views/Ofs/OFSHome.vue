@@ -88,7 +88,7 @@
                               <v-list-item-title @click="addPerson(user); hideMemberList = !hideMemberList" class="text-left">{{company.company}}</v-list-item-title>
                             </v-list-item-content>
                             <v-list-item-action>
-                              <v-list-item-action-text class="font-weight-bold"><router-link :to="company.objectID">View Profile</router-link></v-list-item-action-text>
+                              <v-list-item-action-text class="font-weight-bold" @click="viewPublicCompany(company.objectID,company.company)"><router-link to="">View Profile</router-link></v-list-item-action-text>
                             </v-list-item-action>
                           </v-list-item>
                         </template>
@@ -260,7 +260,7 @@ export default {
     },
   },
   methods: {
-    ...mapActions(["getCategories","getCompanyByservice","getCompanyMainService","searchSupplier"]),
+    ...mapActions(["getCategories","getCompanyByservice","getCompanyMainService","searchSupplier","getPublicCompanyInfo"]),
     getAllCategories(){
       this.getCategories();
       
@@ -279,6 +279,9 @@ export default {
         this.searchSupplier(this.searchCompany);
       }
     },
+    viewPublicCompany(id,name){
+      this.getPublicCompanyInfo({'id':id,'name':name});
+    }
   },
   mounted() {
   document.title = "OFS - BidOut"

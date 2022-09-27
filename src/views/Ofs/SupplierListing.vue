@@ -63,7 +63,7 @@
                             <td>{{ company.employees }}</td>
                             <td>{{ company.fieldLocations }}</td>
                             <td>{{ company.accountContacts }}</td>
-                            <td><span @click="viewCompany(company.objectID,company.company)" class="text-decoration-none">View Details</span></td>
+                            <td><span @click="viewCompany(company.objectID,company.company)" class="text-decoration-none company-link">View Details</span></td>
                           </tr>
                         </tbody>
                       </template>

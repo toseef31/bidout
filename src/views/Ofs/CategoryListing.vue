@@ -60,7 +60,7 @@
                             <td>{{ company.employees }}</td>
                             <td>{{ company.fieldLocations }}</td>
                             <td>{{ company.accountContacts }}</td>
-                            <td><router-link to="/company-profiles" class="text-decoration-none">View Details</router-link></td>
+                            <td><span @click="viewPublicCompany(company.objectID,company.company)" class="text-decoration-none company-link">View Details</span></td>
                           </tr>
                         </tbody>
                       </template>
@@ -128,7 +128,10 @@ export default {
    },
   },
   methods: {
-    
+    ...mapActions(["getPublicCompanyInfo"]),
+    viewPublicCompany(id,name){
+      this.getPublicCompanyInfo({'id':id,'name':name});
+    }
   },
   mounted() {
     document.title = "Categories - BidOut" 
