@@ -76,7 +76,7 @@
             <label class="d-block text-left input-label mb-1">Phone Number</label>
             <!-- <v-text-field placeholder="Phone Number ..." v-model="contactPhoneNo" single-line outlined></v-text-field> -->
             <VuePhoneNumberInput :border-radius="8" size="lg" v-model="contactPhoneNo"
-            :translations="translations"
+            
             :loader="hasLoaderActive"
             :error="hasErrorActive"
             class="mb-2"

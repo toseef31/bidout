@@ -53,4 +53,10 @@ export default {
     contractData (state){
        return state.contractData
     },
+    plan (state){
+       return state.plan
+    },
+    id (state){
+       return state.id
+    },
 }

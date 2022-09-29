@@ -36,7 +36,7 @@
             <h4 class="text-left mb-5">{{esg.name}}</h4>
             <p class="text-left">{{esg.description}}</p>
             <a :href="esg.attachment" download class="text-decoration-none" v-if="esg.attachment">Download <v-icon>mdi-tray-arrow-down</v-icon></a><br>
-            <v-btn color="#F32349" outlined small min-width="32px" height="32px" class="pa-0 mt-3" @click="deleteEsG(esg.index)"><v-icon>mdi-trash-can-outline</v-icon></v-btn>
+            <v-btn color="#F32349" outlined small min-width="32px" height="32px" class="pa-0 mt-3" @click="deleteEsG(esg)"><v-icon>mdi-trash-can-outline</v-icon></v-btn>
           </div>
         </v-col>
       </v-row>
@@ -60,37 +60,39 @@ export default {
     }
   },
   methods: {
-    ...mapActions(["addCompanyEsg"]),
+    ...mapActions(["addCompanyEsg","deleteCompanyEsg"]),
     addEsG(){
       if(this.$store.getters.companyData.esgInitiatives){
         this.esgInitiatives = this.$store.getters.companyData.esgInitiatives;
       }
-      
+      const head = Date.now().toString();
+      const tail = Math.random().toString().substr(2);
       var esgData = {
         name: this.title,
         description: this.description,
         attachment: this.attachment,
+        id: head + tail,
       }
-      this.esgInitiatives.push(esgData);
+      // this.esgInitiatives.push(esgData);
       var data = {
         companyId: this.$store.getters.userInfo.company.id,
-        esgInitiatives: this.esgInitiatives,
+        esgInitiatives: esgData,
       }
       this.addCompanyEsg(data);
       this.title = '';
       this.description = '';
       this.attachment = '';
     },
-    deleteEsG(index){
+    deleteEsG(data){
       if(this.$store.getters.companyData.esgInitiatives){
         this.esgInitiatives = this.$store.getters.companyData.esgInitiatives;
       }
-      this.esgInitiatives.splice(index,1);
+      // this.esgInitiatives.splice(index,1);
       var data = {
         companyId: this.$store.getters.userInfo.company.id,
-        esgInitiatives: this.esgInitiatives,
+        esgInitiatives: data,
       }
-      this.addCompanyEsg(data);
+      this.deleteCompanyEsg(data);
     }
   },
   mounted() {

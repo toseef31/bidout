@@ -129,6 +129,9 @@ export default {
         fileName : this.$store.getters.contractData.fileName,
         sign: data,
         companyId: this.$store.getters.companyId,
+        userId: this.$store.getters.id,
+        yearly: true,
+        plan: this.$store.getters.plan,
       }
       this.signAgreement(agreement);
     },

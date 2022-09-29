@@ -21,4 +21,6 @@ export default {
     companyName: '',
     verifyData: {},
     contractData: JSON.parse(localStorage.getItem('contractData')),
+    plan: null,
+    id: null,
 }

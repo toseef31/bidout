@@ -72,7 +72,7 @@
           <v-icon color="#013D3A">mdi-linkedin</v-icon>
         </div>
         <div class="profile-list" v-for="(excutive,index) in companyData.executiveLeadership">
-          <v-icon color="#F32349" class="pa-1 white" @click="deleteExcutive(excutive.index)">mdi-trash-can-outline</v-icon>
+          <v-icon color="#F32349" class="pa-1 white" @click="deleteExcutive(excutive)">mdi-trash-can-outline</v-icon>
           <v-img :src="excutive.profilePicture" width="173"></v-img>
           <h6>{{excutive.name}}</h6>
           <p>{{excutive.role}}</p>
@@ -107,7 +107,7 @@ export default {
     }
   },
   methods: {
-    ...mapActions(["addCompanyExcutive"]),
+    ...mapActions(["addCompanyExcutive","deleteCompanyExcutive"]),
     cropProfile (e) {
       console.log(e);
       var files = e.target.files || e.dataTransfer.files;
@@ -151,16 +151,19 @@ export default {
         });
     },
     addExcutive(){
+      const head = Date.now().toString();
+      const tail = Math.random().toString().substr(2);
       var leader = {
         profilePicture : this.croppieProfile,
         name: this.excutiveName,
         role: this.excutiveRole,
-        linkedin: this.excutivelinkdinProfile
+        linkedin: this.excutivelinkdinProfile,
+        id: head + tail,
       }
-      this.executiveLeadership.push(leader);
+      // this.executiveLeadership.push(leader);
       var data = {
         companyId: this.$store.getters.userInfo.company.id,
-        executiveLeadership: this.executiveLeadership,
+        executiveLeadership: leader
       }
       this.addCompanyExcutive(data);
       this.croppieProfile = '';
@@ -168,13 +171,13 @@ export default {
       this.excutiveRole = '';
       this.excutivelinkdinProfile = '';
     },
-    deleteExcutive(index){
-      this.executiveLeadership.splice(index,1);
+    deleteExcutive(data){
+      // this.executiveLeadership.splice(index,1);
       var data = {
         companyId: this.$store.getters.userInfo.company.id,
-        executiveLeadership: this.executiveLeadership,
+        executiveLeadership: data,
       }
-      this.addCompanyExcutive(data);
+      this.deleteCompanyExcutive(data);
     }
   },
   mounted() {

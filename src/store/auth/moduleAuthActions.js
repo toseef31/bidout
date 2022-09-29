@@ -143,14 +143,14 @@ export default {
            }else{
             axios.post('/ofs/createCompany',{'company': payload.company, 'companyHq': payload.companyHq, 'companyHq2': payload.companyHq2, 'companyHqCountry': payload.companyHqCountry,'companyHqState':payload.companyHqState, 'companyHqCity': payload.companyHqCity, 'companyHqZip': payload.companyHqZip})
              .then(responce => {
-              commit('setCompanyId', responce.data.companyId);
+              commit('setCompanyId', responce.data.data.companyId);
               localStorage.setItem("companyId",JSON.stringify(responce.data.companyId));
               if(responce.status == 200){
                 axios.post('/ofs/createUser',{'company': payload.company,'firstName': payload.firstName, 'lastName': payload.lastName,'email': payload.email,'phoneNumber':payload.phoneNumber, 'title': payload.title, 'password': payload.password,'companyId':responce.data.data.companyId})
                  .then(responce => {
                   if(responce.status == 200){
-                    // localStorage.setItem("userId",JSON.stringify(responce.data));
-                    commit('setCompanyId', responce.data);
+                     commit("setId",responce.data.data.id);
+                    // commit('setCompanyId', responce.data);
                     commit('setCompanyName', payload.company);
                     router.replace({
                       name: "ModuleSelection"
@@ -196,13 +196,13 @@ export default {
         }else{
           axios.post('/ofs/createCompany',{'company': payload.company, 'companyHq': payload.companyHq, 'companyHq2': payload.companyHq2, 'companyHqCountry': payload.companyHqCountry,'companyHqState':payload.companyHqState, 'companyHqCity': payload.companyHqCity, 'companyHqZip': payload.companyHqZip})
            .then(responce => {
-            commit('setCompanyId', responce.data.companyId);
+            commit('setCompanyId', responce.data.data.companyId);
             localStorage.setItem("companyId",JSON.stringify(responce.data.companyId));
             if(responce.status == 200){
               axios.post('/ofs/createUser',{'company': payload.company,'firstName': payload.firstName, 'lastName': payload.lastName,'email': payload.email,'phoneNumber':payload.phoneNumber, 'title': payload.title, 'password': payload.password,'companyId':responce.data.data.companyId})
                .then(responce => {
                 if(responce.status == 200){
-                  // localStorage.setItem("userId",JSON.stringify(responce.data));
+                  commit("setId",responce.data.data.id);
                   commit('setCompanyName', payload.company);
                   router.replace({
                     name: "ModuleSelection"
@@ -235,11 +235,13 @@ export default {
 
   // signAgreement
   contractGenerate({commit}, payload){
+    console.log(payload,'contract');
     axios.post('/ofs/generateContract',{'id': payload.id,'ip': payload.ip,'contractType': payload.contractType, 'plan': payload.plan})
      .then(responce => {
       if(responce.status == 200){
         localStorage.setItem('contractData', JSON.stringify(responce.data));
         commit('setContract', responce.data)
+        commit('setPlan', payload.plan)
         router.replace({
           name: "Contract"
         });
@@ -251,11 +253,11 @@ export default {
   },
   signAgreement({commit}, payload){
     // Try to store Agreement
-    axios.post('/ofs/signContract',{'sign': payload.sign,'contractType': payload.contractType,'fileName':payload.fileName})
+    axios.post('/ofs/signContract',{'sign': payload.sign,'contractType': payload.contractType,'fileName':payload.fileName,'companyId':payload.companyId,'userId':payload.userId,'yearly':payload.yearly,'plan':payload.plan})
      .then(responce => {
       if(responce.status == 200){
-        localStorage.removeItem('contractData');
-        commit('setContract', 'Contract generated successfully!')
+        commit('setContract', responce.data)
+        // commit('setContract', 'Contract generated successfully!')
 
         router.replace({
           name: "ModuleSelection"

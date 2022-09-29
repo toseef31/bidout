@@ -25,7 +25,7 @@
             <v-col cols="12" md="9">
               <div class="title-head text-left">
                 <h3 class="mb-4">New Account Setup:</h3>
-                <h1 class="mb-8">Tetra Technologies</h1>
+                <h1 class="mb-8">{{companyName}}</h1>
                 <h4 class="font-weight-bold">Billing Frequency</h4>
                 <div class="d-flex">
                   <v-radio-group
@@ -341,7 +341,10 @@
       minCardMonth () {
         if (this.formData.cardYear === this.minCardYear) return new Date().getMonth() + 1
         return 1
-      }
+      },
+      companyName(){
+       return this.$store.getters.companyName;
+      },
     },
     watch: {
       cardYear () {

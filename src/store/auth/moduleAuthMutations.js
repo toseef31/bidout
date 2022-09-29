@@ -59,4 +59,10 @@ export default {
     setContract (state, payload){
       state.contractData = payload
     },
+    setPlan (state, payload){
+      state.plan = payload
+    },
+    setId (state, payload){
+      state.id = payload
+    },
 }

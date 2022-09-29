@@ -168,7 +168,7 @@
                   <v-row class="mt-5">
                     <v-col cols="12" sm="4" v-for="esg in companyData.esgInitiatives">
                       <div class="esg-list text-left">
-                        <h4 class="text-left mb-5">{{esg.title}}</h4>
+                        <h4 class="text-left mb-5">{{esg.name}}</h4>
                         <p class="text-left">{{esg.description}}</p>
                         <a :href="esg.attachment" download class="text-decoration-none px-5" v-if="esg.attachment">Download <v-icon>mdi-tray-arrow-down</v-icon></a>
                       </div>
