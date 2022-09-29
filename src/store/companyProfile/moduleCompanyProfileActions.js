@@ -76,6 +76,24 @@ export default {
       dispatch("getCompany",payload.companyId)
     })
   },
+  deleteCompanyDocument({commit,dispatch}, payload){
+    console.log(payload,'payload');
+    var config = {
+      headers: {
+        "Content-Type": "multipart/form-data",
+        "Authorization": `Bearer ${JSON.parse(localStorage.getItem('token'))}`
+      },
+    };
+    const formData = new FormData()
+
+    formData.append('corporateDocument[attachment]', payload.corporateDocument.attachment);
+    formData.append('corporateDocument[documentId]', payload.corporateDocument.documentId);
+    formData.append('companyId', payload.companyId);
+    axios.post('/company/deleteCompanyDocuments/',formData,config)
+     .then(responce => {
+      dispatch("getCompany",payload.companyId)
+    })
+  },
   addCompanyNews({commit,dispatch}, payload){
     console.log(payload);
     var config = {
@@ -95,7 +113,7 @@ export default {
         "Authorization": `Bearer ${JSON.parse(localStorage.getItem('token'))}`
       },
     };
-    axios.post('/company/addCompanyKeyfacts/',{'companyId':payload.companyId,'founded':payload.founded,'employees':payload.employees,'hqlocation':payload.hqlocation,'stockPrice':payload.stockPrice,'website':payload.website,'linkedin':payload.linkedin,'careers':payload.careers},config)
+    axios.post('/company/addCompanyKeyfacts/',{'companyId':payload.companyId,'founded':payload.founded,'employees':payload.employees,'hqlocation':payload.hqLocation,'stockPrice':payload.stockPrice,'website':payload.website,'linkedin':payload.linkedin,'careers':payload.careers},config)
      .then(responce => {
       dispatch("getCompany",payload.companyId)
     })

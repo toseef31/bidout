@@ -59,7 +59,7 @@
                             <td class="pl-6">{{ company.company }} 
                               
                             </td>
-                            <td>{{ company.hQLocation }}</td>
+                            <td>{{ company.hqlocation }}</td>
                             <td>{{ company.employees }}</td>
                             <td>{{ company.fieldLocations }}</td>
                             <td>{{ company.accountContacts }}</td>

@@ -367,7 +367,7 @@ export default {
     },500),
   },
   methods: {
-     ...mapActions(["getCompany","getCategories","companyProfileImg","updateBasicProfile","addCompanyService","addCompanyVideos","addCompanyNews","addCompanyDocument"]),
+     ...mapActions(["getCompany","getCategories","companyProfileImg","updateBasicProfile","addCompanyService","addCompanyVideos","addCompanyNews","addCompanyDocument","deleteCompanyDocument"]),
      uploadDocument() {
       this.isSelecting = true
       window.addEventListener('focus', () => {
@@ -523,20 +523,16 @@ export default {
         }
         this.addCompanyDocument(data);
       },
-      deleteDoc(index){
+      deleteDoc(data){
         if(this.$store.getters.companyData.corporateDocuments){
           this.documents = this.$store.getters.companyData.corporateDocuments;
         }
-        if(index >= 0){
-          this.documents.splice(index,1);
-          var data = {
-            companyId: this.$store.getters.userInfo.company.id,
-            videoLinks: this.videos,
-          }
-          this.addCompanyDocument(data);
-        }else{
-          alert("error");
+        // this.documents.splice(index,1);
+        var data = {
+          companyId: this.$store.getters.userInfo.company.id,
+          corporateDocument: data,
         }
+        this.deleteCompanyDocument(data);
         
       },
       addLocation(){
