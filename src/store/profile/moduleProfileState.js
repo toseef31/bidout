@@ -9,6 +9,7 @@ export default {
    message: null,
    userData: {},
    disableList: {},
+   pendingList: {},
    alerts: {
      showErrorAlert: false
    },

@@ -78,7 +78,8 @@
                 </div>
                 <div class="company-location mb-12">
                   <h1 class="mb-4 font-weight-bold">Service Locations</h1>
-                  <v-img :src="require('@/assets/images/ofs/company/lcoation.png')"></v-img>
+                  <div id="map"class="map" style="height:350px"></div>
+                  <!-- <v-img :src="require('@/assets/images/ofs/company/lcoation.png')"></v-img> -->
                 </div>
                 <div class="company-location mb-12">
                   <h1 class="mb-4 font-weight-bold">Corporate Videos</h1>
@@ -102,26 +103,12 @@
                   <v-row>
                     <v-col cols="3" sm="2" v-for="docs in companyData.corporateDocuments">
                       <div class="doc-col text-center">
-                        <v-img :src="require('@/assets/images/profile/pdf.png')" width="80px" class="mx-auto"></v-img>
-                        <p>Company Profile.pdf</p>
-                      </div>
-                    </v-col>
-                    <v-col cols="3" sm="2">
-                      <div class="doc-col text-center">
-                        <v-img  :src="require('@/assets/images/profile/excel.png')" width="80px" class="mx-auto"></v-img>
-                        <p>Price Sheet.xlsx</p>
-                      </div>
-                    </v-col>
-                    <v-col cols="3" sm="2">
-                      <div class="doc-col text-center">
-                        <v-img :src="require('@/assets/images/profile/other.png')" width="80px" class="mx-auto"></v-img>
-                        <p>Q4 Investor Presentation</p>
-                      </div>
-                    </v-col>
-                    <v-col cols="3" sm="2">
-                      <div class="doc-col text-center">
-                        <v-img :src="require('@/assets/images/profile/pdf.png')" width="80px" class="mx-auto"></v-img>
-                        <p>ESG_Inititves.pdf</p>
+                        <a :href="docs.attachment" target="_blank" class="text-decoration-none">
+                          <v-img v-if="get_url_extension(docs.attachment) == 'pdf'" :src="require('@/assets/images/profile/pdf.png')" width="80px" class="mx-auto"></v-img>
+                          <v-img v-else-if="get_url_extension(docs.attachment) == 'xlsx' || get_url_extension(docs.attachment) == 'xls'" :src="require('@/assets/images/profile/excel.png')" width="80px" class="mx-auto"></v-img>
+                          <v-img v-else :src="require('@/assets/images/profile/other.png')" width="80px" class="mx-auto"></v-img>
+                        </a>
+                        <p>{{get_url_name(docs.attachment)}}</p>
                       </div>
                     </v-col>
                   </v-row>
@@ -129,7 +116,7 @@
                 <div class="company-news mb-12">
                   <h1 class="mb-4 font-weight-bold">Corporate News & Press Releases</h1>
                   <div class="news-list" v-for="news in companyData.corporateNews">
-                    <p>{{news.date}} -  {{news.title}}</p>
+                    <p>{{news.date}} -  <a :href="news.url" class="text-decoration-none">{{news.title}}</a></p>
                   </div>
                 </div>
                 <div class="company-leadership mb-12">
@@ -143,24 +130,6 @@
                         <v-icon color="#013D3A">mdi-linkedin</v-icon>
                       </a>
                     </div>
-                    <!-- <div class="profile-list">
-                      <v-img :src="require('@/assets/images/ofs/company/leader-2.png')"></v-img>
-                      <h6>C. Andrews Smith</h6>
-                      <p>EVP and CFO</p>
-                      <v-icon color="#013D3A">mdi-linkedin</v-icon>
-                    </div>
-                    <div class="profile-list">
-                      <v-img :src="require('@/assets/images/ofs/company/leader-3.png')"></v-img>
-                      <h6>Kenneth N. Berns</h6>
-                      <p>EVP and CCO</p>
-                      <v-icon color="#013D3A">mdi-linkedin</v-icon>
-                    </div>
-                    <div class="profile-list">
-                      <v-img :src="require('@/assets/images/ofs/company/leader-4.png')"></v-img>
-                      <h6>Seth D. Weiser</h6>
-                      <p>SVP and General Counsel</p>
-                      <v-icon color="#013D3A">mdi-linkedin</v-icon>
-                    </div> -->
                   </div>
                 </div>
                 <div class="company-esg mb-16">
@@ -195,35 +164,8 @@ export default {
   
   data() {
     return {
-      drillingService: [
-        {title: 'Drilling Services'},
-        {title: 'Contract Drilling Services'},
-        {title: 'Hydralic Fracturing'},
-        {title: 'Measurement-while-drilling'},
-        {title: 'Measurement-while-drilling'},
-        {title: 'Directional Drilling'},
-        {title: 'Pressure Pumping Service'},
-        {title: 'Cementing Services'},
-        {title: 'Downhole Performance Motors'},
-        {title: 'Horizontal Drilling'},
-      ],
-      esGList: [
-        {
-          title: 'Environmetal',
-          description: 'Donec vulputate dolor ac tempus fringilla. Vestibulum et consectetur dui, nec condimentum risus. Vivamus vel mauris lacus. Sed vel sagittis augue, sed aliquet velit. Curabitur nunc enim, dignissim eu tellus a, molestie aliquam risus. Mauris ornare eros eget eros semper, ut cursus sapien viverra.',
-          file: '2021_ESG_Report.pdf',
-        },
-        {
-          title: 'Social',
-          description: 'Donec vulputate dolor ac tempus fringilla. Vestibulum et consectetur dui, nec condimentum risus. Vivamus vel mauris lacus. Sed vel sagittis augue, sed aliquet velit. Curabitur nunc enim, dignissim eu tellus a, molestie aliquam risus. Mauris ornare eros eget eros semper, ut cursus sapien viverra.',
-          file: '',
-        },
-        {
-          title: 'Governance',
-          description: 'Donec vulputate dolor ac tempus fringilla. Vestibulum et consectetur dui, nec condimentum risus. Vivamus vel mauris lacus. Sed vel sagittis augue, sed aliquet velit. Curabitur nunc enim, dignissim eu tellus a, molestie aliquam risus. Mauris ornare eros eget eros semper, ut cursus sapien viverra.',
-          file: '2021_ESG_Report.pdf',
-        },
-      ],
+      mapOptions: '',
+      markerOptions: '',
     };
   },
   computed:{
@@ -232,10 +174,100 @@ export default {
    }
   },
   methods: {
-    
+    getLocation(){
+      this.mapOptions = {
+        center: { lat: this.$store.getters.companyData.lattitude, lng: this.$store.getters.companyData.longitude },
+        zoom: 18,
+        mapTypeId: 'terrain',
+        mapTypeControl: false,
+        scaleControl: false,
+        streetViewControl: false,
+        rotateControl: false,
+        fullscreenControl: false,
+        disableDefaultUi: false,
+        zoomControl: false,
+        scrollwheel: false,
+      };
+      this.markerOptions = {
+        url: '/assets/images/dashboard/mapMobile.png',
+        size: {width: 60, height: 90, f: 'px', b: 'px',},
+        scaledSize: {width: 30, height: 45, f: 'px', b: 'px',},
+      };
+      // console.log(this.mapOptions,'maps');
+      const map = new google.maps.Map(document.getElementById("map"), this.mapOptions);
+        // const card = document.getElementById("pac-card");
+
+        // map.controls[google.maps.ControlPosition.TOP_RIGHT].push(card);
+
+        // [START maps_places_autocomplete_creation]
+        const center = { lat: this.$store.getters.companyData.lattitude, lng: this.$store.getters.companyData.longitude };
+        // Create a bounding box with sides ~10km away from the center point
+        const defaultBounds = {
+          north: center.lat + 0.1,
+          south: center.lat - 0.1,
+          east: center.lng + 0.1,
+          west: center.lng - 0.1,
+        };
+        const input = document.getElementById("pac-input");
+
+        const options = {
+          bounds: defaultBounds,
+          // componentRestrictions: { country: "us" },
+          fields: ["address_components", "geometry", "icon", "name","formatted_address"],
+          strictBounds: false,
+          types: ["establishment"],
+        };
+        const autocomplete = new google.maps.places.Autocomplete(input, options);
+        const southwest = { lat: 5.6108, lng: 136.589326 };
+        const northeast = { lat: 61.179287, lng: 2.64325 };
+        const newBounds = new google.maps.LatLngBounds(southwest, northeast);
+
+        autocomplete.setBounds(newBounds);
+
+        const marker = new google.maps.Marker({
+          position: new google.maps.LatLng(this.$store.getters.companyData.lattitude, this.$store.getters.companyData.longitude),
+          title: 'Marker',
+          map: map,
+          draggable: true,
+          // map,
+          // icon:'https://img.icons8.com/fluent/48/000000/marker-storm.png',
+          anchorPoint: new google.maps.Point(0, -29),
+        });
+        autocomplete.addListener("place_changed", () => {
+          // infowindow.open();
+          marker.setVisible(true);
+
+          const place = autocomplete.getPlace();
+
+          if (!place.geometry || !place.geometry.location) {
+            // User entered the name of a Place that was not suggested and
+            // pressed the Enter key, or the Place Details request failed.
+            window.alert("No details available for input: '" + place.name + "'");
+            return;
+          }
+
+          // If the place has a geometry, then present it on a map.
+          if (place.geometry.viewport) {
+            map.fitBounds(place.geometry.viewport);
+          } else {
+            map.setCenter(place.geometry.location);
+            map.setZoom(17); // Why 17? Because it looks good.
+          }
+
+          marker.setPosition(place.geometry.location);
+          marker.setVisible(true);
+        });
+    },
+    get_url_extension( url ) {
+      return url.split(/[#?]/)[0].split('.').pop().trim();
+    },
+    get_url_name( url ) {
+      return url.split('/').pop();
+    },
   },
   mounted() {
     document.title = "Company Profile - BidOut" 
+    this.getLocation();
   }
 };
 </script>

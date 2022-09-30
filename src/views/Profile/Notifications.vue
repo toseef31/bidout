@@ -133,7 +133,9 @@ export default {
     };
   },
   computed:{
-    
+    notifications(){
+    	return this.$store.getters.userInfo;
+    }
   },
  	watch: {
  		responseAll: _.debounce(function(){

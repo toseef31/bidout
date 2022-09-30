@@ -17,6 +17,9 @@ export default {
    disableList (state){
       return state.disableList
    },
+   pendingList (state){
+      return state.pendingList
+   },
    showErrorAlert (state) {
      return state.alerts.showErrorAlert;
    },

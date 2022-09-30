@@ -39,6 +39,18 @@ const routes = [
        }
       },
       {
+        path: '/manage-users/pending-users',
+        name: 'PendingUsers',
+        component: () => import('@/views/PendingUsers.vue'),
+        beforeEnter: (to, from, next) => {
+           if(localStorage.getItem("userData") == null) {
+               next('/login');
+           } else {
+               next();
+           }
+       }
+      },
+      {
         path: '/manage-users/disabled-users',
         name: 'DisabledUsers',
         component: () => import('@/views/DisabledUsers.vue'),

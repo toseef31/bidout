@@ -8,6 +8,17 @@
 	  padding-left: 0 !important;
 	}
 }
+.companySupplier-module{
+	.company-leftSidebar{
+		.facts-data{
+			width: 33%;
+		}
+		.tag-box{
+			width: 33%;
+			margin: 20px auto;
+		}
+	}
+}
 .mid-content-collapse{
 	flex: 0 0 95%;
   	max-width: 95%;

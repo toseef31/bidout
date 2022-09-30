@@ -130,7 +130,7 @@ export default {
     return {
       founded: this.$store.getters.userInfo.company.founded,
       employees: this.$store.getters.userInfo.company.employees,
-      hqLocation: this.$store.getters.userInfo.company.hqLocation,
+      hqLocation: this.$store.getters.userInfo.company.hqlocation,
       stockPrice: this.$store.getters.userInfo.company.stockPrice,
       website: this.$store.getters.userInfo.company.website,
       linkedin: this.$store.getters.userInfo.company.linkedin,

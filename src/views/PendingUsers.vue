@@ -10,7 +10,7 @@
                       {{ statusMessage }}
                     </v-alert>
                     <div class="top-section d-flex">
-                      <h4>Disabled Users</h4>
+                      <h4>Pending Users</h4>
                       <div>
                         <router-link to="/manage-users" class="pr-8 font-weight-bold">Manage Users</router-link>
                         <!-- <router-link to="/add-users" class="text-decoration-none"><v-btn 
@@ -30,13 +30,13 @@
                                 Name
                               </th>
                               <th class="text-left black--text font-weight-bold">
+                                Title
+                              </th>
+                              <th class="text-left black--text font-weight-bold">
                                 Email
                               </th>
                               <th class="text-left black--text font-weight-bold">
-                                Last Login
-                              </th>
-                              <th class="text-left black--text font-weight-bold">
-                                User Permissions
+                                Phone Number
                               </th>
                               <th class="text-left black--text font-weight-bold">
                                 
@@ -50,17 +50,18 @@
                             >
 
                               <td class="text-left font-weight-medium">{{ user.firstName }} {{ user.lastName }}</td>
+                              <td class="text-left font-weight-medium text-capitalize">{{user.title}}</td>
                               <td class="text-left font-weight-medium">{{ user.email }}</td>
-                              <td class="text-left font-weight-medium"><span v-if="user.lastSeen">{{ user.lastSeen | moment("MM/D/YYYY") }}</span><span v-else>no history</span></td>
-                              <td class="text-left font-weight-medium text-capitalize">{{user.role}}</td>
+                              
+                              <td class="text-left font-weight-medium"><span v-if="user.phoneNumber">{{ user.phoneNumber }}</span><span v-else>no phone</span></td>
                               <td class="text-center">
-                                <v-btn depressed color="transparent" class="text-capitalize" @click="enable(user.id)" >
+                                <v-btn depressed color="transparent" class="text-capitalize" @click="accept(user)" >
                                     <v-icon>mdi-check</v-icon>
-                                  Enable </v-btn>
+                                  Accept </v-btn>
                               </td>
                             </tr>
                             <tr v-if="users.length < 1">
-                              <td colspan="4"><h4>There is no disable user.</h4></td>
+                              <td colspan="4"><h4>There is no pending user.</h4></td>
                             </tr>
                           </tbody>
                         </template>
@@ -79,7 +80,7 @@
   import RightSidebar from './Layout/Dashboard/RightSidebar.vue'
   import { mapActions, mapState } from "vuex";
 export default {
-  name : "DisabledUsers",
+  name : "PendingUsers",
   components: {
     Navbar,
     LeftSidebar,
@@ -102,26 +103,27 @@ export default {
       return this.$store.getters.statusMessage
     },
     users(){
-      return this.$store.getters.disableList;
+      return this.$store.getters.pendingList;
     },
     showErrorAlert(){
       return this.$store.getters.showErrorAlert;
     }
   },
   methods: {
-    ...mapActions(["getDisabledUsers","enableUser"]),
-    getDisableUsers(company){
-      this.getDisabledUsers(company);
+    ...mapActions(["getPendingUsers","acceptPendingUser"]),
+    pendingUsers(company){
+      console.log(company);
+      this.getPendingUsers(company);
     },
-    enable(id){
-      this.enableUser(id);
+    accept(user){
+      this.acceptPendingUser(user);
     },
   },
   mounted() {
-    document.title = "Disabled Users - BidOut";
+    document.title = "Pending Users - BidOut";
     this.user = this.$store.getters.userInfo;
-
-    this.getDisableUsers(this.user.company.company);
+    console.log(this.user)
+    this.getPendingUsers(this.user.company.id);
   }
 };
 </script>

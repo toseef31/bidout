@@ -20,6 +20,9 @@ export default {
     setDisableUsersList (state, payload){
       state.disableList = payload
     },
+    setPendingUsersList (state, payload){
+      state.pendingList = payload
+    },
     showErrorAlert(state){
       state.alerts.showErrorAlert = true
       setTimeout(() => {

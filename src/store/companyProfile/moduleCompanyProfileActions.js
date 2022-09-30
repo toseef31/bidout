@@ -47,6 +47,17 @@ export default {
       dispatch("getCompany",payload.companyId)
     })
   }, 
+  addCompanyLocation({commit,dispatch}, payload){
+    var config = {
+      headers: {
+        "Authorization": `Bearer ${JSON.parse(localStorage.getItem('token'))}`
+      },
+    };
+    axios.post('/company/addCompanyLocation/',{'companyId': payload.companyId,'location': payload.location,'lat':payload.lat,'long':payload.long},config)
+     .then(responce => {
+      dispatch("getCompany",payload.companyId)
+    })
+  }, 
   addCompanyVideos({commit,dispatch}, payload){
     var config = {
       headers: {

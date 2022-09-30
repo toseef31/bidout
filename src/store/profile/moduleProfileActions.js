@@ -138,6 +138,14 @@ export default {
       commit('showErrorAlert')
     })
   }, 
+  getPendingUsers({commit},payload){
+    axios.get('/user/getPendingUsers/'+ payload,{ headers: {"Authorization" : `Bearer ${JSON.parse(localStorage.getItem('token'))}`} })
+      .then(responce => {
+      // console.log(responce.data);
+      commit('setPendingUsersList',responce.data.data)
+      commit('showErrorAlert')
+    })
+  }, 
   verifyInviteToken({commit}, payload){
     axios.get('/auth/checkIfInvitationIsValid/'+payload)
      .then(responce => {

@@ -12,6 +12,7 @@
                 <div class="top-section d-flex">
                   <h4>Manage Users</h4>
                   <div>
+                    <router-link to="/manage-users/pending-users" class="pr-8 font-weight-bold">Show Pending Users</router-link>
                     <router-link to="/manage-users/disabled-users" class="pr-8 font-weight-bold">Show Disable Users</router-link>
                     <router-link to="/manage-users/add-users" class="text-decoration-none"><v-btn 
                     color="#0D9648" 
@@ -57,7 +58,7 @@
                           <td class="text-left font-weight-medium"><span v-if="user.lastSeen">{{ user.lastSeen | moment("MM/D/YYYY") }}</span><span v-else>no history</span></td>
                           <td class="text-left font-weight-medium text-capitalize">
                             <template v-if="user.role == 'admin'">Administrator</template>
-                            <template v-else>User</template>
+                            <template v-if="user.role == 'user'">User</template>
                           </td>
                           <td class="text-left">
                             <v-btn depressed color="transparent" @click="editUser(user,'general')" class="text-capitalize edit-btn">
@@ -69,6 +70,9 @@
                             Disable </v-btn>
 
                           </td>
+                        </tr>
+                        <tr v-if="users.length < 1">
+                          <td colspan="4"> <h4>There is no user in this company</h4></td>
                         </tr>
                         <tr class="white">
                           <td colspan="5"><h2 class="my-4 text-left">Pending User Invitations</h2></td>
@@ -95,6 +99,9 @@
                             Disable </v-btn> -->
 
                           </td>
+                        </tr>
+                        <tr v-if="invitedList.length < 1">
+                          <td colspan="5"><h4>There is no invited user.</h4></td>
                         </tr>
                       </tbody>
                     </template>
