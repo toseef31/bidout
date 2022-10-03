@@ -4,5 +4,8 @@ export default {
    },
    serviceCompanies (state){
       return state.serviceCompanies
-   }
+   },
+   premiumCompanies (state){
+      return state.premiumCompanies
+   },
 }

@@ -6,7 +6,7 @@
           <v-row justify="center">
             <v-col cols="12" md="12">
               <div class="category-list">
-                <h1 class="text-left service-title mb-8">{{allcompanies.name}}</h1>
+                <h1 class="text-left service-title mb-8">{{companyName}}</h1>
                 <div class="d-flex align-center tabs-header">
                   <v-tabs
                     v-model="tab"
@@ -22,7 +22,7 @@
                   </v-tabs>
                   <div class="category-list__searchBox">
                     <v-text-field
-                      v-model="searchCompany"
+                      v-model="filterCompany"
                       prepend-inner-icon="search"
                       placeholder="Search here..."
                       single-line
@@ -50,10 +50,10 @@
                         </thead>
                         <tbody>
                           <tr
-                            v-for="company in allcompanies.data"
+                            v-for="company in allcompanies"
                             :key="company.objectID"
                           >
-                            <td class="pl-8">{{ company.company }} 
+                            <td class="pl-8"><span @click="viewPublicCompany(company.objectID,company.company)" class="text-decoration-none company-link">{{ company.company }} </span>
                               
                             </td>
                             <td>{{ company.hqlocation }}</td>
@@ -97,7 +97,7 @@ export default {
   data() {
     return {
       tab: null,
-      searchCompany: '',
+      filterCompany: '',
       page: 1,
       items: [
         'All', 'Gulf Coast', 'Northwest', 'Rockies', 'Mid-Con', 'Permian', 'Arklatex', 'Offshore', 'Other',
@@ -118,19 +118,26 @@ export default {
   },
   computed:{
    allcompanies(){
-    if(this.searchCompany){
-      return this.$store.getters.serviceCompanies.filter((companies)=>{
-        return this.searchCompany.toLowerCase().split(' ').every(v => companies.name.toLowerCase().includes(v))
+    if(this.filterCompany){
+      return this.$store.getters.serviceCompanies.data.filter((companies)=>{
+        return this.filterCompany.toLowerCase().split(' ').every(v => companies.company.toLowerCase().includes(v))
       })
+
     }else{
-      return this.$store.getters.serviceCompanies;
+      return this.$store.getters.serviceCompanies.data;
     }
    },
+   companyName(){
+    return this.$store.getters.serviceCompanies.name;
+   }
   },
   methods: {
-    ...mapActions(["getPublicCompanyInfo"]),
+    ...mapActions(["getPublicCompanyInfo","searchCompany"]),
     viewPublicCompany(id,name){
       this.getPublicCompanyInfo({'id':id,'name':name});
+    },
+    companySearch(){
+      this.searchCompany();
     }
   },
   mounted() {

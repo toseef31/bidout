@@ -86,7 +86,7 @@
                       </template>
                     </v-simple-table> -->
                   </div>
-                  <div class="pending-queue mb-2" v-if="userDatas.role == 'admin'">
+                  <div class="pending-queue mb-2" v-if="userDatas.role == 'admin' && pendingCount > 0">
                     <div class="d-flex justify-space-between">
                       <div class="pending-content d-flex">
                         <v-img :src="require('@/assets/images/dashboard/userCircle.png')" height="24px" width="24px"></v-img> <span class="pl-3">{{pendingCount}} Pending User in Queue</span>

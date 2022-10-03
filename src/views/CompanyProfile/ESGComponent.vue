@@ -39,6 +39,14 @@
             <v-btn color="#F32349" outlined small min-width="32px" height="32px" class="pa-0 mt-3" @click="deleteEsG(esg)"><v-icon>mdi-trash-can-outline</v-icon></v-btn>
           </div>
         </v-col>
+        <v-col cols="12" sm="4" v-for="(esg,index) in esgData">
+          <div class="esg-list text-left">
+            <h4 class="text-left mb-5">{{esg.name}}</h4>
+            <p class="text-left">{{esg.description}}</p>
+            <a :href="esg.attachment" download class="text-decoration-none" v-if="esg.attachment">Download <v-icon>mdi-tray-arrow-down</v-icon></a><br>
+            <!-- <v-btn color="#F32349" outlined small min-width="32px" height="32px" class="pa-0 mt-3" @click="deleteEsG(esg)"><v-icon>mdi-trash-can-outline</v-icon></v-btn> -->
+          </div>
+        </v-col>
       </v-row>
     </v-container>
   </v-form>
@@ -52,6 +60,23 @@ export default {
       attachment: '',
       description: '',
       esgInitiatives: [],
+      esgData:  [
+        {
+          name: 'Environmetal',
+          description: 'Donec vulputate dolor ac tempus fringilla. Vestibulum et consectetur dui, nec condimentum risus. Vivamus vel mauris lacus. Sed vel sagittis augue, sed aliquet velit. Curabitur nunc enim, dignissim eu tellus a, molestie aliquam risus. Mauris ornare eros eget eros semper, ut cursus sapien viverra.',
+          attachment: '',
+        },
+        {
+          name: 'Social',
+          description: 'Donec vulputate dolor ac tempus fringilla. Vestibulum et consectetur dui, nec condimentum risus. Vivamus vel mauris lacus. Sed vel sagittis augue, sed aliquet velit. Curabitur nunc enim, dignissim eu tellus a, molestie aliquam risus. Mauris ornare eros eget eros semper, ut cursus sapien viverra.',
+          attachment: '',
+        },
+        {
+          name: 'Governance',
+          description: 'Donec vulputate dolor ac tempus fringilla. Vestibulum et consectetur dui, nec condimentum risus. Vivamus vel mauris lacus. Sed vel sagittis augue, sed aliquet velit. Curabitur nunc enim, dignissim eu tellus a, molestie aliquam risus. Mauris ornare eros eget eros semper, ut cursus sapien viverra.',
+          attachment: '',
+        },
+      ],
     };
   },
   computed:{
@@ -93,7 +118,10 @@ export default {
         esgInitiatives: data,
       }
       this.deleteCompanyEsg(data);
-    }
+    },
+    get_url_name( url ) {
+      return url.split('/').pop();
+    },
   },
   mounted() {
     

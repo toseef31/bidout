@@ -6,7 +6,10 @@
             <v-col cols="12" sm="12" md="12" class="d-sm-block px-0">
               <div class="manage-sections pa-4 px-0">
                 <div class="top-section d-flex pa-sm-10 pa-4">
-                  <h4>Company's Page</h4>
+                  <div>
+                    <img :src="companyData.image">
+                    <h4>{{companyData.company}} Page</h4>
+                  </div>
                   <template>
                     <div class="progress-section">
                       <div class="d-flex progress-heading">
@@ -36,7 +39,7 @@
                               Crop Image
                             </v-card-title>
                             <v-card-text>
-                              <vue-croppie ref="croppieRef" :showZoomer="false" :enableOrientation="true" :enableResize="false" :boundary="{ width: 600, height: 350}" :viewport="{ width:365, height:90, 'type':'square' }">
+                              <vue-croppie ref="croppieRef" :showZoomer="true" :enableOrientation="true" :enableResize="false" :boundary="{ width: 600, height: 350}" :viewport="{ width:450, height:120, 'type':'square' }">
                               </vue-croppie>
                             </v-card-text>
 
@@ -80,7 +83,7 @@
                     </v-row>
                     <v-row>
                       <v-col cols="12" sm="12">
-                        <v-btn color="#0D9648" large class="text-capitalize white--text" width="176px" height="54px" @click="updateBasic">Add Info</v-btn>
+                        <v-btn color="#0D9648" large class="text-capitalize white--text" width="176px" height="54px" @click="updateBasic">Save Info</v-btn>
                       </v-col>
                     </v-row>
                   </v-container>
@@ -122,23 +125,7 @@
                   <v-container class="pa-sm-10 pa-4">
                       <label class="d-block text-left main-label">Services Location</label>
                       <div class="pac-card" id="pac-card">
-                        <!-- <div>
-                          <div id="title">Countries</div>
-                          <div id="country-selector" class="pac-controls">
-                            <input type="radio" name="type" id="changecountry-usa" />
-                            <label for="changecountry-usa">USA</label>
-
-                            <input
-                              type="radio"
-                              name="type"
-                              id="changecountry-usa-and-uot"
-                              checked="checked"
-                            />
-                            <label for="changecountry-usa-and-uot"
-                              >USA and unincorporated organized territories</label
-                            >
-                          </div>
-                        </div> -->
+                        
                         <div id="pac-container">
                           <v-row>
                             <v-col cols="10" sm="10">
@@ -432,7 +419,7 @@ export default {
     crop() {
       let options = {
         type: 'blob',
-        size: { width: 370, height: 90 },
+        size: { width: 450, height: 120 },
         format: 'png',
         name: this.logoName
       };
@@ -632,7 +619,6 @@ export default {
             // map,
             anchorPoint: new google.maps.Point(0, -29),
           });
-          console.log(marker,'mARKER');
           autocomplete.addListener("place_changed", () => {
             // infowindow.open();
             marker.setVisible(true);

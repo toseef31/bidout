@@ -26,6 +26,11 @@
 						font-weight: 700;
 					}
 				}
+				&:hover{
+					&::before{
+						border-radius: 16px;
+					}
+				}
 
 			}
 		}

@@ -25,17 +25,17 @@
             <v-col cols="12" md="12">
               <VueSlickCarousel v-bind="settings" class="company-slider">
 
-                <div class="slide-item ">
+                <div class="slide-item " v-for="premium in premiumCompanies" @click="viewPublicCompany(premium.id,premium.company)">
                   <div class="slide-img d-flex align-center justify-center flex-column">
                     <img
-                      :src="require('@/assets/images/ofs/patterson.png')" class="mx-auto"
+                      :src="premium.image" class="mx-auto"
                     >
                   </div>
                   <div class="slide-caption">
                     <h3 class="font-weight-bold">Premium Service Provider</h3>
                   </div>
                 </div>
-                <div class="slide-item ">
+                <!-- <div class="slide-item ">
                   <div class="slide-img d-flex align-center justify-center flex-column">
                     <img
                       :src="require('@/assets/images/ofs/tetra.png')" class="mx-auto" height="120"
@@ -64,7 +64,7 @@
                   <div class="slide-caption">
                     <h3 class="font-weight-bold">Premium Service Provider</h3>
                   </div>
-                </div>
+                </div> -->
               </VueSlickCarousel>
             </v-col>
           </v-row>
@@ -258,9 +258,12 @@ export default {
       this.hideList = true;
       return this.$store.getters.supplier;
     },
+    premiumCompanies(){
+      return this.$store.getters.premiumCompanies;
+    }
   },
   methods: {
-    ...mapActions(["getCategories","getCompanyByservice","getCompanyMainService","searchSupplier","getPublicCompanyInfo"]),
+    ...mapActions(["getCategories","getCompanyByservice","getCompanyMainService","searchSupplier","getPublicCompanyInfo","getPremiumCompanies"]),
     getAllCategories(){
       this.getCategories();
       
@@ -281,11 +284,13 @@ export default {
     },
     viewPublicCompany(id,name){
       this.getPublicCompanyInfo({'id':id,'name':name});
-    }
+    },
+    
   },
   mounted() {
   document.title = "OFS - BidOut"
     this.getCategories();
+    this.getPremiumCompanies();
   }
 };
 </script>

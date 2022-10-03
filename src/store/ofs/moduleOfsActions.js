@@ -40,6 +40,7 @@ export default {
     console.log(url);
     axios.get('/company/getCompaniesByMainService/'+url)
       .then(responce => {
+        console.log(responce.data);
         var data = {
           'data': responce.data,
           'name': payload.name
@@ -53,6 +54,7 @@ export default {
     console.log(url);
     axios.get('/company/getCompaniesByMainService/'+url)
       .then(responce => {
+        console.log(responce.data);
         var data = {
           'data': responce.data,
           'name': payload.name
@@ -78,5 +80,18 @@ export default {
       localStorage.setItem('companyData', JSON.stringify(responce.data));
       router.replace('/company-profiles/'+url);
     })
-  }
+  },
+  getPremiumCompanies({commit},payload){
+    axios.get('admin/getPremiumCompanies')
+     .then(responce => {
+      commit('setPremiumList',responce.data);
+    })
+  },
+  searchCompany({commit}, payload){
+    axios.get('/ofs/searchSuppliers/'+payload)
+      .then(responce => {
+        console.log(responce.data);
+      commit('setCompanies',responce.data.hits)
+    })
+  },
 }
