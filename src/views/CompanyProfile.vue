@@ -7,19 +7,19 @@
               <div class="manage-sections pa-4 px-0">
                 <div class="top-section d-flex pa-sm-10 pa-4">
                   <div>
-                    <img :src="companyData.image">
+                    <!-- <img :src="companyData.image"> -->
                     <h4>{{companyData.company}} Page</h4>
                   </div>
                   <template>
                     <div class="progress-section">
                       <div class="d-flex progress-heading">
-                        <p class="mb-0">Page Progress: <strong>80%</strong></p>
-                        <small>10 out of 12 modules</small>
+                        <p class="mb-0">Page Progress: <strong>{{percentage}}%</strong></p>
+                        <small>11 out of 11 modules</small>
                       </div>
                       <v-progress-linear 
                       color="#0D9648"
                       rounded
-                      value="80" max-width="100%"></v-progress-linear>
+                      :value="percentage" max-width="100%"></v-progress-linear>
                     </div>
                   </template>
                 </div>
@@ -62,7 +62,7 @@
                         <img :src="companyData.image">
                       </v-col>
                       <v-col cols="4" sm="6" class="pt-10 mt-4 btn-col pl-0 d-flex align-center justify-end">
-                        <label for="logo-input" class="text-capitalize mr-2 white--text add-logo d-flex align-center font-weight-bold">Add Image
+                        <label for="logo-input" class="text-capitalize mr-2 white--text add-logo d-flex align-center font-weight-bold justify-center">Add Image
                           <input type="file" accept="image/*" class="logo-input d-none" id="logo-input" @change="croppie($event)">
                         </label>
                         <v-btn color="rgb(243, 35, 73, 0.1)" class="text-capitalize del-btn" width="48%" height="56px" @click="deleteLogo">Delete</v-btn>
@@ -349,6 +349,16 @@ export default {
     },
     companyData(){
       return this.$store.getters.companyData;
+    },
+    percentage(){
+      if(this.$store.getters.companyData.image && this.$store.getters.companyData.services && this.$store.getters.companyData.lattitude && this.$store.getters.companyData.corporateVideos && this.$store.getters.companyData.corporateDocuments && this.$store.getters.companyData.corporateNews && this.$store.getters.companyData.executiveLeadership && this.$store.getters.companyData.esgInitiatives && this.$store.getters.companyData.accountContacts){
+        return 100;
+      }
+      if(this.$store.getters.companyData.image && this.$store.getters.companyData.esgInitiatives == []){
+        return 30;
+      }else{
+        return 20;
+      }
     }
   },
   watch:{

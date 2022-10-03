@@ -12,7 +12,7 @@
                 <div class="top-section d-flex">
                   <h4>Manage Users</h4>
                   <div>
-                    <router-link to="/manage-users/pending-users" class="pr-8 font-weight-bold">Show Pending Users</router-link>
+                    <!-- <router-link to="/manage-users/pending-users" class="pr-8 font-weight-bold">Show Pending Users</router-link> -->
                     <router-link to="/manage-users/disabled-users" class="pr-8 font-weight-bold">Show Disable Users</router-link>
                     <router-link to="/manage-users/add-users" class="text-decoration-none"><v-btn 
                     color="#0D9648" 
@@ -72,7 +72,7 @@
                           </td>
                         </tr>
                         <tr v-if="users.length < 1">
-                          <td colspan="4"> <h4>There is no user in this company</h4></td>
+                          <td colspan="5"> <h4>There is no user in this company</h4></td>
                         </tr>
                         <tr class="white">
                           <td colspan="5"><h2 class="my-4 text-left">Pending User Invitations</h2></td>
@@ -102,6 +102,28 @@
                         </tr>
                         <tr v-if="invitedList.length < 1">
                           <td colspan="5"><h4>There is no invited user.</h4></td>
+                        </tr>
+                        <tr class="white">
+                          <td colspan="5"><h2 class="my-4 text-left">Pending Users</h2></td>
+                        </tr>
+                        <tr
+                          v-for="(user, i) in pendingUsers"
+                          :key="user.i"
+                        >
+
+                          <td class="text-left font-weight-medium">{{ user.firstName }} {{ user.lastName }}</td>
+                          <td class="text-left font-weight-medium text-capitalize">{{user.title}}</td>
+                          <td class="text-left font-weight-medium">{{ user.email }}</td>
+                          
+                          <td class="text-left font-weight-medium"><span v-if="user.phoneNumber">{{ user.phoneNumber }}</span><span v-else>no phone</span></td>
+                          <td class="text-center">
+                            <v-btn depressed color="transparent" class="text-capitalize" @click="accept(user)" >
+                                <v-icon>mdi-check</v-icon>
+                              Accept </v-btn>
+                          </td>
+                        </tr>
+                        <tr v-if="pendingUsers.length < 1">
+                          <td colspan="5"><h4>There is no pending user.</h4></td>
                         </tr>
                       </tbody>
                     </template>
@@ -157,12 +179,15 @@ export default {
     invitedList () {
       return this.$store.getters.invitedList
     },
+    pendingUsers(){
+      return this.$store.getters.pendingList;
+    },
     showErrorAlert(){
       return this.$store.getters.showErrorAlert;
     }
   },
   methods: {
-    ...mapActions(["manageUsers","disableUser","enableUser","editData","getInvitedList"]),
+    ...mapActions(["manageUsers","disableUser","enableUser","editData","getInvitedList","getPendingUsers","acceptPendingUser"]),
     getUsers(company){
       this.manageUsers(company);
     },
@@ -178,7 +203,13 @@ export default {
     },
     invitedUsers(company){
       this.getInvitedList(company);
-    }
+    },
+    pendingUsers(company){
+      this.getPendingUsers(company);
+    },
+    accept(user){
+      this.acceptPendingUser(user);
+    },
   },
   mounted() {
     document.title = "Manage Users - BidOut";
@@ -186,6 +217,7 @@ export default {
 
     this.getUsers(this.user.company.company);
     this.invitedUsers(this.user.company.company);
+    this.getPendingUsers(this.user.company.id);
   }
 };
 </script>

@@ -122,7 +122,7 @@ export default {
   mounted() {
     document.title = "Pending Users - BidOut";
     this.user = this.$store.getters.userInfo;
-    console.log(this.user)
+    // console.log(this.user)
     this.getPendingUsers(this.user.company.id);
   }
 };
