@@ -7,7 +7,7 @@
               <div class="manage-sections pa-4 px-0">
                 <div class="top-section d-flex pa-sm-10 pa-4">
                   <div>
-                    <!-- <img :src="companyData.image"> -->
+                    <img :src="companyData.image">
                     <h4>{{companyData.company}} Page</h4>
                   </div>
                   <template>
@@ -59,7 +59,7 @@
                           </v-card>
                         </v-dialog>
                         <!-- the result -->
-                        <img :src="companyData.image">
+                        <!-- <img :src="companyData.image"> -->
                       </v-col>
                       <v-col cols="4" sm="6" class="pt-10 mt-4 btn-col pl-0 d-flex align-center justify-end">
                         <label for="logo-input" class="text-capitalize mr-2 white--text add-logo d-flex align-center font-weight-bold justify-center">Add Image
@@ -91,11 +91,30 @@
                   <v-container class="pa-sm-10 pa-4">
                       <label class="d-block text-left main-label">Services Portfolio</label>
                     <v-row>
-                      <v-col cols="10" sm="10">
+                      <v-col cols="5" sm="5">
                         <!-- <v-text-field placeholder="Add a service here ..." single-line outlined hide-details ></v-text-field> -->
                         <v-autocomplete
                           v-model="services"
                           :items="allcategories"
+                          item-value="id" item-text="name"
+                          chips
+                          outlined
+                          full-width
+                          hide-details
+                          hide-no-data
+                          hide-selected
+                          
+                          single-line
+                          deletable-chips
+                          placeholder="Category"
+                          @change="getSubCate(services)"
+                        ></v-autocomplete>
+                      </v-col>
+                      <v-col cols="5" sm="5">
+                        <!-- <v-text-field placeholder="Add a service here ..." single-line outlined hide-details ></v-text-field> -->
+                        <v-autocomplete
+                          v-model="subservices"
+                          :items="subCategories"
                           item-value="name" item-text="name"
                           chips
                           outlined
@@ -106,6 +125,7 @@
                           multiple
                           single-line
                           deletable-chips
+                          placeholder="Sub category"
                         ></v-autocomplete>
                       </v-col>
                       <v-col cols="2" sm="2" class="pl-0">
@@ -335,6 +355,7 @@ export default {
       lat: '',
       lng: '',
       address: "",
+      subservices: '',
     };
   },
   computed:{
@@ -359,6 +380,9 @@ export default {
       }else{
         return 20;
       }
+    },
+    subCategories(){
+      return this.$store.getters.subCategories;
     }
   },
   watch:{
@@ -367,7 +391,7 @@ export default {
     },500),
   },
   methods: {
-     ...mapActions(["getCompany","getCategories","companyProfileImg","updateBasicProfile","addCompanyService","addCompanyVideos","addCompanyNews","addCompanyDocument","deleteCompanyDocument","addCompanyLocation"]),
+     ...mapActions(["getCompany","getCategories","getSubCategories","companyProfileImg","updateBasicProfile","addCompanyService","addCompanyVideos","addCompanyNews","addCompanyDocument","deleteCompanyDocument","addCompanyLocation"]),
      uploadDocument() {
       this.isSelecting = true
       window.addEventListener('focus', () => {
@@ -472,10 +496,11 @@ export default {
         if(this.$store.getters.companyData.services){
           this.drillingService = this.$store.getters.companyData.services;
         }
-        const array3 = [...this.drillingService, ...this.services]
+        const array3 = [...this.drillingService, ...this.subservices]
         this.drillingService = array3;
         this.addCompanyService({companyId: this.$store.getters.userInfo.company.id,services: this.drillingService});
         this.services = '';
+        this.subservices = '';
       },
       deleteService(index){
         if(this.$store.getters.companyData.services){
@@ -693,6 +718,10 @@ export default {
       get_url_name( url ) {
         return url.split('/').pop();
       },
+      getSubCate(catId){
+        console.log(catId);
+        this.getSubCategories(catId);
+      }
   },
   mounted() {
     document.title = "Company Profile - BidOut";

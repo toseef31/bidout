@@ -65,4 +65,10 @@ export default {
     setId (state, payload){
       state.id = payload
     },
+    setCustomerId (state, payload){
+      state.customerId = payload
+    },
+    setPrice (state, payload){
+      state.price = payload
+    },
 }

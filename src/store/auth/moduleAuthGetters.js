@@ -59,4 +59,10 @@ export default {
     id (state){
        return state.id
     },
+    customerId (state){
+       return state.customerId
+    },
+    price (state){
+       return state.price
+    },
 }

@@ -103,9 +103,6 @@
                         <tr v-if="invitedList.length < 1">
                           <td colspan="5"><h4>There is no invited user.</h4></td>
                         </tr>
-                        <tr class="white">
-                          <td colspan="5"><h2 class="my-4 text-left">Pending Users</h2></td>
-                        </tr>
                         <tr
                           v-for="(user, i) in pendingUsers"
                           :key="user.i"
@@ -119,11 +116,8 @@
                           <td class="text-center">
                             <v-btn depressed color="transparent" class="text-capitalize" @click="accept(user)" >
                                 <v-icon>mdi-check</v-icon>
-                              Accept </v-btn>
+                              Approve </v-btn>
                           </td>
-                        </tr>
-                        <tr v-if="pendingUsers.length < 1">
-                          <td colspan="5"><h4>There is no pending user.</h4></td>
                         </tr>
                       </tbody>
                     </template>

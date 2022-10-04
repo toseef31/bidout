@@ -10,6 +10,14 @@ export default {
       localStorage.setItem('companyData', JSON.stringify(responce.data));
     })
   },
+  getSubCategories({commit}, payload){
+    console.log(payload);
+    axios.get('serviceCategory/getSubCategories/'+payload)
+     .then(responce => {
+      console.log(responce);
+      commit('setSubCategories',responce.data)
+    })
+  },
   companyProfileImg({commit,dispatch}, payload){
     var config = {
       headers: {

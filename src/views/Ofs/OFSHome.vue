@@ -24,12 +24,12 @@
           <v-row class="mt-n16">
             <v-col cols="12" md="12">
               <VueSlickCarousel v-bind="settings" class="company-slider">
-
                 <div class="slide-item " v-for="premium in premiumCompanies" @click="viewPublicCompany(premium.id,premium.company)">
                   <div class="slide-img d-flex align-center justify-center flex-column">
-                    <img
+                    <img v-if="premium.image"
                       :src="premium.image" class="mx-auto"
                     >
+                    <img v-else :src="require('@/assets/images/ofs/no-image.jpg')">
                   </div>
                   <div class="slide-caption">
                     <h3 class="font-weight-bold">Premium Service Provider</h3>
@@ -79,10 +79,11 @@
                       <v-list  class="company-list">
                         <template v-for="(company, index) in companies">
                           <v-list-item class="py-1"
-                            :key="company.objectID"
+                            :key="company.objectID" @click="viewPublicCompany(company.objectID,company.company)"
                           >
                             <v-list-item-avatar max-height="31px" max-width="88px" width="88px" tile>
-                              <v-img :src="`/images/companies/patterson.png`" height="auto"></v-img>
+                              <v-img v-if="company.companyImage" :src="company.companyImage" height="auto"></v-img>
+                              <v-img v-else :src="`/images/companies/no-image.jpg`" height="auto"></v-img>
                             </v-list-item-avatar>
                             <v-list-item-content>
                               <v-list-item-title @click="addPerson(user); hideMemberList = !hideMemberList" class="text-left">{{company.company}}</v-list-item-title>
@@ -286,6 +287,9 @@ export default {
       this.getPublicCompanyInfo({'id':id,'name':name});
     },
     
+  },
+  beforeMount() {
+    this.getPremiumCompanies();
   },
   mounted() {
   document.title = "OFS - BidOut"

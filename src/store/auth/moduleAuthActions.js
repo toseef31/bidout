@@ -25,6 +25,11 @@ export default {
             axios.get('/auth/addUserLoginHistory/'+responce.data.id)
               .then(responce => {
             })
+            axios.get('company/getCompanyById/'+responce.data.company.id)
+             .then(responce => {
+              commit('setCompany',responce.data)
+              localStorage.setItem('companyData', JSON.stringify(responce.data));
+            })
             commit('setUser',responce.data)
             localStorage.setItem("userData",JSON.stringify(responce.data));
             router.replace({ name: "Dashboard" });
@@ -49,6 +54,7 @@ export default {
         commit('setToken', null)
         commit('setUserId', null)
         commit('setError', null)
+        commit('setCompany', null)
         // console.log(result);
         localStorage.removeItem("userData");
         // localStorage.removeItem("userId");
@@ -150,6 +156,7 @@ export default {
                  .then(responce => {
                   if(responce.status == 200){
                      commit("setId",responce.data.data.id);
+                     commit("setCustomerId",responce.data.data.chargebee_customer_id);
                     // commit('setCompanyId', responce.data);
                     commit('setCompanyName', payload.company);
                     router.replace({
@@ -181,12 +188,13 @@ export default {
   searchSupplier({commit}, payload){
     axios.get('/ofs/searchSuppliers/'+payload)
       .then(responce => {
-      commit('setSupplierList',responce.data.hits)
+      commit('setSupplierList',responce.data)
     })
   },
   // Buyer SignUp Acton
   buyerSignUpAction({ commit }, payload) {
     // Try to sigin
+    console.log(payload);
     if(payload.email.indexOf('@') != -1){
       axios.post('/user/checkIfUserWithEmailExists',{'email': payload.email})
        .then(responce => {
@@ -203,6 +211,7 @@ export default {
                .then(responce => {
                 if(responce.status == 200){
                   commit("setId",responce.data.data.id);
+                  commit("setCustomerId",responce.data.data.chargebee_customer_id);
                   commit('setCompanyName', payload.company);
                   router.replace({
                     name: "ModuleSelection"
@@ -242,9 +251,14 @@ export default {
         localStorage.setItem('contractData', JSON.stringify(responce.data));
         commit('setContract', responce.data)
         commit('setPlan', payload.plan)
-        router.replace({
-          name: "Contract"
-        });
+        axios.post('chargeBee/createSubscription',{'customer_id': payload.customer_id,'item_price_id': payload.item_price_id,'unit_price': payload.unit_price, 'quantity': payload.quantity,'trial_end': payload.trial_end,'billing_cycles':this.billing_cycles})
+        .then(responce => {
+          commit('setPrice',payload.unit_price)
+          router.replace({
+            name: "Contract"
+          });
+        })
+        
       }
       else{
         commit('setEmailError', 'Something wrong please try again')
@@ -278,5 +292,29 @@ export default {
            // Handle error
         });
     });
+  },
+  savePaymentsDetails({commit},payload){
+    axios.post('/chargeBee/savePaymentDetails',{'userId': payload.userId,'customer_id': payload.customer_id,'cardNumber':payload.cardNumber,'CVV':payload.CVV,'expiryMonth':payload.expiryMonth,'expiryYear':payload.expiryYear,'billing_zip':payload.billing_zip,'billing_country':payload.billing_country})
+     .then(responce => {
+      if(responce.status == 200){
+        console.log(responce,'Save Details');
+        commit('setContract', null);
+        localStorage.removeItem('contractData');
+         commit('setPlan', null);
+         axios.post('/chargeBee/createAuthorizePayment',{'customer_id': payload.customer_id,'amount':payload.amount})
+          .then(responce => {
+            console.log(responce,'payment');
+            router.replace({
+              name: "Confirmation"
+            });
+          })
+        // commit('setContract', 'Contract generated successfully!')
+
+        
+      }
+      else{
+        commit('setEmailError', 'Something wrong please try again')
+      }
+    })
   }
 }

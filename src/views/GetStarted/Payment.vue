@@ -26,25 +26,6 @@
               <div class="title-head text-left">
                 <h3 class="mb-4">New Account Setup:</h3>
                 <h1 class="mb-8">{{companyName}}</h1>
-                <h4 class="font-weight-bold">Billing Frequency</h4>
-                <div class="d-flex">
-                  <v-radio-group
-                    v-model="frequency"
-                    mandatory
-                    row
-                  >
-                    <v-radio
-                      label="Monthly"
-                      color="#0D9647"
-                      value="monthly"
-                    ></v-radio>
-                    <v-radio
-                      label="Yearly"
-                      color="#0D9647"
-                      value="yearly"
-                    ></v-radio>
-                  </v-radio-group>
-                </div>
               </div>
               <div class="form-section">
                 <v-row>
@@ -66,15 +47,19 @@
                           @focus="focusCardNumber"
                           @blur="blurCardNumber"
                           class="card-input__input"
-                          :value="formData.cardNumber"
+                          v-model="formData.cardNumber"
                           :maxlength="cardNumberMaxLength"
                           data-card-field
                           autocomplete="off"
                         />
                       </v-col>
                       <v-col cols="12" sm="6" text="left">
-                        <label class="d-block text-left input-label mb-2 font-weight-bold">Expiration</label>
-                        <v-text-field placeholder="MM/YY" maxlength="5" single-line outlined type="text"></v-text-field>
+                        <label class="d-block text-left input-label mb-2 font-weight-bold">Expiration Month</label>
+                        <v-text-field placeholder="MM" v-model="expiryMonth" maxlength="2" single-line outlined type="text"></v-text-field>
+                      </v-col>
+                      <v-col cols="12" sm="6" text="left">
+                        <label class="d-block text-left input-label mb-2 font-weight-bold">Expiration Year</label>
+                        <v-text-field placeholder="YY" v-model="expiryYear" maxlength="2" single-line outlined type="text"></v-text-field>
                       </v-col>
                       <v-col cols="12" sm="6" text="left">
                         <label class="d-block text-left input-label mb-2 font-weight-bold">CVV</label>
@@ -82,18 +67,18 @@
                             v-number-only
                             :id="fields.cardCvv"
                             maxlength="4"
-                            :value="formData.cardCvv"
+                            v-model="formData.cardCvv"
                             @input="changeCvv"
-                            data-card-field
+                            data-card-field 
                             autocomplete="off"></v-text-field>
                       </v-col>
                       <v-col cols="12" sm="6" text="left">
                         <label class="d-block text-left input-label mb-2 font-weight-bold">Country</label>
                         <country-select v-model="country" :country="country" topCountry="US" className="countrySelect" placeholder="Select Country" />
                       </v-col>
-                      <v-col cols="12" sm="6" text="left">
+                      <v-col cols="12" sm="12" text="left">
                         <label class="d-block text-left input-label mb-2 font-weight-bold">ZIP Code</label>
-                        <v-text-field placeholder="ZIP Code" single-line outlined type="text"></v-text-field>
+                        <v-text-field placeholder="ZIP Code" v-model="zipCode" single-line outlined type="text"></v-text-field>
                       </v-col>
                     </v-row>
                     <v-row justify="space-between" align="center">
@@ -101,7 +86,7 @@
                         <h1 class="mb-0 font-weight-bold">Amount being charged today</h1>
                       </v-col>
                       <v-col cols="12" md="4" class="text-right">
-                        <h1 class="price-text">$ 79.99</h1>
+                        <h1 class="price-text">$ {{price}}</h1>
                       </v-col>
                     </v-row>
                     <v-row justify="space-between" align="center">
@@ -114,7 +99,7 @@
                     </v-row>
                     <v-row justify="center" align="center" class="mt-5">
                       <v-col cols="12" md="4">
-                        <v-btn color="#0D9647" large dense width="100%" height="56" class="font-weight-bold white--text text-capitalize">Complete Signup <v-icon class="pl-2" color="#fff">mdi-arrow-right-circle</v-icon></v-btn>
+                        <v-btn color="#0D9647" large dense width="100%" height="56" class="font-weight-bold white--text text-capitalize" @click="savePayment">Complete Signup <v-icon class="pl-2" color="#fff">mdi-arrow-right-circle</v-icon></v-btn>
                       </v-col>
                     </v-row>
                   </v-form>
@@ -335,6 +320,9 @@
         billingNameCheck: true,
         billingPhoneCheck: true,
         country: "US",
+        zipCode: '',
+        expiryMonth: '',
+        expiryYear: '',
       }
     },
     computed: {
@@ -344,6 +332,9 @@
       },
       companyName(){
        return this.$store.getters.companyName;
+      },
+      price(){
+       return this.$store.getters.price;
       },
     },
     watch: {
@@ -358,6 +349,7 @@
       this.maskCardNumber()
     },
     methods: {
+      ...mapActions(["savePaymentsDetails"]),
       generateMonthValue (n) {
         return n < 10 ? `0${n}` : n
       },
@@ -449,6 +441,20 @@
         }else{
           this.showCard = false;
         }
+      },
+      savePayment(){
+        var data = {
+          userId: this.$store.getters.id,
+          customer_id: this.$store.getters.customerId,
+          cardNumber: this.formData.cardNumberNotMask,
+          CVV: this.formData.cardCvv,
+          expiryMonth: this.expiryMonth,
+          expiryYear: this.expiryYear,
+          billing_zip: this.zipCode,
+          billing_country: this.country,
+          amount: this.$store.getters.price,
+        }
+        this.savePaymentsDetails(data);
       }
     }
   }

@@ -64,7 +64,7 @@
                             </div>
                           </div>
                         </div>
-                        <a download :href="contracts.filePath" class="ml-2">Download Contract</a>
+                        <a target="_blank" :href="contracts.filePath" class="ml-2">Download Contract</a>
                       </template>
                       
                     </div>
@@ -132,7 +132,14 @@
                     </div>
                     <v-row>
                       <v-col cols="12" sm="12" v-show="trial_end == 'premium'">
-                        <label class="d-block text-left input-label mb-2 font-weight-bold">Sales Team Users</label>
+                        <label class="d-block text-left input-label mb-2 font-weight-bold">Billing Cycle</label>
+                        <v-select outlined placeholder="Select" v-model="billingCycle" :items="cycle"  :disabled="contracts.contractType == 'ofs-premium' ? true : false"></v-select>
+                        
+                      </v-col>
+                    </v-row>
+                    <v-row>
+                      <v-col cols="12" sm="12" v-show="trial_end == 'premium'">
+                        <label class="d-block text-left input-label mb-2 font-weight-bold">Sales Team Contacts</label>
                         <v-select outlined placeholder="Select" v-model="package" :items="packages" item-text="name" item-value="id" :disabled="contracts.contractType == 'ofs-premium' ? true : false"></v-select>
                         
                       </v-col>
@@ -153,7 +160,7 @@
                               </div>
                             </div>
                           </div>
-                          <a download :href="contracts.filePath" class="ml-2">Download Contract</a>
+                          <a target="_blank" :href="contracts.filePath" class="ml-2">Download Contract</a>
                         </template>                        
                       </v-col>
                     </v-row>
@@ -242,8 +249,15 @@
                   </div>
                   <v-row>
                     <v-col cols="12" sm="12" v-show="trial_end == 'premium'">
-                      <label class="d-block text-left input-label mb-2 font-weight-bold">Sales Team Users</label>
-                      <v-select outlined placeholder="Select" v-model="package" :items="packages" item-text="name" item-value="id"></v-select>
+                      <label class="d-block text-left input-label mb-2 font-weight-bold">Billing Cycle</label>
+                      <v-select outlined hide-details placeholder="Select" v-model="billingCycle" :items="cycle" @change="getCycle"  :disabled="ofsModule == true ?  false : true" class="text-capitalize"></v-select>
+                      
+                    </v-col>
+                  </v-row>
+                  <v-row>
+                    <v-col cols="12" sm="12" v-show="trial_end == 'premium'">
+                      <label class="d-block text-left input-label mb-2 font-weight-bold">Sales Team Contacts</label>
+                      <v-select outlined placeholder="Select" v-model="package" :items="packages" item-text="name" item-value="id" @change="getPackage" :disabled="ofsModule == true ?  false : true"></v-select>
                       
                     </v-col>
                   </v-row>
@@ -296,6 +310,11 @@ export default {
       rfxActiveModule: true,
       ofsActiveModule: true,
       trial_end : 'premium',
+      billingCycle: '',
+      billing_cycles: '',
+      cycle: ['Monthly','Yearly'],
+      item_price_id: '',
+      unit_price: '',
       signData: true,
       package: 1,
       packages: [
@@ -328,18 +347,73 @@ export default {
   methods: {
     ...mapActions(["contractGenerate","getIpAddress"]),
     generateContract(type){
+      if(this.package == 1){
+        if(this.billing_cycles == 1){
+          this.item_price_id = 'OFS-Directory-Premium-Edition-USD-Monthly';
+          this.unit_price = 79.99;
+        }else{
+          this.unit_price = 800;
+          this.item_price_id = 'OFS-Directory-Premium-Edition-USD-Yearly';
+        }
+      }
+      if(this.package == 2){
+        if(this.billing_cycles == 1){
+          this.item_price_id = 'OFS-Directory-Premium-Edition-1-USD-Monthly';
+          this.unit_price = 99.99;
+        }else{
+          this.unit_price = 1000;
+          this.item_price_id = 'OFS-Directory-Premium-Edition-1-USD-Yearly';
+        }
+      }
+      if(this.package == 3){
+        if(this.billing_cycles == 1){
+          this.unit_price = 119.99;
+          this.item_price_id = 'OFS-Directory-Premium-Edition-2-USD-Monthly';
+        }else{
+          this.unit_price = 1200;
+          this.item_price_id = 'OFS-Directory-Premium-Edition-2-USD-Yearly';
+        }
+      }
+      if(this.package == 4){
+        this.billing_cycles == 12;
+        this.unit_price = 2400;
+        this.item_price_id = 'OFS-Directory-Premium-Edition-3-USD-Yearly';
+      }
       if(type == 'ofs-premium'){
         var plan = this.package;
       }else{
+        
         var plan = 0;
       }
+      if(this.trial_end == 'free'){
+        this.item_price_id = 'OFS-Directory-Standard-Edition';
+        this.unit_price = 0;
+        this.billing_cycles = 0;
+      }
+      console.log(this.billing_cycles,'id',this.item_price_id,'price',this.unit_price); 
       var contract = {
         ip: this.$store.getters.userIp,
         contractType: type,
         plan: plan,
         id: this.$store.getters.companyId,
+
+        item_price_id: this.item_price_id,
+        billing_cycles: this.billing_cycles,
+        customer_id: this.$store.getters.customerId,
       }
       this.contractGenerate(contract);
+    },
+    getCycle(){
+      if(this.billingCycle == 'Yearly'){
+        this.billing_cycles = 12;
+      }else{
+        this.billing_cycles = 1;
+      }
+    },
+    getPackage(){
+      if(this.package == 4){
+        this.billingCycle = 'Yearly';
+      }
     }
   },
   mounted() {

@@ -23,4 +23,6 @@ export default {
     contractData: JSON.parse(localStorage.getItem('contractData')),
     plan: null,
     id: null,
+    customerId: null,
+    price: null,
 }

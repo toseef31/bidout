@@ -20,6 +20,7 @@ import VueSignaturePad from 'vue-signature-pad';
 import '@/assets/styles/index.scss';
 import VueCroppie from 'vue-croppie';
 import 'croppie/croppie.css';
+import VueGtag from "vue-gtag";
 // Your web app's Firebase configuration
 var firebaseConfig = {
   apiKey: import.meta.env.VITE_FIREBASE_API_KEY,
@@ -67,6 +68,11 @@ LogRocket.getSessionURL(sessionURL => {
     scope.setExtra("sessionURL", sessionURL);
   });
 });
+
+Vue.use(VueGtag, {
+  config: { id: import.meta.env.VITE_GOOGLE_TAG_MANAGER }
+});
+
 var userData = store.getters.userInfo;
 if(userData){
   LogRocket.identify(userData.id, {
