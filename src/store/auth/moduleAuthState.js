@@ -25,4 +25,5 @@ export default {
     id: null,
     customerId: null,
     price: null,
+    credentials: null,
 }

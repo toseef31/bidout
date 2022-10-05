@@ -71,4 +71,7 @@ export default {
     setPrice (state, payload){
       state.price = payload
     },
+    setCredentials (state, payload){
+      state.credentials = payload
+    },
 }

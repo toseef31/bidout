@@ -61,7 +61,7 @@
                             </td>
                             <td><span v-if="company.companyData.hqlocation">{{ company.companyData.hqlocation }}</span><span v-else>No location</span></td>
                             <td>{{ company.companyData.employees }}</td>
-                            <td> <span v-if="company.companyData.locPlaces.length">{{ company.companyData.locPlaces }}</span><span v-else>No location</span></td>
+                            <td> <span v-if="company.companyData.companyLocations">{{ company.companyData.companyLocations.length }}</span><span v-else>No location</span></td>
                             <td><span v-if="company.companyData.accountContacts">{{ company.companyData.accountContacts.length }}</span><span v-else>No Contacts</span></td>
                             <td><span @click="viewCompany(company.objectID,company.company)" class="text-decoration-none company-link">View Details</span></td>
                           </tr>

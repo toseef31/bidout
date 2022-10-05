@@ -35,17 +35,17 @@
                       <h1 class="font-weight-bold">RFx Platform - Create Bids</h1>
                       <v-sheet>
                           <template v-if="contracts.contractType == 'rfx'">
-                            <v-switch
+                            <v-checkbox
                               v-model="rfxActiveModule"
                               inset
                               disabled
-                            ></v-switch>
+                            ></v-checkbox>
                           </template>
                           <template v-else>
-                            <v-switch
+                            <v-checkbox
                               v-model="rfxModule"
                               inset
-                            ></v-switch>
+                            ></v-checkbox>
                           </template>
                       </v-sheet>
                     </div>
@@ -97,17 +97,17 @@
 
                           <template v-if="contracts.contractType == 'ofs-premium'">
                             
-                            <v-switch
+                            <v-checkbox
                               v-model="ofsActiveModule"
                               inset
                               disabled :value="true"
-                            ></v-switch>
+                            ></v-checkbox>
                           </template> 
                           <template v-else>
-                            <v-switch
+                            <v-checkbox
                               v-model="ofsModule"
                               inset
-                            ></v-switch>
+                            ></v-checkbox>
                           </template>
                       </v-sheet>
                     </div>
@@ -177,15 +177,15 @@
                   <div class="d-flex justify-space-between align-center mb-5 label-title">
                     <h1 class="font-weight-bold">RFx Platform - Create Bids</h1>
                     <v-sheet>
-                      <v-switch
+                      <v-checkbox
                         v-model="rfxModule"
                         inset
-                      ></v-switch>
+                      ></v-checkbox>
                     </v-sheet>
                   </div>
                   <p class="font-weight-medium">BidOut's flagship RFP Platform. The ability to create and distribute RPF's to BidOut's network or <br>service providers.</p>
                   <div class="d-inline-block">
-                    <v-btn color="#0D9647" large dense width="260px" height="56" class="font-weight-bold white--text text-capitalize pa-4" @click="generateContract('rfx')" :disabled="rfxModule == true ?  false : true">Execute Agreement Now <v-icon class="pl-2" color="#fff">mdi-arrow-right-circle</v-icon></v-btn>
+                    <v-btn color="#0D9647" large dense width="260px" height="56" class="font-weight-bold white--text text-capitalize pa-4" @click="generateContract('rfx')" :disabled="rfxModule == true ?  false : true" :loading="loading">Execute Agreement Now <v-icon class="pl-2" color="#fff">mdi-arrow-right-circle</v-icon></v-btn>
                   </div>
                   <!-- <div class="d-inline-block agreement-box pa-3">
                     <div class="d-flex">
@@ -221,11 +221,11 @@
                       <template v-if="package == 4">$2400/year</template>
                     </span></h1>
                     <v-sheet>
-                      <v-switch
+                      <v-checkbox
                         v-model="ofsModule"
                         inset
                         
-                      ></v-switch>
+                      ></v-checkbox>
                     </v-sheet>
                   </div>
                   <p class="font-weight-medium">Respond to bid invitiations & showcase your services to oil and gas operators to gain access to <br>greater visibility.</p>
@@ -263,7 +263,7 @@
                   </v-row>
                   <v-row>
                     <v-col cols="12" sm="4" text="left">
-                      <v-btn color="#0D9647" large dense width="260px" height="56" class="font-weight-bold white--text text-capitalize pa-4" @click="generateContract('ofs-premium')" :disabled="ofsModule == true ?  false : true">Execute Agreement Now <v-icon class="pl-2" color="#fff">mdi-arrow-right-circle</v-icon></v-btn>
+                      <v-btn color="#0D9647" large dense width="260px" height="56" class="font-weight-bold white--text text-capitalize pa-4" @click="generateContract('ofs-premium')" :disabled="ofsModule == true ?  false : true" :loading="loading">Execute Agreement Now <v-icon class="pl-2" color="#fff">mdi-arrow-right-circle</v-icon></v-btn>
                     </v-col>
                   </v-row>
                 </div>
@@ -304,6 +304,7 @@ export default {
   
   data() {
     return {
+      loading: false,
       rfxModule: false,
       bidRespond: false,
       ofsModule: false,
@@ -390,16 +391,17 @@ export default {
         this.unit_price = 0;
         this.billing_cycles = 0;
       }
-      console.log(this.billing_cycles,'id',this.item_price_id,'price',this.unit_price); 
+      // console.log(this.billing_cycles,'id',this.item_price_id,'price',this.unit_price); 
       var contract = {
         ip: this.$store.getters.userIp,
         contractType: type,
         plan: plan,
         id: this.$store.getters.companyId,
-
+        userId: this.$store.getters.id,
         item_price_id: this.item_price_id,
         billing_cycles: this.billing_cycles,
         customer_id: this.$store.getters.customerId,
+        unit_price: this.unit_price,
       }
       this.contractGenerate(contract);
     },

@@ -47,15 +47,15 @@
                   <p><router-link to="">Independents Contract Drilling</router-link></p>
                   <p><router-link to="">Cactus Drilling</router-link></p>
                 </div> -->
-                <div class="tag-box pa-3 d-flex align-center">
-                  <h4 class="font-weight-bold mb-0"><a href="mailto:hello@bidout.app" class="text-decoration-none green-color"><v-icon color="#0D9647">mdi-check-decagram-outline</v-icon> Upgradeto a Premium Profile Today</a></h4>
+                <div class="tag-box pa-3 d-flex align-center" v-if="!companyData.isPremium || companyData.isPremium == 'false'">
+                  <h4 class="font-weight-bold mb-0"><a href="mailto:hello@bidout.app" class="text-decoration-none green-color"><v-icon color="#0D9647">mdi-check-decagram-outline</v-icon> Upgrade to a Premium Profile Today</a></h4>
                 </div>
               </aside>
             </v-col>
             <v-col cols="12" md="9">
               <div class="company-content text-left">
                 <div class="company-title mb-12">
-                  <h1>{{companyData.company}} &nbsp; &nbsp; <span><v-icon color="#0D9647">mdi-check-decagram</v-icon>Premium Service Provider</span></h1>
+                  <h1>{{companyData.company}} &nbsp; &nbsp; <span v-if="companyData.isPremium || companyData.isPremium == 'true'"><v-icon color="#0D9647">mdi-check-decagram</v-icon>Premium Service Provider</span></h1>
                 </div>
                 <div class="company-desc">
                   <h1 class="mb-4 font-weight-bold">Corporate Summary</h1>
@@ -205,88 +205,32 @@ export default {
   },
   methods: {
     getLocation(){
-      this.mapOptions = {
-        center: { lat: this.$store.getters.companyData.lattitude, lng: this.$store.getters.companyData.longitude },
-        zoom: 18,
-        mapTypeId: 'terrain',
-        mapTypeControl: false,
-        scaleControl: false,
-        streetViewControl: false,
-        rotateControl: false,
-        fullscreenControl: false,
-        disableDefaultUi: false,
-        zoomControl: false,
-        scrollwheel: false,
-      };
-      this.markerOptions = {
-        url: '/assets/images/dashboard/mapMobile.png',
-        size: {width: 60, height: 90, f: 'px', b: 'px',},
-        scaledSize: {width: 30, height: 45, f: 'px', b: 'px',},
-      };
-      // console.log(this.mapOptions,'maps');
-      const map = new google.maps.Map(document.getElementById("map"), this.mapOptions);
-        // const card = document.getElementById("pac-card");
+      var LocationsForMap = this.$store.getters.companyData.companyLocations;
+      console.log(LocationsForMap[0].lattitude);
+      var map = new google.maps.Map(document.getElementById('map'), {
+        zoom: 2,
+        center: new google.maps.LatLng(LocationsForMap[0].lattitude, LocationsForMap[0].longitude),
+        mapTypeId: google.maps.MapTypeId.ROADMAP
+      });
 
-        // map.controls[google.maps.ControlPosition.TOP_RIGHT].push(card);
+      var infowindow = new google.maps.InfoWindow();
 
-        // [START maps_places_autocomplete_creation]
-        const center = { lat: this.$store.getters.companyData.lattitude, lng: this.$store.getters.companyData.longitude };
-        // Create a bounding box with sides ~10km away from the center point
-        const defaultBounds = {
-          north: center.lat + 0.1,
-          south: center.lat - 0.1,
-          east: center.lng + 0.1,
-          west: center.lng - 0.1,
-        };
-        const input = document.getElementById("pac-input");
+      var marker, i;
 
-        const options = {
-          bounds: defaultBounds,
-          // componentRestrictions: { country: "us" },
-          fields: ["address_components", "geometry", "icon", "name","formatted_address"],
-          strictBounds: false,
-          types: ["establishment"],
-        };
-        const autocomplete = new google.maps.places.Autocomplete(input, options);
-        const southwest = { lat: 5.6108, lng: 136.589326 };
-        const northeast = { lat: 61.179287, lng: 2.64325 };
-        const newBounds = new google.maps.LatLngBounds(southwest, northeast);
-
-        autocomplete.setBounds(newBounds);
-
-        const marker = new google.maps.Marker({
-          position: new google.maps.LatLng(this.$store.getters.companyData.lattitude, this.$store.getters.companyData.longitude),
-          title: 'Marker',
+      for (i = 0; i < LocationsForMap.length; i++) {  
+        marker = new google.maps.Marker({
+          position: new google.maps.LatLng(LocationsForMap[i].lattitude, LocationsForMap[i].longitude),
           map: map,
-          draggable: true,
-          // map,
-          // icon:'https://img.icons8.com/fluent/48/000000/marker-storm.png',
+          title: 'Marker',
           anchorPoint: new google.maps.Point(0, -29),
         });
-        autocomplete.addListener("place_changed", () => {
-          // infowindow.open();
-          marker.setVisible(true);
-
-          const place = autocomplete.getPlace();
-
-          if (!place.geometry || !place.geometry.location) {
-            // User entered the name of a Place that was not suggested and
-            // pressed the Enter key, or the Place Details request failed.
-            window.alert("No details available for input: '" + place.name + "'");
-            return;
+        google.maps.event.addListener(marker, 'click', (function(marker, i) {
+          return function() {
+            infowindow.setContent(LocationsForMap[i].location);
+            infowindow.open(map, marker);
           }
-
-          // If the place has a geometry, then present it on a map.
-          if (place.geometry.viewport) {
-            map.fitBounds(place.geometry.viewport);
-          } else {
-            map.setCenter(place.geometry.location);
-            map.setZoom(17); // Why 17? Because it looks good.
-          }
-
-          marker.setPosition(place.geometry.location);
-          marker.setVisible(true);
-        });
+        })(marker, i));
+      }
     },
     get_url_extension( url ) {
       return url.split(/[#?]/)[0].split('.').pop().trim();

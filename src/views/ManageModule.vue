@@ -24,7 +24,7 @@
                   <v-tabs-items v-model="tab">
                     <v-tab-item>
 
-                      <div class="panels pb-4">
+                      <div class="panels pb-4" >
                         <div class="panel">
                           <div class="d-flex justify-space-between panel-header">
                             <h6>BidOut Procurement Platform</h6>
@@ -107,6 +107,9 @@ export default {
     },
     activityPanel(){
         return this.$store.getters.g_activityPanel;
+    },
+    moduleData(){
+      return this.$store.getters.companyData;
     },
   },
   methods: {

@@ -61,7 +61,18 @@ export default {
         "Authorization": `Bearer ${JSON.parse(localStorage.getItem('token'))}`
       },
     };
-    axios.post('/company/addCompanyLocation/',{'companyId': payload.companyId,'location': payload.location,'lat':payload.lat,'long':payload.long},config)
+    axios.post('/company/addCompanyLocation/',{'id': payload.id,'companyId': payload.companyId,'location': payload.location,'lat':payload.lat,'long':payload.long},config)
+     .then(responce => {
+      dispatch("getCompany",payload.companyId)
+    })
+  }, 
+  deleteCompanyLocation({commit,dispatch}, payload){
+    var config = {
+      headers: {
+        "Authorization": `Bearer ${JSON.parse(localStorage.getItem('token'))}`
+      },
+    };
+    axios.post('/company/deleteCompanyLocation/',{'id': payload.id,'companyId': payload.companyId,'location': payload.location,'lat':payload.lat,'long':payload.long},config)
      .then(responce => {
       dispatch("getCompany",payload.companyId)
     })

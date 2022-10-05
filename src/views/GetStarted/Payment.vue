@@ -245,6 +245,7 @@
 <script>
   import NavbarBeforeLogin from '../Layout/NavbarBeforeLogin.vue'
   import Footer from '../Layout/Footer.vue'
+  import { mapActions } from "vuex";
   export default {
     name: 'Payment',
     directives: {

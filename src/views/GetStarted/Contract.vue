@@ -45,7 +45,9 @@
                     </div>
                   </v-col>
                   <v-col cols="12" md="4" class="text-right">
-                    <v-btn color="#0D9647" large dense class="white--text text-capitalize mb-2" width="100%" height="56" @click="sign()">Sign Agreement <v-icon class="pl-2" color="#fff">mdi-arrow-right-circle</v-icon></v-btn>
+                    <v-btn color="#0D9647" large dense class="white--text text-capitalize mb-2" width="100%" height="56" @click="sign()" 
+                    :loading="loading"
+                    :disabled="loading">Sign Agreement <v-icon class="pl-2" color="#fff">mdi-arrow-right-circle</v-icon></v-btn>
                     <v-btn color="#0D9647" large dense class="white--text text-capitalize" width="100%" height="56" @click="undo()">Undo Sign </v-btn>
                   </v-col>
                 </v-row>
@@ -98,6 +100,8 @@ export default {
   
   data() {
     return {
+      loader: null,
+      loading: false,
       createBid: true,
       bidRespond: false,
       providerListing: true,
@@ -134,6 +138,7 @@ export default {
         plan: this.$store.getters.plan,
       }
       this.signAgreement(agreement);
+      this.loader = 'loading';
     },
     undo() {
       this.$refs.signaturePad.undoSignature();

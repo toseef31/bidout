@@ -7,7 +7,7 @@
               <div class="manage-sections pa-4 px-0">
                 <div class="top-section d-flex pa-sm-10 pa-4">
                   <div>
-                    <img :src="companyData.image">
+                    <!-- <img :src="companyData.image"> -->
                     <h4>{{companyData.company}} Page</h4>
                   </div>
                   <template>
@@ -59,7 +59,7 @@
                           </v-card>
                         </v-dialog>
                         <!-- the result -->
-                        <!-- <img :src="companyData.image"> -->
+                        <img :src="companyData.image">
                       </v-col>
                       <v-col cols="4" sm="6" class="pt-10 mt-4 btn-col pl-0 d-flex align-center justify-end">
                         <label for="logo-input" class="text-capitalize mr-2 white--text add-logo d-flex align-center font-weight-bold justify-center">Add Image
@@ -91,9 +91,26 @@
                   <v-container class="pa-sm-10 pa-4">
                       <label class="d-block text-left main-label">Services Portfolio</label>
                     <v-row>
-                      <v-col cols="5" sm="5">
+                      <v-col cols="6" sm="6">
                         <!-- <v-text-field placeholder="Add a service here ..." single-line outlined hide-details ></v-text-field> -->
-                        <v-autocomplete
+                          <v-list class="service-cate">
+                            <v-list-item-group>
+                             <!--  <template v-slot:activator>
+                                <v-list-item-content>
+                                  <v-list-item-title v-text="category.name" class="text-left"></v-list-item-title>
+                                </v-list-item-content>
+                              </template> -->
+                              <v-list-item
+                                v-for="category in allcategories"
+                                :key="category.id" @click="getSubCate(category.id)"
+                              >
+                                <v-list-item-content>
+                                  <v-list-item-title v-text="category.name" class="text-left"></v-list-item-title>
+                                </v-list-item-content>
+                              </v-list-item>
+                            </v-list-item-group>
+                          </v-list>
+                        <!-- <v-autocomplete
                           v-model="services"
                           :items="allcategories"
                           item-value="id" item-text="name"
@@ -108,11 +125,12 @@
                           deletable-chips
                           placeholder="Category"
                           @change="getSubCate(services)"
-                        ></v-autocomplete>
+                        ></v-autocomplete> -->
                       </v-col>
-                      <v-col cols="5" sm="5">
+                      <v-col cols="6" sm="6">
                         <!-- <v-text-field placeholder="Add a service here ..." single-line outlined hide-details ></v-text-field> -->
-                        <v-autocomplete
+                        
+                        <!-- <v-autocomplete
                           v-model="subservices"
                           :items="subCategories"
                           item-value="name" item-text="name"
@@ -126,11 +144,32 @@
                           single-line
                           deletable-chips
                           placeholder="Sub category"
-                        ></v-autocomplete>
+                        ></v-autocomplete> -->
+                        <v-list  class="service-cate">
+                          <!-- <v-list-group
+                            v-for="category in allcategories"
+                            :key="category.name"
+                          > -->
+                           <!--  <template v-slot:activator>
+                              <v-list-item-content>
+                                <v-list-item-title v-text="category.name" class="text-left"></v-list-item-title>
+                              </v-list-item-content>
+                            </template> -->
+
+                            <v-list-item
+                              v-for="subcategory in subCategories"
+                              :key="subcategory.id" @click="addService(subcategory.name)"
+                            >
+                              <v-list-item-content>
+                                <v-list-item-title v-text="subcategory.name" class="text-left"></v-list-item-title>
+                              </v-list-item-content>
+                            </v-list-item>
+                          <!-- </v-list-group> -->
+                        </v-list>
                       </v-col>
-                      <v-col cols="2" sm="2" class="pl-0">
+                      <!-- <v-col cols="2" sm="2" class="pl-0">
                       <v-btn color="#0D9648" class="text-capitalize mr-2 white--text" width="100%" height="54px" @click="addService">Add</v-btn>
-                      </v-col>
+                      </v-col> -->
                     </v-row>
                     <v-row>
                       <v-col cols="12" sm="10">
@@ -164,7 +203,13 @@
                           </v-col>
                         </v-row>
                       </div>
-                      
+                      <v-row>
+                        <v-col cols="12" sm="10">
+                          <div class="service-list text-left mt-5">
+                            <label class="d-flex justify-space-between" v-for="(location,index) in companyData.companyLocations"><span><v-icon>mdi-map-marker-outline</v-icon>{{location.location}}</span> <v-icon color="#F32349"  @click="deleteLocation(location)">mdi-trash-can-outline</v-icon></label>
+                          </div>
+                        </v-col>
+                      </v-row>
                   </v-container>
                   <hr>
                   <v-container class="pa-sm-10 pa-4 corporate-video">
@@ -391,7 +436,7 @@ export default {
     },500),
   },
   methods: {
-     ...mapActions(["getCompany","getCategories","getSubCategories","companyProfileImg","updateBasicProfile","addCompanyService","addCompanyVideos","addCompanyNews","addCompanyDocument","deleteCompanyDocument","addCompanyLocation"]),
+     ...mapActions(["getCompany","getCategories","getSubCategories","companyProfileImg","updateBasicProfile","addCompanyService","addCompanyVideos","addCompanyNews","addCompanyDocument","deleteCompanyDocument","addCompanyLocation","deleteCompanyLocation"]),
      uploadDocument() {
       this.isSelecting = true
       window.addEventListener('focus', () => {
@@ -425,7 +470,6 @@ export default {
         files: this.file,
         documentId: head + tail
       }
-      console.log(data);
       this.addCompanyDocument(data);
     },
     croppie (e) {
@@ -492,11 +536,11 @@ export default {
         }
         this.companyProfileImg(data);
       },
-      addService(){
+      addService(name){
         if(this.$store.getters.companyData.services){
           this.drillingService = this.$store.getters.companyData.services;
         }
-        const array3 = [...this.drillingService, ...this.subservices]
+        const array3 = [...this.drillingService, name]
         this.drillingService = array3;
         this.addCompanyService({companyId: this.$store.getters.userInfo.company.id,services: this.drillingService});
         this.services = '';
@@ -645,7 +689,7 @@ export default {
           // const infowindowContent = document.getElementById("infowindow-content");
           // console.log(infowindowContent);
           // infowindow.setContent(infowindowContent);
-
+          
           const marker = new google.maps.Marker({
             position: new google.maps.LatLng(this.$store.getters.companyData.lattitude, this.$store.getters.companyData.longitude),
             title: 'Marker',
@@ -703,7 +747,10 @@ export default {
           });
       },
       addLocation(){
+        const head = Date.now().toString();
+        const tail = Math.random().toString().substr(2);
         var data = {
+          id: head + tail,
           companyId: this.$store.getters.userInfo.company.id,
           location: this.address,
           lat: this.lat,
@@ -711,6 +758,16 @@ export default {
         }
         this.addCompanyLocation(data);
         // console.log(this.address,'adr',this.lat,'lng',this.lng);
+      },
+      deleteLocation(data){
+        var data = {
+          id: data.id,
+          companyId: this.$store.getters.userInfo.company.id,
+          location: data.location,
+          lat: data.lattitude,
+          long: data.longitude,
+        }
+        this.deleteCompanyLocation(data);
       },
       get_url_extension( url ) {
         return url.split(/[#?]/)[0].split('.').pop().trim();

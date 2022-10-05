@@ -65,4 +65,7 @@ export default {
     price (state){
        return state.price
     },
+    credentials (state){
+       return state.credentials
+    },
 }

@@ -32,7 +32,7 @@
                     <img v-else :src="require('@/assets/images/ofs/no-image.jpg')">
                   </div>
                   <div class="slide-caption">
-                    <h3 class="font-weight-bold">Premium Service Provider</h3>
+                    <h3 class="font-weight-bold">{{premium.company}}</h3>
                   </div>
                 </div>
                 <!-- <div class="slide-item ">
@@ -189,7 +189,7 @@ export default {
       settings: {
         "arrows": true,
         "dots": false,
-        "infinite": true,
+        "infinite": false,
         "slidesToShow": 3,
         "slidesToScroll": 3,
         "touchThreshold": 5,
