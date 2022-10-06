@@ -90,26 +90,32 @@
                   <hr>
                   <v-container class="pa-sm-10 pa-4">
                       <label class="d-block text-left main-label">Services Portfolio</label>
-                    <v-row>
+                    <v-row class="mt-5">
                       <v-col cols="6" sm="6">
-                        <!-- <v-text-field placeholder="Add a service here ..." single-line outlined hide-details ></v-text-field> -->
-                          <v-list class="service-cate">
-                            <v-list-item-group>
-                             <!--  <template v-slot:activator>
-                                <v-list-item-content>
-                                  <v-list-item-title v-text="category.name" class="text-left"></v-list-item-title>
-                                </v-list-item-content>
-                              </template> -->
-                              <v-list-item
-                                v-for="category in allcategories"
-                                :key="category.id" @click="getSubCate(category.id)"
-                              >
-                                <v-list-item-content>
-                                  <v-list-item-title v-text="category.name" class="text-left"></v-list-item-title>
-                                </v-list-item-content>
-                              </v-list-item>
-                            </v-list-item-group>
-                          </v-list>
+                        <label class="d-block text-center main-label mb-5">Available Services</label>
+                        <div  class="service-cate">
+                          <div class="px-5 mt-4">
+                            <v-text-field placeholder="Search ..." single-line outlined hide-details min-height="40px" v-model="searchService"></v-text-field>
+                          </div>
+                            <v-list class="px-2">
+                              <v-list-group v-for="category in allcategories">
+                                <template v-slot:activator>
+                                  <v-list-item-content>
+                                    <v-list-item-title v-text="category.name" class="text-left font-weight-bold"></v-list-item-title>
+                                  </v-list-item-content>
+                                </template>
+                                <v-list-item min-height="30px" prepend-inner-icon="mdi-close"
+                                  v-for="subcategory in category.subCategories"
+                                  :key="subcategory.id"
+                                >
+                                  <v-list-item-content class="py-0 pl-4">
+                                    
+                                    <v-list-item-title class="text-left"><v-icon>mdi-circle-small</v-icon>{{subcategory.name}}<v-icon class="pl-5" small @click="addService(subcategory.name)">mdi-plus-circle-outline</v-icon></v-list-item-title>
+                                  </v-list-item-content>
+                                </v-list-item>
+                              </v-list-group>
+                            </v-list>
+                        </div>
                         <!-- <v-autocomplete
                           v-model="services"
                           :items="allcategories"
@@ -128,6 +134,7 @@
                         ></v-autocomplete> -->
                       </v-col>
                       <v-col cols="6" sm="6">
+                        <label class="d-block text-center main-label mb-5">Selected Services</label>
                         <!-- <v-text-field placeholder="Add a service here ..." single-line outlined hide-details ></v-text-field> -->
                         
                         <!-- <v-autocomplete
@@ -145,40 +152,75 @@
                           deletable-chips
                           placeholder="Sub category"
                         ></v-autocomplete> -->
-                        <v-list  class="service-cate">
-                          <!-- <v-list-group
-                            v-for="category in allcategories"
-                            :key="category.name"
-                          > -->
-                           <!--  <template v-slot:activator>
-                              <v-list-item-content>
-                                <v-list-item-title v-text="category.name" class="text-left"></v-list-item-title>
-                              </v-list-item-content>
-                            </template> -->
+                        <!-- <div class="service-cate"> -->
+                          <!-- <v-list> -->
+                            <!-- <v-list-group
+                              v-for="category in allcategories"
+                              :key="category.name"
+                            > -->
+                             <!--  <template v-slot:activator>
+                                <v-list-item-content>
+                                  <v-list-item-title v-text="category.name" class="text-left"></v-list-item-title>
+                                </v-list-item-content>
+                              </template> -->
 
-                            <v-list-item
-                              v-for="subcategory in subCategories"
-                              :key="subcategory.id" @click="addService(subcategory.name)"
-                            >
-                              <v-list-item-content>
-                                <v-list-item-title v-text="subcategory.name" class="text-left"></v-list-item-title>
-                              </v-list-item-content>
-                            </v-list-item>
-                          <!-- </v-list-group> -->
-                        </v-list>
+                             <!--  <v-list-item
+                                v-for="subcategory in subCategories"
+                                :key="subcategory.id" @click="addService(subcategory.name)"
+                              >
+                                <v-list-item-content>
+                                  <v-list-item-title v-text="subcategory.name" class="text-left"></v-list-item-title>
+                                </v-list-item-content>
+                              </v-list-item>
+                          </v-list> -->
+                          <div class="subservice-cate service-cate">
+                            <v-list class="px-5">
+                              <!-- <v-list-group v-for="category in allcategories">
+                                <template v-slot:activator>
+                                  <v-list-item-content>
+                                    <v-list-item-title v-text="category.name" class="text-left font-weight-bold"></v-list-item-title>
+                                  </v-list-item-content>
+                                </template> -->
+                                <v-list-item min-height="30px"
+                                  v-for="subcategory in companyData.services"
+                                  :key="subcategory"
+                                >
+                                  <v-list-item-content class="py-0 pl-4">
+                                    <v-list-item-title v-text="subcategory" class="text-left"></v-list-item-title>
+                                  </v-list-item-content>
+                                </v-list-item>
+                              <!-- </v-list-group> -->
+                            </v-list>
+                          </div>
                       </v-col>
                       <!-- <v-col cols="2" sm="2" class="pl-0">
                       <v-btn color="#0D9648" class="text-capitalize mr-2 white--text" width="100%" height="54px" @click="addService">Add</v-btn>
                       </v-col> -->
                     </v-row>
-                    <v-row>
+                    <!-- <v-row>
                       <v-col cols="12" sm="10">
                         <div class="service-list text-left">
                           <label v-for="(drill,index) in companyData.services"><v-icon>mdi-check</v-icon><span @click="deleteService(index)">{{drill}}</span></label>
                         </div>
                         <p class="text-left mt-5 alert-text">*Click in a service above to delete from list.</p>
                       </v-col>
-                    </v-row>
+                    </v-row> -->
+                  </v-container>
+                  <hr>
+                  <v-container class="pa-sm-10 pa-4">
+                    <label class="d-block text-left main-label">Basins</label>
+                      <v-row>
+                        <v-col cols="4" sm="2" v-for="basin in region">
+                            <v-checkbox
+                            v-model="basins"
+                            :label="basin"
+                            color="#0d9648"
+                            :value="basin"
+                            @change="addBasin"
+                            hide-details
+                            ></v-checkbox>
+                        </v-col>
+                      </v-row>
                   </v-container>
                   <hr>
                   <v-container class="pa-sm-10 pa-4">
@@ -206,7 +248,7 @@
                       <v-row>
                         <v-col cols="12" sm="10">
                           <div class="service-list text-left mt-5">
-                            <label class="d-flex justify-space-between" v-for="(location,index) in companyData.companyLocations"><span><v-icon>mdi-map-marker-outline</v-icon>{{location.location}}</span> <v-icon color="#F32349"  @click="deleteLocation(location)">mdi-trash-can-outline</v-icon></label>
+                            <label class="d-flex justify-space-between" v-for="(location,index) in companyData.companyLocations"><span><v-icon>mdi-map-marker-outline</v-icon>{{location.location}}</span> <v-icon color="#F32349"  @click="deleteLocation(location)">mdi-close</v-icon></label>
                           </div>
                         </v-col>
                       </v-row>
@@ -401,6 +443,10 @@ export default {
       lng: '',
       address: "",
       subservices: '',
+      region: ['Gulf Coast','Northwest','Rockies','Mid-Con','Permian','Arklatex','Offshore','Other'],
+      basins: this.$store.getters.companyData.basins,
+      basinsData: [],
+      searchService: '',
     };
   },
   computed:{
@@ -411,7 +457,14 @@ export default {
         return this.$store.getters.g_activityPanel;
     },
     allcategories(){
-      return this.$store.getters.categories;
+      if(this.searchService){
+        console.log(this.searchService,'dasda');
+        return this.$store.getters.categories.filter((item)=>{
+          return this.searchService.toLowerCase().split(' ').every(v => item.name.toLowerCase().includes(v))
+        })
+      }else{
+        return this.$store.getters.categories;
+      }
     },
     companyData(){
       return this.$store.getters.companyData;
@@ -436,7 +489,7 @@ export default {
     },500),
   },
   methods: {
-     ...mapActions(["getCompany","getCategories","getSubCategories","companyProfileImg","updateBasicProfile","addCompanyService","addCompanyVideos","addCompanyNews","addCompanyDocument","deleteCompanyDocument","addCompanyLocation","deleteCompanyLocation"]),
+     ...mapActions(["getCompany","getCategories","getSubCategories","companyProfileImg","updateBasicProfile","addCompanyService","addCompanyVideos","addCompanyNews","addCompanyDocument","deleteCompanyDocument","addCompanyLocation","deleteCompanyLocation","addCompanyBasins"]),
      uploadDocument() {
       this.isSelecting = true
       window.addEventListener('focus', () => {
@@ -552,6 +605,17 @@ export default {
         }
         this.drillingService.splice(index,1);
         this.addCompanyService({companyId: this.$store.getters.userInfo.company.id,services: this.drillingService});
+      },
+      addBasin(){
+        if(this.$store.getters.companyData.basins){
+          this.basinsData = this.$store.getters.companyData.basins;
+        }
+        this.basinsData.push(this.basins);
+        var data = {
+          companyId: this.$store.getters.userInfo.company.id,
+          basins: this.basins,
+        }
+        this.addCompanyBasins(data);
       },
       addVideos(){
         if(this.$store.getters.companyData.corporateVideos){
@@ -787,6 +851,10 @@ export default {
     
     this.getLocation();
     // this.address = '33.6396095, 73.0565219';
+    if(this.$store.getters.companyData.basins){
+      this.basins = this.$store.getters.companyData.basins;
+    }
+    
   }
 };
 </script>

@@ -112,38 +112,54 @@
 	  				}
 	  			}
 	  			.service-cate{
-	  				height: 400px;
-	  				overflow: auto;
 	  				border: 1px solid #ddd;
-	  				border-radius: 5px;
-	  				&::-webkit-scrollbar {
-	  				  width: 4px;
-	  				  height: 5px;
+	  				border-radius: 12px;
+	  				.v-list{
+	  					height: 400px;
+	  					overflow: auto;
+	  					margin-bottom: 20px;
+	  					&::-webkit-scrollbar {
+	  					  width: 4px;
+	  					  height: 5px;
+	  					}
+	  					&::-webkit-scrollbar-thumb {
+	  					  background: #e1e1e1;
+	  					  border: 14px solid #0d9647;
+	  					  border-radius: 26px;
+	  					}
+	  					&::-webkit-scrollbar-thumb:hover {
+	  					  background: #ffffff;
+	  					}
+	  					&::-webkit-scrollbar-thumb:active {
+	  					  background: #0d9647;
+	  					}
+	  					&::-webkit-scrollbar-track {
+	  					  /*background: #666666;*/
+	  					  /*border: 36px solid #e3e3e3;*/
+	  					  border-radius: 42px;
+	  					}
+	  					&::-webkit-scrollbar-track:hover {
+	  					  background: #666666;
+	  					}
+	  					&::-webkit-scrollbar-track:active {
+	  					  background: #0d9647;
+	  					}
+	  					&::-webkit-scrollbar-corner {
+	  					  background: transparent;
+	  					}
+	  					.v-list-group{
+	  						.v-list-item{
+	  							min-height: 30px;
+	  						}
+	  					}
 	  				}
-	  				&::-webkit-scrollbar-thumb {
-	  				  background: #e1e1e1;
-	  				  border: 14px solid #0d9647;
-	  				  border-radius: 26px;
-	  				}
-	  				&::-webkit-scrollbar-thumb:hover {
-	  				  background: #ffffff;
-	  				}
-	  				&::-webkit-scrollbar-thumb:active {
-	  				  background: #0d9647;
-	  				}
-	  				&::-webkit-scrollbar-track {
-	  				  /*background: #666666;*/
-	  				  /*border: 36px solid #e3e3e3;*/
-	  				  border-radius: 42px;
-	  				}
-	  				&::-webkit-scrollbar-track:hover {
-	  				  background: #666666;
-	  				}
-	  				&::-webkit-scrollbar-track:active {
-	  				  background: #0d9647;
-	  				}
-	  				&::-webkit-scrollbar-corner {
-	  				  background: transparent;
+	  			}
+	  			.subservice-cate{
+	  				height: 494px;
+	  				.v-list{
+	  					margin-top: 20px;
+	  					height: 450px;
+	  					overflow: auto;
 	  				}
 	  			}
 	  			.service-list{

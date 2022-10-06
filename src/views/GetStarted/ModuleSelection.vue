@@ -167,7 +167,7 @@
                   </div>
                   <v-row justify="center mt-10">
                     <v-col cols="12" md="3">
-                      <router-link to="payment" class="white--text text-decoration-none"><v-btn color="#0D9647" large dense width="100%" height="56" class="font-weight-bold white--text text-capitalize">Next <v-icon class="pl-2" color="#fff">mdi-arrow-right-circle</v-icon></v-btn></router-link>
+                      <router-link to="payment" class="white--text text-decoration-none"><v-btn color="#0D9647" large dense width="100%" height="56" class="font-weight-bold white--text text-capitalize" :disabled="ofsModule == true || rfxModule == true ?  true : false">Next <v-icon class="pl-2" color="#fff">mdi-arrow-right-circle</v-icon></v-btn></router-link>
                     </v-col>
                   </v-row>
                 </template>
@@ -177,10 +177,10 @@
                   <div class="d-flex justify-space-between align-center mb-5 label-title">
                     <h1 class="font-weight-bold">RFx Platform - Create Bids</h1>
                     <v-sheet>
-                      <v-checkbox
+                      <v-switch
                         v-model="rfxModule"
                         inset
-                      ></v-checkbox>
+                      ></v-switch>
                     </v-sheet>
                   </div>
                   <p class="font-weight-medium">BidOut's flagship RFP Platform. The ability to create and distribute RPF's to BidOut's network or <br>service providers.</p>
@@ -214,18 +214,27 @@
                   <div class="d-flex justify-space-between align-center mb-5 label-title">
                     <h1 class="font-weight-bold">Respond to Bids - OFS Directory</h1>
                     <h1 class="price-text"><span v-if="trial_end == 'free'">Free</span><span v-else>
-                      <template v-if="package.id == 1">$79.99/month</template>
-                      <template v-if="package == 1">$79.99/month</template>
-                      <template v-if="package == 2">$99.99/month</template>
-                      <template v-if="package == 3">$119.99/month</template>
-                      <template v-if="package == 4">$2400/year</template>
+                      <template v-if="package.id == 1 && billingCycle == 'Yearly'">
+                          $800/year
+                      </template>
+                      <template v-if="package.id == 1 && billingCycle == 'Monthly'">
+                          $79.99/month
+                      </template>
+                      <template v-if="package == 1 && billingCycle == 'Yearly'">$800/year</template>
+                      <template v-if="package == 1 && billingCycle == 'Monthly'">$79.99/month</template>
+                      <template v-if="package == 2 && billingCycle == 'Yearly'">$1,000/year</template>
+                      <template v-if="package == 2 && billingCycle == 'Monthly'">$99.99/month</template>
+                      <template v-if="package == 3 && billingCycle == 'Yearly'">$1,200/year</template>
+                      <template v-if="package == 3 && billingCycle == 'Monthly'">$119.99/month</template>
+                      <template v-if="package == 4 && billingCycle == 'Yearly'">$2,400/year</template>
+                      <template v-if="package == 4 && billingCycle == 'Monthly'">$239.99/month</template>
                     </span></h1>
                     <v-sheet>
-                      <v-checkbox
+                      <v-switch
                         v-model="ofsModule"
                         inset
                         
-                      ></v-checkbox>
+                      ></v-switch>
                     </v-sheet>
                   </div>
                   <p class="font-weight-medium">Respond to bid invitiations & showcase your services to oil and gas operators to gain access to <br>greater visibility.</p>
@@ -322,7 +331,7 @@ export default {
         { name: '1-5 Users - $79.99/month or $800/year prepaid', id: 1},
         { name: '6-10 Users - $99.99/month or $1,000/year prepaid', id: 2},
         { name: '11-15 Users - $119.99/month or $1,200/year prepaid', id: 3},
-        { name: '16+ Users or Unlimited - $2,400/year prepaid', id: 4},
+        { name: '16+ Users - $239.99/month or $2,400/year prepaid', id: 4},
       ],
     };
   },
@@ -404,6 +413,13 @@ export default {
         unit_price: this.unit_price,
       }
       this.contractGenerate(contract);
+      if(type == 'ofs-premium'){
+        this.loading = 'loading';
+        this.ofsModule = false;
+      }else{
+        this.loading = 'loading';
+        this.rfxModule = false;
+      }
     },
     getCycle(){
       if(this.billingCycle == 'Yearly'){

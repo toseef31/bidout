@@ -24,22 +24,30 @@
                   <v-tabs-items v-model="tab">
                     <v-tab-item>
 
-                      <div class="panels pb-4" >
-                        <div class="panel">
-                          <div class="d-flex justify-space-between panel-header">
-                            <h6>BidOut Procurement Platform</h6>
-                            <div class="btn-section">
-                              <a href="" class="text-decoration-none text-right toggle-btn" max-width="150px"><v-icon>mdi-bookmark-outline</v-icon>Upgrade to Enterpise</a>
-                              <a href="" class="text-decoration-none text-right contract-btn" max-width="150px"><v-icon>mdi-file-outline</v-icon>View Contract</a>
+                      <template v-if="moduleData.contracts">  
+                          <div class="panels pb-4" v-for="modules in moduleData.contracts">
+                            <div class="panel">
+                              <div class="d-flex justify-space-between panel-header">
+                                <h6 v-if="modules.contractType == 'rfx'">BidOut Procurement Platform</h6>
+                                <h6 v-else>OFS Directory Profile</h6>
+                                <div class="btn-section">
+                                  <a href="" class="text-decoration-none text-right toggle-btn" max-width="150px"><v-icon>mdi-bookmark-outline</v-icon>Upgrade to Enterpise</a>
+                                  <a :href="modules.filePath" target="_blank" class="text-decoration-none text-right contract-btn" max-width="150px"><v-icon>mdi-file-outline</v-icon>View Contract</a>
+                                </div>
+                              </div>
+                              <div class="panel-content">
+                                <p class="mb-1 black--text">Renewal Date: {{modules.renewsOn  | moment("MM/D/YYYY")}}</p>
+                                <p class="black--text mb-0">Annual Fee: ${{modules.annualFee}}</p>
+                              </div>
                             </div>
                           </div>
-                          <div class="panel-content">
-                            <p class="mb-1 black--text">Renewal Date: 01/12/2023</p>
-                            <p class="black--text mb-0">Annual Fee: $800</p>
+                      </template>
+                      <template v-else>  
+                          <div class="panels pb-4">
+                              <h3>You don't have any active moudle yet.</h3>
                           </div>
-                        </div>
-                      </div>
-                      <div class="panels pb-4">
+                      </template>
+                      <!-- <div class="panels pb-4">
                         <div class="panel">
                           <div class="d-flex justify-space-between panel-header">
                             <h6>OFS Directory Profile</h6>
@@ -68,7 +76,7 @@
                             <p class="black--text mb-0">Annual Fee: $600</p>
                           </div>
                         </div>
-                      </div>
+                      </div> -->
                     </v-tab-item>
                   </v-tabs-items>
                 </div>

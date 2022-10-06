@@ -279,7 +279,7 @@
                               <v-list-item-subtitle v-text="conversation.subtitle"></v-list-item-subtitle>
                             </v-list-item-content>
 
-                            <v-list-item-action class="mt-n5">
+                            <v-list-item-action>
                               <v-list-item-action-text>{{ istoday(conversation.latestMessage)}}</v-list-item-action-text>
                             </v-list-item-action>
                             <!-- <v-badge
@@ -680,6 +680,7 @@ export default {
       allMembers: [],
       snackbar: false,
       timeout: 2000,
+      convDec: '',
     };
   },
   computed:{
@@ -821,6 +822,7 @@ export default {
         content: this.message,
         attachment: chat_file[0],
       }
+      console.log(this.conversationId,'conversationId');
       if(data.content || data.attachment){
         this.sendMessage(data);
       }
@@ -830,6 +832,7 @@ export default {
       }, 500);
       this.message = '';
       this.filename = '';
+      
     },
     chatActions(data){
       var archivess = {

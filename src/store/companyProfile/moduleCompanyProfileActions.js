@@ -55,6 +55,17 @@ export default {
       dispatch("getCompany",payload.companyId)
     })
   }, 
+  addCompanyBasins({commit,dispatch}, payload){
+    var config = {
+      headers: {
+        "Authorization": `Bearer ${JSON.parse(localStorage.getItem('token'))}`
+      },
+    };
+    axios.post('/company/addCompanyBasin/',{'companyId': payload.companyId,'basins': payload.basins},config)
+     .then(responce => {
+      dispatch("getCompany",payload.companyId)
+    })
+  }, 
   addCompanyLocation({commit,dispatch}, payload){
     var config = {
       headers: {
@@ -200,6 +211,7 @@ export default {
     })
   },
   addCompanyEsg({commit,dispatch}, payload){
+    console.log(payload);
     var config = {
       headers: {
         "Content-Type": "multipart/form-data",
@@ -212,8 +224,9 @@ export default {
     formData.append('esgInitiatives[description]', payload.esgInitiatives.description);
     formData.append('esgInitiatives[attachment]', payload.esgInitiatives.attachment);
     formData.append('esgInitiatives[id]', payload.esgInitiatives.id);
+    formData.append('esgInitiatives[type]', payload.esgInitiatives.type);
     
-    axios.post('/company/addCompanyDifferentiators/',formData,config)
+    axios.post('/company/editCompanyDifferentiators/',formData,config)
      .then(responce => {
       dispatch("getCompany",payload.companyId)
     })
@@ -231,6 +244,7 @@ export default {
     formData.append('esgInitiatives[description]', payload.esgInitiatives.description);
     formData.append('esgInitiatives[attachment]', payload.esgInitiatives.attachment);
     formData.append('esgInitiatives[id]', payload.esgInitiatives.id);
+    formData.append('esgInitiatives[type]', payload.esgInitiatives.type);
     
     axios.post('/company/deleteCompanyDifferentiators/',formData,config)
      .then(responce => {

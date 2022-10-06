@@ -22,7 +22,7 @@ export default {
 		 	dispatch("unreadMessagesCount",{'userId':payload.userId})
 		})
 	},
-	sendMessage({commit}, payload){
+	sendMessage({commit,state,dispatch}, payload){
 		var config = {
 		  header: {
 		    "Content-Type": "multipart/form-data",
@@ -38,6 +38,7 @@ export default {
 		formData.append('attachment', payload.attachment)
 		axios.post('chat/sendMessage',formData, config)
 		 .then(responce => {
+		 	dispatch("getAllConversations",state.userId.id)
 		 	commit('setNewMessages',responce.data.message)
 		})
 	},   
