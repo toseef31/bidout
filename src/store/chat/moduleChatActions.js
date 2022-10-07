@@ -22,7 +22,7 @@ export default {
 		 	dispatch("unreadMessagesCount",{'userId':payload.userId})
 		})
 	},
-	sendMessage({commit}, payload){
+	sendMessage({commit,state,dispatch}, payload){
 		var config = {
 		  header: {
 		    "Content-Type": "multipart/form-data",
@@ -38,6 +38,7 @@ export default {
 		formData.append('attachment', payload.attachment)
 		axios.post('chat/sendMessage',formData, config)
 		 .then(responce => {
+		 	dispatch("getAllConversations",state.userId.id)
 		 	commit('setNewMessages',responce.data.message)
 		})
 	},   
@@ -54,9 +55,9 @@ export default {
 		})
 	},
 	// Archive Chat
-	archiveChat({commit,state,dispatch}, payload){
+	async archiveChat({commit,state,dispatch}, payload){
 		
-		axios.post('/chat/archiveConversation',{'userId':payload.userId,'conversationId':payload.conversationId})
+		await axios.post('/chat/archiveConversation',{'userId':payload.userId,'conversationId':payload.conversationId})
 		 .then(responce => {
 		 	// commit('setArchiveStatus',responce.data.count)
 		 	commit('setMessagesList',null)
@@ -82,6 +83,7 @@ export default {
 	 createConversation({commit, state,dispatch}, payload){
 		 axios.post('/chat/createConversation/',payload)
 		 .then(responce => {
+		 	console.log(state.userId);
 		 	dispatch("getAllConversations",state.userId.id);
 		 	commit("setCreateMsg", responce.data.message);
 		 	setTimeout(function(){

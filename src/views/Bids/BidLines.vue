@@ -35,14 +35,14 @@
         <v-col md="2">
           <div class="mr-2 bid-item">
             <label class="d-block input-label text-left">QTY</label>
-            <v-text-field placeholder="Line Item Description" height="31pxx" single-line outlined type="text" hide-details>
+            <v-text-field placeholder="Line Item Description" height="31px" single-line outlined type="text" hide-details>
             </v-text-field>
           </div>
         </v-col>
         <v-col md="3" class="d-flex">
           <div class="mr-2 bid-item">
             <label class="d-block input-label text-left">Buyer Comment</label>
-            <v-text-field placeholder="Line Item Description" height="31pxx" single-line outlined type="text" hide-details>
+            <v-text-field placeholder="Line Item Description" height="31px" single-line outlined type="text" hide-details>
             </v-text-field>
           </div>
           <div class="mr-2 d-flex">
@@ -88,14 +88,14 @@
         <v-col md="2">
           <div class="mr-2 bid-item">
             <label class="d-block input-label text-left">QTY</label>
-            <v-text-field placeholder="Line Item Description" height="31pxx" single-line outlined type="text" hide-details>
+            <v-text-field placeholder="Line Item Description" height="31px" single-line outlined type="text" hide-details>
             </v-text-field>
           </div>
         </v-col>
         <v-col md="3" class="d-flex">
           <div class="mr-2 bid-item">
             <label class="d-block input-label text-left">Buyer Comment</label>
-            <v-text-field placeholder="Line Item Description" height="31pxx" single-line outlined type="text" hide-details>
+            <v-text-field placeholder="Line Item Description" height="31px" single-line outlined type="text" hide-details>
             </v-text-field>
           </div>
           <div class="mr-2 d-flex">
@@ -122,7 +122,7 @@
         </div>
         <div class="mr-2 bid-item">
           <label class="d-block input-label text-left">Line Item Description</label>
-          <v-text-field placeholder="Line Item Description" height="31pxx" single-line outlined type="text" v-model="exampleItems.description" hide-details>
+          <v-text-field placeholder="Line Item Description" height="31px" single-line outlined type="text" v-model="exampleItems.description" hide-details>
           </v-text-field>
         </div>
         <div class="mr-2 bid-item">
@@ -140,7 +140,7 @@
         </div>
         <div class="mr-2 bid-item">
           <label class="d-block input-label text-left">Buyer Comment</label>
-          <v-text-field placeholder="Line Item Description" height="31pxx" single-line outlined type="text" v-model="exampleItems.buyerComment" hide-details>
+          <v-text-field placeholder="Line Item Description" height="31px" single-line outlined type="text" v-model="exampleItems.buyerComment" hide-details>
           </v-text-field>
         </div>
         <div class="mr-2 d-flex">

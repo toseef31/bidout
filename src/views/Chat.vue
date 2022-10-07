@@ -19,7 +19,6 @@
               top
             >
               {{createMsg}}
-
               <template v-slot:action="{ attrs }">
                 <v-btn
                   color="white"
@@ -33,236 +32,86 @@
             </v-snackbar>
         <v-row>
           <v-col cols="12" sm="4" md="4" class="userCol  d-sm-block" v-if="userList">
-            <div class="userlist-col">
-              <div class="chat-search d-flex">
-              <div class="search-box">
-                <v-text-field
-                  v-model="searchUsers"
-                  clearable
-                  type="text" align-center
-                  class="pt-0 mt-0" height="44px"
+              <div class="userlist-col">
+              <chat-leftsidebar></chat-leftsidebar>
+              <div class="users-lists">
+                <v-tabs
+                  v-model="convTab"
+                  align-with-title grow hide-slider
                 >
-                  <template v-slot:prepend>
-                    <v-icon>mdi-magnify</v-icon>
-                  </template>
-                </v-text-field>
-              </div>
-              <div class="add-people">
-                <template>
-                  <span class="icon-box" @click="isAddUser = !isAddUser"
-                          :class="{ 'active-btn': isAddUser}">
-                    <v-icon>mdi-plus</v-icon>
-                  </span>
-                </template>
-                <div v-show="isAddUser">
-                  <v-card
-                    class="mx-auto chat-menu-card"
-                    min-width="290"
-                    tile
-                    outlined
+                  <v-tab
+                    v-for="item in chatTab"
+                    :key="item" active-class="activeChat-tab" class="ml-0 font-weight-bold"
                   >
-                  <v-list class="pa-0">
-                    <v-list-item-group
-                      color="success"
-                    >
-                      <v-dialog
-                        v-model="startChatDialog"
-                        width="700"
-                      >
-                        <template v-slot:activator="{ on, attrs }">
-                          <v-btn
-                            color="transparent"
-                            v-bind="attrs"
-                            v-on="on" class="text-capitalize text-left justify-start manage-btn font-weight-bold"
-                            height="48px" width="100%" elevation="0"
-                          >
-                            <v-icon class="mr-2" color="#0D9648">mdi-chat-processing-outline</v-icon>Start a new chat
-                          </v-btn>
+                    {{ item }}
+                  </v-tab>
+                </v-tabs>
+                <v-tabs-items v-model="convTab">
+                  <v-tab-item> 
+                    <v-list two-line  class="py-0">
+                      <v-list-item-group
+                        v-model="selectedUser"
+                        active-class="grey--text">
+                        <template v-for="(conversation, index) in conversationsList">
+                          <v-list-item @click="openChat(conversation,conversation.groupName)" :key="conversation._id"  :class="{ 'grey--text v-list-item--active' : conversation._id === chatData.group._id }" v-if="conversation.type == 'GROUP'">
+                            <template>
+                              <v-list-item-avatar>
+                                <v-icon>mdi-account-group-outline</v-icon>
+                              </v-list-item-avatar>
+                              <v-list-item-content>
+                                <v-list-item-title v-if="conversation.company == ''" v-text="conversation.company"></v-list-item-title>
+                                <v-list-item-title v-else v-text="conversation.groupName"></v-list-item-title>
+
+                                <v-list-item-subtitle
+                                  class="text--primary"
+                                  v-text="conversation.headline"
+                                ></v-list-item-subtitle>
+
+                                <v-list-item-subtitle v-text="conversation.subtitle"></v-list-item-subtitle>
+                              </v-list-item-content>
+
+                              <v-list-item-action class="mt-n5">
+                                <v-list-item-action-text>{{ istoday(conversation.latestMessage)}}</v-list-item-action-text>
+                              </v-list-item-action>
+                              <!-- <v-badge
+                                  color="#0D9648"
+                                  :value="msgCount"
+                                  :content="msgCount" overlap
+                                ></v-badge> -->
+                            </template>
+                          </v-list-item>
+                          <v-list-item v-if="conversation.type == 'PRIVATE' && participant.id != user.id"  v-for="participant in conversation.participantDetails" @click="openChat(conversation,participant.name)" :class="{ 'grey--text v-list-item--active' : conversation._id === chatData.group._id }" :key="participant.id">
+                            <template >
+                                <v-list-item-avatar>
+                                  <v-avatar>
+                                    <img v-if="participant.image != null" :src="participant.image">
+                                    <img v-if="participant.image == null" :src="require('@/assets/images/chat/chatUser.png')">
+                                  </v-avatar>
+                                </v-list-item-avatar>
+                                <v-list-item-content align-center>
+                                  <v-list-item-title v-text="participant.name"></v-list-item-title>
+                                </v-list-item-content>
+
+                              <v-list-item-action>
+                                <v-list-item-action-text>{{ istoday(conversation.latestMessage) }}</v-list-item-action-text>
+                              </v-list-item-action>
+                            </template>
+                          </v-list-item>
+                          <v-divider
+                            v-if="index < conversation.length - 1"
+                            :key="index"
+                          ></v-divider>
                         </template>
-
-                        <v-card>
-                          <v-card-title class="text-h5 d-flex justify-space-between">
-                            Start a new Chat
-                            <v-icon @click="startChatDialog = false" small>mdi-close</v-icon>
-                          </v-card-title>
-                          <v-card-text class="py-8">
-
-                            <v-autocomplete
-                              v-model="addChat"
-                              :items="membersLists"
-                              item-value="id" item-text="firstName"
-                              chips
-                              outlined
-                              full-width
-                              hide-details
-                              hide-no-data
-                              hide-selected
-                              single-line 
-                              deletable-chips
-                              search-input
-                              return-object
-                              class="text-left" @keydown="getSupplierUsers"
-                            ></v-autocomplete>
-                            <!-- <v-list v-if="hideList == true" class="company-list">
-                              <template v-for="(user, index) in suppliersUsers">
-                                <v-list-item
-                                  :key="user.objectID"
-                                >
-                                  <v-list-item-avatar>
-                                    <v-avatar>
-                                      <img :src="require('@/assets/images/chat/chatUser.png')">
-                                    </v-avatar>
-                                  </v-list-item-avatar>
-                                  <v-list-item-content>
-                                    <v-list-item-title @click="createChat(user); hideList = !hideList" class="text-left">{{user.firstName}} {{user.lastName}}</v-list-item-title>
-                                    <v-list-item-subtitle
-                                      class="text--primary text-left"
-                                      v-text="user.company"
-                                    ></v-list-item-subtitle>
-                                  </v-list-item-content>
-                                </v-list-item>
-                              </template>
-                            </v-list> -->
-                          </v-card-text>
-                          <v-card-actions class="justify-end flex-column text-right">
-                            <v-spacer></v-spacer>
-                            <v-btn
-                              color="#0D9648"
-                              large class="white--text px-6 font-weight-bold text-capitalize" @click="createChat"
-                            >
-                             Create Chat
-                            </v-btn>
-                          </v-card-actions>
-                        </v-card>
-                      </v-dialog>
-                      <v-dialog
-                        v-model="groupChatDialog"
-                        width="700"
-                      >
-                        <template v-slot:activator="{ on, attrs }">
-                          <v-btn
-                            color="transparent"
-                            v-bind="attrs"
-                            v-on="on" class="text-capitalize text-left justify-start manage-btn font-weight-bold"
-                            height="48px" width="100%" elevation="0"
-                          >
-                            <v-icon class="mr-2" color="#0D9648">mdi-account-group-outline</v-icon>Create a Group
-                          </v-btn>
-                        </template>
-
-                        <v-card>
-                          <v-card-title class="text-h5 d-flex justify-space-between">
-                            Start a new group Chat
-                            <v-icon @click="groupChatDialog = false" small>mdi-close</v-icon>
-                          </v-card-title>
-                          <v-card-text class="py-8">
-                            <label class="d-block text-left input-label font-weight-bold black--text">Group Name</label>
-                            <v-text-field
-                              v-model="groupName"
-                              hide-details
-                              outlined class="addChat-box"
-                            >
-                            </v-text-field>
-                            <label class="d-block text-left input-label font-weight-bold black--text mt-5">Add Users</label>
-                            <v-text-field
-                              v-model="addMember"
-                              hide-details
-                              outlined class="addChat-box"
-                              prepend-inner-icon="mdi-magnify" @keyup="getSupplierMembers"
-                            >
-                            </v-text-field>
-                            <label class="d-block text-left input-label font-weight-bold black--text mt-5">Add Users</label>
-                            
-                            <v-list class="company-list member-lists">
-                              <template v-for="(user, index) in membersData">
-                                <v-list-item
-                                  :key="user.objectID"
-                                >
-                                  <v-list-item-avatar>
-                                    <v-avatar>
-                                      <img :src="require('@/assets/images/chat/chatUser.png')">
-                                    </v-avatar>
-                                  </v-list-item-avatar>
-                                  <v-list-item-content>
-                                    <v-list-item-title class="text-left">{{user.name}}</v-list-item-title>
-                                    <v-list-item-subtitle
-                                      class="text--primary text-left"
-                                      v-text="user.company"
-                                    ></v-list-item-subtitle>
-                                  </v-list-item-content>
-                                  <v-list-item-action @click="removeItem(user.index)">
-                                    <v-icon>mdi-close</v-icon>
-                                  </v-list-item-action>
-                                </v-list-item>
-                              </template>
-                            </v-list>
-                            <v-list v-if="hideMemberList == true" class="company-list">
-                              <template v-for="(user, index) in suppliersUsers">
-                                <v-list-item
-                                  :key="user.objectID"
-                                >
-                                  <v-list-item-avatar>
-                                    <v-avatar>
-                                      <img :src="require('@/assets/images/chat/chatUser.png')">
-                                    </v-avatar>
-                                  </v-list-item-avatar>
-                                  <v-list-item-content>
-                                    <v-list-item-title @click="addPerson(user)" class="text-left">{{user.firstName}} {{user.lastName}}</v-list-item-title>
-                                    <v-list-item-subtitle
-                                      class="text--primary text-left"
-                                      v-text="user.company"
-                                    ></v-list-item-subtitle>
-                                  </v-list-item-content>
-                                </v-list-item>
-                              </template>
-                            </v-list>
-                          </v-card-text>
-
-                          <v-card-actions class="justify-center flex-column">
-                            <v-spacer></v-spacer>
-                            <v-btn
-                              color="#0D9648"
-                              large class="white--text px-6 font-weight-bold text-capitalize" @click="createGroup"
-                            >
-                             Create Group
-                            </v-btn>
-                          </v-card-actions>
-                        </v-card>
-                      </v-dialog>
-                    </v-list-item-group>
-                  </v-list>
-                </v-card>
-              </div>
-              </div>
-            </div>
-            <div class="users-lists">
-              <v-tabs
-                v-model="convTab"
-                align-with-title grow hide-slider
-              >
-
-                <v-tab
-                  v-for="item in chatTab"
-                  :key="item" active-class="activeChat-tab" class="ml-0 font-weight-bold"
-                >
-                  {{ item }}
-                </v-tab>
-              </v-tabs>
-              <v-tabs-items v-model="convTab">
-                <v-tab-item
-                  
-                > 
-                
-                  <v-list two-line  class="py-0">
+                      </v-list-item-group>
+                    </v-list>
+                  </v-tab-item>
+                  <v-tab-item>
+                  <v-list two-line  class="py-0" v-if="archiveList">
                     <v-list-item-group
                       v-model="selectedUser"
-                      active-class="grey--text"
-                      
-                    >
-                      <template v-for="(conversation, index) in conversationsList">
-                        
-                        <v-list-item @click="openChat(conversation,conversation.groupName)" :key="conversation._id"  :class="{ 'grey--text v-list-item--active' : conversation._id === chatData.group._id }" v-if="conversation.type == 'GROUP'">
-                          
+                      active-class="grey--text">
+                      <template v-for="(conversation, index) in archiveList">
+                        <v-list-item @click="openChat(conversation,conversation.groupName)" :key="conversation._id" v-if="conversation.type == 'GROUP'">
                           <template>
                             <v-list-item-avatar>
                               <v-icon>mdi-account-group-outline</v-icon>
@@ -279,8 +128,10 @@
                               <v-list-item-subtitle v-text="conversation.subtitle"></v-list-item-subtitle>
                             </v-list-item-content>
 
-                            <v-list-item-action class="mt-n5">
-                              <v-list-item-action-text>{{ istoday(conversation.latestMessage)}}</v-list-item-action-text>
+                            <v-list-item-action>
+                              <v-btn color="rgba(13, 150, 72, 0.1)" elevation="0" class="text-capitalize archive-btn" @click="unarchive(conversation._id)">
+                                Unarchive
+                              </v-btn>
                             </v-list-item-action>
                             <!-- <v-badge
                                 color="#0D9648"
@@ -290,7 +141,7 @@
                           </template>
                           
                         </v-list-item>
-                        <v-list-item v-if="conversation.type == 'PRIVATE' && participant.id != user.id"  v-for="participant in conversation.participantDetails" @click="openChat(conversation,participant.name)" :class="{ 'grey--text v-list-item--active' : conversation._id === chatData.group._id }" :key="participant.id">
+                        <v-list-item v-if="conversation.type == 'PRIVATE' && participant.id != user.id"  v-for="participant in conversation.participantDetails" @click="openChat(conversation,participant.name)" :key="participant.id">
                           <template >
                               <v-list-item-avatar>
                                 <v-avatar>
@@ -302,8 +153,11 @@
                                 <v-list-item-title v-text="participant.name"></v-list-item-title>
                               </v-list-item-content>
 
+                            
                             <v-list-item-action>
-                              <v-list-item-action-text>{{ istoday(conversation.latestMessage) }}</v-list-item-action-text>
+                              <v-btn color="rgba(13, 150, 72, 0.1)" elevation="0" class="text-capitalize archive-btn" @click="unarchive(conversation._id)">
+                                Unarchive
+                              </v-btn>
                             </v-list-item-action>
                           </template>
                         </v-list-item>
@@ -314,87 +168,18 @@
                       </template>
                     </v-list-item-group>
                   </v-list>
-                </v-tab-item>
-                <v-tab-item
-                  
-                >
-                <v-list two-line  class="py-0" v-if="archiveList">
-                  <v-list-item-group
-                    v-model="selectedUser"
-                    active-class="grey--text"
-                    
-                  >
-                    <template v-for="(conversation, index) in archiveList">
-                      <v-list-item @click="openChat(conversation,conversation.groupName)" :key="conversation._id" v-if="conversation.type == 'GROUP'">
-                        <template>
-                          <v-list-item-avatar>
-                            <v-icon>mdi-account-group-outline</v-icon>
-                          </v-list-item-avatar>
-                          <v-list-item-content>
-                            <v-list-item-title v-if="conversation.company == ''" v-text="conversation.company"></v-list-item-title>
-                            <v-list-item-title v-else v-text="conversation.groupName"></v-list-item-title>
-
-                            <v-list-item-subtitle
-                              class="text--primary"
-                              v-text="conversation.headline"
-                            ></v-list-item-subtitle>
-
-                            <v-list-item-subtitle v-text="conversation.subtitle"></v-list-item-subtitle>
-                          </v-list-item-content>
-
-                          <v-list-item-action>
-                            <v-btn color="rgba(13, 150, 72, 0.1)" elevation="0" class="text-capitalize archive-btn" @click="unarchive(conversation._id)">
-                              Unarchive
-                            </v-btn>
-                          </v-list-item-action>
-                          <!-- <v-badge
-                              color="#0D9648"
-                              :value="msgCount"
-                              :content="msgCount" overlap
-                            ></v-badge> -->
-                        </template>
-                        
-                      </v-list-item>
-                      <v-list-item v-if="conversation.type == 'PRIVATE' && participant.id != user.id"  v-for="participant in conversation.participantDetails" @click="openChat(conversation,participant.name)" :key="participant.id">
-                        <template >
-                            <v-list-item-avatar>
-                              <v-avatar>
-                                <img v-if="participant.image != null" :src="participant.image">
-                                <img v-if="participant.image == null" :src="require('@/assets/images/chat/chatUser.png')">
-                              </v-avatar>
-                            </v-list-item-avatar>
-                            <v-list-item-content align-center>
-                              <v-list-item-title v-text="participant.name"></v-list-item-title>
-                            </v-list-item-content>
-
-                          
-                          <v-list-item-action>
-                            <v-btn color="rgba(13, 150, 72, 0.1)" elevation="0" class="text-capitalize archive-btn" @click="unarchive(conversation._id)">
-                              Unarchive
-                            </v-btn>
-                          </v-list-item-action>
-                        </template>
-                      </v-list-item>
-                      <v-divider
-                        v-if="index < conversation.length - 1"
-                        :key="index"
-                      ></v-divider>
-                    </template>
-                  </v-list-item-group>
-                </v-list>
-                  <v-card
-                    flat v-else
-                  >
-                    <v-card-text><h3>There is no archive chat</h3></v-card-text>
-                  </v-card>
-                </v-tab-item>
-              </v-tabs-items>
-            </div>
+                    <v-card
+                      flat v-else
+                    >
+                      <v-card-text><h3>There is no archive chat</h3></v-card-text>
+                    </v-card>
+                  </v-tab-item>
+                </v-tabs-items>
+              </div>
             </div>
           </v-col>
           <v-col cols="12" sm="8" md="8" class="pl-0 pr-2 pt-0 d-sm-block" v-show="showMsgBlock">
             <div class="message-area">
-
               <!-- Message Header -->
               <div class="msg-header pa-5">
                 <v-icon class="back-arrow" v-if="backArrow" @click="closeChat">mdi-chevron-left</v-icon>
@@ -592,12 +377,9 @@
                         <input id="attach-file"
                            type="file" class="d-none" 
                           truncate-length="8" ref="msgFile" @change="fileUpload"
-
                         >
                         <v-img :src="require('@/assets/images/chat/attach.png')" max-width="28px" height="32px"></v-img>
-                      </label>
-                      
-                      
+                      </label> 
                     </div>
                   </v-col>
                 </v-row> 
@@ -613,6 +395,7 @@
 <script>
   import Navbar from './Layout/Navbar.vue'
   import LeftSidebar from './Layout/Dashboard/LeftSidebar.vue'
+  import ChatLeftsidebar from './Chat/ChatLeftSideBar.vue'
   import axios from 'axios'
   import _ from 'lodash';
   import vueDropzone from 'vue2-dropzone';
@@ -625,6 +408,7 @@ export default {
     Navbar,
     LeftSidebar,
     vueDropzone,
+    ChatLeftsidebar
   },
   
   data() {
@@ -638,27 +422,17 @@ export default {
       backArrow : false,
       userList : true,
       dialog: false,
-      startChatDialog: false,
       groupChatDialog: false,
       searchMessage: '',
       message: '',
       conversationId : '',
       filename: '',
-      searchUsers: '',
       chatData: '',
       selected: null,
       toggleMenu: [
         { text: 'Archive Chat', icon: 'mdi-archive-outline' },
       ],
       user: '',
-      addChat: '',
-      addMember: '',
-      groupName: '',
-      hideList: false,
-      hideMemberList: false,
-      membersData: [],
-      participants: [],
-      participantDetails: [],
       dropzoneOptions: {
         url: 'https://api-dev-v2-dot-bidout-dev.uc.r.appspot.com/api/chat/sendMessage',
         thumbnailWidth: 100,
@@ -669,7 +443,6 @@ export default {
         headers: { "My-Awesome-Header": "header value" }
       },
       uploadDrag: false,
-      userObject: '',
       removeMember: '',
       fileExt: '',
       convTab: null,
@@ -689,7 +462,6 @@ export default {
     activityPanel(){
       return this.$store.getters.g_activityPanel;
     },
-
     conversationsList(){
       if(this.searchUsers){
         return _.orderBy(this.$store.getters.conversations.filter((item)=>{
@@ -708,12 +480,6 @@ export default {
         return this.$store.getters.messages;
       }
     },
-    membersLists(){
-      return this.$store.getters.membersList;
-    },
-    suppliersUsers(){
-      return this.$store.getters.suppliersUsers;
-    },
     archiveList(){
       return this.$store.getters.archiveList;
     },
@@ -729,30 +495,10 @@ export default {
         this.$store.state.createMsg = null;
       }, 4000);
     },
-    // msgCount(){
-    //   return this.$store.getters.unMessageCount;
-    // },
   },
-  watch:{
-    addChat: _.debounce(function(){
-      if(this.addChat < 1){
-        this.hideList = false;
-        // this.companyInfo = true;
-      }else{
-        this.hideList = true;
-      }
-    },500),
-    addMember: _.debounce(function(){
-      if(this.addMember < 1){
-        this.hideMemberList = false;
-        // this.companyInfo = true;
-      }else{
-        this.hideMemberList = true;
-      }
-    },500),
-  },
+ 
   methods: {
-    ...mapActions(["getAllConversations","getAllMessages","sendMessage","unreadMessagesCountCon","lastMessageRead","archiveChat","supplierList","supplierUserList","createConversation","removeConvUser","getArchiveChats","unArchiveConversation"]),
+    ...mapActions(["getAllConversations","getAllMessages","sendMessage","unreadMessagesCountCon","lastMessageRead","archiveChat","removeConvUser","getArchiveChats","unArchiveConversation"]),
     getConversations(id){
       this.getAllConversations(id);
     },
@@ -784,10 +530,6 @@ export default {
       
       this.lastMessageRead(ids);
       var container = this.$refs.messagesSection;
-      // if(container === undefined){
-      //   var container = this.$refs.messagesSection;
-      //   // alert(container);
-      // }
       setTimeout(function(){
         container.scrollTop = container.scrollHeight;
       }, 1000);
@@ -800,7 +542,6 @@ export default {
         this.backArrow = false;
       }
     },
-    
     fileUpload(){
       this.filename = this.$refs.msgFile.files[0].name;
     },
@@ -840,83 +581,6 @@ export default {
       this.isChatMenu = false;
       this.chatData.name = '';
     },
-    memberList(){
-      this.supplierList();
-    },
-    getSupplierUsers(){
-      if(this.addChat.length > 1){
-        console.log(this.addChat);
-        this.supplierUserList(this.addChat);
-      }
-    },
-    getSupplierMembers(){
-      this.supplierUserList(this.addMember);
-    },
-    addPerson(user){
-      this.userObject = user;
-      var userdata = {
-        id: user.objectID,
-        name: user.firstName+' '+user.lastName,
-        lastMessageReadAt: null,
-      }
-      this.membersData.push(userdata);
-      this.participants.push(user.objectID);
-      
-      this.hideMemberList = false;
-      this.addMember = '';
-    },
-    createGroup(){
-      var myData = {
-        id: this.user.id,
-        name: this.user.firstName+' '+this.user.lastName,
-        lastMessageReadAt: null,
-      }
-      this.membersData.push(myData);
-      this.participants.push(this.user.id);
-      var data = {
-        participants: this.participants,
-        messages: [],
-        participantDetails: this.membersData,
-        type: 'GROUP',
-        groupName: this.groupName
-      }
-      
-      this.createConversation(data);
-      this.groupChatDialog = false;
-      this.isAddUser = false;
-    },
-    createChat(){
-      var data = {
-        participants: [
-           this.addChat.id, this.user.id,
-        ],
-        messages: [],
-        participantDetails: [
-          {
-            id: this.addChat.id,
-            name: this.addChat.firstName+' '+this.addChat.lastName,
-            lastMessageReadAt: null,
-          },
-          {
-            id: this.user.id,
-            name: this.user.firstName+' '+this.user.lastName,
-            lastMessageReadAt: null,
-          }
-        ],
-        type: 'PRIVATE',
-        groupName: '',
-      }
-      this.createConversation(data);
-      this.startChatDialog = false;
-      this.isAddUser = false;
-    },
-    // unreadCountMsg(conId){
-    //   var Ids = {
-    //     'userId': this.user.uid,
-    //     'conversationId': conId,
-    //   }
-    //   // this.unreadMessagesCountCon(Ids);
-    // },
     getText: (item) => `${item.firstName} ${item.lastName}`,
     dragfileupload(file, xhr, formData) {
       formData.append('conversationId', this.conversationId)
@@ -980,16 +644,6 @@ export default {
     check(ext){
       this.fileExt = ext;
     },
-    removeItem(index){
-      this.membersData.splice(index, 1);
-      this.participants.slice(index)
-      this.participants.filter((item)=>{
-       if(this.user.id != item.id){
-        return item;
-       }
-        // return this.searchUsers.toLowerCase().split(' ').every(v => item.company.toLowerCase().includes(v))
-      })
-    },
     archiveConversations(id){
       this.getArchiveChats(id);
     },
@@ -1014,9 +668,6 @@ export default {
           el.scrollIntoView({behavior: 'smooth'});
         }
       },
-    // time(newDate){
-    //   return moment.tz(newDate, this.user.timezone).format('MMM DD YYYY, h:mm:ss a');
-    // }
   },
   beforeMount() {
     this.user = this.$store.getters.userInfo;
@@ -1028,16 +679,12 @@ export default {
       }, 1000);      
     await this.getAllConversations(this.user.id);
     this.archiveConversations(this.user.id);
-
     var convo = _.orderBy(this.$store.getters.conversations, 'latestMessage', 'desc')[0];
-    
     if(convo.type == 'PRIVATE'){
       var membr = convo.participantDetails.filter((item)=>{
-       
        if(this.user.id != item.id){
         return item;
        }
-        // return this.searchUsers.toLowerCase().split(' ').every(v => item.company.toLowerCase().includes(v))
       })
       var grpName = membr[0].name;
     }else{
@@ -1051,9 +698,7 @@ export default {
       this.userList = true;
       this.showMsgBlock = false;
       this.backArrow = false;
-    }
-    this.getSupplierUsers();  
-    this.memberList();
+    } 
     this.scrollToElement();
     document.addEventListener('dragenter', function(e) {
       console.log(e.target.className);
@@ -1067,6 +712,3 @@ export default {
   }
 };
 </script>
-<style scoped lang="scss">
-
-</style>

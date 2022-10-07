@@ -2,15 +2,9 @@ import router from '@/router'
 import axios from 'axios'
 
 export default {
-  getAllBids({commit}){
-    axios.get('/admin/getBids',{ headers: {"Authorization" : `Bearer ${JSON.parse(localStorage.getItem('token'))}`} })
-      .then(responce => {
-      commit('getBids',responce.data)
-    })
-  }, 
 
-  pendingUserCount({commit},payload){
-    axios.get('/user/getQueueUsersCount/'+payload,{ headers: {"Authorization" : `Bearer ${JSON.parse(localStorage.getItem('token'))}`} })
+  async pendingUserCount({commit},payload){
+    await axios.get('/user/getQueueUsersCount/'+payload,{ headers: {"Authorization" : `Bearer ${JSON.parse(localStorage.getItem('token'))}`} })
       .then(responce => {
       commit('setPendingCount',responce.data.size)
     })

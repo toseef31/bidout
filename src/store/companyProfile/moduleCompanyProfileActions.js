@@ -3,18 +3,16 @@ import store from "../../store";
 import axios from 'axios'
 
 export default {
-  getCompany({commit}, payload){
-    axios.get('company/getCompanyById/'+payload)
+  async getCompany({commit}, payload){
+    await axios.get('company/getCompanyById/'+payload)
      .then(responce => {
       commit('setCompany',responce.data)
       localStorage.setItem('companyData', JSON.stringify(responce.data));
     })
   },
-  getSubCategories({commit}, payload){
-    console.log(payload);
-    axios.get('serviceCategory/getSubCategories/'+payload)
+  async getSubCategories({commit}, payload){
+    await axios.get('serviceCategory/getSubCategories/'+payload)
      .then(responce => {
-      console.log(responce);
       commit('setSubCategories',responce.data)
     })
   },
@@ -89,7 +87,6 @@ export default {
     })
   },
   addCompanyDocument({commit,dispatch}, payload){
-    console.log(payload,'payload');
     var config = {
       headers: {
         "Content-Type": "multipart/form-data",
@@ -107,7 +104,6 @@ export default {
     })
   },
   deleteCompanyDocument({commit,dispatch}, payload){
-    console.log(payload,'payload');
     var config = {
       headers: {
         "Content-Type": "multipart/form-data",
@@ -125,7 +121,6 @@ export default {
     })
   },
   addCompanyNews({commit,dispatch}, payload){
-    console.log(payload);
     var config = {
       headers: {
         "Authorization": `Bearer ${JSON.parse(localStorage.getItem('token'))}`
@@ -137,7 +132,6 @@ export default {
     })
   },
   addCompanyFacts({commit,dispatch}, payload){
-    console.log(payload);
     var config = {
       headers: {
         "Authorization": `Bearer ${JSON.parse(localStorage.getItem('token'))}`
@@ -149,7 +143,6 @@ export default {
     })
   },
   addCompanyContacts({commit,dispatch}, payload){
-    console.log(payload);
     var config = {
       headers: {
         "Authorization": `Bearer ${JSON.parse(localStorage.getItem('token'))}`
@@ -180,7 +173,6 @@ export default {
     })
   },
   deleteCompanyExcutive({commit,dispatch}, payload){
-    console.log(payload,'payload');
     var config = {
       headers: {
         "Content-Type": "multipart/form-data",

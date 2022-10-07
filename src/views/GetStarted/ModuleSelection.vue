@@ -398,8 +398,6 @@ export default {
         plan: plan,
         id: this.$store.getters.companyId,
         userId: this.$store.getters.id,
-        item_price_id: this.item_price_id,
-        billing_cycles: this.billing_cycles,
         customer_id: this.$store.getters.customerId,
         unit_price: this.unit_price,
       }
