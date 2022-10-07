@@ -267,5 +267,32 @@ export default {
            // Handle error
         });
     });
+  },
+  signInWithCustomToken({ commit }, payload) {
+    return new Promise(async (resolve, reject) => {
+      try {
+        const result  = await firebase.auth().signInWithCustomToken(payload)
+        commit('setError', null)
+        commit('setToken',result.user.multiFactor.user.accessToken);
+        localStorage.setItem("token",JSON.stringify(result.user.multiFactor.user.accessToken));
+        const userResp = await axios.get('/user/getUserData/'+result.user.multiFactor.user.email)
+        if(userResp.data.status == false){
+          commit('setError', 'Disabled account! You cannot login with this account');
+          commit('showErrorAlert')
+        }else{
+          axios.get('/auth/addUserLoginHistory/'+userResp.data.id)
+          const companyResp = await axios.get('company/getCompanyById/'+userResp.data.company.id)
+          commit('setCompany',companyResp.data)
+          localStorage.setItem('companyData', JSON.stringify(companyResp.data));
+          commit('setUser',userResp.data)
+          localStorage.setItem("userData",JSON.stringify(userResp.data));
+          router.replace({ name: "Dashboard" });
+        }
+        resolve(result)
+      } catch(err) {
+        console.log(err);
+        reject(err)
+      }
+    })
   }
 }

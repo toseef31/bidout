@@ -21,6 +21,11 @@ const routes = [
         name: 'ResetPassword',
         component: () => import('@/views/ResetPassword.vue'),
       },
+      {
+        path: '/impersonate',
+        name: 'Impersonate',
+        component: () => import('@/views/Impersonate.vue'),
+      },
     ],
   },
 ];
