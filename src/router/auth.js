@@ -1,4 +1,4 @@
-import Base from '@/views/Layout/Base.vue';
+import Base from '@/components/Layout/Base.vue';
 
 const routes = [
   {
@@ -9,22 +9,22 @@ const routes = [
       {
         path: '/login',
         name: 'Login',
-        component: () => import('@/views/Login.vue'),
+        component: () => import('@/components/Login.vue'),
       },
       {
         path: '/forgot-password',
         name: 'ForgotPassword',
-        component: () => import('@/views/ForgotPassword.vue'),
+        component: () => import('@/components/ForgotPassword.vue'),
       },
       {
         path: '/reset-password/:token',
         name: 'ResetPassword',
-        component: () => import('@/views/ResetPassword.vue'),
+        component: () => import('@/components/ResetPassword.vue'),
       },
       {
         path: '/invitation/:token',
         name: 'Invitation',
-        component: () => import('@/views/Invitation.vue'),
+        component: () => import('@/components/Invitation.vue'),
       },
     ],
   },

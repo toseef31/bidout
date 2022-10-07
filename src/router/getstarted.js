@@ -1,4 +1,4 @@
-import Base from '@/views/Layout/Base.vue';
+import Base from '@/components/Layout/Base.vue';
 
 const routes = [
   {
@@ -8,7 +8,7 @@ const routes = [
       {
         path: '/get-started',
         name: 'GetStarted',
-        component: () => import('@/views/GetStarted/GetStarted.vue'),
+        component: () => import('@/components/GetStarted/GetStarted.vue'),
         beforeEnter: (to, from, next) => {
             if(localStorage.getItem("userData") == null) {
                 
@@ -21,7 +21,7 @@ const routes = [
       {
         path: '/get-started/existing-account',
         name: 'ExistingAccount',
-        component: () => import('@/views/GetStarted/ExistingAccount.vue'),
+        component: () => import('@/components/GetStarted/ExistingAccount.vue'),
         beforeEnter: (to, from, next) => {
             if(localStorage.getItem("userData") == null) {
                 
@@ -34,7 +34,7 @@ const routes = [
       {
         path: '/get-started/module-selection',
         name: 'ModuleSelection',
-        component: () => import('@/views/GetStarted/ModuleSelection.vue'),
+        component: () => import('@/components/GetStarted/ModuleSelection.vue'),
         beforeEnter: (to, from, next) => {
             if(localStorage.getItem("userData") == null) {
                 
@@ -47,7 +47,7 @@ const routes = [
       {
         path: '/get-started/contract',
         name: 'Contract',
-        component: () => import('@/views/GetStarted/Contract.vue'),
+        component: () => import('@/components/GetStarted/Contract.vue'),
         beforeEnter: (to, from, next) => {
             if(localStorage.getItem("userData") == null) {
                 
@@ -60,7 +60,7 @@ const routes = [
       {
         path: '/get-started/payment',
         name: 'Payment',
-        component: () => import('@/views/GetStarted/Payment.vue'),
+        component: () => import('@/components/GetStarted/Payment.vue'),
         beforeEnter: (to, from, next) => {
           if(localStorage.getItem("userData") == null) {
               
@@ -73,7 +73,7 @@ const routes = [
       {
         path: '/get-started/confirmation',
         name: 'Confirmation',
-        component: () => import('@/views/GetStarted/Confirmation.vue'),
+        component: () => import('@/components/GetStarted/Confirmation.vue'),
         beforeEnter: (to, from, next) => {
             if(localStorage.getItem("userData") == null) {
                 
@@ -86,7 +86,7 @@ const routes = [
       
       { 
         path: "*", 
-        component: () => import('@/views/PageNotFound.vue'), 
+        component: () => import('@/components/PageNotFound.vue'), 
        
       }
     ],

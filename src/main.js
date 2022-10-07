@@ -37,7 +37,7 @@ var firebaseConfig = {
 firebase.initializeApp(firebaseConfig);
 
 axios.defaults.baseURL = import.meta.env.VITE_API_BASE_URL;
-
+axios.defaults.headers.common['Authorization'] = `Bearer ${JSON.parse(localStorage.getItem('token'))}`;
 LogRocket.init('voayxx/v2-ib4bb');
 const logrocketPlugin = createPlugin(LogRocket);
 

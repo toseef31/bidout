@@ -1,4 +1,4 @@
-import Base from '@/views/Layout/Base.vue';
+import Base from '@/components/Layout/Base.vue';
 const routes = [
   {
     path: '',
@@ -7,7 +7,7 @@ const routes = [
       {
         path: '/',
         name: 'OFSHome',
-        component: () => import('@/views/Ofs/OFSHome.vue'),
+        component: () => import('@/components/Ofs/OFSHome.vue'),
         beforeEnter: (to, from, next) => {
           if(localStorage.getItem("userData") == null) {
               
@@ -20,7 +20,7 @@ const routes = [
       {
         path: '/ofs-directory/:slug',
         name: 'CategoryName',
-        component: () => import('@/views/Ofs/CategoryListing.vue'),
+        component: () => import('@/components/Ofs/CategoryListing.vue'),
         beforeEnter: (to, from, next) => {
           if(localStorage.getItem("userData") == null) {
               
@@ -33,7 +33,7 @@ const routes = [
       {
         path: '/ofs-directory/:slug/:name',
         name: 'CategoryListing',
-        component: () => import('@/views/Ofs/CategoryListing.vue'),
+        component: () => import('@/components/Ofs/CategoryListing.vue'),
         beforeEnter: (to, from, next) => {
           if(localStorage.getItem("userData") == null) {
               
@@ -46,7 +46,7 @@ const routes = [
       {
         path: '/company-profiles/:name',
         name: 'CompanyProfiles',
-        component: () => import('@/views/Ofs/ViewCompany.vue'),
+        component: () => import('@/components/Ofs/ViewCompany.vue'),
         beforeEnter: (to, from, next) => {
           if(localStorage.getItem("userData") == null) {
               
@@ -59,7 +59,7 @@ const routes = [
       {
         path: '/subcompany-profile',
         name: 'SubCompanyProfile',
-        component: () => import('@/views/Ofs/SubCompany.vue'),
+        component: () => import('@/components/Ofs/SubCompany.vue'),
         beforeEnter: (to, from, next) => {
           if(localStorage.getItem("userData") == null) {
             next();

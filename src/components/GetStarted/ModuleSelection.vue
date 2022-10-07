@@ -350,35 +350,31 @@ export default {
     generateContract(type){
       if(this.package == 1){
         if(this.billing_cycles == 1){
-          this.item_price_id = 'OFS-Directory-Premium-Edition-USD-Monthly';
           this.unit_price = 79.99;
         }else{
           this.unit_price = 800;
-          this.item_price_id = 'OFS-Directory-Premium-Edition-USD-Yearly';
         }
       }
       if(this.package == 2){
         if(this.billing_cycles == 1){
-          this.item_price_id = 'OFS-Directory-Premium-Edition-1-USD-Monthly';
           this.unit_price = 99.99;
         }else{
           this.unit_price = 1000;
-          this.item_price_id = 'OFS-Directory-Premium-Edition-1-USD-Yearly';
         }
       }
       if(this.package == 3){
         if(this.billing_cycles == 1){
           this.unit_price = 119.99;
-          this.item_price_id = 'OFS-Directory-Premium-Edition-2-USD-Monthly';
         }else{
           this.unit_price = 1200;
-          this.item_price_id = 'OFS-Directory-Premium-Edition-2-USD-Yearly';
         }
       }
       if(this.package == 4){
-        this.billing_cycles == 12;
-        this.unit_price = 2400;
-        this.item_price_id = 'OFS-Directory-Premium-Edition-3-USD-Yearly';
+        if(this.billing_cycles == 1){
+          this.unit_price = 239.99;
+        }else{
+          this.unit_price = 2400;
+        }
       }
       if(type == 'ofs-premium'){
         var plan = this.package;

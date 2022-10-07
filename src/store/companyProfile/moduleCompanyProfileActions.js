@@ -8,13 +8,17 @@ export default {
      .then(responce => {
       commit('setCompany',responce.data)
       localStorage.setItem('companyData', JSON.stringify(responce.data));
-    })
+    }).catch(err => {
+          console.log(err);
+      });
   },
   async getSubCategories({commit}, payload){
     await axios.get('serviceCategory/getSubCategories/'+payload)
      .then(responce => {
       commit('setSubCategories',responce.data)
-    })
+    }).catch(err => {
+          console.log(err);
+      });
   },
   companyProfileImg({commit,dispatch}, payload){
     var config = {
@@ -29,62 +33,51 @@ export default {
     axios.post('/company/updateCompanyProfile/',formData,config)
      .then(responce => {
       dispatch("getCompany",payload.companyId)
-    })
+    }).catch(err => {
+          console.log(err);
+      });
   },  
   updateBasicProfile({commit,dispatch}, payload){
-    var config = {
-      headers: {
-        "Authorization": `Bearer ${JSON.parse(localStorage.getItem('token'))}`
-      },
-    };
-    axios.post('/company/updateBasicProfile/',{'companyId': payload.companyId,'profileName': payload.profileName,'profileSummary': payload.profileSummary},config)
+    axios.post('/company/updateBasicProfile/',{'companyId': payload.companyId,'profileName': payload.profileName,'profileSummary': payload.profileSummary})
      .then(responce => {
       dispatch("getCompany",payload.companyId)
-    })
+    }).catch(err => {
+          console.log(err);
+      });
   }, 
   addCompanyService({commit,dispatch}, payload){
-    var config = {
-      headers: {
-        "Authorization": `Bearer ${JSON.parse(localStorage.getItem('token'))}`
-      },
-    };
-    axios.post('/company/addCompanyServices/',{'companyId': payload.companyId,'services': payload.services},config)
+    axios.post('/company/addCompanyServices/',{'companyId': payload.companyId,'services': payload.services})
      .then(responce => {
       dispatch("getCompany",payload.companyId)
-    })
+    }).catch(err => {
+          console.log(err);
+      });
   }, 
   addCompanyLocation({commit,dispatch}, payload){
-    var config = {
-      headers: {
-        "Authorization": `Bearer ${JSON.parse(localStorage.getItem('token'))}`
-      },
-    };
-    axios.post('/company/addCompanyLocation/',{'id': payload.id,'companyId': payload.companyId,'location': payload.location,'lat':payload.lat,'long':payload.long},config)
+    axios.post('/company/addCompanyLocation/',{'id': payload.id,'companyId': payload.companyId,'location': payload.location,'lat':payload.lat,'long':payload.long})
      .then(responce => {
       dispatch("getCompany",payload.companyId)
-    })
+    }).catch(err => {
+          console.log(err);
+      });
   }, 
   deleteCompanyLocation({commit,dispatch}, payload){
-    var config = {
-      headers: {
-        "Authorization": `Bearer ${JSON.parse(localStorage.getItem('token'))}`
-      },
-    };
-    axios.post('/company/deleteCompanyLocation/',{'id': payload.id,'companyId': payload.companyId,'location': payload.location,'lat':payload.lat,'long':payload.long},config)
+    
+    axios.post('/company/deleteCompanyLocation/',{'id': payload.id,'companyId': payload.companyId,'location': payload.location,'lat':payload.lat,'long':payload.long})
      .then(responce => {
       dispatch("getCompany",payload.companyId)
-    })
+    }).catch(err => {
+          console.log(err);
+      });
   }, 
   addCompanyVideos({commit,dispatch}, payload){
-    var config = {
-      headers: {
-        "Authorization": `Bearer ${JSON.parse(localStorage.getItem('token'))}`
-      },
-    };
-    axios.post('/company/addCompanyVideo/',{'companyId': payload.companyId,'videoLinks': payload.videoLinks},config)
+   
+    axios.post('/company/addCompanyVideo/',{'companyId': payload.companyId,'videoLinks': payload.videoLinks})
      .then(responce => {
       dispatch("getCompany",payload.companyId)
-    })
+    }).catch(err => {
+          console.log(err);
+      });
   },
   addCompanyDocument({commit,dispatch}, payload){
     var config = {
@@ -101,7 +94,9 @@ export default {
     axios.post('/company/addCompanyDocuments/',formData,config)
      .then(responce => {
       dispatch("getCompany",payload.companyId)
-    })
+    }).catch(err => {
+          console.log(err);
+      });
   },
   deleteCompanyDocument({commit,dispatch}, payload){
     var config = {
@@ -118,40 +113,36 @@ export default {
     axios.post('/company/deleteCompanyDocuments/',formData,config)
      .then(responce => {
       dispatch("getCompany",payload.companyId)
-    })
+    }).catch(err => {
+          console.log(err);
+      });
   },
   addCompanyNews({commit,dispatch}, payload){
-    var config = {
-      headers: {
-        "Authorization": `Bearer ${JSON.parse(localStorage.getItem('token'))}`
-      },
-    };
-    axios.post('/company/addCompanyNews/',{'companyId': payload.companyId,'corporateNews': payload.corporateNews},config)
+    
+    axios.post('/company/addCompanyNews/',{'companyId': payload.companyId,'corporateNews': payload.corporateNews})
      .then(responce => {
       dispatch("getCompany",payload.companyId)
-    })
+    }).catch(err => {
+          console.log(err);
+      });
   },
   addCompanyFacts({commit,dispatch}, payload){
-    var config = {
-      headers: {
-        "Authorization": `Bearer ${JSON.parse(localStorage.getItem('token'))}`
-      },
-    };
-    axios.post('/company/addCompanyKeyfacts/',{'companyId':payload.companyId,'founded':payload.founded,'employees':payload.employees,'hqlocation':payload.hqLocation,'stockPrice':payload.stockPrice,'website':payload.website,'linkedin':payload.linkedin,'careers':payload.careers},config)
+    
+    axios.post('/company/addCompanyKeyfacts/',{'companyId':payload.companyId,'founded':payload.founded,'employees':payload.employees,'hqlocation':payload.hqLocation,'stockPrice':payload.stockPrice,'website':payload.website,'linkedin':payload.linkedin,'careers':payload.careers})
      .then(responce => {
       dispatch("getCompany",payload.companyId)
-    })
+    }).catch(err => {
+          console.log(err);
+      });
   },
   addCompanyContacts({commit,dispatch}, payload){
-    var config = {
-      headers: {
-        "Authorization": `Bearer ${JSON.parse(localStorage.getItem('token'))}`
-      },
-    };
-    axios.post('/company/addCompanyContact/',{'companyId':payload.companyId,'accountContacts':payload.accountContacts},config)
+    
+    axios.post('/company/addCompanyContact/',{'companyId':payload.companyId,'accountContacts':payload.accountContacts})
      .then(responce => {
       dispatch("getCompany",payload.companyId)
-    })
+    }).catch(err => {
+          console.log(err);
+      });
   },
   addCompanyExcutive({commit,dispatch}, payload){
     var config = {
@@ -170,7 +161,9 @@ export default {
     axios.post('/company/addCompanyLeadership/',formData,config)
      .then(responce => {
       dispatch("getCompany",payload.companyId)
-    })
+    }).catch(err => {
+          console.log(err);
+      });
   },
   deleteCompanyExcutive({commit,dispatch}, payload){
     var config = {
@@ -189,7 +182,9 @@ export default {
     axios.post('/company/deleteCompanyLeadership/',formData,config)
      .then(responce => {
       dispatch("getCompany",payload.companyId)
-    })
+    }).catch(err => {
+          console.log(err);
+      });
   },
   addCompanyEsg({commit,dispatch}, payload){
     var config = {
@@ -208,7 +203,9 @@ export default {
     axios.post('/company/addCompanyDifferentiators/',formData,config)
      .then(responce => {
       dispatch("getCompany",payload.companyId)
-    })
+    }).catch(err => {
+          console.log(err);
+      });
   }, 
   deleteCompanyEsg({commit,dispatch}, payload){
     var config = {
@@ -227,7 +224,9 @@ export default {
     axios.post('/company/deleteCompanyDifferentiators/',formData,config)
      .then(responce => {
       dispatch("getCompany",payload.companyId)
-    })
+    }).catch(err => {
+          console.log(err);
+      });
   },  
 
   

@@ -1,5 +1,5 @@
-// import Settings from '@/views/Layout/Base.vue';
-import Settings from '@/views/Layout/Settings.vue';
+// import Settings from '@/components/Layout/Base.vue';
+import Settings from '@/components/Layout/Settings.vue';
 import store from '@/store';
 
 const routes = [
@@ -12,7 +12,7 @@ const routes = [
       {
         path: '/company-profile',
         name: 'CompanyProfile',
-        component: () => import('@/views/CompanyProfile.vue'),
+        component: () => import('@/components/CompanyProfile.vue'),
         beforeEnter: (to, from, next) => {
            if(localStorage.getItem("userData") == null) {
                next('/login');
@@ -24,7 +24,7 @@ const routes = [
       {
         path: '/manage-users',
         name: 'ManageUsers',
-        component: () => import('@/views/ManageUsers.vue'),
+        component: () => import('@/components/ManageUsers.vue'),
          // meta: { authorize: [localStorage.getItem("userData").role == 'admin'] }
         beforeEnter: (to, from, next) => {
            if(localStorage.getItem("userData") != null) {
@@ -41,7 +41,7 @@ const routes = [
       {
         path: '/manage-users/pending-users',
         name: 'PendingUsers',
-        component: () => import('@/views/PendingUsers.vue'),
+        component: () => import('@/components/PendingUsers.vue'),
         beforeEnter: (to, from, next) => {
            if(localStorage.getItem("userData") == null) {
                next('/login');
@@ -53,7 +53,7 @@ const routes = [
       {
         path: '/manage-users/disabled-users',
         name: 'DisabledUsers',
-        component: () => import('@/views/DisabledUsers.vue'),
+        component: () => import('@/components/DisabledUsers.vue'),
         beforeEnter: (to, from, next) => {
            if(localStorage.getItem("userData") == null) {
                next('/login');
@@ -65,7 +65,7 @@ const routes = [
       {
         path: '/manage-users/add-users',
         name: 'AddUsers',
-        component: () => import('@/views/AddUsers.vue'),
+        component: () => import('@/components/AddUsers.vue'),
         beforeEnter: (to, from, next) => {
            if(localStorage.getItem("userData") == null) {
                next('/login');
@@ -77,7 +77,7 @@ const routes = [
       {
         path: '/manage-users/edit-user/',
         name: 'EditUser',
-        component: () => import('@/views/EditUser.vue'),
+        component: () => import('@/components/EditUser.vue'),
         beforeEnter: (to, from, next) => {
            if(localStorage.getItem("userData") == null) {
                next('/login');
@@ -89,7 +89,7 @@ const routes = [
       {
         path: '/manage-module',
         name: 'ManageModules',
-        component: () => import('@/views/ManageModule.vue'),
+        component: () => import('@/components/ManageModule.vue'),
         beforeEnter: (to, from, next) => {
            if(localStorage.getItem("userData") == null) {
                next('/login');
@@ -101,7 +101,7 @@ const routes = [
       {
         path: '/manage-templates',
         name: 'ManageTemplates',
-        component: () => import('@/views/ManageTemplates.vue'),
+        component: () => import('@/components/ManageTemplates.vue'),
         beforeEnter: (to, from, next) => {
            if(localStorage.getItem("userData") == null) {
                next('/login');
