@@ -13,6 +13,9 @@ export default {
 
       .then((result) => {
         commit('setError', null)
+        commit('setContract', null)
+        commit('setCredentials', null)
+        localStorage.removeItem('contractData');
         commit('setToken',result.user.multiFactor.user.accessToken);
         localStorage.setItem("token",JSON.stringify(result.user.multiFactor.user.accessToken));
         axios.get('/user/getUserData/'+result.user.multiFactor.user.email)
@@ -55,6 +58,8 @@ export default {
         commit('setError', null)
         commit('setCompany', null)
         commit('setCredentials', null)
+        commit('setContract', null)
+        localStorage.removeItem('contractData');
         // console.log(result);
         localStorage.removeItem("userData");
         // localStorage.removeItem("userId");
@@ -163,11 +168,11 @@ export default {
                 axios.post('/ofs/createUser',{'company': payload.company,'firstName': payload.firstName, 'lastName': payload.lastName,'email': payload.email,'phoneNumber':payload.phoneNumber, 'title': payload.title, 'password': payload.password,'companyId':responce.data.data.companyId})
                  .then(responce => {
                   if(responce.status == 200){
-                    commit('setCredentials',{'email':payload.email,'password': payload.password})
-                     commit("setId",responce.data.data.id);
-                     commit("setCustomerId",responce.data.data.chargebee_customer_id);
+                    commit('setCredentials',payload)
+                     commit("setId",responce.data.data.id)
+                     commit("setCustomerId",responce.data.data.chargebee_customer_id)
                     // commit('setCompanyId', responce.data);
-                    commit('setCompanyName', payload.company);
+                    commit('setCompanyName', payload.company)
                     router.replace({
                       name: "ModuleSelection"
                     });
@@ -216,16 +221,16 @@ export default {
         }else{
           axios.post('/ofs/createCompany',{'company': payload.company, 'companyHq': payload.companyHq, 'companyHq2': payload.companyHq2, 'companyHqCountry': payload.companyHqCountry,'companyHqState':payload.companyHqState, 'companyHqCity': payload.companyHqCity, 'companyHqZip': payload.companyHqZip})
            .then(responce => {
-            commit('setCompanyId', responce.data.data.companyId);
+            commit('setCompanyId', responce.data.data.companyId)
             localStorage.setItem("companyId",JSON.stringify(responce.data.companyId));
             if(responce.status == 200){
               axios.post('/ofs/createUser',{'company': payload.company,'firstName': payload.firstName, 'lastName': payload.lastName,'email': payload.email,'phoneNumber':payload.phoneNumber, 'title': payload.title, 'password': payload.password,'companyId':responce.data.data.companyId})
                .then(responce => {
                 if(responce.status == 200){
-                  commit('setCredentials',{'email':payload.email,'password': payload.password})
-                  commit("setId",responce.data.data.id);
-                  commit("setCustomerId",responce.data.data.chargebee_customer_id);
-                  commit('setCompanyName', payload.company);
+                  commit('setCredentials',payload)
+                  commit("setId",responce.data.data.id)
+                  commit("setCustomerId",responce.data.data.chargebee_customer_id)
+                  commit('setCompanyName', payload.company)
                   router.replace({
                     name: "ModuleSelection"
                   });
@@ -316,18 +321,28 @@ export default {
     axios.post('/chargeBee/savePaymentDetails',{'userId': payload.userId,'customer_id': payload.customer_id,'cardNumber':payload.cardNumber,'CVV':payload.CVV,'expiryMonth':payload.expiryMonth,'expiryYear':payload.expiryYear,'billing_zip':payload.billing_zip,'billing_country':payload.billing_country})
      .then(responce => {
       if(responce.status == 200){
+        commit('setPlan', null);
+        router.replace({
+          name: "Confirmation"
+        });
+      }
+      else{
+        commit('setEmailError', 'Something wrong please try again')
+      }
+    }).catch(err => {
+      console.log(err);
+    });
+   },
+  savePaymentsNet30({commit},payload){
+    axios.post('/chargeBee/saveNet30Payment',{'customer_id': payload.customer_id,'sameAsyou':payload.sameAsYou,'email':payload.email,'first_name':payload.firstName,'last_name':payload.lastName,'phone':payload.phone})
+     .then(responce => {
+      if(responce.status == 200){
         commit('setContract', null);
         localStorage.removeItem('contractData');
-         commit('setPlan', null);
-         // axios.post('/chargeBee/createAuthorizePayment',{'customer_id': payload.customer_id,'amount':payload.amount})
-         //  .then(responce => {
-            router.replace({
-              name: "Confirmation"
-            });
-          // })
-        // commit('setContract', 'Contract generated successfully!')
-
-        
+        commit('setPlan', null);
+        router.replace({
+          name: "Confirmation"
+        });
       }
       else{
         commit('setEmailError', 'Something wrong please try again')

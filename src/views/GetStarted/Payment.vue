@@ -94,132 +94,56 @@
                         <h1 class="mb-0 font-weight-bold">Next Renewal</h1>
                       </v-col>
                       <v-col cols="12" md="4" class="text-right">
-                        <h1>08/11/2022</h1>
+                        <h1>{{contractData[0].renewsOn  | moment("MM/D/YYYY")}}</h1>
                       </v-col>
                     </v-row>
                     <v-row justify="center" align="center" class="mt-5">
                       <v-col cols="12" md="4">
-                        <v-btn color="#0D9647" large dense width="100%" height="56" class="font-weight-bold white--text text-capitalize" @click="savePayment">Complete Signup <v-icon class="pl-2" color="#fff">mdi-arrow-right-circle</v-icon></v-btn>
+                        <v-btn color="#0D9647" large dense width="100%" height="56" class="font-weight-bold white--text text-capitalize" @click="savePayment" :loading="loading"
+                    :disabled="disable">Complete Signup <v-icon class="pl-2" color="#fff">mdi-arrow-right-circle</v-icon></v-btn>
                       </v-col>
                     </v-row>
                   </v-form>
-                  <!-- <div class="card-form__inner">
-                    <div class="card-input">
-                      <label for="cardNumber" class="card-input__label">Card Number</label>
-                      <input
-                        type="tel"
-                        :id="fields.cardNumber"
-                        @input="changeNumber"
-                        @focus="focusCardNumber"
-                        @blur="blurCardNumber"
-                        class="card-input__input"
-                        :value="formData.cardNumber"
-                        :maxlength="cardNumberMaxLength"
-                        data-card-field
-                        autocomplete="off"
-                      />
-                      <button
-                        class="card-input__eye"
-                        :class="{ '-active' : !isCardNumberMasked }"
-                        title="Show/Hide card number"
-                        tabindex="-1"
-                        :disabled="formData.cardNumber === ''"
-                        @click="toggleMask"
-                      ></button>
-                    </div>
-                    <div class="card-form__row">
-                      <div class="card-form__col">
-                        <div class="card-form__group">
-                          <label for="cardMonth" class="card-input__label">expirationDate</label>
-                          <select
-                            class="card-input__input -select"
-                            :id="fields.cardMonth"
-                            v-model="formData.cardMonth"
-                            @change="changeMonth"
-                            data-card-field
-                          >
-                            <option value disabled selected>month</option>
-                            <option
-                              v-bind:value="n < 10 ? '0' + n : n"
-                              v-for="n in 12"
-                              v-bind:disabled="n < minCardMonth"
-                              v-bind:key="n"
-                            >{{generateMonthValue(n)}}</option>
-                          </select>
-                          <select
-                            class="card-input__input -select"
-                            :id="fields.cardYear"
-                            v-model="formData.cardYear"
-                            @change="changeYear"
-                            data-card-field
-                          >
-                            <option value disabled selected>year</option>
-                            <option
-                              v-bind:value="$index + minCardYear"
-                              v-for="(n, $index) in 12"
-                              v-bind:key="n"
-                            >{{$index + minCardYear}}</option>
-                          </select>
-                        </div>
-                      </div>
-                      <div class="card-form__col -cvv">
-                        <div class="card-input">
-                          <label for="cardCvv" class="card-input__label">CVV</label>
-                          <input
-                            type="tel"
-                            class="card-input__input"
-                            v-number-only
-                            :id="fields.cardCvv"
-                            maxlength="4"
-                            :value="formData.cardCvv"
-                            @input="changeCvv"
-                            data-card-field
-                            autocomplete="off"
-                          />
-                        </div>
-                      </div>
-                    </div>
-
-                    <button class="card-form__button" v-on:click="invaildCard">submit</button>
-                  </div> -->
+                  
                 </div>
                 <div v-else>
                   <v-form class="net30-form">
                     <v-row class="mt-12">
                       <v-col cols="12" sm="12" text="left">
-                        <label class="d-block text-left input-label mb-2 font-weight-bold">Billing Contact Name</label>
-                        <v-text-field placeholder="Billing Contact Name" single-line outlined type="text"></v-text-field>
                         <v-checkbox
-                          v-model="billingNameCheck"
+                          v-model="sameAsYou"
                           label="Same as you"
                           color="#0D9648"
-                          class="mt-0"
+                          class="mt-0" @change="sameAsAction"
                         ></v-checkbox>
+                        <label class="d-block text-left input-label mb-2 font-weight-bold">Billing Contact First Name</label>
+                        <v-text-field placeholder="Billing Contact Name" v-model="first_name" single-line outlined type="text"></v-text-field>
+                        
+                      </v-col>
+                      <v-col cols="12" sm="12" text="left">
+                        <label class="d-block text-left input-label mb-2 font-weight-bold">Billing Contact Last Name</label>
+                        <v-text-field placeholder="Billing Contact Name" v-model="last_name" single-line outlined type="text"></v-text-field>
+                        
                       </v-col>
                       <v-col cols="12" sm="12" text="left">
                         <label class="d-block text-left input-label mb-2 font-weight-bold">Billing Contact Phone</label>
-                        <v-text-field placeholder="Billing Contact Phone" single-line outlined type="text"></v-text-field>
-                        <v-checkbox
-                          v-model="billingPhoneCheck"
-                          label="Same as you"
-                          color="#0D9648"
-                          class="mt-0"
-                        ></v-checkbox>
+                        <VuePhoneNumberInput :border-radius="4" size="lg" v-model="phone"
+                        :translations="translations"
+                        :loader="hasLoaderActive"
+                        :error="hasErrorActive"
+                        class="mb-2"
+                        @update="onUpdate"
+                        />
                       </v-col>
                       <v-col cols="12" sm="12" text="left">
                         <label class="d-block text-left input-label mb-2 font-weight-bold">Billing Contact Email</label>
-                        <v-text-field placeholder="Billing Contact Email" single-line outlined type="email"></v-text-field>
-                        <v-checkbox
-                          v-model="billingEmailCheck"
-                          label="Same as you"
-                          color="#0D9648"
-                          class="mt-0"
-                        ></v-checkbox>
+                        <v-text-field placeholder="Billing Contact Email" v-model="email" single-line outlined type="email" :rules="emailRules"></v-text-field>
                       </v-col>
                     </v-row>
                     <v-row justify="center" align="center">
                       <v-col cols="12" md="4">
-                        <v-btn color="#0D9647" large dense width="100%" height="56" class="font-weight-bold white--text text-capitalize">Complete Signup <v-icon class="pl-2" color="#fff">mdi-arrow-right-circle</v-icon></v-btn>
+                        <v-btn color="#0D9647" large dense width="100%" height="56" class="font-weight-bold white--text text-capitalize" :loading="loading"
+                        :disabled="disable" @click="saveNet30">Complete Signup <v-icon class="pl-2" color="#fff">mdi-arrow-right-circle</v-icon></v-btn>
                       </v-col>
                     </v-row>
                   </v-form>
@@ -245,6 +169,8 @@
 <script>
   import NavbarBeforeLogin from '../../components/Layout/NavbarBeforeLogin.vue'
   import Footer from '../../components/Layout/Footer.vue'
+  import VuePhoneNumberInput from 'vue-phone-number-input';
+  import 'vue-phone-number-input/dist/vue-phone-number-input.css';
   import { mapActions } from "vuex";
   export default {
     name: 'Payment',
@@ -287,15 +213,11 @@
           }
         }
       },
-      backgroundImage: [String, Object],
-      randomBackgrounds: {
-        type: Boolean,
-        default: true
-      }
     },
     components: {
       NavbarBeforeLogin,
-      Footer
+      Footer,
+      VuePhoneNumberInput
     },
     data () {
       return {
@@ -317,13 +239,30 @@
         ],
         type: 'Credit Card',
         showCard: true,
-        billingEmailCheck: true,
-        billingNameCheck: true,
-        billingPhoneCheck: true,
+        sameAsYou: true,
         country: "US",
         zipCode: '',
         expiryMonth: '',
         expiryYear: '',
+        loading: false,
+        disable: false,
+        first_name: this.$store.getters.credentials.firstName,
+        last_name: this.$store.getters.credentials.lastName,
+        phone: this.$store.getters.credentials.phoneNumber,
+        email: this.$store.getters.credentials.email,
+        defaultCountry: 'US',
+        translations: {
+          countrySelectorLabel: 'Country Code',
+          countrySelectorError: 'Choose country',
+          phoneNumberLabel: 'Phone Number',
+          example: 'Example'
+        },
+        hasLoaderActive: false,
+        hasErrorActive: false,
+        results: {},
+        emailRules: [
+          v => /.+@.+\..+/.test(v) || 'E-mail must be valid',
+        ],
       }
     },
     computed: {
@@ -337,6 +276,11 @@
       price(){
        return this.$store.getters.price;
       },
+      contractData(){
+       if(this.$store.getters.contractData){
+         return this.$store.getters.contractData.company.contracts;
+       }
+      },
     },
     watch: {
       cardYear () {
@@ -345,12 +289,8 @@
         }
       }
     },
-    mounted () {
-       document.title = "Payment - BidOut"
-      this.maskCardNumber()
-    },
     methods: {
-      ...mapActions(["savePaymentsDetails"]),
+      ...mapActions(["savePaymentsDetails","savePaymentsNet30"]),
       generateMonthValue (n) {
         return n < 10 ? `0${n}` : n
       },
@@ -456,8 +396,40 @@
           amount: this.$store.getters.price,
         }
         this.savePaymentsDetails(data);
+        this.loading = 'loading';
+        this.disable = true;
+      },
+      onUpdate (payload) {
+        this.results = payload.formattedNumber
+      },
+      sameAsAction(){
+        if(this.sameAsYou == false){
+          this.sameAsYou = '',
+          this.first_name = '',
+          this.last_name = '',
+          this.email = '';
+          this.phone = '';
+        }
+      },
+      saveNet30(){
+        var data = {
+          customer_id: this.$store.getters.customerId,
+          sameAsYou: this.sameAsYou,
+          firstName: this.first_name,
+          lastName: this.last_name,
+          email: this.email,
+          phone: this.results,
+        }
+        console.log(data);
+        this.savePaymentsNet30(data);
+        this.loading = 'loading';
+        this.disable = true;
       }
-    }
+    },
+    mounted () {
+       document.title = "Payment - BidOut"
+      this.maskCardNumber()
+    },
   }
 </script>
 <style scoped lang="scss">

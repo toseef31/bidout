@@ -23,9 +23,8 @@
                 <div class="module-content mt-16">
                   <v-tabs-items v-model="tab">
                     <v-tab-item>
-
-                      <template v-if="moduleData.contracts">  
-                          <div class="panels pb-4" v-for="modules in moduleData.contracts">
+                      <template v-if="moduleData && moduleData.length > 0">  
+                          <div class="panels pb-4" v-for="modules in moduleData">
                             <div class="panel">
                               <div class="d-flex justify-space-between panel-header">
                                 <h6 v-if="modules.contractType == 'rfx'">BidOut Procurement Platform</h6>
@@ -117,7 +116,13 @@ export default {
         return this.$store.getters.g_activityPanel;
     },
     moduleData(){
-      return this.$store.getters.companyData;
+      if(this.$store.getters.companyData){
+        return this.$store.getters.companyData.contracts.filter((item)=>{
+          // console.log(item);
+          return this.$store.getters.userInfo.id == item.signedBy
+        })
+      }
+      
     },
   },
   methods: {
