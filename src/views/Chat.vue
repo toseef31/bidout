@@ -138,6 +138,7 @@
                   </v-list-item-group>
                 </v-list>
               </div>
+              {{dropzoneOptions.url}}
               <!-- Message Send Area -->
               <div class="message-send-area px-5 pt-5">
                 <span class="fileName" v-if="filename">{{filename}}</span>
@@ -214,7 +215,7 @@ export default {
       ],
       user: '',
       dropzoneOptions: {
-        url: 'https://api-dev-v2-dot-bidout-dev.uc.r.appspot.com/api/chat/sendMessage',
+        url: import.meta.env.VITE_API_BASE_URL+'/chat/sendMessage',
         thumbnailWidth: 100,
         thumbnailHeight: 100,
         maxFiles: 10,
