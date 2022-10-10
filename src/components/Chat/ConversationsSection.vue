@@ -14,11 +14,12 @@
     <v-tabs-items v-model="convTab">
       <v-tab-item> 
         <v-list two-line  class="py-0">
+
           <v-list-item-group
             v-model="selectedUser"
             active-class="grey--text">
             <template v-for="(conversation, index) in conversationsList">
-              <v-list-item @click="openChat(conversation,conversation.groupName)" :key="conversation._id"  :class="{ 'grey--text v-list-item--active' : conversation._id === chatData.group._id }" v-if="conversation.type == 'GROUP'">
+              <v-list-item   @click="openChat(conversation,conversation.groupName)" :key="conversation._id"  :class="{ 'grey--text v-list-item--active' : conversation._id === chatData.group._id }" v-if="conversation.type == 'GROUP'">
                 <template>
                   <v-list-item-avatar>
                     <v-icon>mdi-account-group-outline</v-icon>
@@ -144,6 +145,8 @@
 </template>
 <script>
   import _ from 'lodash';
+  import VueMoment from 'vue-moment';
+  import moment from 'moment-timezone';
   import { mapActions } from "vuex";
 export default {
   data() {
@@ -154,10 +157,13 @@ export default {
         'All', 'Archive',
       ],
       userList : true,
+      selected: null,
       chatData: '',
       searchUsers: '',
       user:'',
       conversationId : '',
+      backArrow : false,
+      loading: true,
     };
   },
   computed:{
@@ -182,7 +188,7 @@ export default {
     getConversations(id){
       this.getAllConversations(id);
     },
-    openChat(group,name,id){
+    openChat(group,name){
       if(screen.width < 767){
         this.userList = false;
         this.showMsgBlock = true;
@@ -195,25 +201,14 @@ export default {
       this.conversationId = group._id;
       this.chatData = obj;
       if(this.chatData){
-        this.allMembers = this.chatData.group.participantDetails;
+        this.$emit('membersData',this.chatData.group.participantDetails);
       }
       var ids = {
         userId: this.user.id,
         conversationId: this.conversationId,
       }
-      this.getAllMessages(ids);
-      // var container = this.$refs.messagesSection;
-      
-      // setTimeout(function(){
-      //   container.scrollTop = container.scrollHeight;
-      // }, 4000);
-      
-      this.lastMessageRead(ids);
-      // var container = this.$refs.messagesSection;
-      // setTimeout(function(){
-      //   container.scrollTop = container.scrollHeight;
-      // }, 1000);
-      this.isChatMenu  = false;
+      this.$emit('ChatDatas',this.chatData);
+      this.$emit('callTest', group,name)
     },
     archiveConversations(id){
       this.getArchiveChats(id);
@@ -225,13 +220,31 @@ export default {
       }
       this.unArchiveConversation(conv);
     },
+    istoday (date) {
+      return moment(date).calendar();
+    },
   },
   beforeMount() {
     this.user = this.$store.getters.userInfo;
   },
-  mounted: async function() {
+  mounted: async function() { 
     await this.getAllConversations(this.user.id);
     this.archiveConversations(this.user.id);
+    var convo = await _.orderBy(this.$store.getters.conversations, 'latestMessage', 'desc')[0];
+    console.log(convo,'dada');
+    if(convo.type == 'PRIVATE'){
+      var membr = convo.participantDetails.filter((item)=>{
+       if(this.user.id != item.id){
+        return item;
+       }
+      })
+      var grpName = membr[0].name;
+    }else{
+      var grpName = convo.groupName;
+    }
+    if(convo){ 
+      await this.openChat(convo,grpName);
+    }
   } 
 };
 </script>
