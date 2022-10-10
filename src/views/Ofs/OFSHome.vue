@@ -167,8 +167,8 @@
    </section>
 </template>
 <script>
-  import NavbarBeforeLogin from '../Layout/NavbarBeforeLogin.vue'
-  import Footer from '../Layout/Footer.vue'
+  import NavbarBeforeLogin from '../../components/Layout/NavbarBeforeLogin.vue'
+  import Footer from '../../components/Layout/Footer.vue'
   import VueSlickCarousel from 'vue-slick-carousel'
   import 'vue-slick-carousel/dist/vue-slick-carousel.css'
     // optional style for arrows & dots

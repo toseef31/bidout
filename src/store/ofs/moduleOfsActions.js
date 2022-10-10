@@ -7,7 +7,9 @@ export default {
       .then(responce => {
         // console.log(responce);
       commit('setCatgeoryList',responce.data)
-    })
+    }).catch(err => {
+          console.log(err);
+      });
   },
   getCompanyByservice({commit}, payload){
     var url = encodeURIComponent(payload.service);
@@ -20,7 +22,9 @@ export default {
         }
       commit('setCompanies',data)
       router.replace('/ofs-directory/'+payload.slug+'/'+url);
-    })
+    }).catch(err => {
+          console.log(err);
+      });
   },
 
   getSupplierCompanyByservice({commit}, payload){
@@ -33,35 +37,38 @@ export default {
         }
       commit('setCompanies',data)
       router.replace('/ofs-supplier/'+payload.slug+'/'+url);
-    })
+    }).catch(err => {
+          console.log(err);
+      });
   },
   getSupplierMainService({commit},payload){
     var url = encodeURIComponent(payload.name);
-    console.log(url);
     axios.get('/company/getCompaniesByMainService/'+url)
       .then(responce => {
-        console.log(responce.data);
         var data = {
           'data': responce.data,
           'name': payload.name
         }
       commit('setCompanies',data)
       router.replace('/ofs-supplier/'+url);
-    })
+    }).catch(err => {
+          console.log(err);
+      });
   },
   getCompanyMainService({commit},payload){
     var url = encodeURIComponent(payload.name);
-    console.log(url);
+
     axios.get('/company/getCompaniesByMainService/'+url)
       .then(responce => {
-        console.log(responce.data);
         var data = {
           'data': responce.data,
           'name': payload.name
         }
       commit('setCompanies',data)
       router.replace('/ofs-directory/'+url);
-    })
+    }).catch(err => {
+          console.log(err);
+      });
   },
   getCompanyInfo({commit},payload){
     var url = encodeURIComponent(payload.name);
@@ -70,7 +77,9 @@ export default {
       commit('setCompany',responce.data);
       localStorage.setItem('companyData', JSON.stringify(responce.data));
       router.replace('/company/'+url);
-    })
+    }).catch(err => {
+          console.log(err);
+      });
   },
   getPublicCompanyInfo({commit},payload){
     var url = encodeURIComponent(payload.name);
@@ -79,19 +88,25 @@ export default {
       commit('setCompany',responce.data);
       localStorage.setItem('companyData', JSON.stringify(responce.data));
       router.replace('/company-profiles/'+url);
-    })
+    }).catch(err => {
+          console.log(err);
+      });
   },
   getPremiumCompanies({commit},payload){
     axios.get('admin/getPremiumCompanies')
      .then(responce => {
       commit('setPremiumList',responce.data);
-    })
+    }).catch(err => {
+          console.log(err);
+      });
   },
   searchCompany({commit}, payload){
     axios.get('/ofs/searchSuppliers/'+payload)
       .then(responce => {
         console.log(responce.data);
       commit('setCompanies',responce.data.hits)
-    })
+    }).catch(err => {
+          console.log(err);
+      });
   },
 }

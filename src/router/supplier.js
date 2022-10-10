@@ -1,5 +1,5 @@
-// import Base from '@/views/Layout/Base.vue';
-import Settings from '@/views/Layout/Settings.vue';
+// import Base from '@/components/Layout/Base.vue';
+import Settings from '@/components/Layout/Settings.vue';
 import store from '@/store';
 
 const routes = [
@@ -70,7 +70,7 @@ const routes = [
       },
       // { 
       //   path: "*", 
-      //   component: () => import('@/views/PageNotFoundLogin.vue'),
+      //   component: () => import('@/components/PageNotFoundLogin.vue'),
          
       // }
     ],

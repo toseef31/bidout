@@ -28,10 +28,6 @@
                   <h4 class="mb-2">RPF Platform - Create Bids</h4>
                   <h1 class="mb-8">Execute Contract</h1>
                 </div>
-                <!-- <div class="white text-left pa-4 font-weight-medium mb-5 contract-section"> -->
-                  <!-- <iframe src="https://secure.na4.adobesign.com/public/esignWidget?wid=CBFCIBAA3AAABLblqZhDT0_wRVtyZBChhOqPrTIn40SxaOO8QNDZk74wgPBadN2q8qV2YwI29jLlKRjTvhic*&hosted=false" width="100%" height="100%" frameborder="0" style="border: 0; overflow: hidden; min-height: 700px; min-width: 600px;"></iframe> -->
-                  
-                <!-- </div> -->
                   <vue-pdf-embed class="white text-left pa-4 font-weight-medium mb-5 contract-section"
                       ref="pdfRef"
                       :source="pdfSource"
@@ -86,8 +82,8 @@
    </section>
 </template>
 <script>
-  import NavbarBeforeLogin from '../Layout/NavbarBeforeLogin.vue'
-  import Footer from '../Layout/Footer.vue'
+  import NavbarBeforeLogin from '../../components/Layout/NavbarBeforeLogin.vue'
+  import Footer from '../../components/Layout/Footer.vue'
   import VuePdfEmbed from 'vue-pdf-embed/dist/vue2-pdf-embed'
   import { mapActions } from "vuex";
 export default {

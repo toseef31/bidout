@@ -1,5 +1,5 @@
-// import Settings from '@/views/Layout/Base.vue';
-import Settings from '@/views/Layout/Settings.vue';
+// import Settings from '@/components/Layout/Base.vue';
+import Settings from '@/components/Layout/Settings.vue';
 import store from '@/store';
 
 const routes = [

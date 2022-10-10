@@ -1,7 +1,5 @@
 <template>
-  <!-- <section class="section-container fill-height dashboard-module"> -->
-    
-       <v-col class="dashboard-module pa-0 pa-sm-3 pl-sm-0" :class="[ showSideBar ? 'col-md-6 col-12 col-sm-7' : 'mid-content-collapse', activityPanel ? 'd-sm-block' : 'd-md-block']" v-show="!activityPanel">
+  <v-col class="dashboard-module pa-0 pa-sm-3 pl-sm-0" :class="[ showSideBar ? 'col-md-6 col-12 col-sm-7' : 'mid-content-collapse', activityPanel ? 'd-sm-block' : 'd-md-block']" v-show="!activityPanel">
           <v-row>
             <v-col class="col-md-8 col-12 col-sm-8">
               <div class="mid-content">
@@ -46,45 +44,7 @@
                         </tbody>
                       </template>
                     </v-simple-table>
-                    <!-- <div class="title-block shipment">
-                      <h3>Active Shipments</h3>
-                      <a href="">View all</a>
-                    </div>
-                    <v-simple-table class="bids-table">
-                      <template v-slot:default>
-                        <thead>
-                          <tr>
-                            <th class="text-left">
-                              Bid ID
-                            </th>
-                            <th class="text-left">
-                              Title
-                            </th>
-                            <th class="text-left">
-                              Entries
-                            </th>
-                            <th class="text-left">
-                              End Time
-                            </th>
-                            <th class="text-left">
-                              Action
-                            </th>
-                          </tr>
-                        </thead>
-                        <tbody>
-                          <tr
-                            v-for="bid in bids"
-                            :key="bid.id"
-                          >
-                            <td class="text-left">{{ bid.id }}</td>
-                            <td class="text-left">{{ bid.title }}</td>
-                            <td class="text-left">{{ bid.entries }}</td>
-                            <td class="text-left">{{ bid.endTime }}</td>
-                            <td class="text-left">View Details</td>
-                          </tr>
-                        </tbody>
-                      </template>
-                    </v-simple-table> -->
+                    
                   </div>
                   <div class="pending-queue mb-2" v-if="userDatas.role == 'admin' && pendingCount > 0">
                     <div class="d-flex justify-space-between">
@@ -97,8 +57,6 @@
                     </div>
                   </div>
                   <div class="map-section">
-                    <!-- <v-img :src="require('@/assets/images/dashboard/map.png')" class="d-none d-sm-block"></v-img>
-                    <v-img :src="require('@/assets/images/dashboard/mapMobile.png')" class="d-block d-sm-none"></v-img> -->
                     <div id="map" class="map" height="400px"></div>
                   </div>
                 </div>
@@ -114,9 +72,9 @@
    <!-- </section> -->
 </template>
 <script>
-  import Navbar from './Layout/Navbar.vue'
-  import LeftSidebar from './Layout/Dashboard/LeftSidebar.vue'
-  import RightSidebar from './Layout/Dashboard/RightSidebar.vue'
+  import Navbar from '../components/Layout/Navbar.vue'
+  import LeftSidebar from '../components/Layout/Dashboard/LeftSidebar.vue'
+  import RightSidebar from '../components/Layout/Dashboard/RightSidebar.vue'
   import { mapActions } from "vuex";
 export default {
   name : "Dashboard",
@@ -181,9 +139,6 @@ export default {
     activityPanel(){
         return this.$store.getters.g_activityPanel;
     },
-    allbids(){
-        return this.$store.getters.bids;
-    },
     userDatas(){
         return this.$store.getters.userInfo;
     },
@@ -195,10 +150,7 @@ export default {
     },
   },
   methods: {
-    ...mapActions(["getAllBids","pendingUserCount"]),
-    getBids(){
-      this.getAllBids();
-    },
+    ...mapActions(["pendingUserCount"]),
     shipMap(){
       this.mapOptions = {
         center: new google.maps.LatLng(29.721085, -95.342049),
@@ -214,7 +166,7 @@ export default {
         scrollwheel: false,
       },
       this.markerOptions = {
-        url: '/assets/images/dashboard/mapMobile.png',
+        // url: '/assets/images/dashboard/mapMobile.png',
         size: {width: 60, height: 90, f: 'px', b: 'px',},
         scaledSize: {width: 30, height: 45, f: 'px', b: 'px',},
       },

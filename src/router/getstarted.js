@@ -1,4 +1,4 @@
-import Base from '@/views/Layout/Base.vue';
+import Base from '@/components/Layout/Base.vue';
 
 const routes = [
   {

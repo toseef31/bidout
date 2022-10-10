@@ -86,6 +86,8 @@ export default {
     axios.get('/auth/verifyPasswordResetToken/'+payload)
      .then(responce => {
       commit('setVerifyData',responce.data)
+    }).catch(err => {
+        console.log(err);
     })
   },
   resetPassword({commit}, payload){
@@ -101,6 +103,8 @@ export default {
       else{
         commit('setEmailError', 'Something wrong please try again')
       }
+    }).catch(err => {
+        console.log(err);
     })
   },
   checkEmail({ commit }, payload) {
@@ -115,6 +119,8 @@ export default {
         }
         
        
+      }).catch(err => {
+        console.log(err);
       })
     }
     
@@ -145,7 +151,9 @@ export default {
               else{
                 commit('setEmailError', 'Something wrong please try again')
               }
-            })
+            }).catch(err => {
+                console.log(err);
+            });
            }else{
             axios.post('/ofs/createCompany',{'company': payload.company, 'companyHq': payload.companyHq, 'companyHq2': payload.companyHq2, 'companyHqCountry': payload.companyHqCountry,'companyHqState':payload.companyHqState, 'companyHqCity': payload.companyHqCity, 'companyHqZip': payload.companyHqZip})
              .then(responce => {
@@ -168,7 +176,9 @@ export default {
                   else{
                     commit('setEmailError', 'Something wrong please try again')
                   }
-                })
+                }).catch(err => {
+                  console.log(err);
+                });
               }
               else{
                 commit('setCompanyError', 'Please try with different Company details')
@@ -190,7 +200,9 @@ export default {
     axios.get('/ofs/searchSuppliers/'+payload)
       .then(responce => {
       commit('setSupplierList',responce.data)
-    })
+    }).catch(err => {
+      console.log(err);
+    });
   },
   // Buyer SignUp Acton
   buyerSignUpAction({ commit }, payload) {
@@ -222,12 +234,16 @@ export default {
                 else{
                   commit('setEmailError', 'Something wrong please try again')
                 }
-              })
+              }).catch(err => {
+                console.log(err);
+              });
             }
             else{
               commit('setCompanyError', 'Please try with different Company details')
             }
-          })
+          }).catch(err => {
+            console.log(err);
+          });
         }
         
        
@@ -240,7 +256,9 @@ export default {
       .then(responce => {
        commit('setLocalIp', responce.data)
        // return responce;
-    })  
+    }).catch(err => {
+      console.log(err);
+    });  
   },
 
   // signAgreement
@@ -260,7 +278,9 @@ export default {
       else{
         commit('setEmailError', 'Something wrong please try again')
       }
-    })
+    }).catch(err => {
+      console.log(err);
+    });
   },
   signAgreement({commit}, payload){
     // Try to store Agreement
@@ -277,7 +297,9 @@ export default {
       else{
         commit('setEmailError', 'Something wrong please try again')
       }
-    })
+    }).catch(err => {
+      console.log(err);
+    });
   },
   getToken({commit}){
     firebase.auth().onAuthStateChanged(user => {
@@ -309,6 +331,36 @@ export default {
       }
       else{
         commit('setEmailError', 'Something wrong please try again')
+      }
+    }).catch(err => {
+      console.log(err);
+    });
+   },
+
+  signInWithCustomToken({ commit }, payload) {
+    return new Promise(async (resolve, reject) => {
+      try {
+        const result  = await firebase.auth().signInWithCustomToken(payload)
+        commit('setError', null)
+        commit('setToken',result.user.multiFactor.user.accessToken);
+        localStorage.setItem("token",JSON.stringify(result.user.multiFactor.user.accessToken));
+        const userResp = await axios.get('/user/getUserData/'+result.user.multiFactor.user.email)
+        if(userResp.data.status == false){
+          commit('setError', 'Disabled account! You cannot login with this account');
+          commit('showErrorAlert')
+        }else{
+          axios.get('/auth/addUserLoginHistory/'+userResp.data.id)
+          const companyResp = await axios.get('company/getCompanyById/'+userResp.data.company.id)
+          commit('setCompany',companyResp.data)
+          localStorage.setItem('companyData', JSON.stringify(companyResp.data));
+          commit('setUser',userResp.data)
+          localStorage.setItem("userData",JSON.stringify(userResp.data));
+          router.replace({ name: "Dashboard" });
+        }
+        resolve(result)
+      } catch(err) {
+        console.log(err);
+        reject(err)
       }
     })
   }

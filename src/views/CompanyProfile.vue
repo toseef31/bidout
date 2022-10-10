@@ -7,7 +7,6 @@
               <div class="manage-sections pa-4 px-0">
                 <div class="top-section d-flex pa-sm-10 pa-4">
                   <div>
-                    <!-- <img :src="companyData.image"> -->
                     <h4>{{companyData.company}} Page</h4>
                   </div>
                   <template>
@@ -25,50 +24,7 @@
                 </div>
                 <div class="company-form mt-16">
                   <hr>
-                  <v-container class="pa-sm-10 pa-4">
-                    <v-row>
-                      <v-col cols="8" sm="6" class="pt-10 text-left">
-                        <label class="d-block text-left input-label">Company's Logo</label>
-                        
-                        <v-dialog
-                          v-model="dialog"
-                          width="700"
-                        >
-                          <v-card>
-                            <v-card-title class="text-h5">
-                              Crop Image
-                            </v-card-title>
-                            <v-card-text>
-                              <vue-croppie ref="croppieRef" :showZoomer="true" :enableOrientation="true" :enableResize="false" :boundary="{ width: 600, height: 350}" :viewport="{ width:450, height:120, 'type':'square' }">
-                              </vue-croppie>
-                            </v-card-text>
-
-                            <v-divider></v-divider>
-
-                            <v-card-actions>
-                              <v-spacer></v-spacer>
-                              <v-btn
-                                color="#0D9648"
-                                rounded
-                                @click="crop"
-                                class="px-7 white--text text-capitalize"
-                              >
-                                Crop
-                              </v-btn>
-                            </v-card-actions>
-                          </v-card>
-                        </v-dialog>
-                        <!-- the result -->
-                        <img :src="companyData.image">
-                      </v-col>
-                      <v-col cols="4" sm="6" class="pt-10 mt-4 btn-col pl-0 d-flex align-center justify-end">
-                        <label for="logo-input" class="text-capitalize mr-2 white--text add-logo d-flex align-center font-weight-bold justify-center">Add Image
-                          <input type="file" accept="image/*" class="logo-input d-none" id="logo-input" @change="croppie($event)">
-                        </label>
-                        <v-btn color="rgb(243, 35, 73, 0.1)" class="text-capitalize del-btn" width="48%" height="56px" @click="deleteLogo">Delete</v-btn>
-                      </v-col>
-                    </v-row>
-                  </v-container>
+                  <company-logo></company-logo>
                   <hr>
                   <v-container class="pa-sm-10 pa-4">
                     <v-row>
@@ -92,6 +48,7 @@
                       <label class="d-block text-left main-label">Services Portfolio</label>
                     <v-row class="mt-5">
                       <v-col cols="6" sm="6">
+
                         <label class="d-block text-center main-label mb-5">Available Services</label>
                         <div  class="service-cate">
                           <div class="px-5 mt-4">
@@ -193,9 +150,6 @@
                             </v-list>
                           </div>
                       </v-col>
-                      <!-- <v-col cols="2" sm="2" class="pl-0">
-                      <v-btn color="#0D9648" class="text-capitalize mr-2 white--text" width="100%" height="54px" @click="addService">Add</v-btn>
-                      </v-col> -->
                     </v-row>
                     <!-- <v-row>
                       <v-col cols="12" sm="10">
@@ -223,161 +177,17 @@
                       </v-row>
                   </v-container>
                   <hr>
-                  <v-container class="pa-sm-10 pa-4">
-                      <label class="d-block text-left main-label">Services Location</label>
-                      <div class="pac-card" id="pac-card">
-                        
-                        <div id="pac-container">
-                          <v-row>
-                            <v-col cols="10" sm="10">
-                              <v-text-field placeholder="Add a location here ..." single-line outlined hide-details id="pac-input"></v-text-field>
-                            </v-col>
-                            <v-col cols="2" sm="2" class="pl-0 pt-0 pb-0">
-                              <v-btn color="#0D9648" class="text-capitalize mr-2 white--text" width="100%" height="54px" @click="addLocation">Add</v-btn>
-                            </v-col>
-                          </v-row>
-                          <!-- <input id="pac-input" type="text" placeholder="Enter a location" /> -->
-                        </div>
-
-                        <v-row>
-                          <v-col cols="12" sm="12">
-                            <div id="map"class="map" style="height:400px"></div>
-                          </v-col>
-                        </v-row>
-                      </div>
-                      <v-row>
-                        <v-col cols="12" sm="10">
-                          <div class="service-list text-left mt-5">
-                            <label class="d-flex justify-space-between" v-for="(location,index) in companyData.companyLocations"><span><v-icon>mdi-map-marker-outline</v-icon>{{location.location}}</span> <v-icon color="#F32349"  @click="deleteLocation(location)">mdi-close</v-icon></label>
-                          </div>
-                        </v-col>
-                      </v-row>
-                  </v-container>
+                  <service-locations></service-locations>
                   <hr>
-                  <v-container class="pa-sm-10 pa-4 corporate-video">
-                    <label class="text-left main-label d-block">Corporate Video</label>
-                    <v-row>
-                      <v-col cols="10" sm="10">
-                        <v-text-field placeholder="Add youtube video url ..." v-model="videoLinks" single-line outlined hide-details></v-text-field>
-                      </v-col>
-                      <v-col cols="2" sm="2" class="pl-0">
-                      <v-btn color="#0D9648" class="text-capitalize mr-2 white--text" width="100%" height="54px" @click="addVideos">Add Video</v-btn>
-                      </v-col>
-                    </v-row>
-                    <!-- <v-row>
-                      <v-col cols="12" sm="12" class="d-flex align-center justify-space-between">
-                        <v-btn color="#0D9648" class="text-capitalize white--text mt-5" width="176px" height="54px" @click="uploadVideo">Add Video</v-btn>
-                        <input ref="uploader" class="d-none" type="file"
-                          accept="video/*"
-                          @change="handleFileUpload($event)"
-                        >
-                      </v-col>
-                    </v-row> -->
-                    <v-row v-if="companyData.corporateVideos">
-                      <v-col cols="6" sm="6" v-for="(video,key) in companyData.corporateVideos">
-                        <div class="video-col">
-                          <iframe  id="video-preview" :src="video" width="100%" height="350px"></iframe >
-                          <v-btn absolute top left @click="deleteVideo(key)"><v-icon>mdi-trash-can-outline</v-icon> Delete Video</v-btn>
-                        </div>
-                      </v-col>
-                    </v-row>
-                  </v-container>
+                  <company-videos></company-videos>
                   <hr>
-                  <v-container class="pa-sm-10 pa-4 corporate-video">
-                    <v-row>
-                      <v-col cols="12" sm="12" class="d-flex align-center justify-space-between">
-                      <label class="text-left main-label">Corporate Documents</label>
-                        <v-btn color="#0D9648" class="text-capitalize white--text mt-5" width="176px" height="54px" @click="uploadDocument">Add Document</v-btn>
-                        <input ref="documentUploader" class="d-none" type="file"
-                          accept="application/msword, application/vnd.ms-excel, application/vnd.ms-powerpoint, application/pdf"
-                          @change="handleDocumentUpload($event)"
-                        >
-                      </v-col>
-                    </v-row>
-                    <v-row>
-                      <v-col cols="3" sm="2" v-for="(doc,index) in companyData.corporateDocuments">
-                        <div class="doc-col">
-                          <a :href="doc.attachment" target="_blank" class="text-decoration-none">
-                            <v-img v-if="get_url_extension(doc.attachment) == 'pdf'" :src="require('@/assets/images/profile/pdf.png')" width="80px" class="mx-auto"></v-img>
-                            <v-img v-else-if="get_url_extension(doc.attachment) == 'xlsx' || get_url_extension(doc.attachment) == 'xls'" :src="require('@/assets/images/profile/excel.png')" width="80px" class="mx-auto"></v-img>
-                            <v-img v-else :src="require('@/assets/images/profile/other.png')" width="80px" class="mx-auto"></v-img>
-                            <p>{{get_url_name(doc.attachment)}}</p>
-                          </a>
-                          <v-btn small min-width="36px" min-height="36px" @click="deleteDoc(doc)"><v-icon>mdi-trash-can-outline</v-icon></v-btn>
-                        </div>
-                      </v-col>
-                    </v-row>
-                  </v-container>
+                  <company-documents></company-documents>
                   <hr>
-                  <v-container class="pa-sm-10 pa-4">
-                    <v-row>
-                      <v-col cols="10" sm="10">
-                        <label class="d-block text-left main-label mb-4">Corporate News & Press Releases</label>
-                      </v-col>
-                    </v-row>
-                    <v-form>
-                      <v-row>
-                        <v-col cols="12" sm="6" text="left">
-                          <label class="d-block text-left input-label mb-2">Title</label>
-                          <v-text-field placeholder="Enter news title" v-model="newsTitle" single-line outlined hide-details></v-text-field>
-                        </v-col>
-                        <v-col cols="12" sm="6" text="left">
-                          <label class="d-block text-left input-label mb-2">Date</label>
-                          <v-text-field type="date" placeholder="Role ..." v-model="newsDate" single-line outlined hide-details></v-text-field>
-                        </v-col>
-                      </v-row>
-                      <v-row>
-                        <v-col cols="12" sm="6" text="left">
-                          <label class="d-block text-left input-label mb-2">Url</label>
-                          <v-text-field placeholder="Enter news url" v-model="newsUrl" single-line outlined></v-text-field>
-                        </v-col>
-                      </v-row>
-                      <v-row>
-                        <v-col cols="12" sm="12" class="pb-0 pl-0 pt-0">
-                          <v-btn color="#0D9648" class="text-capitalize mr-2 white--text" width="176px" height="54px" @click="addNews">Add</v-btn>
-                        </v-col>
-                      </v-row>
-                    </v-form>
-                    <v-row align="center" justify="space-between" class="news-list mt-10" v-for="(news,index) in companyData.corporateNews">
-                      <v-col cols="12" sm="8" text="left">
-                        <p class="text-left mb-0">{{news.date}} -  <a :href="news.url" class="text-decoration-none">{{news.title}}</a></p>
-                      </v-col>
-                      <v-col cols="12" sm="4" class="text-right">
-                        <!-- <v-btn default color="transparent" class="text-capitalize edit-btn"><v-icon>mdi-square-edit-outline</v-icon>Edit Details</v-btn> -->
-                        <v-btn default color="transparent" class="text-capitalize dele-btn" @click="deleteNews(news.index)"><v-icon>mdi-close</v-icon>Delete</v-btn>
-                      </v-col>
-                    </v-row>
-                  </v-container>
+                  <corporate-news></corporate-news>
                   <hr>
                   <excutive-leadership></excutive-leadership>
-                    <!-- <hr>
-                    <v-container class="pa-sm-10 pa-4 corporate-video">
-                      <label class="d-block text-left main-label mb-4">Subsidaries</label>
-                      <v-row>
-                        <v-col cols="10" sm="10">
-                          <label for="subs-img">
-                            <v-file-input
-                              outlined class="logo-input text-center profile-input" 
-                              placeholder="Add Image" id="subs-img"  color="#0D9648" hide-details
-                            ></v-file-input>
-                          </label>
-                        </v-col>
-                        <v-col
-                          cols="2" sm="2" class="pb-0 pt-0 pl-0">
-                        <v-btn color="#0D9648" class="text-capitalize mr-2 white--text" width="100%" height="54px">Add</v-btn>
-                        </v-col>
-                      </v-row>
-                      <v-row align="center" justify="space-between" class="news-list white">
-                        <v-col cols="6" sm="3" text="left" v-for="(subs, i) in subsidaries" :key="i">
-                          <div class="subsid-list">
-                            <v-btn absolute left top  color="#F32349" outlined small min-width="32px" height="32px" class="pa-0"><v-icon>mdi-trash-can-outline</v-icon></v-btn>
-                            <v-img :src="require('@/assets/images/ofs/company/subs-1.png')"></v-img>
-                          </div>
-                        </v-col>
-                      </v-row>
-                    </v-container> -->
-                      <hr>
-                    <ESGComponent />
+                  <hr>
+                  <ESGComponent />
                   <hr>
                   <key-facts></key-facts>
                 </div>
@@ -390,12 +200,17 @@
 </template>
 <script async defer src="https://maps.googleapis.com/maps/api/js?key=%VITE_GOOGLE_MAP%&libraries=places"></script>
 <script>
-  import Navbar from './Layout/Navbar.vue'
-  import LeftSidebar from './Layout/Dashboard/LeftSidebar.vue'
-  import RightSidebar from './Layout/Dashboard/RightSidebar.vue'
-  import ESGComponent from './CompanyProfile/ESGComponent.vue'
-  import KeyFacts from './CompanyProfile/KeyFacts.vue'
-  import ExcutiveLeadership from './CompanyProfile/ExcutiveLeadership.vue'
+  import Navbar from '../components/Layout/Navbar.vue'
+  import LeftSidebar from '../components/Layout/Dashboard/LeftSidebar.vue'
+  import RightSidebar from '../components/Layout/Dashboard/RightSidebar.vue'
+  import ESGComponent from '../components/CompanyProfile/ESGComponent.vue'
+  import KeyFacts from '../components/CompanyProfile/KeyFacts.vue'
+  import ExcutiveLeadership from '../components/CompanyProfile/ExcutiveLeadership.vue'
+  import ServiceLocations from '../components/CompanyProfile/ServiceLocations.vue'
+  import CorporateNews from '../components/CompanyProfile/CorporateNews.vue'
+  import CompanyDocuments from '../components/CompanyProfile/CompanyDocuments.vue'
+  import CompanyVideos from '../components/CompanyProfile/CompanyVideos.vue'
+  import CompanyLogo from '../components/CompanyProfile/CompanyLogo.vue'
   import _ from 'lodash';
   import { mapActions } from "vuex"
 export default {
@@ -407,41 +222,19 @@ export default {
     ESGComponent,
     KeyFacts,
     ExcutiveLeadership,
+    ServiceLocations,
+    CorporateNews,
+    CompanyDocuments,
+    CompanyVideos,
+    CompanyLogo
   },
   
   data() {
     return {
-      isHidden : false,
-      file: false,
-      fileName: '',
-      fileExt: '',
       profileName: this.$store.getters.companyData.company,
       profileSummary: this.$store.getters.companyData.overview,
-      corporateNews:'',
       services: '',
-      subsidaries: [
-        { image: 'subs-1' },{ image: 'subs-2' },{ image: 'subs-3' },{ image: 'subs-4' },
-      ],
       drillingService: [],
-      videoLinks: '',
-      videos: [],
-      croppieImage: '',
-      imageSrc: this.$store.getters.companyData.image,
-      base64data: '',
-      dialog: false,
-      imageUrl: '',
-      logoName: '',
-      newsTitle: '',
-      newsDate: '',
-      newsUrl: '',
-      corporateNews: [],
-      mapOptions: {},
-      markerOptions: {},
-      map: '',
-      documents: [],
-      lat: '',
-      lng: '',
-      address: "",
       subservices: '',
       region: ['Gulf Coast','Northwest','Rockies','Mid-Con','Permian','Arklatex','Offshore','Other'],
       basins: this.$store.getters.companyData.basins,
@@ -483,93 +276,8 @@ export default {
       return this.$store.getters.subCategories;
     }
   },
-  watch:{
-    address: _.debounce(function(){
-      const autocomplete = new google.maps.places.Autocomplete(this.address);
-    },500),
-  },
   methods: {
-     ...mapActions(["getCompany","getCategories","getSubCategories","companyProfileImg","updateBasicProfile","addCompanyService","addCompanyVideos","addCompanyNews","addCompanyDocument","deleteCompanyDocument","addCompanyLocation","deleteCompanyLocation","addCompanyBasins"]),
-     uploadDocument() {
-      this.isSelecting = true
-      window.addEventListener('focus', () => {
-        this.isSelecting = false
-      }, { once: true })
-
-      this.$refs.documentUploader.click()
-    },
-    previewDoc(){
-      let video = document.getElementById('doc-preview');
-      let reader = new FileReader();
-      reader.readAsDataURL( this.file );
-      reader.addEventListener('load', function(){
-        video.src = reader.result;
-      });
-    },
-    
-    handleDocumentUpload( event ){
-      this.file = event.target.files[0];
-      this.fileName = this.file.name;
-      this.fileExt =  this.fileName.split('.').pop();
-      // this.previewDoc();
-      if(this.$store.getters.companyData.corporateDocuments){
-        this.documents = this.$store.getters.companyData.corporateDocuments;
-      }
-      this.documents.push(this.file);
-      const head = Date.now().toString();
-      const tail = Math.random().toString().substr(2);
-      var data = {
-        companyId: this.$store.getters.userInfo.company.id,
-        files: this.file,
-        documentId: head + tail
-      }
-      this.addCompanyDocument(data);
-    },
-    croppie (e) {
-      var files = e.target.files || e.dataTransfer.files;
-      // alert(files);
-      if (!files.length) return;
-      this.logoName = files[0].name;
-      this.dialog = true;
-      var reader = new FileReader();
-      reader.onload = e => {
-        this.imageUrl = e.target.result
-        setTimeout(() => {
-            this.bind()
-        }, 200)
-        
-      };
-
-    reader.readAsDataURL(files[0]);
-    },
-    bind() {
-      this.$refs.croppieRef.bind({
-        url: this.imageUrl,
-      });
-    },
-    crop() {
-      let options = {
-        type: 'blob',
-        size: { width: 450, height: 120 },
-        format: 'png',
-        name: this.logoName
-      };
-      this.$refs.croppieRef.result(options, output => {
-        var reader = new FileReader();
-        this.base64data = reader.readAsDataURL(output); 
-        reader.onloadend = function() {
-          this.base64data = reader.result;                
-          this.imageSrc = this.base64data;
-        }
-        this.image_name = this.croppieImage = output;
-          this.dialog = false;
-          var data = {
-            companyId: this.$store.getters.userInfo.company.id,
-            files: this.image_name,
-          }
-          this.companyProfileImg(data);
-        });
-      },
+    ...mapActions(["getCompany","getCategories","getSubCategories","updateBasicProfile","addCompanyService"]),
       updateBasic(){
         var data = {
           companyId: this.$store.getters.userInfo.company.id,
@@ -581,13 +289,6 @@ export default {
       getAllCategories(){
         this.getCategories();
         
-      },
-      deleteLogo(){
-        var data = {
-          companyId: this.$store.getters.userInfo.company.id,
-          files: '',
-        }
-        this.companyProfileImg(data);
       },
       addService(name){
         if(this.$store.getters.companyData.services){
@@ -617,222 +318,8 @@ export default {
         }
         this.addCompanyBasins(data);
       },
-      addVideos(){
-        if(this.$store.getters.companyData.corporateVideos){
-          this.videos = this.$store.getters.companyData.corporateVideos;
-        }
-        this.videos.push(this.videoLinks);
-        var data = {
-          companyId: this.$store.getters.userInfo.company.id,
-          videoLinks: this.videos,
-        }
-        this.addCompanyVideos(data);
-        this.videoLinks = '';
-      },
-      deleteVideo(index){
-        if(this.$store.getters.companyData.corporateVideos){
-          this.videos = this.$store.getters.companyData.corporateVideos;
-        }
-        if(index >= 0){
-          this.videos.splice(index,1);
-          var data = {
-            companyId: this.$store.getters.userInfo.company.id,
-            videoLinks: this.videos,
-          }
-          this.addCompanyVideos(data);
-        }else{
-          alert("error");
-        }
-        
-      },
-      addDocument(){
-        // if(this.$store.getters.companyData.corporateDocuments){
-        //   this.documents = this.$store.getters.companyData.corporateDocuments;
-        // }
-        // this.documents.push(this.videoLinks);
-        var data = {
-          companyId: this.$store.getters.userInfo.company.id,
-          files: this.documents,
-        }
-        this.addCompanyDocument(data);
-      },
-      deleteDoc(data){
-        if(this.$store.getters.companyData.corporateDocuments){
-          this.documents = this.$store.getters.companyData.corporateDocuments;
-        }
-        // this.documents.splice(index,1);
-        var data = {
-          companyId: this.$store.getters.userInfo.company.id,
-          corporateDocument: data,
-        }
-        this.deleteCompanyDocument(data);
-        
-      },
-      addNews(){
-        if(this.$store.getters.companyData.corporateNews){
-          this.corporateNews = this.$store.getters.companyData.corporateNews;
-        }
-        var data = {
-          title: this.newsTitle,
-          date: this.newsDate,
-          url: this.newsUrl,
-        }
-        this.corporateNews.push(data);
-        this.addCompanyNews({companyId: this.$store.getters.userInfo.company.id,corporateNews: this.corporateNews});
-        this.newsUrl = '';
-        this.newsTitle = '';
-        this.newsDate = '';
-      },
-      deleteNews(index){
-        if(this.$store.getters.companyData.corporateNews){
-          this.corporateNews = this.$store.getters.companyData.corporateNews;
-        }
-        this.corporateNews.splice(index,1);
-        this.addCompanyNews({companyId: this.$store.getters.userInfo.company.id,corporateNews: this.corporateNews});
-      },
+
       
-      getLocation(){
-        this.mapOptions = {
-          center: { lat: this.$store.getters.companyData.lattitude, lng: this.$store.getters.companyData.longitude },
-          zoom: 17,
-          mapTypeId: 'terrain',
-          mapTypeControl: false,
-          scaleControl: false,
-          streetViewControl: false,
-          rotateControl: false,
-          fullscreenControl: true,
-          disableDefaultUi: false,
-          zoomControl: true,
-          scrollwheel: false,
-        };
-        this.markerOptions = {
-          url: '/assets/images/dashboard/mapMobile.png',
-          size: {width: 60, height: 90, f: 'px', b: 'px',},
-          scaledSize: {width: 30, height: 45, f: 'px', b: 'px',},
-        };
-        // console.log(this.mapOptions,'maps');
-        const map = new google.maps.Map(document.getElementById("map"), this.mapOptions);
-          // const card = document.getElementById("pac-card");
-
-          // map.controls[google.maps.ControlPosition.TOP_RIGHT].push(card);
-
-          // [START maps_places_autocomplete_creation]
-          const center = { lat: this.$store.getters.companyData.lattitude, lng: this.$store.getters.companyData.longitude };
-          // Create a bounding box with sides ~10km away from the center point
-          const defaultBounds = {
-            north: center.lat + 0.1,
-            south: center.lat - 0.1,
-            east: center.lng + 0.1,
-            west: center.lng - 0.1,
-          };
-          const input = document.getElementById("pac-input");
-
-          const options = {
-            bounds: defaultBounds,
-            // componentRestrictions: { country: "us" },
-            fields: ["address_components", "geometry", "icon", "name","formatted_address"],
-            strictBounds: false,
-            types: ["establishment"],
-          };
-          const autocomplete = new google.maps.places.Autocomplete(input, options);
-          // console.log(autocomplete,'autpo',input);
-          // autocomplete.setComponentRestrictions({
-          //     country: ["us", "pr", "vi", "gu", "mp"],
-          //   });
-
-          // [END maps_places_autocomplete_countries_multiple]
-          // [START maps_places_autocomplete_setbounds]
-          const southwest = { lat: 5.6108, lng: 136.589326 };
-          const northeast = { lat: 61.179287, lng: 2.64325 };
-          const newBounds = new google.maps.LatLngBounds(southwest, northeast);
-
-          autocomplete.setBounds(newBounds);
-
-          // [END maps_places_autocomplete_setbounds]
-          // const infowindow = new google.maps.InfoWindow();
-          // const infowindowContent = document.getElementById("infowindow-content");
-          // console.log(infowindowContent);
-          // infowindow.setContent(infowindowContent);
-          
-          const marker = new google.maps.Marker({
-            position: new google.maps.LatLng(this.$store.getters.companyData.lattitude, this.$store.getters.companyData.longitude),
-            title: 'Marker',
-            map: map,
-            draggable: true,
-            // map,
-            anchorPoint: new google.maps.Point(0, -29),
-          });
-          autocomplete.addListener("place_changed", () => {
-            // infowindow.open();
-            marker.setVisible(true);
-
-            const place = autocomplete.getPlace();
-
-            if (!place.geometry || !place.geometry.location) {
-              // User entered the name of a Place that was not suggested and
-              // pressed the Enter key, or the Place Details request failed.
-              window.alert("No details available for input: '" + place.name + "'");
-              return;
-            }
-
-            // If the place has a geometry, then present it on a map.
-            if (place.geometry.viewport) {
-              map.fitBounds(place.geometry.viewport);
-            } else {
-              map.setCenter(place.geometry.location);
-              map.setZoom(17); // Why 17? Because it looks good.
-            }
-
-            marker.setPosition(place.geometry.location);
-            marker.setVisible(true);
-
-            let address = "";
-
-            if (place.address_components) {
-              address = [
-                (place.address_components[0] &&
-                  place.address_components[0].short_name) ||
-                  "",
-                (place.address_components[1] &&
-                  place.address_components[1].short_name) ||
-                  "",
-                (place.address_components[2] &&
-                  place.address_components[2].short_name) ||
-                  "",
-                (place.address_components[3] &&
-                  place.address_components[3].short_name) ||
-                  "",
-              ].join(" ");
-            }
-            this.lat = place.geometry.location.lat();
-            this.lng = place.geometry.location.lng();
-            this.address = place.name;
-            console.log(place.name,'adrees',this.lng);
-          });
-      },
-      addLocation(){
-        const head = Date.now().toString();
-        const tail = Math.random().toString().substr(2);
-        var data = {
-          id: head + tail,
-          companyId: this.$store.getters.userInfo.company.id,
-          location: this.address,
-          lat: this.lat,
-          long: this.lng,
-        }
-        this.addCompanyLocation(data);
-        // console.log(this.address,'adr',this.lat,'lng',this.lng);
-      },
-      deleteLocation(data){
-        var data = {
-          id: data.id,
-          companyId: this.$store.getters.userInfo.company.id,
-          location: data.location,
-          lat: data.lattitude,
-          long: data.longitude,
-        }
-        this.deleteCompanyLocation(data);
-      },
       get_url_extension( url ) {
         return url.split(/[#?]/)[0].split('.').pop().trim();
       },
@@ -840,7 +327,6 @@ export default {
         return url.split('/').pop();
       },
       getSubCate(catId){
-        console.log(catId);
         this.getSubCategories(catId);
       }
   },
@@ -848,13 +334,6 @@ export default {
     document.title = "Company Profile - BidOut";
     this.getCategories();
     this.getCompany(this.$store.getters.userInfo.company.id);
-    
-    this.getLocation();
-    // this.address = '33.6396095, 73.0565219';
-    if(this.$store.getters.companyData.basins){
-      this.basins = this.$store.getters.companyData.basins;
-    }
-    
   }
 };
 </script>

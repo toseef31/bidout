@@ -35,7 +35,7 @@
    </section>
 </template>
 <script>
-  import Footer from './Layout/Footer.vue'
+  import Footer from '../components/Layout/Footer.vue'
 export default {
   name : "PageNotFound",
   components: {

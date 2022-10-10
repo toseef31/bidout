@@ -230,8 +230,8 @@
    </section>
 </template>
 <script>
-  import NavbarBeforeLogin from '../Layout/NavbarBeforeLogin.vue'
-  import Footer from '../Layout/Footer.vue'
+  import NavbarBeforeLogin from '../../components/Layout/NavbarBeforeLogin.vue'
+  import Footer from '../../components/Layout/Footer.vue'
   
 export default {
   name : "ModuleSelection",

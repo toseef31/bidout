@@ -68,10 +68,10 @@
    </section>
 </template>
 <script>
-  import Navbar from './Layout/Navbar.vue'
-  import NavbarBeforeLogin from './Layout/NavbarBeforeLogin.vue'
-  import LeftSidebar from './Layout/Dashboard/LeftSidebar.vue'
-  import Footer from './Layout/Footer.vue'
+  import Navbar from '../components/Layout/Navbar.vue'
+  import NavbarBeforeLogin from '../components/Layout/NavbarBeforeLogin.vue'
+  import LeftSidebar from '../components/Layout/Dashboard/LeftSidebar.vue'
+  import Footer from '../components/Layout/Footer.vue'
 export default {
   name : "PageNotFound",
   components: {

@@ -88,9 +88,9 @@
    </v-col>
 </template>
 <script>
-  import Navbar from './Layout/Navbar.vue'
-  import LeftSidebar from './Layout/Dashboard/LeftSidebar.vue'
-  import RightSidebar from './Layout/Dashboard/RightSidebar.vue'
+  import Navbar from '../components/Layout/Navbar.vue'
+  import LeftSidebar from '../components/Layout/Dashboard/LeftSidebar.vue'
+  import RightSidebar from '../components/Layout/Dashboard/RightSidebar.vue'
   import axios from 'axios'
 export default {
   name : "ManageUsers",

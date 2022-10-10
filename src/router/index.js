@@ -1,6 +1,6 @@
 import Vue from 'vue';
 import VueRouter from 'vue-router';
-import Base from '@/views/Layout/Base.vue';
+import Base from '@/components/Layout/Base.vue';
 import AuthRoutes from '@/router/auth'
 import Dashboard from '@/router/dashboard'
 import Chat from '@/router/chat'

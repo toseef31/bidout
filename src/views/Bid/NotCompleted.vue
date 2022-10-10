@@ -76,15 +76,15 @@
    </v-col>
 </template>
 <script>
-  import Navbar from '../Layout/Navbar.vue'
-  import LeftSidebar from '../Layout/Dashboard/LeftSidebar.vue'
-  import RightSidebar from '../Layout/Dashboard/RightSidebar.vue'
-  import SupplierSection from './SupplierSection.vue'
-  import TeamMembers from './TeamMembers.vue'
-  import BidLines from './BidLines.vue'
-  import Attachment from './Attachment.vue'
-  import BidDetails from './BidDetails.vue'
-  import QuestionSection from './QuestionSection.vue'
+  import Navbar from '../../components/Layout/Navbar.vue'
+  import LeftSidebar from '../../components/Layout/Dashboard/LeftSidebar.vue'
+  import RightSidebar from '../../components/Layout/Dashboard/RightSidebar.vue'
+  import SupplierSection from '../../components/BidTabs/SupplierSection.vue'
+  import TeamMembers from '../../components/BidTabs/TeamMembers.vue'
+  import BidLines from '../../components/BidTabs/BidLines.vue'
+  import Attachment from '../../components/BidTabs/Attachment.vue'
+  import BidDetails from '../../components/BidTabs/BidDetails.vue'
+  import QuestionSection from '../../components/BidTabs/QuestionSection.vue'
   import { mapActions } from "vuex";
 export default {
   name : "NotCompleted",

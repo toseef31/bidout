@@ -143,8 +143,8 @@
   </v-col>
 </template>
 <script>
-  import Navbar from '../Layout/Navbar.vue'
-  import LeftSidebar from '../Layout/Dashboard/LeftSidebar.vue'
+  import Navbar from '../../components/Layout/Navbar.vue'
+  import LeftSidebar from '../../components/Layout/Dashboard/LeftSidebar.vue'
   import VueSlickCarousel from 'vue-slick-carousel'
   import 'vue-slick-carousel/dist/vue-slick-carousel.css'
     // optional style for arrows & dots

@@ -179,11 +179,11 @@
    </v-col>
 </template>
 <script>
-  import Navbar from './Layout/Navbar.vue'
-  import LeftSidebar from './Layout/Dashboard/LeftSidebar.vue'
-  import ProfileImage from './Profile/ProfileImage.vue'
-  import ChangePassword from './Profile/ChangePassword.vue'
-  import Notifications from './Profile/Notifications.vue'
+  import Navbar from '../components/Layout/Navbar.vue'
+  import LeftSidebar from '../components/Layout/Dashboard/LeftSidebar.vue'
+  import ProfileImage from '../components/Profile/ProfileImage.vue'
+  import ChangePassword from '../components/Profile/ChangePassword.vue'
+  import Notifications from '../components/Profile/Notifications.vue'
   import VuePhoneNumberInput from 'vue-phone-number-input';
   import 'vue-phone-number-input/dist/vue-phone-number-input.css';
   import timezones from 'timezones-list';

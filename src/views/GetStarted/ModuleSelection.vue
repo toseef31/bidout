@@ -260,7 +260,6 @@
                     <v-col cols="12" sm="12" v-show="trial_end == 'premium'">
                       <label class="d-block text-left input-label mb-2 font-weight-bold">Billing Cycle</label>
                       <v-select outlined hide-details placeholder="Select" v-model="billingCycle" :items="cycle" @change="getCycle"  :disabled="ofsModule == true ?  false : true" class="text-capitalize"></v-select>
-                      
                     </v-col>
                   </v-row>
                   <v-row>
@@ -272,7 +271,7 @@
                   </v-row>
                   <v-row>
                     <v-col cols="12" sm="4" text="left">
-                      <v-btn color="#0D9647" large dense width="260px" height="56" class="font-weight-bold white--text text-capitalize pa-4" @click="generateContract('ofs-premium')" :disabled="ofsModule == true ?  false : true" :loading="loading">Execute Agreement Now <v-icon class="pl-2" color="#fff">mdi-arrow-right-circle</v-icon></v-btn>
+                      <v-btn color="#0D9647" large dense width="260px" height="56" class="font-weight-bold white--text text-capitalize pa-4" @click="generateContract('ofs-premium')" :disabled="ofsModule == true || ofsBtn == true ?  false : true" :loading="loading">Execute Agreement Now <v-icon class="pl-2" color="#fff">mdi-arrow-right-circle</v-icon></v-btn>
                     </v-col>
                   </v-row>
                 </div>
@@ -301,8 +300,8 @@
    </section>
 </template>
 <script>
-  import NavbarBeforeLogin from '../Layout/NavbarBeforeLogin.vue'
-  import Footer from '../Layout/Footer.vue'
+  import NavbarBeforeLogin from '../../components/Layout/NavbarBeforeLogin.vue'
+  import Footer from '../../components/Layout/Footer.vue'
   import { mapActions } from "vuex";
 export default {
   name : "ModuleSelection",
@@ -314,13 +313,15 @@ export default {
   data() {
     return {
       loading: false,
-      rfxModule: false,
+      rfxModule: true,
+      rfxBtn: true,
       bidRespond: false,
-      ofsModule: false,
+      ofsModule: true,
+      ofsBtn: true,
       rfxActiveModule: true,
       ofsActiveModule: true,
       trial_end : 'premium',
-      billingCycle: '',
+      billingCycle: 'Yearly',
       billing_cycles: '',
       cycle: ['Monthly','Yearly'],
       item_price_id: '',
@@ -359,35 +360,31 @@ export default {
     generateContract(type){
       if(this.package == 1){
         if(this.billing_cycles == 1){
-          this.item_price_id = 'OFS-Directory-Premium-Edition-USD-Monthly';
           this.unit_price = 79.99;
         }else{
           this.unit_price = 800;
-          this.item_price_id = 'OFS-Directory-Premium-Edition-USD-Yearly';
         }
       }
       if(this.package == 2){
         if(this.billing_cycles == 1){
-          this.item_price_id = 'OFS-Directory-Premium-Edition-1-USD-Monthly';
           this.unit_price = 99.99;
         }else{
           this.unit_price = 1000;
-          this.item_price_id = 'OFS-Directory-Premium-Edition-1-USD-Yearly';
         }
       }
       if(this.package == 3){
         if(this.billing_cycles == 1){
           this.unit_price = 119.99;
-          this.item_price_id = 'OFS-Directory-Premium-Edition-2-USD-Monthly';
         }else{
           this.unit_price = 1200;
-          this.item_price_id = 'OFS-Directory-Premium-Edition-2-USD-Yearly';
         }
       }
       if(this.package == 4){
-        this.billing_cycles == 12;
-        this.unit_price = 2400;
-        this.item_price_id = 'OFS-Directory-Premium-Edition-3-USD-Yearly';
+        if(this.billing_cycles == 1){
+          this.unit_price = 239.99;
+        }else{
+          this.unit_price = 2400;
+        }
       }
       if(type == 'ofs-premium'){
         var plan = this.package;
@@ -396,26 +393,22 @@ export default {
         var plan = 0;
       }
       if(this.trial_end == 'free'){
-        this.item_price_id = 'OFS-Directory-Standard-Edition';
         this.unit_price = 0;
         this.billing_cycles = 0;
-      }
-      // console.log(this.billing_cycles,'id',this.item_price_id,'price',this.unit_price); 
+      } 
       var contract = {
         ip: this.$store.getters.userIp,
         contractType: type,
         plan: plan,
         id: this.$store.getters.companyId,
         userId: this.$store.getters.id,
-        item_price_id: this.item_price_id,
-        billing_cycles: this.billing_cycles,
         customer_id: this.$store.getters.customerId,
         unit_price: this.unit_price,
       }
-      this.contractGenerate(contract);
+      // this.contractGenerate(contract);
       if(type == 'ofs-premium'){
         this.loading = 'loading';
-        this.ofsModule = false;
+        this.ofsBtn = false;
       }else{
         this.loading = 'loading';
         this.rfxModule = false;
