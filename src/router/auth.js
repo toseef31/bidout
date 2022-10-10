@@ -26,6 +26,11 @@ const routes = [
         name: 'Invitation',
         component: () => import('@/views/Invitation.vue'),
       },
+      {
+        path: '/impersonate',
+        name: 'Impersonate',
+        component: () => import('@/views/Impersonate.vue'),
+      },
     ],
   },
 ];
