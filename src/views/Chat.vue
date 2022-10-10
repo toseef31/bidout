@@ -138,7 +138,6 @@
                   </v-list-item-group>
                 </v-list>
               </div>
-              {{dropzoneOptions.url}}
               <!-- Message Send Area -->
               <div class="message-send-area px-5 pt-5">
                 <span class="fileName" v-if="filename">{{filename}}</span>
