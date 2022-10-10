@@ -335,7 +335,7 @@ export default {
     }).catch(err => {
       console.log(err);
     });
-   }.
+   },
 
   signInWithCustomToken({ commit }, payload) {
     return new Promise(async (resolve, reject) => {
