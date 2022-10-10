@@ -11,7 +11,7 @@ const routes = [
       {
         path: '/messages',
         name: 'Messages',
-        component: () => import('@/components/Chat.vue'),
+        component: () => import('@/views/Chat.vue'),
         beforeEnter: (to, from, next) => {
            if(localStorage.getItem("userData") == null) {
                next('/login');
@@ -23,7 +23,7 @@ const routes = [
       // {
       //   path: '/messages?room_id=:id',
       //   name: 'Message',
-      //   component: () => import('@/components/Chat.vue'),
+      //   component: () => import('@/views/Chat.vue'),
       //   beforeEnter: (to, from, next) => {
       //      if(localStorage.getItem("userData") == null) {
       //          next('/login');

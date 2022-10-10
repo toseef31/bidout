@@ -9,7 +9,7 @@ const routes = [
       {
         path: '/view-bids',
         name: 'ViewBids',
-        component: () => import('@/components/Bids/ViewBids.vue'),
+        component: () => import('@/views/Bid/ViewBids.vue'),
         beforeEnter: (to, from, next) => {
           if(localStorage.getItem("userData") == null) {
               next('/login');
@@ -21,7 +21,7 @@ const routes = [
       {
         path: '/create-bid',
         name: 'CreateBid',
-        component: () => import('@/components/Bids/CreateBid.vue'),
+        component: () => import('@/views/Bid/CreateBid.vue'),
         beforeEnter: (to, from, next) => {
           if(localStorage.getItem("userData") == null) {
               next('/login');
@@ -33,7 +33,7 @@ const routes = [
       {
         path: '/templates',
         name: 'Templates',
-        component: () => import('@/components/Bids/Templates.vue'),
+        component: () => import('@/views/Bid/Templates.vue'),
         beforeEnter: (to, from, next) => {
           if(localStorage.getItem("userData") == null) {
               next('/login');
@@ -45,7 +45,7 @@ const routes = [
       {
         path: '/not-completed',
         name: 'NotCompleted',
-        component: () => import('@/components/Bids/NotCompleted.vue'),
+        component: () => import('@/views/Bid/NotCompleted.vue'),
         beforeEnter: (to, from, next) => {
           if(localStorage.getItem("userData") == null) {
               next('/login');
@@ -57,7 +57,7 @@ const routes = [
       {
         path: '/completed',
         name: 'Completed',
-        component: () => import('@/components/Bids/Completed.vue'),
+        component: () => import('@/views/Bid/Completed.vue'),
         beforeEnter: (to, from, next) => {
           if(localStorage.getItem("userData") == null) {
               next('/login');
@@ -69,7 +69,7 @@ const routes = [
       
       // { 
       //   path: "*", 
-      //   component: () => import('@/components/PageNotFound.vue'), 
+      //   component: () => import('@/views/PageNotFound.vue'), 
        
       // }
     ],

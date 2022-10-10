@@ -11,7 +11,7 @@ const routes = [
       {
         path: '/dashboard',
         name: 'Dashboard',
-        component: () => import('@/components/Dashboard.vue'),
+        component: () => import('@/views/Dashboard.vue'),
         beforeEnter: (to, from, next) => {
            if(localStorage.getItem("userData") == null) {
                next('/login');
@@ -22,7 +22,7 @@ const routes = [
       },
       // { 
       //   path: "*", 
-      //   component: () => import('@/components/PageNotFoundLogin.vue'),
+      //   component: () => import('@/views/PageNotFoundLogin.vue'),
          
       // }
     ],

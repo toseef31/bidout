@@ -11,7 +11,7 @@ const routes = [
       {
         path: '/view-ofs-suppliers',
         name: 'ViewOfsSupplier',
-        component: () => import('@/components/Ofs/ViewOFsSupplier.vue'),
+        component: () => import('@/views/Ofs/ViewOFsSupplier.vue'),
         beforeEnter: (to, from, next) => {
            if(localStorage.getItem("userData") == null) {
                next('/login');
@@ -23,7 +23,7 @@ const routes = [
       {
         path: '/ofs-supplier/:slug/:name',
         name: 'SupplierListing',
-        component: () => import('@/components/Ofs/SupplierListing.vue'),
+        component: () => import('@/views/Ofs/SupplierListing.vue'),
          beforeEnter: (to, from, next) => {
             if(localStorage.getItem("userData") == null) {
                 next('/login');
@@ -35,7 +35,7 @@ const routes = [
       {
         path: '/ofs-supplier/:slug',
         name: 'SupplierName',
-        component: () => import('@/components/Ofs/SupplierListing.vue'),
+        component: () => import('@/views/Ofs/SupplierListing.vue'),
          beforeEnter: (to, from, next) => {
             if(localStorage.getItem("userData") == null) {
                 next('/login');
@@ -47,7 +47,7 @@ const routes = [
       {
         path: '/edit-profile',
         name: 'EditProfile',
-        component: () => import('@/components/EditProfile.vue'),
+        component: () => import('@/views/EditProfile.vue'),
         beforeEnter: (to, from, next) => {
            if(localStorage.getItem("userData") == null) {
                next('/login');
@@ -59,7 +59,7 @@ const routes = [
       {
         path: '/company/:name',
         name: 'Company',
-        component: () => import('@/components/Ofs/Company.vue'),
+        component: () => import('@/views/Ofs/Company.vue'),
         beforeEnter: (to, from, next) => {
            if(localStorage.getItem("userData") == null) {
                next('/login');

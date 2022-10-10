@@ -1,0 +1,244 @@
+<template>
+   <v-col class="companyProfile-module inner-Company pa-0 pa-sm-3 pl-sm-0" :class="[ showSideBar ? 'col-md-9 col-12 col-sm-9' : 'mid-content-collapse', activityPanel ? 'd-sm-block' : 'd-md-block']" v-show="!activityPanel">
+      <div class="mid-content">
+        <div class="content-section">
+          <v-row class="mx-0">
+            <v-col cols="12" sm="12" md="12" class="d-sm-block px-0">
+              <div class="manage-sections pa-4 px-0">
+                <div class="top-section d-flex pa-sm-10 pa-4">
+                  <div>
+                    <h4>{{companyData.company}} Page</h4>
+                  </div>
+                  <template>
+                    <div class="progress-section">
+                      <div class="d-flex progress-heading">
+                        <p class="mb-0">Page Progress: <strong>{{percentage}}%</strong></p>
+                        <small>11 out of 11 modules</small>
+                      </div>
+                      <v-progress-linear 
+                      color="#0D9648"
+                      rounded
+                      :value="percentage" max-width="100%"></v-progress-linear>
+                    </div>
+                  </template>
+                </div>
+                <div class="company-form mt-16">
+                  <hr>
+                  <company-logo></company-logo>
+                  <hr>
+                  <v-container class="pa-sm-10 pa-4">
+                    <v-row>
+                      <v-col cols="12" sm="12">
+                      <label class="d-block text-left input-label">Company's Name</label>
+                        <v-text-field placeholder="Company's Name" v-model="profileName" single-line outlined hide-details></v-text-field>
+                      </v-col>
+                      <v-col cols="12" sm="12">
+                      <label class="d-block text-left input-label">Corporate Summary</label>
+                        <v-textarea outlined name="input-7-4" v-model="profileSummary" hide-details></v-textarea>
+                      </v-col>
+                    </v-row>
+                    <v-row>
+                      <v-col cols="12" sm="12">
+                        <v-btn color="#0D9648" large class="text-capitalize white--text" width="176px" height="54px" @click="updateBasic">Save Info</v-btn>
+                      </v-col>
+                    </v-row>
+                  </v-container>
+                  <hr>
+                  <v-container class="pa-sm-10 pa-4">
+                      <label class="d-block text-left main-label">Services Portfolio</label>
+                    <v-row>
+                      <v-col cols="6" sm="6">
+                        <!-- <v-text-field placeholder="Add a service here ..." single-line outlined hide-details ></v-text-field> -->
+                          <v-list class="service-cate">
+                            <v-list-item-group>
+                             <!--  <template v-slot:activator>
+                                <v-list-item-content>
+                                  <v-list-item-title v-text="category.name" class="text-left"></v-list-item-title>
+                                </v-list-item-content>
+                              </template> -->
+                              <v-list-item
+                                v-for="category in allcategories"
+                                :key="category.id" @click="getSubCate(category.id)"
+                              >
+                                <v-list-item-content>
+                                  <v-list-item-title v-text="category.name" class="text-left"></v-list-item-title>
+                                </v-list-item-content>
+                              </v-list-item>
+                            </v-list-item-group>
+                          </v-list>
+                      </v-col>
+                      <v-col cols="6" sm="6">
+                        
+                        <v-list  class="service-cate">
+                          <!-- <v-list-group
+                            v-for="category in allcategories"
+                            :key="category.name"
+                          > -->
+                           <!--  <template v-slot:activator>
+                              <v-list-item-content>
+                                <v-list-item-title v-text="category.name" class="text-left"></v-list-item-title>
+                              </v-list-item-content>
+                            </template> -->
+
+                            <v-list-item
+                              v-for="subcategory in subCategories"
+                              :key="subcategory.id" @click="addService(subcategory.name)"
+                            >
+                              <v-list-item-content>
+                                <v-list-item-title v-text="subcategory.name" class="text-left"></v-list-item-title>
+                              </v-list-item-content>
+                            </v-list-item>
+                          <!-- </v-list-group> -->
+                        </v-list>
+                      </v-col>
+                    </v-row>
+                    <v-row>
+                      <v-col cols="12" sm="10">
+                        <div class="service-list text-left">
+                          <label v-for="(drill,index) in companyData.services"><v-icon>mdi-check</v-icon><span @click="deleteService(index)">{{drill}}</span></label>
+                        </div>
+                        <p class="text-left mt-5 alert-text">*Click in a service above to delete from list.</p>
+                      </v-col>
+                    </v-row>
+                  </v-container>
+                  <hr>
+                  <service-locations></service-locations>
+                  <hr>
+                  <company-videos></company-videos>
+                  <hr>
+                  <company-documents></company-documents>
+                  <hr>
+                  <corporate-news></corporate-news>
+                  <hr>
+                  <excutive-leadership></excutive-leadership>
+                  <hr>
+                  <ESGComponent />
+                  <hr>
+                  <key-facts></key-facts>
+                </div>
+              </div>
+            </v-col>
+          </v-row>
+        </div>
+      </div>
+   </v-col>
+</template>
+<script async defer src="https://maps.googleapis.com/maps/api/js?key=%VITE_GOOGLE_MAP%&libraries=places"></script>
+<script>
+  import Navbar from '../components/Layout/Navbar.vue'
+  import LeftSidebar from '../components/Layout/Dashboard/LeftSidebar.vue'
+  import RightSidebar from '../components/Layout/Dashboard/RightSidebar.vue'
+  import ESGComponent from '../components/CompanyProfile/ESGComponent.vue'
+  import KeyFacts from '../components/CompanyProfile/KeyFacts.vue'
+  import ExcutiveLeadership from '../components/CompanyProfile/ExcutiveLeadership.vue'
+  import ServiceLocations from '../components/CompanyProfile/ServiceLocations.vue'
+  import CorporateNews from '../components/CompanyProfile/CorporateNews.vue'
+  import CompanyDocuments from '../components/CompanyProfile/CompanyDocuments.vue'
+  import CompanyVideos from '../components/CompanyProfile/CompanyVideos.vue'
+  import CompanyLogo from '../components/CompanyProfile/CompanyLogo.vue'
+  import _ from 'lodash';
+  import { mapActions } from "vuex"
+export default {
+  name : "CompanyProfile",
+  components: {
+    Navbar,
+    LeftSidebar,
+    RightSidebar,
+    ESGComponent,
+    KeyFacts,
+    ExcutiveLeadership,
+    ServiceLocations,
+    CorporateNews,
+    CompanyDocuments,
+    CompanyVideos,
+    CompanyLogo
+  },
+  
+  data() {
+    return {
+      profileName: this.$store.getters.companyData.company,
+      profileSummary: this.$store.getters.companyData.overview,
+      services: '',
+      drillingService: [],
+      subservices: '',
+    };
+  },
+  computed:{
+    showSideBar(){
+        return this.$store.getters.g_sideBarOpen;
+    },
+    activityPanel(){
+        return this.$store.getters.g_activityPanel;
+    },
+    allcategories(){
+      return this.$store.getters.categories;
+    },
+    companyData(){
+      return this.$store.getters.companyData;
+    },
+    percentage(){
+      if(this.$store.getters.companyData.image && this.$store.getters.companyData.services && this.$store.getters.companyData.lattitude && this.$store.getters.companyData.corporateVideos && this.$store.getters.companyData.corporateDocuments && this.$store.getters.companyData.corporateNews && this.$store.getters.companyData.executiveLeadership && this.$store.getters.companyData.esgInitiatives && this.$store.getters.companyData.accountContacts){
+        return 100;
+      }
+      if(this.$store.getters.companyData.image && this.$store.getters.companyData.esgInitiatives == []){
+        return 30;
+      }else{
+        return 20;
+      }
+    },
+    subCategories(){
+      return this.$store.getters.subCategories;
+    }
+  },
+  methods: {
+    ...mapActions(["getCompany","getCategories","getSubCategories","updateBasicProfile","addCompanyService"]),
+      updateBasic(){
+        var data = {
+          companyId: this.$store.getters.userInfo.company.id,
+          profileName: this.profileName,
+          profileSummary: this.profileSummary,
+        }
+        this.updateBasicProfile(data);
+      },
+      getAllCategories(){
+        this.getCategories();
+        
+      },
+      addService(name){
+        if(this.$store.getters.companyData.services){
+          this.drillingService = this.$store.getters.companyData.services;
+        }
+        const array3 = [...this.drillingService, name]
+        this.drillingService = array3;
+        this.addCompanyService({companyId: this.$store.getters.userInfo.company.id,services: this.drillingService});
+        this.services = '';
+        this.subservices = '';
+      },
+      deleteService(index){
+        if(this.$store.getters.companyData.services){
+          this.drillingService = this.$store.getters.companyData.services;
+        }
+        this.drillingService.splice(index,1);
+        this.addCompanyService({companyId: this.$store.getters.userInfo.company.id,services: this.drillingService});
+      },
+      
+      get_url_extension( url ) {
+        return url.split(/[#?]/)[0].split('.').pop().trim();
+      },
+      get_url_name( url ) {
+        return url.split('/').pop();
+      },
+      getSubCate(catId){
+        this.getSubCategories(catId);
+      }
+  },
+  mounted() {
+    document.title = "Company Profile - BidOut";
+    this.getCategories();
+    this.getCompany(this.$store.getters.userInfo.company.id);
+  }
+};
+</script>
+<style scoped lang="scss">
+
+</style>
