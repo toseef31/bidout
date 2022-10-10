@@ -6,7 +6,7 @@
               <v-row class="mx-0">
                 <v-col cols="12" sm="12" md="12" class="d-sm-block">
                   <div class="manage-sections pa-4">
-                    <v-alert type="success" v-if="statusMessage !== null" class="text-left" dismissible>
+                    <v-alert type="success" v-show="showErrorAlert" v-if="statusMessage !== null" class="text-left" dismissible>
                       {{ statusMessage }}
                     </v-alert>
                     <div class="top-section d-flex">
@@ -59,6 +59,9 @@
                                   Enable </v-btn>
                               </td>
                             </tr>
+                            <tr v-if="users.length < 1">
+                              <td colspan="4"><h4>There is no disable user.</h4></td>
+                            </tr>
                           </tbody>
                         </template>
                       </v-simple-table>
@@ -71,9 +74,9 @@
        </v-col>
 </template>
 <script>
-  import Navbar from './Layout/Navbar.vue'
-  import LeftSidebar from './Layout/Dashboard/LeftSidebar.vue'
-  import RightSidebar from './Layout/Dashboard/RightSidebar.vue'
+  import Navbar from '../components/Layout/Navbar.vue'
+  import LeftSidebar from '../components/Layout/Dashboard/LeftSidebar.vue'
+  import RightSidebar from '../components/Layout/Dashboard/RightSidebar.vue'
   import { mapActions, mapState } from "vuex";
 export default {
   name : "DisabledUsers",
@@ -101,6 +104,9 @@ export default {
     users(){
       return this.$store.getters.disableList;
     },
+    showErrorAlert(){
+      return this.$store.getters.showErrorAlert;
+    }
   },
   methods: {
     ...mapActions(["getDisabledUsers","enableUser"]),
@@ -115,7 +121,7 @@ export default {
     document.title = "Disabled Users - BidOut";
     this.user = this.$store.getters.userInfo;
 
-    this.getDisableUsers(this.user.company);
+    this.getDisableUsers(this.user.company.company);
   }
 };
 </script>

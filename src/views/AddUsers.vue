@@ -54,6 +54,7 @@
                     :items="items"
                     :rules="[v => !!v || 'Privileges is required']"
                     placeholder="Select"
+                    item-text="label" item-value="value"
                     required
                     outlined
                     solo-flat class="text-capitalize"
@@ -80,9 +81,9 @@
    </v-col>
 </template>
 <script>
-  import Navbar from './Layout/Navbar.vue'
-  import LeftSidebar from './Layout/Dashboard/LeftSidebar.vue'
-  import RightSidebar from './Layout/Dashboard/RightSidebar.vue'
+  import Navbar from '../components/Layout/Navbar.vue'
+  import LeftSidebar from '../components/Layout/Dashboard/LeftSidebar.vue'
+  import RightSidebar from '../components/Layout/Dashboard/RightSidebar.vue'
   import axios from 'axios'
   import { mapActions, mapState } from "vuex";
 export default {
@@ -109,8 +110,8 @@ export default {
         ],
         select: null,
         items: [
-          'admin',
-          'user',
+          {value: 'admin', label: 'Administrator'},
+          {value:'user', label: 'User'},
         ],
         user: '',
     };
@@ -133,7 +134,7 @@ export default {
         lastName: this.lastName,
         email: this.email,
         role: this.select,
-        company: this.user.company,
+        company: this.user.company,company,
         parent: this.user.id,
       }
       this.inviteUser(data);
@@ -142,7 +143,6 @@ export default {
   mounted() {
     document.title = "Add Users - BidOut";
     this.user = this.$store.getters.userInfo;
-    console.log(this.user);
   }
 };
 </script>

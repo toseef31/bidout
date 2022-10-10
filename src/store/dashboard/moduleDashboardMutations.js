@@ -20,4 +20,7 @@ export default {
   setInvitedUsersList (state, payload){
       state.invitedList = payload
   },
+  setPendingCount (state, payload){
+   state.pendingCount = payload
+  }
 }

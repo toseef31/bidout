@@ -7,17 +7,18 @@
               <v-col cols="12" md="12">
                 <VueSlickCarousel v-bind="settings" class="company-slider">
 
-                  <div class="slide-item">
+                  <div class="slide-item" v-for="premium in premiumCompanies" @click="viewCompany(premium.id,premium.company)">
                     <div class="slide-img d-flex align-center justify-center flex-column">
-                      <img
-                        :src="require('@/assets/images/ofs/patterson.png')" class="mx-auto"
+                      <img v-if="premium.image"
+                        :src="premium.image" class="mx-auto"
                       >
+                      <img v-else :src="require('@/assets/images/ofs/no-image.jpg')">
                     </div>
                     <div class="slide-caption">
-                      <h3 class="font-weight-bold">Premium Service Provider</h3>
+                      <h3 class="font-weight-bold">{{premium.company}}</h3>
                     </div>
                   </div>
-                  <div class="slide-item">
+                  <!-- <div class="slide-item">
                     <div class="slide-img d-flex align-center justify-center flex-column">
                       <img
                         :src="require('@/assets/images/ofs/tetra.png')" class="mx-auto" height="120"
@@ -46,33 +47,36 @@
                     <div class="slide-caption">
                       <h3 class="font-weight-bold">Premium Service Provider</h3>
                     </div>
-                  </div>
+                  </div> -->
                 </VueSlickCarousel>
               </v-col>
             </v-row>
             <v-row justify="center">
               <v-col cols="12" md="12" class="pl-sm-5 pr-sm-5">
                 <v-form class="search-form">
-                  <v-text-field label="Search here ..." single-line outlined type="text" placeholder="Search here" v-model="searchCategory" prepend-inner-icon="mdi-magnify">
+                  <v-text-field label="Search here ..." single-line outlined type="text" placeholder="Search here" v-model="searchCompany" prepend-inner-icon="mdi-magnify" @keyup="getSupplierList">
                   </v-text-field>
-                  <v-list v-if="hideList == true"  class="company-list">
-                    <template v-for="(company, index) in companies">
-                      <v-list-item class="py-1"
-                        :key="company.name"
-                      >
-                        <v-list-item-avatar max-height="31px" max-width="88px" width="88px" tile>
-                          <v-img :src="`/images/companies/${company.image}`" height="auto"></v-img>
-                        </v-list-item-avatar>
-                        <v-list-item-content>
-                          <v-list-item-title @click="addPerson(user); hideMemberList = !hideMemberList" class="text-left">{{company.name}}</v-list-item-title>
-                        </v-list-item-content>
-                        <v-list-item-action>
-                          <v-list-item-action-text class="font-weight-bold"><router-link :to="company.link">View Profile</router-link></v-list-item-action-text>
-                        </v-list-item-action>
-                      </v-list-item>
-                    </template>
-                    <v-btn color="rgba(13, 150, 72, 0.1)" rounded class="all-btn text-capitalize my-4">View all results</v-btn>
-                  </v-list>
+                  <div v-if="hideList == true">
+                    <v-list  class="company-list">
+                      <template v-for="(company, index) in companies">
+                        <v-list-item class="py-1"
+                          :key="company.objectID" @click="viewCompany(company.objectID,company.company)"
+                        >
+                          <v-list-item-avatar max-height="31px" max-width="88px" width="88px" tile>
+                            <v-img v-if="company.companyImage" :src="company.companyImage" height="auto"></v-img>
+                            <v-img v-else :src="`/images/companies/no-image.jpg`" height="auto"></v-img>
+                          </v-list-item-avatar>
+                          <v-list-item-content>
+                            <v-list-item-title class="text-left">{{company.company}}</v-list-item-title>
+                          </v-list-item-content>
+                          <v-list-item-action>
+                            <v-list-item-action-text class="font-weight-bold" @click="viewCompany(company.objectID,company.company)"><router-link to="">View Profile</router-link></v-list-item-action-text>
+                          </v-list-item-action>
+                        </v-list-item>
+                      </template>
+                      <!-- <v-btn color="rgba(13, 150, 72, 0.1)" rounded class="all-btn text-capitalize my-4">View all results</v-btn> -->
+                    </v-list>
+                  </div>
                 </v-form>
               </v-col>
             </v-row>
@@ -100,7 +104,7 @@
               <v-col cols="12" md="6" v-for="category in allcategories" :key="category.id" class="pl-sm-5 pr-sm-5">
                 
                 <div class="ofs-listing text-left">
-                  <h1 class="font-weight-bold mb-3 text-break"><router-link :to="'/ofs-supplier/'+category.slug">{{category.name}}</router-link></h1>
+                  <h1 class="font-weight-bold mb-3 text-break" @click="getMainCompany(category.slug,category.name)">{{category.name}}</h1>
                   <p>
                     <span v-for="subcategry in subCategories(category.subCategories)" class="sub-catLink">
                       <span @click="getCompanies(category.slug,subcategry.name)">  
@@ -139,8 +143,8 @@
   </v-col>
 </template>
 <script>
-  import Navbar from '../Layout/Navbar.vue'
-  import LeftSidebar from '../Layout/Dashboard/LeftSidebar.vue'
+  import Navbar from '../../components/Layout/Navbar.vue'
+  import LeftSidebar from '../../components/Layout/Dashboard/LeftSidebar.vue'
   import VueSlickCarousel from 'vue-slick-carousel'
   import 'vue-slick-carousel/dist/vue-slick-carousel.css'
     // optional style for arrows & dots
@@ -157,8 +161,8 @@ export default {
   
   data() {
     return {
-      searchCategory: '',
-      companies: [
+      searchCompany: '',
+      companiess: [
         {name: 'Tetra Technologies', link: '/company-profile', image: 'tetra.png'},
         {name: 'Patterson-UTI', link: '/company-profile', image: 'patterson.png'},
         {name: 'ChampionX', link: '/company-profile', image: 'champion.png'},
@@ -167,7 +171,7 @@ export default {
       settings: {
         "arrows": true,
         "dots": false,
-        "infinite": true,
+        "infinite": false,
         "slidesToShow": 3,
         "slidesToScroll": 3,
         "touchThreshold": 5,
@@ -214,8 +218,8 @@ export default {
     };
   },
   watch:{
-    searchCategory: _.debounce(function(){
-      if(this.searchCategory < 1){
+    searchCompany: _.debounce(function(){
+      if(this.searchCompany < 1){
         this.hideList = false;
       }else{
         this.hideList = true;
@@ -239,9 +243,16 @@ export default {
         return _.orderBy(this.$store.getters.categories, 'orderNumber', 'asc');
       // }
     },
+    companies(){
+      this.hideList = true;
+      return this.$store.getters.supplier;
+    },
+    premiumCompanies(){
+      return this.$store.getters.premiumCompanies;
+    }
   },
   methods: {
-    ...mapActions(["getCategories","getCompanyByservice","getSupplierCompanyByservice"]),
+    ...mapActions(["getCategories","getCompanyByservice","getSupplierCompanyByservice","getSupplierMainService","searchSupplier","getCompanyInfo","getPremiumCompanies"]),
     getAllCategories(){
       this.getCategories();
       
@@ -251,11 +262,24 @@ export default {
     },
     getCompanies(slug,subName){
       this.getSupplierCompanyByservice({slug:slug, service:subName});
-    }
+    },
+    getMainCompany(slug,name){
+      this.getSupplierMainService({slug:slug, name:name});
+    },
+    getSupplierList(){
+      if(this.searchCompany.length > 1){
+        this.searchSupplier(this.searchCompany);
+      }
+    },
+    viewCompany(id,name){
+      this.getCompanyInfo({'id':id,'name':name});
+    },
+      
   },
   mounted() {
   document.title = "View OFS Supplier - BidOut"
     this.getCategories();
+    this.getPremiumCompanies();
   }
 };
 </script>

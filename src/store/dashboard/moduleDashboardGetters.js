@@ -20,4 +20,7 @@ export default {
    invitedList (state){
       return state.invitedList
    },
+   pendingCount (state){
+      return state.pendingCount
+   },
 }

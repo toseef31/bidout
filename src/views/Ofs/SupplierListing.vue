@@ -7,7 +7,7 @@
             <v-col cols="12" md="12">
               <div class="category-list">
                 <div class="d-flex justify-space-between px-4">
-                  <h1 class="text-left service-title mb-8">{{allcompanies.name}}</h1>
+                  <h1 class="text-left service-title mb-8">{{companyName}}</h1>
                   <div class="category-list__searchBox">
                     <v-text-field
                       v-model="searchCompany"
@@ -53,17 +53,17 @@
                         </thead>
                         <tbody>
                           <tr
-                            v-for="company in allcompanies.data"
+                            v-for="company in allcompanies"
                             :key="company.objectID"
                           >
-                            <td class="pl-6">{{ company.company }} 
+                            <td class="pl-6"><span @click="viewCompany(company.objectID,company.company)" class="text-decoration-none company-link">{{ company.company }}</span> 
                               
                             </td>
-                            <td>{{ company.hQLocation }}</td>
-                            <td>{{ company.employees }}</td>
-                            <td>{{ company.fieldLocations }}</td>
-                            <td>{{ company.accountContacts }}</td>
-                            <td><router-link to="/company-profile" class="text-decoration-none">View Details</router-link></td>
+                            <td><span v-if="company.companyData.hqlocation">{{ company.companyData.hqlocation }}</span><span v-else>No location</span></td>
+                            <td>{{ company.companyData.employees }}</td>
+                            <td> <span v-if="company.companyData.companyLocations">{{ company.companyData.companyLocations.length }}</span><span v-else>No location</span></td>
+                            <td><span v-if="company.companyData.accountContacts">{{ company.companyData.accountContacts.length }}</span><span v-else>No Contacts</span></td>
+                            <td><span @click="viewCompany(company.objectID,company.company)" class="text-decoration-none company-link">View Details</span></td>
                           </tr>
                         </tbody>
                       </template>
@@ -86,8 +86,8 @@
   </v-col>
 </template>
 <script>
-  import Navbar from '../Layout/Navbar.vue'
-  import LeftSidebar from '../Layout/Dashboard/LeftSidebar.vue'
+  import Navbar from '../../components/Layout/Navbar.vue'
+  import LeftSidebar from '../../components/Layout/Dashboard/LeftSidebar.vue'
   import _ from 'lodash';
   import { mapActions } from "vuex";
 export default {
@@ -128,16 +128,22 @@ export default {
     },
    allcompanies(){
     if(this.searchCompany){
-      return this.$store.getters.serviceCompanies.filter((companies)=>{
-        return this.searchCompany.toLowerCase().split(' ').every(v => companies.name.toLowerCase().includes(v))
+      return this.$store.getters.serviceCompanies.data.filter((companies)=>{
+        return this.searchCompany.toLowerCase().split(' ').every(v => companies.company.toLowerCase().includes(v))
       })
     }else{
-      return this.$store.getters.serviceCompanies;
+      return this.$store.getters.serviceCompanies.data;
     }
    },
+   companyName(){
+    return this.$store.getters.serviceCompanies.name;
+   }
   },
   methods: {
-    
+    ...mapActions(["getCompanyInfo"]),
+    viewCompany(id,name){
+      this.getCompanyInfo({'id':id,'name':name});
+    }
   },
   mounted() {
     document.title = "Categories - BidOut" 

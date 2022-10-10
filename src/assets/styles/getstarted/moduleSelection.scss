@@ -15,16 +15,22 @@
 			.v-input--is-label-active{
 				color: #0D9648 !important;
 				opacity: 1;
-				.v-input--switch__track.primary--text{
-					color: #0D9648 !important;
-					opacity: 1;
+				.v-input--selection-controls__input{
+					.primary--text{
+						color: #0D9648 !important;
+					}
+					.v-input--checkbox__track.primary--text{
+						color: #0D9648 !important;
+						opacity: 1;
+					}
+					.v-input--checkbox__thumb.primary--text{
+						color: #fff !important;
+					}
+					.v-input--selection-controls__ripple.primary--text{
+						color: #0D9648 !important;
+					}
 				}
-				.v-input--switch__thumb.primary--text{
-					color: #fff !important;
-				}
-				.v-input--selection-controls__ripple.primary--text{
-					color: #0D9648 !important;
-				}
+				
 			}
 			.agreement-box{
 				background: rgba(13, 150, 72, 0.1);
@@ -48,6 +54,10 @@
 		overflow-x: hidden;
 		overflow-y: auto;
 	}
+}
+.inviation-module{
+		flex: 0 0 100%;
+	    max-width: 100%;
 }
 @media(max-width: 768px){
 	.module-selection{

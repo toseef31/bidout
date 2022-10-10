@@ -24,7 +24,7 @@
                   <v-tabs-items v-model="tab">
                     <v-tab-item>
 
-                      <div class="panels pb-4">
+                      <div class="panels pb-4" >
                         <div class="panel">
                           <div class="d-flex justify-space-between panel-header">
                             <h6>BidOut Procurement Platform</h6>
@@ -80,9 +80,9 @@
    </v-col>
 </template>
 <script>
-  import Navbar from './Layout/Navbar.vue'
-  import LeftSidebar from './Layout/Dashboard/LeftSidebar.vue'
-  import RightSidebar from './Layout/Dashboard/RightSidebar.vue'
+  import Navbar from '../components/Layout/Navbar.vue'
+  import LeftSidebar from '../components/Layout/Dashboard/LeftSidebar.vue'
+  import RightSidebar from '../components/Layout/Dashboard/RightSidebar.vue'
   import axios from 'axios'
 export default {
   name : "ManageUsers",
@@ -107,6 +107,9 @@ export default {
     },
     activityPanel(){
         return this.$store.getters.g_activityPanel;
+    },
+    moduleData(){
+      return this.$store.getters.companyData;
     },
   },
   methods: {

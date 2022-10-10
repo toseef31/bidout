@@ -24,10 +24,16 @@ export default {
     state.archiveStatus = payload
   }, 
   setMembersList (state, payload){
-    var data;
-      state.membersList = payload;
+    state.membersList = payload;
   }, 
   setSuppliersUsers (state, payload){
       state.suppliersUsers = payload;
   }, 
+  setArchiveConverstaionList (state, payload){
+      state.archiveList = payload;
+  }, 
+  setCreateMsg (state, payload){
+      state.createMsg = payload;
+  },  
+  
 }

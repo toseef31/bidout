@@ -1,12 +1,16 @@
 .dashboard-module{
+	flex: 0 0 78%;
+	max-width: 78%;
 	.mid-content{
+		flex: 0 0 100%;
+		max-width: 100%;
 		z-index: 2;
 	  padding-left: 0 !important;
 		.content-section{
 			background: #FFFFFF;
 			border: 1px solid #B8B8B8;
 			border-radius: 8px;
-			margin-bottom: 20px;
+			margin-bottom: 8px;
 			padding: 3px;
 			.title-block{
 				display: flex;
@@ -54,6 +58,20 @@
 			 	}
 			}
 		}
+		.pending-queue{
+			background: rgba(13, 150, 72, 0.1);
+	    border-radius: 8px;
+	    border: 1px solid #0D9648;
+	    padding: 22px 24px;
+	    .pending-content{
+	    	span{
+	    		font-weight: 600;
+	    	}
+	    }
+	    a{
+	    	font-weight: 600;
+	    }
+		}
 		.map-section{
 			border: 1px solid #B8B8B8;
 	    border-radius: 8px;
@@ -98,10 +116,10 @@
 
 @media (min-width: 769px) {
 	.dashboard-module{
-		.right-col{
+		/*.right-col{
 			flex: 0 0 28%;
 		  max-width: 28%;
-		}
+		}*/
 		.mid-content{
 			display: block;
 		}

@@ -85,7 +85,27 @@
   	outline: 1px solid #B8B8B8;
   }
 }
-
+.company-link{
+	cursor: pointer;
+}
+.green-color{
+	color: #0D9647 !important;
+}
+#MazPhoneNumberInput{
+	margin-bottom: 0!important;
+	.country-selector{
+		&__input{
+			height: 56px;
+			min-height: 56px;
+		}
+	}
+	.input-tel{
+		&__input{
+			height: 56px;
+			min-height: 56px;
+		}
+	}
+}
 @media (min-width: 769px) {
 	
 }

@@ -45,6 +45,7 @@
 		  	}
 	  	}
 	  	.category-list{
+
 	  		.v-tabs-items{
 	  			 .company-table{
   			 	    border-width: 1px 0 0 0;
@@ -65,6 +66,37 @@
 		border: 1px solid #F1F1F1;
     box-shadow: 0px 21px 26px rgb(0 0 0 / 10%) !important;
     border-radius: 0px 0px 8px 8px;
+    max-height: 400px;
+    overflow: auto;
+    &::-webkit-scrollbar {
+      width: 5px;
+      height: 5px;
+    }
+    &::-webkit-scrollbar-thumb {
+      background: #e1e1e1;
+      border: 14px solid #0d9647;
+      border-radius: 26px;
+    }
+    &::-webkit-scrollbar-thumb:hover {
+      background: #ffffff;
+    }
+    &::-webkit-scrollbar-thumb:active {
+      background: #0d9647;
+    }
+    &::-webkit-scrollbar-track {
+      /*background: #666666;*/
+      border: 36px solid #e3e3e3;
+      border-radius: 42px;
+    }
+    &::-webkit-scrollbar-track:hover {
+      background: #666666;
+    }
+    &::-webkit-scrollbar-track:active {
+      background: #0d9647;
+    }
+    &::-webkit-scrollbar-corner {
+      background: transparent;
+    }
     .all-btn{
     	border-radius: 28px;
     	color: #0D9648;
@@ -73,6 +105,8 @@
 }
 @media (max-width: 768px) {
 	.ofsSupplier-module{
+		flex: 0 0 100%;
+	  	max-width: 100%;
 		.mid-content {
 			flex: 0 0 100%;
 	  	max-width: 100%;

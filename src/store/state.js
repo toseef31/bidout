@@ -2,7 +2,8 @@
 const state = {
     authenticated: false,
     sideBarOpen: true,
-    activityPanel: false
+    activityPanel: false,
+    pageLoader: true,
 }
 
 export default state

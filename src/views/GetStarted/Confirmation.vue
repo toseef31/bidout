@@ -31,7 +31,7 @@
               <div class="confirm-box pt-5">
                 <h1 class="font-weight-medium">If you are not automatically redirected, click here</h1>
                 <div class="mt-6">
-                  <router-link to="/dashboard" class="text-decoration-none"><v-btn color="#0D9647" large dense height="56" class="font-weight-bold white--text text-capitalize" type="submit">Access BidOut Dashboard <v-icon class="pl-2" color="#fff">mdi-arrow-right-circle</v-icon></v-btn></router-link>
+                  <v-btn color="#0D9647" large dense height="56" class="font-weight-bold white--text text-capitalize" @click="loginRequest">Access BidOut Dashboard <v-icon class="pl-2" color="#fff">mdi-arrow-right-circle</v-icon></v-btn>
                 </div>
               </div>
             </v-col>
@@ -53,8 +53,9 @@
    </section>
 </template>
 <script>
-  import NavbarBeforeLogin from '../Layout/NavbarBeforeLogin.vue'
-  import Footer from '../Layout/Footer.vue'
+  import NavbarBeforeLogin from '../../components/Layout/NavbarBeforeLogin.vue'
+  import Footer from '../../components/Layout/Footer.vue'
+  import { mapActions } from "vuex";
 export default {
   name : "GetStarted",
   components: {
@@ -73,11 +74,18 @@ export default {
     },
   },
   methods: {
-    
+    ...mapActions(["signInAction"]),
+    loginRequest() {
+      setTimeout(function(){
+        this.signInAction({ email: this.$store.getters.credentials.email, password: this.$store.getters.credentials.password });
+      },5000)
+      
+    },
   },
   mounted() {
-     document.title = "Confirmation - BidOut"
-}
+    document.title = "Confirmation - BidOut"
+    this.loginRequest();
+  }
 };
 </script>
 <style scoped lang="scss">

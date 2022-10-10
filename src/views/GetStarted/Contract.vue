@@ -28,10 +28,6 @@
                   <h4 class="mb-2">RPF Platform - Create Bids</h4>
                   <h1 class="mb-8">Execute Contract</h1>
                 </div>
-                <!-- <div class="white text-left pa-4 font-weight-medium mb-5 contract-section"> -->
-                  <!-- <iframe src="https://secure.na4.adobesign.com/public/esignWidget?wid=CBFCIBAA3AAABLblqZhDT0_wRVtyZBChhOqPrTIn40SxaOO8QNDZk74wgPBadN2q8qV2YwI29jLlKRjTvhic*&hosted=false" width="100%" height="100%" frameborder="0" style="border: 0; overflow: hidden; min-height: 700px; min-width: 600px;"></iframe> -->
-                  
-                <!-- </div> -->
                   <vue-pdf-embed class="white text-left pa-4 font-weight-medium mb-5 contract-section"
                       ref="pdfRef"
                       :source="pdfSource"
@@ -45,7 +41,9 @@
                     </div>
                   </v-col>
                   <v-col cols="12" md="4" class="text-right">
-                    <v-btn color="#0D9647" large dense class="white--text text-capitalize mb-2" width="100%" height="56" @click="sign()">Sign Agreement <v-icon class="pl-2" color="#fff">mdi-arrow-right-circle</v-icon></v-btn>
+                    <v-btn color="#0D9647" large dense class="white--text text-capitalize mb-2" width="100%" height="56" @click="sign()" 
+                    :loading="loading"
+                    :disabled="loading">Sign Agreement <v-icon class="pl-2" color="#fff">mdi-arrow-right-circle</v-icon></v-btn>
                     <v-btn color="#0D9647" large dense class="white--text text-capitalize" width="100%" height="56" @click="undo()">Undo Sign </v-btn>
                   </v-col>
                 </v-row>
@@ -84,8 +82,8 @@
    </section>
 </template>
 <script>
-  import NavbarBeforeLogin from '../Layout/NavbarBeforeLogin.vue'
-  import Footer from '../Layout/Footer.vue'
+  import NavbarBeforeLogin from '../../components/Layout/NavbarBeforeLogin.vue'
+  import Footer from '../../components/Layout/Footer.vue'
   import VuePdfEmbed from 'vue-pdf-embed/dist/vue2-pdf-embed'
   import { mapActions } from "vuex";
 export default {
@@ -98,6 +96,8 @@ export default {
   
   data() {
     return {
+      loader: null,
+      loading: false,
       createBid: true,
       bidRespond: false,
       providerListing: true,
@@ -127,23 +127,22 @@ export default {
       var agreement = {
         contractType : this.$store.getters.contractData.contractType,
         fileName : this.$store.getters.contractData.fileName,
-        ipAddress: this.$store.getters.userIp,
         sign: data,
-        plan: 3,
-        cbUserId: this.$store.getters.userId,
+        companyId: this.$store.getters.companyId,
+        userId: this.$store.getters.id,
+        yearly: true,
+        plan: this.$store.getters.plan,
       }
       this.signAgreement(agreement);
+      this.loader = 'loading';
     },
     undo() {
       this.$refs.signaturePad.undoSignature();
-    },
-    getIP(){
-      this.getIpAddress();
     }
   },
   mounted() {
     document.title = "Contract - BidOut" ;
-    this.getIP();  
+    this.getIpAddress();  
     console.log('contract',this.$store.getters.contractData);
   }
 };

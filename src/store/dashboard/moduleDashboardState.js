@@ -6,4 +6,5 @@ export default {
    responseId: null, 
    activities: null, 
    invitedList: [], 
+   pendingCount : 0,
 }

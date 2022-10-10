@@ -1,4 +1,4 @@
-import Base from '@/views/Layout/Base.vue';
+import Base from '@/components/Layout/Base.vue';
 const routes = [
   {
     path: '',
@@ -44,9 +44,9 @@ const routes = [
         }
       },
       {
-        path: '/company-profiles',
+        path: '/company-profiles/:name',
         name: 'CompanyProfiles',
-        component: () => import('@/views/Ofs/CompanyProfile.vue'),
+        component: () => import('@/views/Ofs/ViewCompany.vue'),
         beforeEnter: (to, from, next) => {
           if(localStorage.getItem("userData") == null) {
               

@@ -13,11 +13,14 @@ import 'firebase/compat/auth';
 import 'firebase/compat/firestore';
 import axios from 'axios';
 import vueCountryRegionSelect from 'vue-country-region-select';
-import moment from 'vue-moment';
+import VueMoment from 'vue-moment';
+import moment from 'moment-timezone';
+// import momentTimeZone from 'vue-moment-tz';
 import VueSignaturePad from 'vue-signature-pad';
 import '@/assets/styles/index.scss';
 import VueCroppie from 'vue-croppie';
-import 'croppie/croppie.css'
+import 'croppie/croppie.css';
+import VueGtag from "vue-gtag";
 // Your web app's Firebase configuration
 var firebaseConfig = {
   apiKey: import.meta.env.VITE_FIREBASE_API_KEY,
@@ -34,13 +37,17 @@ var firebaseConfig = {
 firebase.initializeApp(firebaseConfig);
 
 axios.defaults.baseURL = import.meta.env.VITE_API_BASE_URL;
-
+axios.defaults.headers.common['Authorization'] = `Bearer ${JSON.parse(localStorage.getItem('token'))}`;
 LogRocket.init('voayxx/v2-ib4bb');
 const logrocketPlugin = createPlugin(LogRocket);
 
 Vue.use(vueCountryRegionSelect);
 Vue.use(Vuex,axios);
-Vue.use(moment);
+// Vue.use(moment);
+Vue.use(VueMoment, {
+    moment,
+});
+// Vue.use(momentTimeZone);
 Vue.use(VueSignaturePad);
 Vue.use(VueCroppie);
 Sentry.init({
@@ -55,11 +62,17 @@ Sentry.init({
   
 })
 
+
 LogRocket.getSessionURL(sessionURL => {
   Sentry.configureScope(scope => {
     scope.setExtra("sessionURL", sessionURL);
   });
 });
+
+Vue.use(VueGtag, {
+  config: { id: import.meta.env.VITE_GOOGLE_TAG_MANAGER }
+});
+
 var userData = store.getters.userInfo;
 if(userData){
   LogRocket.identify(userData.id, {
@@ -70,7 +83,6 @@ if(userData){
     subscriptionType: 'pro'
   });
 }
-
 
 new Vue({
   vuetify,

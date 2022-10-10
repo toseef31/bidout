@@ -63,13 +63,14 @@
                           <v-col cols="12" sm="12" text="left">
                             <label class="d-block text-left input-label mb-2 font-weight-bold">Timezone </label>
                             </v-text-field>
-                           
+                            
                             <v-autocomplete
                               v-model="userTimezone"
                               :items="timezone"
                               :search-input.sync="searchTimezone"
-                              item-text="label"
+                              item-text="label" item-value="tzCode"
                               flat
+                              auto-select-first
                               hide-details
                               outlined
                             ></v-autocomplete>
@@ -158,7 +159,9 @@
                         <template v-slot:default>
                           <tbody>
                             <tr v-for="history in historyData">
-                              <td class="text-left">{{history.date}}</td>
+                              <td class="text-left"> 
+                                {{ time(history.date,userTimezone)}}
+                              </td>
                               <td class="text-left">{{history.location}}</td>
                               <td class="text-right">{{history.deviceType}}</td>
                             </tr>
@@ -176,14 +179,16 @@
    </v-col>
 </template>
 <script>
-  import Navbar from './Layout/Navbar.vue'
-  import LeftSidebar from './Layout/Dashboard/LeftSidebar.vue'
-  import ProfileImage from './Profile/ProfileImage.vue'
-  import ChangePassword from './Profile/ChangePassword.vue'
-  import Notifications from './Profile/Notifications.vue'
+  import Navbar from '../components/Layout/Navbar.vue'
+  import LeftSidebar from '../components/Layout/Dashboard/LeftSidebar.vue'
+  import ProfileImage from '../components/Profile/ProfileImage.vue'
+  import ChangePassword from '../components/Profile/ChangePassword.vue'
+  import Notifications from '../components/Profile/Notifications.vue'
   import VuePhoneNumberInput from 'vue-phone-number-input';
   import 'vue-phone-number-input/dist/vue-phone-number-input.css';
   import timezones from 'timezones-list';
+  import VueMoment from 'vue-moment';
+  import moment from 'moment-timezone';
   import _ from 'lodash';
   import { mapActions } from "vuex";
 export default {
@@ -219,6 +224,7 @@ export default {
       hasErrorActive: false,
       results: {},
       twoFactor: true,
+      timee: '',
     };
   },
   watch: {
@@ -236,15 +242,19 @@ export default {
     userDatas(){
         this.firstName = this.$store.getters.userInfo.firstName;
     },
+    userDatss(){
+        return this.$store.getters.userInfo;
+    },
     historyData(){
       return _.orderBy(this.$store.getters.historyData, 'date','desc');
     },
     companyAdmins(){
       return this.$store.getters.companyAdmins;
     },
+    
   },
   methods: {
-    ...mapActions(["updateUser","loginHistory","adminsCompany"]),
+    ...mapActions(["updateProfile","loginHistory","adminsCompany"]),
     onUpdate (payload) {
       this.results = payload.formattedNumber;
     },
@@ -260,7 +270,8 @@ export default {
         userid: this.$store.getters.userInfo.id,
         timezone: this.userTimezone,
       }
-      this.updateUser(user);
+      // console.log(user);
+      this.updateProfile(user);
     },
     history(){
       var user = {
@@ -270,7 +281,7 @@ export default {
     },
     getAdmins(){
       var data = {
-        company: this.$store.getters.userInfo.company,
+        company: this.$store.getters.userInfo.company.company,
       }
       this.adminsCompany(data);
     },
@@ -281,11 +292,23 @@ export default {
         })
       }, 500)
     },
+    timeInfo(){
+      // console.log(moment.tz.names());
+      // return moment.tz.names();
+    },
+    time(newDate,zone){
+      return moment.tz(newDate, zone).format('MMM DD YYYY, h:mm:ss a');
+    }
   },
   mounted() {
     document.title = "Edit Profile - BidOut"
     this.history();
     this.getAdmins();
+
+   this.timeInfo();
+   if(!this.$store.getters.userInfo.timezone){
+    this.userTimezone = 'America/Chicago';
+   }
   }
 };
 </script>

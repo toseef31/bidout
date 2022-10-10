@@ -1,5 +1,5 @@
-// import Settings from '@/views/Layout/Base.vue';
-import Settings from '@/views/Layout/Settings.vue';
+// import Settings from '@/components/Layout/Base.vue';
+import Settings from '@/components/Layout/Settings.vue';
 import store from '@/store';
 
 const routes = [
@@ -25,6 +25,23 @@ const routes = [
         path: '/manage-users',
         name: 'ManageUsers',
         component: () => import('@/views/ManageUsers.vue'),
+         // meta: { authorize: [localStorage.getItem("userData").role == 'admin'] }
+        beforeEnter: (to, from, next) => {
+           if(localStorage.getItem("userData") != null) {
+               if(localStorage.getItem("userData").role == 'user'){
+                    next('/dashboard');
+                }else{
+                    next();
+                }
+           } else {
+               next('/login');
+           }
+       }
+      },
+      {
+        path: '/manage-users/pending-users',
+        name: 'PendingUsers',
+        component: () => import('@/views/PendingUsers.vue'),
         beforeEnter: (to, from, next) => {
            if(localStorage.getItem("userData") == null) {
                next('/login');

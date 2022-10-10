@@ -84,7 +84,7 @@
 	  			.btn-col{
 	  				.add-logo{
 	  					background: #0d9648;
-					    padding: 18px 77px;
+					    padding: 16px 60px;
 					    width: 240px;
 					    border-radius: 8px;
 	  				}
@@ -111,6 +111,41 @@
 	  					border-color: #B8B8B8;
 	  				}
 	  			}
+	  			.service-cate{
+	  				height: 400px;
+	  				overflow: auto;
+	  				border: 1px solid #ddd;
+	  				border-radius: 5px;
+	  				&::-webkit-scrollbar {
+	  				  width: 4px;
+	  				  height: 5px;
+	  				}
+	  				&::-webkit-scrollbar-thumb {
+	  				  background: #e1e1e1;
+	  				  border: 14px solid #0d9647;
+	  				  border-radius: 26px;
+	  				}
+	  				&::-webkit-scrollbar-thumb:hover {
+	  				  background: #ffffff;
+	  				}
+	  				&::-webkit-scrollbar-thumb:active {
+	  				  background: #0d9647;
+	  				}
+	  				&::-webkit-scrollbar-track {
+	  				  /*background: #666666;*/
+	  				  /*border: 36px solid #e3e3e3;*/
+	  				  border-radius: 42px;
+	  				}
+	  				&::-webkit-scrollbar-track:hover {
+	  				  background: #666666;
+	  				}
+	  				&::-webkit-scrollbar-track:active {
+	  				  background: #0d9647;
+	  				}
+	  				&::-webkit-scrollbar-corner {
+	  				  background: transparent;
+	  				}
+	  			}
 	  			.service-list{
 	  				display: grid;
 				    grid-template-columns: repeat(4, 1fr);
@@ -126,6 +161,9 @@
 					    .v-icon{
 					    	color: #0D9647;
 					    	margin-right: 5px;
+					    }
+					    span{
+					    	cursor: pointer;
 					    }
 	  				}
 	  			}
@@ -167,7 +205,7 @@
 	  				p{
 					    font-weight: 500;
 					    font-size: 12px;
-					    line-height: 25px;
+					    line-height: 18px;
 					    color: #013D3A;
 	  				}
 	  			}
@@ -292,6 +330,8 @@
 }
 @media (max-width: 768px) {
 	.companyProfile-module{
+	flex: 0 0 100%;
+		  max-width: 100%;
 		.mid-content{
 			flex: 0 0 100%;
 		  max-width: 100%;

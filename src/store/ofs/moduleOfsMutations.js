@@ -5,4 +5,7 @@ export default {
   setCompanies(state, payload){
     state.serviceCompanies = payload
   },
+  setPremiumList(state, payload){
+    state.premiumCompanies = payload
+  },
 }

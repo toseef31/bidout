@@ -67,42 +67,44 @@
 		        		}
 
 			        }
-
 			  		}
 		  		}
 		  		
 		  	}
 		  	.users-lists{
-		  		height: calc(100vh - 195px);
-  		    overflow: auto;
-  		    &::-webkit-scrollbar {
-  		      width: 5px;
-  		      height: 5px;
-  		    }
-  		    &::-webkit-scrollbar-thumb {
-  		      background: #e1e1e1;
-  		      border: 14px solid #0d9647;
-  		      border-radius: 26px;
-  		    }
-  		    &::-webkit-scrollbar-thumb:hover {
-  		      background: #ffffff;
-  		    }
-  		    &::-webkit-scrollbar-thumb:active {
-  		      background: #0d9647;
-  		    }
-  		    &::-webkit-scrollbar-track {
-  		      /*background: #666666;*/
-  		      border: 36px solid #e3e3e3;
-  		      border-radius: 42px;
-  		    }
-  		    &::-webkit-scrollbar-track:hover {
-  		      background: #666666;
-  		    }
-  		    &::-webkit-scrollbar-track:active {
-  		      background: #0d9647;
-  		    }
-  		    &::-webkit-scrollbar-corner {
-  		      background: transparent;
+		  		
+  		    .v-list{
+			  		height: calc(100vh - 243px);
+	  		    overflow: auto;
+	  		    &::-webkit-scrollbar {
+	  		      width: 5px;
+	  		      height: 5px;
+	  		    }
+	  		    &::-webkit-scrollbar-thumb {
+	  		      background: #e1e1e1;
+	  		      border: 14px solid #0d9647;
+	  		      border-radius: 26px;
+	  		    }
+	  		    &::-webkit-scrollbar-thumb:hover {
+	  		      background: #ffffff;
+	  		    }
+	  		    &::-webkit-scrollbar-thumb:active {
+	  		      background: #0d9647;
+	  		    }
+	  		    &::-webkit-scrollbar-track {
+	  		      /*background: #666666;*/
+	  		      border: 36px solid #e3e3e3;
+	  		      border-radius: 42px;
+	  		    }
+	  		    &::-webkit-scrollbar-track:hover {
+	  		      background: #666666;
+	  		    }
+	  		    &::-webkit-scrollbar-track:active {
+	  		      background: #0d9647;
+	  		    }
+	  		    &::-webkit-scrollbar-corner {
+	  		      background: transparent;
+	  		    }
   		    }
 		  		.v-list-item{
 		  			height: 80px;
@@ -125,6 +127,15 @@
 					    font-size: 12px;
 					    font-weight: 400;
 		  			}
+		  		}
+		  		.activeChat-tab{
+		  			color: #0d9648;
+  			    font-weight: 700;
+  			    border-bottom: 2px solid #0d9648;
+		  		}
+		  		.archive-btn{
+		  			color: #0d9648;
+		  			font-weight: 600;
 		  		}
 		  	}
 	  	}
@@ -317,14 +328,46 @@
 	}
 }
 .v-dialog{
+	.member-lists{
+		padding: 0;
+		.v-list-item{
+			border-bottom: 1px solid #ccc;
+			&::before{
+				background-color: currentColor;
+		    bottom: 0;
+		    content: "";
+		    left: 0;
+		    opacity: 0.12;
+		    pointer-events: none;
+		    position: absolute;
+		    right: 0;
+		    top: 0;
+		    transition: 0.3s cubic-bezier(0.25, 0.8, 0.5, 1);
+			}
+		}
+	}
 	.company-list{
 		border-width: 0px 1px 1px 1px;
     border-style: solid;
     border-color: #F1F1F1;
 	}
+	.addChat-box{
+		
+		.v-input__slot{
+			fieldset{
+				border-radius: 8px;
+		    border-color: #B8B8B8;
+			}
+		}
+	}
+	.v-btn{
+		border-radius: 8px;
+	}
 }
 @media (max-width: 768px) {
 	.chat-module{
+		flex: 0 0 100%;
+		max-width: 100%;
 		.mid-content {
 			flex: 0 0 100%;
 	  	max-width: 100%;

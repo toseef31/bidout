@@ -25,6 +25,11 @@ export default {
             axios.get('/auth/addUserLoginHistory/'+responce.data.id)
               .then(responce => {
             })
+            axios.get('company/getCompanyById/'+responce.data.company.id)
+             .then(responce => {
+              commit('setCompany',responce.data)
+              localStorage.setItem('companyData', JSON.stringify(responce.data));
+            })
             commit('setUser',responce.data)
             localStorage.setItem("userData",JSON.stringify(responce.data));
             router.replace({ name: "Dashboard" });
@@ -33,7 +38,8 @@ export default {
         })
         
       }, (err) => {
-        commit('setError',err.message)
+        commit('setPassError',"Oops! You have entered a incorrect password, try again, if you are still unsure of your password, please Reset Password")
+        // commit('showErrorAlert')
       })
   },  
   signOutAction({ commit }) {
@@ -47,10 +53,13 @@ export default {
         commit('setToken', null)
         commit('setUserId', null)
         commit('setError', null)
+        commit('setCompany', null)
+        commit('setCredentials', null)
         // console.log(result);
         localStorage.removeItem("userData");
         // localStorage.removeItem("userId");
         localStorage.removeItem("token");
+        localStorage.removeItem("companyData");
         router.replace({
           name: "OFSHome"
         });
@@ -65,31 +74,37 @@ export default {
     // Try to sendForgot email
     axios.post('/auth/sendPasswordResetEmail',{'email': payload.email})
      .then(responce => {
-      if(responce.status == 200){
+      // console.log(responce.data.message);
+      // if(responce.status == 200){
         commit('setEmailSuccess', 'If this account exists, a password reset email has been sent to the email address for the account.');
-      }
-      else{
-        commit('setEmailError', 'Something wrong please try again')
-      }
-    })
+    }, (err) => {
+
+        commit('setEmailSuccess',"If this account exists, a password reset email has been sent to the email address for the account.")
+      })
   },
   verifyToken({commit}, payload){
     axios.get('/auth/verifyPasswordResetToken/'+payload)
      .then(responce => {
       commit('setVerifyData',responce.data)
+    }).catch(err => {
+        console.log(err);
     })
   },
   resetPassword({commit}, payload){
-    console.log(payload,'reset password');
     axios.post('/auth/updatePassword',{'email': payload.email, 'oobCode': payload.oobCode, 'password': payload.password})
      .then(responce => {
       if(responce.status == 200){
         commit('setEmailSuccess', 'Password reset successfully!');
-        commit('setVerifyData', {})
+        commit('setVerifyData', {});
+        commit('setResetEmail', payload.email);
+        commit('showSuccessAlert')
+        router.replace({ name: "Login" });
       }
       else{
         commit('setEmailError', 'Something wrong please try again')
       }
+    }).catch(err => {
+        console.log(err);
     })
   },
   checkEmail({ commit }, payload) {
@@ -104,6 +119,8 @@ export default {
         }
         
        
+      }).catch(err => {
+        console.log(err);
       })
     }
     
@@ -124,7 +141,7 @@ export default {
              .then(responce => {
               if(responce.status == 200){
                 // localStorage.setItem("userId",payload.id);
-                commit('setUserId', payload.id);
+                commit('setCompanyId', payload.id);
                 commit('setCompanyName', payload.companyName);
                 router.replace({
                   name: "ModuleSelection"
@@ -134,16 +151,22 @@ export default {
               else{
                 commit('setEmailError', 'Something wrong please try again')
               }
-            })
+            }).catch(err => {
+                console.log(err);
+            });
            }else{
             axios.post('/ofs/createCompany',{'company': payload.company, 'companyHq': payload.companyHq, 'companyHq2': payload.companyHq2, 'companyHqCountry': payload.companyHqCountry,'companyHqState':payload.companyHqState, 'companyHqCity': payload.companyHqCity, 'companyHqZip': payload.companyHqZip})
              .then(responce => {
+              commit('setCompanyId', responce.data.data.companyId);
+              localStorage.setItem("companyId",JSON.stringify(responce.data.companyId));
               if(responce.status == 200){
-                axios.post('/ofs/createUser',{'company': payload.company,'firstName': payload.firstName, 'lastName': payload.lastName,'email': payload.email,'phoneNumber':payload.phoneNumber, 'title': payload.title, 'password': payload.password})
+                axios.post('/ofs/createUser',{'company': payload.company,'firstName': payload.firstName, 'lastName': payload.lastName,'email': payload.email,'phoneNumber':payload.phoneNumber, 'title': payload.title, 'password': payload.password,'companyId':responce.data.data.companyId})
                  .then(responce => {
                   if(responce.status == 200){
-                    // localStorage.setItem("userId",JSON.stringify(responce.data));
-                    commit('setUserId', responce.data);
+                    commit('setCredentials',{'email':payload.email,'password': payload.password})
+                     commit("setId",responce.data.data.id);
+                     commit("setCustomerId",responce.data.data.chargebee_customer_id);
+                    // commit('setCompanyId', responce.data);
                     commit('setCompanyName', payload.company);
                     router.replace({
                       name: "ModuleSelection"
@@ -153,7 +176,9 @@ export default {
                   else{
                     commit('setEmailError', 'Something wrong please try again')
                   }
-                })
+                }).catch(err => {
+                  console.log(err);
+                });
               }
               else{
                 commit('setCompanyError', 'Please try with different Company details')
@@ -174,8 +199,10 @@ export default {
   searchSupplier({commit}, payload){
     axios.get('/ofs/searchSuppliers/'+payload)
       .then(responce => {
-      commit('setSupplierList',responce.data.hits)
-    })
+      commit('setSupplierList',responce.data)
+    }).catch(err => {
+      console.log(err);
+    });
   },
   // Buyer SignUp Acton
   buyerSignUpAction({ commit }, payload) {
@@ -184,17 +211,20 @@ export default {
       axios.post('/user/checkIfUserWithEmailExists',{'email': payload.email})
        .then(responce => {
         if(responce.data.exists == true){
-          commit('setEmailExistSuccess', 'Email aleardy Exists! Please try different one')
+          commit('setEmailExistSuccess', 'Email already Exists! Please try different one')
           
         }else{
           axios.post('/ofs/createCompany',{'company': payload.company, 'companyHq': payload.companyHq, 'companyHq2': payload.companyHq2, 'companyHqCountry': payload.companyHqCountry,'companyHqState':payload.companyHqState, 'companyHqCity': payload.companyHqCity, 'companyHqZip': payload.companyHqZip})
            .then(responce => {
+            commit('setCompanyId', responce.data.data.companyId);
+            localStorage.setItem("companyId",JSON.stringify(responce.data.companyId));
             if(responce.status == 200){
-              axios.post('/ofs/createUser',{'company': payload.company,'firstName': payload.firstName, 'lastName': payload.lastName,'email': payload.email,'phoneNumber':payload.phoneNumber, 'title': payload.title, 'password': payload.password})
+              axios.post('/ofs/createUser',{'company': payload.company,'firstName': payload.firstName, 'lastName': payload.lastName,'email': payload.email,'phoneNumber':payload.phoneNumber, 'title': payload.title, 'password': payload.password,'companyId':responce.data.data.companyId})
                .then(responce => {
                 if(responce.status == 200){
-                  // localStorage.setItem("userId",JSON.stringify(responce.data));
-                  commit('setUserId', responce.data);
+                  commit('setCredentials',{'email':payload.email,'password': payload.password})
+                  commit("setId",responce.data.data.id);
+                  commit("setCustomerId",responce.data.data.chargebee_customer_id);
                   commit('setCompanyName', payload.company);
                   router.replace({
                     name: "ModuleSelection"
@@ -204,12 +234,16 @@ export default {
                 else{
                   commit('setEmailError', 'Something wrong please try again')
                 }
-              })
+              }).catch(err => {
+                console.log(err);
+              });
             }
             else{
               commit('setCompanyError', 'Please try with different Company details')
             }
-          })
+          }).catch(err => {
+            console.log(err);
+          });
         }
         
        
@@ -222,16 +256,21 @@ export default {
       .then(responce => {
        commit('setLocalIp', responce.data)
        // return responce;
-    })  
+    }).catch(err => {
+      console.log(err);
+    });  
   },
 
   // signAgreement
   contractGenerate({commit}, payload){
-    axios.post('/ofs/generateContract',{'id': payload.id,'ip': payload.ip,'contractType': payload.contractType, 'plan': payload.plan})
+    // console.log(payload,'contract');
+    axios.post('/ofs/generateContract',{'id': payload.id,'ip': payload.ip,'contractType': payload.contractType, 'plan': payload.plan,'userId':payload.userId})
      .then(responce => {
       if(responce.status == 200){
         localStorage.setItem('contractData', JSON.stringify(responce.data));
         commit('setContract', responce.data)
+        commit('setPlan', payload.plan)
+        commit('setPrice',payload.unit_price)
         router.replace({
           name: "Contract"
         });
@@ -239,15 +278,18 @@ export default {
       else{
         commit('setEmailError', 'Something wrong please try again')
       }
-    })
+    }).catch(err => {
+      console.log(err);
+    });
   },
   signAgreement({commit}, payload){
     // Try to store Agreement
-    axios.post('/ofs/signContract',{'sign': payload.sign,'contractType': payload.contractType,'fileName':payload.fileName,'plan':payload.plan,'cbUserId':payload.cbUserId})
+    axios.post('/ofs/signContract',{'sign': payload.sign,'contractType': payload.contractType,'fileName':payload.fileName,'companyId':payload.companyId,'userId':payload.userId,'yearly':payload.yearly,'plan':payload.plan})
      .then(responce => {
       if(responce.status == 200){
-        localStorage.removeItem('contractData');
-        commit('setContract', 'Contract generated successfully!')
+        commit('setContract', responce.data)
+        // commit('setContract', 'Contract generated successfully!')
+
         router.replace({
           name: "ModuleSelection"
         });
@@ -255,7 +297,9 @@ export default {
       else{
         commit('setEmailError', 'Something wrong please try again')
       }
-    })
+    }).catch(err => {
+      console.log(err);
+    });
   },
   getToken({commit}){
     firebase.auth().onAuthStateChanged(user => {
@@ -268,6 +312,31 @@ export default {
         });
     });
   },
+  savePaymentsDetails({commit},payload){
+    axios.post('/chargeBee/savePaymentDetails',{'userId': payload.userId,'customer_id': payload.customer_id,'cardNumber':payload.cardNumber,'CVV':payload.CVV,'expiryMonth':payload.expiryMonth,'expiryYear':payload.expiryYear,'billing_zip':payload.billing_zip,'billing_country':payload.billing_country})
+     .then(responce => {
+      if(responce.status == 200){
+        commit('setContract', null);
+        localStorage.removeItem('contractData');
+         commit('setPlan', null);
+         // axios.post('/chargeBee/createAuthorizePayment',{'customer_id': payload.customer_id,'amount':payload.amount})
+         //  .then(responce => {
+            router.replace({
+              name: "Confirmation"
+            });
+          // })
+        // commit('setContract', 'Contract generated successfully!')
+
+        
+      }
+      else{
+        commit('setEmailError', 'Something wrong please try again')
+      }
+    }).catch(err => {
+      console.log(err);
+    });
+   },
+
   signInWithCustomToken({ commit }, payload) {
     return new Promise(async (resolve, reject) => {
       try {

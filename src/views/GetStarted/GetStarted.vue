@@ -149,7 +149,9 @@
                       </v-row>
                       <v-row justify="center" class="mt-10">
                         <v-col cols="12" md="3">
-                          <v-btn color="#0D9647" large dense width="100%" height="56" class="font-weight-bold white--text text-capitalize" type="submit">Next <v-icon class="pl-2" color="#fff">mdi-arrow-right-circle</v-icon></v-btn>
+                          <v-btn color="#0D9647" large dense width="100%" height="56" class="font-weight-bold white--text text-capitalize" type="submit"
+                          :loading="loading"
+                          :disabled="loading">Next <v-icon class="pl-2" color="#fff">mdi-arrow-right-circle</v-icon></v-btn>
                         </v-col>
                       </v-row>
                     </v-container>
@@ -164,18 +166,19 @@
                           <v-text-field prepend-inner-icon="search" placeholder="Company name" single-line outlined type="text" v-model="company" @keyup="getSupplierList" clearable>
                           </v-text-field>
                           <input type="hidden" v-model="companyId">
-
-                          <v-list v-if="hideList == true" class="company-list">
-                            <template v-for="(item, index) in suppliers">
-                              <v-list-item
-                                :key="item.title"
-                              >
-                                <v-list-item-content>
-                                  <v-list-item-title v-html="item.company" @click="companyList(item.company,item.objectID); hideList = !hideList" class="text-left"></v-list-item-title>
-                                </v-list-item-content>
-                              </v-list-item>
-                            </template>
-                          </v-list>
+                          <template v-if="hideList == true"> 
+                            <v-list class="company-list" v-if="suppliers != ''">
+                              <template v-for="(item, index) in suppliers">
+                                <v-list-item
+                                  :key="item.title"
+                                >
+                                  <v-list-item-content>
+                                    <v-list-item-title v-html="item.company" @click="companyList(item.company,item.objectID); hideList = !hideList" class="text-left"></v-list-item-title>
+                                  </v-list-item-content>
+                                </v-list-item>
+                              </template>
+                            </v-list>
+                          </template>
                         </v-col>
                       </v-row>
                       <v-row class="mt-12 bg-light pa-3" v-if="companyInfo">
@@ -274,7 +277,9 @@
                       </v-row>
                       <v-row justify="center" class="mt-10">
                         <v-col cols="12" md="3">
-                          <v-btn color="#0D9647" large dense width="100%" height="56" class="font-weight-bold white--text text-capitalize" type="submit">Next <v-icon class="pl-2" color="#fff">mdi-arrow-right-circle</v-icon></v-btn>
+                          <v-btn color="#0D9647" large dense width="100%" height="56" class="font-weight-bold white--text text-capitalize" type="submit" 
+                          :loading="loading"
+                          :disabled="loading">Next <v-icon class="pl-2" color="#fff">mdi-arrow-right-circle</v-icon></v-btn>
                         </v-col>
                       </v-row>
                     </v-container>
@@ -300,8 +305,8 @@
    </section>
 </template>
 <script>
-  import NavbarBeforeLogin from '../Layout/NavbarBeforeLogin.vue'
-  import Footer from '../Layout/Footer.vue'
+  import NavbarBeforeLogin from '../../components/Layout/NavbarBeforeLogin.vue'
+  import Footer from '../../components/Layout/Footer.vue'
   import _ from 'lodash';
   import VuePhoneNumberInput from 'vue-phone-number-input';
   import 'vue-phone-number-input/dist/vue-phone-number-input.css';
@@ -317,6 +322,8 @@ export default {
   data() {
     return {
       isActivity : false,
+      loader: null,
+      loading: false,
       currentItem: '',
       items: [
         'Buyer', 'Supplier',
@@ -384,6 +391,14 @@ export default {
         this.hideList = true;
       }
     },500),
+    loader () {
+      const l = this.loader
+      this[l] = !this[l]
+
+      setTimeout(() => (this[l] = false), 5000)
+
+      this.loader = null
+    },
   },
   computed:{
     activityPanel(){
@@ -464,8 +479,8 @@ export default {
           password: this.password
         }
       }
-      // console.log(supplierData);
       this.supplierSignUpAction(supplierData);
+      this.loader = 'loading';
     },
     buyerRequest() {
       var buyerData = {
@@ -484,6 +499,7 @@ export default {
         password: this.password
       }
       this.buyerSignUpAction(buyerData);
+      this.loader = 'loading';
     },
     getSupplierList(){
       if(this.company.length > 2){

@@ -1,4 +1,4 @@
-import Base from '@/views/Layout/Base.vue';
+import Base from '@/components/Layout/Base.vue';
 
 const routes = [
   {
@@ -20,6 +20,11 @@ const routes = [
         path: '/reset-password/:token',
         name: 'ResetPassword',
         component: () => import('@/views/ResetPassword.vue'),
+      },
+      {
+        path: '/invitation/:token',
+        name: 'Invitation',
+        component: () => import('@/views/Invitation.vue'),
       },
       {
         path: '/impersonate',

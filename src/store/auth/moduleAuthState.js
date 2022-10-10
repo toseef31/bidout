@@ -5,9 +5,12 @@ export default {
     userInfo: JSON.parse(localStorage.getItem('userData')),
     userToken: JSON.parse(localStorage.getItem('token')),
     userId: '',
+    companyId: '',
     error: null,
+    passError: null,
     alerts: {
-      showErrorAlert: false
+      showErrorAlert: false,
+      showSuccessAlert: false
     },
     successMessage: null,
     errorMessage: null,
@@ -18,4 +21,9 @@ export default {
     companyName: '',
     verifyData: {},
     contractData: JSON.parse(localStorage.getItem('contractData')),
+    plan: null,
+    id: null,
+    customerId: null,
+    price: null,
+    credentials: null,
 }
