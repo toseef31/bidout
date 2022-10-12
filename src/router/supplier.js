@@ -42,7 +42,7 @@ const routes = [
             } else {
                 next();
             }
-        }
+        },
       },
       {
         path: '/edit-profile',

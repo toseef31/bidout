@@ -23,7 +23,7 @@
                 <div class="module-content mt-16">
                   <v-tabs-items v-model="tab">
                     <v-tab-item>
-                      <template v-if="moduleData && moduleData.length > 0">  
+                      <template v-if="moduleData.length > 0">  
                           <div class="panels pb-4" v-for="modules in moduleData">
                             <div class="panel">
                               <div class="d-flex justify-space-between panel-header">
@@ -35,7 +35,7 @@
                                 </div>
                               </div>
                               <div class="panel-content">
-                                <p class="mb-1 black--text">Renewal Date: {{modules.renewsOn  | moment("MM/D/YYYY")}}</p>
+                                <p class="mb-1 black--text">Renewal Date: {{new Date(modules.renewsOn._seconds * 1000).toLocaleDateString()}} </p>
                                 <p class="black--text mb-0">Annual Fee: ${{modules.annualFee}}</p>
                               </div>
                             </div>
@@ -43,7 +43,7 @@
                       </template>
                       <template v-else>  
                           <div class="panels pb-4">
-                              <h3>You don't have any active moudle yet.</h3>
+                              <h3 class="pt-3">You don't have any active moudle yet.</h3>
                           </div>
                       </template>
                       <!-- <div class="panels pb-4">
@@ -116,9 +116,8 @@ export default {
         return this.$store.getters.g_activityPanel;
     },
     moduleData(){
-      if(this.$store.getters.companyData){
-        return this.$store.getters.companyData.contracts.filter((item)=>{
-          // console.log(item);
+      if(this.$store.getters.companyData.companyData.contracts){
+        return this.$store.getters.companyData.companyData.contracts.filter((item)=>{
           return this.$store.getters.userInfo.id == item.signedBy
         })
       }

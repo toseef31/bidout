@@ -94,7 +94,7 @@
                         <h1 class="mb-0 font-weight-bold">Next Renewal</h1>
                       </v-col>
                       <v-col cols="12" md="4" class="text-right">
-                        <h1>{{contractData[0].renewsOn  | moment("MM/D/YYYY")}}</h1>
+                        <h1>{{new Date(contractData[0].renewsOn._seconds * 1000).toLocaleDateString()}}</h1>
                       </v-col>
                     </v-row>
                     <v-row justify="center" align="center" class="mt-5">

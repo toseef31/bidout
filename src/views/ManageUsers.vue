@@ -198,7 +198,7 @@ export default {
     invitedUsers(company){
       this.getInvitedList(company);
     },
-    pendingUsers(company){
+    pendingUser(company){
       this.getPendingUsers(company);
     },
     accept(user){

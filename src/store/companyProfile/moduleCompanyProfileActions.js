@@ -46,7 +46,12 @@ export default {
       });
   }, 
   addCompanyService({commit,dispatch}, payload){
-    axios.post('/company/addCompanyServices/',{'companyId': payload.companyId,'services': payload.services})
+    var config = {
+      headers: {
+        "Authorization": `Bearer ${JSON.parse(localStorage.getItem('token'))}`
+      },
+    };
+    axios.post('/company/addCompanyService/',{'companyId': payload.companyId,'subCategories': payload.subCategories},config)
      .then(responce => {
       dispatch("getCompany",payload.companyId)
     }).catch(err => {

@@ -228,13 +228,13 @@ export default {
        return this.$store.getters.g_activityPanel;
    },
    companyData(){
-     return this.$store.getters.companyData;
+     return this.$store.getters.companyData.companyData;
    }
   },
   methods: {
     getLocation(){
     
-    var LocationsForMap = this.$store.getters.companyData.companyLocations;
+    var LocationsForMap = this.$store.getters.companyData.companyData.companyLocations;
     console.log(LocationsForMap[0].lattitude);
     var map = new google.maps.Map(document.getElementById('map'), {
       zoom: 2,

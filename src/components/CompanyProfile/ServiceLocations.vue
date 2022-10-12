@@ -48,7 +48,7 @@ export default {
   },
   computed:{
     companyData(){
-      return this.$store.getters.companyData;
+      return this.$store.getters.companyData.companyData;
     }
   },
   watch:{
@@ -59,8 +59,18 @@ export default {
   methods: {
     ...mapActions(["addCompanyLocation","deleteCompanyLocation"]),
     getLocation(){
+      if(this.$store.getters.companyData.companyData.lattitude){
+        var lat = this.$store.getters.companyData.companyData.lattitude;
+      }else{
+        var lat = 29.721085;
+      }
+      if(this.$store.getters.companyData.companyData.longitude){
+        var lng = this.$store.getters.companyData.companyData.longitude;
+      }else{
+        var lng = -95.342049;
+      }
       this.mapOptions = {
-        center: { lat: this.$store.getters.companyData.lattitude, lng: this.$store.getters.companyData.longitude },
+        center: { lat: lat, lng: lng },
         zoom: 2,
         mapTypeId: 'terrain',
         mapTypeControl: false,
@@ -84,7 +94,7 @@ export default {
         // map.controls[google.maps.ControlPosition.TOP_RIGHT].push(card);
 
         // [START maps_places_autocomplete_creation]
-        const center = { lat: this.$store.getters.companyData.lattitude, lng: this.$store.getters.companyData.longitude };
+        const center = { lat: lat, lng: lng };
         // Create a bounding box with sides ~10km away from the center point
         const defaultBounds = {
           north: center.lat + 0.1,
@@ -114,8 +124,17 @@ export default {
         const newBounds = new google.maps.LatLngBounds(southwest, northeast);
 
         autocomplete.setBounds(newBounds);
-
-        var LocationsForMap = this.$store.getters.companyData.companyLocations;
+        if(this.$store.getters.companyData.companyLocations){
+          var LocationsForMap = this.$store.getters.companyData.companyData.companyLocations;
+        }else{
+          var LocationsForMap = [
+            {
+              lattitude: 29.721085,
+              longitude: -95.342049,
+              location: 'M.D. Anderson Library'
+            }
+          ];
+        }
         var infowindow = new google.maps.InfoWindow();
         var marker, i;
 

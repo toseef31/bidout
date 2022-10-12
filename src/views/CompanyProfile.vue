@@ -6,8 +6,8 @@
             <v-col cols="12" sm="12" md="12" class="d-sm-block px-0">
               <div class="manage-sections pa-4 px-0">
                 <div class="top-section d-flex pa-sm-10 pa-4">
-                  <div>
-                    <h4>{{companyData.company}} Page</h4>
+                  <div> 
+                    <h4>{{companyData.companyData.company}} Page</h4>
                   </div>
                   <template>
                     <div class="progress-section">
@@ -54,111 +54,57 @@
                           <div class="px-5 mt-4">
                             <v-text-field placeholder="Search ..." single-line outlined hide-details min-height="40px" v-model="searchService"></v-text-field>
                           </div>
+                            
                             <v-list class="px-2">
-                              <v-list-group v-for="category in allcategories">
+                              <template v-for="category in allcategories">
+                                <v-list-group>
+                                  <template v-slot:activator>
+                                    <v-list-item-content>
+                                      <v-list-item-title v-text="category.name" class="text-left font-weight-bold"></v-list-item-title>
+                                    </v-list-item-content>
+                                  </template>
+                                  <template>
+                                    <v-list-item min-height="30px" prepend-inner-icon="mdi-close"
+                                      v-for="subcategory in category.subCategories"
+                                      :key="subcategory.id"
+                                    >
+                                      <template>
+                                        <v-list-item-content class="py-0 pl-4">
+                                          
+                                          <v-list-item-title class="text-left"><v-icon>mdi-circle-small</v-icon>{{subcategory.name}}<v-icon class="ml-5" small @click="addService(subcategory.name,subcategory.id)">mdi-plus-circle-outline</v-icon></v-list-item-title>
+                                        </v-list-item-content>
+                                      </template> 
+                                    </v-list-item>
+                                  </template>
+                                </v-list-group>
+                              </template>
+                            </v-list>
+                        </div>
+                      </v-col>
+                      <v-col cols="6" sm="6">
+                        <label class="d-block text-center main-label mb-5">Selected Services</label>
+                        
+                          <div class="subservice-cate service-cate">
+                            <v-list class="px-5">
+                              <v-list-group v-for="category in companyData.categories" v-if="category.subCategories.length > 0">
                                 <template v-slot:activator>
                                   <v-list-item-content>
                                     <v-list-item-title v-text="category.name" class="text-left font-weight-bold"></v-list-item-title>
                                   </v-list-item-content>
                                 </template>
-                                <v-list-item min-height="30px" prepend-inner-icon="mdi-close"
-                                  v-for="subcategory in category.subCategories"
-                                  :key="subcategory.id"
+                                <v-list-item min-height="30px"
+                                  v-for="(subcategory,index) in category.subCategories"
+                                  :key="subcategory.subid"
                                 >
                                   <v-list-item-content class="py-0 pl-4">
-                                    
-                                    <v-list-item-title class="text-left"><v-icon>mdi-circle-small</v-icon>{{subcategory.name}}<v-icon class="pl-5" small @click="addService(subcategory.name)">mdi-plus-circle-outline</v-icon></v-list-item-title>
+                                    <v-list-item-title class="text-left"><v-icon>mdi-circle-small</v-icon> {{subcategory.subname}} <v-icon class="ml-5" small @click="deleteService(subcategory)">mdi-trash-can-outline</v-icon></v-list-item-title>
                                   </v-list-item-content>
                                 </v-list-item>
                               </v-list-group>
                             </v-list>
-                        </div>
-                        <!-- <v-autocomplete
-                          v-model="services"
-                          :items="allcategories"
-                          item-value="id" item-text="name"
-                          chips
-                          outlined
-                          full-width
-                          hide-details
-                          hide-no-data
-                          hide-selected
-                          
-                          single-line
-                          deletable-chips
-                          placeholder="Category"
-                          @change="getSubCate(services)"
-                        ></v-autocomplete> -->
-                      </v-col>
-                      <v-col cols="6" sm="6">
-                        <label class="d-block text-center main-label mb-5">Selected Services</label>
-                        <!-- <v-text-field placeholder="Add a service here ..." single-line outlined hide-details ></v-text-field> -->
-                        
-                        <!-- <v-autocomplete
-                          v-model="subservices"
-                          :items="subCategories"
-                          item-value="name" item-text="name"
-                          chips
-                          outlined
-                          full-width
-                          hide-details
-                          hide-no-data
-                          hide-selected
-                          multiple
-                          single-line
-                          deletable-chips
-                          placeholder="Sub category"
-                        ></v-autocomplete> -->
-                        <!-- <div class="service-cate"> -->
-                          <!-- <v-list> -->
-                            <!-- <v-list-group
-                              v-for="category in allcategories"
-                              :key="category.name"
-                            > -->
-                             <!--  <template v-slot:activator>
-                                <v-list-item-content>
-                                  <v-list-item-title v-text="category.name" class="text-left"></v-list-item-title>
-                                </v-list-item-content>
-                              </template> -->
-
-                             <!--  <v-list-item
-                                v-for="subcategory in subCategories"
-                                :key="subcategory.id" @click="addService(subcategory.name)"
-                              >
-                                <v-list-item-content>
-                                  <v-list-item-title v-text="subcategory.name" class="text-left"></v-list-item-title>
-                                </v-list-item-content>
-                              </v-list-item>
-                          </v-list> -->
-                          <div class="subservice-cate service-cate">
-                            <v-list class="px-5">
-                              <!-- <v-list-group v-for="category in allcategories">
-                                <template v-slot:activator>
-                                  <v-list-item-content>
-                                    <v-list-item-title v-text="category.name" class="text-left font-weight-bold"></v-list-item-title>
-                                  </v-list-item-content>
-                                </template> -->
-                                <v-list-item min-height="30px"
-                                  v-for="subcategory in companyData.services"
-                                  :key="subcategory"
-                                >
-                                  <v-list-item-content class="py-0 pl-4">
-                                    <v-list-item-title v-text="subcategory" class="text-left"></v-list-item-title>
-                                  </v-list-item-content>
-                                </v-list-item>
-                              <!-- </v-list-group> -->
-                            </v-list>
                           </div>
                       </v-col>
                     </v-row>
-                    <!-- <v-row>
-                      <v-col cols="12" sm="10">
-                        <div class="service-list text-left">
-                          <label v-for="(drill,index) in companyData.services"><v-icon>mdi-check</v-icon><span @click="deleteService(index)">{{drill}}</span></label>
-                        </div>
-                        <p class="text-left mt-5 alert-text">*Click in a service above to delete from list.</p>
-                      </v-col>
-                    </v-row> -->
                   </v-container>
                   <hr>
                   <v-container class="pa-sm-10 pa-4">
@@ -231,15 +177,17 @@ export default {
   
   data() {
     return {
-      profileName: this.$store.getters.companyData.company,
-      profileSummary: this.$store.getters.companyData.overview,
+      profileName: this.$store.getters.companyData.companyData.company,
+      profileSummary: this.$store.getters.companyData.companyData.overview,
       services: '',
-      drillingService: [],
+      companyService: '',
+      companyService: [],
       subservices: '',
       region: ['Gulf Coast','Northwest','Rockies','Mid-Con','Permian','Arklatex','Offshore','Other'],
-      basins: this.$store.getters.companyData.basins,
+      basins: '',
       basinsData: [],
       searchService: '',
+      servData: [],
     };
   },
   computed:{
@@ -262,11 +210,19 @@ export default {
     companyData(){
       return this.$store.getters.companyData;
     },
+    serviceSubId(){
+      if(this.$store.getters.companyData.companyData.services){
+        let servc = this.$store.getters.companyData.companyData.services.filter((item3) =>{
+           this.servData.push({'id': item3.id});
+         })
+         return this.servData;
+      }
+    },
     percentage(){
-      if(this.$store.getters.companyData.image && this.$store.getters.companyData.services && this.$store.getters.companyData.lattitude && this.$store.getters.companyData.corporateVideos && this.$store.getters.companyData.corporateDocuments && this.$store.getters.companyData.corporateNews && this.$store.getters.companyData.executiveLeadership && this.$store.getters.companyData.esgInitiatives && this.$store.getters.companyData.accountContacts){
+      if(this.$store.getters.companyData.companyData.image && this.$store.getters.companyData.companyData.services && this.$store.getters.companyData.companyData.companyLocations && this.$store.getters.companyData.companyData.corporateVideos && this.$store.getters.companyData.companyData.corporateDocuments && this.$store.getters.companyData.companyData.corporateNews && this.$store.getters.companyData.companyData.executiveLeadership && this.$store.getters.companyData.companyData.esgInitiatives && this.$store.getters.companyData.companyData.accountContacts){
         return 100;
       }
-      if(this.$store.getters.companyData.image && this.$store.getters.companyData.esgInitiatives == []){
+      if(this.$store.getters.companyData.companyData.image && this.$store.getters.companyData.companyData.esgInitiatives == []){
         return 30;
       }else{
         return 20;
@@ -277,7 +233,7 @@ export default {
     }
   },
   methods: {
-    ...mapActions(["getCompany","getCategories","getSubCategories","updateBasicProfile","addCompanyService"]),
+    ...mapActions(["getCompany","getCategories","getSubCategories","updateBasicProfile","addCompanyService","addCompanyBasins"]),
       updateBasic(){
         var data = {
           companyId: this.$store.getters.userInfo.company.id,
@@ -288,38 +244,42 @@ export default {
       },
       getAllCategories(){
         this.getCategories();
-        
       },
-      addService(name){
-        if(this.$store.getters.companyData.services){
-          this.drillingService = this.$store.getters.companyData.services;
+      addService(name,id){
+        if(this.$store.getters.companyData.companyData.services){
+          this.companyService = this.$store.getters.companyData.companyData.services;
         }
-        const array3 = [...this.drillingService, name]
-        this.drillingService = array3;
-        this.addCompanyService({companyId: this.$store.getters.userInfo.company.id,services: this.drillingService});
+        var servicedata = {
+          name: name,
+          id: id,
+        }
+        this.companyService.push(servicedata);
+        this.addCompanyService({companyId: this.$store.getters.userInfo.company.id,subCategories: this.companyService});
         this.services = '';
         this.subservices = '';
       },
-      deleteService(index){
-        if(this.$store.getters.companyData.services){
-          this.drillingService = this.$store.getters.companyData.services;
+      deleteService(item){
+        if(this.$store.getters.companyData.companyData.services){
+          this.companyService = this.$store.getters.companyData.companyData.services;
         }
-        this.drillingService.splice(index,1);
-        this.addCompanyService({companyId: this.$store.getters.userInfo.company.id,services: this.drillingService});
+        for(var i=0; i<this.companyService.length; i++){
+          if(this.companyService[i].id == item.subid){
+            this.companyService.splice(i,1);
+          }
+        }
+        this.addCompanyService({companyId: this.$store.getters.userInfo.company.id,subCategories: this.companyService});
       },
       addBasin(){
         if(this.$store.getters.companyData.basins){
-          this.basinsData = this.$store.getters.companyData.basins;
+          this.basinsData = this.$store.getters.companyData.companyData.basins;
         }
         this.basinsData.push(this.basins);
         var data = {
           companyId: this.$store.getters.userInfo.company.id,
-          basins: this.basins,
+          basins: this.basinsData,
         }
         this.addCompanyBasins(data);
       },
-
-      
       get_url_extension( url ) {
         return url.split(/[#?]/)[0].split('.').pop().trim();
       },
@@ -334,6 +294,9 @@ export default {
     document.title = "Company Profile - BidOut";
     this.getCategories();
     this.getCompany(this.$store.getters.userInfo.company.id);
+    if(this.$store.getters.companyData.companyData.basins){
+      this.basins = this.$store.getters.companyData.companyData.basins;
+    }
   }
 };
 </script>

@@ -97,13 +97,13 @@ export default {
       excutiveName: '',
       excutiveRole: '',
       logoName: '',
-      executiveLeadership: this.$store.getters.companyData.executiveLeadership,
+      executiveLeadership: this.$store.getters.companyData.companyData.executiveLeadership,
 
     };
   },
   computed:{
     companyData(){
-      return this.$store.getters.companyData;
+      return this.$store.getters.companyData.companyData;
     }
   },
   methods: {

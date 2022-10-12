@@ -53,14 +53,14 @@ export default {
   },
   computed:{
     companyData(){
-      return this.$store.getters.companyData;
+      return this.$store.getters.companyData.companyData;
     }
   },
   methods: {
     ...mapActions(["addCompanyNews"]),
     addNews(){
-      if(this.$store.getters.companyData.corporateNews){
-        this.corporateNews = this.$store.getters.companyData.corporateNews;
+      if(this.$store.getters.companyData.companyData.corporateNews){
+        this.corporateNews = this.$store.getters.companyData.companyData.corporateNews;
       }
       var data = {
         title: this.newsTitle,
@@ -74,8 +74,8 @@ export default {
       this.newsDate = '';
     },
     deleteNews(index){
-      if(this.$store.getters.companyData.corporateNews){
-        this.corporateNews = this.$store.getters.companyData.corporateNews;
+      if(this.$store.getters.companyData.companyData.corporateNews){
+        this.corporateNews = this.$store.getters.companyData.companyData.corporateNews;
       }
       this.corporateNews.splice(index,1);
       this.addCompanyNews({companyId: this.$store.getters.userInfo.company.id,corporateNews: this.corporateNews});
