@@ -38,23 +38,22 @@
                     <div class="company-service mb-12">
                       <h1 class="mb-4 font-weight-bold">Services Portfolio</h1>
                       <div class="service-list text-left mt-4">
-                        <label v-for="drill in companyData.services"><v-icon>mdi-check</v-icon>{{drill}}</label>
+                        <label v-for="drill in companyData.services"><v-icon>mdi-check</v-icon>{{drill.name}}</label>
                       </div>
                         <h3 v-if="!companyData.services" class="text-center">No services added yet</h3>
                       <!-- <p class="text-right">View all services</p> -->
                     </div>
                     <div class="company-location mb-12">
                       <h1 class="mb-4 font-weight-bold">Service Locations</h1>
-                      <div id="map"class="map" style="height:350px" v-if="companyData.lattitude && companyData.longitude"></div>
-                      <!-- <v-img :src="require('@/assets/images/ofs/company/lcoation.png')"></v-img> -->
-                      <h3 class="text-center" v-if="!companyData.lattitude && !companyData.longitude">Location not added</h3>
+                      <div id="map"class="map" style="height:350px" v-if="companyData.companyLocations"></div>
+                      <h3 class="text-center" v-if="!companyData.companyLocations">Location not added</h3>
                     </div>
                     <div class="company-location mb-12">
                       <h1 class="mb-4 font-weight-bold">Corporate Videos</h1>
                       <v-row>
                         <v-col cols="12" md="6" v-for="video in companyData.corporateVideos">
                           <div class="video-col">
-                            <!-- <video id="video-preview" width="100%" src="https://www.youtube.com/embed/WNeLUngb-Xg" /> -->
+                            
                             <iframe
                               width="100%"
                               height="350px"
@@ -111,34 +110,11 @@
                       </div>
                       <h3 v-if="!companyData.executiveLeadership" class="text-center">No data to show</h3>
                     </div>
-                    <!-- <div class="company-subsi mb-12">
-                      <h1 class="mb-4 font-weight-bold">Subsidaries</h1>
-                      <div class="subsidary-list text-left mt-10">
-                        <div class="profile-list">
-                          <router-link to="/subcompany-profile"><v-img :src="require('@/assets/images/ofs/company/subs-1.png')"></v-img></router-link>
-                        </div>
-                        <div class="profile-list">
-                          <router-link to="/subcompany-profile"><v-img :src="require('@/assets/images/ofs/company/subs-2.png')"></v-img></router-link>
-                        </div>
-                        <div class="profile-list">
-                          <router-link to="/subcompany-profile"><v-img :src="require('@/assets/images/ofs/company/subs-3.png')"></v-img></router-link>
-                        </div>
-                        <div class="profile-list">
-                          <router-link to="/subcompany-profile"><v-img :src="require('@/assets/images/ofs/company/subs-4.png')"></v-img></router-link>
-                        </div>
-                      </div>
-                    </div> -->
+                    
                     <div class="company-esg mb-16">
                       <h1 class="mb-4 font-weight-bold">ESG Inititives</h1>
                       <v-row class="mt-5">
-                        <v-col cols="12" sm="4" v-for="esg in companyData.esgInitiatives">
-                          <div class="esg-list text-left">
-                            <h4 class="text-left mb-5">{{esg.name}}</h4>
-                            <p class="text-left">{{esg.description}}</p>
-                            <a :href="esg.attachment" download class="text-decoration-none px-5" v-if="esg.attachment">Download <v-icon>mdi-tray-arrow-down</v-icon></a>
-                          </div>
-                        </v-col>
-                        <v-col cols="12" sm="4" v-for="esg in esgData">
+                        <v-col cols="12" sm="4" v-for="esg in esgCompanyData">
                           <div class="esg-list text-left">
                             <h4 class="text-left mb-5">{{esg.name}}</h4>
                             <p class="text-left">{{esg.description}}</p>
@@ -206,16 +182,22 @@ export default {
           name: 'Environmetal',
           description: 'Donec vulputate dolor ac tempus fringilla. Vestibulum et consectetur dui, nec condimentum risus. Vivamus vel mauris lacus. Sed vel sagittis augue, sed aliquet velit. Curabitur nunc enim, dignissim eu tellus a, molestie aliquam risus. Mauris ornare eros eget eros semper, ut cursus sapien viverra.',
           attachment: '',
+          type: 'environmetal',
+          id: '1665493735995301876774201398'
         },
         {
           name: 'Social',
           description: 'Donec vulputate dolor ac tempus fringilla. Vestibulum et consectetur dui, nec condimentum risus. Vivamus vel mauris lacus. Sed vel sagittis augue, sed aliquet velit. Curabitur nunc enim, dignissim eu tellus a, molestie aliquam risus. Mauris ornare eros eget eros semper, ut cursus sapien viverra.',
           attachment: '',
+          type: 'social',
+          id: '166549373599530187677420139',
         },
         {
           name: 'Governance',
           description: 'Donec vulputate dolor ac tempus fringilla. Vestibulum et consectetur dui, nec condimentum risus. Vivamus vel mauris lacus. Sed vel sagittis augue, sed aliquet velit. Curabitur nunc enim, dignissim eu tellus a, molestie aliquam risus. Mauris ornare eros eget eros semper, ut cursus sapien viverra.',
           attachment: '',
+          type: 'governance',
+          id: '1665493735995301876774201'
         },
       ],
     };
@@ -229,6 +211,15 @@ export default {
    },
    companyData(){
      return this.$store.getters.companyData.companyData;
+   },
+   esgCompanyData(){
+     var target = this.esgData;
+     var source = this.$store.getters.companyData.companyData.esgInitiatives;
+     Array.prototype.push.apply(target, source);
+     let uniqueObjArray = [
+       ...new Map(target.map((item) => [item["type"], item])).values(),
+     ];
+     return uniqueObjArray;
    }
   },
   methods: {

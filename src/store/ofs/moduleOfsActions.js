@@ -31,6 +31,7 @@ export default {
     var url = encodeURIComponent(payload.service);
     axios.get('/company/getCompaniesByService/'+url)
       .then(responce => {
+        console.log(responce);
         var data = {
           'data': responce.data,
           'name': payload.service

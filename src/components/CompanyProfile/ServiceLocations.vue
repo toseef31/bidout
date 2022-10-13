@@ -59,36 +59,73 @@ export default {
   methods: {
     ...mapActions(["addCompanyLocation","deleteCompanyLocation"]),
     getLocation(){
-      if(this.$store.getters.companyData.companyData.lattitude){
-        var lat = this.$store.getters.companyData.companyData.lattitude;
+      if(this.$store.getters.companyData.companyData.companyLocations){
+        var lat = this.$store.getters.companyData.companyData.companyLocations[0].lattitude;
       }else{
         var lat = 29.721085;
       }
-      if(this.$store.getters.companyData.companyData.longitude){
-        var lng = this.$store.getters.companyData.companyData.longitude;
+      if(this.$store.getters.companyData.companyData.companyLocations){
+        var lng = this.$store.getters.companyData.companyData.companyLocations[0].longitude;
       }else{
         var lng = -95.342049;
       }
-      this.mapOptions = {
-        center: { lat: lat, lng: lng },
+      if(this.$store.getters.companyData.companyData.companyLocations){
+        var LocationsForMap = this.$store.getters.companyData.companyData.companyLocations;
+      }else{
+        var LocationsForMap = [
+          {
+            lattitude: 29.721085,
+            longitude: -95.342049,
+            location: 'M.D. Anderson Library'
+          }
+        ];
+      }
+
+      var map = new google.maps.Map(document.getElementById('map'), {
         zoom: 2,
-        mapTypeId: 'terrain',
-        mapTypeControl: false,
-        scaleControl: false,
-        streetViewControl: false,
-        rotateControl: false,
-        fullscreenControl: true,
-        disableDefaultUi: false,
-        zoomControl: true,
-        scrollwheel: false,
-      };
-      this.markerOptions = {
-        url: '/assets/images/dashboard/mapMobile.png',
-        size: {width: 60, height: 90, f: 'px', b: 'px',},
-        scaledSize: {width: 30, height: 45, f: 'px', b: 'px',},
-      };
+        center: new google.maps.LatLng(LocationsForMap[0].lattitude, LocationsForMap[0].longitude),
+        mapTypeId: google.maps.MapTypeId.ROADMAP
+      });
+
+      var infowindow = new google.maps.InfoWindow();
+      var marker, i;
+      for (i = 0; i < LocationsForMap.length; i++) {  
+        marker = new google.maps.Marker({
+          position: new google.maps.LatLng(LocationsForMap[i].lattitude, LocationsForMap[i].longitude),
+          map: map,
+          title: 'Marker',
+          anchorPoint: new google.maps.Point(0, -29),
+        });
+        console.log(LocationsForMap[i].location,'dadas');
+        google.maps.event.addListener(marker, 'click', (function(marker, i) {
+          return function() {
+            infowindow.setContent(LocationsForMap[i].location);
+            infowindow.open(map, marker);
+          }
+        })(marker, i));
+      }
+
+
+      // this.mapOptions = {
+      //   center: { lat: lat, lng: lng },
+      //   zoom: 2,
+      //   mapTypeId: 'terrain',
+      //   mapTypeControl: false,
+      //   scaleControl: false,
+      //   streetViewControl: false,
+      //   rotateControl: false,
+      //   fullscreenControl: true,
+      //   disableDefaultUi: false,
+      //   zoomControl: true,
+      //   scrollwheel: false,
+      // };
+      // this.markerOptions = {
+      //   url: '/assets/images/dashboard/mapMobile.png',
+      //   size: {width: 60, height: 90, f: 'px', b: 'px',},
+      //   scaledSize: {width: 30, height: 45, f: 'px', b: 'px',},
+      // };
       // console.log(this.mapOptions,'maps');
-      const map = new google.maps.Map(document.getElementById("map"), this.mapOptions);
+      // const map = new google.maps.Map(document.getElementById("map"), this.mapOptions);
         // const card = document.getElementById("pac-card");
 
         // map.controls[google.maps.ControlPosition.TOP_RIGHT].push(card);
@@ -124,36 +161,7 @@ export default {
         const newBounds = new google.maps.LatLngBounds(southwest, northeast);
 
         autocomplete.setBounds(newBounds);
-        if(this.$store.getters.companyData.companyLocations){
-          var LocationsForMap = this.$store.getters.companyData.companyData.companyLocations;
-        }else{
-          var LocationsForMap = [
-            {
-              lattitude: 29.721085,
-              longitude: -95.342049,
-              location: 'M.D. Anderson Library'
-            }
-          ];
-        }
-        var infowindow = new google.maps.InfoWindow();
-        var marker, i;
-
-        for (i = 0; i < LocationsForMap.length; i++) {
-          marker = new google.maps.Marker({
-            position: new google.maps.LatLng(LocationsForMap[i].lattitude, LocationsForMap[i].longitude),
-            title: 'Marker',
-            map: map,
-            draggable: true,
-            // map,
-            anchorPoint: new google.maps.Point(0, -29),
-          });
-          google.maps.event.addListener(marker, 'click', (function(marker, i) {
-            return function() {
-              infowindow.setContent(LocationsForMap[i].location);
-              infowindow.open(map, marker);
-            }
-          })(marker, i));
-        }
+        
         autocomplete.addListener("place_changed", () => {
           // infowindow.open();
           marker.setVisible(true);
@@ -200,7 +208,7 @@ export default {
           console.log(place,'place');
           this.lat = place.geometry.location.lat();
           this.lng = place.geometry.location.lng();
-          this.address = place.formatted_address;
+          this.address = place.name+', '+place.formatted_address;
         });
     },
     addLocation(){

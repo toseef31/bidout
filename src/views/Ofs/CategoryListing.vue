@@ -56,10 +56,11 @@
                             <td class="pl-8"><span @click="viewPublicCompany(company.objectID,company.company)" class="text-decoration-none company-link">{{ company.company }} </span>
                               
                             </td>
-                            <td><span v-if="company.companyData.hqlocation">{{ company.companyData.hqlocation }}</span><span v-else>No location</span></td>
-                            <td>{{ company.companyData.employees }}</td>
-                            <td><span v-if="company.companyData.companyLocations">{{ company.companyData.companyLocations.length }}</span><span v-else>No location</span></td>
-                            <td><span v-if="company.companyData.accountContacts">{{ company.companyData.accountContacts.length }}</span><span v-else>No Contacts</span></td>
+                            </td>
+                            <td><span v-if="!company.companyHq">No location</span><span v-else>{{ company.companyHq }}</span></td>
+                            <td><span v-if="!company.employees">Not Added</span><span v-else>{{  company.employees }}</span></td>
+                            <td> <span v-if="!company.companyHqState">No location</span><span v-else>{{company.companyHqCountry}},{{ company.companyHqState }}</span></td>
+                            <td><span v-if="!company.accountContacts">No Contacts</span><span v-else>{{ company.accountContacts.length }}</span></td>
                             <td><span @click="viewPublicCompany(company.objectID,company.company)" class="text-decoration-none company-link">View Details</span></td>
                           </tr>
                         </tbody>
