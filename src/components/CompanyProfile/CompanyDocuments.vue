@@ -35,7 +35,7 @@ export default {
   },
   computed:{
     companyData(){
-      return this.$store.getters.companyData;
+      return this.$store.getters.companyData.companyData;
     }
   },
   methods: {
@@ -55,8 +55,8 @@ export default {
       this.fileName = this.file.name;
       this.fileExt =  this.fileName.split('.').pop();
       // this.previewDoc();
-      if(this.$store.getters.companyData.corporateDocuments){
-        this.documents = this.$store.getters.companyData.corporateDocuments;
+      if(this.$store.getters.companyData.companyData.corporateDocuments){
+        this.documents = this.$store.getters.companyData.companyData.corporateDocuments;
       }
       this.documents.push(this.file);
       const head = Date.now().toString();
@@ -76,8 +76,8 @@ export default {
       this.addCompanyDocument(data);
     },
     deleteDoc(data){
-      if(this.$store.getters.companyData.corporateDocuments){
-        this.documents = this.$store.getters.companyData.corporateDocuments;
+      if(this.$store.getters.companyData.companyData.corporateDocuments){
+        this.documents = this.$store.getters.companyData.companyData.corporateDocuments;
       }
       var data = {
         companyId: this.$store.getters.userInfo.company.id,

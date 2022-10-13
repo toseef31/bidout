@@ -124,13 +124,13 @@ export default {
   },
   data() {
     return {
-      founded: this.$store.getters.userInfo.company.founded,
-      employees: this.$store.getters.userInfo.company.employees,
-      hqLocation: this.$store.getters.userInfo.company.hqlocation,
-      stockPrice: this.$store.getters.userInfo.company.stockPrice,
-      website: this.$store.getters.userInfo.company.website,
-      linkedin: this.$store.getters.userInfo.company.linkedin,
-      careers: this.$store.getters.userInfo.company.careers,
+      founded: this.$store.getters.companyData.companyData.founded,
+      employees: this.$store.getters.companyData.companyData.employees,
+      hqLocation: this.$store.getters.companyData.companyData.hqlocation,
+      stockPrice: this.$store.getters.companyData.companyData.stockPrice,
+      website: this.$store.getters.companyData.companyData.website,
+      linkedin: this.$store.getters.companyData.companyData.linkedin,
+      careers: this.$store.getters.companyData.companyData.careers,
       contactName: '',
       contactEmail: '',
       contactRole: '',
@@ -147,7 +147,7 @@ export default {
   },
   computed:{
     companyData(){
-      return this.$store.getters.companyData;
+      return this.$store.getters.companyData.companyData;
     }
   },
   methods: {
@@ -157,7 +157,7 @@ export default {
     },
     getHqLocation(){
       this.mapOption = {
-        center: { lat: this.$store.getters.companyData.lattitude, lng: this.$store.getters.companyData.longitude },
+        center: { lat: this.$store.getters.companyData.companyData.lattitude, lng: this.$store.getters.companyData.companyData.longitude },
         zoom: 17,
         mapTypeId: 'terrain',
         mapTypeControl: false,
@@ -177,7 +177,7 @@ export default {
 
       const map = new google.maps.Map(document.getElementById("maps"), this.mapOption);
         
-        const center = { lat: this.$store.getters.companyData.lattitude, lng: this.$store.getters.companyData.longitude };
+        const center = { lat: this.$store.getters.companyData.companyData.lattitude, lng: this.$store.getters.companyData.companyData.longitude };
 
         const defaultBounds = {
           north: center.lat + 0.1,
@@ -250,8 +250,8 @@ export default {
       this.addCompanyFacts(data);
     },
     addContacts(){
-      if(this.$store.getters.companyData.accountContacts){
-        this.accountContacts = this.$store.getters.companyData.accountContacts;
+      if(this.$store.getters.companyData.companyData.accountContacts){
+        this.accountContacts = this.$store.getters.companyData.companyData.accountContacts;
       }
       var data = {
         name: this.contactName,
@@ -263,8 +263,8 @@ export default {
       this.addCompanyContacts({companyId: this.$store.getters.userInfo.company.id,accountContacts: this.accountContacts});
     },
     deleteContact(index){
-      if(this.$store.getters.companyData.accountContacts){
-        this.accountContacts = this.$store.getters.companyData.accountContacts;
+      if(this.$store.getters.companyData.companyData.accountContacts){
+        this.accountContacts = this.$store.getters.companyData.companyData.accountContacts;
       }
       this.accountContacts.splice(index,1);
       this.addCompanyContacts({companyId: this.$store.getters.userInfo.company.id,accountContacts: this.accountContacts});

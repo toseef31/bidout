@@ -19,6 +19,7 @@
           </v-row>
         </v-container>
       </div>
+      {{credent}}
       <v-container>
         <v-main class="pt-15">
           <v-row justify="center">
@@ -72,13 +73,24 @@ export default {
     activityPanel(){
         return this.$store.getters.g_activityPanel;
     },
+    contractData(){
+     if(this.$store.getters.contractData){
+       return this.$store.getters.contractData;
+     }
+     // return this.$store.getters.contractData;
+    },
+    credent(){
+      return this.$store.getters.credentials;
+    }
   },
   methods: {
     ...mapActions(["signInAction"]),
     loginRequest() {
-      setTimeout(function(){
-        this.signInAction({ email: this.$store.getters.credentials.email, password: this.$store.getters.credentials.password });
-      },5000)
+      var data = {
+        email: this.$store.getters.credentials.email, 
+        password: this.$store.getters.credentials.password
+      }
+      this.signInAction(data);
       
     },
   },

@@ -46,12 +46,18 @@ export default {
       });
   }, 
   addCompanyService({commit,dispatch}, payload){
-    axios.post('/company/addCompanyServices/',{'companyId': payload.companyId,'services': payload.services})
+    axios.post('/company/addCompanyService/',{'companyId': payload.companyId,'subCategories': payload.subCategories})
      .then(responce => {
       dispatch("getCompany",payload.companyId)
     }).catch(err => {
           console.log(err);
       });
+  }, 
+  addCompanyBasins({commit,dispatch}, payload){
+    axios.post('/company/addCompanyBasin/',{'companyId': payload.companyId,'basins': payload.basins})
+     .then(responce => {
+      dispatch("getCompany",payload.companyId)
+    })
   }, 
   addCompanyLocation({commit,dispatch}, payload){
     axios.post('/company/addCompanyLocation/',{'id': payload.id,'companyId': payload.companyId,'location': payload.location,'lat':payload.lat,'long':payload.long})
@@ -187,6 +193,7 @@ export default {
       });
   },
   addCompanyEsg({commit,dispatch}, payload){
+    console.log(payload);
     var config = {
       headers: {
         "Content-Type": "multipart/form-data",
@@ -199,8 +206,9 @@ export default {
     formData.append('esgInitiatives[description]', payload.esgInitiatives.description);
     formData.append('esgInitiatives[attachment]', payload.esgInitiatives.attachment);
     formData.append('esgInitiatives[id]', payload.esgInitiatives.id);
+    formData.append('esgInitiatives[type]', payload.esgInitiatives.type);
     
-    axios.post('/company/addCompanyDifferentiators/',formData,config)
+    axios.post('/company/editCompanyDifferentiators/',formData,config)
      .then(responce => {
       dispatch("getCompany",payload.companyId)
     }).catch(err => {
@@ -220,6 +228,7 @@ export default {
     formData.append('esgInitiatives[description]', payload.esgInitiatives.description);
     formData.append('esgInitiatives[attachment]', payload.esgInitiatives.attachment);
     formData.append('esgInitiatives[id]', payload.esgInitiatives.id);
+    formData.append('esgInitiatives[type]', payload.esgInitiatives.type);
     
     axios.post('/company/deleteCompanyDifferentiators/',formData,config)
      .then(responce => {

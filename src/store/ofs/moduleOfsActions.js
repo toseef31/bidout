@@ -70,9 +70,18 @@ export default {
           console.log(err);
       });
   },
+  getCompanyByBasin({commit},payload){
+    axios.get('/company/getCompanyByBasin/'+payload)
+      .then(responce => {
+        // console.log(responce);
+        commit('setCompanies',response.data)
+    }).catch(err => {
+          console.log(err);
+      });
+  },
   getCompanyInfo({commit},payload){
     var url = encodeURIComponent(payload.name);
-    axios.get('company/getCompanyById/'+payload.id)
+    axios.get('/company/getCompanyById/'+payload.id)
      .then(responce => {
       commit('setCompany',responce.data);
       localStorage.setItem('companyData', JSON.stringify(responce.data));
@@ -83,7 +92,7 @@ export default {
   },
   getPublicCompanyInfo({commit},payload){
     var url = encodeURIComponent(payload.name);
-    axios.get('company/getCompanyById/'+payload.id)
+    axios.get('/company/getCompanyById/'+payload.id)
      .then(responce => {
       commit('setCompany',responce.data);
       localStorage.setItem('companyData', JSON.stringify(responce.data));

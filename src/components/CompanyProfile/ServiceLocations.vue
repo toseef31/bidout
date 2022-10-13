@@ -22,10 +22,12 @@
       </v-row>
     </div>
     <v-row>
-      <v-col cols="12" sm="10">
-        <div class="service-list text-left mt-5">
-          <label class="d-flex justify-space-between" v-for="(location,index) in companyData.companyLocations"><span><v-icon>mdi-map-marker-outline</v-icon>{{location.location}}</span> <v-icon color="#F32349"  @click="deleteLocation(location)">mdi-trash-can-outline</v-icon></label>
-        </div>
+      <v-col cols="12" sm="12">
+        <v-row>
+          <v-col cols="12" class="-list text-left pt-2"  v-for="(location,index) in companyData.companyLocations">
+            <label class="d-flex justify-space-between"><span><v-icon>mdi-map-marker-outline</v-icon>{{location.location}}</span> <v-icon color="#F32349"  @click="deleteLocation(location)">mdi-trash-can-outline</v-icon></label>
+          </v-col>
+        </v-row>
       </v-col>
     </v-row>
   </v-container>
@@ -46,7 +48,7 @@ export default {
   },
   computed:{
     companyData(){
-      return this.$store.getters.companyData;
+      return this.$store.getters.companyData.companyData;
     }
   },
   watch:{
@@ -57,9 +59,19 @@ export default {
   methods: {
     ...mapActions(["addCompanyLocation","deleteCompanyLocation"]),
     getLocation(){
+      if(this.$store.getters.companyData.companyData.lattitude){
+        var lat = this.$store.getters.companyData.companyData.lattitude;
+      }else{
+        var lat = 29.721085;
+      }
+      if(this.$store.getters.companyData.companyData.longitude){
+        var lng = this.$store.getters.companyData.companyData.longitude;
+      }else{
+        var lng = -95.342049;
+      }
       this.mapOptions = {
-        center: { lat: this.$store.getters.companyData.lattitude, lng: this.$store.getters.companyData.longitude },
-        zoom: 17,
+        center: { lat: lat, lng: lng },
+        zoom: 2,
         mapTypeId: 'terrain',
         mapTypeControl: false,
         scaleControl: false,
@@ -82,7 +94,7 @@ export default {
         // map.controls[google.maps.ControlPosition.TOP_RIGHT].push(card);
 
         // [START maps_places_autocomplete_creation]
-        const center = { lat: this.$store.getters.companyData.lattitude, lng: this.$store.getters.companyData.longitude };
+        const center = { lat: lat, lng: lng };
         // Create a bounding box with sides ~10km away from the center point
         const defaultBounds = {
           north: center.lat + 0.1,
@@ -112,21 +124,36 @@ export default {
         const newBounds = new google.maps.LatLngBounds(southwest, northeast);
 
         autocomplete.setBounds(newBounds);
+        if(this.$store.getters.companyData.companyLocations){
+          var LocationsForMap = this.$store.getters.companyData.companyData.companyLocations;
+        }else{
+          var LocationsForMap = [
+            {
+              lattitude: 29.721085,
+              longitude: -95.342049,
+              location: 'M.D. Anderson Library'
+            }
+          ];
+        }
+        var infowindow = new google.maps.InfoWindow();
+        var marker, i;
 
-        // [END maps_places_autocomplete_setbounds]
-        // const infowindow = new google.maps.InfoWindow();
-        // const infowindowContent = document.getElementById("infowindow-content");
-        // console.log(infowindowContent);
-        // infowindow.setContent(infowindowContent);
-        
-        const marker = new google.maps.Marker({
-          position: new google.maps.LatLng(this.$store.getters.companyData.lattitude, this.$store.getters.companyData.longitude),
-          title: 'Marker',
-          map: map,
-          draggable: true,
-          // map,
-          anchorPoint: new google.maps.Point(0, -29),
-        });
+        for (i = 0; i < LocationsForMap.length; i++) {
+          marker = new google.maps.Marker({
+            position: new google.maps.LatLng(LocationsForMap[i].lattitude, LocationsForMap[i].longitude),
+            title: 'Marker',
+            map: map,
+            draggable: true,
+            // map,
+            anchorPoint: new google.maps.Point(0, -29),
+          });
+          google.maps.event.addListener(marker, 'click', (function(marker, i) {
+            return function() {
+              infowindow.setContent(LocationsForMap[i].location);
+              infowindow.open(map, marker);
+            }
+          })(marker, i));
+        }
         autocomplete.addListener("place_changed", () => {
           // infowindow.open();
           marker.setVisible(true);
@@ -143,9 +170,10 @@ export default {
           // If the place has a geometry, then present it on a map.
           if (place.geometry.viewport) {
             map.fitBounds(place.geometry.viewport);
+            // map.setZoom(2);
           } else {
             map.setCenter(place.geometry.location);
-            map.setZoom(17); // Why 17? Because it looks good.
+            map.setZoom(2); // Why 17? Because it looks good.
           }
 
           marker.setPosition(place.geometry.location);
@@ -169,9 +197,10 @@ export default {
                 "",
             ].join(" ");
           }
+          console.log(place,'place');
           this.lat = place.geometry.location.lat();
           this.lng = place.geometry.location.lng();
-          this.address = place.name;
+          this.address = place.formatted_address;
         });
     },
     addLocation(){

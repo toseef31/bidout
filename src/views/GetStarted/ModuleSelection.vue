@@ -6,15 +6,10 @@
           <v-row
             align="center"
             justify="center"
-            no-gutters
-          >
-            <v-col
-              class="text-left"
-              cols="12"
-            >
-              <h1 class="font-weight-bolder white--text">
-                Get Started
-              </h1>
+            no-gutters>
+            <v-col class="text-left"
+              cols="12">
+              <h1 class="font-weight-bolder white--text">Get Started</h1>
             </v-col>
           </v-row>
         </v-container>
@@ -29,61 +24,55 @@
                 <h4 class="font-weight-bold">BidOut Modules</h4>
               </div>
               <v-form v-if="contractData">
-                <template v-for="contracts in contractData">
-                  <div class="create-bid text-left mt-5 pa-4">
+                <template>
+                  
+                  <div class="create-bid text-left mt-5 pa-4"  v-if="rfxContractData && rfxContractData.length > 0">
                     <div class="d-flex justify-space-between align-center mb-5 label-title">
                       <h1 class="font-weight-bold">RFx Platform - Create Bids</h1>
                       <v-sheet>
-                          <template v-if="contracts.contractType == 'rfx'">
-                            <v-checkbox
-                              v-model="rfxActiveModule"
-                              inset
-                              disabled
-                            ></v-checkbox>
-                          </template>
-                          <template v-else>
-                            <v-checkbox
-                              v-model="rfxModule"
-                              inset
-                            ></v-checkbox>
-                          </template>
+                        <v-icon color="#0D9647">mdi-check-circle-outline</v-icon>
+                        <!-- <v-checkbox
+                          v-model="rfxActiveModule"
+                          inset
+                          disabled
+                        ></v-checkbox> -->
                       </v-sheet>
                     </div>
                     <p class="font-weight-medium">BidOut's flagship RFP Platform. The ability to create and distribute RPF's to BidOut's network or <br>service providers.</p>
                     <div class="d-inline-block">
-                      <template v-if="contracts.contractType != 'rfx'">
-                        <v-btn color="#0D9647" large dense width="260px" height="56" class="font-weight-bold white--text text-capitalize pa-4" @click="generateContract('rfx')" :disabled="rfxModule == true ? false : true">Execute Agreement Now <v-icon class="pl-2" color="#fff">mdi-arrow-right-circle</v-icon></v-btn>
-                      </template>
-                      <template v-else>
-                        <div class="d-inline-block agreement-box pa-3">
-                          <div class="d-flex">
-                            <v-icon color="#0D9647">mdi-check-circle-outline</v-icon>
-                            <div class="pl-2">
-                              <p class="mb-0">Contract Excuted</p>
-                              <p class="mb-0">{{ contracts.signedAt | moment("MM/D/YYYY h:mm a") }} </p>
-                            </div>
+                      <div class="d-inline-block agreement-box pa-3">
+                        <div class="d-flex">
+                          <v-icon color="#0D9647">mdi-check-circle-outline</v-icon>
+                          <div class="pl-2">
+                            <p class="mb-0">Contract Excuted</p>
+                            <p class="mb-0">{{ rfxContractData[0].signedAt | moment("MM/D/YYYY h:mm a") }} </p>
                           </div>
                         </div>
-                        <a target="_blank" :href="contracts.filePath" class="ml-2">Download Contract</a>
-                      </template>
-                      
+                      </div>
+                      <a target="_blank" :href="rfxContractData[0].filePath" class="ml-2">Download Contract</a>
                     </div>
-                    
                   </div>
-                  <!-- <div class="create-bid text-left mt-5 pa-4">
+
+
+
+                  <div class="create-bid text-left mt-5 pa-4" v-else>
                     <div class="d-flex justify-space-between align-center mb-5 label-title">
-                      <h1 class="font-weight-bold">RFP Platform - Respond to Bids</h1>
+                      <h1 class="font-weight-bold">RFx Platform - Create Bids</h1>
                       <v-sheet>
                         <v-switch
-                          v-model="bidRespond"
-                          inset
-                          
+                          v-model="rfxModule"
+                          inset @change="rfxToggle"
                         ></v-switch>
                       </v-sheet>
                     </div>
-                    <p class="font-weight-medium">Signup today as a service provider to get access to more work trhoughout BidOut Platform. By <br> enabling this module, Operators can invite your business to respond to bids.</p>
-                  </div> -->
-                  <div class="create-bid text-left mt-10 pa-4">
+                    <p class="font-weight-medium">BidOut's flagship RFP Platform. The ability to create and distribute RPF's to BidOut's network or <br>service providers.</p>
+                    <div class="d-inline-block">
+                      <v-btn color="#0D9647" large dense width="260px" height="56" class="font-weight-bold white--text text-capitalize pa-4" @click="generateContract('rfx')" :disabled="rfxBtn == true ?  false : true" :loading="loading">Execute Agreement Now <v-icon class="pl-2" color="#fff">mdi-arrow-right-circle</v-icon></v-btn>
+                    </div>
+                  </div>
+                </template>
+                <template>
+                  <div class="create-bid text-left mt-10 pa-4" v-if="ofsContractData && ofsContractData.length > 0">
                     <div class="d-flex justify-space-between align-center mb-5 label-title">
                       <h1 class="font-weight-bold">Respond to Bids - OFS Directory</h1>
                       <h1 class="price-text"><span v-if="trial_end == 'free'">Free</span><span v-else>
@@ -94,21 +83,12 @@
                         <template v-if="package == 4">$2400/year</template>
                       </span></h1>
                       <v-sheet>
-
-                          <template v-if="contracts.contractType == 'ofs-premium'">
-                            
-                            <v-checkbox
-                              v-model="ofsActiveModule"
-                              inset
-                              disabled :value="true"
-                            ></v-checkbox>
-                          </template> 
-                          <template v-else>
-                            <v-checkbox
-                              v-model="ofsModule"
-                              inset
-                            ></v-checkbox>
-                          </template>
+                        <v-icon color="#0D9647">mdi-check-circle-outline</v-icon>
+                        <!-- <v-checkbox
+                          v-model="ofsActiveModule"
+                          inset
+                          disabled :value="true"
+                        ></v-checkbox>  -->
                       </v-sheet>
                     </div>
                     <p class="font-weight-medium">Respond to bid invitiations & showcase your services to oil and gas operators to gain access to <br>greater visibility.</p>
@@ -116,7 +96,7 @@
                       <v-radio-group
                         v-model="trial_end"
                         mandatory
-                        row :disabled="contracts.contractType == 'ofs-premium' ? true : false"
+                        row :disabled="true"
                       >
                         <v-radio
                           label="Standard Edition (Free)"
@@ -133,99 +113,145 @@
                     <v-row>
                       <v-col cols="12" sm="12" v-show="trial_end == 'premium'">
                         <label class="d-block text-left input-label mb-2 font-weight-bold">Billing Cycle</label>
-                        <v-select outlined placeholder="Select" v-model="billingCycle" :items="cycle"  :disabled="contracts.contractType == 'ofs-premium' ? true : false"></v-select>
-                        
+                        <v-select outlined placeholder="Select" v-model="billingCycle" :items="cycle"  :disabled="true"></v-select>
                       </v-col>
                     </v-row>
                     <v-row>
                       <v-col cols="12" sm="12" v-show="trial_end == 'premium'">
                         <label class="d-block text-left input-label mb-2 font-weight-bold">Sales Team Contacts</label>
-                        <v-select outlined placeholder="Select" v-model="package" :items="packages" item-text="name" item-value="id" :disabled="contracts.contractType == 'ofs-premium' ? true : false"></v-select>
-                        
+                        <v-select outlined placeholder="Select" v-model="package" :items="packages" item-text="name" item-value="id" :disabled="true"></v-select>
                       </v-col>
                     </v-row>
                     <v-row>
                       <v-col cols="12" sm="5" text="left">
-                        <template v-if="contracts.contractType != 'ofs-premium'">
-                          <v-btn color="#0D9647" large dense width="260px" height="56" class="font-weight-bold white--text text-capitalize pa-4" @click="generateContract('ofs-premium')">Execute Agreement Now <v-icon class="pl-2" color="#fff">mdi-arrow-right-circle</v-icon></v-btn>
-                        </template>
-
-                        <template v-else>
-                          <div class="d-inline-block agreement-box pa-3">
-                            <div class="d-flex">
-                              <v-icon color="#0D9647">mdi-check-circle-outline</v-icon>
-                              <div class="pl-2">
-                                <p class="mb-0">Contract Excuted On</p>
-                                <p class="mb-0">{{ contracts.signedAt | moment("MM/D/YYYY h:mm a") }} </p>
-                              </div>
+                        <div class="d-inline-block agreement-box pa-3">
+                          <div class="d-flex">
+                            <v-icon color="#0D9647">mdi-check-circle-outline</v-icon>
+                            <div class="pl-2">
+                              <p class="mb-0">Contract Excuted On</p>
+                              <p class="mb-0">{{ ofsContractData[0].signedAt | moment("MM/D/YYYY h:mm a") }} </p>
                             </div>
                           </div>
-                          <a target="_blank" :href="contracts.filePath" class="ml-2">Download Contract</a>
-                        </template>                        
+                        </div>
+                        <a target="_blank" :href="ofsContractData[0].filePath" class="ml-2">Download Contract</a>
                       </v-col>
                     </v-row>
                   </div>
-                  <v-row justify="center mt-10">
-                    <v-col cols="12" md="3">
-                      <router-link to="payment" class="white--text text-decoration-none"><v-btn color="#0D9647" large dense width="100%" height="56" class="font-weight-bold white--text text-capitalize">Next <v-icon class="pl-2" color="#fff">mdi-arrow-right-circle</v-icon></v-btn></router-link>
-                    </v-col>
-                  </v-row>
+                  <div class="create-bid text-left mt-10 pa-4" v-else>
+                    <div class="d-flex justify-space-between align-center mb-5 label-title">
+                      <h1 class="font-weight-bold">Respond to Bids - OFS Directory</h1>
+                      <h1 class="price-text"><span v-if="trial_end == 'free'">Free</span><span v-else>
+                        <template v-if="package.id == 1 && billingCycle == 'Yearly'">
+                            $800/year
+                        </template>
+                        <template v-if="package.id == 1 && billingCycle == 'Monthly'">
+                            $79.99/month
+                        </template>
+                        <template v-if="package == 1 && billingCycle == 'Yearly'">$800/year</template>
+                        <template v-if="package == 1 && billingCycle == 'Monthly'">$79.99/month</template>
+                        <template v-if="package == 2 && billingCycle == 'Yearly'">$1,000/year</template>
+                        <template v-if="package == 2 && billingCycle == 'Monthly'">$99.99/month</template>
+                        <template v-if="package == 3 && billingCycle == 'Yearly'">$1,200/year</template>
+                        <template v-if="package == 3 && billingCycle == 'Monthly'">$119.99/month</template>
+                        <template v-if="package == 4 && billingCycle == 'Yearly'">$2,400/year</template>
+                        <template v-if="package == 4 && billingCycle == 'Monthly'">$239.99/month</template>
+                      </span></h1>
+                      <v-sheet>
+                        <v-switch
+                          v-model="ofsModule"
+                          inset
+                          @change="ofsToggle"
+                        ></v-switch>
+                      </v-sheet>
+                    </div>
+                    <p class="font-weight-medium">Respond to bid invitiations & showcase your services to oil and gas operators to gain access to <br>greater visibility.</p>
+                    <div class="d-flex">
+                      <v-radio-group
+                        v-model="trial_end"
+                        mandatory
+                        row
+                      >
+                        <v-radio
+                          label="Standard Edition (Free)"
+                          color="#0D9647"
+                          value="free"
+                        ></v-radio>
+                        <v-radio
+                          label="Premium Edition"
+                          color="#0D9647"
+                          value="premium"
+                        ></v-radio>
+                      </v-radio-group>
+                    </div>
+                    <v-row>
+                      <v-col cols="12" sm="12" v-show="trial_end == 'premium'">
+                        <label class="d-block text-left input-label mb-2 font-weight-bold">Billing Cycle</label>
+                        <v-select outlined hide-details placeholder="Select" v-model="billingCycle" :items="cycle" @change="getCycle"  :disabled="ofsModule == true ?  false : true" class="text-capitalize"></v-select>
+                      </v-col>
+                    </v-row>
+                    <v-row>
+                      <v-col cols="12" sm="12" v-show="trial_end == 'premium'">
+                        <label class="d-block text-left input-label mb-2 font-weight-bold">Sales Team Contacts</label>
+                        <v-select outlined placeholder="Select" v-model="package" :items="packages" item-text="name" item-value="id" @change="getPackage" :disabled="ofsModule == true ?  false : true"></v-select>
+                        
+                      </v-col>
+                    </v-row>
+                    <v-row>
+                      <v-col cols="12" sm="4" text="left">
+                        <v-btn color="#0D9647" large dense width="260px" height="56" class="font-weight-bold white--text text-capitalize pa-4" @click="generateContract('ofs-premium')" :disabled="ofsBtn == true ?  false : true" :loading="loading">Execute Agreement Now <v-icon class="pl-2" color="#fff">mdi-arrow-right-circle</v-icon></v-btn>
+                      </v-col>
+                    </v-row>
+                  </div>
                 </template>
+                <v-row justify="center mt-10">
+                  <v-col cols="12" md="3">
+                    <router-link to="payment" class="white--text text-decoration-none"><v-btn color="#0D9647" large dense width="100%" height="56" class="font-weight-bold white--text text-capitalize" :disabled="ofsModule == true || rfxModule == true ?  true : false">Next <v-icon class="pl-2" color="#fff">mdi-arrow-right-circle</v-icon></v-btn></router-link>
+                  </v-col>
+                </v-row>
+
               </v-form>
               <v-form v-else>
                 <div class="create-bid text-left mt-5 pa-4">
                   <div class="d-flex justify-space-between align-center mb-5 label-title">
                     <h1 class="font-weight-bold">RFx Platform - Create Bids</h1>
                     <v-sheet>
-                      <v-checkbox
+                      <v-switch
                         v-model="rfxModule"
-                        inset
-                      ></v-checkbox>
+                        inset @change="rfxToggle"
+                      ></v-switch>
                     </v-sheet>
                   </div>
                   <p class="font-weight-medium">BidOut's flagship RFP Platform. The ability to create and distribute RPF's to BidOut's network or <br>service providers.</p>
                   <div class="d-inline-block">
-                    <v-btn color="#0D9647" large dense width="260px" height="56" class="font-weight-bold white--text text-capitalize pa-4" @click="generateContract('rfx')" :disabled="rfxModule == true ?  false : true" :loading="loading">Execute Agreement Now <v-icon class="pl-2" color="#fff">mdi-arrow-right-circle</v-icon></v-btn>
+                    <v-btn color="#0D9647" large dense width="260px" height="56" class="font-weight-bold white--text text-capitalize pa-4" @click="generateContract('rfx')" :disabled="rfxBtn == true ?  false : true" :loading="loading">Execute Agreement Now <v-icon class="pl-2" color="#fff">mdi-arrow-right-circle</v-icon></v-btn>
                   </div>
-                  <!-- <div class="d-inline-block agreement-box pa-3">
-                    <div class="d-flex">
-                      <v-icon color="#0D9647">mdi-check-circle-outline</v-icon>
-                      <div class="pl-2">
-                        <p class="mb-0">Contract Excuted</p>
-                        <p class="mb-0">{{ new Date() | moment("MM/D/YYYY h:mm a") }} </p>
-                      </div>
-                    </div>
-                  </div> -->
                 </div>
-                <!-- <div class="create-bid text-left mt-5 pa-4">
-                  <div class="d-flex justify-space-between align-center mb-5 label-title">
-                    <h1 class="font-weight-bold">RFP Platform - Respond to Bids</h1>
-                    <v-sheet>
-                      <v-switch
-                        v-model="bidRespond"
-                        inset
-                        
-                      ></v-switch>
-                    </v-sheet>
-                  </div>
-                  <p class="font-weight-medium">Signup today as a service provider to get access to more work trhoughout BidOut Platform. By <br> enabling this module, Operators can invite your business to respond to bids.</p>
-                </div> -->
+                
                 <div class="create-bid text-left mt-10 pa-4">
                   <div class="d-flex justify-space-between align-center mb-5 label-title">
                     <h1 class="font-weight-bold">Respond to Bids - OFS Directory</h1>
                     <h1 class="price-text"><span v-if="trial_end == 'free'">Free</span><span v-else>
-                      <template v-if="package.id == 1">$79.99/month</template>
-                      <template v-if="package == 1">$79.99/month</template>
-                      <template v-if="package == 2">$99.99/month</template>
-                      <template v-if="package == 3">$119.99/month</template>
-                      <template v-if="package == 4">$2400/year</template>
+                      <template v-if="package.id == 1 && billingCycle == 'Yearly'">
+                          $800/year
+                      </template>
+                      <template v-if="package.id == 1 && billingCycle == 'Monthly'">
+                          $79.99/month
+                      </template>
+                      <template v-if="package == 1 && billingCycle == 'Yearly'">$800/year</template>
+                      <template v-if="package == 1 && billingCycle == 'Monthly'">$79.99/month</template>
+                      <template v-if="package == 2 && billingCycle == 'Yearly'">$1,000/year</template>
+                      <template v-if="package == 2 && billingCycle == 'Monthly'">$99.99/month</template>
+                      <template v-if="package == 3 && billingCycle == 'Yearly'">$1,200/year</template>
+                      <template v-if="package == 3 && billingCycle == 'Monthly'">$119.99/month</template>
+                      <template v-if="package == 4 && billingCycle == 'Yearly'">$2,400/year</template>
+                      <template v-if="package == 4 && billingCycle == 'Monthly'">$239.99/month</template>
                     </span></h1>
                     <v-sheet>
-                      <v-checkbox
+                      <v-switch
                         v-model="ofsModule"
                         inset
-                        
-                      ></v-checkbox>
+                        @change="ofsToggle"
+                      ></v-switch>
                     </v-sheet>
                   </div>
                   <p class="font-weight-medium">Respond to bid invitiations & showcase your services to oil and gas operators to gain access to <br>greater visibility.</p>
@@ -251,7 +277,6 @@
                     <v-col cols="12" sm="12" v-show="trial_end == 'premium'">
                       <label class="d-block text-left input-label mb-2 font-weight-bold">Billing Cycle</label>
                       <v-select outlined hide-details placeholder="Select" v-model="billingCycle" :items="cycle" @change="getCycle"  :disabled="ofsModule == true ?  false : true" class="text-capitalize"></v-select>
-                      
                     </v-col>
                   </v-row>
                   <v-row>
@@ -261,9 +286,14 @@
                       
                     </v-col>
                   </v-row>
-                  <v-row>
+                  <v-row v-if="trial_end == 'premium'">
                     <v-col cols="12" sm="4" text="left">
-                      <v-btn color="#0D9647" large dense width="260px" height="56" class="font-weight-bold white--text text-capitalize pa-4" @click="generateContract('ofs-premium')" :disabled="ofsModule == true ?  false : true" :loading="loading">Execute Agreement Now <v-icon class="pl-2" color="#fff">mdi-arrow-right-circle</v-icon></v-btn>
+                      <v-btn color="#0D9647" large dense width="260px" height="56" class="font-weight-bold white--text text-capitalize pa-4" @click="generateContract('ofs-premium')" :disabled="ofsBtn == true ?  false : true" :loading="loading">Execute Agreement Now <v-icon class="pl-2" color="#fff">mdi-arrow-right-circle</v-icon></v-btn>
+                    </v-col>
+                  </v-row>
+                  <v-row v-else>
+                    <v-col cols="12" sm="4" text="left">
+                      <router-link to="confirmation" class="text-decoration-none"><v-btn color="#0D9647" large dense width="260px" height="56" class="font-weight-bold white--text text-capitalize pa-4" :loading="loading">Confirm Account <v-icon class="pl-2" color="#fff">mdi-arrow-right-circle</v-icon></v-btn></router-link>
                     </v-col>
                   </v-row>
                 </div>
@@ -305,13 +335,15 @@ export default {
   data() {
     return {
       loading: false,
-      rfxModule: false,
+      rfxModule: true,
+      rfxBtn: true,
       bidRespond: false,
-      ofsModule: false,
+      ofsModule: true,
+      ofsBtn: true,
       rfxActiveModule: true,
       ofsActiveModule: true,
       trial_end : 'premium',
-      billingCycle: '',
+      billingCycle: 'Yearly',
       billing_cycles: '',
       cycle: ['Monthly','Yearly'],
       item_price_id: '',
@@ -322,7 +354,7 @@ export default {
         { name: '1-5 Users - $79.99/month or $800/year prepaid', id: 1},
         { name: '6-10 Users - $99.99/month or $1,000/year prepaid', id: 2},
         { name: '11-15 Users - $119.99/month or $1,200/year prepaid', id: 3},
-        { name: '16+ Users or Unlimited - $2,400/year prepaid', id: 4},
+        { name: '16+ Users - $239.99/month or $2,400/year prepaid', id: 4},
       ],
     };
   },
@@ -334,6 +366,26 @@ export default {
     if(this.$store.getters.contractData){
       return this.$store.getters.contractData.company.contracts.filter((item)=>{
         return this.$store.getters.id == item.signedBy
+      })
+    }
+    // return this.$store.getters.contractData;
+   },
+   ofsContractData(){
+    if(this.$store.getters.contractData){
+      return this.$store.getters.contractData.company.contracts.filter((item)=>{
+        if(this.$store.getters.id == item.signedBy){
+          return item.contractType == 'ofs-premium'
+        }
+      })
+    }
+    // return this.$store.getters.contractData;
+   },
+   rfxContractData(){
+    if(this.$store.getters.contractData){
+      return this.$store.getters.contractData.company.contracts.filter((item)=>{
+        if(this.$store.getters.id == item.signedBy){
+          return item.contractType == 'rfx'
+        }
       })
     }
     // return this.$store.getters.contractData;
@@ -383,11 +435,9 @@ export default {
         var plan = 0;
       }
       if(this.trial_end == 'free'){
-        this.item_price_id = 'OFS-Directory-Standard-Edition';
         this.unit_price = 0;
         this.billing_cycles = 0;
-      }
-      // console.log(this.billing_cycles,'id',this.item_price_id,'price',this.unit_price); 
+      } 
       var contract = {
         ip: this.$store.getters.userIp,
         contractType: type,
@@ -398,6 +448,13 @@ export default {
         unit_price: this.unit_price,
       }
       this.contractGenerate(contract);
+      if(type == 'ofs-premium'){
+        this.loading = 'loading';
+        this.ofsBtn = false;
+      }else{
+        this.loading = 'loading';
+        this.rfxBtn = false;
+      }
     },
     getCycle(){
       if(this.billingCycle == 'Yearly'){
@@ -410,7 +467,9 @@ export default {
       if(this.package == 4){
         this.billingCycle = 'Yearly';
       }
-    }
+    },
+    rfxToggle(){this.rfxBtn = !this.rfxBtn; },
+    ofsToggle(){this.ofsBtn = !this.ofsBtn},
   },
   mounted() {
     document.title = "Module Selection - BidOut" 

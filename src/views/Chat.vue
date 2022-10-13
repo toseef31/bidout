@@ -225,11 +225,11 @@ export default {
       uploadDrag: false,
       removeMember: '',
       fileExt: '',
-      // selectedUser: null,
       loading: true,
       allMembers: [],
       snackbar: false,
       timeout: 2000,
+      convDec: '',
     };
   },
   computed:{
@@ -330,6 +330,7 @@ export default {
         content: this.message,
         attachment: chat_file[0],
       }
+      console.log(this.conversationId,'conversationId');
       if(data.content || data.attachment){
         this.sendMessage(data);
       }
@@ -339,6 +340,7 @@ export default {
       }, 500);
       this.message = '';
       this.filename = '';
+      
     },
     chatActions(data){
       var archivess = {

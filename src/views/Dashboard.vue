@@ -166,7 +166,7 @@ export default {
         scrollwheel: false,
       },
       this.markerOptions = {
-        // url: '/assets/images/dashboard/mapMobile.png',
+        url: '/assets/images/dashboard/mapMobile.png',
         size: {width: 60, height: 90, f: 'px', b: 'px',},
         scaledSize: {width: 30, height: 45, f: 'px', b: 'px',},
       },
@@ -176,7 +176,6 @@ export default {
   },
   mounted() {
     document.title = "Dashboard - BidOut";
-    this.getBids();
     this.shipMap();
     this.pendingUserCount(this.$store.getters.userInfo.company.id)
     this.users = JSON.parse(localStorage.getItem("userData")).user;

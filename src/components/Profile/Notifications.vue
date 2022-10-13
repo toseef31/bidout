@@ -27,7 +27,7 @@
 	                v-model="responseAll"
 	                color="#0D9648"
 	                class="mt-0"
-	                hide-details  @change="updateNoti"
+	                hide-details 
 	              ></v-checkbox>
 	            </td>
 	            <td class="text-right">
@@ -54,7 +54,7 @@
 	                v-model="questionAndAnswersAll"
 	                color="#0D9648"
 	                class="mt-0"
-	                hide-details  @change="updateNoti"
+	                hide-details  
 	              ></v-checkbox>
 	            </td>
 	            <td class="text-left">
@@ -81,7 +81,7 @@
 	                v-model="bidCompletionEmailsAll"
 	                color="#0D9648"
 	                class="mt-0"
-	                hide-details  @change="updateNoti"
+	                hide-details
 	              ></v-checkbox>
 	            </td>
 	            <td class="text-left">
@@ -118,22 +118,23 @@ export default {
     	bidCompletionEmailsAll: false,
     	notificationPreference: {
     		bidResponses: {
-    			email: this.$store.getters.userInfo.notificationPreference.bidResponses.email,
-    			sms: this.$store.getters.userInfo.notificationPreference.bidResponses.sms,
+    			email: '',
+    			sms: '',
     		},
     		questionAndAnswers: {
-    			email: this.$store.getters.userInfo.notificationPreference.questionAndAnswers.email,
-    			sms: this.$store.getters.userInfo.notificationPreference.questionAndAnswers.sms,
+    			email: '',
+    			sms: '',
     		},
     		bidCompletionEmails: {
-    			email: this.$store.getters.userInfo.notificationPreference.bidCompletionEmails.email,
-    			sms: this.$store.getters.userInfo.notificationPreference.bidCompletionEmails.sms,
+    			email: '',
+    			sms: '',
     		},
     	},
     };
   },
   computed:{
     notifications(){
+
     	return this.$store.getters.userInfo;
     }
   },
@@ -146,6 +147,7 @@ export default {
  		    this.notificationPreference.bidResponses.email = false;
  		    this.notificationPreference.bidResponses.sms = false;
  		  }
+ 		  this.updateNoti();
  		},500),
  		questionAndAnswersAll: _.debounce(function(){
  		  if(this.questionAndAnswersAll == true){
@@ -155,6 +157,7 @@ export default {
  		    this.notificationPreference.questionAndAnswers.email = false;
  		    this.notificationPreference.questionAndAnswers.sms = false;
  		  }
+ 		  this.updateNoti();
  		},500),
  		bidCompletionEmailsAll: _.debounce(function(){
  		  if(this.bidCompletionEmailsAll == true){
@@ -164,6 +167,7 @@ export default {
  		    this.notificationPreference.bidCompletionEmails.email = false;
  		    this.notificationPreference.bidCompletionEmails.sms = false;
  		  }
+ 		  this.updateNoti();
  		},500),
  	},
   methods: {
@@ -179,21 +183,24 @@ export default {
     }
   },
   mounted() {
-    var responseEmail = this.notificationPreference.bidResponses.email;
-    var responseSms = this.notificationPreference.bidResponses.sms;
-    if(responseEmail == true && responseSms == true){
-    	this.responseAll = true;
+    if(this.$store.getters.userInfo.notificationPreference){
+    	this.notificationPreference.bidResponses.email = this.$store.getters.userInfo.notificationPreference.bidResponses.email;
+    	this.notificationPreference.bidResponses.sms = this.$store.getters.userInfo.notificationPreference.bidResponses.sms;
+    	if(this.$store.getters.userInfo.notificationPreference.bidResponses.email == true && this.$store.getters.userInfo.notificationPreference.bidResponses.sms == true){
+    		this.responseAll = true;
+    	}
+    	this.notificationPreference.questionAndAnswers.email = this.$store.getters.userInfo.notificationPreference.questionAndAnswers.email;
+    	this.notificationPreference.questionAndAnswers.sms = this.$store.getters.userInfo.notificationPreference.questionAndAnswers.sms;
+    	if(this.$store.getters.userInfo.notificationPreference.questionAndAnswers.email == true && this.$store.getters.userInfo.notificationPreference.questionAndAnswers.sms == true){
+    		this.questionAndAnswersAll = true;
+    	}
+	    this.notificationPreference.bidCompletionEmails.email = this.$store.getters.userInfo.notificationPreference.bidCompletionEmails.email;
+	    this.notificationPreference.bidCompletionEmails.sms = this.$store.getters.userInfo.notificationPreference.bidCompletionEmails.sms;
+	    if(this.$store.getters.userInfo.notificationPreference.bidCompletionEmails.email == true && this.$store.getters.userInfo.notificationPreference.bidCompletionEmails.sms == true){
+	    	this.bidCompletionEmailsAll = true;
+	    }
     }
-    var qaEmail = this.notificationPreference.questionAndAnswers.email;
-    var qaSms = this.notificationPreference.questionAndAnswers.sms;
-    if(qaEmail == true && qaSms == true){
-    	this.questionAndAnswersAll = true;
-    }
-    var bidEmail = this.notificationPreference.bidCompletionEmails.email;
-    var bidSms = this.notificationPreference.bidCompletionEmails.sms;
-    if(bidEmail == true && bidSms == true){
-    	this.bidCompletionEmailsAll = true;
-    }
+
   } 
 };
 </script>

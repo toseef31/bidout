@@ -8,7 +8,7 @@
             <LeftSidebar></LeftSidebar>
           </v-col>
           
-          <router-view />
+          <router-view :key="$route.path" />
         </v-row>
       </section>
     </v-main>

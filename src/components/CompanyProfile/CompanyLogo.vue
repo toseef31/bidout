@@ -51,7 +51,7 @@ export default {
   data() {
     return {
       croppieImage: '',
-      imageSrc: this.$store.getters.companyData.image,
+      imageSrc: this.$store.getters.companyData.companyData.image,
       base64data: '',
       dialog: false,
       imageUrl: '',
@@ -60,7 +60,7 @@ export default {
   },
   computed:{
     companyData(){
-      return this.$store.getters.companyData;
+      return this.$store.getters.companyData.companyData;
     }
   },
   methods: {

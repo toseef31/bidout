@@ -19,9 +19,11 @@ allRoutes = allRoutes.concat(Ofs, AuthRoutes, Dashboard, Chat, Profile, Bids ,Su
 const routes = allRoutes
 
 const router = new VueRouter({
-  mode: 'history',
   base: import.meta.env.Base,
   routes,
+  mode: 'history',
+  
 });
+
 
 export default router;

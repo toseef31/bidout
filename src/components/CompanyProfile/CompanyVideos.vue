@@ -30,14 +30,14 @@ export default {
   },
   computed:{
     companyData(){
-      return this.$store.getters.companyData;
+      return this.$store.getters.companyData.companyData;
     }
   },
   methods: {
     ...mapActions(["addCompanyVideos"]),
     addVideos(){
-     if(this.$store.getters.companyData.corporateVideos){
-       this.videos = this.$store.getters.companyData.corporateVideos;
+     if(this.$store.getters.companyData.companyData.corporateVideos){
+       this.videos = this.$store.getters.companyData.companyData.corporateVideos;
      }
      this.videos.push(this.videoLinks);
      var data = {
@@ -48,8 +48,8 @@ export default {
      this.videoLinks = '';
     },
     deleteVideo(index){
-     if(this.$store.getters.companyData.corporateVideos){
-       this.videos = this.$store.getters.companyData.corporateVideos;
+     if(this.$store.getters.companyData.companyData.corporateVideos){
+       this.videos = this.$store.getters.companyData.companyData.corporateVideos;
      }
      if(index >= 0){
        this.videos.splice(index,1);
