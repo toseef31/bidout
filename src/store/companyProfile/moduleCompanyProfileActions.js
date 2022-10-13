@@ -46,12 +46,7 @@ export default {
       });
   }, 
   addCompanyService({commit,dispatch}, payload){
-    var config = {
-      headers: {
-        "Authorization": `Bearer ${JSON.parse(localStorage.getItem('token'))}`
-      },
-    };
-    axios.post('/company/addCompanyService/',{'companyId': payload.companyId,'subCategories': payload.subCategories},config)
+    axios.post('/company/addCompanyService/',{'companyId': payload.companyId,'subCategories': payload.subCategories})
      .then(responce => {
       dispatch("getCompany",payload.companyId)
     }).catch(err => {
@@ -59,12 +54,7 @@ export default {
       });
   }, 
   addCompanyBasins({commit,dispatch}, payload){
-    var config = {
-      headers: {
-        "Authorization": `Bearer ${JSON.parse(localStorage.getItem('token'))}`
-      },
-    };
-    axios.post('/company/addCompanyBasin/',{'companyId': payload.companyId,'basins': payload.basins},config)
+    axios.post('/company/addCompanyBasin/',{'companyId': payload.companyId,'basins': payload.basins})
      .then(responce => {
       dispatch("getCompany",payload.companyId)
     })

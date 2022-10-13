@@ -75,7 +75,6 @@
                               outlined
                             ></v-autocomplete>
                             
-                            <!-- <v-select :items="timezone" item-text="label" v-model="userTimezone" outlined></v-select> -->
                           </v-col>
                         </v-row>
                         <v-row justify="center">
@@ -229,7 +228,7 @@ export default {
   },
   watch: {
     searchTimezone (val) {
-      val && val !== this.userTimezone && this.querySelections(val)
+      val && val !== this.userTimezone
     },
   },
   computed:{
@@ -285,17 +284,6 @@ export default {
       }
       this.adminsCompany(data);
     },
-    querySelections (v) {
-      setTimeout(() => {
-        this.timezone = this.timezon.filter(e => {
-          return (e || '').toLowerCase().indexOf((v || '').toLowerCase()) > -1
-        })
-      }, 500)
-    },
-    timeInfo(){
-      // console.log(moment.tz.names());
-      // return moment.tz.names();
-    },
     time(newDate,zone){
       return moment.tz(newDate, zone).format('MMM DD YYYY, h:mm:ss a');
     }
@@ -305,7 +293,6 @@ export default {
     this.history();
     this.getAdmins();
 
-   this.timeInfo();
    if(!this.$store.getters.userInfo.timezone){
     this.userTimezone = 'America/Chicago';
    }
