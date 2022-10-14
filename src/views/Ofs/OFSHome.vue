@@ -23,7 +23,7 @@
         <v-main class="pt-0">
           <v-row class="mt-n16">
             <v-col cols="12" md="12">
-              <VueSlickCarousel v-bind="settings" class="company-slider">
+              <VueSlickCarousel v-bind="settings" class="company-slider" v-if="premiumCompanies.length > 0">
                 <div class="slide-item " v-for="premium in premiumCompanies" @click="viewPublicCompany(premium.id,premium.company)">
                   <div class="slide-img d-flex align-center justify-center flex-column">
                     <img v-if="premium.image"
@@ -35,36 +35,6 @@
                     <h3 class="font-weight-bold">{{premium.company}}</h3>
                   </div>
                 </div>
-                <!-- <div class="slide-item ">
-                  <div class="slide-img d-flex align-center justify-center flex-column">
-                    <img
-                      :src="require('@/assets/images/ofs/tetra.png')" class="mx-auto" height="120"
-                    >
-                  </div>
-                  <div class="slide-caption">
-                    <h3 class="font-weight-bold">Premium Service Provider</h3>
-                  </div>
-                </div>
-                <div class="slide-item ">
-                  <div class="slide-img d-flex align-center justify-center flex-column">
-                    <img
-                      :src="require('@/assets/images/ofs/champion.png')" class="mx-auto"
-                    >
-                  </div>
-                  <div class="slide-caption">
-                    <h3 class="font-weight-bold">Premium Service Provider</h3>
-                  </div>
-                </div>
-                <div class="slide-item">
-                  <div class="slide-img d-flex align-center justify-center flex-column">
-                    <img
-                      :src="require('@/assets/images/ofs/patterson.png')" class="mx-auto"
-                    >
-                  </div>
-                  <div class="slide-caption">
-                    <h3 class="font-weight-bold">Premium Service Provider</h3>
-                  </div>
-                </div> -->
               </VueSlickCarousel>
             </v-col>
           </v-row>
@@ -286,7 +256,11 @@ export default {
     viewPublicCompany(id,name){
       this.getPublicCompanyInfo({'id':id,'name':name});
     },
-    
+    loader(){
+      setTimeout(()=>{
+        this.loading = false;
+      },100)
+    }
   },
   beforeMount() {
     this.getPremiumCompanies();
@@ -295,6 +269,7 @@ export default {
   document.title = "OFS - BidOut"
     this.getCategories();
     this.getPremiumCompanies();
+    this.loader();
   }
 };
 </script>

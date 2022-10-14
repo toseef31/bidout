@@ -1,12 +1,17 @@
 <template>
-  <v-col class="ofs-module ofsSupplier-module white pa-0 pa-sm-3" :class="[ showSideBar ? 'col-md-9 col-12 col-sm-7' : 'mid-content-collapse', activityPanel ? 'd-sm-block' : 'd-md-block']" v-show="!activityPanel">
+  <v-row fill-height align="center" v-if="loading">
+    <v-col cols="12">
+      <v-progress-circular :width="3" color="green" indeterminate ></v-progress-circular>
+    </v-col>
+  </v-row>
+  <v-col class="ofs-module ofsSupplier-module white pa-0 pa-sm-3" :class="[ showSideBar ? 'col-md-9 col-12 col-sm-7' : 'mid-content-collapse', activityPanel ? 'd-sm-block' : 'd-md-block']" v-show="!activityPanel" v-else>
     <div class="mid-content">
       <div class="content-section fill-height">
         <v-container class="px-sm-8">
             <v-row>
               <v-col cols="12" md="12">
-                <VueSlickCarousel v-bind="settings" class="company-slider">
-
+                <VueSlickCarousel v-bind="settings" class="company-slider" v-if="premiumCompanies.length > 0">
+                  
                   <div class="slide-item" v-for="premium in premiumCompanies" @click="viewCompany(premium.id,premium.company)">
                     <div class="slide-img d-flex align-center justify-center flex-column">
                       <img v-if="premium.image"
@@ -18,36 +23,6 @@
                       <h3 class="font-weight-bold">{{premium.company}}</h3>
                     </div>
                   </div>
-                  <!-- <div class="slide-item">
-                    <div class="slide-img d-flex align-center justify-center flex-column">
-                      <img
-                        :src="require('@/assets/images/ofs/tetra.png')" class="mx-auto" height="120"
-                      >
-                    </div>
-                    <div class="slide-caption">
-                      <h3 class="font-weight-bold">Premium Service Provider</h3>
-                    </div>
-                  </div>
-                  <div class="slide-item">
-                    <div class="slide-img d-flex align-center justify-center flex-column">
-                      <img
-                        :src="require('@/assets/images/ofs/champion.png')" class="mx-auto"
-                      >
-                    </div>
-                    <div class="slide-caption">
-                      <h3 class="font-weight-bold">Premium Service Provider</h3>
-                    </div>
-                  </div>
-                  <div class="slide-item">
-                    <div class="slide-img d-flex align-center justify-center flex-column">
-                      <img
-                        :src="require('@/assets/images/ofs/patterson.png')" class="mx-auto"
-                      >
-                    </div>
-                    <div class="slide-caption">
-                      <h3 class="font-weight-bold">Premium Service Provider</h3>
-                    </div>
-                  </div> -->
                 </VueSlickCarousel>
               </v-col>
             </v-row>
@@ -162,6 +137,7 @@ export default {
   data() {
     return {
       searchCompany: '',
+      loading: true,
       companiess: [
         {name: 'Tetra Technologies', link: '/company-profile', image: 'tetra.png'},
         {name: 'Patterson-UTI', link: '/company-profile', image: 'patterson.png'},
@@ -171,7 +147,7 @@ export default {
       settings: {
         "arrows": true,
         "dots": false,
-        "infinite": false,
+        "infinite": true,
         "slidesToShow": 3,
         "slidesToScroll": 3,
         "touchThreshold": 5,
@@ -189,7 +165,7 @@ export default {
                 "slidesToScroll": 3,
                 "infinite": true,
                 "dots": true,
-                "arrows": false
+                "arrows": true
               }
             },
             {
@@ -274,12 +250,17 @@ export default {
     viewCompany(id,name){
       this.getCompanyInfo({'id':id,'name':name});
     },
-      
+    loader(){
+      setTimeout(()=>{
+        this.loading = false;
+      },100)
+    }
   },
   mounted() {
   document.title = "View OFS Supplier - BidOut"
     this.getCategories();
     this.getPremiumCompanies();
+    this.loader();
   }
 };
 </script>
