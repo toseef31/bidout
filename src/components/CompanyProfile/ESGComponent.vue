@@ -13,7 +13,7 @@
             <p class="text-left" v-show="edit != esgDB.name">{{esgDB.description}}</p>
             <v-textarea outlined name="input-7-4" v-model="description" v-show="edit == esgDB.name">{{esgDB.description}}</v-textarea>
             <a :href="esgDB.attachment" download class="text-decoration-none" v-if="esgDB.attachment" v-show="edit != esgDB.name">Download <v-icon>mdi-tray-arrow-down</v-icon></a>
-            <!-- <v-file-input outlined class="logo-input text-center profile-input" v-model="attachment" placeholder="Add Document" color="#0D9648" v-show="edit == esgDB.name"></v-file-input> -->
+            
             <label for="docFile" class="profile-input" v-show="edit == esgDB.name">{{docName}}
               <input type="file" ref="attachment" id="docFile" class="d-none" @change="onFileChange($event)">
             </label>
@@ -98,7 +98,6 @@ export default {
         id: head + tail,
         type: esg.type,
       }
-      // this.esgInitiatives.push(esgData);
       var data = {
         companyId: this.$store.getters.userInfo.company.id,
         esgInitiatives: esgData,
@@ -113,7 +112,6 @@ export default {
       if(this.$store.getters.companyData.esgInitiatives){
         this.esgInitiatives = this.$store.getters.companyData.esgInitiatives;
       }
-      // this.esgInitiatives.splice(index,1);
       var data = {
         companyId: this.$store.getters.userInfo.company.id,
         esgInitiatives: data,

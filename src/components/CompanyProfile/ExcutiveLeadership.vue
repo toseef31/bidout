@@ -55,7 +55,6 @@
             </v-card>
           </v-dialog>
           <!-- the result -->
-          <!-- <img :src="croppedProfile"> -->
         </v-col>
       </v-row>
       <v-row>
@@ -146,7 +145,6 @@ export default {
           this.imageSrc = this.base64data;
         }
         this.croppedProfile = this.croppieProfile = output;
-          // console.log(this.croppieProfile);
           this.dialogProfile = false;
         });
     },
@@ -160,7 +158,6 @@ export default {
         linkedin: this.excutivelinkdinProfile,
         id: head + tail,
       }
-      // this.executiveLeadership.push(leader);
       var data = {
         companyId: this.$store.getters.userInfo.company.id,
         executiveLeadership: leader
@@ -172,7 +169,6 @@ export default {
       this.excutivelinkdinProfile = '';
     },
     deleteExcutive(data){
-      // this.executiveLeadership.splice(index,1);
       var data = {
         companyId: this.$store.getters.userInfo.company.id,
         executiveLeadership: data,

@@ -199,7 +199,6 @@ export default {
     },
     allcategories(){
       if(this.searchService){
-        console.log(this.searchService,'dasda');
         return this.$store.getters.categories.filter((item)=>{
           return this.searchService.toLowerCase().split(' ').every(v => item.name.toLowerCase().includes(v))
         })

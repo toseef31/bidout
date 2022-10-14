@@ -5,7 +5,7 @@ export default {
   getCategories({commit}){
     axios.get('/serviceCategory/getAllCategories')
       .then(responce => {
-        // console.log(responce);
+      
       commit('setCatgeoryList',responce.data)
     }).catch(err => {
           console.log(err);
@@ -13,7 +13,7 @@ export default {
   },
   getCompanyByservice({commit}, payload){
     var url = encodeURIComponent(payload.service);
-    console.log(url);
+   
     axios.get('/company/getCompaniesByService/'+url)
       .then(responce => {
         var data = {
@@ -31,6 +31,7 @@ export default {
     var url = encodeURIComponent(payload.service);
     axios.get('/company/getCompaniesByService/'+url)
       .then(responce => {
+        
         var data = {
           'data': responce.data,
           'name': payload.service
@@ -73,7 +74,7 @@ export default {
   getCompanyByBasin({commit},payload){
     axios.get('/company/getCompanyByBasin/'+payload)
       .then(responce => {
-        // console.log(responce);
+        
         commit('setCompanies',response.data)
     }).catch(err => {
           console.log(err);
@@ -112,7 +113,7 @@ export default {
   searchCompany({commit}, payload){
     axios.get('/ofs/searchSuppliers/'+payload)
       .then(responce => {
-        console.log(responce.data);
+        
       commit('setCompanies',responce.data.hits)
     }).catch(err => {
           console.log(err);

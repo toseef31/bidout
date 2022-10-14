@@ -39,7 +39,9 @@
                     v-for="item in items"
                     :key="item"
                   >
+
                     <v-simple-table dense class="company-table mb-12">
+                  
                       <template v-slot:default>
                         <thead>
                           <tr class="py-4 px-6">
@@ -51,6 +53,7 @@
                             <th></th>
                           </tr>
                         </thead>
+                        
                         <tbody>
                           <tr
                             v-for="company in allcompanies"
@@ -59,22 +62,16 @@
                             <td class="pl-6"><span @click="viewCompany(company.objectID,company.company)" class="text-decoration-none company-link">{{ company.company }}</span> 
                               
                             </td>
-                            <td><span v-if="company.companyData.hqlocation">{{ company.companyData.hqlocation }}</span><span v-else>No location</span></td>
-                            <td>{{ company.companyData.employees }}</td>
-                            <td> <span v-if="company.companyData.companyLocations">{{ company.companyData.companyLocations.length }}</span><span v-else>No location</span></td>
-                            <td><span v-if="company.companyData.accountContacts">{{ company.companyData.accountContacts.length }}</span><span v-else>No Contacts</span></td>
+                            <td><span v-if="!company.companyHq">No location</span><span v-else>{{ company.companyHq }}</span></td>
+                            <td><span v-if="!company.employees">Not Added</span><span v-else>{{  company.employees }}</span></td>
+                            <td> <span v-if="!company.companyHqState">No location</span><span v-else>{{company.companyHqCountry}},{{ company.companyHqState }}</span></td>
+                            <td><span v-if="!company.accountContacts">No Contacts</span><span v-else>{{ company.accountContacts.length }}</span></td>
                             <td><span @click="viewCompany(company.objectID,company.company)" class="text-decoration-none company-link">View Details</span></td>
                           </tr>
                         </tbody>
                       </template>
                     </v-simple-table>
-                    <!-- <v-pagination
-                      v-model="page"
-                      :length="4"
-                      color="#0D9647"
-                      next-icon="mdi-arrow-right"
-                      prev-icon="mdi-arrow-left"
-                    ></v-pagination> -->
+                    
                   </v-tab-item>
                 </v-tabs-items>
               </div>
@@ -106,18 +103,6 @@ export default {
       items: [
         'All', 'Gulf Coast', 'Northwest', 'Rockies', 'Mid-Con', 'Permian', 'Arklatex', 'Offshore', 'Other',
       ],
-      headers: [
-        {
-          text: 'Companies',
-          align: 'start',
-          value: 'companies',
-        },
-        { text: 'HQ Location', value: 'hQLocation'},
-        { text: 'Employees', value: 'employees'},
-        { text: 'Field Locations', value: 'fieldLocations' },
-        { text: 'Account Contacts', value: 'accountContacts'},
-        { text: '', value: 'link'},
-      ],
       allcompanies: this.$store.getters.serviceCompanies.data,
     };
   },
@@ -129,7 +114,7 @@ export default {
       return this.$store.getters.g_activityPanel;
     },
     allcompany(){
-      this.allcompanies = this.$store.getters.serviceCompanies.data;
+      this.allcompanies =  this.$store.getters.serviceCompanies.data;
     },
    companyName(){
     return this.$store.getters.serviceCompanies.name;
@@ -169,6 +154,7 @@ export default {
   },
   mounted() {
     document.title = "Categories - BidOut" ;
+    console.log(this.$store.getters.serviceCompanies.data);
   }
 };
 </script>

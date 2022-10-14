@@ -330,7 +330,6 @@ export default {
         content: this.message,
         attachment: chat_file[0],
       }
-      console.log(this.conversationId,'conversationId');
       if(data.content || data.attachment){
         this.sendMessage(data);
       }
@@ -432,7 +431,6 @@ export default {
     } 
     this.scrollToElement();
     document.addEventListener('dragenter', function(e) {
-      console.log(e.target.className);
      if (e.target.className == 'message-area' || e.target.className == 'messages-section' || e.target.className == 'v-list-item__content' || e.target.className == 'v-list-item__title' || e.target.className == 'v-list own-user message-list v-sheet theme--light v-list--two-line' || e.target.className == 'v-item-group theme--light v-list-item-group' || e.target.className == 'message-send-area' || e.target.className == 'row' || e.target.className == 'col-sm-10 col-md-10 col-12' || e.target.className == 'msg-text-box' ) {
         document.getElementById('dropzone').style.display = "block";
       }

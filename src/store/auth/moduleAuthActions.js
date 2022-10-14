@@ -79,8 +79,7 @@ export default {
     // Try to sendForgot email
     axios.post('/auth/sendPasswordResetEmail',{'email': payload.email})
      .then(responce => {
-      // console.log(responce.data.message);
-      // if(responce.status == 200){
+      
         commit('setEmailSuccess', 'If this account exists, a password reset email has been sent to the email address for the account.');
     }, (err) => {
 
@@ -145,7 +144,7 @@ export default {
             axios.post('/ofs/queueSupplierUser',{'id': payload.id, 'email': payload.email, 'firstName': payload.firstName, 'lastName': payload.lastName,'phoneNumber':payload.phoneNumber, 'title': payload.title, 'password': payload.password})
              .then(responce => {
               if(responce.status == 200){
-                // localStorage.setItem("userId",payload.id);
+               
                 commit('setCompanyId', payload.id);
                 commit('setCompanyName', payload.companyName);
                 router.replace({
@@ -195,12 +194,7 @@ export default {
     }
     
   },
-  // searchSupplier({commit}){
-  //   axios.get('/company/getAllSuppliersPublic/')
-  //     .then(responce => {
-  //     commit('setSupplierList',responce.data)
-  //   })
-  // },
+  
   searchSupplier({commit}, payload){
     axios.get('/ofs/searchSuppliers/'+payload)
       .then(responce => {
@@ -293,7 +287,6 @@ export default {
      .then(responce => {
       if(responce.status == 200){
         commit('setContract', responce.data)
-        // commit('setContract', 'Contract generated successfully!')
 
         router.replace({
           name: "ModuleSelection"

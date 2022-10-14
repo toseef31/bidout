@@ -87,22 +87,7 @@
                   </v-row>
                   <v-divider class="my-12"></v-divider>
                   <change-password></change-password>
-                  <!-- <v-divider class="my-12"></v-divider>
-                  <v-row justify="center">
-                    <v-col cols="12" sm="10" md="10">
-                      <v-row justify="center">
-                        <v-col cols="10" sm="6">
-                          <h3 class="text-left font-weight-bold admin-title">Two Factor Authentication</h3>
-                        </v-col>
-                        <v-col cols="2" sm="6">
-                          <v-switch
-                            v-model="twoFactor"
-                            inset class="mr-4 mt-0 text-right" hide-details
-                          ></v-switch>
-                        </v-col>
-                      </v-row>
-                    </v-col>
-                  </v-row> -->
+                  
                   <v-divider class="my-12"></v-divider>
                   <notifications></notifications>
                   <v-divider class="my-12"></v-divider>
@@ -259,7 +244,6 @@ export default {
     },
     editForm(){
       this.mobileNumber = this.results;
-      // console.log(this.userTimezone);
       var user = {
         firstName: this.firstName,
         lastName: this.lastName,
@@ -269,7 +253,6 @@ export default {
         userid: this.$store.getters.userInfo.id,
         timezone: this.userTimezone,
       }
-      // console.log(user);
       this.updateProfile(user);
     },
     history(){

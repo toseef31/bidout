@@ -13,12 +13,7 @@
                       <h4>Pending Users</h4>
                       <div>
                         <router-link to="/manage-users" class="pr-8 font-weight-bold">Manage Users</router-link>
-                        <!-- <router-link to="/add-users" class="text-decoration-none"><v-btn 
-                        color="#0D9648" 
-                        large 
-                        dark 
-                        min-width="200px"
-                        class="text-capitalize">Add User</v-btn></router-link> -->
+                        
                       </div>
                     </div>
                     <div class="userlist-table mt-16">

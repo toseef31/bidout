@@ -189,7 +189,6 @@ export default {
         
         const options = {
           bounds: defaultBounds,
-          // componentRestrictions: { country: "us" },
           fields: ["address_components", "geometry", "icon", "name","formatted_address"],
           strictBounds: false,
           types: ["establishment"],
@@ -233,7 +232,7 @@ export default {
             ].join(" ");
           }
           
-          this.hqLocation = place.name;
+          this.hqLocation = place.name+', '+place.formatted_address;
         });
     },
     addKeyFacts(){
