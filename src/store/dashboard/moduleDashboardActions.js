@@ -63,7 +63,7 @@ export default {
     
     axios.post('/user/acceptPendingUser/',{ 'userId':payload.id, 'email': payload.email,'firstName':payload.firstName,'lastName':payload.lastName,'companyId':payload.companyId,'phoneNumber':payload.phoneNumber,'title':payload.title})
       .then(responce => {
-      // console.log(responce.data);
+     
       commit('setStatusMessage','User accepted sucessfully!')
       commit('showErrorAlert')
     }).catch(err => {

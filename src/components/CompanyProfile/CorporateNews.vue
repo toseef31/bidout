@@ -33,7 +33,7 @@
         <p class="text-left mb-0">{{news.date}} -  <a :href="news.url" class="text-decoration-none">{{news.title}}</a></p>
       </v-col>
       <v-col cols="12" sm="4" class="text-right">
-        <!-- <v-btn default color="transparent" class="text-capitalize edit-btn"><v-icon>mdi-square-edit-outline</v-icon>Edit Details</v-btn> -->
+        
         <v-btn default color="transparent" class="text-capitalize dele-btn" @click="deleteNews(news.index)"><v-icon>mdi-close</v-icon>Delete</v-btn>
       </v-col>
     </v-row>

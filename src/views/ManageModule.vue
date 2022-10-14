@@ -46,36 +46,7 @@
                               <h3 class="pt-3">You don't have any active moudle yet.</h3>
                           </div>
                       </template>
-                      <!-- <div class="panels pb-4">
-                        <div class="panel">
-                          <div class="d-flex justify-space-between panel-header">
-                            <h6>OFS Directory Profile</h6>
-                            <div class="btn-section">
-                              <a href="" class="text-decoration-none text-right toggle-btn" max-width="150px"><v-icon>mdi-bookmark-outline</v-icon>Upgrade to Enterpise</a>
-                              <a href="" class="text-decoration-none text-right contract-btn" max-width="150px"><v-icon>mdi-file-outline</v-icon>View Contract</a>
-                            </div>
-                          </div>
-                          <div class="panel-content">
-                            <p class="mb-1 black--text">Renewal Date: 07/12/2023</p>
-                            <p class="black--text mb-0">Annual Fee: $900</p>
-                          </div>
-                        </div>
-                      </div>
-                      <div class="panels pb-4">
-                        <div class="panel">
-                          <div class="d-flex justify-space-between panel-header">
-                            <h6>BidOut Procurement Platform</h6>
-                            <div class="btn-section">
-                              <a href="" class="text-decoration-none text-right toggle-btn" max-width="150px"><v-icon>mdi-bookmark-outline</v-icon>Upgrade to Enterpise</a>
-                              <a href="" class="text-decoration-none text-right contract-btn" max-width="150px"><v-icon>mdi-file-outline</v-icon>View Contract</a>
-                            </div>
-                          </div>
-                          <div class="panel-content">
-                            <p class="mb-1 black--text">Renewal Date: 29/12/2023</p>
-                            <p class="black--text mb-0">Annual Fee: $600</p>
-                          </div>
-                        </div>
-                      </div> -->
+                      
                     </v-tab-item>
                   </v-tabs-items>
                 </div>

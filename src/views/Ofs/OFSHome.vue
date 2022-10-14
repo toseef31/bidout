@@ -21,7 +21,12 @@
       </div>
       <v-container>
         <v-main class="pt-0">
-          <v-row class="mt-n16">
+          <v-row fill-height align="center" v-if="pageLoader">
+            <v-col cols="12">
+              <v-progress-circular :width="3" color="green" indeterminate ></v-progress-circular>
+            </v-col>
+          </v-row>
+          <v-row class="mt-n16" v-else>
             <v-col cols="12" md="12">
               <VueSlickCarousel v-bind="settings" class="company-slider" v-if="premiumCompanies.length > 0">
                 <div class="slide-item " v-for="premium in premiumCompanies" @click="viewPublicCompany(premium.id,premium.company)">
@@ -63,13 +68,9 @@
                             </v-list-item-action>
                           </v-list-item>
                         </template>
-                        <!-- <v-btn color="rgba(13, 150, 72, 0.1)" rounded class="all-btn text-capitalize my-4">View all results</v-btn> -->
                       </v-list>
                     </div>
                   </v-col>
-                  <!-- <v-col cols="2" sm="1" text="left" class="pl-0">
-                    <v-btn color="#0D9647" class="white--text" height="56" min-width="50"><v-icon>search</v-icon></v-btn>
-                  </v-col> -->
                 </v-row>
               </v-form>
             </v-col>
@@ -141,7 +142,6 @@
   import Footer from '../../components/Layout/Footer.vue'
   import VueSlickCarousel from 'vue-slick-carousel'
   import 'vue-slick-carousel/dist/vue-slick-carousel.css'
-    // optional style for arrows & dots
   import 'vue-slick-carousel/dist/vue-slick-carousel-theme.css'
   import _ from 'lodash';
   import { mapActions } from "vuex"
@@ -159,7 +159,7 @@ export default {
       settings: {
         "arrows": true,
         "dots": false,
-        "infinite": false,
+        "infinite": true,
         "slidesToShow": 3,
         "slidesToScroll": 3,
         "touchThreshold": 5,
@@ -202,6 +202,7 @@ export default {
           ]
       },
       loading: true,
+      pageLoader: true,
       hideList: false,
     };
   },
@@ -216,14 +217,8 @@ export default {
   },
   computed:{
     allcategories(){
-      // if(this.searchCategory){
-      //   return _.orderBy(this.$store.getters.categories.filter((category)=>{
-      //     return this.searchCategory.toLowerCase().split(' ').every(v => category.name.toLowerCase().includes(v))
-      //   }), 'orderNumber', 'asc')
-      // }else{
-        setTimeout(() => this.loading = false, 500);
-        return _.orderBy(this.$store.getters.categories, 'orderNumber', 'asc');
-      // }
+      setTimeout(() => this.loading = false, 500);
+      return _.orderBy(this.$store.getters.categories, 'orderNumber', 'asc');
     },
     companies(){
       this.hideList = true;
@@ -258,7 +253,7 @@ export default {
     },
     loader(){
       setTimeout(()=>{
-        this.loading = false;
+        this.pageLoader = false;
       },100)
     }
   },

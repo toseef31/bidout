@@ -206,17 +206,14 @@ export default {
       select: {text: 'Create a new Bid',link: '/create-bid' , icon: 'bids.png'},
       items: [
         { text: 'Create a new Bid', link: '/create-bid' , icon: 'bids.png' },
-        // { text: 'Create a new Shipment', icon: 'mdi-truck' },
+       
       ],
         itemss: [
           { title: 'Dashboard', icon: 'mdi-view-dashboard-outline', link: '/dashboard' },
           { title: 'View Bids', icon: 'mdi-gavel', link: '/view-bids' },
-          // { title: 'View Shipments', icon: 'mdi-truck' },
+         
           { title: 'View OFS Suppliers', icon: 'mdi-tag-outline', link:'/view-ofs-suppliers' },
           { title: 'Messages', icon: 'mdi-email-outline', link: '/messages' },
-          // { title: "Browse Public RFx's", icon: 'mdi-compass-outline' },
-          // { title: 'Manage Invoices', icon: 'mdi-calendar-text-outline' },
-          // { title: 'Reporting', icon: 'mdi-note-multiple-outline' },
         ],
         subitems: [
           {

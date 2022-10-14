@@ -210,14 +210,8 @@ export default {
         return this.$store.getters.g_activityPanel;
     },
     allcategories(){
-      // if(this.searchCategory){
-      //   return _.orderBy(this.$store.getters.categories.filter((category)=>{
-      //     return this.searchCategory.toLowerCase().split(' ').every(v => category.name.toLowerCase().includes(v))
-      //   }), 'orderNumber', 'asc')
-      // }else{
-        setTimeout(() => this.loading = false, 500);
-        return _.orderBy(this.$store.getters.categories, 'orderNumber', 'asc');
-      // }
+      setTimeout(() => this.loading = false, 500);
+      return _.orderBy(this.$store.getters.categories, 'orderNumber', 'asc');
     },
     companies(){
       this.hideList = true;

@@ -96,7 +96,7 @@ export default {
           title: 'Marker',
           anchorPoint: new google.maps.Point(0, -29),
         });
-        console.log(LocationsForMap[i].location,'dadas');
+        
         google.maps.event.addListener(marker, 'click', (function(marker, i) {
           return function() {
             infowindow.setContent(LocationsForMap[i].location);
@@ -105,30 +105,6 @@ export default {
         })(marker, i));
       }
 
-
-      // this.mapOptions = {
-      //   center: { lat: lat, lng: lng },
-      //   zoom: 2,
-      //   mapTypeId: 'terrain',
-      //   mapTypeControl: false,
-      //   scaleControl: false,
-      //   streetViewControl: false,
-      //   rotateControl: false,
-      //   fullscreenControl: true,
-      //   disableDefaultUi: false,
-      //   zoomControl: true,
-      //   scrollwheel: false,
-      // };
-      // this.markerOptions = {
-      //   url: '/assets/images/dashboard/mapMobile.png',
-      //   size: {width: 60, height: 90, f: 'px', b: 'px',},
-      //   scaledSize: {width: 30, height: 45, f: 'px', b: 'px',},
-      // };
-      // console.log(this.mapOptions,'maps');
-      // const map = new google.maps.Map(document.getElementById("map"), this.mapOptions);
-        // const card = document.getElementById("pac-card");
-
-        // map.controls[google.maps.ControlPosition.TOP_RIGHT].push(card);
 
         // [START maps_places_autocomplete_creation]
         const center = { lat: lat, lng: lng };
@@ -143,16 +119,12 @@ export default {
 
         const options = {
           bounds: defaultBounds,
-          // componentRestrictions: { country: "us" },
           fields: ["address_components", "geometry", "icon", "name","formatted_address"],
           strictBounds: false,
           types: ["establishment"],
         };
         const autocomplete = new google.maps.places.Autocomplete(input, options);
-        // console.log(autocomplete,'autpo',input);
-        // autocomplete.setComponentRestrictions({
-        //     country: ["us", "pr", "vi", "gu", "mp"],
-        //   });
+        
 
         // [END maps_places_autocomplete_countries_multiple]
         // [START maps_places_autocomplete_setbounds]
@@ -163,7 +135,7 @@ export default {
         autocomplete.setBounds(newBounds);
         
         autocomplete.addListener("place_changed", () => {
-          // infowindow.open();
+         
           marker.setVisible(true);
 
           const place = autocomplete.getPlace();
@@ -205,7 +177,6 @@ export default {
                 "",
             ].join(" ");
           }
-          console.log(place,'place');
           this.lat = place.geometry.location.lat();
           this.lng = place.geometry.location.lng();
           this.address = place.name+', '+place.formatted_address;

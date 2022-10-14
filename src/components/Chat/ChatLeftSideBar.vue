@@ -311,7 +311,6 @@ export default {
        if(this.user.id != item.id){
         return item;
        }
-        // return this.searchUsers.toLowerCase().split(' ').every(v => item.company.toLowerCase().includes(v))
       })
     },
     archiveConversations(id){

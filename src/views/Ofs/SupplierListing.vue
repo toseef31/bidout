@@ -71,13 +71,7 @@
                         </tbody>
                       </template>
                     </v-simple-table>
-                    <!-- <v-pagination
-                      v-model="page"
-                      :length="4"
-                      color="#0D9647"
-                      next-icon="mdi-arrow-right"
-                      prev-icon="mdi-arrow-left"
-                    ></v-pagination> -->
+                    
                   </v-tab-item>
                 </v-tabs-items>
               </div>

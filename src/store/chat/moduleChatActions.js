@@ -12,7 +12,6 @@ export default {
 	async getAllConversations({commit}, payload){
 		await axios.get('/chat/getConversations/'+payload)
 		 .then(responce => {
-		 	console.log(responce.data);
 		 	commit('setConverstaionList',responce.data.conversations)
 		 	commit('setPageLoader', false)
 		}).catch(err => {
@@ -61,7 +60,7 @@ export default {
 	lastMessageRead({commit}, payload){
 		axios.post('/chat/setLastMessageReadAt',{'userId':payload.userId,'conversationId':payload.conversationId})
 		 .then(responce => {
-		 	// commit('setLastMessageRead',responce.data)
+		 	
 		}).catch(err => {
         	console.log(err);
     	});
@@ -71,7 +70,7 @@ export default {
 		
 		axios.post('/chat/archiveConversation',{'userId':payload.userId,'conversationId':payload.conversationId})
 		 .then(responce => {
-		 	// commit('setArchiveStatus',responce.data.count)
+		 	
 		 	commit('setMessagesList',null)
 		 	dispatch("getAllConversations",state.userId.id)
 		 	dispatch("getArchiveChats",state.userId.id)
@@ -101,7 +100,7 @@ export default {
 	 createConversation({commit, state,dispatch}, payload){
 		 axios.post('/chat/createConversation/',payload)
 		 .then(responce => {
-		 	console.log(state.userId);
+		 	
 		 	dispatch("getAllConversations",state.userId.id);
 		 	commit("setCreateMsg", responce.data.message);
 		 	setTimeout(function(){

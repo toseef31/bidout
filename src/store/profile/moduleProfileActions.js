@@ -71,7 +71,7 @@ export default {
      .then(responce => {
       axios.get('/user/getUserData/'+payload.email)
        .then(responce => {
-        // console.log(responce.data,'after uodate');
+        
         commit('setUser',responce.data)
         localStorage.setItem("userData",JSON.stringify(responce.data));
       }).catch(err => {
@@ -85,7 +85,7 @@ export default {
     
     axios.post('/company/addInvitedUser/',{'firstName':payload.firstName,'lastName': payload.lastName,'company': payload.company,'email':payload.email,'parent': payload.parent,'role': payload.role})
      .then(responce => {
-        console.log(responce);
+        
         commit('setMessage','User invited successfully')
         router.replace({ name: "ManageUsers" });
     }).catch(err => {
@@ -100,7 +100,7 @@ export default {
     
     axios.post('/company/updateUser/'+payload.id,{'firstName':payload.firstName,'lastName': payload.lastName,'role': payload.role})
      .then(responce => {
-        console.log(responce);
+        
         commit('setMessage','User updated successfully')
         commit('showErrorAlert')
         router.replace({ name: "ManageUsers" });
@@ -112,7 +112,7 @@ export default {
     
     axios.post('/company/updateInvitedUser/'+payload.id,{'firstName':payload.firstName,'lastName': payload.lastName,'role': payload.role})
      .then(responce => {
-        console.log(responce);
+        
         commit('setMessage','User updated successfully')
         commit('showErrorAlert')
         router.replace({ name: "ManageUsers" });
@@ -133,7 +133,7 @@ export default {
   getPendingUsers({commit},payload){
     axios.get('/user/getPendingUsers/'+ payload)
       .then(responce => {
-      // console.log(responce.data);
+      
       commit('setPendingUsersList',responce.data.data)
       commit('showErrorAlert')
     }).catch(err => {
@@ -149,7 +149,7 @@ export default {
       });
   },
   resetInvitePassword({commit}, payload){
-    // console.log(payload);
+    
     axios.post('/auth/signUpInvitedUser/',{'invitationId': payload.invitationId, 'password': payload.password})
      .then(responce => {
       if(responce.status == 200){

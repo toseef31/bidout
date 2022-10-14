@@ -12,7 +12,7 @@
                 <div class="top-section d-flex">
                   <h4>Manage Users</h4>
                   <div>
-                    <!-- <router-link to="/manage-users/pending-users" class="pr-8 font-weight-bold">Show Pending Users</router-link> -->
+                   
                     <router-link to="/manage-users/disabled-users" class="pr-8 font-weight-bold">Show Disable Users</router-link>
                     <router-link to="/manage-users/add-users" class="text-decoration-none"><v-btn 
                     color="#0D9648" 
