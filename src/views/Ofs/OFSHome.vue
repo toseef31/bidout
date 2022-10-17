@@ -28,7 +28,7 @@
           </v-row>
           <v-row class="mt-n16" v-else>
             <v-col cols="12" md="12">
-              <VueSlickCarousel v-bind="settings" class="company-slider" v-if="premiumCompanies.length > 0">
+              <VueSlickCarousel v-bind="settings" class="company-slider" v-if="premiumCompanies && premiumCompanies.length > 0">
                 <div class="slide-item " v-for="premium in premiumCompanies" @click="viewPublicCompany(premium.id,premium.company)">
                   <div class="slide-img d-flex align-center justify-center flex-column">
                     <img v-if="premium.image"
