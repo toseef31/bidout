@@ -71,7 +71,7 @@
                                       <template>
                                         <v-list-item-content class="py-0 pl-4">
                                           
-                                          <v-list-item-title class="text-left"><v-icon>mdi-circle-small</v-icon>{{subcategory.name}}<v-icon class="ml-5" small @click="addService(subcategory.name,subcategory.id)">mdi-plus-circle-outline</v-icon></v-list-item-title>
+                                          <v-list-item-title class="text-left"><v-icon>mdi-circle-small</v-icon>{{subcategory.name}}<v-icon class="ml-5" small @click="addService(subcategory)">mdi-plus-circle-outline</v-icon></v-list-item-title>
                                         </v-list-item-content>
                                       </template> 
                                     </v-list-item>
@@ -244,13 +244,14 @@ export default {
       getAllCategories(){
         this.getCategories();
       },
-      addService(name,id){
+      addService(subcate){
         if(this.$store.getters.companyData.companyData.services){
           this.companyService = this.$store.getters.companyData.companyData.services;
         }
         var servicedata = {
-          name: name,
-          id: id,
+          name: subcate.name,
+          id: subcate.id,
+          slug: subcate.slug,
         }
         this.companyService.push(servicedata);
         this.addCompanyService({companyId: this.$store.getters.userInfo.company.id,subCategories: this.companyService});
