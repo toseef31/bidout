@@ -79,7 +79,6 @@ export default {
           'data': responce.data,
           'name': payload.name,
         }
-        console.log(responce);
         commit('setCompanies',data)
     }).catch(err => {
           console.log(err);
