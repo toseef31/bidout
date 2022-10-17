@@ -34,7 +34,8 @@ export default {
         
         var data = {
           'data': responce.data,
-          'name': payload.service
+          'name': payload.service,
+          'slug': payload.slug
         }
       commit('setCompanies',data)
       router.replace('/ofs-supplier/'+payload.slug+'/'+url);
@@ -72,10 +73,13 @@ export default {
       });
   },
   getCompanyByBasin({commit},payload){
-    axios.get('/company/getCompanyByBasin/'+payload)
+    axios.get('/company/getCompanyByBasin/'+payload.basin)
       .then(responce => {
-        
-        commit('setCompanies',response.data)
+        var data = {
+          'data': responce.data,
+          'name': payload.name,
+        }
+        commit('setCompanies',data)
     }).catch(err => {
           console.log(err);
       });

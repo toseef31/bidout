@@ -15,7 +15,7 @@
 
                     <v-tab
                       v-for="item in items"
-                      :key="item"
+                      :key="item" @click="getByBasin(item,companyName)"
                     >
                       <span class="text-capitalize">{{ item }}</span>
                     </v-tab>
@@ -127,13 +127,24 @@ export default {
    }
   },
   methods: {
-    ...mapActions(["getPublicCompanyInfo","searchCompany"]),
+    ...mapActions(["getPublicCompanyInfo","searchCompany","getCompanyByBasin"]),
     viewPublicCompany(id,name){
       this.getPublicCompanyInfo({'id':id,'name':name});
     },
     companySearch(){
       this.searchCompany();
-    }
+    },
+    getByBasin(basin,service){
+      if(basin == 'All'){
+        return this.$store.getters.serviceCompanies.data;
+      }else{
+        var data = {
+          basin: basin,
+          name: service,
+        }
+        this.getCompanyByBasin(data);
+      }
+    },
   },
   mounted() {
     document.title = "Categories - BidOut" 

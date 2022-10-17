@@ -27,12 +27,11 @@
 
                     <v-tab
                       v-for="item in items"
-                      :key="item" @click="getByBasin(item,allcompanies)"
+                      :key="item" @click="getByBasin(item,serviceName)"
                     >
                       <span class="text-capitalize">{{ item }}</span>
                     </v-tab>
                   </v-tabs>
-                  
                 </div>
                 <v-tabs-items v-model="tab">
                   <v-tab-item
@@ -99,11 +98,9 @@ export default {
       tab: null,
       searchCompany: '',
       page: 1,
-      serviceName: this.$store.getters.serviceCompanies.name,
       items: [
         'All', 'Gulf Coast', 'Northwest', 'Rockies', 'Mid-Con', 'Permian', 'Arklatex', 'Offshore', 'Other',
       ],
-      allcompanies: this.$store.getters.serviceCompanies.data,
     };
   },
   computed:{
@@ -113,51 +110,35 @@ export default {
     activityPanel(){
       return this.$store.getters.g_activityPanel;
     },
-    allcompany(){
-      this.allcompanies =  this.$store.getters.serviceCompanies.data;
+    allcompanies(){
+      return this.$store.getters.serviceCompanies.data;
     },
-   companyName(){
-    return this.$store.getters.serviceCompanies.name;
-   }
+    serviceName(){
+      return this.$store.getters.serviceCompanies.name;
+    },
   },
   watch:{
     searchCompany: _.debounce(function(){
-      this.allcompanies =  this.$store.getters.serviceCompanies.data.filter((companies)=>{
+      return this.$store.getters.serviceCompanies.data.filter((companies)=>{
         return this.searchCompany.toLowerCase().split(' ').every(v => companies.company.toLowerCase().includes(v))
       })
-    },500),
-    
+    },500), 
   },
   methods: {
     ...mapActions(["getCompanyInfo","getCompanyByBasin","getSupplierMainService"]),
     viewCompany(id,name){
       this.getCompanyInfo({'id':id,'name':name});
     },
-    getByBasin(basin,companies){
+    getByBasin(basin,service){
       if(basin == 'All'){
-        return this.allcompanies = this.$store.getters.serviceCompanies.data;
+        return this.$store.getters.serviceCompanies.data;
       }else{
-        return this.allcompanies = this.allcompanies.filter((item)=>{
-          if(item.companyData.basins){
-            return item.companyData.basins.filter((item2)=>{
-              if(item2 == basin){
-              return item2.toLowerCase().includes(basin.toLowerCase());
-              }
-            })
-          }else{
-            this.allcompanies = [];
-          }
-          
-        }) 
+        this.getCompanyByBasin({'basin': basin,'name': service});
       }
     },
   },
   mounted() {
     document.title = "Categories - BidOut" ;
-    console.log(this.$store.getters.serviceCompanies.data);
   }
 };
 </script>
-<style scoped lang="scss">
-
-</style>

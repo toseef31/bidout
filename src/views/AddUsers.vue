@@ -134,7 +134,7 @@ export default {
         lastName: this.lastName,
         email: this.email,
         role: this.select,
-        company: this.user.company,company,
+        company: this.user.company.company,
         parent: this.user.id,
       }
       this.inviteUser(data);
