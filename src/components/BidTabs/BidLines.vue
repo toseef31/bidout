@@ -23,13 +23,13 @@
         <v-col md="2">
           <div class="mr-2 bid-item">
             <label class="d-block input-label text-left">Unit/Measure</label>
-            <v-select outlined hide-details :items="units"></v-select>
+            <v-select outlined hide-details v-model="unit" :items="units"></v-select>
           </div>
         </v-col>
         <v-col md="2">
           <div class="mr-2 bid-item">
             <label class="d-block input-label text-left">Input Type</label>
-            <v-select outlined hide-details :items="inputType"></v-select>
+            <v-select outlined hide-details v-model="type" :items="inputType"></v-select>
           </div>
         </v-col>
         <v-col md="2">
@@ -46,16 +46,25 @@
             </v-text-field>
           </div>
           <div class="mr-2 d-flex">
-            <v-checkbox
-              v-model="switch1"
-              inset class="mr-2 ml-2" hide-details
-            ></v-checkbox>
+            <v-tooltip top>
+              <template v-slot:activator="{ on, attrs }">
+                
+                <v-checkbox
+                  v-bind="attrs"
+                  v-on="on"
+                  v-model="switch1"
+                  inset class="mr-2 ml-2" hide-details
+                ></v-checkbox>
+              </template>
+              <span>Left tooltip</span>
+            </v-tooltip>
+
             <v-icon color="#0D9648" class="mr-2 mt-6">mdi-content-copy</v-icon>
             <v-icon color="#F32349" class=" mt-6">mdi-trash-can-outline</v-icon>
           </div>
         </v-col>
       </v-row>
-      <v-row class="bidline-list d-flex align-center px-6 my-2">
+      <v-row class="bidline-list d-flex align-center px-6 my-2" v-for="items in bidLines">
         <v-col md="3" class="d-flex">
           <v-row>
             <v-col md="1">
@@ -66,7 +75,7 @@
             <v-col md="11">
               <div class="mr-2 bid-item">
                 <label class="d-block input-label text-left">Line Item Description</label>
-                <v-text-field placeholder="Line Item Description" height="31px" width="200px" single-line outlined type="text" hide-details>
+                <v-text-field placeholder="Line Item Description" v-model="items.description" height="31px" width="200px" single-line outlined type="text" hide-details>
                 </v-text-field>
               </div>
             </v-col>
@@ -76,31 +85,31 @@
         <v-col md="2">
           <div class="mr-2 bid-item">
             <label class="d-block input-label text-left">Unit/Measure</label>
-            <v-select outlined hide-details :items="units"></v-select>
+            <v-select outlined hide-details v-model="items.unit" :items="units"></v-select>
           </div>
         </v-col>
         <v-col md="2">
           <div class="mr-2 bid-item">
             <label class="d-block input-label text-left">Input Type</label>
-            <v-select outlined hide-details :items="inputType"></v-select>
+            <v-select outlined hide-details v-model="items.type" :items="inputType"></v-select>
           </div>
         </v-col>
         <v-col md="2">
           <div class="mr-2 bid-item">
             <label class="d-block input-label text-left">QTY</label>
-            <v-text-field placeholder="Line Item Description" height="31px" single-line outlined type="text" hide-details>
+            <v-text-field placeholder="Line Item Description" v-model="items.quantity" height="31px" single-line outlined type="text" hide-details>
             </v-text-field>
           </div>
         </v-col>
         <v-col md="3" class="d-flex">
           <div class="mr-2 bid-item">
             <label class="d-block input-label text-left">Buyer Comment</label>
-            <v-text-field placeholder="Line Item Description" height="31px" single-line outlined type="text" hide-details>
+            <v-text-field placeholder="Line Item Description"  v-model="items.buyerComment" height="31px" single-line outlined type="text" hide-details>
             </v-text-field>
           </div>
           <div class="mr-2 d-flex">
             <v-checkbox
-              v-model="switch1"
+              v-model="items.switch1"
               inset class="mr-2 ml-2" hide-details
             ></v-checkbox>
             <v-icon color="#0D9648" class="mr-2 mt-6">mdi-content-copy</v-icon>
@@ -111,7 +120,7 @@
     </div>
     <v-row justify="center" align="center" class="my-8" no-gutters>
       <v-col cols="12">
-        <v-btn rounded color="rgba(13, 150, 72, 0.1)" elevation="0" class="text-capitalize font-weight-bold"><v-icon color="#0D9648" class="pr-2">mdi-plus</v-icon> Add 5 Line Items</v-btn>
+        <v-btn rounded color="rgba(13, 150, 72, 0.1)" elevation="0" class="text-capitalize font-weight-bold"  @click="addItem"><v-icon color="#0D9648" class="pr-2">mdi-plus</v-icon> Add 5 Line Items</v-btn>
       </v-col>
     </v-row>
     <div class="bidline-section bid-list">
@@ -148,7 +157,6 @@
             v-model="switch1"
             inset class="mr-4"
           ></v-switch>
-          <v-icon color="#0D9648" class="mr-4">mdi-content-copy</v-icon>
           <v-icon color="#F32349" class="mr-4">mdi-trash-can-outline</v-icon>
         </div>
       </div>
@@ -171,15 +179,11 @@ export default {
       switch1: true,
       inputType: ['USD','EUR'],
       units: ['Gallon','Liter'],
-      lineItems : [
-      	{
-      		description: '',
-      		unit: '',
-      		inputType: '',
-      		quantity: '',
-      		buyerComment: ''
-      	}
-      ],
+      description: '',
+  		unit: 'Gallon',
+  		type: 'USD',
+  		quantity: '',
+  		buyerComment: '',
       exampleItems : [
       	{
       		description: '',
@@ -189,6 +193,7 @@ export default {
       		buyerComment: ''
       	}
       ],
+      bidLines: [],
     };
   },
   computed:{
@@ -198,7 +203,19 @@ export default {
     changeTab(){
     	
       this.$emit('changetab', 'tab-5');
-    }
+    },
+    addItem(){
+      this.bidLines.push({  
+        type: 'USD',
+        inputType: ['USD','EUR'],
+        units: ['Gallon','Liter'],
+        description: '',
+        unit: 'Gallon',
+        quantity: '',
+        buyerComment: '',
+        switch1: '',
+      })
+    },
   },
   mounted() {
     

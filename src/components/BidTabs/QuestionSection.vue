@@ -117,74 +117,74 @@
               <div class="text-left ml-10 mt-5 text-muted">
                 <a href="" class="text-muted">Add Option</a>
               </div>
-              
+              <div class="text-left ml-4 ml-sm-10 mt-5 mr-4 mr-sm-6">
+                <div class="d-flex justify-space-between mb-2 question-header">
+                  <div class="d-flex align-center mb-2">
+                    <label class="d-block input-label black--text">Please explain your Previous safety incident </label>
+                    <a href="" class="text-muted ml-5">Delete</a>
+                  </div>
+                  <div class="d-flex align-center mb-2">
+                    <v-switch
+                      v-model="switch1"
+                      inset class="mr-4 mt-0" hide-details
+                    ></v-switch>
+                    <span class="text-muted">Required Question </span>
+                  </div>
+                </div>
+                <v-text-field single-line outlined type="text" height="56px" hide-details class="mb-8">
+                </v-text-field>
+                <hr>
+                <div class="d-flex justify-space-between mb-2 mt-8 question-header">
+                  <div class="d-flex align-center mb-2">
+                    <label class="d-block input-label black--text">Upload your certificate of insurance </label>
+                    <a href="" class="text-muted ml-5">Delete</a>
+                  </div>
+                  <div class="d-flex align-center mb-2">
+                    <v-switch
+                      v-model="switch1"
+                      inset class="mr-4 mt-0" hide-details
+                    ></v-switch>
+                    <span class="text-muted">Required Question </span>
+                  </div>
+                </div>
+                <div class="upload-attach mb-8">
+                  <label for="uploadFile" class="upload-file pa-4 d-block font-weight-medium text-center">
+                    <v-file-input
+                        label="File input"
+                        filled
+                        color="#fff" id="uploadFile"
+                      ></v-file-input> Upload or Drop Attachments Here
+                  </label>
+                </div>
+                <hr>
+                <div class="d-flex justify-space-between mb-2 mt-8 question-header">
+                  <div class="d-flex align-center mb-2">
+                    <label class="d-block input-label black--text">Upload your certificate of insurance </label>
+                    <a href="" class="text-muted ml-5">Delete</a>
+                  </div>
+                  <div class="d-flex align-center">
+                    <v-switch
+                      v-model="switch1"
+                      inset class="mr-4 mt-0" hide-details
+                    ></v-switch>
+                    <span class="text-muted">Required Question </span>
+                  </div>
+                </div>
+                <div class="upload-attach">
+                  <label for="uploadFile" class="upload-file pa-4 d-block font-weight-medium text-center">
+                    <v-file-input
+                        label="File input"
+                        filled
+                        color="#fff" id="uploadFile"
+                      ></v-file-input> Upload or Drop Attachments Here
+                  </label>
+                </div>
+              </div>
             </v-expansion-panel-content>
           </v-expansion-panel>
         </v-expansion-panels>
       </v-row>
-      <div class="text-left ml-4 ml-sm-10 mt-5 mr-4 mr-sm-6">
-        <div class="d-flex justify-space-between mb-2 question-header">
-          <div class="d-flex align-center mb-2">
-            <label class="d-block input-label black--text">Please explain your Previous safety incident </label>
-            <a href="" class="text-muted ml-5">Delete</a>
-          </div>
-          <div class="d-flex align-center mb-2">
-            <v-switch
-              v-model="switch1"
-              inset class="mr-4 mt-0" hide-details
-            ></v-switch>
-            <span class="text-muted">Required Question </span>
-          </div>
-        </div>
-        <v-text-field single-line outlined type="text" height="56px" hide-details class="mb-8">
-        </v-text-field>
-        <hr>
-        <div class="d-flex justify-space-between mb-2 mt-8 question-header">
-          <div class="d-flex align-center mb-2">
-            <label class="d-block input-label black--text">Upload your certificate of insurance </label>
-            <a href="" class="text-muted ml-5">Delete</a>
-          </div>
-          <div class="d-flex align-center mb-2">
-            <v-switch
-              v-model="switch1"
-              inset class="mr-4 mt-0" hide-details
-            ></v-switch>
-            <span class="text-muted">Required Question </span>
-          </div>
-        </div>
-        <div class="upload-attach mb-8">
-          <label for="uploadFile" class="upload-file pa-4 d-block font-weight-medium text-center">
-            <v-file-input
-                label="File input"
-                filled
-                color="#fff" id="uploadFile"
-              ></v-file-input> Upload or Drop Attachments Here
-          </label>
-        </div>
-        <hr>
-        <div class="d-flex justify-space-between mb-2 mt-8 question-header">
-          <div class="d-flex align-center mb-2">
-            <label class="d-block input-label black--text">Upload your certificate of insurance </label>
-            <a href="" class="text-muted ml-5">Delete</a>
-          </div>
-          <div class="d-flex align-center">
-            <v-switch
-              v-model="switch1"
-              inset class="mr-4 mt-0" hide-details
-            ></v-switch>
-            <span class="text-muted">Required Question </span>
-          </div>
-        </div>
-        <div class="upload-attach">
-          <label for="uploadFile" class="upload-file pa-4 d-block font-weight-medium text-center">
-            <v-file-input
-                label="File input"
-                filled
-                color="#fff" id="uploadFile"
-              ></v-file-input> Upload or Drop Attachments Here
-          </label>
-        </div>
-      </div>
+      
       <v-row justify="center" no-gutters class="mt-10"> 
         <v-col cols="12">
           <v-btn color="#0D9648" large height="56px" class="white--text text-capitalize font-weight-bold save-btn px-9">Save Changes</v-btn>

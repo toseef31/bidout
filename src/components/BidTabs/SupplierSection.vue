@@ -1,11 +1,11 @@
 <template>
 	<div>
 		<v-row class="my-4 supplier-row fill-height" no-gutters>
-		  <v-col sm="2" v-if="categories"> 
-		  	<v-list>
+		  <v-col sm="2" v-if="categories" class="category-col"> 
+		  	<v-list class="pt-0">
   	      <v-list-group
   	        v-for="category in allcategories"
-  	        :key="category.name"
+  	        :key="category.name" active-class="black--text"
   	      >
   	        <template v-slot:activator>
   	          <v-list-item-content>
@@ -13,7 +13,7 @@
   	          </v-list-item-content>
   	        </template>
 
-  	        <v-list-item
+  	        <v-list-item class="ml-3"
   	          v-for="subcategry in subCategories(category.subCategories)"
   	          :key="subcategry.name"
   	        >
@@ -52,7 +52,7 @@
 		          </div>
 		          <div class="d-flex align-center">
 		            <label class="input-label black--text pr-2 font-weight-bold">Basin</label>
-		            <v-select rounded hide-details outlined class="available-select" :items="availableSearch" width="150px"></v-select>
+		            <v-select rounded hide-details outlined class="available-select" :items="availableSearch" width="150px" min-height="28px"></v-select>
 		          </div>
 		        </div>
 		        <div class="companies-list">
@@ -330,14 +330,14 @@
                   :translations="translations"
                   :loader="hasLoaderActive"
                   :error="hasErrorActive"
-                  class="mb-2"
+                  
                   @update="onUpdate"
                   />
-                <label class="d-block text-left font-weight-bold mb-2">Email</label>
+                <label class="d-block text-left font-weight-bold mb-2 mt-6">Email</label>
                 <v-text-field
                   v-model="email"
                   :rules="emailRules"
-                  placeholder="Example@email.com"
+                  placeholder="example@email.com"
                   required
                   outlined
                 ></v-text-field>
@@ -373,7 +373,7 @@ export default {
 	},
   data() {
     return {
-      availableSearch: ['Gulf Coast','Northwest','Rockies','Mid-Con','Permian','Arklatex','Offshore','Other'],
+      availableSearch: ['All','Gulf Coast','Northwest','Rockies','Mid-Con','Permian','Arklatex','Offshore','Other'],
       availableSuppl: null,
       supplierDialog: false,
       valid: true,

@@ -1,7 +1,7 @@
 <template>
   <v-row class="my-8" justify="center">
     <v-col cols="12" sm="9">
-      <v-form @submit.prevent="bidForm" ref="form">
+      <v-form @submit.prevent="bidForm" ref="form" v-model="valid">
         <v-container>
           <v-row justify="center">
             <v-col cols="12" sm="12" text="left">
@@ -114,7 +114,7 @@ export default {
       titleRules: [
         v => !!v || 'Title is required',
       ],
-      type: '',
+      bidType: '',
       bidTypeRules: [
         v => !!v || 'Please select bid type',
       ],
@@ -143,26 +143,13 @@ export default {
     };
   },
   computed:{
-    passRule1(){
-      if(this.title === ''){
-        var value = this.$store.state.validate = true;
-        return value;
-      }else{
-        var value =  this.$store.state.validate = false;
-        return value;
-      }
+    validat(){
+      this.$emit('validation',{'valid': this.valid,'value': '1'});
+      return this.valid;
     }
   },
   watch: {
-    title(){
-      if(this.title === ''){
-        
-        this.$store.state.validate = true;
-      }else{
-        
-        this.$store.state.validate = false;
-      }
-    }
+    
   },
   methods: {
     changeTab(){
