@@ -318,6 +318,10 @@
 				.question-tab{
 					.add-question{
 						font-size: 20px;
+						border-radius: 8px;
+					}
+					a{
+						font-size: 12px;
 					}
 					.v-expansion-panels{
 						.v-expansion-panel-content{
@@ -369,7 +373,19 @@
 					.attach-btn{
 						font-size: 20px;
 					}
-
+					.operational-question{
+						border-left: 3px solid #f1f1f1;
+						border-radius: 2px;
+					}
+					.legal-mainQuestion{
+						border-left: 3px solid #f1f1f1;
+						border-radius: 2px;
+					}
+					.question-body{
+						.subtitle{
+							font-weight: 600;
+						}
+					}
 				}
 				.invite-btn{
 					font-size: 16px;
