@@ -7,5 +7,11 @@ export default {
    },
    salesRepsList(state){
       return state.salesRepsList;
-   }
+   },
+   companiesList(state){
+      return state.companiesList;
+   },
+   serviceCompaniesList(state){
+      return state.serviceCompaniesList;
+   },
 }

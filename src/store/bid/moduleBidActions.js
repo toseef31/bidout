@@ -19,4 +19,20 @@ export default {
        	commit('setSalesReps',null);
        }
     },
+    async searchByCompany({commit}, payload){
+      const res = await axios.post('company/searchCompanies/',{'query': payload.query,'basin':payload.basin});
+       if(res.status == 200){
+       	commit('setCompaniesList',res.data);
+       }else{
+       	commit('setCompaniesList',null);
+       }
+    },
+    async getCompanyByServices({commit}, payload){
+      const res = await axios.get('company/getCompaniesByService/'+payload);
+       if(res.status == 200){
+       	commit('setCompaniesList',res.data);
+       }else{
+       	commit('setCompaniesList',null);
+       }
+    },
 }
