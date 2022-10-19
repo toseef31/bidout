@@ -54,7 +54,7 @@
             <template v-for="(child,index) in item.items"
               > 
                 <v-list-item
-                   v-if="userDatas.role == 'admin' && index === 0"
+                   v-if="userDatas.role == 'admin' && (index === 0 || index === 3)"
                 >
                   <v-list-item-icon class="mr-6 mt-3" v-show="!showSideBar">
                     <router-link :to="'/'+child.link" class="text-decoration-none"><v-icon v-text="child.icon"></v-icon></router-link>
@@ -67,7 +67,7 @@
                 </v-list-item>
 
                 <v-list-item
-                   v-if="index > 0"
+                   v-if="index === 1 || index === 2"
                 >
                   <v-list-item-icon class="mr-6 mt-3" v-show="!showSideBar">
                     <router-link :to="'/'+child.link" class="text-decoration-none"><v-icon v-text="child.icon"></v-icon></router-link>
