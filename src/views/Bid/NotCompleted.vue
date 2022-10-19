@@ -33,7 +33,8 @@
               >
                 {{ item.text }} {{item.index}}
                 
-                <v-icon right small color="#F32349">
+                <v-icon small right v-if="validate == true && value == item.value" color="#0D9648">mdi-check-circle-outline</v-icon>
+                <v-icon right small color="#F32349" v-else>
                   {{item.icon}}
                 </v-icon>
               </v-tab>
@@ -42,7 +43,7 @@
               <v-tab-item
                 value="tab-1"
               >
-                <bid-details @changetab="ChangeT($event)"></bid-details>
+                <bid-details @changetab="ChangeT($event)" @validation="validateValue($event)"></bid-details>
               </v-tab-item>
               <v-tab-item
                 value="tab-2"
@@ -119,6 +120,8 @@ export default {
       subCompany: false,
       switch1: true,
       ex4: '',
+      validate: '',
+      value: '',
     };
   },
   computed:{
@@ -140,6 +143,11 @@ export default {
     {
       this.currentItem=tab;
     },
+    validateValue(event){
+      this.validate = event.valid;
+      this.value = event.value;
+      console.log(event);
+    }
   },
   mounted() {
     document.title = "Create Bid - BidOut";
