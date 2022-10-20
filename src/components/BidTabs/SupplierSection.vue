@@ -109,19 +109,7 @@
 		      </v-tab-item>
 		      <v-tab-item value="serviceCategory">
 		        <div class="available-search d-flex justify-space-between align-center mt-5 px-4">
-		          <!-- <div>
-		            <v-text-field
-		              type="text" hide-details
-		              outlined
-		              placeholder="Search"
-		              prepend-inner-icon="mdi-magnify"
-		            >
-		            </v-text-field>
-		          </div> -->
-		          <!-- <div class="d-flex align-center">
-		            <label class="input-label black--text pr-2 font-weight-bold">Basin</label>
-		            <v-select rounded hide-details outlined class="available-select" :items="availableSearch" width="150px"></v-select>
-		          </div> -->
+		          
 		        </div>
 		        <div class="companies-list">
 		          <div>
@@ -143,20 +131,6 @@
 		                <v-btn color="rgba(13, 150, 72, 0.1)" tile min-width="32px" height="32" class="pa-0" elevation="0" @click="addServiceCompany(company,index)"> <v-icon color="#0D9648">mdi-plus</v-icon></v-btn>
 		              </div>
 		            </div>
-		            <!-- <div class="d-flex align-center justify-space-between list-company pa-4 pl-16">
-		              <div class="comapny-data d-flex align-center">
-		                <div class="company-img">
-		                  <img :src="require('@/assets/images/chat/chatUser.png')">
-		                </div>
-		                <div class="company-title text-left pl-4">
-		                  <h4>Pat Hodges</h4>
-		                  <p class="mb-0">Patterson-UTI<router-link to="">View Profile</router-link></p>
-		                </div>
-		              </div>
-		              <div class="add-company">
-		                <v-btn color="rgba(13, 150, 72, 0.1)" tile min-width="32px" height="32" class="pa-0" elevation="0"> <v-icon color="#0D9648">mdi-plus</v-icon></v-btn>
-		              </div>
-		            </div> -->
 		          </div>
 		        </div>
 		      </v-tab-item>
