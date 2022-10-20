@@ -51,6 +51,7 @@ export default {
   
   data() {
     return {
+      isHidden : false,
       users: ''
     };
   },

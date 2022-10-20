@@ -5,7 +5,7 @@
           <v-row align="center" justify="space-between" no-gutters class="px-2 px-sm-6 my-4 not-completd-title">
             <v-col cols="12" md="6" class="text-left">
               <div class="d-flex align-center">
-                <h3 class="pl-1 mr-4">Annual Chemical Bid</h3>
+                <h3 class="pl-1 mr-4">{{bidTitle}}</h3>
                 <!-- <p class="preview-text mb-0 ml-3">
                   <a href="" class="text-decoration-none"><v-icon color="#0D9648" class="pr-2">mdi-open-in-new</v-icon>Preview Bid in Supplier View</a>
                 </p> -->
@@ -122,6 +122,7 @@ export default {
       ex4: '',
       validate: '',
       value: '',
+      bidTitle: '',
     };
   },
   computed:{
@@ -144,8 +145,10 @@ export default {
       this.currentItem=tab;
     },
     validateValue(event){
+      console.log(event);
       this.validate = event.valid;
       this.value = event.value;
+      this.bidTitle = event.bidTitle;
       console.log(event);
     }
   },

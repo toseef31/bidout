@@ -15,7 +15,7 @@
 
   	        <v-list-item class="ml-3"
   	          v-for="subcategry in subCategories(category.subCategories)"
-  	          :key="subcategry.name"
+  	          :key="subcategry.name"  @click="getByCategory(subcategry.name)"
   	        >
   	          <v-list-item-content>
   	            <v-list-item-title v-text="subcategry.name" class="text-left"></v-list-item-title>
@@ -46,56 +46,29 @@
 		              type="text" hide-details
 		              outlined
 		              placeholder="Search"
-		              prepend-inner-icon="mdi-magnify"
+		              prepend-inner-icon="mdi-magnify" v-model="companySearch" @keyup="getCompanies"
 		            >
 		            </v-text-field>
 		          </div>
 		          <div class="d-flex align-center">
 		            <label class="input-label black--text pr-2 font-weight-bold">Basin</label>
-		            <v-select rounded hide-details outlined class="available-select" :items="availableSearch" width="150px" min-height="28px"></v-select>
+		            <v-select rounded hide-details outlined class="available-select" :items="availableSearch" width="150px" v-model="companyBasin" min-height="28px" @change="getCompanies"></v-select>
 		          </div>
 		        </div>
 		        <div class="companies-list">
-		          <div class="d-flex align-center justify-space-between list-company pa-4">
+		          <div class="d-flex align-center justify-space-between list-company pa-4" v-for="(company,index) in companiesList">
 		            <div class="comapny-data d-flex align-center">
 		              <div class="company-img">
-		                <img :src="require('@/assets/images/bids/patterson.png')">
+		                <img v-if="!company.image" :src="require('@/assets/images/bids/patterson.png')">
+		                <img v-else :src="company.image" width="88px" height="48px">
 		              </div>
 		              <div class="company-title text-left pl-4">
-		                <h4>Patterson-UTI, Inc</h4>
-		                <p class="mb-0"><router-link to="">View Profile</router-link></p>
+		                <h4>{{company.company}}</h4>
+		                <p class="mb-0"><a @click="viewCompany(company.objectID,company.company)" class="text-decoration-underline">View Profile</a></p>
 		              </div>
 		            </div>
 		            <div class="add-company">
-		              <v-btn color="rgba(13, 150, 72, 0.1)" tile min-width="32px" height="32" class="pa-0" elevation="0"> <v-icon color="#0D9648">mdi-plus</v-icon></v-btn>
-		            </div>
-		          </div>
-		          <div class="d-flex align-center justify-space-between list-company pa-4 bg-light">
-		            <div class="comapny-data d-flex align-center">
-		              <div class="company-img">
-		                <img :src="require('@/assets/images/bids/ms.png')">
-		              </div>
-		              <div class="company-title text-left pl-4">
-		                <h4>MS Directional, Inc</h4>
-		                <p class="mb-0"><router-link to="">View Profile</router-link></p>
-		              </div>
-		            </div>
-		            <div class="add-company">
-		              <v-btn color="rgba(13, 150, 72, 0.1)" tile min-width="32px" height="32" class="pa-0" elevation="0"> <v-icon color="#0D9648">mdi-plus</v-icon></v-btn>
-		            </div>
-		          </div>
-		          <div class="d-flex align-center justify-space-between list-company pa-4">
-		            <div class="comapny-data d-flex align-center">
-		              <div class="company-img">
-		                <img :src="require('@/assets/images/bids/superior.png')">
-		              </div>
-		              <div class="company-title text-left pl-4">
-		                <h4>Superior QC</h4>
-		                <p class="mb-0"><router-link to="">View Profile</router-link></p>
-		              </div>
-		            </div>
-		            <div class="add-company">
-		              <v-btn color="rgba(13, 150, 72, 0.1)" tile min-width="32px" height="32" class="pa-0" elevation="0"> <v-icon color="#0D9648">mdi-plus</v-icon></v-btn>
+		              <v-btn color="rgba(13, 150, 72, 0.1)" tile min-width="32px" height="32" class="pa-0" elevation="0" @click="addCompany(company,index)"> <v-icon color="#0D9648">mdi-plus</v-icon></v-btn>
 		            </div>
 		          </div>
 		        </div>
@@ -107,136 +80,63 @@
 		              type="text" hide-details
 		              outlined
 		              placeholder="Search"
-		              prepend-inner-icon="mdi-magnify"
+		              prepend-inner-icon="mdi-magnify" v-model="searchCompany" @keyup="getSales"
 		            >
 		            </v-text-field>
 		          </div>
 		          <div class="d-flex align-center">
 		            <label class="input-label black--text pr-2 font-weight-bold">Basin</label>
-		            <v-select rounded hide-details outlined class="available-select" :items="availableSearch" width="150px"></v-select>
+		            <v-select rounded hide-details outlined class="available-select" :items="availableSearch" width="150px" v-model="basinFilter" @change="getSales"></v-select>
 		          </div>
 		        </div>
 		        <div class="companies-list">
-		          <div class="d-flex align-center justify-space-between list-company pa-4">
+		          <div class="d-flex align-center justify-space-between list-company pa-4" v-for="(list,index) in salesRepsList">
 		            <div class="comapny-data d-flex align-center">
 		              <div class="company-img">
-		                <img :src="require('@/assets/images/chat/chatUser.png')">
+		                <img v-if="!list.image" :src="require('@/assets/images/chat/chatUser.png')">
+		                <img v-else :src="list.image" width="48px" height="48px">
 		              </div>
 		              <div class="company-title text-left pl-4">
-		                <h4>Patrick Smith</h4>
-		                <p class="mb-0">Baker Hughes <router-link to="">View Profile</router-link></p>
+		                <h4>{{list.firstName}} {{list.lastName}}</h4>
+		                <p class="mb-0">{{list.company}} <a @click="viewCompany(team.companyId,team.company)" class="text-decoration-underline">View Profile</a></p>
 		              </div>
 		            </div>
 		            <div class="add-company">
-		              <v-btn color="rgba(13, 150, 72, 0.1)" tile min-width="32px" height="32" class="pa-0" elevation="0"> <v-icon color="#0D9648">mdi-plus</v-icon></v-btn>
-		            </div>
-		          </div>
-		          <div class="d-flex align-center justify-space-between list-company pa-4 bg-light">
-		            <div class="comapny-data d-flex align-center">
-		              <div class="company-img">
-		                <img :src="require('@/assets/images/chat/chatUser.png')">
-		              </div>
-		              <div class="company-title text-left pl-4">
-		                <h4>Pat Hodges</h4>
-		                <p class="mb-0">Halli Burton <router-link to="">View Profile</router-link></p>
-		              </div>
-		            </div>
-		            <div class="add-company">
-		              <v-btn color="rgba(13, 150, 72, 0.1)" tile min-width="32px" height="32" class="pa-0" elevation="0"> <v-icon color="#0D9648">mdi-plus</v-icon></v-btn>
+		              <v-btn color="rgba(13, 150, 72, 0.1)" tile min-width="32px" height="32" class="pa-0" elevation="0" @click="addReps(list,index)"> <v-icon color="#0D9648">mdi-plus</v-icon></v-btn>
 		            </div>
 		          </div>
 		        </div>
 		      </v-tab-item>
 		      <v-tab-item value="serviceCategory">
 		        <div class="available-search d-flex justify-space-between align-center mt-5 px-4">
-		          <!-- <div>
-		            <v-text-field
-		              type="text" hide-details
-		              outlined
-		              placeholder="Search"
-		              prepend-inner-icon="mdi-magnify"
-		            >
-		            </v-text-field>
-		          </div> -->
-		          <div class="d-flex align-center">
-		            <label class="input-label black--text pr-2 font-weight-bold">Basin</label>
-		            <v-select rounded hide-details outlined class="available-select" :items="availableSearch" width="150px"></v-select>
-		          </div>
+		          
 		        </div>
 		        <div class="companies-list">
 		          <div>
-		            <div class="d-flex align-center justify-space-between list-company pa-4">
+		            <div class="d-flex align-center justify-space-between list-company pa-4" v-for="(company,index) in companiesList">
 		              <div class="comapny-data d-flex align-center">
-		                <div class="pr-4">
+		                <!-- <div class="pr-4">
 		                  <v-icon>mdi-chevron-down</v-icon>
-		                </div>
+		                </div> -->
 		                <div class="company-img">
-		                  <img :src="require('@/assets/images/bids/patterson.png')">
+		                  <img v-if="!company.image" :src="require('@/assets/images/bids/patterson.png')">
+		                  <img v-else :src="company.image" width="88px" height="48px">
 		                </div>
 		                <div class="company-title text-left pl-4">
-		                  <h4>Patterson-UTI, Inc</h4>
-		                  <p class="mb-0"><router-link to="">View Profile</router-link></p>
+		                  <h4>{{company.company}}</h4>
+		                  <p class="mb-0"><a @click="viewCompany(company.objectID,company.company)" class="text-decoration-underline">View Profile</a></p>
 		                </div>
 		              </div>
 		              <div class="add-company">
-		                <v-btn color="rgba(13, 150, 72, 0.1)" tile min-width="32px" height="32" class="pa-0" elevation="0"> <v-icon color="#0D9648">mdi-plus</v-icon></v-btn>
-		              </div>
-		            </div>
-		            <div class="d-flex align-center justify-space-between list-company pa-4 pl-16">
-		              <div class="comapny-data d-flex align-center">
-		                <div class="company-img">
-		                  <img :src="require('@/assets/images/chat/chatUser.png')">
-		                </div>
-		                <div class="company-title text-left pl-4">
-		                  <h4>Pat Hodges</h4>
-		                  <p class="mb-0">Patterson-UTI<router-link to="">View Profile</router-link></p>
-		                </div>
-		              </div>
-		              <div class="add-company">
-		                <v-btn color="rgba(13, 150, 72, 0.1)" tile min-width="32px" height="32" class="pa-0" elevation="0"> <v-icon color="#0D9648">mdi-plus</v-icon></v-btn>
+		                <v-btn color="rgba(13, 150, 72, 0.1)" tile min-width="32px" height="32" class="pa-0" elevation="0" @click="addServiceCompany(company,index)"> <v-icon color="#0D9648">mdi-plus</v-icon></v-btn>
 		              </div>
 		            </div>
 		          </div>
-		          <div>
-		            <div class="d-flex align-center justify-space-between list-company pa-4">
-		              <div class="comapny-data d-flex align-center">
-		                <div class="pr-4">
-		                  <v-icon>mdi-chevron-down</v-icon>
-		                </div>
-		                <div class="company-img">
-		                  <img :src="require('@/assets/images/bids/greatplans.png')">
-		                </div>
-		                <div class="company-title text-left pl-4">
-		                  <h4>Great Plains Oilfield Rental </h4>
-		                  <p class="mb-0"><router-link to="">View Profile</router-link></p>
-		                </div>
-		              </div>
-		              <div class="add-company">
-		                <v-btn color="rgba(13, 150, 72, 0.1)" tile min-width="32px" height="32" class="pa-0" elevation="0"> <v-icon color="#0D9648">mdi-plus</v-icon></v-btn>
-		              </div>
-		            </div>
-		            <div class="d-flex align-center justify-space-between list-company pa-4 pl-16">
-		              <div class="comapny-data d-flex align-center">
-		                <div class="company-img">
-		                  <img :src="require('@/assets/images/chat/chatUser.png')">
-		                </div>
-		                <div class="company-title text-left pl-4">
-		                  <h4>Pat Hodges</h4>
-		                  <p class="mb-0">Great Plains Oilfield Rental <router-link to="">View Profile</router-link></p>
-		                </div>
-		              </div>
-		              <div class="add-company">
-		                <v-btn color="rgba(13, 150, 72, 0.1)" tile min-width="32px" height="32" class="pa-0" elevation="0"> <v-icon color="#0D9648">mdi-plus</v-icon></v-btn>
-		              </div>
-		            </div>
-		          </div>
-		          
 		        </div>
-		        
 		      </v-tab-item>
 		    </v-tabs-items>
 		  </v-col>
-		  <v-col cols="12" class="invited-data" :class="[ categories ? 'col-sm-4' : 'col-sm-6']">
+		  <v-col cols="12" class="invited-data available-data" :class="[ categories ? 'col-sm-4' : 'col-sm-6']">
 		    <div class="d-flex justify-space-between align-center pl-4 py-3 invited-head">
 		      <div>
 		        <h4 class="mb-0 black--text font-weight-bold">Invited Services Suppliers</h4>
@@ -244,32 +144,34 @@
 		    </div>
 		    <div>
 		      <div class="companies-list">
-		        <div class="d-flex align-center justify-space-between list-company pa-4">
+		        <div class="d-flex align-center justify-space-between list-company pa-4" v-for="(company,index) in invitedCompanies">
 		          <div class="comapny-data d-flex align-center">
 		            <div class="company-img">
-		              <img :src="require('@/assets/images/bids/greatplans.png')">
+		              <img v-if="!company.image" :src="require('@/assets/images/bids/greatplans.png')">
+		              <img v-else :src="company.image" width="88px" height="48px">
 		            </div>
 		            <div class="company-title text-left pl-4">
-		              <h4>Great Plains Oilfield Rental </h4>
-		              <p class="mb-0"><router-link to="">View Profile</router-link></p>
+		              <h4>{{company.company}} </h4>
+		              <p class="mb-0"><a @click="viewCompany(company.objectID,company.company)" class="text-decoration-underline">View Profile</a></p>
 		            </div>
 		          </div>
 		          <div class="add-company">
-		            <v-btn color="rgba(243, 35, 73, 0.1)" tile min-width="32px" height="32" class="pa-0" elevation="0"> <v-icon color="#F32349">mdi-minus</v-icon></v-btn>
+		            <v-btn color="rgba(243, 35, 73, 0.1)" tile min-width="32px" height="32" class="pa-0" elevation="0" @click="removeCompany(company,index)"> <v-icon color="#F32349">mdi-minus</v-icon></v-btn>
 		          </div>
 		        </div>
-		        <div class="d-flex align-center justify-space-between list-company pa-4">
+		        <div class="d-flex align-center justify-space-between list-company pa-4" v-for="(list,index) in repsInvited">
 		          <div class="comapny-data d-flex align-center">
 		            <div class="company-img">
-		              <img :src="require('@/assets/images/chat/chatUser.png')">
+		              <img v-if="!list.image" :src="require('@/assets/images/chat/chatUser.png')">
+		              <img v-else :src="list.image" width="48px" height="48px">
 		            </div>
 		            <div class="company-title text-left pl-4">
-		              <h4>Pat Hodges</h4>
-		              <p class="mb-0">Halli Burton <router-link to="">View Profile</router-link></p>
+		              <h4>{{list.firstName}} {{list.lastName}}</h4>
+		              <p class="mb-0">{{list.company}} <a @click="viewCompany(team.companyId,team.company)" class="text-decoration-underline">View Profile</a></p>
 		            </div>
 		          </div>
 		          <div class="add-company">
-		            <v-btn color="rgba(243, 35, 73, 0.1)" tile min-width="32px" height="32" class="pa-0" elevation="0"> <v-icon color="#F32349">mdi-minus</v-icon></v-btn>
+		            <v-btn color="rgba(243, 35, 73, 0.1)" tile min-width="32px" height="32" class="pa-0" elevation="0" @click="removeReps(list,index)"> <v-icon color="#F32349">mdi-minus</v-icon></v-btn>
 		          </div>
 		        </div>
 		      </div>
@@ -373,7 +275,7 @@ export default {
 	},
   data() {
     return {
-      availableSearch: ['All','Gulf Coast','Northwest','Rockies','Mid-Con','Permian','Arklatex','Offshore','Other'],
+      availableSearch: ['Gulf Coast','Northwest','Rockies','Mid-Con','Permian','Arklatex','Offshore','Other'],
       availableSuppl: null,
       supplierDialog: false,
       valid: true,
@@ -403,6 +305,12 @@ export default {
       hasErrorActive: false,
       results: {},
       categories: false,
+      searchCompany: '',
+      basinFilter: 'Gulf Coast',
+      repsInvited: [],
+      companySearch: this.$store.getters.userInfo.company.company,
+      companyBasin: 'Gulf Coast',
+      invitedCompanies: [],
     };
   },
   computed:{
@@ -410,9 +318,18 @@ export default {
       setTimeout(() => this.loading = false, 500);
       return _.orderBy(this.$store.getters.categories, 'orderNumber', 'asc');
     },
+    salesRepsList(){
+    	return this.$store.getters.salesRepsList;
+    },
+    companiesList(){
+    	return this.$store.getters.companiesList;
+    },
+    serviceCompanies(){
+    	return this.$store.getters.serviceCompaniesList;
+    },
   },
   methods: {
-  	...mapActions(["getCategories"]),
+  	...mapActions(["getCategories","getSalesReps","getCompanyInfo","searchByCompany","getCompanyByServices"]),
     changeTab(){
       this.$emit('changetab', 'tab-3');
     },
@@ -428,9 +345,43 @@ export default {
     subCategories(subCats){
      return _.orderBy(subCats, 'orderNumber', 'asc');
     },
+    getSales(){
+    	this.getSalesReps({'query':this.searchCompany,'basin':this.basinFilter})
+    },
+    viewCompany(id,name){
+      this.getCompanyInfo({'id':id,'name':name});
+    },
+    addReps(list,index){
+    	this.repsInvited.push(list);
+    	this.$store.getters.salesRepsList.splice(index,1);
+    },
+    removeReps(list,index){
+    	this.$store.getters.salesRepsList.push(list);
+    	this.repsInvited.splice(index,1);
+    },
+    getCompanies(){
+    	this.searchByCompany({'query':this.companySearch,'basin':this.companyBasin})
+    },
+    getByCategory(category){
+    	this.getCompanyByServices(category);
+    },
+    addCompany(company,index){
+    	this.invitedCompanies.push(company);
+    	this.$store.getters.companiesList.splice(index,1);
+    },
+    addServiceCompany(company,index){
+    	this.invitedCompanies.push(company);
+    	this.$store.getters.companiesList.splice(index,1);
+    },
+    removeCompany(company,index){
+    	this.invitedCompanies.splice(index,1);
+    	this.$store.getters.companiesList.push(company);
+    }
   },
   mounted() {
     this.getCategories();
+    this.getSales();
+    this.getCompanies();
 	}	
 };
 </script>

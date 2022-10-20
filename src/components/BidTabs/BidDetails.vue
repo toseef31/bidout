@@ -94,6 +94,7 @@
               <v-btn color="rgba(13, 150, 72, 0.1)" rounded class="text-capitalize adtn-btn font-weight-bold" @click="add"><v-icon>mdi-plus</v-icon>Add Aditional Description</v-btn>
             </v-col>
           </v-row>
+          {{validat}}
           <v-row justify="center">
             <v-col cols="12">
               <v-btn color="#0D9648" height="56" class="text-capitalize white--text font-weight-bold save-btn px-9" :disabled="!valid" @click="changeTab" large>Save Changes</v-btn>
@@ -144,7 +145,7 @@ export default {
   },
   computed:{
     validat(){
-      this.$emit('validation',{'valid': this.valid,'value': '1'});
+      this.$emit('validation',{'valid': this.valid,'value': '1','bidTitle':this.title});
       return this.valid;
     }
   },
@@ -153,7 +154,6 @@ export default {
   },
   methods: {
     changeTab(){
-      
       var bidDetails = {
         title: this.title,
         type: this.bidType,

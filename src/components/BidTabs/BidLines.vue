@@ -13,17 +13,17 @@
         @start="dragging = true"
         @end="dragging = false"
       >  
-        <v-row class="bidline-list d-flex align-center px-6 my-2" v-for="items in bidLines">
+        <v-row class="bidline-list d-flex align-center px-6" v-for="(items,index) in bidLines">
           <v-col md="3" class="d-flex">
             <v-row>
               <v-col md="1">
-                <div class="mt-6 mr-2 bid-item">
+                <div class="mr-2 bid-item" :class="[index != 0 ? 'mt-1' : 'mt-6']">
                   <img :src="require('@/assets/images/bids/DotsSix.png')">
                 </div>
               </v-col>
               <v-col md="11">
                 <div class="mr-2 bid-item">
-                  <label class="d-block input-label text-left">Line Item Description</label>
+                  <label class="d-block input-label text-left" v-if="index === 0">Line Item Description</label>
                   <v-text-field placeholder="Line Item Description" v-model="items.description" height="31px" width="200px" single-line outlined type="text" hide-details>
                   </v-text-field>
                 </div>
@@ -33,36 +33,36 @@
           
           <v-col md="2">
             <div class="mr-2 bid-item">
-              <label class="d-block input-label text-left">Unit/Measure</label>
+              <label class="d-block input-label text-left" v-if="index === 0">Unit/Measure</label>
               <v-select outlined hide-details v-model="items.unit" :items="units"></v-select>
             </div>
           </v-col>
           <v-col md="2">
             <div class="mr-2 bid-item">
-              <label class="d-block input-label text-left">Input Type</label>
+              <label class="d-block input-label text-left" v-if="index === 0">Input Type</label>
               <v-select outlined hide-details v-model="items.type" :items="inputType"></v-select>
             </div>
           </v-col>
           <v-col md="2">
             <div class="mr-2 bid-item">
-              <label class="d-block input-label text-left">QTY</label>
-              <v-text-field placeholder="Line Item Description" v-model="items.quantity" height="31px" single-line outlined type="text" hide-details>
+              <label class="d-block input-label text-left" v-if="index === 0">QTY</label>
+              <v-text-field placeholder="Line Item Description" height="31px" single-line outlined  hide-details v-model="items.quantity" @keypress="isLetterOrNumber($event)">
               </v-text-field>
             </div>
           </v-col>
           <v-col md="3" class="d-flex">
             <div class="mr-2 bid-item">
-              <label class="d-block input-label text-left">Buyer Comment</label>
+              <label class="d-block input-label text-left" v-if="index === 0">Buyer Comment</label>
               <v-text-field placeholder="Line Item Description"  v-model="items.buyerComment" height="31px" single-line outlined type="text" hide-details>
               </v-text-field>
             </div>
             <div class="d-flex">
               <v-checkbox
                 v-model="items.switch1"
-                inset class="mr-2 ml-2" hide-details
+                inset class="mr-2 ml-2" hide-details :class="[index != 0 ? 'mt-0' : 'mt-4']"
               ></v-checkbox>
-              <v-icon color="#0D9648" class="mr-2 mt-6" @click="clone(items)">mdi-content-copy</v-icon>
-              <v-icon color="#F32349" class=" mt-6">mdi-trash-can-outline</v-icon>
+              <v-icon color="#0D9648" class="mr-2"  :class="[index != 0 ? 'mt-0' : 'mt-6']" @click="clone(items)">mdi-content-copy</v-icon>
+              <v-icon color="#F32349" :class="[index != 0 ? 'mt-0' : 'mt-6']" @click="removeBidLine(index)">mdi-trash-can-outline</v-icon>
             </div>
           </v-col>
         </v-row>
@@ -76,7 +76,7 @@
     </v-row>
     <div class="bidline-section bid-list">
       <h4 class="text-left pl-6 font-weight-bold black--text my-4">Bid Example</h4>
-      <v-row class="bidline-list d-flex align-center px-6 my-2" v-for="elements in exampleItems">
+      <v-row class="bidline-list d-flex align-center px-6 my-2" v-for="(elements,index) in exampleItems">
         <v-col md="3" class="d-flex">
           <v-row>
             <v-col md="1">
@@ -87,7 +87,7 @@
             <v-col md="11">
               <div class="mr-2 bid-item">
                 <label class="d-block input-label text-left">Line Item Description</label>
-                <v-text-field placeholder="Line Item Description" v-model="elements.description" height="31px" width="200px" single-line outlined type="text" hide-details>
+                <v-text-field placeholder="Line Item Description" v-model="elements.description" height="31px" width="200px" single-line outlined type="text" hide-details readonly>
                 </v-text-field>
               </div>
             </v-col>
@@ -96,13 +96,13 @@
         <v-col md="2">
           <div class="mr-2 bid-item">
             <label class="d-block input-label text-left">Unit/Measure</label>
-            <v-select outlined hide-details :items="units" v-model="elements.unit"></v-select>
+            <v-select outlined hide-details :items="units" v-model="elements.unit" readonly></v-select>
           </div>
         </v-col>
         <v-col md="2">
           <div class="mr-2 bid-item">
             <label class="d-block input-label text-left">Input Type</label>
-            <v-select outlined hide-details :items="inputType" v-model="elements.inputType"></v-select>
+            <v-select outlined hide-details :items="inputType" v-model="elements.type" readonly></v-select>
           </div>
         </v-col>
         <v-col md="2">
@@ -115,15 +115,15 @@
         <v-col md="3" class="d-flex">
           <div class="mr-2 bid-item">
             <label class="d-block input-label text-left">Buyer Comment</label>
-            <v-text-field placeholder="Line Item Description" height="31px" single-line outlined type="text" v-model="elements.buyerComment" hide-details>
+            <v-text-field placeholder="Line Item Description" height="31px" single-line outlined type="text" v-model="elements.buyerComment" hide-details readonly>
             </v-text-field>
           </div>
           <div class="d-flex">
             <v-checkbox
               v-model="elements.switch1"
-              inset class="mr-2 ml-2" hide-details
+              inset class="mr-2 ml-2" hide-details readonly
             ></v-checkbox>
-            <v-icon color="#F32349" class="mr-4 mt-5">mdi-trash-can-outline</v-icon>
+            <v-icon color="#F32349" class="mr-4 mt-5" @click="removeExample(index)">mdi-trash-can-outline</v-icon>
           </div>
         </v-col>
       </v-row>
@@ -147,17 +147,28 @@ export default {
       availableSearch: ['All','Company'],
       availableSuppl: null,
       inputType: ['USD','EUR'],
-      units: ['Gallon','Liter'],
+      units: ['Feet','Pound','Ton','Mile','Gallon','Barrell','Day','Each','Hourly','N/A'],
       exampleItems : [],
+      qtyRules: [
+        v => !!v || 'This field is required',
+        ],
+        numberRule: v  => {
+              if (!v.trim()) return true;
+              if (!isNaN(parseFloat(v)) && v >= 0 && v <= 999) return true;
+              return 'Number has to be between 0 and 999';
+            },
       bidLines: [
         {
           switch1: true,
           description: '',
-          unit: 'Gallon',
+          unit: 'Feet',
           type: 'USD',
           quantity: '',
           buyerComment: '',
         }
+      ],
+      descRules: [
+        v => /^\d+$/.test(v) || 'Description is required',
       ],
       enabled: true,
       dragging: false
@@ -179,7 +190,7 @@ export default {
           inputType: ['USD','EUR'],
           units: ['Gallon','Liter'],
           description: '',
-          unit: 'Gallon',
+          unit: 'Feet',
           quantity: '',
           buyerComment: '',
           switch1: '',
@@ -187,7 +198,6 @@ export default {
       }
     },
     clone(item){
-      console.log(item);
       this.exampleItems.push({
         type: item.type,
         description: item.description,
@@ -199,6 +209,17 @@ export default {
     },
     checkMove: function(e) {
       console.log("Future index: " + e.draggedContext.futureIndex);
+    },
+    isLetterOrNumber(e) {
+        let char = String.fromCharCode(e.keyCode);
+        if (/^[0-9]+$/.test(char)) return true;
+        else e.preventDefault();
+    },
+    removeExample(index){
+      this.exampleItems.splice(index,1);
+    },
+    removeBidLine(index){
+      this.bidLines.splice(index,1);
     }
   },
   mounted() {

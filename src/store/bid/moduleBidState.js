@@ -3,4 +3,8 @@ import store from "../../store";
 
 export default {
    validate : false,
+   teamMembers: null,
+   salesRepsList: null,
+   companiesList: null,
+   serviceCompaniesList: null,
 }
