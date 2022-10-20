@@ -332,10 +332,10 @@ export default {
       results: {},
       categories: false,
       searchCompany: '',
-      basinFilter: '',
+      basinFilter: 'Gulf Coast',
       repsInvited: [],
-      companySearch: '',
-      companyBasin: '',
+      companySearch: this.$store.getters.userInfo.company.company,
+      companyBasin: 'Gulf Coast',
       invitedCompanies: [],
     };
   },
@@ -406,6 +406,8 @@ export default {
   },
   mounted() {
     this.getCategories();
+    this.getSales();
+    this.getCompanies();
 	}	
 };
 </script>

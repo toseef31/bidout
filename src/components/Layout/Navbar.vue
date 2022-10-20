@@ -21,14 +21,14 @@
               dark
               small
               color="#0D9648"
-              @click="isHidden = !isHidden"
-              :class="{ 'active-btn': isHidden}"
+              @click="isCreateBid = !isCreateBid"
+              :class="{ 'active-btn': isCreateBid}"
             >
               <v-icon dark>
-                {{isHidden ? 'mdi-close' : 'mdi-plus'}}
+                {{isCreateBid ? 'mdi-close' : 'mdi-plus'}}
               </v-icon>
             </v-btn>
-            <div v-show="isHidden">
+            <div v-show="isCreateBid">
               <v-card
                   class="mx-auto menu-card"
                   min-width="290"
@@ -41,17 +41,17 @@
                     >
                       <v-list-item
                         v-for="(item, i) in items"
-                        :key="i"
+                        :key="i" class="pr-0"
                       >
-                        <router-link :to="item.link" class="text-decoration-none">
-                          <v-list-item-icon class="mr-2 my-2">
+                        <router-link :to="item.link" class="text-decoration-none" >
+                          <v-list-item-icon class="mr-2 my-2" @click="isCreateBid = !isCreateBid">
                             <!-- <v-icon color="#0D9648" v-text="item.icon"></v-icon> -->
                             <v-img :src="`/images/${item.icon}`" width="24px" height="24px"></v-img>
                           </v-list-item-icon>
                         </router-link>
                         <v-list-item-content align-start color="#0D9648" class="pa-0">
                           <router-link :to="item.link" class="text-decoration-none">
-                            <v-list-item-title v-text="item.text" color="#0D9648"></v-list-item-title>
+                            <v-list-item-title v-text="item.text" color="#0D9648" @click="isCreateBid = !isCreateBid" class="py-3"></v-list-item-title>
                           </router-link>
                         </v-list-item-content>
                         
@@ -197,7 +197,7 @@ export default {
   name : "Navbar",
   data() {
     return {
-      isHidden : false,
+      isCreateBid : false,
       isMenu : false,
       isActive : false,
       isActivity : false,

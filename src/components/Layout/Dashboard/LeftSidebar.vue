@@ -15,14 +15,14 @@
             v-for="(item, i) in items"
             :key="i"
           >
-            <v-list-item-icon class="mr-6 mt-3">
+            <v-list-item-icon class="mr-6 mt-3"  @click="isCreateBid = !isCreateBid">
               <router-link :to="'/'+item.link" class="text-decoration-none">
                 <v-img :src="`/images/${item.icon}`" width="24px" height="24px"></v-img>
               </router-link>
             </v-list-item-icon>
 
               
-            <v-list-item-content class="text-left py-1">
+            <v-list-item-content class="text-left py-1"  @click="isCreateBid = !isCreateBid">
               <router-link :to="'/'+item.link" class="text-decoration-none"><v-list-item-title class="font-weight-bold" v-text="item.text" v-show="showSideBar"> 
                 
               </v-list-item-title></router-link>
@@ -116,6 +116,7 @@ export default {
       selectedItem: 0,
       showSide : true,
       isHidden : false,
+      isCreateBid : false,
         items: [
           { id: 0, text: 'Dashboard', icon: 'dashboard.png', link: 'dashboard' },
           { id: 1, text: 'View Bids', icon: 'bids.png' , link: 'view-bids' },
