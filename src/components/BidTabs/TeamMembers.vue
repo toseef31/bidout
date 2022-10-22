@@ -30,7 +30,7 @@
 		              </div>
 		              <div class="company-title text-left pl-4">
 		                <h4>{{team.firstName}} {{team.lastName}}</h4>
-		                <p class="mb-0">{{team.company}} <a @click="viewCompany(team.companyId,team.company)" class="text-decoration-underline">View Profile</a></p>
+		                <p class="mb-0">{{team.company}}</p>
 		              </div>
 		            </div>
 		            <div class="add-company">
@@ -55,7 +55,7 @@
 		          </div>
 		          <div class="company-title text-left pl-4">
 		            <h4>{{team.firstName}} {{team.lastName}}</h4>
-		            <p class="mb-0">{{team.company}} <a @click="viewCompany(team.companyId,team.company)" class="text-decoration-underline">View Profile</a></p>
+		            <p class="mb-0">{{team.company}} </p>
 		          </div>
 		        </div>
 		        <div class="add-company">
@@ -94,8 +94,9 @@ export default {
     }
   },
   methods: {
-  	...mapActions(["getTeamMembers","getCompanyInfo"]),
+  	...mapActions(["getTeamMembers","getCompanyInfo","saveDraftBid"]),
     changeTab(){
+    	this.saveDraftBid({'invitedTeamMembers':this.membersAdded});
       this.$emit('changetab', 'tab-4');
     },
     viewCompany(id,name){
@@ -109,6 +110,9 @@ export default {
 	  	this.$store.getters.teamMembers.push(member);
 			this.membersAdded.splice(index,1);
     }
+  },
+  created() {
+    this.interval = setInterval(() => this.saveDraftBid({'invitedTeamMembers':this.membersAdded}), 100000);
   },
   mounted() {
     this.getTeamMembers(this.$store.getters.userInfo.company.company);

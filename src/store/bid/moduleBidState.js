@@ -7,4 +7,6 @@ export default {
    salesRepsList: null,
    companiesList: null,
    serviceCompaniesList: null,
+   draftBidsList: null,
+   bidData: JSON.parse(localStorage.getItem('bidData')),
 }

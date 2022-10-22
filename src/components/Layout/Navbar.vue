@@ -197,15 +197,15 @@ export default {
   name : "Navbar",
   data() {
     return {
-      isCreateBid : false,
+      isCreateBid : this.$store.state.isCreateBid,
       isMenu : false,
       isActive : false,
       isActivity : false,
       iconText: 'mdi-view-dashboard-outline',
       menuText: 'Dashboard',
-      select: {text: 'Create a new Bid',link: '/create-bid' , icon: 'bids.png'},
+      select: {text: 'Create a new Bid',link: '/create' , icon: 'bids.png'},
       items: [
-        { text: 'Create a new Bid', link: '/create-bid' , icon: 'bids.png' },
+        { text: 'Create a new Bid', link: '/create' , icon: 'bids.png' },
        
       ],
         itemss: [

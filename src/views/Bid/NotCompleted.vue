@@ -3,7 +3,7 @@
       <div class="mid-content">
         <div class="content-section fill-height pa-0">
           <v-row align="center" justify="space-between" no-gutters class="px-2 px-sm-6 my-4 not-completd-title">
-            <v-col cols="12" md="6" class="text-left">
+            <v-col cols="12" md="5" class="text-left">
               <div class="d-flex align-center">
                 <h3 class="pl-1 mr-4">{{bidTitle}}</h3>
                 <!-- <p class="preview-text mb-0 ml-3">
@@ -11,7 +11,7 @@
                 </p> -->
               </div>
             </v-col>
-            <v-col cols="12" md="6" class="text-right">
+            <v-col cols="12" md="7" class="text-right">
               <div class="d-flex align-center justify-end">
                 <p class="mb-0 mr-4 auto-text"><strong>Autosaved Draft:</strong> 07/22/2022 12:51 pm</p>
                 <v-btn color="#B8B8B8" class="white--text text-capitalize publish-btn" width="250px" height="52px" large>

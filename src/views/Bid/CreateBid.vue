@@ -6,7 +6,7 @@
           <v-row align="center" justify="center" class="fill-height mx-0">
             <v-col cols="12" md="4">
               <h1 class="text-left mb-7">Create Bid</h1>
-              <router-link to="/not-completed" class="text-decoration-none">
+              <router-link to="/create-bid" class="text-decoration-none">
                 <div class="bid-box">
                   <div class="icon-box pa-8">
                     <img :src="require('@/assets/images/bids/FileX.png')">
