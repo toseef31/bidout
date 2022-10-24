@@ -180,9 +180,9 @@ export default {
     }
   },
   methods: {
-    ...mapActions(["saveDraftBid"]),
+    ...mapActions(["updateDraftBid"]),
     changeTab(){
-      this.saveDraftBid({'bidlines':this.bidLines,'exampleItems':this.exampleItems});
+      this.updateDraftBid({'bidlines':this.bidLines,'exampleItems':this.exampleItems});
       // this.$emit('changetab', 'tab-5');
     },
     addItem(){

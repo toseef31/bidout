@@ -330,16 +330,15 @@ export default {
     },
   },
   methods: {
-  	...mapActions(["getCategories","getSalesReps","getCompanyInfo","searchByCompany","getCompanyByServices","saveDraftBid","inviteNewSupplier"]),
+  	...mapActions(["getCategories","getSalesReps","getCompanyInfo","searchByCompany","getCompanyByServices","saveDraftBid","inviteNewSupplier","updateDraftBid"]),
     changeTab(){
-    	this.saveDraftBid({'invitedSuppliers':this.repsInvited});
+    	this.updateDraftBid({'invitedSuppliers':this.repsInvited});
       this.$emit('changetab', 'tab-3');
     },
     onUpdate (payload) {
       this.results = payload.formattedNumber;
     },
     validate() {
-    	console.log(this.$store.getters.bidData,'fe');
       this.$refs.form.validate();
     	var supplier = {
     		firstName: this.firstName,
@@ -352,7 +351,6 @@ export default {
     		bidDueDate: JSON.parse(localStorage.getItem('bidData')).bidDueDate,
     		bidDueTime: JSON.parse(localStorage.getItem('bidData')).bidDueTime,
     	}
-      console.log(supplier,'d');
       this.inviteNewSupplier(supplier);
     },
     hideCategories(){
@@ -395,7 +393,7 @@ export default {
     }
   },
   created() {
-    this.interval = setInterval(() => this.saveDraftBid({'invitedSuppliers':this.repsInvited}), 100000);
+    // this.interval = setInterval(() => this.updateDraftBid({'invitedSuppliers':this.repsInvited}));
   },
   mounted() {
     this.getCategories();

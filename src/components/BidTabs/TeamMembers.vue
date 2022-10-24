@@ -94,9 +94,9 @@ export default {
     }
   },
   methods: {
-  	...mapActions(["getTeamMembers","getCompanyInfo","saveDraftBid"]),
+  	...mapActions(["getTeamMembers","getCompanyInfo","updateDraftBid"]),
     changeTab(){
-    	this.saveDraftBid({'invitedTeamMembers':this.membersAdded});
+    	this.updateDraftBid({'invitedTeamMembers':this.membersAdded});
       this.$emit('changetab', 'tab-4');
     },
     viewCompany(id,name){
@@ -112,7 +112,7 @@ export default {
     }
   },
   created() {
-    this.interval = setInterval(() => this.saveDraftBid({'invitedTeamMembers':this.membersAdded}), 100000);
+    // this.interval = setInterval(() => this.updateDraftBid({'invitedTeamMembers':this.membersAdded}));
   },
   mounted() {
     this.getTeamMembers(this.$store.getters.userInfo.company.company);
