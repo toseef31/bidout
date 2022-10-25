@@ -32,21 +32,21 @@
 		        </tr>
 		      </thead>
 		      <tbody>
-		        <tr v-for="doc in documents">
+		        <tr v-for="(doc,index) in docsList">
 		          <td class="text-left"><img :src="require('@/assets/images/bids/FilePdf.png')"></td>
-		          <td class="text-left">{{doc.name}}</td>
+		          <td class="text-left">{{doc.fileName}}</td>
 		          <td class="text-left">
 		          	
-		          	<span v-if="!edit"></span>
-		          	<div v-if="edit" class="d-flex edit-comment align-center"><v-text-field outlined height="30px" width="150px" hide-details></v-text-field><v-checkbox color="#0D9648"></v-checkbox></div>
+		          	<div v-if="edit === index && isEdit" class="d-flex edit-comment align-center"><v-text-field outlined height="30px" width="150px" hide-details v-model="docsList[index]['comment']"></v-text-field><v-checkbox color="#0D9648" @change="saveComment(doc)"></v-checkbox></div>
+		          	<span v-else>{{doc.comment}}</span>
 		          </td>
-		          <td class="text-left">{{size(doc.size)}}</td>
-		          <td class="text-left">{{uploadedBy}}</td>
-		          <td class="text-left"></td>
+		          <td class="text-left">{{size(doc.fileSize)}}</td>
+		          <td class="text-left">{{doc.uploadedBy}}</td>
+		          <td class="text-left">{{doc.uploadedAt | moment('MM/DD/YYYY hh:mm a')}}</td>
 		          <td>
 		            <div class="d-flex">
-		              <img :src="require('@/assets/images/bids/chatdots.png')" class="mr-3" @click="edit = !edit">
-		              <v-icon color="#F32349">mdi-trash-can-outline</v-icon>
+		              <img :src="require('@/assets/images/bids/chatdots.png')" class="mr-3" @click="openComment(index)">
+		              <v-icon color="#F32349" @click="deleteAttach(index)">mdi-trash-can-outline</v-icon>
 		            </div>
 		          </td>
 		        </tr>
@@ -72,22 +72,25 @@
 export default {
   data() {
     return {
-    	edit: false,
+    	edit: '',
+    	isEdit: false,
     	file: '',
     	fileName: '',
     	fileExt: '',
     	fileSize: '',
     	documents: [],
-    	docsList: [],
     };
   },
   computed:{
     uploadedBy(){
     	return this.$store.getters.userInfo.firstName+' '+this.$store.getters.userInfo.lastName;
+    },
+    docsList(){
+    	return this.$store.getters.attachData;
     }
   },
   methods: {
-  	...mapActions(["uploadBidAttach"]),
+  	...mapActions(["uploadBidAttach","updateDraftBid"]),
     changeTab(){
       this.$emit('changetab', 'tab-6');
     },
@@ -113,16 +116,32 @@ export default {
         uploadedBy: this.$store.getters.userInfo.firstName+' '+this.$store.getters.userInfo.lastName,
         attachement: this.documents,
       }
-      
+      // this.documents.push(this.file);
       this.uploadBidAttach(data);
     },
     size(size){
     	var sizeInMB = (size / (1024*1024)).toFixed(2);
     	return sizeInMB+'mb';
+    },
+    deleteAttach(index){
+    	this.documents.splice(index,1);
+    	this.$store.getters.attachData.splice(index,1);
+    },
+    openComment(index){
+    	this.edit = index;
+    	this.isEdit = true;
+    },
+    saveComment(doc){
+    	console.log(this.docsList,'dpc');
+    	this.isEdit = false;
+    	this.updateDraftBid({'attachement':this.docsList});
     }
   },
   mounted() {
-    
+  	console.log(this.$store.getters.attachData,'attachement');
+    if(this.$store.getters.attachData){
+    	this.documents = this.$store.getters.attachData;
+    }
 	}	
 };
 </script>

@@ -141,6 +141,17 @@ export default {
           formData.append('exampleItems['+i+'][buyerComment]', payload.exampleItems[i].buyerComment);
         }
       }
+      if(payload.attachement){
+        for(let i=0; i<payload.attachement.length; i++){
+          formData.append('attachment['+i+'][fileName]', payload.attachement[i].fileName);
+          formData.append('attachment['+i+'][fileSize]', payload.attachement[i].fileSize);
+          formData.append('attachment['+i+'][uploadedBy]', payload.attachement[i].uploadedBy);
+          formData.append('attachment['+i+'][url]', payload.attachement[i].url);
+          formData.append('attachment['+i+'][uploadedAt]', payload.attachement[i].uploadedAt);
+          formData.append('attachment['+i+'][comment]', payload.attachement[i].comment);
+          formData.append('attachment['+i+'][id]', payload.attachement[i].id);
+        }
+      }
       
       const res = await axios.post('bid/draft/updateDraft/'+state.draftBidsList,formData,config);
       // if(res.status == 200){
@@ -168,19 +179,16 @@ export default {
       };
       const formData = new FormData();
       if(payload.attachement){
+        formData.append('uploadedBy', payload.uploadedBy);
         for(let i=0; i<payload.attachement.length; i++){
-          formData.append('uploadedBy', payload.uploadedBy);
           formData.append('attachement['+i+']', payload.attachement[i]);
         }
       }
-      console.log(payload);
       const res = await axios.post('bid/uploadBidAttachment/',formData,config);
        if(res.status == 200){
-        console.log(res);
-        // localStorage.removeItem('bidData');
-        // commit('setBidData',null);
+        commit('setAttachData',res.data);
        }else{
-        // commit('setBidData',null);
+        commit('setAttachData',null);
        }
     },
 }
