@@ -10,4 +10,5 @@ export default {
    draftBidsList: null,
    bidData: JSON.parse(localStorage.getItem('bidData')),
    attachData: null,
+   draftTime: null,
 }

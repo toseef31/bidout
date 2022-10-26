@@ -89,8 +89,8 @@ export default {
       
       const res = await axios.post('bid/draft/createDraft',formData,config);
       if(res.status == 200){
-        console.log(res);
         commit('setDraftBidsList',res.data);
+        commit('setDraftTime',new Date().toLocaleString());
       }else{
         commit('setDraftBidsList',null);
       }
@@ -154,12 +154,13 @@ export default {
       }
       
       const res = await axios.post('bid/draft/updateDraft/'+state.draftBidsList,formData,config);
-      // if(res.status == 200){
-      //   console.log(res);
-      //   commit('setDraftBidsList',res.data);
-      // }else{
-      //   commit('setDraftBidsList',null);
-      // }
+      if(res.status == 200){
+        console.log(res);
+        // commit('setDraftBidsList',null);
+        commit('setDraftTime',new Date().toLocaleString());
+      }else{
+        // commit('setDraftBidsList',null);
+      }
     },
     async inviteNewSupplier({commit,state}, payload){
       const res = await axios.post('bid/inviteSupplier/',{'firstName': payload.firstName,'lastName':payload.lastName,'company': payload.company,'phone':payload.phone,'email':payload.email,'bidTitle':payload.bidTitle,'bidType':payload.bidType,'bidDueDate':payload.bidDueDate,'bidDueTime':payload.bidDueTime});

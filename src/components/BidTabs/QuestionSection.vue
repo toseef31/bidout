@@ -28,6 +28,11 @@
               <v-list-item-title >{{ item.title }}</v-list-item-title>
             </v-list-item>
           </v-list>
+          <v-list>
+            <v-list-item @click="createCategory">
+              <v-list-item-title >Category Header</v-list-item-title>
+            </v-list-item>
+          </v-list>
         </v-menu>
       </v-col>
     </v-row>
@@ -45,7 +50,7 @@
               </div>
             </div>
           </div>
-          <div class="ml-5 question-body" v-for="question in cat.question">
+          <div class="ml-5 question-body" v-for="(question,i) in cat.question">
             <template v-if="question.questionType == 'checkbox'">
               <div class="d-flex align-center justify-space-between">
                 <div class="d-flex ">
@@ -54,7 +59,7 @@
                 </div>
                 <div class="d-flex align-center mr-4 mr-sm-6">
                   <v-switch
-                    v-model="switch1"
+                    v-model="cat.question[i]['required']"
                     inset class="mr-4 mt-0" hide-details
                   ></v-switch>
                   <span class="text-muted">Required Question </span>
@@ -63,10 +68,10 @@
               <div class="d-flex align-center ml-10 mt-5 ">
                 <div class="option-box"> 
                   <v-checkbox
-                      v-model="ex4"
+                      v-model="cat.question[i]['options']"
                       label="Yes"
                       color="#0D9648"
-                      value="yes" class="mt-0"
+                      class="mt-0"
                       hide-details
                     ></v-checkbox>
                 </div>
@@ -160,7 +165,7 @@
       
       <v-row justify="center" no-gutters class="mt-10 mb-8"> 
         <v-col cols="12">
-          <v-btn color="#0D9648" large height="56px" class="white--text text-capitalize font-weight-bold save-btn px-9">Save Changes</v-btn>
+          <v-btn color="#0D9648" large height="56px" class="white--text text-capitalize font-weight-bold save-btn px-9" @click="updateQuestion">Save Changes</v-btn>
         </v-col>
       </v-row>
   </div>
@@ -176,7 +181,6 @@ export default {
         {title:'Text Field', type: 'textfield'},
         {title:'Textarea', type: 'textarea'},
         {title:'Upload Field', type: 'uploadFile'},
-        {title:'Category Header', type: 'category'},
       ],
       offset: true,
       categories:[],
@@ -188,24 +192,30 @@ export default {
     
   },
   methods: {
+    ...mapActions(["updateDraftBid"]),
+    createCategory(){
+      var title = "add your category title here";
+      var data = {
+        title: title,
+        question: this.questions,
+      }
+      this.categories.push(data);
+    },
     createQuestion(type){
-        if(type != 'category'){
-          var qusData = {
-            questionTitle: "add question title here",
-            questionType: type,
-          }
-          this.questions.push(qusData);
-        }
-        if(type == 'category'){
-          var title = "add your category title here";
-        }
-        var data = {
-          title: title,
-          question: this.questions,
-        }
-        this.categories.push(data);
-     
-        console.log(this.categories);
+      var qusData = {
+        questionTitle: "add question title here",
+        questionType: type,
+      }
+      this.questions.push(qusData);
+      var data = {
+        question: this.questions,
+      }
+      this.categories.push(data);
+   
+    },
+    updateQuestion(){
+      console.log(this.categories);
+      this.updateDraftBid(this.categories);
     }
     
   },

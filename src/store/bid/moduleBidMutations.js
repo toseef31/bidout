@@ -20,4 +20,7 @@ export default {
   setAttachData(state, payload){
     state.attachData = payload
   },
+  setDraftTime(state, payload){
+    state.draftTime = payload
+  },
 }

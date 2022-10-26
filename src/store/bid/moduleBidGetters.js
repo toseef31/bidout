@@ -20,4 +20,7 @@ export default {
    attachData(state){
       return state.attachData;
    },
+   draftTime(state){
+      return state.draftTime;
+   },
 }
