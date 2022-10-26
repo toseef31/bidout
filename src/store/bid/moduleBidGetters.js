@@ -14,4 +14,7 @@ export default {
    serviceCompaniesList(state){
       return state.serviceCompaniesList;
    },
+   draftBidsList(state){
+      return state.draftBidsList;
+   },
 }

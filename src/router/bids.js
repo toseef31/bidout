@@ -19,7 +19,7 @@ const routes = [
         }
       },
       {
-        path: '/create-bid',
+        path: '/create',
         name: 'CreateBid',
         component: () => import('@/views/Bid/CreateBid.vue'),
         beforeEnter: (to, from, next) => {
@@ -43,7 +43,7 @@ const routes = [
         }
       },
       {
-        path: '/not-completed',
+        path: '/create-bid',
         name: 'NotCompleted',
         component: () => import('@/views/Bid/NotCompleted.vue'),
         beforeEnter: (to, from, next) => {

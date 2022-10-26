@@ -4,6 +4,7 @@ const state = {
     sideBarOpen: true,
     activityPanel: false,
     pageLoader: true,
+    isCreateBid: false,
 }
 
 export default state

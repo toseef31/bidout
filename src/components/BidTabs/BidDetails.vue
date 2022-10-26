@@ -5,6 +5,7 @@
         <v-container>
           <v-row justify="center">
             <v-col cols="12" sm="12" text="left">
+              <input type="hidden" name="" :value="validat">
               <label class="d-block text-left input-label mb-2 font-weight-bold">Bid Title</label>
               <v-text-field placeholder="Bid Title" v-model="title" single-line outlined type="text" :rules="titleRules">
               </v-text-field>
@@ -94,7 +95,7 @@
               <v-btn color="rgba(13, 150, 72, 0.1)" rounded class="text-capitalize adtn-btn font-weight-bold" @click="add"><v-icon>mdi-plus</v-icon>Add Aditional Description</v-btn>
             </v-col>
           </v-row>
-          {{validat}}
+
           <v-row justify="center">
             <v-col cols="12">
               <v-btn color="#0D9648" height="56" class="text-capitalize white--text font-weight-bold save-btn px-9" :disabled="!valid" @click="changeTab" large>Save Changes</v-btn>
@@ -141,6 +142,7 @@ export default {
       time: ['1pm CST','2pm CST','3pm CST','4pm CST'],
       region: ['Gulf Coast','Northwest','Rockies','Mid-Con','Permian','Arklatex','Offshore','Other'],
       textFields: [],
+      interval: '',
     };
   },
   computed:{
@@ -153,17 +155,21 @@ export default {
     
   },
   methods: {
+    ...mapActions(["saveDraftBid"]),
     changeTab(){
       var bidDetails = {
         title: this.title,
         type: this.bidType,
         dueDate: this.dueDate,
         dueTime: this.dueTime,
-        regions: this.regions,
+        regions: this.bidRegions,
         bidDescriptions: this.bidDescriptions,
-        qAndAEnabled: this.qAndAEnabled
+        qAndAEnabled: this.qAndAEnabled,
+        userId: this.$store.getters.userInfo.id,
+        companyId: this.$store.getters.userInfo.company.id,
       }
       if(this.$refs.form.validate()){
+        this.saveDraftBid(bidDetails);
         this.$emit('changetab', 'tab-2');
       }
     },
@@ -178,8 +184,10 @@ export default {
        this.textFields.splice(index, 1)
    }
   },
+  created() {
+      this.interval = setInterval(() => this.changeTab(), 100000);
+  },
   mounted() {
-    
   } 
 };
 </script>

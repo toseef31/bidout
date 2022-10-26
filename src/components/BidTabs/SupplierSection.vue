@@ -52,7 +52,7 @@
 		          </div>
 		          <div class="d-flex align-center">
 		            <label class="input-label black--text pr-2 font-weight-bold">Basin</label>
-		            <v-select rounded hide-details outlined class="available-select" :items="availableSearch" width="150px" v-model="companyBasin" min-height="28px" @change="getCompanies"></v-select>
+		            <v-select rounded hide-details outlined class="available-select text-capitalize" :items="availableSearch" width="150px" v-model="companyBasin" min-height="28px" @change="getCompanies"></v-select>
 		          </div>
 		        </div>
 		        <div class="companies-list">
@@ -86,7 +86,7 @@
 		          </div>
 		          <div class="d-flex align-center">
 		            <label class="input-label black--text pr-2 font-weight-bold">Basin</label>
-		            <v-select rounded hide-details outlined class="available-select" :items="availableSearch" width="150px" v-model="basinFilter" @change="getSales"></v-select>
+		            <v-select rounded hide-details outlined class="available-select text-capitalize" :items="availableSearch" width="150px" v-model="basinFilter" @change="getSales"></v-select>
 		          </div>
 		        </div>
 		        <div class="companies-list">
@@ -275,7 +275,7 @@ export default {
 	},
   data() {
     return {
-      availableSearch: ['Gulf Coast','Northwest','Rockies','Mid-Con','Permian','Arklatex','Offshore','Other'],
+      availableSearch: ['all','Gulf Coast','Northwest','Rockies','Mid-Con','Permian','Arklatex','Offshore','Other'],
       availableSuppl: null,
       supplierDialog: false,
       valid: true,
@@ -306,11 +306,12 @@ export default {
       results: {},
       categories: false,
       searchCompany: '',
-      basinFilter: 'Gulf Coast',
+      basinFilter: 'all',
       repsInvited: [],
-      companySearch: this.$store.getters.userInfo.company.company,
-      companyBasin: 'Gulf Coast',
+      companySearch: '',
+      companyBasin: 'all',
       invitedCompanies: [],
+      interval: '',
     };
   },
   computed:{
@@ -329,15 +330,30 @@ export default {
     },
   },
   methods: {
-  	...mapActions(["getCategories","getSalesReps","getCompanyInfo","searchByCompany","getCompanyByServices"]),
+  	...mapActions(["getCategories","getSalesReps","getCompanyInfo","searchByCompany","getCompanyByServices","saveDraftBid","inviteNewSupplier"]),
     changeTab(){
+    	this.saveDraftBid({'invitedSuppliers':this.repsInvited});
       this.$emit('changetab', 'tab-3');
     },
     onUpdate (payload) {
       this.results = payload.formattedNumber;
     },
     validate() {
+    	console.log(this.$store.getters.bidData,'fe');
       this.$refs.form.validate();
+    	var supplier = {
+    		firstName: this.firstName,
+    		lastName: this.lastName,
+    		company: this.company,
+    		phone: this.results,
+    		email: this.email,
+    		bidTitle: JSON.parse(localStorage.getItem('bidData')).bidTitle,
+    		bidType: JSON.parse(localStorage.getItem('bidData')).bidType,
+    		bidDueDate: JSON.parse(localStorage.getItem('bidData')).bidDueDate,
+    		bidDueTime: JSON.parse(localStorage.getItem('bidData')).bidDueTime,
+    	}
+      console.log(supplier,'d');
+      this.inviteNewSupplier(supplier);
     },
     hideCategories(){
     	this.categories = false;
@@ -377,6 +393,9 @@ export default {
     	this.invitedCompanies.splice(index,1);
     	this.$store.getters.companiesList.push(company);
     }
+  },
+  created() {
+    this.interval = setInterval(() => this.saveDraftBid({'invitedSuppliers':this.repsInvited}), 100000);
   },
   mounted() {
     this.getCategories();

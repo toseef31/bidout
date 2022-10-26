@@ -79,7 +79,7 @@
               </v-simple-table>
               <div class="title-block d-flex justify-space-between px-4 px-sm-6 py-4 align-center">
                 <div>
-                  <h3 class="font-weight-bold">Draft Bids <font color="#B8B8B8">(3)</font></h3>
+                  <h3 class="font-weight-bold">Draft Bids <font color="#B8B8B8">({{draftBidsList.length}})</font></h3>
                 </div>
               </div>
               <v-simple-table class="bids-table draft-table">
@@ -87,14 +87,14 @@
                   <tbody>
                     
                     <tr
-                      v-for="bid in draftbids"
+                      v-for="bid in draftBidsList"
                       :key="bid.id"
                     >
                       <td class="text-left pl-sm-6">{{ bid.id }}</td>
                       <td class="text-left">{{ bid.title }}</td>
-                      <td class="text-left">{{ bid.creator }}</td>
-                      <td class="text-center">{{ bid.entries }}</td>
-                      <td class="text-left">{{ bid.endTime }}</td>
+                      <td class="text-left">{{ userDatas.firstName }} {{ userDatas.lastName }}</td>
+                      <td class="text-center">0</td>
+                      <td class="text-left">{{ bid.dueDate || moment('DD/MM/YYYY') }} {{bid.dueTime}}</td>
                       <td class="text-left d-none d-sm-block pt-3"><a href="">Edit Draft</a></td>
                     </tr>
                   </tbody>
@@ -137,7 +137,7 @@
                       <td class="text-left">{{ bid.title }}</td>
                       <td class="text-left">{{ bid.creator }}</td>
                       <td class="text-left">{{ bid.entries }}</td>
-                      <td class="text-left">{{ bid.endTime }}</td>
+                      <td class="text-left">{{ bid.dueDate }}</td>
                       <td class="text-left d-none d-sm-block pt-3"><a href="">View Details</a></td>
                     </tr>
                   </tbody>
@@ -215,29 +215,6 @@ export default {
           endTime: '08/26/2022, 10:00 am',
         },
       ],
-      draftbids: [
-        {
-          id: 105811,
-          title: 'This is a test template',
-          creator: 'Rodney Giles',
-          entries: 0,
-          endTime: '08/26/2022, 10:00 am',
-        },
-        {
-          id: 105711,
-          title: 'Sheu',
-          creator: 'Baker Hughes',
-          entries: 0,
-          endTime: '08/26/2022, 10:00 am',
-        },
-        {
-          id: 105611,
-          title: 'Water Job',
-          creator: 'Rodney Giles',
-          entries: 0,
-          endTime: '08/26/2022, 10:00 am',
-        },
-      ],
     };
   },
   computed:{
@@ -250,14 +227,18 @@ export default {
     userDatas(){
         return this.$store.getters.userInfo;
     },
+    draftBidsList(){
+      return this.$store.getters.draftBidsList;
+    }
   },
   methods: {
-    
+    ...mapActions(["getDraftBids"]),
   },
   mounted() {
     document.title = "Bids - BidOut";
-    this.users = JSON.parse(localStorage.getItem("userData")).user;
-}
+    this.users = this.$store.getters.userInfo;
+    this.getDraftBids(this.users.id);
+  }
 };
 </script>
 <style scoped lang="scss">

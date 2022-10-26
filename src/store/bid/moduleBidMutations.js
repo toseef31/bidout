@@ -11,4 +11,10 @@ export default {
   setServiceCompanies(state, payload){
   	state.serviceCompaniesList = payload
   },
+  setDraftBidsList(state, payload){
+    state.draftBidsList = payload
+  },
+  setBidData(state, payload){
+    state.bidData = payload
+  },
 }
