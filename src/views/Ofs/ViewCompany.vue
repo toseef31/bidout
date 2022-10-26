@@ -163,21 +163,21 @@ export default {
       esgData:  [
         {
           name: 'Environmetal',
-          description: 'Donec vulputate dolor ac tempus fringilla. Vestibulum et consectetur dui, nec condimentum risus. Vivamus vel mauris lacus. Sed vel sagittis augue, sed aliquet velit. Curabitur nunc enim, dignissim eu tellus a, molestie aliquam risus. Mauris ornare eros eget eros semper, ut cursus sapien viverra.',
+          description: '',
           attachment: '',
           type: 'environmetal',
           id: '1665493735995301876774201398'
         },
         {
           name: 'Social',
-          description: 'Donec vulputate dolor ac tempus fringilla. Vestibulum et consectetur dui, nec condimentum risus. Vivamus vel mauris lacus. Sed vel sagittis augue, sed aliquet velit. Curabitur nunc enim, dignissim eu tellus a, molestie aliquam risus. Mauris ornare eros eget eros semper, ut cursus sapien viverra.',
+          description: '',
           attachment: '',
           type: 'social',
           id: '166549373599530187677420139',
         },
         {
           name: 'Governance',
-          description: 'Donec vulputate dolor ac tempus fringilla. Vestibulum et consectetur dui, nec condimentum risus. Vivamus vel mauris lacus. Sed vel sagittis augue, sed aliquet velit. Curabitur nunc enim, dignissim eu tellus a, molestie aliquam risus. Mauris ornare eros eget eros semper, ut cursus sapien viverra.',
+          description: '',
           attachment: '',
           type: 'governance',
           id: '1665493735995301876774201'
