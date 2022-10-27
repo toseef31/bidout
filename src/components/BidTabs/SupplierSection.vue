@@ -98,7 +98,9 @@
 		              </div>
 		              <div class="company-title text-left pl-4">
 		                <h4>{{list.firstName}} {{list.lastName}}</h4>
-		                <p class="mb-0">{{list.company}} <a @click="viewCompany(team.companyId,team.company)" class="text-decoration-underline">View Profile</a></p>
+		                <p class="mb-0">{{list.company}} 
+		                		<!-- <a @click="viewCompany(team.companyId,team.company)" class="text-decoration-underline">View Profile</a> -->
+		                </p>
 		              </div>
 		            </div>
 		            <div class="add-company">
@@ -144,36 +146,40 @@
 		    </div>
 		    <div>
 		      <div class="companies-list">
-		        <div class="d-flex align-center justify-space-between list-company pa-4" v-for="(company,index) in invitedCompanies">
-		          <div class="comapny-data d-flex align-center">
-		            <div class="company-img">
-		              <img v-if="!company.image" :src="require('@/assets/images/bids/greatplans.png')">
-		              <img v-else :src="company.image" width="88px" height="48px">
-		            </div>
-		            <div class="company-title text-left pl-4">
-		              <h4>{{company.company}} </h4>
-		              <p class="mb-0"><a @click="viewCompany(company.objectID,company.company)" class="text-decoration-underline">View Profile</a></p>
-		            </div>
-		          </div>
-		          <div class="add-company">
-		            <v-btn color="rgba(243, 35, 73, 0.1)" tile min-width="32px" height="32" class="pa-0" elevation="0" @click="removeCompany(company,index)"> <v-icon color="#F32349">mdi-minus</v-icon></v-btn>
-		          </div>
-		        </div>
-		        <div class="d-flex align-center justify-space-between list-company pa-4" v-for="(list,index) in repsInvited">
-		          <div class="comapny-data d-flex align-center">
-		            <div class="company-img">
-		              <img v-if="!list.image" :src="require('@/assets/images/chat/chatUser.png')">
-		              <img v-else :src="list.image" width="48px" height="48px">
-		            </div>
-		            <div class="company-title text-left pl-4">
-		              <h4>{{list.firstName}} {{list.lastName}}</h4>
-		              <p class="mb-0">{{list.company}} <a @click="viewCompany(team.companyId,team.company)" class="text-decoration-underline">View Profile</a></p>
-		            </div>
-		          </div>
-		          <div class="add-company">
-		            <v-btn color="rgba(243, 35, 73, 0.1)" tile min-width="32px" height="32" class="pa-0" elevation="0" @click="removeReps(list,index)"> <v-icon color="#F32349">mdi-minus</v-icon></v-btn>
-		          </div>
-		        </div>
+		        <template  v-for="(company,index) in repsInvited">
+		        	<div class="d-flex align-center justify-space-between list-company pa-4" v-if="company.type == 'company'">
+		        	  <div class="comapny-data d-flex align-center">
+		        	    <div class="company-img">
+		        	      <img v-if="!company.item.image" :src="require('@/assets/images/bids/greatplans.png')">
+		        	      <img v-else :src="company.item.image" width="88px" height="48px">
+		        	    </div>
+		        	    <div class="company-title text-left pl-4">
+		        	      <h4>{{company.item.company}} </h4>
+		        	      <p class="mb-0"><a @click="viewCompany(company.item.objectID,company.item.company)" class="text-decoration-underline">View Profile</a></p>
+		        	    </div>
+		        	  </div>
+		        	  <div class="add-company">
+		        	    <v-btn color="rgba(243, 35, 73, 0.1)" tile min-width="32px" height="32" class="pa-0" elevation="0" @click="removeCompany(company,index)"> <v-icon color="#F32349">mdi-minus</v-icon></v-btn>
+		        	  </div>
+		        	</div>
+		        	<div class="d-flex align-center justify-space-between list-company pa-4" v-if="company.type == 'user'">
+		        	  <div class="comapny-data d-flex align-center">
+		        	    <div class="company-img">
+		        	      <img v-if="!company.item.image" :src="require('@/assets/images/chat/chatUser.png')">
+		        	      <img v-else :src="company.item.image" width="48px" height="48px">
+		        	    </div>
+		        	    <div class="company-title text-left pl-4">
+		        	      <h4>{{company.item.firstName}} {{company.item.lastName}}</h4>
+		        	      <p class="mb-0">{{company.item.company}} 
+		        	      	<!-- <a @click="viewCompany(company.item.companyId,company.item.company)" class="text-decoration-underline">View Profile</a> -->
+		        	      </p>
+		        	    </div>
+		        	  </div>
+		        	  <div class="add-company">
+		        	    <v-btn color="rgba(243, 35, 73, 0.1)" tile min-width="32px" height="32" class="pa-0" elevation="0" @click="removeReps(company,index)"> <v-icon color="#F32349">mdi-minus</v-icon></v-btn>
+		        	  </div>
+		        	</div>
+		        </template>
 		      </div>
 		    </div>
 		  </v-col>
@@ -330,16 +336,15 @@ export default {
     },
   },
   methods: {
-  	...mapActions(["getCategories","getSalesReps","getCompanyInfo","searchByCompany","getCompanyByServices","saveDraftBid","inviteNewSupplier"]),
+  	...mapActions(["getCategories","getSalesReps","getCompanyInfo","searchByCompany","getCompanyByServices","saveDraftBid","inviteNewSupplier","updateDraftBid"]),
     changeTab(){
-    	this.saveDraftBid({'invitedSuppliers':this.repsInvited});
+    	this.updateDraftBid({'invitedSuppliers':this.repsInvited});
       this.$emit('changetab', 'tab-3');
     },
     onUpdate (payload) {
       this.results = payload.formattedNumber;
     },
     validate() {
-    	console.log(this.$store.getters.bidData,'fe');
       this.$refs.form.validate();
     	var supplier = {
     		firstName: this.firstName,
@@ -352,7 +357,6 @@ export default {
     		bidDueDate: JSON.parse(localStorage.getItem('bidData')).bidDueDate,
     		bidDueTime: JSON.parse(localStorage.getItem('bidData')).bidDueTime,
     	}
-      console.log(supplier,'d');
       this.inviteNewSupplier(supplier);
     },
     hideCategories(){
@@ -368,11 +372,15 @@ export default {
       this.getCompanyInfo({'id':id,'name':name});
     },
     addReps(list,index){
-    	this.repsInvited.push(list);
+    	var data = {
+    		type: 'user',
+    		item: list,
+    	}
+    	this.repsInvited.push(data);
     	this.$store.getters.salesRepsList.splice(index,1);
     },
     removeReps(list,index){
-    	this.$store.getters.salesRepsList.push(list);
+    	this.$store.getters.salesRepsList.push(list.item);
     	this.repsInvited.splice(index,1);
     },
     getCompanies(){
@@ -382,20 +390,28 @@ export default {
     	this.getCompanyByServices(category);
     },
     addCompany(company,index){
-    	this.invitedCompanies.push(company);
+    	var data = {
+    		type: 'company',
+    		item: company,
+    	}
+    	this.repsInvited.push(data);
     	this.$store.getters.companiesList.splice(index,1);
     },
     addServiceCompany(company,index){
-    	this.invitedCompanies.push(company);
+    	var data = {
+    		type: 'company',
+    		item: company,
+    	}
+    	this.repsInvited.push(data);
     	this.$store.getters.companiesList.splice(index,1);
     },
     removeCompany(company,index){
-    	this.invitedCompanies.splice(index,1);
-    	this.$store.getters.companiesList.push(company);
+    	this.repsInvited.splice(index,1);
+    	this.$store.getters.companiesList.push(company.item);
     }
   },
   created() {
-    this.interval = setInterval(() => this.saveDraftBid({'invitedSuppliers':this.repsInvited}), 100000);
+    // this.interval = setInterval(() => this.updateDraftBid({'invitedSuppliers':this.repsInvited}));
   },
   mounted() {
     this.getCategories();
