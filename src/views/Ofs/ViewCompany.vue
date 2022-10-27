@@ -162,22 +162,22 @@ export default {
       markerOptions: '',
       esgData:  [
         {
-          name: 'Environmetal',
-          description: '',
+          name: 'Environmental',
+          description: 'No data to show',
           attachment: '',
           type: 'environmetal',
           id: '1665493735995301876774201398'
         },
         {
           name: 'Social',
-          description: '',
+          description: 'No data to show',
           attachment: '',
           type: 'social',
           id: '166549373599530187677420139',
         },
         {
           name: 'Governance',
-          description: '',
+          description: 'No data to show',
           attachment: '',
           type: 'governance',
           id: '1665493735995301876774201'
