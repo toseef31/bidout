@@ -64,82 +64,80 @@
                   <div id="map"class="map" style="height:350px" v-if="companyData.companyLocations"></div>
                   <h3 class="text-center" v-if="!companyData.companyLocations">Location not added</h3>
                 </div>
-                <template v-if="companyData.isPremium || companyData.isPremium == 'true'">
-                  <div class="company-location mb-12">
-                    <h1 class="mb-4 font-weight-bold">Corporate Videos</h1>
-                    <v-row>
-                      <v-col cols="12" md="6" v-for="video in companyData.corporateVideos">
-                        <div class="video-col">
-                          <iframe
-                            width="430"
-                            height="240"
-                            :src="video"
-                            frameborder="0"
-                            allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture"
-                            allowfullscreen
-                          ></iframe>
-                        </div>
-                      </v-col>
-                      <v-col cols="12" md="12" v-if="!companyData.corporateVideos">
-                        <h3 class="text-center">No videos to show</h3>
-                      </v-col>
-                    </v-row>
-                  </div>
-                  <div class="company-documents mb-12">
-                    <h1 class="mb-4 font-weight-bold">Corporate Documents</h1>
-                    <v-row>
-                      <v-col cols="3" sm="2" v-for="docs in companyData.corporateDocuments">
-                        <div class="doc-col text-center">
-                          <a :href="docs.attachment" target="_blank" class="text-decoration-none">
-                            <v-img v-if="get_url_extension(docs.attachment) == 'pdf'" :src="require('@/assets/images/profile/pdf.png')" width="80px" class="mx-auto"></v-img>
-                            <v-img v-else-if="get_url_extension(docs.attachment) == 'xlsx' || get_url_extension(docs.attachment) == 'xls'" :src="require('@/assets/images/profile/excel.png')" width="80px" class="mx-auto"></v-img>
-                            <v-img v-else :src="require('@/assets/images/profile/other.png')" width="80px" class="mx-auto"></v-img>
-                          </a>
-                          <p><a :href="docs.attachment" target="_blank" class="text-decoration-none">{{get_url_name(docs.attachment)}}</a></p>
-                        </div>
-                      </v-col>
-                      <v-col cols="12" sm="12" v-if="!companyData.corporateDocuments">
-                        <h3 class="text-center">No documents to show</h3>
-                      </v-col>
-                    </v-row>
-                  </div>
-                  <div class="company-news mb-12">
-                    <h1 class="mb-4 font-weight-bold">Corporate News & Press Releases</h1>
-                    <div class="news-list" v-for="news in companyData.corporateNews">
-                      <p>{{news.date | moment('MM/DD/YYYY')}} -  <a :href="news.url" target="_blank" class="text-decoration-none">{{news.title}}</a></p>
-                    </div>
-                    <div class="news-list" v-if="!companyData.corporateNews">
-                      <h3 class="text-center">No news to show</h3>
-                    </div>
-                  </div>
-                  <div class="company-leadership mb-12">
-                    <h1 class="mb-4 font-weight-bold">Executive Leadership</h1>
-                    <div class="leader-list text-left mt-10">
-                      <div class="profile-list" v-for="excutive in companyData.executiveLeadership">
-                        <v-img  width="175px" height="175px" :src="excutive.profilePicture"></v-img>
-                        <h6>{{excutive.name}}</h6>
-                        <p>{{excutive.role}}</p>
-                        <a v-if="excutive.linkedin" class="text-decoration-none" target="_blank" :href="excutive.linkedin">
-                          <v-icon color="#013D3A">mdi-linkedin</v-icon>
-                        </a>
+                <div class="company-location mb-12">
+                  <h1 class="mb-4 font-weight-bold">Corporate Videos</h1>
+                  <v-row>
+                    <v-col cols="12" md="6" v-for="video in companyData.corporateVideos">
+                      <div class="video-col">
+                        <iframe
+                          width="430"
+                          height="240"
+                          :src="video"
+                          frameborder="0"
+                          allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture"
+                          allowfullscreen
+                        ></iframe>
                       </div>
+                    </v-col>
+                    <v-col cols="12" md="12" v-if="!companyData.corporateVideos">
+                      <h3 class="text-center">No videos to show</h3>
+                    </v-col>
+                  </v-row>
+                </div>
+                <div class="company-documents mb-12">
+                  <h1 class="mb-4 font-weight-bold">Corporate Documents</h1>
+                  <v-row>
+                    <v-col cols="3" sm="2" v-for="docs in companyData.corporateDocuments">
+                      <div class="doc-col text-center">
+                        <a :href="docs.attachment" target="_blank" class="text-decoration-none">
+                          <v-img v-if="get_url_extension(docs.attachment) == 'pdf'" :src="require('@/assets/images/profile/pdf.png')" width="80px" class="mx-auto"></v-img>
+                          <v-img v-else-if="get_url_extension(docs.attachment) == 'xlsx' || get_url_extension(docs.attachment) == 'xls'" :src="require('@/assets/images/profile/excel.png')" width="80px" class="mx-auto"></v-img>
+                          <v-img v-else :src="require('@/assets/images/profile/other.png')" width="80px" class="mx-auto"></v-img>
+                        </a>
+                        <p><a :href="docs.attachment" target="_blank" class="text-decoration-none">{{get_url_name(docs.attachment)}}</a></p>
+                      </div>
+                    </v-col>
+                    <v-col cols="12" sm="12" v-if="!companyData.corporateDocuments">
+                      <h3 class="text-center">No documents to show</h3>
+                    </v-col>
+                  </v-row>
+                </div>
+                <div class="company-news mb-12">
+                  <h1 class="mb-4 font-weight-bold">Corporate News & Press Releases</h1>
+                  <div class="news-list" v-for="news in companyData.corporateNews">
+                    <p>{{news.date | moment('MM/DD/YYYY')}} -  <a :href="news.url" target="_blank" class="text-decoration-none">{{news.title}}</a></p>
+                  </div>
+                  <div class="news-list" v-if="!companyData.corporateNews">
+                    <h3 class="text-center">No news to show</h3>
+                  </div>
+                </div>
+                <div class="company-leadership mb-12">
+                  <h1 class="mb-4 font-weight-bold">Executive Leadership</h1>
+                  <div class="leader-list text-left mt-10">
+                    <div class="profile-list" v-for="excutive in companyData.executiveLeadership">
+                      <v-img  width="175px" height="175px" :src="excutive.profilePicture"></v-img>
+                      <h6>{{excutive.name}}</h6>
+                      <p>{{excutive.role}}</p>
+                      <a v-if="excutive.linkedin" class="text-decoration-none" target="_blank" :href="excutive.linkedin">
+                        <v-icon color="#013D3A">mdi-linkedin</v-icon>
+                      </a>
                     </div>
-                    <h3 v-if="!companyData.executiveLeadership" class="text-center">No data to show</h3>
-                  
                   </div>
-                  <div class="company-esg mb-16">
-                    <h1 class="mb-4 font-weight-bold">ESG Inititives</h1>
-                    <v-row class="mt-5">
-                      <v-col cols="12" sm="4" v-for="(esg,index) in esgCompanyData" :key="index">
-                        <div class="esg-list text-left">
-                          <h4 class="text-left mb-5">{{esg.name}}</h4>
-                          <p class="text-left">{{esg.description}}</p>
-                          <a :href="esg.attachment" download class="text-decoration-none px-5" v-if="esg.attachment">Download <v-icon>mdi-tray-arrow-down</v-icon></a>
-                        </div>
-                      </v-col>
-                    </v-row>
-                  </div>
-                </template>
+                  <h3 v-if="!companyData.executiveLeadership" class="text-center">No data to show</h3>
+                
+                </div>
+                <div class="company-esg mb-16">
+                  <h1 class="mb-4 font-weight-bold">ESG Inititives</h1>
+                  <v-row class="mt-5">
+                    <v-col cols="12" sm="4" v-for="(esg,index) in esgCompanyData" :key="index">
+                      <div class="esg-list text-left">
+                        <h4 class="text-left mb-5">{{esg.name}}</h4>
+                        <p class="text-left">{{esg.description}}</p>
+                        <a :href="esg.attachment" download class="text-decoration-none px-5" v-if="esg.attachment">Download <v-icon>mdi-tray-arrow-down</v-icon></a>
+                      </div>
+                    </v-col>
+                  </v-row>
+                </div>
               </div>
             </v-col>
           </v-row>
