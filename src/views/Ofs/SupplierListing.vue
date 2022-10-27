@@ -113,6 +113,16 @@ export default {
     allcompanies(){
       return this.$store.getters.serviceCompanies.data;
     },
+    allcompanies(){
+     if(this.searchCompany){
+       return this.$store.getters.serviceCompanies.data.filter((companies)=>{
+         return this.searchCompany.toLowerCase().split(' ').every(v => companies.company.toLowerCase().includes(v))
+       })
+
+     }else{
+       return this.$store.getters.serviceCompanies.data;
+     }
+    },
     serviceName(){
       return this.$store.getters.serviceCompanies.name;
     },

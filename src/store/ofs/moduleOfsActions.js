@@ -45,7 +45,7 @@ export default {
   },
   getSupplierMainService({commit},payload){
     var url = encodeURIComponent(payload.name);
-    axios.get('/company/getCompaniesByMainService/'+url)
+    axios.get('/company/getCompaniesByMainService/'+payload.name+'/'+payload.id)
       .then(responce => {
         var data = {
           'data': responce.data,
@@ -60,7 +60,7 @@ export default {
   getCompanyMainService({commit},payload){
     var url = encodeURIComponent(payload.name);
 
-    axios.get('/company/getCompaniesByMainService/'+url)
+    axios.get('/company/getCompaniesByMainService/'+payload.name+'/'+payload.id)
       .then(responce => {
         var data = {
           'data': responce.data,

@@ -13,7 +13,7 @@
         @start="dragging = true"
         @end="dragging = false"
       >  
-        <v-row class="bidline-list d-flex align-center px-6" v-for="(items,index) in bidLines">
+        <v-row class="bidline-list d-flex align-center px-6 mt-0" v-for="(items,index) in bidLines">
           <v-col md="3" class="d-flex">
             <v-row>
               <v-col md="1" class="pl-1">
@@ -75,18 +75,18 @@
       </v-col>
     </v-row>
     <div class="bidline-section bid-list">
-      <h4 class="text-left pl-4 font-weight-bold black--text my-4">Bid Example</h4>
+      <h4 class="text-left pl-4 font-weight-bold black--text my-4" v-if="index === 0">Bid Example</h4>
       <v-row class="bidline-list d-flex align-center px-6 my-2" v-for="(elements,index) in exampleItems">
         <v-col md="3" class="d-flex">
           <v-row>
             <v-col md="1" class="pl-1">
-              <div class="mt-6 mr-2 bid-item">
+              <div class="mt-6 mr-2 bid-item" :class="[index != 0 ? 'mt-1' : 'mt-6']">
                 <img :src="require('@/assets/images/bids/DotsSix.png')">
               </div>
             </v-col>
             <v-col md="11">
               <div class="mr-2 bid-item">
-                <label class="d-block input-label text-left">Line Item Description</label>
+                <label class="d-block input-label text-left" v-if="index === 0">Line Item Description</label>
                 <v-text-field placeholder="Line Item Description" v-model="exampleItems[index]['description']" height="31px" width="200px" single-line outlined type="text" hide-details readonly>
                 </v-text-field>
               </div>
@@ -95,35 +95,35 @@
         </v-col>
         <v-col md="2">
           <div class="mr-2 bid-item">
-            <label class="d-block input-label text-left">Unit/Measure</label>
+            <label class="d-block input-label text-left" v-if="index === 0">Unit/Measure</label>
             <v-select outlined hide-details :items="units" v-model="exampleItems[index]['unit']" readonly></v-select>
           </div>
         </v-col>
         <v-col md="2">
           <div class="mr-2 bid-item">
-            <label class="d-block input-label text-left">Input Type</label>
+            <label class="d-block input-label text-left" v-if="index === 0">Input Type</label>
             <v-select outlined hide-details :items="inputType" v-model="exampleItems[index]['type']" readonly></v-select>
           </div>
         </v-col>
         <v-col md="2">
           <div class="mr-2 bid-item">
-            <label class="d-block input-label text-left">QTY</label>
+            <label class="d-block input-label text-left" v-if="index === 0">QTY</label>
             <v-text-field placeholder="Line Item Description" height="31px" single-line outlined v-model="exampleItems[index]['quantity']" @keypress="isLetterOrNumber($event)" hide-details>
             </v-text-field>
           </div>
         </v-col>
         <v-col md="3" class="d-flex">
           <div class="mr-2 bid-item">
-            <label class="d-block input-label text-left">Buyer Comment</label>
+            <label class="d-block input-label text-left" v-if="index === 0">Buyer Comment</label>
             <v-text-field placeholder="Line Item Description" height="31px" single-line outlined type="text" v-model="exampleItems[index]['buyerComment']" hide-details readonly>
             </v-text-field>
           </div>
           <div class="d-flex">
             <v-checkbox
               v-model="exampleItems[index]['switch1']"
-              inset class="mr-2 ml-2" hide-details readonly
+              inset class="mr-2 ml-2" hide-details readonly :class="[index != 0 ? 'mt-0' : 'mt-4']"
             ></v-checkbox>
-            <v-icon color="#F32349" class="mr-4 mt-5" @click="removeExample(index)">mdi-trash-can-outline</v-icon>
+            <v-icon color="#F32349" class="mr-4 mt-5" :class="[index != 0 ? 'mt-0' : 'mt-6']" @click="removeExample(index)">mdi-trash-can-outline</v-icon>
           </div>
         </v-col>
       </v-row>

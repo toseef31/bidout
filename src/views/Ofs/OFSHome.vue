@@ -99,7 +99,7 @@
             <v-col cols="12" md="6" v-for="category in allcategories" :key="category.id">
               
               <div class="ofs-listing text-left">
-                <h1 class="font-weight-bold mb-3 text-break" @click="getMainCompany(category.slug,category.name)">{{category.name}}</h1>
+                <h1 class="font-weight-bold mb-3 text-break" @click="getMainCompany(category)">{{category.name}}</h1>
                 <p>
                   <span v-for="subcategry in subCategories(category.subCategories)" class="sub-catLink">
                     <span @click="getCompanies(category.slug,subcategry.name)">  
@@ -240,8 +240,8 @@ export default {
     getCompanies(slug,subName){
       this.getCompanyByservice({slug:slug, service:subName});
     },
-    getMainCompany(slug,name){
-      this.getCompanyMainService({slug:slug, name:name});
+    getMainCompany(category){
+      this.getCompanyMainService({slug:category.slug, name:category.name, id: category.id});
     },
     getSupplierList(){
       if(this.searchCompany.length > 1){
