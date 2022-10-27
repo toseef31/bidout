@@ -64,13 +64,11 @@
                             ><span v-else>{{ company.employees }}</span>
                           </td>
                           <td>
-                            <span v-if="!company.companyHqState"
+                            <span v-if="!company.companyLocations"
                               >No location</span
-                            ><span v-else
-                              >{{ company.companyHqCountry }},{{
-                                company.companyHqState
-                              }}</span
-                            >
+                            ><span v-else>{{
+                              company.companyLocations.length
+                            }}</span>
                           </td>
                           <td>
                             <span v-if="!company.accountContacts"
@@ -155,7 +153,7 @@ export default {
             .every((v) => companies.company.toLowerCase().includes(v))
         );
       }
-
+      console.log(this.$store.getters.serviceCompanies.data);
       return this.$store.getters.serviceCompanies.data;
     },
     companyName() {
