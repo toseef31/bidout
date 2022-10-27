@@ -79,7 +79,7 @@
                               <v-img v-else-if="get_url_extension(docs.attachment) == 'xlsx' || get_url_extension(docs.attachment) == 'xls'" :src="require('@/assets/images/profile/excel.png')" width="80px" class="mx-auto"></v-img>
                               <v-img v-else :src="require('@/assets/images/profile/other.png')" width="80px" class="mx-auto"></v-img>
                             </a>
-                            <p>{{get_url_name(docs.attachment)}}</p>
+                            <p><a :href="docs.attachment" target="_blank" class="text-decoration-none">{{get_url_name(docs.attachment)}}</a></p>
                           </div>
                         </v-col>
                         <v-col cols="12" sm="12" v-if="!companyData.corporateDocuments">
@@ -90,7 +90,7 @@
                     <div class="company-news mb-12">
                       <h1 class="mb-4 font-weight-bold">Corporate News & Press Releases</h1>
                       <div class="news-list" v-for="news in companyData.corporateNews">
-                        <p>{{news.date}} -  <a :href="news.url" class="text-decoration-none">{{news.title}}</a></p>
+                        <p>{{news.date | moment('MM/DD/YYYY')}} -  <a :href="news.url" target="_blank" class="text-decoration-none">{{news.title}}</a></p>
                       </div>
                       <div class="news-list" v-if="!companyData.corporateNews">
                         <h3 class="text-center">No news to show</h3>
