@@ -40,7 +40,7 @@ export default {
       docName: 'Add Document',
       esgData:  [
         {
-          name: 'Environmetal',
+          name: 'Environmental',
           description: 'Donec vulputate dolor ac tempus fringilla. Vestibulum et consectetur dui, nec condimentum risus. Vivamus vel mauris lacus. Sed vel sagittis augue, sed aliquet velit. Curabitur nunc enim, dignissim eu tellus a, molestie aliquam risus. Mauris ornare eros eget eros semper, ut cursus sapien viverra.',
           attachment: '',
           type: 'environmetal',
