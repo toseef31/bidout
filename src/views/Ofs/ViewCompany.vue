@@ -106,7 +106,7 @@
                   <div class="company-news mb-12">
                     <h1 class="mb-4 font-weight-bold">Corporate News & Press Releases</h1>
                     <div class="news-list" v-for="news in companyData.corporateNews">
-                      <p>{{news.date}} -  <a :href="news.url" class="text-decoration-none">{{news.title}}</a></p>
+                       <p>{{news.date | moment('MM/DD/YYYY')}} -  <a :href="news.url" target="_blank" class="text-decoration-none">{{news.title}}</a></p>
                     </div>
                     <div class="news-list" v-if="!companyData.corporateNews">
                       <h3 class="text-center">No news to show</h3>
