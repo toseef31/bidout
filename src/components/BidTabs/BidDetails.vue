@@ -30,6 +30,7 @@
               <label class="d-block text-left input-label mb-2 font-weight-bold">Due Date </label>
               <v-text-field placeholder="Due Date" single-line outlined type="date" v-model="dueDate" :rules="dueDateRules" >
               </v-text-field>
+              
             </v-col>
           </v-row>
           <v-row justify="center">
@@ -143,6 +144,9 @@ export default {
       region: ['Gulf Coast','Northwest','Rockies','Mid-Con','Permian','Arklatex','Offshore','Other'],
       textFields: [],
       interval: '',
+      disabledDates: {
+        to: new Date(Date.now() - 8640000)
+      }
     };
   },
   computed:{

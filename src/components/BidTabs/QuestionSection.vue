@@ -214,7 +214,6 @@ export default {
    
     },
     updateQuestion(){
-      console.log(this.categories);
       this.updateDraftBid(this.categories);
     }
     

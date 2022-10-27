@@ -13,7 +13,7 @@
             </v-col>
             <v-col cols="12" md="7" class="text-right">
               <div class="d-flex align-center justify-end">
-                <p class="mb-0 mr-4 auto-text"><strong>Autosaved Draft:</strong> {{draftTime}}</p>
+                <p class="mb-0 mr-4 auto-text" v-if="draftTime"><strong>Autosaved Draft:</strong> {{draftTime}}</p>
                 <v-btn color="#B8B8B8" class="white--text text-capitalize publish-btn" width="250px" height="52px" large>
                   Publish Bid
                 </v-btn>

@@ -94,7 +94,7 @@
                       <td class="text-left">{{ bid.title }}</td>
                       <td class="text-left">{{ userDatas.firstName }} {{ userDatas.lastName }}</td>
                       <td class="text-center">0</td>
-                      <td class="text-left">{{ bid.dueDate || moment('DD/MM/YYYY') }} {{bid.dueTime}}</td>
+                      <td class="text-left">{{ bid.dueDate | moment('DD/MM/YYYY') }} {{bid.dueTime}}</td>
                       <td class="text-left d-none d-sm-block pt-3"><a href="">Edit Draft</a></td>
                     </tr>
                   </tbody>
