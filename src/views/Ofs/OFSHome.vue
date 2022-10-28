@@ -154,7 +154,7 @@
               <h1
                 class="font-weight-bold mb-3 text-break"
                 @click="
-                  getMainCompany(category.slug, category.name, category.id)
+                  getMainCompany(category)
                 "
               >
                 {{ category.name }}
@@ -315,8 +315,8 @@ export default {
     getCompanies(slug, subName) {
       this.getCompanyByservice({ slug, service: subName });
     },
-    getMainCompany(slug, name, id) {
-      this.getCompanyMainService({ slug, name, id });
+    getMainCompany(category){
+      this.getCompanyMainService({slug:category.slug, name:category.name, id: category.id});
     },
     getSupplierList() {
       if (this.searchCompany.length > 1) {

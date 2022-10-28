@@ -46,37 +46,33 @@ export default {
         console.log(err);
       });
   },
-  getSupplierMainService({ commit }, payload) {
-    const url = encodeURIComponent(payload.name);
-    axios
-      .get(`/company/getCompaniesByMainService/${url}`)
-      .then((responce) => {
+  getSupplierMainService({commit},payload){
+    var url = encodeURIComponent(payload.name);
+    axios.get(`/company/getCompaniesByMainService/${payload.name}/${payload.id}`)
+      .then(responce => {
         const data = {
           data: responce.data,
-          name: payload.name,
-        };
-        commit("setCompanies", data);
-        router.replace(`/ofs-supplier/${url}`);
-      })
-      .catch((err) => {
-        console.log(err);
+          name: payload.name
+        }
+      commit('setCompanies',data)
+      router.replace(`/ofs-supplier/${url}`);
+    }).catch(err => {
+          console.log(err);
       });
   },
   getCompanyMainService({ commit }, payload) {
     const url = encodeURIComponent(payload.name);
-
     axios
-      .get(`/company/getCompaniesByMainService/${url}/${payload.id}`)
-      .then((responce) => {
+      .get(`/company/getCompaniesByMainService/${payload.name}/${payload.id}`)
+      .then(responce => {
         const data = {
           data: responce.data,
-          name: payload.name,
-        };
-        commit("setCompanies", data);
-        router.replace(`/ofs-directory/${url}`);
-      })
-      .catch((err) => {
-        console.log(err);
+          name: payload.name
+        }
+      commit('setCompanies',data)
+      router.replace(`/ofs-directory/${url}`);
+    }).catch(err => {
+          console.log(err);
       });
   },
   getCompanyByBasin({ commit }, payload) {
