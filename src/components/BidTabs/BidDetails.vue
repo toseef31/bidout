@@ -30,6 +30,7 @@
               <label class="d-block text-left input-label mb-2 font-weight-bold">Due Date </label>
               <v-text-field placeholder="Due Date" single-line outlined type="date" v-model="dueDate" :rules="dueDateRules" >
               </v-text-field>
+              
             </v-col>
           </v-row>
           <v-row justify="center">
@@ -84,9 +85,9 @@
              :key="i">
             <v-col cols="12" sm="12" text="left">
               <label class="d-block text-left input-label mb-2 font-weight-bold">Additional Information <v-icon color="#F32349" @click="remove(i)">mdi-trash-can-outline</v-icon></label> 
-              <v-text-field placeholder="Title" single-line outlined type="text" v-model="textField.value1">
+              <v-text-field placeholder="Title" single-line outlined type="text" v-model="textFields[i]['name']">
               </v-text-field>
-              <v-textarea placeholder="Desribe here" single-line outlined type="text" hide-details v-model="textField.value2">
+              <v-textarea placeholder="Desribe here" single-line outlined type="text" hide-details v-model="textFields[i]['body']">
               </v-textarea>
             </v-col>
           </v-row>
@@ -143,6 +144,9 @@ export default {
       region: ['Gulf Coast','Northwest','Rockies','Mid-Con','Permian','Arklatex','Offshore','Other'],
       textFields: [],
       interval: '',
+      disabledDates: {
+        to: new Date(Date.now() - 8640000)
+      }
     };
   },
   computed:{
@@ -166,6 +170,7 @@ export default {
         bidDescriptions: this.bidDescriptions,
         qAndAEnabled: this.qAndAEnabled,
         userId: this.$store.getters.userInfo.id,
+        description: this.textFields,
         companyId: this.$store.getters.userInfo.company.id,
       }
       if(this.$refs.form.validate()){
@@ -173,10 +178,27 @@ export default {
         this.$emit('changetab', 'tab-2');
       }
     },
+    savedraft(){
+      var bidDetails = {
+        title: this.title,
+        type: this.bidType,
+        dueDate: this.dueDate,
+        dueTime: this.dueTime,
+        regions: this.bidRegions,
+        bidDescriptions: this.bidDescriptions,
+        description: this.textFields,
+        qAndAEnabled: this.qAndAEnabled,
+        userId: this.$store.getters.userInfo.id,
+        companyId: this.$store.getters.userInfo.company.id,
+      }
+      if(this.$refs.form.validate()){
+        this.saveDraftBid(bidDetails);
+      }
+    },
     add () {
       this.textFields.push({  
-        value1: "",
-        value2: ""
+        name: "",
+        body: ""
       })
     },
   
@@ -185,7 +207,7 @@ export default {
    }
   },
   created() {
-      this.interval = setInterval(() => this.changeTab(), 100000);
+      // this.interval = setInterval(() => this.savedraft());
   },
   mounted() {
   } 

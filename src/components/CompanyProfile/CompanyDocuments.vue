@@ -51,6 +51,7 @@ export default {
     
     
     handleDocumentUpload( event ){
+      console.log(event);
       this.file = event.target.files[0];
       this.fileName = this.file.name;
       this.fileExt =  this.fileName.split('.').pop();
