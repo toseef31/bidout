@@ -12,7 +12,7 @@
                   <v-tab
                     v-for="item in items"
                     :key="item"
-                    @click="getByBasin(item, companyName)"
+                    @click="getByBasin(item)"
                   >
                     <span class="text-capitalize">{{ item }}</span>
                   </v-tab>
@@ -169,13 +169,13 @@ export default {
     companySearch() {
       this.searchCompany();
     },
-    getByBasin(basin, service) {
+    getByBasin(basin) {
       if (basin == "All") {
         return this.$store.getters.serviceCompanies.data;
       }
       const data = {
         basin,
-        name: service,
+        id: this.$store.getters.serviceCompanies.id,
       };
       this.getCompanyByBasin(data);
     },

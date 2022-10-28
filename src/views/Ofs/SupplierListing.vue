@@ -35,7 +35,7 @@
                     <v-tab
                       v-for="item in items"
                       :key="item"
-                      @click="getByBasin(item, serviceName)"
+                      @click="getByBasin(item)"
                     >
                       <span class="text-capitalize">{{ item }}</span>
                     </v-tab>
@@ -186,11 +186,11 @@ export default {
     viewCompany(id, name) {
       this.getCompanyInfo({ id, name });
     },
-    getByBasin(basin, service) {
+    getByBasin(basin) {
       if (basin == "All") {
         return this.$store.getters.serviceCompanies.data;
       }
-      this.getCompanyByBasin({ basin, name: service });
+      this.getCompanyByBasin({ basin, id: this.$store.getters.serviceCompanies.id });
     },
   },
   mounted() {
