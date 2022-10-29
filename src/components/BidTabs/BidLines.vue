@@ -3,7 +3,7 @@
 		<div class="bidline-section">
       <h4 class="text-left pl-4 font-weight-bold black--text my-4">Bid Line Items</h4>
       
-        
+        <input type="hidden" name="" :value="validat">
       <draggable
         :list="bidLines"
         :disabled="!enabled"
@@ -76,11 +76,11 @@
     </v-row>
     <div class="bidline-section bid-list">
       <h4 class="text-left pl-4 font-weight-bold black--text my-4" v-if="index === 0">Bid Example</h4>
-      <v-row class="bidline-list d-flex align-center px-6 my-2" v-for="(elements,index) in exampleItems">
+      <v-row class="bidline-list d-flex align-center px-6 mt-0" v-for="(elements,index) in exampleItems">
         <v-col md="3" class="d-flex">
           <v-row>
             <v-col md="1" class="pl-1">
-              <div class="mt-6 mr-2 bid-item" :class="[index != 0 ? 'mt-1' : 'mt-6']">
+              <div class="mr-2 bid-item" :class="[index != 0 ? 'mt-1' : 'mt-6']">
                 <img :src="require('@/assets/images/bids/DotsSix.png')">
               </div>
             </v-col>
@@ -123,7 +123,7 @@
               v-model="exampleItems[index]['switch1']"
               inset class="mr-2 ml-2" hide-details readonly :class="[index != 0 ? 'mt-0' : 'mt-4']"
             ></v-checkbox>
-            <v-icon color="#F32349" class="mr-4 mt-5" :class="[index != 0 ? 'mt-0' : 'mt-6']" @click="removeExample(index)">mdi-trash-can-outline</v-icon>
+            <v-icon color="#F32349" class="mr-4" :class="[index != 0 ? 'mt-0' : 'mt-6']" @click="removeExample(index)">mdi-trash-can-outline</v-icon>
           </div>
         </v-col>
       </v-row>
@@ -146,7 +146,7 @@ export default {
     return {
       availableSearch: ['All','Company'],
       availableSuppl: null,
-      inputType: ['USD','EUR'],
+      inputType: ['USD'],
       units: ['Feet','Pound','Ton','Mile','Gallon','Barrell','Day','Each','Hourly','N/A'],
       exampleItems : [],
       qtyRules: [
@@ -165,6 +165,7 @@ export default {
           type: 'USD',
           quantity: '',
           buyerComment: '',
+          valid: false,
         }
       ],
       descRules: [
@@ -177,7 +178,16 @@ export default {
   computed:{
     draggingInfo() {
       return this.dragging ? "under drag" : "";
-    }
+    },
+    validat(){
+      if(this.bidLines.length > 0){
+        this.$emit('validation',{'valid': true,'items': '4'});
+        return this.valid;
+      }else{
+        this.$emit('validation',{'valid': false,'items': '4'});
+        return this.valid;
+      }
+    },
   },
   methods: {
     ...mapActions(["updateDraftBid"]),

@@ -5,6 +5,7 @@
 		      fixed-header
 		      height="300px"
 		    >
+		    {{validat}}
 		    <template v-slot:default>
 		      <thead>
 		        <tr>
@@ -57,6 +58,7 @@
 		<v-row no-gutters align="center" class="px-6 mt-16">
 		  <v-col cols="12" sm="12" md="12">
 		    <div class="upload-attach">
+		      	<input type="hidden" name="" :value="validat">
 		      <label for="uploadFile" class="upload-file pa-8 d-block font-weight-medium" >
 		      	<input type="file" ref="documentUploader" class="d-none" id="uploadFile"  @change="handleDocumentUpload($event)">
 		         Upload or Drop Attachments Here
@@ -79,6 +81,7 @@ export default {
     	fileExt: '',
     	fileSize: '',
     	documents: [],
+    	valid: false,
     };
   },
   computed:{
@@ -87,7 +90,16 @@ export default {
     },
     docsList(){
     	return this.$store.getters.attachData;
-    }
+    },
+    validat(){
+      if(this.$store.getters.attachData){
+        this.$emit('validation',{'valid': true,'attach': '5'});
+        return this.valid;
+      }else{
+        this.$emit('validation',{'valid': false,'attach': '5'});
+        return this.valid;
+      }
+    },
   },
   methods: {
   	...mapActions(["uploadBidAttach","updateDraftBid"]),

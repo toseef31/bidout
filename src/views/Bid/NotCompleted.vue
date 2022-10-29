@@ -33,10 +33,44 @@
               >
                 {{ item.text }} {{item.index}}
                 
-                <v-icon small right v-if="validate == true && value == item.value" color="#0D9648">mdi-check-circle-outline</v-icon>
-                <v-icon right small color="#F32349" v-else>
-                  {{item.icon}}
-                </v-icon>
+                <template v-if="index === 0">
+                  <v-icon small right v-if="validate == true && value == item.value" color="#0D9648">mdi-check-circle-outline</v-icon>
+                  <v-icon right small color="#F32349" v-else>
+                    {{item.icon}}
+                  </v-icon>
+                </template>
+                
+                <template  v-if="index === 1">
+                  <v-icon small right v-if="supplierValid == true && supplierValue == item.value" color="#0D9648">mdi-check-circle-outline</v-icon>
+                  <v-icon right small color="#F32349" v-else>
+                    {{item.icon}}
+                  </v-icon>
+                </template>
+                <template  v-if="index === 2">
+                  <v-icon small right v-if="teamValid == true && teamValue == item.value" color="#0D9648">mdi-check-circle-outline</v-icon>
+                  <v-icon right small color="#F32349" v-else>
+                    {{item.icon}}
+                  </v-icon>
+                </template>
+                <template  v-if="index === 3">
+                  <v-icon small right v-if="itemsValid == true && itemsValue == item.value" color="#0D9648">mdi-check-circle-outline</v-icon>
+                  <v-icon right small color="#F32349" v-else>
+                    {{item.icon}}
+                  </v-icon>
+                </template>
+                
+                <template  v-if="index === 4">
+                  <v-icon small right v-if="attachValid == true && attachValue == item.value" color="#0D9648">mdi-check-circle-outline</v-icon>
+                  <v-icon right small color="#F32349" v-else>
+                    {{item.icon}}
+                  </v-icon>
+                </template>
+                <template  v-if="index === 5">
+                  <v-icon small right v-if="questionValid == true && questionValue == item.value" color="#0D9648">mdi-check-circle-outline</v-icon>
+                  <v-icon right small color="#F32349" v-else>
+                    {{item.icon}}
+                  </v-icon>
+                </template>
               </v-tab>
             </v-tabs>
             <v-tabs-items v-model="currentItem">
@@ -48,22 +82,22 @@
               <v-tab-item
                 value="tab-2"
               >
-                <SupplierSection @changetab="ChangeT($event)"></SupplierSection>
+                <SupplierSection @changetab="ChangeT($event)" @validation="validateSupplier($event)"></SupplierSection>
               </v-tab-item>
               <v-tab-item
                 value="tab-3"
               >
-                <team-members  @changetab="ChangeT($event)"></team-members>
+                <team-members  @changetab="ChangeT($event)" @validation="validateTeam($event)"></team-members>
               </v-tab-item>
               <v-tab-item
                 value="tab-4" class="bidline-tab"
               >
-                <bid-lines  @changetab="ChangeT($event)"></bid-lines>
+                <bid-lines  @changetab="ChangeT($event)" @validation="validateItems($event)"></bid-lines>
               </v-tab-item>
               <v-tab-item
                 value="tab-5" class="attachment-tab mt-5"
               >
-                <attachment  @changetab="ChangeT($event)"></attachment>
+                <attachment  @changetab="ChangeT($event)" @validation="validateAttachment($event)"></attachment>
               </v-tab-item>
               <v-tab-item
                 value="tab-6" class="question-tab mt-5"
@@ -123,6 +157,16 @@ export default {
       validate: '',
       value: '',
       bidTitle: '',
+      supplierValid: '',
+      supplierValue: '',
+      teamValid: '',
+      teamValue: '',
+      itemsValid: '',
+      itemsValue: '',
+      attachValid: '',
+      attachValue: '',
+      questionValid: '',
+      questionValue: '',
     };
   },
   computed:{
@@ -148,12 +192,28 @@ export default {
       this.currentItem=tab;
     },
     validateValue(event){
-      console.log(event);
       this.validate = event.valid;
       this.value = event.value;
       this.bidTitle = event.bidTitle;
+    },
+    validateSupplier(event){
       console.log(event);
-    }
+      this.supplierValid = event.valid;
+      this.supplierValue = event.supplier;
+    },
+    validateTeam(event){
+      this.teamValid = event.valid;
+      this.teamValue = event.team;
+    },
+    validateItems(event){
+      this.itemsValid = event.valid;
+      this.itemsValue = event.items;
+    },
+    validateAttachment(event){
+      console.log(event);
+      this.attachValid = event.valid;
+      this.attachValue = event.attach;
+    },
   },
   mounted() {
     document.title = "Create Bid - BidOut";

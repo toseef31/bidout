@@ -37,11 +37,11 @@
 		        </v-tabs>
 		      </div>
 		    </div>
-		    
 		    <v-tabs-items v-model="availableSuppl">
 		      <v-tab-item value="companyName">
 		        <div class="available-search d-flex justify-space-between align-center mt-5 px-4">
 		          <div>
+		          	<input type="hidden" name="" :value="validat">
 		            <v-text-field
 		              type="text" hide-details
 		              outlined
@@ -184,6 +184,7 @@
 		    </div>
 		  </v-col>
 		</v-row>
+		
 		<v-row justify="center" align="center" no-gutters>
 		  <v-col cols="12" md="12">
 		    
@@ -318,6 +319,7 @@ export default {
       companyBasin: 'all',
       invitedCompanies: [],
       interval: '',
+      valid: false,
     };
   },
   computed:{
@@ -333,6 +335,15 @@ export default {
     },
     serviceCompanies(){
     	return this.$store.getters.serviceCompaniesList;
+    },
+    validat(){
+    	if(this.repsInvited.length > 0){
+    		this.$emit('validation',{'valid': true,'supplier': '2'});
+    		return this.valid;
+    	}else{
+    		this.$emit('validation',{'valid': false,'supplier': '2'});
+    		return this.valid;
+    	}
     },
   },
   methods: {
@@ -352,12 +363,18 @@ export default {
     		company: this.company,
     		phone: this.results,
     		email: this.email,
-    		bidTitle: JSON.parse(localStorage.getItem('bidData')).bidTitle,
-    		bidType: JSON.parse(localStorage.getItem('bidData')).bidType,
-    		bidDueDate: JSON.parse(localStorage.getItem('bidData')).bidDueDate,
-    		bidDueTime: JSON.parse(localStorage.getItem('bidData')).bidDueTime,
+    		bidTitle: JSON.parse(localStorage.getItem('bidData')).title,
+    		bidType: JSON.parse(localStorage.getItem('bidData')).type,
+    		bidDueDate: JSON.parse(localStorage.getItem('bidData')).dueDate,
+    		bidDueTime: JSON.parse(localStorage.getItem('bidData')).dueTime,
     	}
       this.inviteNewSupplier(supplier);
+      this.supplierDialog = false;
+      const data = {
+      	type: 'user',
+      	item: supplier,
+      }
+      this.repsInvited.push(data);
     },
     hideCategories(){
     	this.categories = false;

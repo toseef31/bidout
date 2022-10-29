@@ -28,7 +28,7 @@
             </v-col>
             <v-col cols="12" sm="6" text="left">
               <label class="d-block text-left input-label mb-2 font-weight-bold">Due Date </label>
-              <v-text-field placeholder="Due Date" single-line outlined type="date" v-model="dueDate" :rules="dueDateRules" >
+              <v-text-field placeholder="Due Date" single-line outlined type="date" v-model="dueDate" :rules="dueDateRules" :min="new Date().toISOString().substr(0, 10)">
               </v-text-field>
               
             </v-col>
@@ -144,19 +144,20 @@ export default {
       region: ['Gulf Coast','Northwest','Rockies','Mid-Con','Permian','Arklatex','Offshore','Other'],
       textFields: [],
       interval: '',
-      disabledDates: {
-        to: new Date(Date.now() - 8640000)
-      }
+      
     };
   },
   computed:{
     validat(){
       this.$emit('validation',{'valid': this.valid,'value': '1','bidTitle':this.title});
       return this.valid;
-    }
+    },
+    
   },
   watch: {
-    
+    date  (val) {
+      this.dueDate = this.formatDate(this.date )
+    },
   },
   methods: {
     ...mapActions(["saveDraftBid"]),
@@ -204,7 +205,8 @@ export default {
   
    remove (index) {
        this.textFields.splice(index, 1)
-   }
+   },
+   
   },
   created() {
       // this.interval = setInterval(() => this.savedraft());

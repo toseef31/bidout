@@ -43,9 +43,13 @@
           <div class="d-flex align-center justify-space-between question-header">
             <div class="d-flex align-center question-title mb-5">
               <img :src="require('@/assets/images/bids/DotsSix.png')" class="mr-4"> 
-              <h4>Operational Questions{{cat.title}}</h4>
+              <h4>
+                <template v-if="editCat === index && isCate"><v-text-field outlined height="30px" width="150px" hide-details v-model="categories[index]['title']"></v-text-field></template>
+                <template v-else>{{cat.title}}</template>
+              </h4>
               <div class="ml-5">
-                <v-icon color="#0D9648" class="mr-6">mdi-square-edit-outline</v-icon>
+                <v-icon color="#0D9648" class="mr-6" v-if="!isCate" @click="editCatTitle(index)">mdi-square-edit-outline</v-icon>
+                <v-icon color="#0D9648" class="mr-6"  v-if="isCate" @click="isCate = !isCate">mdi-content-save</v-icon>
                 <v-icon color="#F32349">mdi-trash-can-outline</v-icon>
               </div>
             </div>
@@ -91,6 +95,8 @@
                 <div class="d-flex justify-space-between mb-2 question-header">
                   <div class="d-flex align-center mb-2">
                     <label class="d-block input-label black--text subtitle">Please explain your Previous safety incident </label>
+
+                    <a @click="editQusTitle(index)" class="text-muted ml-5">Edit</a>
                     <a href="" class="text-muted ml-5">Delete</a>
                   </div>
                   <div class="d-flex align-center mb-2">
@@ -182,6 +188,8 @@ export default {
         {title:'Textarea', type: 'textarea'},
         {title:'Upload Field', type: 'uploadFile'},
       ],
+      editCat: '',
+      isCate: false,
       offset: true,
       categories:[],
       questions: [],
@@ -212,6 +220,10 @@ export default {
       }
       this.categories.push(data);
    
+    },
+    editCatTitle(index){
+      this.editCat = index;
+      this.isCate = true;
     },
     updateQuestion(){
       this.updateDraftBid(this.categories);
