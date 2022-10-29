@@ -7,21 +7,21 @@
       
     >
       <v-col
-        class="py-4 text-left white--text"
+        class="py-4 text-left white--text pl-sm-0"
         cols="12" md="3"
       >
         <div class="first-col">
           <div class="footer-logo">
-            <img :src="require('@/assets/images/green-white.png')">
+            <img :src="require('@/assets/images/Footer-logo.png')">
           </div>
-          <p class="mb-7 mt-4">The Leading Oil & Gas Procurement Platform</p>
-          <div class="mb-5">
+          <p class="mb-6">The Leading Oil & Gas Procurement Platform</p>
+          <div class="mb-0">
             <v-btn color="#747B89" height="34px" min-width="34px" href="https://www.linkedin.com/company/bidout/" target="_blank" class="rounded-0 pa-0 mr-3">
-             <v-icon>fab fa-linkedin-in</v-icon>
+             <v-icon size="17px">fab fa-linkedin-in</v-icon>
             </v-btn>
             <v-btn color="#747B89" height="34px" min-width="34px" href="https://www.facebook.com/bidoutapp" target="_blank" class="rounded-0 pa-0"
               >
-             <v-icon>fab fa-facebook-f</v-icon>
+             <v-icon size="17px">fab fa-facebook-f</v-icon>
             </v-btn>
             
           </div>
@@ -29,12 +29,12 @@
         </div>
       </v-col>
       <v-col
-        class="py-4 text-left white--text"
+        class="py-4 text-left white--text col2-menu"
         cols="12" md="3"
       >
-        <div class="second-col">
-          <a href="https://bidout.app" class="text-decoration-none"><h4 class="mb-7">Home</h4></a>
-          <h4 class="text-uppercase mb-2">Product</h4>
+        <div class="second-col mt-2">
+          <a href="https://bidout.app" class="text-decoration-none"><p class="mb-8">Home</p></a>
+          <h4 class="mb-0">Product</h4>
           <div class="footer-menu">
             <v-list>
               <a href="https://bidout.app/rfx-procurement-platform/" class="text-decoration-none white--text"><v-list-item-title>RFx Procurement Platform</v-list-item-title></a>
@@ -53,7 +53,7 @@
         </div>
       </v-col>
       <v-col
-        class="py-4 text-left white--text"
+        class="py-4 text-left white--text col-menu3"
         cols="12" md="2"
       >
         <div class="second-col">
@@ -83,35 +83,35 @@
         </div>
       </v-col>
       <v-col
-        class="py-4 text-left white--text pl-sm-0"
+        class="py-4 text-left white--text col-menu4"
         cols="12" md="2"
       >
         <div class="second-col">
-          <h4 class="text-uppercase pl-1 mb-6">Contact Us</h4>
+          <h4 class="text-uppercase pl-1 mb-5">Contact Us</h4>
           <div class="d-flex light-text align-center">
-            <v-icon color="#ffffff">mdi-map-marker-outline</v-icon>
+            <v-icon color="#ffffff" size="18px">mdi-map-marker</v-icon>
             <h5 class="pl-2 sub-heading white--text">Address</h5>
           </div>
-            <a href="https://g.page/cannoncommunity" class="white--text text-decoration-none"><p class="pt-2 pl-1">1334 Brittmoore Road <br>Suite 1000B <br>Houston, Texas 77043</p></a>
+            <a href="https://g.page/cannoncommunity" class="white--text text-decoration-none"><p class="pt-2 pl-1">1334 Brittmoore Road Suite 1000B <br>Houston, Texas 77043</p></a>
             <div class="d-flex light-text align-center mt-7">
-              <v-icon color="#ffffff">mdi-phone-outline</v-icon>
+              <v-icon color="#ffffff" size="18px">mdi-phone-outline</v-icon>
               <h5 class="pl-2 sub-heading white--text">Call Us</h5>
             </div>
             <a href="tel:8327862400" class="white--text text-decoration-none"><p class="pl-1 phone pt-2">832-786-2400</p></a>
         </div>
       </v-col>
       <v-col
-        class="py-4 text-left white--text pl-sm-0"
+        class="py-4 text-left white--text pl-sm-2"
         cols="12" md="2"
       >
         <div class="second-col last-col">
           <div class="d-flex light-text align-center mb-2">
-            <v-icon color="#ffffff">mdi-email-outline</v-icon>
+            <v-icon color="#ffffff" size="18px">mdi-email</v-icon>
             <h5 class="pl-2 sub-heading white--text">General Inquiries</h5>
           </div>
             <a href="mailto:hello@bidout.app" class="text-decoration-none white--text pl-1">hello@bidout.app</a>
             <div class="d-flex light-text align-center mt-16 mb-2">
-              <v-icon color="#ffffff">mdi-email-outline</v-icon>
+              <v-icon color="#ffffff" size="18px">mdi-email</v-icon>
               <h5 class="pl-2 sub-heading white--text">Sales Inquiries</h5>
             </div>
             <a href="mailto:sales@bidout.app" class="text-decoration-none white--text pl-1">sales@bidout.app</a>
