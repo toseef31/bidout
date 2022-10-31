@@ -1,6 +1,6 @@
 .footer-module{
 	font-family: 'Poppins', sans-serif;
-	padding: 8.9rem 5.5rem 2rem 5.2rem !important;
+	padding: 8.69rem 5.5rem 2rem 5.25rem !important;
 	background-image: url(https://bidout.app/wp-content/uploads/2022/10/footer-shape-1.png);
   background-position: top right;
   background-repeat: no-repeat;
@@ -32,7 +32,7 @@
 	}
 	.footer-logo{
 		max-width: 197px;
-		margin-bottom: 13px;
+		margin-bottom: 14px;
 		img{
 			width: 100%;
 		}
@@ -50,18 +50,20 @@
 			font-style: italic;
 			color: hsla(0,0%,100%,.4);
 	    font-weight: 500;
+	    margin-bottom: 26px;
 		}
 		.made-by{
 			position: relative;
-			margin-top: 7.8rem;
+			margin-top: 7.7rem;
 			font-style: normal;
 			font-size: 17px;
 			font-weight: 400;
+			margin-bottom: 14px;
 			&:before{
 				position: absolute;
 		    content: "";
-		    right: 16%;
-		    top: -3px;
+		    right: 16.4%;
+		    top: -5px;
 		    width: 40px;
 		    height: 43px;
 		    background: url(https://bidout.app/wp-content/uploads/texas-logo.png);
@@ -71,10 +73,17 @@
 		}
 	}
 	.col2-menu{
-		padding-left: 27px;
+		padding-left: 26px;
+		.product-title{
+			padding-top: 2px;
+		}
+		.footer-menu{
+			margin-top: -1px;
+		}
 	}
 	.col-menu3{
-		padding-left: 0px;
+		margin-left: -3px;
+		padding-left: 0;
 	}
 
 	.second-col{
@@ -92,7 +101,8 @@
 			}
 		}
 		.phone{
-			font-size: 16px;
+			font-size: 16.5px;
+			padding-top: 6px;
 		}
 		.router-link-exact-active{
 			color: #0d9648 !important;
@@ -105,29 +115,63 @@
 			font-size: 16px;
 			font-weight: 500;
 			color: hsla(0,0%,100%,.4);
+			padding-left: 5px;
 		}
 		.footer-menu{
 			.v-list{
 				background: transparent;
 		    color: #fff;
 			}
+			.privacy-menu{
+				padding-top: 26px;
+			}
 		}
 	}
 	.col-menu4{
-		padding-left: 4px;
+		padding-left: 2px;
+    padding-top: 12px;
 		.second-col{
+			.address{
+				p{
+					padding-top: 6px;
+				}
+			}
 			a{
 				font-size: 16.5px;
 				font-weight: 400;
+			}
+			.mdi-map-marker{
+				margin-top: -2px;
+			}
+			.mdi-phone{
+				margin-left: 3px;
+			}
+			.phone-text{
+				padding-left: 2px;
 			}
 		}
 		
 	}
 	.last-col{
 		position: relative;
-		padding-top: 3rem;
+		padding-top: 43px;
+		padding-left: 2px;
+		.email-box{
+			margin-bottom: 5px;
+			.v-icon{
+				margin-top: -2px;
+			}
+		}
+		.sales-box{
+			margin-bottom: 5px;
+			margin-top: 66px;
+			.v-icon{
+				margin-top: -2px;
+			}
+		}
 		a{
-			font-size: 16px;
+			font-size: 16.5px;
+			font-weight: 400;
 			&:hover{
 				color: #0d9648 !important;
 			}
