@@ -82,7 +82,7 @@
                   <h1 class="font-weight-bold mb-3 text-break" @click="getMainCompany(category)">{{category.name}}</h1>
                   <p>
                     <span v-for="subcategry in subCategories(category.subCategories)" class="sub-catLink">
-                      <span @click="getCompanies(category.slug,subcategry.name)">  
+                      <span @click="getCompanies(category.slug,subcategry)">  
                         <font class="font-weight-bold">{{subcategry.name}} </font> 
                         <font class="font-weight-medium">({{subcategry.spCount}}) </font> 
                       </span>
@@ -230,8 +230,8 @@ export default {
     subCategories(subCats){
      return _.orderBy(subCats, 'orderNumber', 'asc');
     },
-    getCompanies(slug,subName){
-      this.getSupplierCompanyByservice({slug:slug, service:subName});
+    getCompanies(slug,subcategory){
+      this.getSupplierCompanyByservice({slug:slug, service:subcategory.name, subSlug: subcategory.slug});
     },
     getMainCompany(category){
       this.getSupplierMainService({slug:category.slug, name:category.name, id: category.id});
