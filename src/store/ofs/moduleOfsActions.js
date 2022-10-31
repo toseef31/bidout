@@ -22,7 +22,7 @@ export default {
           name: payload.service,
         };
         commit("setCompanies", data);
-        router.replace(`/ofs-directory/${payload.slug}/${url}`);
+        router.replace(`/ofs-directory/${payload.slug}/${payload.subSlug}`);
       })
       .catch((err) => {
         console.log(err);
@@ -40,7 +40,7 @@ export default {
           slug: payload.slug,
         };
         commit("setCompanies", data);
-        router.replace(`/ofs-supplier/${payload.slug}/${url}`);
+        router.replace(`/ofs-supplier/${payload.slug}/${payload.subSlug}`);
       })
       .catch((err) => {
         console.log(err);
@@ -57,7 +57,7 @@ export default {
           id: payload.id,
         };
         commit("setCompanies", data);
-        router.replace(`/ofs-supplier/${url}`);
+        router.replace(`/ofs-supplier/${payload.slug}`);
       })
       .catch((err) => {
         console.log(err);
@@ -74,7 +74,7 @@ export default {
           id: payload.id,
         };
         commit("setCompanies", data);
-        router.replace(`/ofs-directory/${url}`);
+        router.replace(`/ofs-directory/${payload.slug}`);
       })
       .catch((err) => {
         console.log(err);
