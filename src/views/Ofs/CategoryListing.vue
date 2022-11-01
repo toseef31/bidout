@@ -48,7 +48,7 @@
                           <td class="pl-8">
                             <span
                               @click="
-                                viewPublicCompany(company.objectID, company.company)
+                                viewPublicCompany(company.id, company.company)
                               "
                               class="text-decoration-none company-link"
                               >{{ company.company }}

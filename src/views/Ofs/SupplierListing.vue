@@ -61,7 +61,7 @@
                             <td class="pl-6">
                               <span
                                 @click="
-                                  viewCompany(company.objectID, company.company)
+                                  viewCompany(company.id, company.company)
                                 "
                                 class="text-decoration-none company-link"
                                 >{{ company.company }}</span
@@ -94,7 +94,7 @@
                             <td>
                               <span
                                 @click="
-                                  viewCompany(company.objectID, company.company)
+                                  viewCompany(company.id, company.company)
                                 "
                                 class="text-decoration-none company-link"
                                 >View Details</span
