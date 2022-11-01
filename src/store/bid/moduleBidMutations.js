@@ -14,6 +14,9 @@ export default {
   setDraftBidsList(state, payload){
     state.draftBidsList = payload
   },
+  setBidsList(state, payload){
+    state.bidsList = payload
+  },
   setBidData(state, payload){
     state.bidData = payload
   },
