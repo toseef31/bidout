@@ -162,6 +162,8 @@ export default {
       "getPublicCompanyInfo",
       "searchCompany",
       "getCompanyByBasin",
+      "getSupplierCompanyByservice",
+      "getSupplierMainService"
     ]),
     viewPublicCompany(id, name) {
       console.log(id);
@@ -171,18 +173,18 @@ export default {
       this.searchCompany();
     },
     getByBasin(basin) {
-      if (basin == "All") {
-        return this.$store.getters.serviceCompanies.data;
-      }
-      const data = {
-        basin,
-        id: this.$store.getters.serviceCompanies.id,
-      };
-      this.getCompanyByBasin(data);
+      this.getCompanyByBasin({ basin, slug: this.cateSlug });
     },
   },
   mounted() {
     document.title = "Categories - BidOut";
+    if(this.$route.params.slug.name){
+      this.cateSlug = this.$route.params.slug.name;
+      this.getCompanyByBasin({ basin: 'All', slug: this.cateSlug });
+    }else{
+      this.cateSlug = this.$route.params.slug;
+      this.getCompanyByBasin({ basin: 'All', slug: this.cateSlug });
+    }
   },
 };
 </script>

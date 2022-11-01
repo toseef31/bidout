@@ -79,13 +79,13 @@
               <v-col cols="12" md="6" v-for="category in allcategories" :key="category.id" class="pl-sm-5 pr-sm-5">
                 
                 <div class="ofs-listing text-left">
-                  <h1 class="font-weight-bold mb-3 text-break" @click="getMainCompany(category)">{{category.name}}</h1>
+                  <h1 class="font-weight-bold mb-3 text-break"><router-link :to="'/ofs-supplier/'+category.slug" class="text-decoration-none">{{category.name}}</router-link></h1>
                   <p>
                     <span v-for="subcategry in subCategories(category.subCategories)" class="sub-catLink">
-                      <span @click="getCompanies(category.slug,subcategry)">  
+                      <router-link :to="'/ofs-supplier/'+category.slug+'/'+subcategry.slug" class="text-decoration-none">  
                         <font class="font-weight-bold">{{subcategry.name}} </font> 
                         <font class="font-weight-medium">({{subcategry.spCount}}) </font> 
-                      </span>
+                      </router-link>
                     </span>
                   </p>
                 </div>
@@ -229,12 +229,6 @@ export default {
     },
     subCategories(subCats){
      return _.orderBy(subCats, 'orderNumber', 'asc');
-    },
-    getCompanies(slug,subcategory){
-      this.getSupplierCompanyByservice({slug:slug, service:subcategory.name, subSlug: subcategory.slug});
-    },
-    getMainCompany(category){
-      this.getSupplierMainService({slug:category.slug, name:category.name, id: category.id});
     },
     getSupplierList(){
       if(this.searchCompany.length > 1){

@@ -143,6 +143,7 @@ export default {
         "Offshore",
         "Other",
       ],
+      cateSlug: '',
     };
   },
   computed: {
@@ -182,19 +183,24 @@ export default {
       "getCompanyInfo",
       "getCompanyByBasin",
       "getSupplierMainService",
+      "getSupplierCompanyByservice",
     ]),
     viewCompany(id, name) {
       this.getCompanyInfo({ id, name });
     },
     getByBasin(basin) {
-      if (basin == "All") {
-        return this.$store.getters.serviceCompanies.data;
-      }
-      this.getCompanyByBasin({ basin, id: this.$store.getters.serviceCompanies.id });
+      this.getCompanyByBasin({ basin, slug: this.cateSlug });
     },
   },
   mounted() {
     document.title = "Categories - BidOut";
+    if(this.$route.params.slug.name){
+      this.cateSlug = this.$route.params.slug.name;
+      this.getCompanyByBasin({ basin: 'All', slug: this.cateSlug });
+    }else{
+      this.cateSlug = this.$route.params.slug;
+      this.getCompanyByBasin({ basin: 'All', slug: this.cateSlug });
+    }
   },
 };
 </script>
