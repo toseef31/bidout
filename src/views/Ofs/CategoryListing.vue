@@ -48,7 +48,7 @@
                           <td class="pl-8">
                             <span
                               @click="
-                                viewPublicCompany(company.id, company.company)
+                                viewPublicCompany(company.objectID, company.company)
                               "
                               class="text-decoration-none company-link"
                               >{{ company.company }}
@@ -78,7 +78,7 @@
                           <td>
                             <span
                               @click="
-                                viewPublicCompany(company.id, company.company)
+                                viewPublicCompany(company.objectID, company.company)
                               "
                               class="text-decoration-none company-link"
                               >View Details</span
@@ -164,6 +164,7 @@ export default {
       "getCompanyByBasin",
     ]),
     viewPublicCompany(id, name) {
+      console.log(id);
       this.getPublicCompanyInfo({ id, name });
     },
     companySearch() {

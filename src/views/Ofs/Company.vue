@@ -80,7 +80,7 @@
                                 <v-img v-else-if="get_url_extension(docs.attachment) == 'xlsx' || get_url_extension(docs.attachment) == 'xls'" :src="require('@/assets/images/profile/excel.png')" width="80px" class="mx-auto"></v-img>
                                 <v-img v-else :src="require('@/assets/images/profile/other.png')" width="80px" class="mx-auto"></v-img>
                               </a>
-                              <p>{{get_url_name(docs.attachment)}}</p>
+                              <a :href="docs.attachment" target="_blank" class="text-decoration-none"><p>{{get_url_name(docs.attachment)}}</p></a>
                             </div>
                           </v-col>
                           <v-col cols="12" sm="12" v-if="!companyData.corporateDocuments">
