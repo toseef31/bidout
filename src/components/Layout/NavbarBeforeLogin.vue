@@ -1,6 +1,6 @@
 <template>
   <div class="navbarNoLogin-module">
-        <v-app-bar height="88" fixed dense app>
+        <v-app-bar height="88">
            
             <template>
               <router-link to="/" class="logo_main">
