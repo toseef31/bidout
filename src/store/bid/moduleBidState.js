@@ -8,6 +8,7 @@ export default {
    companiesList: null,
    serviceCompaniesList: null,
    draftBidsList: null,
+   bidsList: null,
    bidData: JSON.parse(localStorage.getItem('bidData')),
    attachData: null,
    draftTime: null,
