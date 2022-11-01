@@ -50,16 +50,21 @@
               <div class="ml-5">
                 <v-icon color="#0D9648" class="mr-6" v-if="!isCate" @click="editCatTitle(index)">mdi-square-edit-outline</v-icon>
                 <v-icon color="#0D9648" class="mr-6"  v-if="isCate" @click="isCate = !isCate">mdi-content-save</v-icon>
-                <v-icon color="#F32349">mdi-trash-can-outline</v-icon>
+                <v-icon color="#F32349" >mdi-trash-can-outline</v-icon>
               </div>
             </div>
           </div>
           <div class="ml-5 question-body" v-for="(question,i) in cat.question">
             <template v-if="question.questionType == 'checkbox'">
               <div class="d-flex align-center justify-space-between">
-                <div class="d-flex ">
+                <div class="d-flex align-center">
                   <img :src="require('@/assets/images/bids/DotsSix.png')" class="mr-4"> 
-                  <p class="mb-0 black--text subtitle">{{question.questionTitle}}</p>
+                  <template v-if="editQues === index && isQues"><v-text-field outlined height="30px" min-height="32px" width="150px" hide-details v-model="cat.question[index]['questionTitle']"></v-text-field></template>
+                  <template v-else><p class="mb-0 black--text subtitle">{{question.questionTitle}}</p></template>
+
+                  <a @click="editQusTitle(i)" class="text-muted ml-5" v-if="!isQues">Edit</a>
+                  <a v-if="isQues" @click="isQues = !isQues" class="text-muted ml-5">Save</a>
+                  <a @click="deleteQuestion(i)" class="text-muted ml-5">Delete</a>
                 </div>
                 <div class="d-flex align-center mr-4 mr-sm-6">
                   <v-switch
@@ -94,10 +99,14 @@
               <template v-if="question.questionType == 'textfield'">
                 <div class="d-flex justify-space-between mb-2 question-header">
                   <div class="d-flex align-center mb-2">
-                    <label class="d-block input-label black--text subtitle">Please explain your Previous safety incident </label>
+                    
 
-                    <a @click="editQusTitle(index)" class="text-muted ml-5">Edit</a>
-                    <a href="" class="text-muted ml-5">Delete</a>
+                    <template v-if="editQues === index && isQues"><v-text-field outlined height="30px" min-height="32px" width="150px" hide-details v-model="cat.question[index]['questionTitle']"></v-text-field></template>
+                    <template v-else><label class="mb-0 black--text subtitle">{{question.questionTitle}}</label></template>
+
+                    <a @click="editQusTitle(i)" class="text-muted ml-5" v-if="!isQues">Edit</a>
+                    <a v-if="isQues" @click="isQues = !isQues" class="text-muted ml-5">Save</a>
+                    <a @click="deleteQuestion(i)" class="text-muted ml-5">Delete</a>
                   </div>
                   <div class="d-flex align-center mb-2">
                     <v-switch
@@ -194,6 +203,8 @@ export default {
       categories:[],
       questions: [],
       switch1: false,
+      editQues: '',
+      isQues: false,
     };
   },
   computed:{
@@ -218,6 +229,7 @@ export default {
       var data = {
         question: this.questions,
       }
+      
       this.categories.push(data);
    
     },
@@ -225,10 +237,20 @@ export default {
       this.editCat = index;
       this.isCate = true;
     },
+    editQusTitle(index){
+      this.editQues = index;
+      this.isQues = true;
+    },
     updateQuestion(){
       this.updateDraftBid(this.categories);
+    },
+    deleteQuestion(index){
+      this.questions.splice(index,1);
+      var data = {
+        question: this.questions,
+      }
+      this.categories.push(data);
     }
-    
   },
   mounted() {
     
