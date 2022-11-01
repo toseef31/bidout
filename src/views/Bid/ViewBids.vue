@@ -168,7 +168,7 @@ export default {
       tab: 'tab-0',
       searchBid: '',
       items: [
-        'Open Bids (6)', 'Close Bids (3)'
+        'Open Bids (6)', 'Closed Bids (3)'
       ],
       text: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.',
       bids: [
@@ -232,12 +232,13 @@ export default {
     }
   },
   methods: {
-    ...mapActions(["getDraftBids"]),
+    ...mapActions(["getDraftBids","getBidsLists"]),
   },
   mounted() {
     document.title = "Bids - BidOut";
     this.users = this.$store.getters.userInfo;
     this.getDraftBids(this.users.id);
+    this.getBidsLists(this.users.id);
   }
 };
 </script>
