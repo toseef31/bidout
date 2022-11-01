@@ -12,7 +12,7 @@
               <v-col cols="12" md="12">
                 <VueSlickCarousel v-bind="settings" class="company-slider" v-if="premiumCompanies.length > 0">
                   
-                  <div class="slide-item" v-for="premium in premiumCompanies" @click="viewCompany(premium.id,premium.company)">
+                  <div class="slide-item" v-for="premium in premiumCompanies" @click="viewCompany(premium.slug,premium.company)">
                     <div class="slide-img d-flex align-center justify-center flex-column">
                       <img v-if="premium.image"
                         :src="premium.image" class="mx-auto"
@@ -35,7 +35,7 @@
                     <v-list  class="company-list">
                       <template v-for="(company, index) in companies">
                         <v-list-item class="py-1"
-                          :key="company.objectID" @click="viewCompany(company.objectID,company.company)"
+                          :key="company.objectID" @click="viewCompany(company.slug,company.company)"
                         >
                           <v-list-item-avatar max-height="31px" max-width="88px" width="88px" tile>
                             <v-img v-if="company.companyImage" :src="company.companyImage" height="auto"></v-img>
@@ -45,7 +45,7 @@
                             <v-list-item-title class="text-left">{{company.company}}</v-list-item-title>
                           </v-list-item-content>
                           <v-list-item-action>
-                            <v-list-item-action-text class="font-weight-bold" @click="viewCompany(company.objectID,company.company)"><router-link to="">View Profile</router-link></v-list-item-action-text>
+                            <v-list-item-action-text class="font-weight-bold" @click="viewCompany(company.slug,company.company)"><router-link to="">View Profile</router-link></v-list-item-action-text>
                           </v-list-item-action>
                         </v-list-item>
                       </template>
@@ -241,8 +241,8 @@ export default {
         this.searchSupplier(this.searchCompany);
       }
     },
-    viewCompany(id,name){
-      this.getCompanyInfo({'id':id,'name':name});
+    viewCompany(slug,name){
+      this.getCompanyInfo({'slug':slug,'name':name});
     },
     loader(){
       setTimeout(()=>{

@@ -98,11 +98,11 @@ export default {
   getCompanyInfo({ commit }, payload) {
     const url = encodeURIComponent(payload.name);
     axios
-      .get(`/company/getCompanyById/${payload.id}`)
+      .get(`/company/getCompanyBySlug/${payload.slug}`)
       .then((responce) => {
         commit("setCompany", responce.data);
         localStorage.setItem("companyData", JSON.stringify(responce.data));
-        router.replace(`/company/${url}`);
+        router.replace(`/company/${payload.slug}`);
       })
       .catch((err) => {
         console.log(err);
@@ -111,11 +111,11 @@ export default {
   getPublicCompanyInfo({ commit }, payload) {
     const url = encodeURIComponent(payload.name);
     axios
-      .get(`/company/getCompanyById/${payload.id}`)
+      .get(`/company/getCompanyBySlug/${payload.slug}`)
       .then((responce) => {
         commit("setCompany", responce.data);
         localStorage.setItem("companyData", JSON.stringify(responce.data));
-        router.replace(`/company-profiles/${url}`);
+        router.replace(`/company-profiles/${payload.slug}`);
       })
       .catch((err) => {
         console.log(err);

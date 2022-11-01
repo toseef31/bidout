@@ -33,7 +33,7 @@
               <div
                 class="slide-item"
                 v-for="premium in premiumCompanies"
-                @click="viewPublicCompany(premium.id, premium.company)"
+                @click="viewPublicCompany(premium.slug, premium.company)"
               >
                 <div
                   class="slide-img d-flex align-center justify-center flex-column"
@@ -78,7 +78,7 @@
                           class="py-1"
                           :key="company.objectID"
                           @click="
-                            viewPublicCompany(company.objectID, company.company)
+                            viewPublicCompany(company.slug, company.company)
                           "
                         >
                           <v-list-item-avatar
@@ -113,7 +113,7 @@
                               class="font-weight-bold"
                               @click="
                                 viewPublicCompany(
-                                  company.objectID,
+                                  company.slug,
                                   company.company
                                 )
                               "
@@ -323,8 +323,8 @@ export default {
         this.searchSupplier(this.searchCompany);
       }
     },
-    viewPublicCompany(id, name) {
-      this.getPublicCompanyInfo({ id, name });
+    viewPublicCompany(slug, name) {
+      this.getPublicCompanyInfo({ slug, name });
     },
     loader() {
       setTimeout(() => {

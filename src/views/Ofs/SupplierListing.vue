@@ -58,6 +58,7 @@
 
                         <tbody>
                           <tr v-for="company in allcompanies" :key="company.id">
+                            
                             <td class="pl-6">
                               <span
                                 @click="
