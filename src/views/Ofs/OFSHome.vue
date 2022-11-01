@@ -33,24 +33,25 @@
               <div
                 class="slide-item"
                 v-for="premium in premiumCompanies"
-                @click="viewPublicCompany(premium.slug, premium.company)"
               >
-                <div
-                  class="slide-img d-flex align-center justify-center flex-column"
-                >
-                  <img
-                    v-if="premium.image"
-                    :src="premium.image"
-                    class="mx-auto"
-                  />
-                  <img
-                    v-else
-                    :src="require('@/assets/images/ofs/no-image.jpg')"
-                  />
-                </div>
-                <div class="slide-caption">
-                  <h3 class="font-weight-bold">{{ premium.company }}</h3>
-                </div>
+                <router-link :to="'/company-profiles/'+premium.slug" class="text-decoration-none">
+                  <div
+                    class="slide-img d-flex align-center justify-center flex-column"
+                  >
+                    <img
+                      v-if="premium.image"
+                      :src="premium.image"
+                      class="mx-auto"
+                    />
+                    <img
+                      v-else
+                      :src="require('@/assets/images/ofs/no-image.jpg')"
+                    />
+                  </div>
+                  <div class="slide-caption">
+                    <h3 class="font-weight-bold">{{ premium.company }}</h3>
+                  </div>
+                </router-link>
               </div>
             </VueSlickCarousel>
           </v-col>
@@ -323,9 +324,7 @@ export default {
         this.searchSupplier(this.searchCompany);
       }
     },
-    viewPublicCompany(slug, name) {
-      this.getPublicCompanyInfo({ slug, name });
-    },
+    
     loader() {
       setTimeout(() => {
         this.pageLoader = false;

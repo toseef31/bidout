@@ -102,7 +102,6 @@ export default {
       .then((responce) => {
         commit("setCompany", responce.data);
         localStorage.setItem("companyData", JSON.stringify(responce.data));
-        router.replace(`/company/${payload.slug}`);
       })
       .catch((err) => {
         console.log(err);
@@ -115,7 +114,6 @@ export default {
       .then((responce) => {
         commit("setCompany", responce.data);
         localStorage.setItem("companyData", JSON.stringify(responce.data));
-        router.replace(`/company-profiles/${payload.slug}`);
       })
       .catch((err) => {
         console.log(err);

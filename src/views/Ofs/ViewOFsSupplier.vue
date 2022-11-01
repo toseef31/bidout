@@ -11,17 +11,18 @@
             <v-row>
               <v-col cols="12" md="12">
                 <VueSlickCarousel v-bind="settings" class="company-slider" v-if="premiumCompanies.length > 0">
-                  
-                  <div class="slide-item" v-for="premium in premiumCompanies" @click="viewCompany(premium.slug,premium.company)">
-                    <div class="slide-img d-flex align-center justify-center flex-column">
-                      <img v-if="premium.image"
-                        :src="premium.image" class="mx-auto"
-                      >
-                      <img v-else :src="require('@/assets/images/ofs/no-image.jpg')">
-                    </div>
-                    <div class="slide-caption">
-                      <h3 class="font-weight-bold">{{premium.company}}</h3>
-                    </div>
+                  <div class="slide-item" v-for="premium in premiumCompanies">
+                    <router-link :to="'/company/'+premium.slug" class="text-decoration-none">
+                      <div class="slide-img d-flex align-center justify-center flex-column">
+                        <img v-if="premium.image"
+                          :src="premium.image" class="mx-auto"
+                        >
+                        <img v-else :src="require('@/assets/images/ofs/no-image.jpg')">
+                      </div>
+                      <div class="slide-caption">
+                        <h3 class="font-weight-bold">{{premium.company}}</h3>
+                      </div>
+                    </router-link>
                   </div>
                 </VueSlickCarousel>
               </v-col>
