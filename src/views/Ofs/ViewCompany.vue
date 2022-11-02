@@ -206,7 +206,7 @@ export default {
       var LocationsForMap = this.$store.getters.companyData.companyData.companyLocations;
      
       var map = new google.maps.Map(document.getElementById('map'), {
-        zoom: 2,
+        zoom: 4,
         center: new google.maps.LatLng(LocationsForMap[0].lattitude, LocationsForMap[0].longitude),
         mapTypeId: google.maps.MapTypeId.ROADMAP
       });
