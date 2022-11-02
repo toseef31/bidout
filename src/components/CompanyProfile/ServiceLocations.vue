@@ -82,7 +82,7 @@ export default {
       }
 
       var map = new google.maps.Map(document.getElementById('map'), {
-        zoom: 2,
+        zoom: 4,
         center: new google.maps.LatLng(LocationsForMap[0].lattitude, LocationsForMap[0].longitude),
         mapTypeId: google.maps.MapTypeId.ROADMAP
       });
@@ -117,6 +117,7 @@ export default {
         };
         const input = document.getElementById("pac-input");
 
+
         const options = {
           bounds: defaultBounds,
           fields: ["address_components", "geometry", "icon", "name","formatted_address"],
@@ -135,11 +136,11 @@ export default {
         autocomplete.setBounds(newBounds);
         
         autocomplete.addListener("place_changed", () => {
-         
+         console.log('hello',autocomplete);
           marker.setVisible(true);
 
           const place = autocomplete.getPlace();
-
+          console.log(place);
           if (!place.geometry || !place.geometry.location) {
             // User entered the name of a Place that was not suggested and
             // pressed the Enter key, or the Place Details request failed.
@@ -179,7 +180,7 @@ export default {
           }
           this.lat = place.geometry.location.lat();
           this.lng = place.geometry.location.lng();
-          this.address = place.name+', '+place.formatted_address;
+          this.address = place.formatted_address;
         });
     },
     addLocation(){
