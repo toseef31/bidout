@@ -34,20 +34,22 @@
                   <div v-if="hideList == true">
                     <v-list  class="company-list">
                       <template v-for="(company, index) in companies">
-                        <v-list-item class="py-1"
-                          :key="company.objectID" @click="viewCompany(company.objectID,company.company)"
-                        >
-                          <v-list-item-avatar max-height="31px" max-width="88px" width="88px" tile>
-                            <v-img v-if="company.companyImage" :src="company.companyImage" height="auto"></v-img>
-                            <v-img v-else :src="`/images/companies/no-image.jpg`" height="auto"></v-img>
-                          </v-list-item-avatar>
-                          <v-list-item-content>
-                            <v-list-item-title class="text-left">{{company.company}}</v-list-item-title>
-                          </v-list-item-content>
-                          <v-list-item-action>
-                            <v-list-item-action-text class="font-weight-bold" @click="viewCompany(company.objectID,company.company)"><router-link to="">View Profile</router-link></v-list-item-action-text>
-                          </v-list-item-action>
-                        </v-list-item>
+                        <router-link :to="'company/'+company.slug" class="text-decoration-none">
+                          <v-list-item class="py-1"
+                            :key="company.objectID"
+                          >
+                            <v-list-item-avatar max-height="31px" max-width="88px" width="88px" tile>
+                              <v-img v-if="company.companyImage" :src="company.companyImage" height="auto"></v-img>
+                              <v-img v-else :src="`/images/companies/no-image.jpg`" height="auto"></v-img>
+                            </v-list-item-avatar>
+                            <v-list-item-content>
+                              <v-list-item-title class="text-left">{{company.company}}</v-list-item-title>
+                            </v-list-item-content>
+                            <v-list-item-action>
+                              <v-list-item-action-text class="font-weight-bold" ><router-link :to="'company/'+company.slug">View Profile</router-link></v-list-item-action-text>
+                            </v-list-item-action>
+                          </v-list-item>
+                        </router-link>
                       </template>
                       <!-- <v-btn color="rgba(13, 150, 72, 0.1)" rounded class="all-btn text-capitalize my-4">View all results</v-btn> -->
                     </v-list>
