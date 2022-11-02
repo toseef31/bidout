@@ -47,11 +47,8 @@
                         <tr v-for="company in allcompanies.companies" :key="company.id">
                           <td class="pl-8">
                             <span
-                              @click="
-                                viewPublicCompany(company.objectID, company.company)
-                              "
                               class="text-decoration-none company-link"
-                              >{{ company.company }}
+                              ><router-link :to="'/company/'+company.slug" class="text-decoration-none">{{ company.company }}</router-link>
                             </span>
                           </td>
 
@@ -77,11 +74,8 @@
                           </td>
                           <td>
                             <span
-                              @click="
-                                viewPublicCompany(company.objectID, company.company)
-                              "
                               class="text-decoration-none company-link"
-                              >View Details</span
+                              ><router-link :to="'/company/'+company.slug" class="text-decoration-none">View Details</router-link></span
                             >
                           </td>
                         </tr>
