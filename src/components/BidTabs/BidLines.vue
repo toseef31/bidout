@@ -61,7 +61,7 @@
                 v-model="items.switch1"
                 inset class="mr-2 ml-2" hide-details :class="[index != 0 ? 'mt-0' : 'mt-4']"
               ></v-checkbox>
-              <v-icon color="#0D9648" class="mr-2"  :class="[index != 0 ? 'mt-0' : 'mt-6']" @click="clone(items)">mdi-content-copy</v-icon>
+              <v-icon color="#0D9648" class="mr-2"  :class="[index != 0 ? 'mt-0' : 'mt-6']" @click="clone(items,index)">mdi-content-copy</v-icon>
               <v-icon color="#F32349" :class="[index != 0 ? 'mt-0' : 'mt-6']" @click="removeBidLine(index)">mdi-trash-can-outline</v-icon>
             </div>
           </v-col>
@@ -87,7 +87,7 @@
             <v-col md="11">
               <div class="mr-2 bid-item">
                 <label class="d-block input-label text-left" v-if="index === 0">Line Item Description</label>
-                <v-text-field placeholder="Line Item Description" v-model="exampleItems[index]['description']" height="31px" width="200px" single-line outlined type="text" hide-details readonly>
+                <v-text-field placeholder="Line Item Description" v-model="bidLines[elements.indexValue]['description']" height="31px" width="200px" single-line outlined type="text" hide-details readonly>
                 </v-text-field>
               </div>
             </v-col>
@@ -192,7 +192,7 @@ export default {
   methods: {
     ...mapActions(["updateDraftBid"]),
     changeTab(){
-      this.updateDraftBid({'bidlines':this.bidLines,'exampleItems':this.exampleItems});
+      this.updateDraftBid({'bidlines':this.bidLines,'exampleItems':this.bidLines});
       this.$emit('changetab', 'tab-5');
     },
     addItem(){
@@ -209,7 +209,7 @@ export default {
         })
       }
     },
-    clone(item){
+    clone(item,index){
       this.exampleItems.push({
         type: item.type,
         description: item.description,
@@ -217,6 +217,7 @@ export default {
         quantity: item.quantity,
         buyerComment: item.buyerComment,
         switch1: item.switch1,
+        indexValue: index
       })
     },
     checkMove: function(e) {
