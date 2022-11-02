@@ -48,7 +48,7 @@
                           <td class="pl-8">
                             <span
                               class="text-decoration-none company-link"
-                              ><router-link :to="'/company/'+company.slug" class="text-decoration-none">{{ company.company }}</router-link>
+                              ><router-link :to="'/company-profiles/'+company.slug" class="text-decoration-none">{{ company.company }}</router-link>
                             </span>
                           </td>
 
@@ -75,7 +75,7 @@
                           <td>
                             <span
                               class="text-decoration-none company-link"
-                              ><router-link :to="'/company/'+company.slug" class="text-decoration-none">View Details</router-link></span
+                              ><router-link :to="'/company-profiles/'+company.slug" class="text-decoration-none">View Details</router-link></span
                             >
                           </td>
                         </tr>

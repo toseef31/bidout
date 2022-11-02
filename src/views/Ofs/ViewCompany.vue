@@ -245,7 +245,7 @@ export default {
   mounted() {
     document.title = "Company Profile - BidOut" 
     this.getLocation();
-    this.viewPublicCompany();
+    this.getPublicCompanyInfo({ slug : this.$route.params.name});
   }
 };
 </script>
