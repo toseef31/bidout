@@ -35,20 +35,22 @@
                   <div v-if="hideList == true">
                     <v-list  class="company-list">
                       <template v-for="(company, index) in companies">
-                        <v-list-item class="py-1"
-                          :key="company.objectID" @click="viewCompany(company.slug,company.company)"
-                        >
-                          <v-list-item-avatar max-height="31px" max-width="88px" width="88px" tile>
-                            <v-img v-if="company.companyImage" :src="company.companyImage" height="auto"></v-img>
-                            <v-img v-else :src="`/images/companies/no-image.jpg`" height="auto"></v-img>
-                          </v-list-item-avatar>
-                          <v-list-item-content>
-                            <v-list-item-title class="text-left">{{company.company}}</v-list-item-title>
-                          </v-list-item-content>
-                          <v-list-item-action>
-                            <v-list-item-action-text class="font-weight-bold" @click="viewCompany(company.slug,company.company)"><router-link to="">View Profile</router-link></v-list-item-action-text>
-                          </v-list-item-action>
-                        </v-list-item>
+                        <router-link :to="'company/'+company.slug" class="text-decoration-none">
+                          <v-list-item class="py-1"
+                            :key="company.objectID"
+                          >
+                            <v-list-item-avatar max-height="31px" max-width="88px" width="88px" tile>
+                              <v-img v-if="company.companyImage" :src="company.companyImage" height="auto"></v-img>
+                              <v-img v-else :src="`/images/companies/no-image.jpg`" height="auto"></v-img>
+                            </v-list-item-avatar>
+                            <v-list-item-content>
+                              <v-list-item-title class="text-left">{{company.company}}</v-list-item-title>
+                            </v-list-item-content>
+                            <v-list-item-action>
+                              <v-list-item-action-text class="font-weight-bold" ><router-link :to="'company/'+company.slug">View Profile</router-link></v-list-item-action-text>
+                            </v-list-item-action>
+                          </v-list-item>
+                        </router-link>
                       </template>
                       <!-- <v-btn color="rgba(13, 150, 72, 0.1)" rounded class="all-btn text-capitalize my-4">View all results</v-btn> -->
                     </v-list>
@@ -80,13 +82,13 @@
               <v-col cols="12" md="6" v-for="category in allcategories" :key="category.id" class="pl-sm-5 pr-sm-5">
                 
                 <div class="ofs-listing text-left">
-                  <h1 class="font-weight-bold mb-3 text-break" @click="getMainCompany(category)">{{category.name}}</h1>
+                  <h1 class="font-weight-bold mb-3 text-break"><router-link :to="'/ofs-supplier/'+category.slug" class="text-decoration-none">{{category.name}}</router-link></h1>
                   <p>
                     <span v-for="subcategry in subCategories(category.subCategories)" class="sub-catLink">
-                      <span @click="getCompanies(category.slug,subcategry)">  
+                      <router-link :to="'/ofs-supplier/'+category.slug+'/'+subcategry.slug" class="text-decoration-none">  
                         <font class="font-weight-bold">{{subcategry.name}} </font> 
                         <font class="font-weight-medium">({{subcategry.spCount}}) </font> 
-                      </span>
+                      </router-link>
                     </span>
                   </p>
                 </div>
@@ -230,12 +232,6 @@ export default {
     },
     subCategories(subCats){
      return _.orderBy(subCats, 'orderNumber', 'asc');
-    },
-    getCompanies(slug,subcategory){
-      this.getSupplierCompanyByservice({slug:slug, service:subcategory.name, subSlug: subcategory.slug});
-    },
-    getMainCompany(category){
-      this.getSupplierMainService({slug:category.slug, name:category.name, id: category.id});
     },
     getSupplierList(){
       if(this.searchCompany.length > 1){

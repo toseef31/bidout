@@ -191,7 +191,7 @@ export default {
           bounds: defaultBounds,
           fields: ["address_components", "geometry", "icon", "name","formatted_address"],
           strictBounds: false,
-          types: ["establishment"],
+          types: ["address"],
         };
         const autocomplete = new google.maps.places.Autocomplete(input, options);
         
