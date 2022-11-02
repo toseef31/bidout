@@ -6,7 +6,7 @@
         <v-row justify="center">
           <v-col cols="12" md="12">
             <div class="category-list">
-              <h1 class="text-left service-title mb-8">{{ companyName }}</h1>
+              <h1 class="text-left service-title mb-8">{{ allcompanies.category.name }}</h1>
               <div class="d-flex align-center tabs-header">
                 <v-tabs v-model="tab" hide-slider class="service-tabs mb-5">
                   <v-tab
@@ -44,7 +44,7 @@
                         </tr>
                       </thead>
                       <tbody>
-                        <tr v-for="company in allcompanies" :key="company.id">
+                        <tr v-for="company in allcompanies.companies" :key="company.id">
                           <td class="pl-8">
                             <span
                               @click="
@@ -117,7 +117,7 @@ export default {
       filterCompany: "",
       page: 1,
       items: [
-        "All",
+        "all",
         "Gulf Coast",
         "Northwest",
         "Rockies",
@@ -166,25 +166,18 @@ export default {
       "getSupplierMainService"
     ]),
     viewPublicCompany(id, name) {
-      console.log(id);
       this.getPublicCompanyInfo({ id, name });
     },
     companySearch() {
       this.searchCompany();
     },
     getByBasin(basin) {
-      this.getCompanyByBasin({ basin, slug: this.cateSlug });
+      this.getCompanyByBasin({ basin, slug: this.$route.fullPath.split('/').pop() });
     },
   },
   mounted() {
     document.title = "Categories - BidOut";
-    if(this.$route.params.slug.name){
-      this.cateSlug = this.$route.params.slug.name;
-      this.getCompanyByBasin({ basin: 'All', slug: this.cateSlug });
-    }else{
-      this.cateSlug = this.$route.params.slug;
-      this.getCompanyByBasin({ basin: 'All', slug: this.cateSlug });
-    }
+    this.getCompanyByBasin({ basin: 'all', slug: this.$route.fullPath.split('/').pop() });
   },
 };
 </script>

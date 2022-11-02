@@ -15,7 +15,7 @@
               <div class="category-list">
                 <div class="d-flex justify-space-between px-4">
                   <h1 class="text-left service-title mb-8">
-                    {{ serviceName }}
+                    {{ allcompanies.category.name }}
                   </h1>
                   <div class="category-list__searchBox">
                     <v-text-field
@@ -55,9 +55,8 @@
                             <th></th>
                           </tr>
                         </thead>
-
                         <tbody>
-                          <tr v-for="company in allcompanies" :key="company.id">
+                          <tr v-for="company in allcompanies.companies" :key="company.id">
                             <td class="pl-6">
                               <span
                                 @click="
@@ -133,7 +132,7 @@ export default {
       searchCompany: "",
       page: 1,
       items: [
-        "All",
+        "all",
         "Gulf Coast",
         "Northwest",
         "Rockies",
@@ -164,9 +163,6 @@ export default {
       }
       return this.$store.getters.serviceCompanies.data;
     },
-    serviceName() {
-      return this.$store.getters.serviceCompanies.name;
-    },
   },
   watch: {
     searchCompany: _.debounce(function () {
@@ -189,18 +185,12 @@ export default {
       this.getCompanyInfo({ id, name });
     },
     getByBasin(basin) {
-      this.getCompanyByBasin({ basin, slug: this.cateSlug });
+      this.getCompanyByBasin({ basin, slug: this.$route.fullPath.split('/').pop() });
     },
   },
   mounted() {
     document.title = "Categories - BidOut";
-    if(this.$route.params.slug.name){
-      this.cateSlug = this.$route.params.slug.name;
-      this.getCompanyByBasin({ basin: 'All', slug: this.cateSlug });
-    }else{
-      this.cateSlug = this.$route.params.slug;
-      this.getCompanyByBasin({ basin: 'All', slug: this.cateSlug });
-    }
+    this.getCompanyByBasin({ basin: 'all', slug: this.$route.fullPath.split('/').pop() });
   },
 };
 </script>

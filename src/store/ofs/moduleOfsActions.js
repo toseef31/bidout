@@ -84,9 +84,7 @@ export default {
       .then((responce) => {
         const data = {
           data: responce.data,
-          id: payload.id,
         };
-       
         commit("setCompanies", data);
       })
       .catch((err) => {
