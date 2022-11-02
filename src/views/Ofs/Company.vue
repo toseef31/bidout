@@ -40,7 +40,7 @@
                       <div class="service-list text-left mt-4">
                         <label v-for="services in companyCategories"  v-if="services.subCategories.length > 0">
                           <v-icon>mdi-check</v-icon>{{services.name}}:
-                          <span v-for="sub in services.subCategories">{{sub.subname}} , </span>
+                          <span v-for="(sub,index) in services.subCategories">{{sub.subname}} <span v-if="index < services.subCategories.length - 1">,</span> </span>
                         </label>
                       </div>
                         <h3 v-if="!companyData.services" class="text-center">No services added yet</h3>
