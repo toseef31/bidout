@@ -55,7 +55,10 @@
                 <div class="company-service mb-12">
                   <h1 class="mb-4 font-weight-bold">Services Portfolio</h1>
                   <div class="service-list text-left mt-4">
-                    <label v-for="drill in companyData.services"><v-icon>mdi-check</v-icon>{{drill.name}}</label>
+                    <label v-for="services in companyCategories"  v-if="services.subCategories.length > 0">
+                      <v-icon>mdi-check</v-icon>{{services.name}}:
+                      <span v-for="sub in services.subCategories">{{sub.subname}} , </span>
+                    </label>
                   </div>
                     <h3 v-if="!companyData.services" class="text-center">No services added yet</h3>
                 </div>
@@ -190,6 +193,9 @@ export default {
   computed:{
    companyData(){
      return this.$store.getters.companyData.companyData;
+   },
+   companyCategories(){
+     return this.$store.getters.companyData.categories;
    },
    esgCompanyData(){
      var target = this.esgData;
