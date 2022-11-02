@@ -265,6 +265,7 @@ export default {
   mounted() {
     document.title = "Company Profile - BidOut" ;
     this.getLocation();
+    
   }
 };
 </script>
