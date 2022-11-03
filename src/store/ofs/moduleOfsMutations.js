@@ -8,4 +8,7 @@ export default {
   setPremiumList(state, payload){
     state.premiumCompanies = payload
   },
+  setPublicCompany(state, payload){
+    state.publicCompany = payload
+  },
 }

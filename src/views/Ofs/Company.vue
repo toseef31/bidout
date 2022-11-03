@@ -264,12 +264,13 @@ export default {
       return url.split('/').pop();
     },
     viewPublicCompany() {
-      this.getCompanyInfo({ slug : this.$route.params.name});
+      this.getCompanyInfo({ slug : this.$route.fullPath.split('/').pop()});
     },
   },
   mounted() {
     document.title = "Company Profile - BidOut" ;
     this.getLocation();
+    this.viewPublicCompany();
   }
 };
 </script>

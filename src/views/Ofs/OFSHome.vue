@@ -34,7 +34,7 @@
                 class="slide-item"
                 v-for="premium in premiumCompanies"
               >
-                <router-link :to="'/company-profiles/'+premium.slug" class="text-decoration-none">
+                <router-link :to="premium.slug ? '/company-profiles/'+premium.slug: '' " class="text-decoration-none">
                   <div
                     class="slide-img d-flex align-center justify-center flex-column"
                   >
@@ -75,7 +75,8 @@
                   <div v-if="hideList == true">
                     <v-list class="company-list">
                       <template v-for="(company, index) in companies">
-                        <router-link :to="'/company-profiles/'+company.slug" 
+
+                        <router-link :to="company.slug ? '/company-profiles/'+company.slug: '' " 
                           class="text-decoration-none"
                         >
                           <v-list-item
@@ -110,7 +111,7 @@
                               <v-list-item-action-text
                                 class="font-weight-bold"
                                 
-                                ><router-link :to="'/company-profiles/'+company.slug"
+                                ><router-link :to="company.slug ? '/company-profiles/'+company.slug: '' "
                                   >View Profile</router-link
                                 ></v-list-item-action-text
                               >
