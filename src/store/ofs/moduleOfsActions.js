@@ -97,19 +97,19 @@ export default {
       .get(`/company/getCompanyBySlug/${payload.slug}`)
       .then((responce) => {
         commit("setCompany", responce.data);
-        localStorage.setItem("companyData", JSON.stringify(responce.data));
+        // localStorage.setItem("companyData", JSON.stringify(responce.data));
       })
       .catch((err) => {
         console.log(err);
       });
   },
   getPublicCompanyInfo({ commit }, payload) {
-    const url = encodeURIComponent(payload.name);
+    console.log(payload,'dsdas');
     axios
       .get(`/company/getCompanyBySlug/${payload.slug}`)
       .then((responce) => {
         commit("setCompany", responce.data);
-        localStorage.setItem("companyData", JSON.stringify(responce.data));
+        // localStorage.setItem("companyData", JSON.stringify(responce.data));
       })
       .catch((err) => {
         console.log(err);

@@ -8,4 +8,8 @@ export default {
   setPremiumList(state, payload){
     state.premiumCompanies = payload
   },
+  setPublicCompany(state, payload){
+    console.log(payload,'mutate');
+    state.publicCompany = payload
+  },
 }

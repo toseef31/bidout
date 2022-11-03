@@ -1,5 +1,10 @@
 <template>
-  <section class="fill-height company-module white">
+  <v-row fill-height align="center" class="fill-height" v-if="loading">
+    <v-col cols="12">
+      <v-progress-circular :width="3" color="green" indeterminate ></v-progress-circular>
+    </v-col>
+  </v-row>
+  <section class="fill-height company-module white" v-else>
     <NavbarBeforeLogin></NavbarBeforeLogin>
       <v-container>
         <v-main class="mb-16 pt-10">
@@ -161,6 +166,7 @@ export default {
   
   data() {
     return {
+      loading: true,
       mapOptions: '',
       markerOptions: '',
       esgData:  [
@@ -192,45 +198,39 @@ export default {
    companyInfo(){
      return this.$store.getters.companyData.companyData;
    },
-   esgCompanyData(){
-     var target = this.esgData;
-     var source = this.$store.getters.companyData.companyData.esgInitiatives;
-     Array.prototype.push.apply(target, source);
-     let uniqueObjArray = [
-       ...new Map(target.map((item) => [item["type"], item])).values(),
-     ];
-     return uniqueObjArray;
-   }
   },
   methods: {
     ...mapActions(["getPublicCompanyInfo"]),
     getLocation(){
-      var LocationsForMap = this.$store.getters.companyData.companyData.companyLocations;
-     
-      var map = new google.maps.Map(document.getElementById('map'), {
-        zoom: 2,
-        center: new google.maps.LatLng(LocationsForMap[0].lattitude, LocationsForMap[0].longitude),
-        mapTypeId: google.maps.MapTypeId.ROADMAP
-      });
-
-      var infowindow = new google.maps.InfoWindow();
-
-      var marker, i;
-
-      for (i = 0; i < LocationsForMap.length; i++) {  
-        marker = new google.maps.Marker({
-          position: new google.maps.LatLng(LocationsForMap[i].lattitude, LocationsForMap[i].longitude),
-          map: map,
-          title: 'Marker',
-          anchorPoint: new google.maps.Point(0, -29),
+      setTimeout(() => {
+        var LocationsForMap = this.$store.getters.companyData.companyData.companyLocations;
+             
+        var map = new google.maps.Map(document.getElementById('map'), {
+          zoom: 2,
+          center: new google.maps.LatLng(LocationsForMap[0].lattitude, LocationsForMap[0].longitude),
+          mapTypeId: google.maps.MapTypeId.ROADMAP
         });
-        google.maps.event.addListener(marker, 'click', (function(marker, i) {
-          return function() {
-            infowindow.setContent(LocationsForMap[i].location);
-            infowindow.open(map, marker);
-          }
-        })(marker, i));
-      }
+
+        var infowindow = new google.maps.InfoWindow();
+
+        var marker, i;
+
+        for (i = 0; i < LocationsForMap.length; i++) {  
+          marker = new google.maps.Marker({
+            position: new google.maps.LatLng(LocationsForMap[i].lattitude, LocationsForMap[i].longitude),
+            map: map,
+            title: 'Marker',
+            anchorPoint: new google.maps.Point(0, -29),
+          });
+          google.maps.event.addListener(marker, 'click', (function(marker, i) {
+            return function() {
+              infowindow.setContent(LocationsForMap[i].location);
+              infowindow.open(map, marker);
+            }
+          })(marker, i));
+        }
+      },4000)
+      
     },
     get_url_extension( url ) {
       return url.split(/[#?]/)[0].split('.').pop().trim();
@@ -239,13 +239,20 @@ export default {
       return url.split('/').pop();
     },
     viewPublicCompany() {
-      this.getPublicCompanyInfo({ slug : this.$route.params.name});
+      this.getPublicCompanyInfo({ slug : this.$route.fullPath.split('/').pop() });
+    },
+    msgShow() {
+      setTimeout(() => {
+        this.loading = false
+      }, 3000)
     },
   },
+  
   mounted() {
     document.title = "Company Profile - BidOut" 
+    this.msgShow();
+    this.viewPublicCompany();
     this.getLocation();
-    this.getPublicCompanyInfo({ slug : this.$route.params.name});
   }
 };
 </script>
