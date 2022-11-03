@@ -196,14 +196,14 @@ export default {
   },
   computed:{
    companyInfo(){
-     return this.$store.getters.companyData.companyData;
+     return this.$store.getters.publicCompany.companyData;
    },
   },
   methods: {
     ...mapActions(["getPublicCompanyInfo"]),
     getLocation(){
       setTimeout(() => {
-        var LocationsForMap = this.$store.getters.companyData.companyData.companyLocations;
+        var LocationsForMap = this.$store.getters.publicCompany.companyData.companyLocations;
              
         var map = new google.maps.Map(document.getElementById('map'), {
           zoom: 2,
