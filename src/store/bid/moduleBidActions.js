@@ -46,6 +46,15 @@ export default {
         console.log(res);
         commit('setBidsList',res.data);
     },
+    async getBidsLists({commit}, payload){
+      const res = await axios.get('bid/getBidList/'+payload);
+      if(res.status == 200){
+        console.log(res);
+        commit('setBidsList',res.data);
+      }else{
+        commit('setBidsList',null);
+      }
+    },
     async saveDraftBid({commit}, payload){
       var config = {
         headers: {

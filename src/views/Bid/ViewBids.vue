@@ -173,7 +173,6 @@ export default {
       openBids: [],
       closedBids: [],
       items: [],
-      
     };
   },
   computed:{

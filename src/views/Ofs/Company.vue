@@ -38,7 +38,10 @@
                     <div class="company-service mb-12">
                       <h1 class="mb-4 font-weight-bold">Services Portfolio</h1>
                       <div class="service-list text-left mt-4">
-                        <label v-for="drill in companyData.services"><v-icon>mdi-check</v-icon>{{drill.name}}</label>
+                        <label v-for="services in companyCategories"  v-if="services.subCategories.length > 0">
+                          <v-icon>mdi-check</v-icon>{{services.name}}:
+                          <span v-for="(sub,index) in services.subCategories">{{sub.subname}} <span v-if="index < services.subCategories.length - 1">,</span> </span>
+                        </label>
                       </div>
                         <h3 v-if="!companyData.services" class="text-center">No services added yet</h3>
                       <!-- <p class="text-right">View all services</p> -->
@@ -166,6 +169,7 @@
     </v-col>
 </template>
 <script>
+  import { mapActions } from "vuex";
   import NavbarBeforeLogin from '../../components/Layout/NavbarBeforeLogin.vue'
   import Footer from '../../components/Layout/Footer.vue'
 export default {
@@ -214,6 +218,9 @@ export default {
    companyData(){
      return this.$store.getters.companyData.companyData;
    },
+   companyCategories(){
+     return this.$store.getters.companyData.categories;
+   },
    esgCompanyData(){
      var target = this.esgData;
      var source = this.$store.getters.companyData.companyData.esgInitiatives;
@@ -225,6 +232,7 @@ export default {
    }
   },
   methods: {
+    ...mapActions(["getCompanyInfo"]),
     getLocation(){
     
     var LocationsForMap = this.$store.getters.companyData.companyData.companyLocations;
@@ -261,10 +269,14 @@ export default {
     get_url_name( url ) {
       return url.split('/').pop();
     },
+    viewPublicCompany() {
+      this.getCompanyInfo({ slug : this.$route.fullPath.split('/').pop()});
+    },
   },
   mounted() {
     document.title = "Company Profile - BidOut" ;
     this.getLocation();
+    this.viewPublicCompany();
   }
 };
 </script>
