@@ -38,12 +38,13 @@ export default {
     },
     async getDraftBids({commit}, payload){
       const res = await axios.get('bid/draft/getUserDrafts/'+payload);
-      if(res.status == 200){
         console.log(res);
         commit('setDraftBidsList',res.data);
-      }else{
-        commit('setDraftBidsList',null);
-      }
+    },
+    async getBidsLists({commit}, payload){
+      const res = await axios.get('bid/getBidList/'+payload);
+        console.log(res);
+        commit('setBidsList',res.data);
     },
     async getBidsLists({commit}, payload){
       const res = await axios.get('bid/getBidList/'+payload);
