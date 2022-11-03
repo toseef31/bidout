@@ -344,6 +344,27 @@
 		  max-width: 95%;
 	}
 }
+.location-input{
+    border-color: #B8B8B8;
+    color: rgb(0 0 0 / 78%);
+    border-collapse: collapse;
+	border-style: solid;
+	border-width: 1px;
+	bottom: 0;
+	left: 0;
+	transition-duration: 0.15s;
+	transition-property: color;
+	transition: 0.3s cubic-bezier(0.25, 0.8, 0.5, 1);
+	width: 100%;
+	align-items: stretch;
+	min-height: 56px;
+	transition-timing-function: cubic-bezier(0.25, 0.8, 0.25, 1);
+	border-radius: 8px;
+	padding: 0 20px;
+	&:focus-visible{
+		    outline: 1px solid #B8B8B8;
+	}
+}
 @media (max-width: 768px) {
 	.companyProfile-module{
 	flex: 0 0 100%;

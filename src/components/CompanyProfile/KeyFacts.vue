@@ -11,33 +11,32 @@
         <v-row>
           <v-col cols="12"sm="6" text="left">
             <label class="d-block text-left input-label mb-2">Founded</label>
-            <v-text-field placeholder="Enter founded year ..." v-model="founded" single-line outlined></v-text-field>
+            <v-text-field placeholder="Enter founded year ..." v-model="founded" single-line outlined hide-details></v-text-field>
           </v-col>
           <v-col cols="12" sm="6" text="left">
             <label class="d-block text-left input-label mb-2">Employess</label>
-            <v-text-field placeholder="Enter Employees ..." v-model="employees" single-line outlined></v-text-field>
+            <v-text-field placeholder="Enter Employees ..." v-model="employees" single-line outlined hide-details></v-text-field>
           </v-col>
         </v-row>
         <v-row>
           <v-col cols="12" sm="6" text="left" >
             <label class="d-block text-left input-label mb-2">HQ Location</label>
-            <v-text-field placeholder="Enter hq location ..." v-model="hqLocation" single-line outlined id="hq-location"></v-text-field>
-            <!-- <v-text-field placeholder="Add a location here ..." single-line outlined hide-details id="hq-location"></v-text-field> -->
+            <input type="text" class="location-input" placeholder="Enter hq location ..." name="" id="hq-location" v-model="hqLocation">
             <div id="maps"class="map" style="height:400px; display: none;"></div>
           </v-col>
           <v-col cols="12" sm="6" text="left">
             <label class="d-block text-left input-label mb-2">Website</label>
-            <v-text-field placeholder="Enter website ..." v-model="website" single-line outlined></v-text-field>
+            <v-text-field placeholder="Enter website ..." v-model="website" single-line outlined hide-details></v-text-field>
           </v-col>
         </v-row>
         <v-row>
           <v-col cols="12" sm="6" text="left">
             <label class="d-block text-left input-label mb-2">Company's LinkedIn</label>
-            <v-text-field placeholder="Enter company LinkedIn url ..." v-model="linkedin" single-line outlined></v-text-field>
+            <v-text-field placeholder="Enter company LinkedIn url ..." v-model="linkedin" single-line outlined hide-details></v-text-field>
           </v-col>
           <v-col cols="12" sm="6" text="left">
             <label class="d-block text-left input-label mb-2">Careers Page</label>
-            <v-text-field placeholder="Enter career page ..." v-model="careers" single-line outlined></v-text-field>
+            <v-text-field placeholder="Enter career page ..." v-model="careers" single-line outlined hide-details></v-text-field>
           </v-col>
         </v-row>
         <v-row>
@@ -184,7 +183,7 @@ export default {
           bounds: defaultBounds,
           fields: ["address_components", "geometry", "icon", "name","formatted_address"],
           strictBounds: false,
-          types: ["address"],
+          types: ["(regions)"]
         };
         const autocomplete = new google.maps.places.Autocomplete(input, options);
         
@@ -225,7 +224,7 @@ export default {
             ].join(" ");
           }
           
-          this.hqLocation = place.name+', '+place.formatted_address;
+          this.hqLocation = document.getElementById("hq-location").value;
         });
     },
     addKeyFacts(){
