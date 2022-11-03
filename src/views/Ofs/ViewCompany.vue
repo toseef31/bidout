@@ -60,7 +60,10 @@
                 <div class="company-service mb-12">
                   <h1 class="mb-4 font-weight-bold">Services Portfolio</h1>
                   <div class="service-list text-left mt-4">
-                    <label v-for="drill in companyInfo.services"><v-icon>mdi-check</v-icon>{{drill.name}}</label>
+                    <label v-for="services in companyCategories"  v-if="services.subCategories.length > 0">
+                      <v-icon>mdi-check</v-icon>{{services.name}}:
+                      <span v-for="(sub,index) in services.subCategories">{{sub.subname}} <span v-if="index < services.subCategories.length - 1">,</span> </span>
+                    </label>
                   </div>
                     <h3 v-if="!companyInfo.services" class="text-center">No services added yet</h3>
                 </div>
@@ -198,6 +201,18 @@ export default {
    companyInfo(){
      return this.$store.getters.publicCompany.companyData;
    },
+   companyCategories(){
+     return this.$store.getters.publicCompany.categories;
+   },
+   esgCompanyData(){
+     var target = this.esgData;
+     var source = this.$store.getters.companyData.companyData.esgInitiatives;
+     Array.prototype.push.apply(target, source);
+     let uniqueObjArray = [
+       ...new Map(target.map((item) => [item["type"], item])).values(),
+     ];
+     return uniqueObjArray;
+   }
   },
   methods: {
     ...mapActions(["getPublicCompanyInfo"]),
