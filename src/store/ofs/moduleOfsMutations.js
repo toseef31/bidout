@@ -9,7 +9,6 @@ export default {
     state.premiumCompanies = payload
   },
   setPublicCompany(state, payload){
-    console.log(payload,'mutate');
     state.publicCompany = payload
   },
 }

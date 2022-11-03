@@ -104,7 +104,6 @@ export default {
       });
   },
   getPublicCompanyInfo({ commit }, payload) {
-    console.log(payload,'dsdas');
     axios
       .get(`/company/getCompanyBySlug/${payload.slug}`)
       .then((responce) => {
