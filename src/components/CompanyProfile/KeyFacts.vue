@@ -26,21 +26,15 @@
             <div id="maps"class="map" style="height:400px; display: none;"></div>
           </v-col>
           <v-col cols="12" sm="6" text="left">
-            <label class="d-block text-left input-label mb-2">Stock Price</label>
-            <v-text-field placeholder="Enter stock price ..." v-model="stockPrice" single-line outlined></v-text-field>
-          </v-col>
-        </v-row>
-        <v-row>
-          <v-col cols="12" sm="6" text="left">
             <label class="d-block text-left input-label mb-2">Website</label>
             <v-text-field placeholder="Enter website ..." v-model="website" single-line outlined></v-text-field>
           </v-col>
+        </v-row>
+        <v-row>
           <v-col cols="12" sm="6" text="left">
             <label class="d-block text-left input-label mb-2">Company's LinkedIn</label>
             <v-text-field placeholder="Enter company LinkedIn url ..." v-model="linkedin" single-line outlined></v-text-field>
           </v-col>
-        </v-row>
-        <v-row>
           <v-col cols="12" sm="6" text="left">
             <label class="d-block text-left input-label mb-2">Careers Page</label>
             <v-text-field placeholder="Enter career page ..." v-model="careers" single-line outlined></v-text-field>
@@ -48,7 +42,7 @@
         </v-row>
         <v-row>
           <v-col  cols="12" sm="12">
-            <v-btn color="#0D9648" large class="text-capitalize white--text" width="176px" height="54px" @click="addKeyFacts">Add</v-btn>
+            <v-btn color="#0D9648" large class="text-capitalize white--text" width="176px" height="54px" @click="addKeyFacts">Save</v-btn>
           </v-col>
         </v-row>
       </v-container>
@@ -127,7 +121,6 @@ export default {
       founded: this.$store.getters.companyData.companyData.founded,
       employees: this.$store.getters.companyData.companyData.employees,
       hqLocation: this.$store.getters.companyData.companyData.hqlocation,
-      stockPrice: this.$store.getters.companyData.companyData.stockPrice,
       website: this.$store.getters.companyData.companyData.website,
       linkedin: this.$store.getters.companyData.companyData.linkedin,
       careers: this.$store.getters.companyData.companyData.careers,
@@ -241,7 +234,6 @@ export default {
         founded: this.founded,
         employees: this.employees,
         hqLocation: this.hqLocation,
-        stockPrice: this.stockPrice,
         website: this.website,
         linkedin: this.linkedin,
         careers: this.careers
