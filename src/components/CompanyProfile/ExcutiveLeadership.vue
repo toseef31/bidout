@@ -63,13 +63,6 @@
         </v-col>
       </v-row>
       <div class="service-list text-left mt-10">
-        <div class="profile-list" v-if="croppedProfile">
-          <v-icon color="#F32349" class="pa-1 white">mdi-trash-can-outline</v-icon>
-          <v-img :src="croppedProfile" width="173"></v-img>
-          <h6>{{excutiveName}}</h6>
-          <p>{{excutiveRole}}</p>
-          <v-icon color="#013D3A">mdi-linkedin</v-icon>
-        </div>
         <div class="profile-list" v-for="(excutive,index) in companyData.executiveLeadership">
           <v-icon color="#F32349" class="pa-1 white" @click="deleteExcutive(excutive)">mdi-trash-can-outline</v-icon>
           <v-img :src="excutive.profilePicture" width="173"></v-img>
