@@ -206,7 +206,7 @@ export default {
    },
    esgCompanyData(){
      var target = this.esgData;
-     var source = this.$store.getters.companyData.companyData.esgInitiatives;
+     var source = this.$store.getters.publicCompany.companyData.esgInitiatives;
      Array.prototype.push.apply(target, source);
      let uniqueObjArray = [
        ...new Map(target.map((item) => [item["type"], item])).values(),

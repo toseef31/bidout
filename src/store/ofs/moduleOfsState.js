@@ -3,4 +3,5 @@ export default {
    serviceCompanies: [], 
    premiumCompanies:null,
    publicCompany: null,
+   supplierCompany: null,
 }

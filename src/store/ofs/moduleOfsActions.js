@@ -96,7 +96,7 @@ export default {
     axios
       .get(`/company/getCompanyBySlug/${payload.slug}`)
       .then((responce) => {
-        commit("setCompany", responce.data);
+        commit("setSupplierCompany", responce.data);
         // localStorage.setItem("companyData", JSON.stringify(responce.data));
       })
       .catch((err) => {

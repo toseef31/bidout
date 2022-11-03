@@ -12,7 +12,7 @@
               <v-col cols="12" md="12">
                 <VueSlickCarousel v-bind="settings" class="company-slider" v-if="premiumCompanies.length > 0">
                   <div class="slide-item" v-for="premium in premiumCompanies">
-                    <router-link :to="'/company/'+premium.slug" class="text-decoration-none">
+                    <router-link :to="premium.slug ? '/company/'+premium.slug: '' " class="text-decoration-none">
                       <div class="slide-img d-flex align-center justify-center flex-column">
                         <img v-if="premium.image"
                           :src="premium.image" class="mx-auto"
@@ -35,7 +35,7 @@
                   <div v-if="hideList == true">
                     <v-list  class="company-list">
                       <template v-for="(company, index) in companies">
-                        <router-link :to="'company/'+company.slug" class="text-decoration-none">
+                        <router-link :to="company.slug ? '/company/'+company.slug: '' " class="text-decoration-none">
                           <v-list-item class="py-1"
                             :key="company.objectID"
                           >
@@ -47,7 +47,7 @@
                               <v-list-item-title class="text-left">{{company.company}}</v-list-item-title>
                             </v-list-item-content>
                             <v-list-item-action>
-                              <v-list-item-action-text class="font-weight-bold" ><router-link :to="'company/'+company.slug">View Profile</router-link></v-list-item-action-text>
+                              <v-list-item-action-text class="font-weight-bold" ><router-link :to="company.slug ? '/company/'+company.slug: '' ">View Profile</router-link></v-list-item-action-text>
                             </v-list-item-action>
                           </v-list-item>
                         </router-link>
