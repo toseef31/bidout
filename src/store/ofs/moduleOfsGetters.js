@@ -8,4 +8,7 @@ export default {
    premiumCompanies (state){
       return state.premiumCompanies
    },
+   publicCompany (state){
+      return state.publicCompany
+   },
 }

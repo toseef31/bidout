@@ -169,6 +169,7 @@
     </v-col>
 </template>
 <script>
+  import { mapActions } from "vuex";
   import NavbarBeforeLogin from '../../components/Layout/NavbarBeforeLogin.vue'
   import Footer from '../../components/Layout/Footer.vue'
 export default {
@@ -231,6 +232,7 @@ export default {
    }
   },
   methods: {
+    ...mapActions(["getCompanyInfo"]),
     getLocation(){
     
     var LocationsForMap = this.$store.getters.companyData.companyData.companyLocations;
@@ -267,10 +269,14 @@ export default {
     get_url_name( url ) {
       return url.split('/').pop();
     },
+    viewPublicCompany() {
+      this.getCompanyInfo({ slug : this.$route.fullPath.split('/').pop()});
+    },
   },
   mounted() {
     document.title = "Company Profile - BidOut" ;
     this.getLocation();
+    this.viewPublicCompany();
   }
 };
 </script>
