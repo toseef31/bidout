@@ -35,7 +35,8 @@ export default {
             })
             commit('setUser',responce.data)
             localStorage.setItem("userData",JSON.stringify(responce.data));
-            router.replace({ name: "Dashboard" });
+            // window.location.href = '/dashboard';
+            router.push({ name: 'Dashboard' });
           }
           
         })
