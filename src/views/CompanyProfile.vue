@@ -245,19 +245,39 @@ export default {
         this.getCategories();
       },
       addService(subcate){
-        if(this.$store.getters.companyData.companyData.services){
-          this.companyService = this.$store.getters.companyData.companyData.services;
+      if(this.$store.getters.companyData.companyData.services){
+        this.companyService = this.$store.getters.companyData.companyData.services;
+      }
+      
+      console.log(this.$store.getters.companyData.categories);
+      console.log(subcate);
+      let found = false;
+      for(let cat = 0; cat < this.$store.getters.companyData.categories.length; cat++){
+        for(let subcat = 0; subcat < this.$store.getters.companyData.categories[cat].subCategories.length; subcat++){
+
+             console.log(subcate.id ," != ",this.$store.getters.companyData.categories[cat].subCategories[subcat].subid);
+          if(subcate.id == this.$store.getters.companyData.categories[cat].subCategories[subcat].subid){
+          
+           
+          }else{
+             var servicedata = {
+              name: subcate.name,
+              id: subcate.id,
+              slug: subcate.slug,
+            }
+            found = true;
+             this.companyService.push(servicedata);
+             break;
+          }
         }
-        var servicedata = {
-          name: subcate.name,
-          id: subcate.id,
-          slug: subcate.slug,
-        }
-        this.companyService.push(servicedata);
-        this.addCompanyService({companyId: this.$store.getters.userInfo.company.id,subCategories: this.companyService});
-        this.services = '';
-        this.subservices = '';
-      },
+        if (found) break;
+      }
+      console.log(this.companyService);
+      
+      // this.addCompanyService({companyId: this.$store.getters.userInfo.company.id,subCategories: this.companyService});
+      this.services = '';
+      this.subservices = '';
+    },
       deleteService(item){
         if(this.$store.getters.companyData.companyData.services){
           this.companyService = this.$store.getters.companyData.companyData.services;
