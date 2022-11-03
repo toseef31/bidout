@@ -199,11 +199,11 @@ export default {
     },
     allcategories(){
       if(this.searchService){
-        return this.$store.getters.categories.filter((item)=>{
+        return _.orderBy(this.$store.getters.categories.filter((item)=>{
           return this.searchService.toLowerCase().split(' ').every(v => item.name.toLowerCase().includes(v))
-        })
+        }))
       }else{
-        return this.$store.getters.categories;
+        return _.orderBy(this.$store.getters.categories, "orderNumber", "asc");
       }
     },
     companyData(){
