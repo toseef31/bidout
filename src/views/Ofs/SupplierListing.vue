@@ -59,7 +59,7 @@
                           <tr v-for="company in allcompanies.companies" :key="company.id">
                             <td class="pl-6">
                               <span class="text-decoration-none company-link"
-                                ><router-link :to="'/company/'+company.slug">{{ company.company }}</router-link></span
+                                ><router-link class="text-decoration-none" :to="company.slug ? '/company/'+company.slug: '' ">{{ company.company }}</router-link></span
                               >
                             </td>
                             <td>
@@ -89,7 +89,7 @@
                             <td>
                               <span
                                 class="text-decoration-none company-link"
-                                ><router-link :to="'/company/'+company.slug">View Details</router-link></span
+                                ><router-link class="text-decoration-none" :to="company.slug ? '/company/'+company.slug: '' ">View Details</router-link></span
                               >
                             </td>
                           </tr>

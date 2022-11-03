@@ -11,4 +11,7 @@ export default {
   setPublicCompany(state, payload){
     state.publicCompany = payload
   },
+  setSupplierCompany(state, payload){
+    state.supplierCompany = payload
+  },
 }

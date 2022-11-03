@@ -11,4 +11,7 @@ export default {
    publicCompany (state){
       return state.publicCompany
    },
+   supplierCompany (state){
+      return state.supplierCompany
+   },
 }
