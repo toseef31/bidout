@@ -65,7 +65,7 @@
                                   </template>
                                   <template>
                                     <v-list-item min-height="30px" prepend-inner-icon="mdi-close"
-                                      v-for="subcategory in category.subCategories"
+                                      v-for="subcategory in subCategoriesAlign(category.subCategories)"
                                       :key="subcategory.id"
                                     >
                                       <template>
@@ -243,6 +243,9 @@ export default {
       },
       getAllCategories(){
         this.getCategories();
+      },
+      subCategoriesAlign(subCats) {
+        return _.orderBy(subCats, "orderNumber", "asc");
       },
       addService(subcate){
         if(this.$store.getters.companyData.companyData.services){
