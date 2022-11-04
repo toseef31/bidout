@@ -228,7 +228,9 @@ export default {
     formData.append('companyId', payload.companyId);
     formData.append('esgInitiatives[name]', payload.esgInitiatives.name);
     formData.append('esgInitiatives[description]', payload.esgInitiatives.description);
-    formData.append('esgInitiatives[attachment]', payload.esgInitiatives.attachment);
+    if(payload.esgInitiatives.attachment != ''){
+      formData.append('esgInitiatives[attachment]', payload.esgInitiatives.attachment);
+    }
     formData.append('esgInitiatives[id]', payload.esgInitiatives.id);
     formData.append('esgInitiatives[type]', payload.esgInitiatives.type);
     
