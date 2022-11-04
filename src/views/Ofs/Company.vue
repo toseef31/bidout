@@ -212,6 +212,14 @@ export default {
       ],
     };
   },
+  metaInfo() {
+    return {
+      title: this.metaTitle,
+      meta: [
+        { vmid: 'description', name: 'description', content: this.metaDescription}
+      ]
+    }
+  },
   computed:{
    showSideBar(){
        return this.$store.getters.g_sideBarOpen;
@@ -280,12 +288,12 @@ export default {
     },
     msgShow() {
       setTimeout(() => {
-        this.loading = false
+        this.loading = false;
+        document.title = ''+this.companyData.company + "-" + this.companyData.companyHq +' - BidOut Profile' ;
       }, 3000)
     },
   },
   mounted() {
-    document.title = this.companyData.company "-" this.companyData.companyHq "-" "BidOut Profile" ;
     this.msgShow();
     this.viewPublicCompany();
     this.getLocation();
