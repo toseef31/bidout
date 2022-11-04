@@ -151,6 +151,7 @@ export default {
       });
   },
   addCompanyExcutive({commit,dispatch}, payload){
+    console.log(payload);
     var config = {
       headers: {
         "Content-Type": "multipart/form-data",
@@ -163,6 +164,7 @@ export default {
     formData.append('executiveLeadership[linkedin]', payload.executiveLeadership.linkedin);
     formData.append('executiveLeadership[profilePicture]', payload.executiveLeadership.profilePicture);
     formData.append('executiveLeadership[id]', payload.executiveLeadership.id);
+    formData.append('executiveLeadership[orderNumber]', payload.executiveLeadership.orderNumber);
     formData.append('companyId', payload.companyId);
     axios.post('/company/addCompanyLeadership/',formData,config)
      .then(responce => {

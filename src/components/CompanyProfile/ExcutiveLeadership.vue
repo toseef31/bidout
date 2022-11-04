@@ -161,12 +161,14 @@ export default {
     addExcutive(){
       const head = Date.now().toString();
       const tail = Math.random().toString().substr(2);
+      let order = this.$store.getters.companyData.companyData.executiveLeadership.length;
       var leader = {
         profilePicture : this.croppieProfile,
         name: this.excutiveName,
         role: this.excutiveRole,
         linkedin: this.excutivelinkdinProfile,
         id: head + tail,
+        orderNumber: order + 1,
       }
       var data = {
         companyId: this.$store.getters.userInfo.company.id,
