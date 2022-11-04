@@ -1,5 +1,5 @@
 <template>
-  
+
    <v-col class="createBid-module bids-module pa-0 pa-sm-3 pl-sm-0 pb-sm-0" :class="[ showSideBar ? 'col-md-9 col-12 col-sm-7' : 'mid-content-collapse', activityPanel ? 'd-sm-block' : 'd-md-block']" v-show="!activityPanel">
       <div class="mid-content">
         <div class="content-section fill-height">
@@ -74,7 +74,12 @@
                       <td class="text-left">{{ userDatas.firstName }} {{ userDatas.lastName }}</td>
                       <td class="text-center">0</td>
                       <td class="text-left">{{ bid.dueDate | moment('DD/MM/YYYY') }} {{bid.dueTime}}</td>
-                      <td class="text-left d-none d-sm-block pt-3"><a href="">View Details</a></td>
+                      <td class="text-left d-none d-sm-block pt-3"><router-link
+                        :to="{
+                          path: `/bid-detail/${bid.title}`,
+                        }"
+                        >View Details</router-link
+                      ></td>
                     </tr>
                   </tbody>
                 </template>
@@ -271,13 +276,13 @@
   </v-col>
 </template>
 <script>
-import { mapActions } from "vuex";
-import Navbar from "../../components/Layout/Navbar.vue";
-import LeftSidebar from "../../components/Layout/Dashboard/LeftSidebar.vue";
-import RightSidebar from "../../components/Layout/Dashboard/RightSidebar.vue";
+import { mapActions } from 'vuex';
+import Navbar from '../../components/Layout/Navbar.vue';
+import LeftSidebar from '../../components/Layout/Dashboard/LeftSidebar.vue';
+import RightSidebar from '../../components/Layout/Dashboard/RightSidebar.vue';
 
 export default {
-  name: "ViewBids",
+  name: 'ViewBids',
   components: {
     Navbar,
     LeftSidebar,
@@ -304,40 +309,36 @@ export default {
     userDatas() {
       return this.$store.getters.userInfo;
     },
-    draftBidsList(){
-      if(this.$store.getters.draftBidsList){
+    draftBidsList() {
+      if (this.$store.getters.draftBidsList) {
         return this.$store.getters.draftBidsList;
       }
-      
     },
-    bidsList(){
-      console.log('hello',this.$store.getters.bidsList);
-    
-      if(this.$store.getters.bidsList.length > 0){
-        var membr = this.$store.getters.bidsList.filter((item)=>{
-         if(!item.status){
+    bidsList() {
+      console.log('hello', this.$store.getters.bidsList);
+
+      if (this.$store.getters.bidsList.length > 0) {
+        const membr = this.$store.getters.bidsList.filter((item) => {
+          if (!item.status) {
             this.openBids.push(item);
-           }else{
+          } else {
             this.closedBids.push(item);
-           }
-        })
-         return this.$store.getters.bidsList;
-        
-      }else{
-        return [];
+          }
+        });
+        return this.$store.getters.bidsList;
       }
-      
-    }
+      return [];
+    },
   },
   methods: {
-    ...mapActions(["getDraftBids","getBidsLists"]),
+    ...mapActions(['getDraftBids', 'getBidsLists']),
   },
   mounted() {
-    document.title = "Bids - BidOut";
+    document.title = 'Bids - BidOut';
     this.users = this.$store.getters.userInfo;
     this.getDraftBids(this.users.id);
     this.getBidsLists(this.users.id);
-  }
+  },
 };
 </script>
 <style scoped lang="scss"></style>
