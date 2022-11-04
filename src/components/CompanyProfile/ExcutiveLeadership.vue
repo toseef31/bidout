@@ -105,7 +105,8 @@ export default {
       logoName: '',
       executiveLeadership: this.$store.getters.companyData.companyData.executiveLeadership,
       enabled: true,
-      dragging: false
+      dragging: false,
+      sortData: '',
     };
   },
   computed:{
@@ -168,7 +169,7 @@ export default {
         role: this.excutiveRole,
         linkedin: this.excutivelinkdinProfile,
         id: head + tail,
-        orderNumber: order + 1,
+        // orderNumber: order + 1,
       }
       var data = {
         companyId: this.$store.getters.userInfo.company.id,
@@ -188,8 +189,9 @@ export default {
       this.deleteCompanyExcutive(data);
     },
     checkMove: function(e) {
-      // console.log(e);
+      console.log(e);
       console.log("Future index: " + e.relatedContext.list);
+      this.sortData = e.relatedContext.list;
       // var leader = {
       //   profilePicture : e.draggedContext.element.profilePicture,
       //   name: e.draggedContext.element.name,
@@ -200,7 +202,7 @@ export default {
       // }
       var data = {
         companyId: this.$store.getters.userInfo.company.id,
-        executiveLeadership: e.relatedContext.list
+        leadership: this.sortData
       }
       this.editCompanyExcutive(data);
     },

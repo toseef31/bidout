@@ -163,7 +163,7 @@ export default {
     formData.append('executiveLeadership[linkedin]', payload.executiveLeadership.linkedin);
     formData.append('executiveLeadership[profilePicture]', payload.executiveLeadership.profilePicture);
     formData.append('executiveLeadership[id]', payload.executiveLeadership.id);
-    formData.append('executiveLeadership[orderNumber]', payload.executiveLeadership.orderNumber);
+    // formData.append('executiveLeadership[orderNumber]', payload.executiveLeadership.orderNumber);
     formData.append('companyId', payload.companyId);
     axios.post('/company/addCompanyLeadership/',formData,config)
      .then(responce => {
@@ -173,13 +173,9 @@ export default {
       });
   },
   editCompanyExcutive({commit,dispatch}, payload){
-    var config = {
-      headers: {
-        "Authorization": `Bearer ${JSON.parse(localStorage.getItem('token'))}`
-      },
-    };
-    axios.post('/company/updateCompanyLeadership/',{'companyId': payload.companyId, 'leadershipData': payload.executiveLeadership})
+    axios.post('/company/updateCompanyLeadership/',{'companyId': payload.companyId, 'leadershipData': payload.leadership})
      .then(responce => {
+      console.log(payload.leadership,'response');
       dispatch("getCompany",payload.companyId)
     }).catch(err => {
           console.log(err);
@@ -198,6 +194,7 @@ export default {
     formData.append('executiveLeadership[linkedin]', payload.executiveLeadership.linkedin);
     formData.append('executiveLeadership[profilePicture]', payload.executiveLeadership.profilePicture);
     formData.append('executiveLeadership[id]', payload.executiveLeadership.id);
+    formData.append('executiveLeadership[orderNumber]', payload.executiveLeadership.orderNumber);
     formData.append('companyId', payload.companyId);
     axios.post('/company/deleteCompanyLeadership/',formData,config)
      .then(responce => {
