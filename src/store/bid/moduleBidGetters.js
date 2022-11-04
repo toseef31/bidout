@@ -17,6 +17,9 @@ export default {
    draftBidsList(state){
       return state.draftBidsList;
    },
+   bidsList(state){
+      return state.bidsLists;
+   },
    attachData(state){
       return state.attachData;
    },

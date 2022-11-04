@@ -7,7 +7,7 @@ export default {
     await axios.get('company/getCompanyById/'+payload)
      .then(responce => {
       commit('setCompany',responce.data)
-      localStorage.setItem('companyData', JSON.stringify(responce.data));
+     
     }).catch(err => {
           console.log(err);
       });
@@ -134,7 +134,7 @@ export default {
   },
   addCompanyFacts({commit,dispatch}, payload){
     
-    axios.post('/company/addCompanyKeyfacts/',{'companyId':payload.companyId,'founded':payload.founded,'employees':payload.employees,'hqlocation':payload.hqLocation,'stockPrice':payload.stockPrice,'website':payload.website,'linkedin':payload.linkedin,'careers':payload.careers})
+    axios.post('/company/addCompanyKeyfacts/',{'companyId':payload.companyId,'founded':payload.founded,'employees':payload.employees,'hqlocation':payload.hqLocation,'website':payload.website,'linkedin':payload.linkedin,'careers':payload.careers})
      .then(responce => {
       dispatch("getCompany",payload.companyId)
     }).catch(err => {
