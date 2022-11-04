@@ -151,7 +151,6 @@ export default {
       });
   },
   addCompanyExcutive({commit,dispatch}, payload){
-    console.log(payload);
     var config = {
       headers: {
         "Content-Type": "multipart/form-data",
@@ -167,6 +166,22 @@ export default {
     formData.append('executiveLeadership[orderNumber]', payload.executiveLeadership.orderNumber);
     formData.append('companyId', payload.companyId);
     axios.post('/company/addCompanyLeadership/',formData,config)
+     .then(responce => {
+      dispatch("getCompany",payload.companyId)
+    }).catch(err => {
+          console.log(err);
+      });
+  },
+  editCompanyExcutive({commit,dispatch}, payload){
+    console.log(payload);
+    var config = {
+      headers: {
+        "Authorization": `Bearer ${JSON.parse(localStorage.getItem('token'))}`
+      },
+    };
+    let excute = payload.executiveLeadership;
+    
+    axios.post('/company/updateCompanyLeadership/',{'companyId': payload.companyId, 'leadershipData': excute})
      .then(responce => {
       dispatch("getCompany",payload.companyId)
     }).catch(err => {

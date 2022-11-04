@@ -117,7 +117,7 @@ export default {
     }
   },
   methods: {
-    ...mapActions(["addCompanyExcutive","deleteCompanyExcutive"]),
+    ...mapActions(["addCompanyExcutive","deleteCompanyExcutive","editCompanyExcutive"]),
     cropProfile (e) {
       var files = e.target.files || e.dataTransfer.files;
       // alert(files);
@@ -188,7 +188,21 @@ export default {
       this.deleteCompanyExcutive(data);
     },
     checkMove: function(e) {
-      console.log("Future index: " + e.draggedContext.futureIndex);
+      // console.log(e);
+      console.log("Future index: " + e.relatedContext.list);
+      // var leader = {
+      //   profilePicture : e.draggedContext.element.profilePicture,
+      //   name: e.draggedContext.element.name,
+      //   role: e.draggedContext.element.role,
+      //   linkedin: e.draggedContext.element.linkedin,
+      //   id: e.draggedContext.element.id,
+      //   orderNumber: e.draggedContext.futureIndex + 1,
+      // }
+      var data = {
+        companyId: this.$store.getters.userInfo.company.id,
+        executiveLeadership: e.relatedContext.list
+      }
+      this.editCompanyExcutive(data);
     },
   },
   mounted() {
