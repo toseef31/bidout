@@ -173,15 +173,12 @@ export default {
       });
   },
   editCompanyExcutive({commit,dispatch}, payload){
-    console.log(payload);
     var config = {
       headers: {
         "Authorization": `Bearer ${JSON.parse(localStorage.getItem('token'))}`
       },
     };
-    let excute = payload.executiveLeadership;
-    
-    axios.post('/company/updateCompanyLeadership/',{'companyId': payload.companyId, 'leadershipData': excute})
+    axios.post('/company/updateCompanyLeadership/',{'companyId': payload.companyId, 'leadershipData': payload.executiveLeadership})
      .then(responce => {
       dispatch("getCompany",payload.companyId)
     }).catch(err => {
