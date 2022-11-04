@@ -1,7 +1,8 @@
 <template>
    <v-col class="companyProfile-module inner-Company pa-0 pa-sm-3 pl-sm-0" :class="[ showSideBar ? 'col-md-9 col-12 col-sm-9' : 'mid-content-collapse', activityPanel ? 'd-sm-block' : 'd-md-block']" v-show="!activityPanel">
       <div class="mid-content">
-        <div class="content-section">
+       
+        <div class="content-section" v-if="companyData">
           <v-row class="mx-0">
             <v-col cols="12" sm="12" md="12" class="d-sm-block px-0">
               <div class="manage-sections pa-4 px-0">
@@ -141,6 +142,9 @@
             </v-col>
           </v-row>
         </div>
+        <div class="content-section fill-height d-flex justify-center align-center"  v-else>
+        <v-progress-circular :width="3" color="green" indeterminate ></v-progress-circular>
+      </div>
       </div>
    </v-col>
 </template>
@@ -177,8 +181,9 @@ export default {
   
   data() {
     return {
-      profileName: this.$store.getters.companyData.companyData.company,
-      profileSummary: this.$store.getters.companyData.companyData.overview,
+      loading: true,
+      profileName: '',
+      profileSummary: '',
       services: '',
       companyService: '',
       companyService: [],
@@ -207,7 +212,14 @@ export default {
       }
     },
     companyData(){
-      return this.$store.getters.companyData;
+    
+      if(this.$store.getters.companyData){
+        this.profileName = this.$store.getters.companyData.companyData.company;
+        this.profileSummary = this.$store.getters.companyData.companyData.overview;
+       return this.$store.getters.companyData;
+      }else{
+       return [];
+      }
     },
     serviceSubId(){
       if(this.$store.getters.companyData.companyData.services){
@@ -291,10 +303,16 @@ export default {
       },
       getSubCate(catId){
         this.getSubCategories(catId);
-      }
+      },
+      msgShow() {
+      setTimeout(() => {
+        this.loading = false
+      }, 3000)
+    },
   },
   mounted() {
     document.title = "Company Profile - BidOut";
+    this.msgShow();
     this.getCategories();
     this.getCompany(this.$store.getters.userInfo.company.id);
     if(this.$store.getters.companyData.companyData.basins){
