@@ -285,7 +285,7 @@ export default {
     },
   },
   mounted() {
-    document.title = "Company Profile - BidOut" ;
+    document.title = this.companyData.company "-" this.companyData.companyHq "-" "BidOut Profile" ;
     this.msgShow();
     this.viewPublicCompany();
     this.getLocation();
