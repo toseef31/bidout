@@ -62,6 +62,7 @@ export default {
   methods: {
     ...mapActions(["addCompanyLocation","deleteCompanyLocation"]),
     getLocation(){
+     
         if(this.$store.getters.companyData.companyData.companyLocations && this.$store.getters.companyData.companyData.companyLocations.length > 0){
         var lat = this.$store.getters.companyData.companyData.companyLocations[0].lattitude;
       }else{
@@ -92,21 +93,41 @@ export default {
 
       var infowindow = new google.maps.InfoWindow();
       var marker, i;
-      for (i = 0; i < LocationsForMap.length; i++) {  
-        marker = new google.maps.Marker({
-          position: new google.maps.LatLng(LocationsForMap[i].lattitude, LocationsForMap[i].longitude),
-          map: map,
-          title: 'Marker',
-          anchorPoint: new google.maps.Point(0, -29),
-        });
-        
-        google.maps.event.addListener(marker, 'click', (function(marker, i) {
-          return function() {
-            infowindow.setContent(LocationsForMap[i].location);
-            infowindow.open(map, marker);
+      if(this.$store.getters.companyData.companyData.companyLocations.length > 0){
+            for (i = 0; i < LocationsForMap.length; i++) {  
+            marker = new google.maps.Marker({
+
+              position: new google.maps.LatLng(LocationsForMap[i].lattitude, LocationsForMap[i].longitude),
+
+              map: map,
+              title: 'Marker',
+              anchorPoint: new google.maps.Point(0, -29),
+            });
+            
+            google.maps.event.addListener(marker, 'click', (function(marker, i) {
+              return function() {
+                infowindow.setContent(LocationsForMap[i].location);
+                infowindow.open(map, marker);
+              }
+            })(marker, i));
+          } 
+          }else{
+            for (i = 0; i < LocationsForMap.length; i++) {  
+            marker = new google.maps.Marker({
+              map: map,
+              title: 'Marker',
+              anchorPoint: new google.maps.Point(0, -29),
+            });
+            
+            google.maps.event.addListener(marker, 'click', (function(marker, i) {
+              return function() {
+                infowindow.setContent(LocationsForMap[i].location);
+                infowindow.open(map, marker);
+              }
+            })(marker, i));
           }
-        })(marker, i));
-      }
+          }
+    
 
 
         // [START maps_places_autocomplete_creation]
@@ -201,6 +222,7 @@ export default {
       setTimeout(() => {
         this.loading = false,
         document.getElementById("pac-input").value = '';
+        this.getLocation();
       }, 5000)
     },
     deleteLocation(data,indexing){
@@ -221,7 +243,7 @@ export default {
       this.companyData.companyLocations.splice(indexOfObject, 1);
     
       this.deleteCompanyLocation(data);
-      
+      this.getLocation();
     },
   },
   mounted() {
