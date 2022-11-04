@@ -38,7 +38,7 @@
                     </div>
                   </v-col>
                   <v-col cols="12" md="6">
-                    <div class="msg-options d-flex mt-2 justify-end">
+                    <div class="msg-options d-flex mt-2 justify-end">`  `
                       <div class="search"> 
                         <v-text-field v-model="searchMessage" type="text" align-center
                           outlined class="pt-0 mt-0" placeholder="Search this conversation" >
