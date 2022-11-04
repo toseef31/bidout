@@ -193,8 +193,8 @@ export default {
       
     },
     bidsList(){
-      this.openBids = [];
-      this.closedBids = [];
+      console.log('hello',this.$store.getters.bidsList);
+    
       if(this.$store.getters.bidsList.length > 0){
         var membr = this.$store.getters.bidsList.filter((item)=>{
          if(!item.status){
@@ -203,8 +203,10 @@ export default {
             this.closedBids.push(item);
            }
         })
+         return this.$store.getters.bidsList;
         
-        return this.$store.getters.bidsList;
+      }else{
+        return [];
       }
       
     }
