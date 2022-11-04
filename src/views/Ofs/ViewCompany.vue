@@ -11,8 +11,9 @@
           <v-row justify="center">
             <v-col cols="12" md="3" class="pl-0">
               <aside class="company-leftSidebar">
-                <div class="company-logo pb-10">
-                  <v-img :src="companyInfo.image"></v-img>
+                <div class="company-logo">
+                  <v-img :src="companyInfo.image" class="mb-3"></v-img>
+                  <h4 class="mb-3"><span v-if="companyInfo.isPremium || companyInfo.isPremium == 'true'"><v-icon color="#0D9647">mdi-check-decagram</v-icon>Premium Service Provider</span></h4>
                 </div>
                 <div>
                   <router-link to="/login" class="text-decoration-none">
@@ -22,7 +23,7 @@
                     <v-btn color="#0D9647" large tile dense width="100%" height="56" class="font-weight-bold text-capitalize" type="submit" outlined>Create RFP <v-icon class="pl-2">mdi-arrow-right-circle</v-icon></v-btn>
                   </router-link>
                 </div>
-                <div class="facts-data pa-6 text-left">
+                <div class="facts-data pa-5 text-left">
                   <h3 class="mb-4"><font color="#013D3A">Key Facts</font></h3>
                   <p><font class="font-weight-bold">Founded:</font> {{companyInfo.founded}}</p>
                   <p><font class="font-weight-bold">Employees:</font> {{companyInfo.employees}}</p>
@@ -34,7 +35,7 @@
                       <p><a :href="companyInfo.careers" target="_blank">Careers</a><v-icon class="pl-2" color="#013D3A">mdi-arrow-top-right-bold-box-outline</v-icon></p>
                     </div>
                 </div>
-                <div class="facts-data pa-6 text-left">
+                <div class="facts-data pa-5 text-left">
                   <h3 class="mb-4"><font color="#013D3A">Account Contacts</font></h3>
                   <div class="contact-list mb-4" v-for="contacts in companyInfo.accountContacts">
                     <h4 class="mb-0 font-weight-bold">{{contacts.name}}</h4>
@@ -49,8 +50,8 @@
             </v-col>
             <v-col cols="12" md="9">
               <div class="company-content text-left">
-                <div class="company-title mb-12">
-                  <h1>{{companyInfo.company}} &nbsp; &nbsp; <span v-if="companyInfo.isPremium || companyInfo.isPremium == 'true'"><v-icon color="#0D9647">mdi-check-decagram</v-icon>Premium Service Provider</span></h1>
+                <div class="company-title mb-3">
+                  <h1>{{companyInfo.company}}</h1>
                 </div>
                 <div class="company-desc">
                   <h1 class="mb-4 font-weight-bold">Corporate Summary</h1>
