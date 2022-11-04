@@ -276,7 +276,7 @@ export default {
         this.basinsData.push(this.basins);
         var data = {
           companyId: this.$store.getters.userInfo.company.id,
-          basins: this.basinsData,
+          basins: this.basins,
         }
         this.addCompanyBasins(data);
       },
