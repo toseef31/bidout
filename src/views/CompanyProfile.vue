@@ -272,6 +272,7 @@ export default {
       addBasin(){
         if(this.$store.getters.companyData.basins){
           this.basinsData = this.$store.getters.companyData.companyData.basins;
+          this.basins = this.$store.getters.companyData.companyData.basins;
         }
         this.basinsData.push(this.basins);
         var data = {
