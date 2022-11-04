@@ -7,7 +7,7 @@ export default {
     await axios.get('company/getCompanyById/'+payload)
      .then(responce => {
       commit('setCompany',responce.data)
-      localStorage.setItem('companyData', JSON.stringify(responce.data));
+     
     }).catch(err => {
           console.log(err);
       });

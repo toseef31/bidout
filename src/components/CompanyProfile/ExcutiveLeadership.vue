@@ -63,29 +63,36 @@
         </v-col>
       </v-row>
       <div class="service-list text-left mt-10">
-        <div class="profile-list" v-if="croppedProfile">
-          <v-icon color="#F32349" class="pa-1 white">mdi-trash-can-outline</v-icon>
-          <v-img :src="croppedProfile" width="173"></v-img>
-          <h6>{{excutiveName}}</h6>
-          <p>{{excutiveRole}}</p>
-          <v-icon color="#013D3A">mdi-linkedin</v-icon>
-        </div>
-        <div class="profile-list" v-for="(excutive,index) in companyData.executiveLeadership">
-          <v-icon color="#F32349" class="pa-1 white" @click="deleteExcutive(excutive)">mdi-trash-can-outline</v-icon>
-          <v-img :src="excutive.profilePicture" width="173"></v-img>
-          <h6>{{excutive.name}}</h6>
-          <p>{{excutive.role}}</p>
-          <a v-if="excutive.linkedin" class="text-decoration-none" target="_blank" :href="excutive.linkedin">
-            <v-icon color="#013D3A">mdi-linkedin</v-icon>
-          </a>
-        </div>
+        <draggable
+          :list="companyData.executiveLeadership"
+          :disabled="!enabled"
+          class="list-group"
+          ghost-class="ghost"
+          :move="checkMove"
+          @start="dragging = true"
+          @end="dragging = false"
+        > 
+          <div class="profile-list" v-for="(excutive,index) in companyData.executiveLeadership">
+            <v-icon color="#F32349" class="pa-1 white" @click="deleteExcutive(excutive)">mdi-trash-can-outline</v-icon>
+            <v-img :src="excutive.profilePicture" width="173"></v-img>
+            <h6>{{excutive.name}}</h6>
+            <p>{{excutive.role}}</p>
+            <a v-if="excutive.linkedin" class="text-decoration-none" target="_blank" :href="excutive.linkedin">
+              <v-icon color="#013D3A">mdi-linkedin</v-icon>
+            </a>
+          </div>
+        </draggable>
       </div>
     </v-container>
   </v-form>
 </template>
 <script>
   import { mapActions } from "vuex";
+  import draggable from 'vuedraggable'
 export default {
+  components: {
+    draggable,
+  },
   data() {
     return {
       croppieProfile: '',
@@ -97,18 +104,21 @@ export default {
       excutiveRole: '',
       logoName: '',
       executiveLeadership: this.$store.getters.companyData.companyData.executiveLeadership,
-
+      enabled: true,
+      dragging: false
     };
   },
   computed:{
     companyData(){
       return this.$store.getters.companyData.companyData;
+    },
+    draggingInfo() {
+      return this.dragging ? "under drag" : "";
     }
   },
   methods: {
     ...mapActions(["addCompanyExcutive","deleteCompanyExcutive"]),
     cropProfile (e) {
-      console.log(e);
       var files = e.target.files || e.dataTransfer.files;
       // alert(files);
       if (!files.length) return;
@@ -174,7 +184,10 @@ export default {
         executiveLeadership: data,
       }
       this.deleteCompanyExcutive(data);
-    }
+    },
+    checkMove: function(e) {
+      console.log("Future index: " + e.draggedContext.futureIndex);
+    },
   },
   mounted() {
     
