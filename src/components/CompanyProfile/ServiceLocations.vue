@@ -62,17 +62,17 @@ export default {
   methods: {
     ...mapActions(["addCompanyLocation","deleteCompanyLocation"]),
     getLocation(){
-      if(this.$store.getters.companyData.companyData.companyLocations){
+        if(this.$store.getters.companyData.companyData.companyLocations && this.$store.getters.companyData.companyData.companyLocations.length > 0){
         var lat = this.$store.getters.companyData.companyData.companyLocations[0].lattitude;
       }else{
         var lat = 29.721085;
       }
-      if(this.$store.getters.companyData.companyData.companyLocations){
+      if(this.$store.getters.companyData.companyData.companyLocations && this.$store.getters.companyData.companyData.companyLocations.length > 0){
         var lng = this.$store.getters.companyData.companyData.companyLocations[0].longitude;
       }else{
         var lng = -95.342049;
       }
-      if(this.$store.getters.companyData.companyData.companyLocations){
+      if(this.$store.getters.companyData.companyData.companyLocations && this.$store.getters.companyData.companyData.companyLocations.length > 0){
         var LocationsForMap = this.$store.getters.companyData.companyData.companyLocations;
       }else{
         var LocationsForMap = [
@@ -183,6 +183,7 @@ export default {
           this.lng = place.geometry.location.lng();
           this.address = document.getElementById("pac-input").value;
         });
+      
     },
     addLocation(){
       const head = Date.now().toString();
