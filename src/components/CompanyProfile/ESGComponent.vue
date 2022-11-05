@@ -12,7 +12,7 @@
             <h4 class="text-left mb-5">{{esgDB.name}}<small class="pl-5 company-link" @click="editOpen(esgDB)" v-show="!edit">Edit</small><small class="pl-5 company-link" @click="addEsG(esgDB)" v-show="edit">Save</small></h4>
             <p class="text-left" v-show="edit != esgDB.name">{{esgDB.description}}</p>
             <v-textarea outlined name="input-7-4" v-model="description" v-show="edit == esgDB.name">{{esgDB.description}}</v-textarea>
-            <a :href="esgDB.attachment" download class="text-decoration-none" v-if="esgDB.attachment" v-show="edit != esgDB.name">Download <v-icon>mdi-tray-arrow-down</v-icon></a>
+            <a :href="esgDB.attachment" target="_blank" download class="text-decoration-none" v-if="esgDB.attachment" v-show="edit != esgDB.name">Download <v-icon>mdi-tray-arrow-down</v-icon></a>
             
             <label for="docFile" class="profile-input" v-show="edit == esgDB.name">{{docName}}
               <input type="file" ref="attachment" id="docFile" class="d-none" @change="onFileChange($event)">
