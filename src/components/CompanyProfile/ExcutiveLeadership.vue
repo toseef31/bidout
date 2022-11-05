@@ -68,9 +68,8 @@
           :disabled="!enabled"
           class="list-group"
           ghost-class="ghost"
-          :move="checkMove"
           @start="dragging = true"
-          @end="dragging = false"
+          @end="checkMove"
         > 
           <div class="profile-list" v-for="(excutive,index) in orderCate(companyData.executiveLeadership)">
             <v-icon color="#F32349" class="pa-1 white" @click="deleteExcutive(excutive)">mdi-trash-can-outline</v-icon>
@@ -183,29 +182,18 @@ export default {
       this.excutivelinkdinProfile = '';
     },
     deleteExcutive(data){
-      var data = {
-        companyId: this.$store.getters.userInfo.company.id,
-        executiveLeadership: data,
-      }
       this.deleteCompanyExcutive(data);
     },
     checkMove: function(e) {
-      console.log(e);
-      console.log("Future index: " + e.relatedContext.list);
-      // this.sortData = e.relatedContext.list;
-      
-      this.sortData = e.relatedContext.list;
-      console.log(this.sortData,'before');
-      this.sortData.forEach((data, index) => {
-        // console.log(index);
-        this.sortData[index].orderNumber = index
-      })
-      console.log(this.sortData,'after');
+      this.executiveLeadership = this.executiveLeadership.map((item, index) => {
+        item.orderNumber = index + 1;
+        return item;
+      });
+
       var data = {
         companyId: this.$store.getters.userInfo.company.id,
-        leadership: this.sortData,
+        leadership: this.executiveLeadership,
       }
-
       this.editCompanyExcutive(data);
     },
     orderCate(leadership){
