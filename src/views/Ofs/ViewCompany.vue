@@ -83,7 +83,7 @@
                           <iframe
                             width="430"
                             height="240"
-                            :src="video"
+                            :src="'https://www.youtube.com/embed/'+video"
                             frameborder="0"
                             allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture"
                             allowfullscreen
