@@ -72,7 +72,7 @@
           @start="dragging = true"
           @end="dragging = false"
         > 
-          <div class="profile-list" v-for="(excutive,index) in companyData.executiveLeadership">
+          <div class="profile-list" v-for="(excutive,index) in orderCate(companyData.executiveLeadership)">
             <v-icon color="#F32349" class="pa-1 white" @click="deleteExcutive(excutive)">mdi-trash-can-outline</v-icon>
             <v-img :src="excutive.profilePicture" width="173"></v-img>
             <h6>{{excutive.name}}</h6>
@@ -87,8 +87,9 @@
   </v-form>
 </template>
 <script>
-  import { mapActions } from "vuex";
   import draggable from 'vuedraggable'
+  import _ from "lodash";
+  import { mapActions } from "vuex";
 export default {
   components: {
     draggable,
@@ -192,27 +193,24 @@ export default {
       console.log(e);
       console.log("Future index: " + e.relatedContext.list);
       // this.sortData = e.relatedContext.list;
-      for(let arr = 0; arr < e.relatedContext.list.length; arr ++){
-        var leader = {
-          profilePicture : e.relatedContext.list[arr].profilePicture,
-          name: e.relatedContext.list[arr].name,
-          role: e.relatedContext.list[arr].role,
-          linkedin: e.relatedContext.list[arr].linkedin,
-          id: e.relatedContext.list[arr].id,
-          orderNumber: arr,
-        }
-        
-        
-            this.sortData.push(leader); 
-      // console.log([...new Set(this.sortData)],'sorted');
-      }
-      console.log([...new Map(this.sortData.map(item => [item.id, item])).values()]);
+      
+      this.sortData = e.relatedContext.list;
+      console.log(this.sortData,'before');
+      this.sortData.forEach((data, index) => {
+        // console.log(index);
+        this.sortData[index].orderNumber = index
+      })
+      console.log(this.sortData,'after');
       var data = {
         companyId: this.$store.getters.userInfo.company.id,
-        leadership: this.sortData
+        leadership: this.sortData,
       }
-      // this.editCompanyExcutive(data);
+
+      this.editCompanyExcutive(data);
     },
+    orderCate(leadership){
+      return _.orderBy(leadership, "orderNumber", "asc");
+    }
   },
   mounted() {
     

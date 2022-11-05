@@ -173,7 +173,7 @@ export default {
       });
   },
   editCompanyExcutive({commit,dispatch}, payload){
-    console.log(payload.leadership);
+    // console.log(payload);
     axios.post('/company/updateCompanyLeadership/',{'companyId': payload.companyId, 'leadershipData': payload.leadership})
      .then(responce => {
       dispatch("getCompany",payload.companyId)
