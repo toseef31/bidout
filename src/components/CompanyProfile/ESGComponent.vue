@@ -122,10 +122,8 @@ export default {
       return url.split('/').pop();
     },
     editOpen(esg){
-      console.log(esg);
       this.edit = esg.name;
       this.description = esg.description;
-      console.log(this.esg.description);
     }
   },
   mounted() {
