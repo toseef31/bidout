@@ -206,7 +206,7 @@ export default {
    companyCategories(){
      return this.$store.getters.publicCompany.categories;
    },
-   esgCompanyInfo(){
+   esgCompanyData(){
      var target = this.esgData;
      var source = this.$store.getters.publicCompany.companyData.esgInitiatives;
      Array.prototype.push.apply(target, source);
