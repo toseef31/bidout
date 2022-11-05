@@ -194,20 +194,19 @@ export default {
       // this.sortData = e.relatedContext.list;
       for(let arr = 0; arr < e.relatedContext.list.length; arr ++){
         var leader = {
-          profilePicture : e.draggedContext.element.profilePicture,
-          name: e.draggedContext.element.name,
-          role: e.draggedContext.element.role,
-          linkedin: e.draggedContext.element.linkedin,
-          id: e.draggedContext.element.id,
+          profilePicture : e.relatedContext.list[arr].profilePicture,
+          name: e.relatedContext.list[arr].name,
+          role: e.relatedContext.list[arr].role,
+          linkedin: e.relatedContext.list[arr].linkedin,
+          id: e.relatedContext.list[arr].id,
           orderNumber: arr,
         }
         
-        if(this.sortData.indexOf(e.relatedContext.list[arr]) === -1) { 
+        
             this.sortData.push(leader); 
-            // console.log(newArray.value)
-        }
+      // console.log([...new Set(this.sortData)],'sorted');
       }
-      console.log(this.sortData);
+      console.log([...new Map(this.sortData.map(item => [item.id, item])).values()]);
       var data = {
         companyId: this.$store.getters.userInfo.company.id,
         leadership: this.sortData

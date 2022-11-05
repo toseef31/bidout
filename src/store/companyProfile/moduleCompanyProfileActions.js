@@ -194,7 +194,7 @@ export default {
     formData.append('executiveLeadership[linkedin]', payload.executiveLeadership.linkedin);
     formData.append('executiveLeadership[profilePicture]', payload.executiveLeadership.profilePicture);
     formData.append('executiveLeadership[id]', payload.executiveLeadership.id);
-    // formData.append('executiveLeadership[orderNumber]', payload.executiveLeadership.orderNumber);
+    formData.append('executiveLeadership[orderNumber]', payload.executiveLeadership.orderNumber);
     formData.append('companyId', payload.companyId);
     axios.post('/company/deleteCompanyLeadership/',formData,config)
      .then(responce => {
