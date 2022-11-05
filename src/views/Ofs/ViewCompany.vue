@@ -22,16 +22,16 @@
                     <v-btn color="#0D9647" large tile dense width="100%" height="56" class="font-weight-bold text-capitalize" type="submit" outlined>Create RFP <v-icon class="pl-2">mdi-arrow-right-circle</v-icon></v-btn>
                   </router-link>
                 </div>
-                <div class="facts-data pa-6 text-left">
+                <div class="facts-data pa-6 text-left" v-if="companyInfo.founded != null || companyInfo.employees != null  || companyInfo.hqlocation != null || companyInfo.website != null || companyInfo.linkedin != null || companyInfo.careers != null">
                   <h3 class="mb-4"><font color="#013D3A">Key Facts</font></h3>
-                  <p><font class="font-weight-bold">Founded:</font> {{companyInfo.founded}}</p>
-                  <p><font class="font-weight-bold">Employees:</font> {{companyInfo.employees}}</p>
-                  <p><font class="font-weight-bold">HQ Location:</font> {{companyInfo.hqlocation}}</p>
+                  <p v-if="companyInfo.founded"><font class="font-weight-bold">Founded:</font> {{companyInfo.founded}}</p>
+                  <p v-if="companyInfo.employees"><font class="font-weight-bold">Employees:</font> {{companyInfo.employees}}</p>
+                  <p v-if="companyInfo.hqlocation"><font class="font-weight-bold">HQ Location:</font> {{companyInfo.hqlocation}}</p>
                   <!-- <p><font class="font-weight-bold">Stock Price:</font> {{companyInfo.stockPrice}} </p> -->
                     <div class="company-links mt-6">
-                      <p><a :href="companyInfo.website" target="_blank">Website</a><v-icon class="pl-2" color="#013D3A">mdi-arrow-top-right-bold-box-outline</v-icon></p>
-                      <p><a :href="companyInfo.linkedin" target="_blank">LinkedIn</a><v-icon class="pl-2" color="#013D3A">mdi-arrow-top-right-bold-box-outline</v-icon></p>
-                      <p><a :href="companyInfo.careers" target="_blank">Careers</a><v-icon class="pl-2" color="#013D3A">mdi-arrow-top-right-bold-box-outline</v-icon></p>
+                      <p v-if="companyInfo.website"><a :href="companyInfo.website" target="_blank">Website</a><v-icon class="pl-2" color="#013D3A">mdi-arrow-top-right-bold-box-outline</v-icon></p>
+                      <p v-if="companyInfo.linkedin"><a :href="companyInfo.linkedin" target="_blank">LinkedIn</a><v-icon class="pl-2" color="#013D3A">mdi-arrow-top-right-bold-box-outline</v-icon></p>
+                      <p v-if="companyInfo.careers"><a :href="companyInfo.careers" target="_blank">Careers</a><v-icon class="pl-2" color="#013D3A">mdi-arrow-top-right-bold-box-outline</v-icon></p>
                     </div>
                 </div>
                 <div class="facts-data pa-6 text-left">
@@ -57,23 +57,25 @@
                   <p>{{companyInfo.overview}}</p>
                   <h3 class="text-center" v-if="!companyInfo.overview">No summary added yet</h3>
                 </div>
-                <div class="company-service mb-12">
+                <div class="company-service mb-12" v-if="companyInfo.services.length > 0">
                   <h1 class="mb-4 font-weight-bold">Services Portfolio</h1>
                   <div class="service-list text-left mt-4">
-                    <label v-for="services in companyCategories"  v-if="services.subCategories.length > 0">
-                      <v-icon>mdi-check</v-icon>{{services.name}}:
-                      <span v-for="(sub,index) in services.subCategories">{{sub.subname}} <span v-if="index < services.subCategories.length - 1">,</span> </span>
-                    </label>
+                    <template v-for="services in companyCategories"  v-if="services.subCategories.length > 0">
+                      <label v-for="(sub,index) in services.subCategories">
+                        <v-icon>mdi-check</v-icon>
+                        <span>{{services.name}}: {{sub.subname}}  </span>
+                      </label>
+                    </template>
                   </div>
                     <h3 v-if="!companyInfo.services" class="text-center">No services added yet</h3>
                 </div>
-                <div class="company-location mb-12">
+                <div class="company-location mb-12"  v-if="companyInfo.companyLocations.length > 0">
                   <h1 class="mb-4 font-weight-bold">Service Locations</h1>
                   <div id="map"class="map" style="height:350px" v-if="companyInfo.companyLocations"></div>
                   <h3 class="text-center" v-if="!companyInfo.companyLocations">Location not added</h3>
                 </div>
                 <template v-if="companyInfo.isPremium || companyInfo.isPremium == 'true'">
-                  <div class="company-location mb-12">
+                  <div class="company-location mb-12" v-if="companyInfo.corporateVideos.length > 0">
                     <h1 class="mb-4 font-weight-bold">Corporate Videos</h1>
                     <v-row>
                       <v-col cols="12" md="6" v-for="video in companyInfo.corporateVideos">
@@ -93,7 +95,7 @@
                       </v-col>
                     </v-row>
                   </div>
-                  <div class="company-documents mb-12">
+                  <div class="company-documents mb-12" v-if="companyInfo.corporateDocuments.length > 0">
                     <h1 class="mb-4 font-weight-bold">Corporate Documents</h1>
                     <v-row>
                       <v-col cols="3" sm="2" v-for="docs in companyInfo.corporateDocuments">
@@ -111,7 +113,7 @@
                       </v-col>
                     </v-row>
                   </div>
-                  <div class="company-news mb-12">
+                  <div class="company-news mb-12" v-if="companyInfo.corporateNews.length > 0">
                     <h1 class="mb-4 font-weight-bold">Corporate News & Press Releases</h1>
                     <div class="news-list" v-for="news in companyInfo.corporateNews">
                        <p>{{news.date | moment('MM/DD/YYYY')}} -  <a :href="news.url" target="_blank" class="text-decoration-none">{{news.title}}</a></p>
@@ -120,7 +122,7 @@
                       <h3 class="text-center">No news to show</h3>
                     </div>
                   </div>
-                  <div class="company-leadership mb-12">
+                  <div class="company-leadership mb-12" v-if="companyInfo.executiveLeadership.length > 0">
                     <h1 class="mb-4 font-weight-bold">Executive Leadership</h1>
                     <div class="leader-list text-left mt-10">
                       <div class="profile-list" v-for="excutive in companyInfo.executiveLeadership">
@@ -204,7 +206,7 @@ export default {
    companyCategories(){
      return this.$store.getters.publicCompany.categories;
    },
-   esgCompanyData(){
+   esgCompanyInfo(){
      var target = this.esgData;
      var source = this.$store.getters.publicCompany.companyData.esgInitiatives;
      Array.prototype.push.apply(target, source);
