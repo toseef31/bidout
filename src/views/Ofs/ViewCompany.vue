@@ -137,10 +137,10 @@
                     <h3 v-if="!companyInfo.executiveLeadership" class="text-center">No data to show</h3>
                   
                   </div>
-                  <div class="company-esg mb-16" v-if="esgcompanyInfo">
+                  <div class="company-esg mb-16" v-if="esgCompanyData">
                     <h1 class="mb-4 font-weight-bold">ESG Inititives</h1>
                     <v-row class="mt-5">
-                      <v-col cols="12" sm="4" v-for="(esg,index) in esgcompanyInfo" :key="index">
+                      <v-col cols="12" sm="4" v-for="(esg,index) in esgCompanyData" :key="index">
                         <div class="esg-list text-left">
                           <h4 class="text-left mb-5">{{esg.name}}</h4>
                           <p class="text-left">{{esg.description}}</p>
@@ -206,7 +206,7 @@ export default {
    companyCategories(){
      return this.$store.getters.publicCompany.categories;
    },
-   esgCompanyInfo(){
+   esgCompanyData(){
      var target = this.esgData;
      var source = this.$store.getters.publicCompany.companyData.esgInitiatives;
      Array.prototype.push.apply(target, source);
