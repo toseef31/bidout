@@ -64,14 +64,14 @@
       </v-row>
       <div class="service-list text-left mt-10">
         <draggable
-          :list="companyData.executiveLeadership"
+          :list="executiveLeadership"
           :disabled="!enabled"
           class="list-group"
           ghost-class="ghost"
           @start="dragging = true"
           @end="checkMove"
         > 
-          <div class="profile-list" v-for="(excutive,index) in orderCate(companyData.executiveLeadership)">
+          <div class="profile-list" v-for="(excutive,index) in orderCate(executiveLeadership)">
             <v-icon color="#F32349" class="pa-1 white" @click="deleteExcutive(excutive)">mdi-trash-can-outline</v-icon>
             <v-img :src="excutive.profilePicture" width="173"></v-img>
             <h6>{{excutive.name}}</h6>
@@ -185,10 +185,11 @@ export default {
       this.deleteCompanyExcutive(data);
     },
     checkMove: function(e) {
-      this.executiveLeadership = this.executiveLeadership.map((item, index) => {
+      console.log(this.executiveLeadership);
+      this.executiveLeadership = JSON.parse(JSON.stringify(this.executiveLeadership.map((item, index) => {
         item.orderNumber = index + 1;
         return item;
-      });
+      })));
 
       var data = {
         companyId: this.$store.getters.userInfo.company.id,
