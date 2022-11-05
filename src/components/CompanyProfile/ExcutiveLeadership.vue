@@ -106,7 +106,7 @@ export default {
       executiveLeadership: this.$store.getters.companyData.companyData.executiveLeadership,
       enabled: true,
       dragging: false,
-      sortData: '',
+      sortData: [],
     };
   },
   computed:{
@@ -169,7 +169,7 @@ export default {
         role: this.excutiveRole,
         linkedin: this.excutivelinkdinProfile,
         id: head + tail,
-        // orderNumber: order + 1,
+        orderNumber: order + 1,
       }
       var data = {
         companyId: this.$store.getters.userInfo.company.id,
@@ -191,20 +191,28 @@ export default {
     checkMove: function(e) {
       console.log(e);
       console.log("Future index: " + e.relatedContext.list);
-      this.sortData = e.relatedContext.list;
-      // var leader = {
-      //   profilePicture : e.draggedContext.element.profilePicture,
-      //   name: e.draggedContext.element.name,
-      //   role: e.draggedContext.element.role,
-      //   linkedin: e.draggedContext.element.linkedin,
-      //   id: e.draggedContext.element.id,
-      //   orderNumber: e.draggedContext.futureIndex + 1,
-      // }
+      // this.sortData = e.relatedContext.list;
+      for(let arr = 0; arr < e.relatedContext.list.length; arr ++){
+        var leader = {
+          profilePicture : e.draggedContext.element.profilePicture,
+          name: e.draggedContext.element.name,
+          role: e.draggedContext.element.role,
+          linkedin: e.draggedContext.element.linkedin,
+          id: e.draggedContext.element.id,
+          orderNumber: arr,
+        }
+        
+        if(this.sortData.indexOf(e.relatedContext.list[arr]) === -1) { 
+            this.sortData.push(leader); 
+            // console.log(newArray.value)
+        }
+      }
+      console.log(this.sortData);
       var data = {
         companyId: this.$store.getters.userInfo.company.id,
         leadership: this.sortData
       }
-      this.editCompanyExcutive(data);
+      // this.editCompanyExcutive(data);
     },
   },
   mounted() {
