@@ -275,9 +275,17 @@ export default {
           this.basins = this.$store.getters.companyData.companyData.basins;
         }
         this.basinsData.push(this.basins);
-        var data = {
-          companyId: this.$store.getters.userInfo.company.id,
-          basins: this.basins,
+        if(!this.$store.getters.companyData.basins){
+          var data = {
+            companyId: this.$store.getters.userInfo.company.id,
+            basins: this.basinsData,
+          }
+        }
+        if(this.$store.getters.companyData.companyData.basins.length == 0 || this.$store.getters.companyData.companyData.basins.length > 0){
+          var data = {
+            companyId: this.$store.getters.userInfo.company.id,
+            basins: this.basins,
+          }
         }
         this.addCompanyBasins(data);
       },
