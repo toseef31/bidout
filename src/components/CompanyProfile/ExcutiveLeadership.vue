@@ -1,5 +1,5 @@
 <template>
-  <v-form class="excutive-form">
+  <v-form class="excutive-form" ref="form" >
     <v-container class="pa-sm-10 pa-4">
       <v-row>
         <v-col cols="12" sm="12">
@@ -9,7 +9,7 @@
       <v-row>
         <v-col cols="12" sm="6" text="left">
           <label class="d-block text-left input-label mb-2">Executive's name</label>
-          <v-text-field placeholder="Enter executive's name" v-model="excutiveName" single-line outlined></v-text-field>
+          <v-text-field placeholder="Enter executive's name"  v-model="excutiveName" single-line outlined required></v-text-field>
         </v-col>
         <v-col cols="12" sm="6" text="left">
           <label class="d-block text-left input-label mb-2">Role</label>
@@ -24,8 +24,14 @@
         <v-col cols="12" sm="6" text="left">
           <label class="d-block text-left input-label mb-2">Profile</label>
           <label class="profile-input font-weight-bold" for="profile-input">
-          <input type="file" id="profile-input" accept="image/*" class="d-none"  @change="cropProfile($event)">
-          Add Image</label>
+          <input type="file" id="profile-input" accept="image/*" :rules="[v => !!v || 'File is mandatory']" class="d-none"  @change="cropProfile($event)" required>
+          <template v-if="logoName">
+           {{ logoName.substring(0,45)+".." }}
+          </template>
+          <template v-else>
+            Add Image
+          </template>
+          </label>
           <v-dialog
             v-model="dialogProfile"
             width="700"
@@ -59,7 +65,7 @@
       </v-row>
       <v-row>
         <v-col cols="12" sm="12">
-          <v-btn color="#0D9648" large class="text-capitalize white--text" height="54px" width="176px" @click="addExcutive">Add Executive</v-btn>
+          <v-btn color="#0D9648" large class="text-capitalize white--text" height="54px" width="176px" @click="addExcutive" :disabled="!valid">Add Executive</v-btn>
         </v-col>
       </v-row>
       <div class="service-list text-left mt-10">
@@ -95,6 +101,8 @@ export default {
   },
   data() {
     return {
+      valid: false,
+    
       croppieProfile: '',
       croppedProfile: null,
       dialogProfile: false,
@@ -116,9 +124,34 @@ export default {
       return this.dragging ? "under drag" : "";
     }
   },
+  watch:{
+    croppieProfile(){
+      if(this.excutiveRole.length && this.croppieProfile && this.excutiveName.length){
+        this.valid = true;
+      }else{
+        this.valid = false;
+      }
+    },
+    excutiveRole(){
+      if(this.excutiveRole.length && this.croppieProfile && this.excutiveName.length){
+        this.valid = true;
+      }else{
+        this.valid = false;
+      }
+    },
+    excutiveName(){
+      if(this.excutiveRole.length && this.croppieProfile && this.excutiveName.length){
+        this.valid = true;
+      }else{
+        this.valid = false;
+      }
+    },
+  },
   methods: {
     ...mapActions(["addCompanyExcutive","deleteCompanyExcutive"]),
     cropProfile (e) {
+
+      this.$refs.form.validate();
       var files = e.target.files || e.dataTransfer.files;
       // alert(files);
       if (!files.length) return;
@@ -140,7 +173,6 @@ export default {
       });
     },
     cropImage() {
-      
       let options = {
         type: 'blob',
         size: { width: 175, height: 175 },
@@ -155,10 +187,12 @@ export default {
           this.imageSrc = this.base64data;
         }
         this.croppedProfile = this.croppieProfile = output;
+
           this.dialogProfile = false;
         });
     },
     addExcutive(){
+     
       const head = Date.now().toString();
       const tail = Math.random().toString().substr(2);
       var leader = {
@@ -177,6 +211,7 @@ export default {
       this.excutiveName = '';
       this.excutiveRole = '';
       this.excutivelinkdinProfile = '';
+      this.logoName = '';
     },
     deleteExcutive(data){
       var data = {
