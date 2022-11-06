@@ -275,19 +275,20 @@ export default {
           this.basins = this.$store.getters.companyData.companyData.basins;
         }
         this.basinsData.push(this.basins);
-        if(!this.$store.getters.companyData.basins){
-          var data = {
-            companyId: this.$store.getters.userInfo.company.id,
-            basins: this.basinsData,
-          }
-        }
         if(this.$store.getters.companyData.companyData.basins.length == 0 || this.$store.getters.companyData.companyData.basins.length > 0){
           var data = {
             companyId: this.$store.getters.userInfo.company.id,
             basins: this.basins,
           }
+          this.addCompanyBasins(data);
+        }else{
+           var data = {
+              companyId: this.$store.getters.userInfo.company.id,
+              basins: this.basinsData,
+            }
+            // console.log(data,'object');
+            this.addCompanyBasins(data)
         }
-        this.addCompanyBasins(data);
       },
       get_url_extension( url ) {
         return url.split(/[#?]/)[0].split('.').pop().trim();
