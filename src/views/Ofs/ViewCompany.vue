@@ -137,7 +137,7 @@
                     <h3 v-if="!companyInfo.executiveLeadership" class="text-center">No data to show</h3>
                   
                   </div>
-                  <div class="company-esg mb-16" v-if="esgCompanyData">
+                  <div class="company-esg mb-16" v-if="companyInfo.esgInitiatives.length > 0">
                     <h1 class="mb-4 font-weight-bold">ESG Inititives</h1>
                     <v-row class="mt-5">
                       <v-col cols="12" sm="4" v-for="(esg,index) in esgCompanyData" :key="index">
