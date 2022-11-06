@@ -39,7 +39,7 @@
                     <p>{{companyData.overview}}</p>
                     <h3 class="text-center" v-if="!companyData.overview">No summary added yet</h3>
                   </div>
-                  <div class="company-service mb-12">
+                  <div class="company-service mb-12" v-if="companyData.services.length > 0">
                     <h1 class="mb-4 font-weight-bold">Services Portfolio</h1>
                     <div class="service-list text-left mt-4">
                       <template v-for="services in companyCategories"  v-if="services.subCategories.length > 0">
@@ -52,13 +52,13 @@
                       <h3 v-if="!companyData.services" class="text-center">No services added yet</h3>
                     <!-- <p class="text-right">View all services</p> -->
                   </div>
-                  <div class="company-location mb-12">
+                  <div class="company-location mb-12"  v-if="companyData.companyLocations.length > 0">
                     <h1 class="mb-4 font-weight-bold">Service Locations</h1>
                     <div id="map"class="map" style="height:350px" v-if="companyData.companyLocations"></div>
                     <h3 class="text-center" v-if="!companyData.companyLocations">Location not added</h3>
                   </div>
                   <template v-if="companyData.isPremium || companyData.isPremium == 'true'">
-                    <div class="company-location mb-12">
+                    <div class="company-location mb-12" v-if="companyData.corporateVideos.length > 0">
                       <h1 class="mb-4 font-weight-bold">Corporate Videos</h1>
                       <v-row>
                         <v-col cols="12" md="6" v-for="video in companyData.corporateVideos">
@@ -79,7 +79,7 @@
                         </v-col>
                       </v-row>
                     </div>
-                    <div class="company-documents mb-12">
+                    <div class="company-documents mb-12" v-if="companyData.corporateDocuments.length > 0">
                       <h1 class="mb-4 font-weight-bold">Corporate Documents</h1>
                       <v-row>
                         <v-col cols="3" sm="2" v-for="docs in companyData.corporateDocuments">
@@ -97,7 +97,7 @@
                         </v-col>
                       </v-row>
                     </div>
-                    <div class="company-news mb-12">
+                    <div class="company-news mb-12" v-if="companyData.corporateNews.length > 0">
                       <h1 class="mb-4 font-weight-bold">Corporate News & Press Releases</h1>
                       <div class="news-list" v-for="news in companyData.corporateNews">
                         <p>{{news.date | moment('MM/DD/YYYY')}} -  <a :href="news.url" target="_blank" class="text-decoration-none">{{news.title}}</a></p>
@@ -106,7 +106,7 @@
                         <h3 class="text-center">No news to show</h3>
                       </div>
                     </div>
-                    <div class="company-leadership mb-12">
+                    <div class="company-leadership mb-12" v-if="companyData.executiveLeadership.length > 0">
                       <h1 class="mb-4 font-weight-bold">Executive Leadership</h1>
                       <div class="leader-list text-left mt-10">
                         <div class="profile-list" v-for="excutive in companyData.executiveLeadership">
@@ -121,7 +121,7 @@
                       <h3 v-if="!companyData.executiveLeadership" class="text-center">No data to show</h3>
                     </div>
                     
-                    <div class="company-esg mb-16">
+                    <div class="company-esg mb-16" v-if="esgCompanyData">
                       <h1 class="mb-4 font-weight-bold">ESG Inititives</h1>
                       <v-row class="mt-5">
                         <v-col cols="12" sm="4" v-for="esg in esgCompanyData">
@@ -142,7 +142,7 @@
                     <v-btn color="#0D9647" large tile dense width="100%" height="56" class="font-weight-bold text-capitalize mb-4" type="submit" outlined>Place Order <v-icon class="pl-2">mdi-arrow-right-circle</v-icon></v-btn>
                     <router-link to="/create-bid" class="text-decoration-none"><v-btn color="#0D9647" large tile dense width="100%" height="56" class="font-weight-bold text-capitalize" type="submit" outlined>Create RFP <v-icon class="pl-2">mdi-arrow-right-circle</v-icon></v-btn></router-link>
                   </div>
-                  <div class="facts-data pa-5 text-left">
+                  <div class="facts-data pa-6 text-left" v-if="companyData.founded != null || companyData.employees != null  || companyData.hqlocation != null || companyData.website != null || companyData.linkedin != null || companyData.careers != null">
                     <h3 class="mb-4"><font color="#013D3A">Key Facts</font></h3>
                     <p><font class="font-weight-bold">Founded:</font> {{companyData.founded}}</p>
                     <p><font class="font-weight-bold">Employees:</font> {{companyData.employees}}</p>
@@ -246,7 +246,6 @@ export default {
     
     setTimeout(() => {
       var LocationsForMap = this.$store.getters.supplierCompany.companyData.companyLocations;
-      console.log(LocationsForMap[0].lattitude);
       var map = new google.maps.Map(document.getElementById('map'), {
         zoom: 2,
         center: new google.maps.LatLng(LocationsForMap[0].lattitude, LocationsForMap[0].longitude),
@@ -271,7 +270,7 @@ export default {
           }
         })(marker, i));
       }
-    },5000)
+    },6000)
         
     },
     get_url_extension( url ) {
