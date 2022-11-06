@@ -62,17 +62,18 @@ export default {
   methods: {
     ...mapActions(["addCompanyLocation","deleteCompanyLocation"]),
     getLocation(){
-      if(this.$store.getters.companyData.companyData.companyLocations){
+     
+        if(this.$store.getters.companyData.companyData.companyLocations && this.$store.getters.companyData.companyData.companyLocations.length > 0){
         var lat = this.$store.getters.companyData.companyData.companyLocations[0].lattitude;
       }else{
         var lat = 29.721085;
       }
-      if(this.$store.getters.companyData.companyData.companyLocations){
+      if(this.$store.getters.companyData.companyData.companyLocations && this.$store.getters.companyData.companyData.companyLocations.length > 0){
         var lng = this.$store.getters.companyData.companyData.companyLocations[0].longitude;
       }else{
         var lng = -95.342049;
       }
-      if(this.$store.getters.companyData.companyData.companyLocations){
+      if(this.$store.getters.companyData.companyData.companyLocations && this.$store.getters.companyData.companyData.companyLocations.length > 0){
         var LocationsForMap = this.$store.getters.companyData.companyData.companyLocations;
       }else{
         var LocationsForMap = [
@@ -92,21 +93,41 @@ export default {
 
       var infowindow = new google.maps.InfoWindow();
       var marker, i;
-      for (i = 0; i < LocationsForMap.length; i++) {  
-        marker = new google.maps.Marker({
-          position: new google.maps.LatLng(LocationsForMap[i].lattitude, LocationsForMap[i].longitude),
-          map: map,
-          title: 'Marker',
-          anchorPoint: new google.maps.Point(0, -29),
-        });
-        
-        google.maps.event.addListener(marker, 'click', (function(marker, i) {
-          return function() {
-            infowindow.setContent(LocationsForMap[i].location);
-            infowindow.open(map, marker);
+      if(this.$store.getters.companyData.companyData.companyLocations.length > 0){
+            for (i = 0; i < LocationsForMap.length; i++) {  
+            marker = new google.maps.Marker({
+
+              position: new google.maps.LatLng(LocationsForMap[i].lattitude, LocationsForMap[i].longitude),
+
+              map: map,
+              title: 'Marker',
+              anchorPoint: new google.maps.Point(0, -29),
+            });
+            
+            google.maps.event.addListener(marker, 'click', (function(marker, i) {
+              return function() {
+                infowindow.setContent(LocationsForMap[i].location);
+                infowindow.open(map, marker);
+              }
+            })(marker, i));
+          } 
+          }else{
+            for (i = 0; i < LocationsForMap.length; i++) {  
+            marker = new google.maps.Marker({
+              map: map,
+              title: 'Marker',
+              anchorPoint: new google.maps.Point(0, -29),
+            });
+            
+            google.maps.event.addListener(marker, 'click', (function(marker, i) {
+              return function() {
+                infowindow.setContent(LocationsForMap[i].location);
+                infowindow.open(map, marker);
+              }
+            })(marker, i));
           }
-        })(marker, i));
-      }
+          }
+    
 
 
         // [START maps_places_autocomplete_creation]
@@ -183,6 +204,7 @@ export default {
           this.lng = place.geometry.location.lng();
           this.address = document.getElementById("pac-input").value;
         });
+      
     },
     addLocation(){
       const head = Date.now().toString();
@@ -200,6 +222,7 @@ export default {
       setTimeout(() => {
         this.loading = false,
         document.getElementById("pac-input").value = '';
+        this.getLocation();
       }, 5000)
     },
     deleteLocation(data,indexing){
@@ -220,7 +243,7 @@ export default {
       this.companyData.companyLocations.splice(indexOfObject, 1);
     
       this.deleteCompanyLocation(data);
-      
+      this.getLocation();
     },
   },
   mounted() {
