@@ -39,10 +39,12 @@
                   <div class="company-service mb-12" v-if="companyData.services.length > 0">
                     <h1 class="mb-4 font-weight-bold">Services Portfolio</h1>
                     <div class="service-list text-left mt-4">
-                      <label v-for="services in companyCategories"  v-if="services.subCategories.length > 0">
-                        <v-icon>mdi-check</v-icon>{{services.name}}:
-                        <span v-for="(sub,index) in services.subCategories">{{sub.subname}} <span v-if="index < services.subCategories.length - 1">,</span> </span>
-                      </label>
+                      <template v-for="services in companyCategories"  v-if="services.subCategories.length > 0">
+                          <label v-for="(sub,index) in services.subCategories">
+                            <v-icon>mdi-check</v-icon>
+                            <span>{{services.name}}: {{sub.subname}}  </span>
+                          </label>
+                        </template>
                     </div>
                       <h3 v-if="!companyData.services" class="text-center">No services added yet</h3>
                     <!-- <p class="text-right">View all services</p> -->
@@ -62,7 +64,7 @@
                             <iframe
                               width="100%"
                               height="350px"
-                              :src="video"
+                              :src="'https://www.youtube.com/embed/'+video"
                               frameborder="0"
                               allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture"
                               allowfullscreen

@@ -7,7 +7,7 @@ export default {
     await axios.get('company/getCompanyById/'+payload)
      .then(responce => {
       commit('setCompany',responce.data)
-      localStorage.setItem('companyData', JSON.stringify(responce.data));
+     
     }).catch(err => {
           console.log(err);
       });
@@ -134,7 +134,7 @@ export default {
   },
   addCompanyFacts({commit,dispatch}, payload){
     
-    axios.post('/company/addCompanyKeyfacts/',{'companyId':payload.companyId,'founded':payload.founded,'employees':payload.employees,'hqlocation':payload.hqLocation,'stockPrice':payload.stockPrice,'website':payload.website,'linkedin':payload.linkedin,'careers':payload.careers})
+    axios.post('/company/addCompanyKeyfacts/',{'companyId':payload.companyId,'founded':payload.founded,'employees':payload.employees,'hqlocation':payload.hqLocation,'website':payload.website,'linkedin':payload.linkedin,'careers':payload.careers})
      .then(responce => {
       dispatch("getCompany",payload.companyId)
     }).catch(err => {
@@ -204,7 +204,9 @@ export default {
     formData.append('companyId', payload.companyId);
     formData.append('esgInitiatives[name]', payload.esgInitiatives.name);
     formData.append('esgInitiatives[description]', payload.esgInitiatives.description);
-    formData.append('esgInitiatives[attachment]', payload.esgInitiatives.attachment);
+    if(payload.esgInitiatives.attachment != ''){
+      formData.append('esgInitiatives[attachment]', payload.esgInitiatives.attachment);
+    }
     formData.append('esgInitiatives[id]', payload.esgInitiatives.id);
     formData.append('esgInitiatives[type]', payload.esgInitiatives.type);
     

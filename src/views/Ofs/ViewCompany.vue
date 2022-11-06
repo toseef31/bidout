@@ -60,10 +60,12 @@
                 <div class="company-service mb-12" v-if="companyInfo.services.length > 0">
                   <h1 class="mb-4 font-weight-bold">Services Portfolio</h1>
                   <div class="service-list text-left mt-4">
-                    <label v-for="services in companyCategories"  v-if="services.subCategories.length > 0">
-                      <v-icon>mdi-check</v-icon>{{services.name}}:
-                      <span v-for="(sub,index) in services.subCategories">{{sub.subname}} <span v-if="index < services.subCategories.length - 1">,</span> </span>
-                    </label>
+                    <template v-for="services in companyCategories"  v-if="services.subCategories.length > 0">
+                      <label v-for="(sub,index) in services.subCategories">
+                        <v-icon>mdi-check</v-icon>
+                        <span>{{services.name}}: {{sub.subname}}  </span>
+                      </label>
+                    </template>
                   </div>
                     <h3 v-if="!companyInfo.services" class="text-center">No services added yet</h3>
                 </div>
@@ -81,7 +83,7 @@
                           <iframe
                             width="430"
                             height="240"
-                            :src="video"
+                            :src="'https://www.youtube.com/embed/'+video"
                             frameborder="0"
                             allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture"
                             allowfullscreen
@@ -138,7 +140,7 @@
                   <div class="company-esg mb-16" v-if="companyInfo.esgInitiatives.length > 0">
                     <h1 class="mb-4 font-weight-bold">ESG Inititives</h1>
                     <v-row class="mt-5">
-                      <v-col cols="12" sm="4" v-for="(esg,index) in esgcompanyInfo" :key="index">
+                      <v-col cols="12" sm="4" v-for="(esg,index) in esgCompanyData" :key="index">
                         <div class="esg-list text-left">
                           <h4 class="text-left mb-5">{{esg.name}}</h4>
                           <p class="text-left">{{esg.description}}</p>
@@ -204,7 +206,7 @@ export default {
    companyCategories(){
      return this.$store.getters.publicCompany.categories;
    },
-   esgCompanyInfo(){
+   esgCompanyData(){
      var target = this.esgData;
      var source = this.$store.getters.publicCompany.companyData.esgInitiatives;
      Array.prototype.push.apply(target, source);
