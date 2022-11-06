@@ -24,7 +24,7 @@
         <v-col cols="12" sm="6" text="left">
           <label class="d-block text-left input-label mb-2">Profile</label>
           <label class="profile-input font-weight-bold" for="profile-input">
-          <input type="file" id="profile-input" accept="image/*" class="d-none"  @change="cropProfile($event)">
+          <input type="file" id="profile-input" accept="image/*" class="d-none"  @change="cropProfile">
           Add Image</label>
           <v-dialog
             v-model="dialogProfile"
@@ -119,21 +119,23 @@ export default {
   },
   methods: {
     ...mapActions(["addCompanyExcutive","deleteCompanyExcutive","editCompanyExcutive"]),
-    cropProfile (e) {
-      var files = e.target.files || e.dataTransfer.files;
-      // alert(files);
+    cropProfile (file) {
+      var files = file.target.files || file.dataTransfer.files;
       if (!files.length) return;
       this.logoName = files[0].name;
       this.dialogProfile = true;
       var reader = new FileReader();
       reader.onload = e => {
+      
         this.profileImage = e.target.result
+      
         setTimeout(() => {
           this.bind()
         }, 200)
       };
 
     reader.readAsDataURL(files[0]);
+    // document.getElementById("profile-input").value = "";
     },
     bind() {
       this.$refs.croppieRefProfile.bind({
@@ -180,6 +182,9 @@ export default {
       this.excutiveName = '';
       this.excutiveRole = '';
       this.excutivelinkdinProfile = '';
+      this.$refs.croppieRefProfile = '';
+      this.$refs.croppieRefProfile = null;
+      // document.getElementById("profile-input").value = "";
     },
     deleteExcutive(data){
       this.deleteCompanyExcutive(data);
