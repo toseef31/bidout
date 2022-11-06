@@ -151,7 +151,7 @@ export default {
     ...mapActions(["addCompanyExcutive","deleteCompanyExcutive"]),
     cropProfile (e) {
 
-       this.$refs.form.validate();
+      this.$refs.form.validate();
       var files = e.target.files || e.dataTransfer.files;
       // alert(files);
       if (!files.length) return;
@@ -211,6 +211,7 @@ export default {
       this.excutiveName = '';
       this.excutiveRole = '';
       this.excutivelinkdinProfile = '';
+      this.logoName = '';
     },
     deleteExcutive(data){
       var data = {
