@@ -64,14 +64,14 @@
       </v-row>
       <div class="service-list text-left mt-10">
         <draggable
-          :list="executiveLeadership"
+          :list="companyData.executiveLeadership"
           :disabled="!enabled"
           class="list-group"
           ghost-class="ghost"
           @start="dragging = true"
           @end="checkMove"
         > 
-          <div class="profile-list" v-for="(excutive,index) in orderCate(executiveLeadership)">
+          <div class="profile-list" v-for="(excutive,index) in orderCate(companyData.executiveLeadership)">
             <v-icon color="#F32349" class="pa-1 white" @click="deleteExcutive(excutive)">mdi-trash-can-outline</v-icon>
             <v-img :src="excutive.profilePicture" width="173"></v-img>
             <h6>{{excutive.name}}</h6>
@@ -103,7 +103,7 @@ export default {
       excutiveName: '',
       excutiveRole: '',
       logoName: '',
-      executiveLeadership: this.$store.getters.companyData.companyData.executiveLeadership,
+      executiveLeadership: '',
       enabled: true,
       dragging: false,
       sortData: [],
@@ -135,7 +135,7 @@ export default {
       };
 
     reader.readAsDataURL(files[0]);
-    // document.getElementById("profile-input").value = "";
+    document.getElementById("profile-input").value = "";
     },
     bind() {
       this.$refs.croppieRefProfile.bind({
@@ -184,13 +184,17 @@ export default {
       this.excutivelinkdinProfile = '';
       this.$refs.croppieRefProfile = '';
       this.$refs.croppieRefProfile = null;
-      // document.getElementById("profile-input").value = "";
+      document.getElementById("profile-input").value = "";
     },
     deleteExcutive(data){
+      var data = {
+        companyId: this.$store.getters.userInfo.company.id,
+        executiveLeadership: data,
+      }
       this.deleteCompanyExcutive(data);
     },
     checkMove: function(e) {
-      console.log(this.executiveLeadership);
+      this.executiveLeadership = this.$store.getters.companyData.companyData.executiveLeadership;
       this.executiveLeadership = JSON.parse(JSON.stringify(this.executiveLeadership.map((item, index) => {
         item.orderNumber = index + 1;
         return item;
