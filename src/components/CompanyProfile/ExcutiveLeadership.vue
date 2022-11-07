@@ -24,7 +24,8 @@
         <v-col cols="12" sm="6" text="left">
           <label class="d-block text-left input-label mb-2">Profile</label>
           <label class="profile-input font-weight-bold" for="profile-input">
-          <input type="file" id="profile-input" accept="image/*" :rules="[v => !!v || 'File is mandatory']" class="d-none"  @change="cropProfile($event)" required>
+
+          <input type="file" id="profile-input" ref="imageUploader" @click="resetImageUploader"  accept="image/*" :rules="[v => !!v || 'File is mandatory']" class="d-none"  @change="cropProfile($event)" required>
           <template v-if="logoName">
            {{ logoName.substring(0,45)+".." }}
           </template>
@@ -70,15 +71,14 @@
       </v-row>
       <div class="service-list text-left mt-10">
         <draggable
-          :list="companyData.executiveLeadership"
+          :list="executiveLeadership"
           :disabled="!enabled"
           class="list-group"
           ghost-class="ghost"
-          :move="checkMove"
           @start="dragging = true"
-          @end="dragging = false"
+          @end="checkMove"
         > 
-          <div class="profile-list" v-for="(excutive,index) in companyData.executiveLeadership">
+          <div class="profile-list" v-for="(excutive,index) in orderCate(executiveLeadership)">
             <v-icon color="#F32349" class="pa-1 white" @click="deleteExcutive(excutive)">mdi-trash-can-outline</v-icon>
             <v-img :src="excutive.profilePicture" width="173"></v-img>
             <h6>{{excutive.name}}</h6>
@@ -93,8 +93,9 @@
   </v-form>
 </template>
 <script>
-  import { mapActions } from "vuex";
   import draggable from 'vuedraggable'
+  import _ from "lodash";
+  import { mapActions } from "vuex";
 export default {
   components: {
     draggable,
@@ -113,7 +114,8 @@ export default {
       logoName: '',
       executiveLeadership: this.$store.getters.companyData.companyData.executiveLeadership,
       enabled: true,
-      dragging: false
+      dragging: false,
+      sortData: [],
     };
   },
   computed:{
@@ -148,7 +150,10 @@ export default {
     },
   },
   methods: {
-    ...mapActions(["addCompanyExcutive","deleteCompanyExcutive"]),
+    ...mapActions(["addCompanyExcutive","deleteCompanyExcutive","editCompanyExcutive"]),
+    resetImageUploader() {
+      this.$refs.imageUploader.value = '';
+    },
     cropProfile (e) {
 
       this.$refs.form.validate();
@@ -195,12 +200,14 @@ export default {
      
       const head = Date.now().toString();
       const tail = Math.random().toString().substr(2);
+      let order = this.$store.getters.companyData.companyData.executiveLeadership.length;
       var leader = {
         profilePicture : this.croppieProfile,
         name: this.excutiveName,
         role: this.excutiveRole,
         linkedin: this.excutivelinkdinProfile,
         id: head + tail,
+        orderNumber: order + 1,
       }
       var data = {
         companyId: this.$store.getters.userInfo.company.id,
@@ -214,15 +221,24 @@ export default {
       this.logoName = '';
     },
     deleteExcutive(data){
-      var data = {
-        companyId: this.$store.getters.userInfo.company.id,
-        executiveLeadership: data,
-      }
       this.deleteCompanyExcutive(data);
     },
     checkMove: function(e) {
-      console.log("Future index: " + e.draggedContext.futureIndex);
+      console.log(this.executiveLeadership);
+      this.executiveLeadership = JSON.parse(JSON.stringify(this.executiveLeadership.map((item, index) => {
+        item.orderNumber = index + 1;
+        return item;
+      })));
+
+      var data = {
+        companyId: this.$store.getters.userInfo.company.id,
+        leadership: this.executiveLeadership,
+      }
+      this.editCompanyExcutive(data);
     },
+    orderCate(leadership){
+      return _.orderBy(leadership, "orderNumber", "asc");
+    }
   },
   mounted() {
     
