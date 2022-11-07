@@ -280,6 +280,7 @@ export default {
             companyId: this.$store.getters.userInfo.company.id,
             basins: this.basins,
           }
+          console.log('if');
           this.addCompanyBasins(data);
         }
         if(!this.$store.getters.companyData.companyData.basins){
