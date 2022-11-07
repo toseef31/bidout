@@ -282,12 +282,11 @@ export default {
           }
           this.addCompanyBasins(data);
         }else{
-           var data = {
-              companyId: this.$store.getters.userInfo.company.id,
-              basins: this.basinsData,
-            }
-            // console.log(data,'object');
-            this.addCompanyBasins(data)
+         var data = {
+            companyId: this.$store.getters.userInfo.company.id,
+            basins: this.basinsData,
+          }
+          this.addCompanyBasins(data)
         }
       },
       get_url_extension( url ) {
