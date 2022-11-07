@@ -125,7 +125,12 @@ export default {
       });
   },
   editCompanyDocument({commit,dispatch}, payload){
-       console.log(payload);
+      axios.post('/company/editCompanyDocumentName/',{'companyId': payload.companyId,'docData': payload.corporateDocument})
+       .then(responce => {
+        dispatch("getCompany",payload.companyId)
+      }).catch(err => {
+            console.log(err);
+        });
   },
   addCompanyNews({commit,dispatch}, payload){
     

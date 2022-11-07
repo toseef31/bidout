@@ -17,11 +17,11 @@
             <v-img v-if="get_url_extension(doc.attachment) == 'pdf'" :src="require('@/assets/images/profile/pdf.png')" width="80px" class="mx-auto"></v-img>
             <v-img v-else-if="get_url_extension(doc.attachment) == 'xlsx' || get_url_extension(doc.attachment) == 'xls'" :src="require('@/assets/images/profile/excel.png')" width="80px" class="mx-auto"></v-img>
             <v-img v-else :src="require('@/assets/images/profile/other.png')" width="80px" class="mx-auto"></v-img>
-            <p v-if="isName">{{doc.name}}</p>
+            <p v-if="edit != doc.documentId">{{doc.name}}</p>
           </a>
-            <v-text-field clearable v-model="nameEdit" v-if="isField"></v-text-field>
-            <v-btn small min-width="36px" v-if="isName" min-height="36px" @click="editDoc(doc)"><v-icon>mdi-pencil</v-icon></v-btn>
-            <v-btn small min-width="36px" v-if="isField" min-height="36px" @click="saveDoc(doc)"><v-icon>mdi-content-save</v-icon></v-btn>
+            <v-text-field clearable v-model="nameEdit" v-if="edit == doc.documentId"></v-text-field>
+            <v-btn small min-width="36px" v-show="!edit" min-height="36px" @click="editDoc(doc)"><v-icon>mdi-pencil</v-icon></v-btn>
+            <v-btn small min-width="36px" v-show="edit" min-height="36px" @click="saveDoc(doc)"><v-icon>mdi-content-save</v-icon></v-btn>
             &nbsp;
             <v-btn small min-width="36px" min-height="36px" @click="deleteDoc(doc)"><v-icon>mdi-trash-can-outline</v-icon></v-btn>
         </div>
@@ -40,6 +40,7 @@ export default {
       isName: true,
       isField: false,
       nameEdit: '',
+      edit: '',
     };
   },
   computed:{
@@ -105,8 +106,8 @@ export default {
       
     },
     editDoc(val){
-      
-    this.isName = false;
+      console.log(val);
+    this.edit = val.documentId;
     this.isField = true;
     this.nameEdit = val.name;
     
@@ -122,6 +123,8 @@ export default {
         corporateDocument: [obj],
       }
       this.editCompanyDocument(data);
+      this.edit = '',
+      this.isField = false;
     },
     get_url_extension( url ) {
       return url.split(/[#?]/)[0].split('.').pop().trim();
