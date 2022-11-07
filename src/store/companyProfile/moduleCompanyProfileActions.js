@@ -96,6 +96,7 @@ export default {
 
     formData.append('files', payload.files);
     formData.append('companyId', payload.companyId);
+    formData.append('name', payload.name);
     formData.append('documentId', payload.documentId);
     axios.post('/company/addCompanyDocuments/',formData,config)
      .then(responce => {
@@ -122,6 +123,9 @@ export default {
     }).catch(err => {
           console.log(err);
       });
+  },
+  editCompanyDocument({commit,dispatch}, payload){
+       console.log(payload);
   },
   addCompanyNews({commit,dispatch}, payload){
     
