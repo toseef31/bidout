@@ -182,6 +182,7 @@ export default {
       });
   },
   deleteCompanyExcutive({commit,dispatch}, payload){
+    console.log(payload);
     var config = {
       headers: {
         "Content-Type": "multipart/form-data",

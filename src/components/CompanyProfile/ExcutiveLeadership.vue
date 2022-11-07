@@ -186,10 +186,10 @@ export default {
       this.$refs.croppieRefProfile = null;
       document.getElementById("profile-input").value = "";
     },
-    deleteExcutive(data){
+    deleteExcutive(esgData){
       var data = {
         companyId: this.$store.getters.userInfo.company.id,
-        executiveLeadership: data,
+        executiveLeadership: esgData,
       }
       this.deleteCompanyExcutive(data);
     },
