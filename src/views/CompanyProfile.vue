@@ -85,11 +85,11 @@
                         <label class="d-block text-center main-label mb-5">Selected Services</label>
                         
                           <div class="subservice-cate service-cate">
-                            <v-list class="px-5">
-                              <v-list-group v-for="category in companyData.categories" v-if="category.subCategories.length > 0">
+                            <v-list class="px-5" :expand="true">
+                              <v-list-group v-for="(category,i) in companyData.categories" v-if="category.subCategories.length > 0" :value="true">
                                 <template v-slot:activator>
                                   <v-list-item-content>
-                                    <v-list-item-title v-text="category.name" class="text-left font-weight-bold"></v-list-item-title>
+                                    <v-list-item-title v-text="category.name" class="text-left font-weight-bold black--text"></v-list-item-title>
                                   </v-list-item-content>
                                 </template>
                                 <v-list-item min-height="30px"
@@ -249,32 +249,38 @@ export default {
         this.companyService = this.$store.getters.companyData.companyData.services;
       }
       
-      console.log(this.$store.getters.companyData.categories);
-      console.log(subcate);
-      let found = false;
-      for(let cat = 0; cat < this.$store.getters.companyData.categories.length; cat++){
-        for(let subcat = 0; subcat < this.$store.getters.companyData.categories[cat].subCategories.length; subcat++){
+      // console.log(this.$store.getters.companyData.categories);
+      // console.log(subcate);
+      // let found = false;
+      // for(let cat = 0; cat < this.$store.getters.companyData.categories.length; cat++){
+      //   for(let subcat = 0; subcat < this.$store.getters.companyData.categories[cat].subCategories.length; subcat++){
 
-             console.log(subcate.id ," != ",this.$store.getters.companyData.categories[cat].subCategories[subcat].subid);
-          if(subcate.id == this.$store.getters.companyData.categories[cat].subCategories[subcat].subid){
+      //        console.log(subcate.id ," != ",this.$store.getters.companyData.categories[cat].subCategories[subcat].subid);
+      //     if(subcate.id == this.$store.getters.companyData.categories[cat].subCategories[subcat].subid){
           
            
-          }else{
+      //     }else{
              var servicedata = {
               name: subcate.name,
               id: subcate.id,
               slug: subcate.slug,
             }
-            found = true;
+        //     found = true;
              this.companyService.push(servicedata);
-             break;
+        //      break;
+        //   }
+        // }
+        // if (found) break;
+      // }
+      // console.log(this.companyService);
+      var result = this.companyService.reduce((unique, o) => {
+          if(!unique.some(obj => obj.id === o.id)) {
+            unique.push(o);
           }
-        }
-        if (found) break;
-      }
-      console.log(this.companyService);
-      
-      // this.addCompanyService({companyId: this.$store.getters.userInfo.company.id,subCategories: this.companyService});
+          return unique;
+      },[]);
+      // console.log(result);
+      this.addCompanyService({companyId: this.$store.getters.userInfo.company.id,subCategories: result});
       this.services = '';
       this.subservices = '';
     },
