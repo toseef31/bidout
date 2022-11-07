@@ -86,11 +86,11 @@
                         <label class="d-block text-center main-label mb-5">Selected Services</label>
                         
                           <div class="subservice-cate service-cate">
-                            <v-list class="px-5">
-                              <v-list-group v-for="category in companyData.categories" v-if="category.subCategories.length > 0">
+                            <v-list class="px-5" :expand="true">
+                              <v-list-group v-for="(category,i) in companyData.categories" v-if="category.subCategories.length > 0" :value="true">
                                 <template v-slot:activator>
                                   <v-list-item-content>
-                                    <v-list-item-title v-text="category.name" class="text-left font-weight-bold"></v-list-item-title>
+                                    <v-list-item-title v-text="category.name" class="text-left font-weight-bold black--text"></v-list-item-title>
                                   </v-list-item-content>
                                 </template>
                                 <v-list-item min-height="30px"
@@ -260,19 +260,29 @@ export default {
         return _.orderBy(subCats, "orderNumber", "asc");
       },
       addService(subcate){
-        if(this.$store.getters.companyData.companyData.services){
-          this.companyService = this.$store.getters.companyData.companyData.services;
-        }
+      if(this.$store.getters.companyData.companyData.services){
+        this.companyService = this.$store.getters.companyData.companyData.services;
+      }
+      
         var servicedata = {
           name: subcate.name,
           id: subcate.id,
           slug: subcate.slug,
         }
-        this.companyService.push(servicedata);
-        this.addCompanyService({companyId: this.$store.getters.userInfo.company.id,subCategories: this.companyService});
-        this.services = '';
-        this.subservices = '';
-      },
+    
+         this.companyService.push(servicedata);
+        
+        var result = this.companyService.reduce((unique, o) => {
+          if(!unique.some(obj => obj.id === o.id)) {
+            unique.push(o);
+          }
+          return unique;
+      },[]);
+      // console.log(result);
+      this.addCompanyService({companyId: this.$store.getters.userInfo.company.id,subCategories: result});
+      this.services = '';
+      this.subservices = '';
+    },
       deleteService(item){
         if(this.$store.getters.companyData.companyData.services){
           this.companyService = this.$store.getters.companyData.companyData.services;
