@@ -26,7 +26,18 @@
       <v-col cols="12" sm="12">
         <v-row>
           <v-col cols="12" class="-list text-left pt-2"  v-for="(location,index) in companyData.companyLocations">
-            <label class="d-flex justify-space-between"><span><v-icon>mdi-map-marker-outline</v-icon>{{location.location}}</span> <v-icon color="#F32349"   @click="deleteLocation(location,index)">mdi-trash-can-outline</v-icon></label>
+            <div  class="d-flex justify-space-between">
+            <label>
+              <span>
+              <v-icon>mdi-map-marker-outline</v-icon>
+                {{location.location}}
+              </span>
+            </label>
+            <label>
+            <v-icon color="#F32349" @click="deleteLocation(location,index)">mdi-trash-can-outline
+            </v-icon>
+        </label>
+      </div>
           </v-col>
         </v-row>
       </v-col>
