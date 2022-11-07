@@ -249,31 +249,15 @@ export default {
         this.companyService = this.$store.getters.companyData.companyData.services;
       }
       
-      // console.log(this.$store.getters.companyData.categories);
-      // console.log(subcate);
-      // let found = false;
-      // for(let cat = 0; cat < this.$store.getters.companyData.categories.length; cat++){
-      //   for(let subcat = 0; subcat < this.$store.getters.companyData.categories[cat].subCategories.length; subcat++){
-
-      //        console.log(subcate.id ," != ",this.$store.getters.companyData.categories[cat].subCategories[subcat].subid);
-      //     if(subcate.id == this.$store.getters.companyData.categories[cat].subCategories[subcat].subid){
-          
-           
-      //     }else{
-             var servicedata = {
-              name: subcate.name,
-              id: subcate.id,
-              slug: subcate.slug,
-            }
-        //     found = true;
-             this.companyService.push(servicedata);
-        //      break;
-        //   }
-        // }
-        // if (found) break;
-      // }
-      // console.log(this.companyService);
-      var result = this.companyService.reduce((unique, o) => {
+        var servicedata = {
+          name: subcate.name,
+          id: subcate.id,
+          slug: subcate.slug,
+        }
+    
+         this.companyService.push(servicedata);
+        
+        var result = this.companyService.reduce((unique, o) => {
           if(!unique.some(obj => obj.id === o.id)) {
             unique.push(o);
           }
