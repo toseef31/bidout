@@ -209,6 +209,11 @@ export default {
     companyData(){
       return this.$store.getters.companyData;
     },
+    basinsData(){
+      if(this.$store.getters.companyData.companyData.basins){
+        this.basins = this.$store.getters.companyData.companyData.basins;
+      }
+    },
     serviceSubId(){
       if(this.$store.getters.companyData.companyData.services){
         let servc = this.$store.getters.companyData.companyData.services.filter((item3) =>{
@@ -300,15 +305,12 @@ export default {
       },
       getSubCate(catId){
         this.getSubCategories(catId);
-      }
+      },
   },
   mounted() {
     document.title = "Company Profile - BidOut";
     this.getCategories();
     this.getCompany(this.$store.getters.userInfo.company.id);
-    if(this.$store.getters.companyData.companyData.basins){
-      this.basins = this.$store.getters.companyData.companyData.basins;
-    }
   }
 };
 </script>
