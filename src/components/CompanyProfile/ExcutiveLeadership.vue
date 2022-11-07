@@ -24,7 +24,7 @@
         <v-col cols="12" sm="6" text="left">
           <label class="d-block text-left input-label mb-2">Profile</label>
           <label class="profile-input font-weight-bold" for="profile-input">
-          <input type="file" id="profile-input" accept="image/*" class="d-none"  @change="cropProfile($event)">
+          <input type="file" ref="imageUploader" id="profile-input" accept="image/*" class="d-none" @click="resetImageUploader"  @change="cropProfile($event)">
           Add Image</label>
           <v-dialog
             v-model="dialogProfile"
@@ -119,6 +119,9 @@ export default {
   },
   methods: {
     ...mapActions(["addCompanyExcutive","deleteCompanyExcutive","editCompanyExcutive"]),
+    resetImageUploader() {
+      this.$refs.imageUploader.value = '';
+    },
     cropProfile (e) {
       var files = e.target.files || e.dataTransfer.files;
       // alert(files);
