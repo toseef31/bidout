@@ -281,11 +281,13 @@ export default {
             basins: this.basins,
           }
           this.addCompanyBasins(data);
-        }else{
+        }
+        if(!this.$store.getters.companyData.companyData.basins){
          var data = {
             companyId: this.$store.getters.userInfo.company.id,
             basins: this.basinsData,
           }
+          console.log("elseeeee");
           this.addCompanyBasins(data)
         }
       },
