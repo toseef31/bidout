@@ -135,7 +135,7 @@ export default {
       };
 
     reader.readAsDataURL(files[0]);
-    document.getElementById("profile-input").value = "";
+    // document.getElementById("profile-input").value = "";
     },
     bind() {
       this.$refs.croppieRefProfile.bind({
@@ -184,7 +184,7 @@ export default {
       this.excutivelinkdinProfile = '';
       this.$refs.croppieRefProfile = '';
       this.$refs.croppieRefProfile = null;
-      document.getElementById("profile-input").value = "";
+      // document.getElementById("profile-input").value = "";
     },
     deleteExcutive(esgData){
       var data = {
