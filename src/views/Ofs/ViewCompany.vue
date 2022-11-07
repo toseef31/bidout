@@ -127,7 +127,7 @@
                   <div class="company-leadership mb-12" v-if="companyInfo.executiveLeadership.length > 0">
                     <h1 class="mb-4 font-weight-bold">Executive Leadership</h1>
                     <div class="leader-list text-left mt-10">
-                      <div class="profile-list" v-for="excutive in companyInfo.executiveLeadership">
+                      <div class="profile-list" v-for="excutive in orderCate(companyInfo.executiveLeadership)">
                         <v-img  width="175px" height="175px" :src="excutive.profilePicture"></v-img>
                         <h6>{{excutive.name}}</h6>
                         <p>{{excutive.role}}</p>
@@ -259,6 +259,9 @@ export default {
     },
     viewPublicCompany() {
       this.getPublicCompanyInfo({ slug : this.$route.fullPath.split('/').pop() });
+    },
+     orderCate(leadership){
+      return _.orderBy(leadership, "orderNumber", "asc");
     },
     msgShow() {
       setTimeout(() => {
