@@ -59,20 +59,20 @@
       </v-row>
       <v-row>
         <v-col cols="12" sm="12">
-          <v-btn color="#0D9648" large class="text-capitalize white--text" height="54px" width="176px" @click="addExcutive">Add Executive</v-btn>
+          <v-btn color="#0D9648" large class="text-capitalize white--text" height="54px" width="176px" :loading="loading" :disabled="loading" @click="addExcutive">Add Executive</v-btn>
         </v-col>
       </v-row>
       <div class="service-list text-left mt-10">
         <draggable
-          :list="executiveLeadership"
+          :list="companyData.executiveLeadership"
           :disabled="!enabled"
           class="list-group"
           ghost-class="ghost"
           @start="dragging = true"
           @end="checkMove"
         > 
-          <div class="profile-list" v-for="(excutive,index) in orderCate(executiveLeadership)">
-            <v-icon color="#F32349" class="pa-1 white" @click="deleteExcutive(excutive)">mdi-trash-can-outline</v-icon>
+          <div class="profile-list" v-for="(excutive,index) in orderCate(companyData.executiveLeadership)">
+            <v-icon color="#F32349" class="pa-1 white"  @click="deleteExcutive(excutive)">mdi-trash-can-outline</v-icon>
             <v-img :src="excutive.profilePicture" width="173"></v-img>
             <h6>{{excutive.name}}</h6>
             <p>{{excutive.role}}</p>
@@ -96,6 +96,8 @@ export default {
   data() {
     return {
       croppieProfile: '',
+      loader: null,
+      loading: false,
       croppedProfile: null,
       dialogProfile: false,
       excutivelinkdinProfile: '',
@@ -103,7 +105,7 @@ export default {
       excutiveName: '',
       excutiveRole: '',
       logoName: '',
-      executiveLeadership: this.$store.getters.companyData.companyData.executiveLeadership,
+      executiveLeadership: '',
       enabled: true,
       dragging: false,
       sortData: [],
@@ -179,16 +181,31 @@ export default {
         executiveLeadership: leader
       }
       this.addCompanyExcutive(data);
+      this.loader = 'loading';
+      this.loading = true;
+      setTimeout(() => {
+        this.loading = false
+      }, 5000)
       this.croppieProfile = '';
       this.excutiveName = '';
       this.excutiveRole = '';
       this.excutivelinkdinProfile = '';
     },
-    deleteExcutive(data){
+    deleteExcutive(esgData){
+      var data = {
+        companyId: this.$store.getters.userInfo.company.id,
+        executiveLeadership: esgData,
+      }
+      const indexOfObject = this.companyData.executiveLeadership.findIndex(object => {
+        return object.id === esgData.id;
+      });
+      console.log(indexOfObject);
+      this.companyData.executiveLeadership.splice(indexOfObject, 1);
       this.deleteCompanyExcutive(data);
     },
     checkMove: function(e) {
-      console.log(this.executiveLeadership);
+
+      this.executiveLeadership = this.$store.getters.companyData.companyData.executiveLeadership;
       this.executiveLeadership = JSON.parse(JSON.stringify(this.executiveLeadership.map((item, index) => {
         item.orderNumber = index + 1;
         return item;
