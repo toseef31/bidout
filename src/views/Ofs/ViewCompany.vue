@@ -108,7 +108,7 @@
                             <v-img v-else-if="get_url_extension(docs.attachment) == 'xlsx' || get_url_extension(docs.attachment) == 'xls'" :src="require('@/assets/images/profile/excel.png')" width="80px" class="mx-auto"></v-img>
                             <v-img v-else :src="require('@/assets/images/profile/other.png')" width="80px" class="mx-auto"></v-img>
                           </a>
-                          <a :href="docs.attachment" target="_blank" class="text-decoration-none"><p>{{get_url_name(docs.attachment)}}</p></a>
+                          <a :href="docs.attachment" target="_blank" class="text-decoration-none"><p>{{docs.name}}</p></a>
                         </div>
                       </v-col>
                       <v-col cols="12" sm="12" v-if="!companyInfo.corporateDocuments">
@@ -128,7 +128,7 @@
                   <div class="company-leadership mb-12" v-if="companyInfo.executiveLeadership.length > 0">
                     <h1 class="mb-4 font-weight-bold">Executive Leadership</h1>
                     <div class="leader-list text-left mt-10">
-                      <div class="profile-list" v-for="excutive in companyInfo.executiveLeadership">
+                      <div class="profile-list" v-for="excutive in orderCate(companyInfo.executiveLeadership)">
                         <v-img  width="175px" height="175px" :src="excutive.profilePicture"></v-img>
                         <h6>{{excutive.name}}</h6>
                         <p>{{excutive.role}}</p>
