@@ -1,6 +1,10 @@
 <template>
-   <v-col class="companyProfile-module inner-Company pa-0 pa-sm-3 pl-sm-0" :class="[ showSideBar ? 'col-md-9 col-12 col-sm-9' : 'mid-content-collapse', activityPanel ? 'd-sm-block' : 'd-md-block']" v-show="!activityPanel">
+  <div class="companyProfile-module inner-Company fill-height d-flex justify-center align-center"  v-if="loader">
+    <v-progress-circular :width="3" color="green" indeterminate ></v-progress-circular>
+  </div>
+   <v-col class="companyProfile-module inner-Company pa-0 pa-sm-3 pl-sm-0" :class="[ showSideBar ? 'col-md-9 col-12 col-sm-9' : 'mid-content-collapse', activityPanel ? 'd-sm-block' : 'd-md-block']" v-show="!activityPanel" v-else>
       <div class="mid-content">
+        
         <div class="content-section">
           <v-row class="mx-0">
             <v-col cols="12" sm="12" md="12" class="d-sm-block px-0">
@@ -119,6 +123,7 @@
                             @change="addBasin"
                             hide-details
                             ></v-checkbox>
+                            <label class="d-none">{{basinsDatass}}</label>
                         </v-col>
                       </v-row>
                   </v-container>
@@ -177,15 +182,16 @@ export default {
   
   data() {
     return {
+      loader: true,
+      region: ['Gulf Coast','Northwest','Rockies','Mid-Con','Permian','Arklatex','Offshore','Other'],
+      basins: [],
+      basinsData: [],
       profileName: this.$store.getters.companyData.companyData.company,
       profileSummary: this.$store.getters.companyData.companyData.overview,
       services: '',
       companyService: '',
       companyService: [],
       subservices: '',
-      region: ['Gulf Coast','Northwest','Rockies','Mid-Con','Permian','Arklatex','Offshore','Other'],
-      basins: '',
-      basinsData: [],
       searchService: '',
       servData: [],
     };
@@ -209,9 +215,15 @@ export default {
     companyData(){
       return this.$store.getters.companyData;
     },
-    basinsData(){
-      if(this.$store.getters.companyData.companyData.basins){
+    basinsDatass(){
+      if(this.$store.getters.companyData.companyData.basins.length > 0){
         this.basins = this.$store.getters.companyData.companyData.basins;
+        console.log(this.basins);
+        return this.basins;
+      }else{
+        this.basins = [];
+        console.log(this.basins);
+        return this.basins;
       }
     },
     serviceSubId(){
@@ -306,10 +318,21 @@ export default {
       getSubCate(catId){
         this.getSubCategories(catId);
       },
+      loderShow(){
+        setTimeout(()=>{
+          alert('loader');
+          this.loader = false;
+        },5000);
+      }
+  },
+  created(){
+
+    this.getCategories();
+    
   },
   mounted() {
     document.title = "Company Profile - BidOut";
-    this.getCategories();
+     this.loderShow();
     this.getCompany(this.$store.getters.userInfo.company.id);
   }
 };
