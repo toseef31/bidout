@@ -230,13 +230,19 @@ export default {
       }
     },
     basinsDatass(){
-      if(this.$store.getters.companyData.companyData.basins.length > 0 || this.$store.getters.companyData.companyData.basins.length == 0){
-        this.basins = this.$store.getters.companyData.companyData.basins;
-        return this.basins;
-      }else{
+      if(!this.$store.getters.companyData.companyData.basins){
         this.basins = [];
         return this.basins;
+      }else{
+        if(this.$store.getters.companyData.companyData.basins.length > 0 || this.$store.getters.companyData.companyData.basins.length == 0){
+          this.basins = this.$store.getters.companyData.companyData.basins;
+          return this.basins;
+        }else{
+          this.basins = [];
+          return this.basins;
+        }
       }
+      
     },
     serviceSubId(){
       if(this.$store.getters.companyData.companyData.services){
@@ -315,19 +321,27 @@ export default {
           this.basins = this.$store.getters.companyData.companyData.basins;
         }
         this.basinsData.push(this.basins);
-        if(this.$store.getters.companyData.companyData.basins.length == 0 || this.$store.getters.companyData.companyData.basins.length > 0){
-          var data = {
-            companyId: this.$store.getters.userInfo.company.id,
-            basins: this.basins,
-          }
-          this.addCompanyBasins(data);
-        }
         if(!this.$store.getters.companyData.companyData.basins){
-         var data = {
-            companyId: this.$store.getters.userInfo.company.id,
-            basins: this.basinsData,
+          var data = {
+             companyId: this.$store.getters.userInfo.company.id,
+             basins: this.basinsData,
+           }
+           this.addCompanyBasins(data)
+        }else{
+          if(this.$store.getters.companyData.companyData.basins.length == 0 || this.$store.getters.companyData.companyData.basins.length > 0){
+            var data = {
+              companyId: this.$store.getters.userInfo.company.id,
+              basins: this.basins,
+            }
+            this.addCompanyBasins(data);
           }
-          this.addCompanyBasins(data)
+          if(!this.$store.getters.companyData.companyData.basins){
+           var data = {
+              companyId: this.$store.getters.userInfo.company.id,
+              basins: this.basinsData,
+            }
+            this.addCompanyBasins(data)
+          }
         }
       },
       get_url_extension( url ) {
