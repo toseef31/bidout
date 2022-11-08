@@ -16,7 +16,9 @@
                 cols="12" sm="4"
               >
                 <v-img :src="companyData.image"></v-img>
+
                 <h4 class="pl-3 mt-2"><span v-if="companyData.isPremium"><span v-if="companyData.isPremium == 1"></span><v-icon color="#0D9647">mdi-check-decagram</v-icon>Premium Service Provider</span></h4>
+
               </v-col>
               <v-col
                 class="text-left"
@@ -57,7 +59,9 @@
                     <div id="map"class="map" style="height:350px" v-if="companyData.companyLocations"></div>
                     <h3 class="text-center" v-if="!companyData.companyLocations">Location not added</h3>
                   </div>
+
                   <template v-if="companyData.isPremium || companyData.isPremium == 1">
+
                     <div class="company-location mb-12" v-if="companyData.corporateVideos.length > 0">
                       <h1 class="mb-4 font-weight-bold">Corporate Videos</h1>
                       <v-row>
@@ -109,7 +113,7 @@
                     <div class="company-leadership mb-12" v-if="companyData.executiveLeadership.length > 0">
                       <h1 class="mb-4 font-weight-bold">Executive Leadership</h1>
                       <div class="leader-list text-left mt-10">
-                        <div class="profile-list" v-for="excutive in orderCate(companyData.executiveLeadership)">
+                        <div class="profile-list" v-for="excutive in companyData.executiveLeadership">
                           <v-img  width="175px" height="175px" :src="excutive.profilePicture"></v-img>
                           <h6>{{excutive.name}}</h6>
                           <p>{{excutive.role}}</p>
@@ -282,7 +286,6 @@ export default {
     viewPublicCompany() {
       this.getCompanyInfo({ slug : this.$route.fullPath.split('/').pop()});
     },
-
     orderCate(leadership){
       return _.orderBy(leadership, "orderNumber", "asc");
     },
