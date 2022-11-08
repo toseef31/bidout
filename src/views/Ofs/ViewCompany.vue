@@ -217,7 +217,9 @@ export default {
   methods: {
     ...mapActions(["getPublicCompanyInfo"]),
     getLocation(){
-      setTimeout(() => {
+      if(this.$store.getters.publicCompany.companyData.length > 0){
+        setTimeout(() => {
+        console.log(this.$store.getters.publicCompany.companyData);
         var LocationsForMap = this.$store.getters.publicCompany.companyData.companyLocations;
              
         var map = new google.maps.Map(document.getElementById('map'), {
@@ -245,6 +247,8 @@ export default {
           })(marker, i));
         }
       },4000)
+      }
+      
       
     },
     get_url_extension( url ) {
