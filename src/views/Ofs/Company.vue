@@ -298,6 +298,7 @@ export default {
     this.viewPublicCompany();
     this.getLocation();
   }
+  
 };
 </script>
 <style scoped lang="scss">
