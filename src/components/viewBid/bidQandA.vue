@@ -12,7 +12,7 @@
           <v-expansion-panel-header>
             <template v-slot:actions>
               <v-col align="center">
-                <span v-if="open" class="icon-desc">Open to replay</span
+                <span class="icon-desc">Open to replay</span
                 ><v-icon> $expand </v-icon></v-col
               >
             </template>

@@ -95,7 +95,9 @@
           <v-tab-item value="tab-5" class="mt-5">
             <BidQandA @changetab="ChangeT($event)"></BidQandA>
           </v-tab-item>
-          <v-tab-item value="tab-6" class="mt-5"> </v-tab-item>
+          <v-tab-item value="tab-6" class="mt-5"
+            ><BidAuditTrail @changetab="ChangeT($event)"></BidAuditTrail>
+          </v-tab-item>
         </v-tabs-items>
       </div>
     </v-card>
@@ -109,6 +111,7 @@ import TeamMembers from "@/components/BidTabs/TeamMembers.vue";
 import BidQandA from "@/components/viewBid/bidQandA.vue";
 import BidChat from "@/components/viewBid/bidChat.vue";
 import BidSubmission from "@/components/viewBid/bidDetailTab.vue";
+import BidAuditTrail from "@/components/viewBid/bidAuditTrail.vue";
 
 export default {
   name: "BidDetail",
@@ -119,6 +122,7 @@ export default {
     BidQandA,
     BidChat,
     BidSubmission,
+    BidAuditTrail,
   },
   data() {
     return {
