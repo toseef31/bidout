@@ -53,13 +53,13 @@
                         <h3 v-if="!companyData.services" class="text-center">No services added yet</h3>
                       <!-- <p class="text-right">View all services</p> -->
                     </div>
-                    <div class="company-location mb-12">
+                    <div class="company-location mb-12" v-if="companyData.companyLocations.length > 0">
                       <h1 class="mb-4 font-weight-bold">Service Locations</h1>
                       <div id="map"class="map" style="height:350px" v-if="companyData.companyLocations"></div>
                       <h3 class="text-center" v-if="!companyData.companyLocations">Location not added</h3>
                     </div>
                     <template v-if="companyData.isPremium || companyData.isPremium == 'true'">
-                      <div class="company-location mb-12">
+                      <div class="company-location mb-12" v-if="companyData.corporateVideos.length > 0">
                         <h1 class="mb-4 font-weight-bold">Corporate Videos</h1>
                         <v-row>
                           <v-col cols="12" md="6" v-for="video in companyData.corporateVideos">
@@ -80,7 +80,7 @@
                           </v-col>
                         </v-row>
                       </div>
-                      <div class="company-documents mb-12">
+                      <div class="company-documents mb-12" v-if="companyData.corporateDocuments.length > 0">
                         <h1 class="mb-4 font-weight-bold">Corporate Documents</h1>
                         <v-row>
                           <v-col cols="3" sm="2" v-for="docs in companyData.corporateDocuments">
@@ -98,7 +98,7 @@
                           </v-col>
                         </v-row>
                       </div>
-                      <div class="company-news mb-12">
+                      <div class="company-news mb-12" v-if="companyData.corporateNews.length > 0">
                         <h1 class="mb-4 font-weight-bold">Corporate News & Press Releases</h1>
                         <div class="news-list" v-for="news in companyData.corporateNews">
                           <p>{{news.date | moment('MM/DD/YYYY')}} -  <a :href="news.url" target="_blank" class="text-decoration-none">{{news.title}}</a></p>
@@ -107,7 +107,7 @@
                           <h3 class="text-center">No news to show</h3>
                         </div>
                       </div>
-                      <div class="company-leadership mb-12">
+                      <div class="company-leadership mb-12" v-if="companyData.executiveLeadership.length > 0">
                         <h1 class="mb-4 font-weight-bold">Executive Leadership</h1>
                         <div class="leader-list text-left mt-10">
                           <div class="profile-list" v-for="excutive in companyData.executiveLeadership">
@@ -122,7 +122,7 @@
                         <h3 v-if="!companyData.executiveLeadership" class="text-center">No data to show</h3>
                       </div>
                       
-                      <div class="company-esg mb-16">
+                      <div class="company-esg mb-16" v-if="companyData.esgInitiatives.length > 0">
                         <h1 class="mb-4 font-weight-bold">ESG Inititives</h1>
                         <v-row class="mt-5">
                           <v-col cols="12" sm="4" v-for="esg in esgCompanyData">
