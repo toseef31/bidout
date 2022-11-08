@@ -230,7 +230,7 @@ export default {
       }
     },
     basinsDatass(){
-      if(this.$store.getters.companyData.companyData.basins.length > 0){
+      if(this.$store.getters.companyData.companyData.basins.length > 0 || this.$store.getters.companyData.companyData.basins.length == 0){
         this.basins = this.$store.getters.companyData.companyData.basins;
         return this.basins;
       }else{
@@ -280,13 +280,11 @@ export default {
       if(this.$store.getters.companyData.companyData.services){
         this.companyService = this.$store.getters.companyData.companyData.services;
       }
-      
         var servicedata = {
           name: subcate.name,
           id: subcate.id,
           slug: subcate.slug,
         }
-    
          this.companyService.push(servicedata);
         
         var result = this.companyService.reduce((unique, o) => {
@@ -295,7 +293,7 @@ export default {
           }
           return unique;
       },[]);
-      // console.log(result);
+      
       this.addCompanyService({companyId: this.$store.getters.userInfo.company.id,subCategories: result});
       this.services = '';
       this.subservices = '';
