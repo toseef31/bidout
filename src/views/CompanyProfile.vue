@@ -324,7 +324,7 @@ export default {
         if(!this.$store.getters.companyData.companyData.basins){
           var data = {
              companyId: this.$store.getters.userInfo.company.id,
-             basins: this.basinsData,
+             basins: this.basins,
            }
            this.addCompanyBasins(data)
         }else{
@@ -334,13 +334,6 @@ export default {
               basins: this.basins,
             }
             this.addCompanyBasins(data);
-          }
-          if(!this.$store.getters.companyData.companyData.basins){
-           var data = {
-              companyId: this.$store.getters.userInfo.company.id,
-              basins: this.basinsData,
-            }
-            this.addCompanyBasins(data)
           }
         }
       },
