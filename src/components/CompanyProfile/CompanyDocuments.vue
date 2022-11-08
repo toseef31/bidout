@@ -51,11 +51,12 @@ export default {
   methods: {
     ...mapActions(["addCompanyDocument","deleteCompanyDocument","editCompanyDocument"]),
      uploadDocument() {
-      this.isSelecting = true
-      this.loader = 'loading';
-      this.loading = true;
+      
       window.addEventListener('focus', () => {
         this.isSelecting = false
+        this.isSelecting = true
+        this.loader = 'loading';
+        this.loading = true;
       }, { once: true })
 
       this.$refs.documentUploader.click()
@@ -63,7 +64,6 @@ export default {
     
     
     handleDocumentUpload( event ){
-      console.log(event);
       this.file = event.target.files[0];
       this.fileName = this.file.name;
       this.fileExt =  this.fileName.split('.').pop();
@@ -103,24 +103,21 @@ export default {
         corporateDocument: val,
       }
       this.deleteCompanyDocument(data);
-      
     },
     editDoc(val){
-      console.log(val);
-    this.edit = val.documentId;
-    this.isField = true;
-    this.nameEdit = val.name;
-    
+      this.edit = val.documentId;
+      this.isField = true;
+      this.nameEdit = val.name;
     },
     saveDoc(val){
       var obj = {
-            documentId: val.documentId,
-            attachment: val.attachment,
-            name: this.nameEdit
-        };
-       var data = {
+        documentId: val.documentId,
+        attachment: val.attachment,
+        name: this.nameEdit
+      };
+      var data = {
         companyId: this.$store.getters.userInfo.company.id,
-        corporateDocument: [obj],
+        corporateDocument: obj,
       }
       this.editCompanyDocument(data);
       this.edit = '',
