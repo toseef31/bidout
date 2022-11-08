@@ -1,16 +1,10 @@
 <template>
-  <div class="companyProfile-module inner-Company fill-height d-flex justify-center align-center"  v-if="loader">
+  <div class="companyProfile-module inner-Company fill-height d-flex justify-center align-center"  v-if="loading">
     <v-progress-circular :width="3" color="green" indeterminate ></v-progress-circular>
   </div>
    <v-col class="companyProfile-module inner-Company pa-0 pa-sm-3 pl-sm-0" :class="[ showSideBar ? 'col-md-9 col-12 col-sm-9' : 'mid-content-collapse', activityPanel ? 'd-sm-block' : 'd-md-block']" v-show="!activityPanel" v-else>
       <div class="mid-content">
-<<<<<<< HEAD
-        
-        <div class="content-section">
-=======
-       
         <div class="content-section" v-if="companyData">
->>>>>>> 6191541cd4a304f9b856b00b8f672bec9ba276ec
           <v-row class="mx-0">
             <v-col cols="12" sm="12" md="12" class="d-sm-block px-0">
               <div class="manage-sections pa-4 px-0">
@@ -213,16 +207,20 @@ export default {
         return this.$store.getters.g_activityPanel;
     },
     allcategories(){
-      if(this.searchService){
-        return _.orderBy(this.$store.getters.categories.filter((item)=>{
-          return this.searchService.toLowerCase().split(' ').every(v => item.name.toLowerCase().includes(v))
-        }))
+      if(this.$store.getters.categories){
+        if(this.searchService){
+          return _.orderBy(this.$store.getters.categories.filter((item)=>{
+            return this.searchService.toLowerCase().split(' ').every(v => item.name.toLowerCase().includes(v))
+          }))
+        }else{
+          return _.orderBy(this.$store.getters.categories, "orderNumber", "asc");
+        }
       }else{
-        return _.orderBy(this.$store.getters.categories, "orderNumber", "asc");
+        return [];
       }
+      
     },
     companyData(){
-    
       if(this.$store.getters.companyData){
         this.profileName = this.$store.getters.companyData.companyData.company;
         this.profileSummary = this.$store.getters.companyData.companyData.overview;
@@ -234,11 +232,9 @@ export default {
     basinsDatass(){
       if(this.$store.getters.companyData.companyData.basins.length > 0){
         this.basins = this.$store.getters.companyData.companyData.basins;
-        console.log(this.basins);
         return this.basins;
       }else{
         this.basins = [];
-        console.log(this.basins);
         return this.basins;
       }
     },
@@ -326,7 +322,6 @@ export default {
             companyId: this.$store.getters.userInfo.company.id,
             basins: this.basins,
           }
-          console.log('if');
           this.addCompanyBasins(data);
         }
         if(!this.$store.getters.companyData.companyData.basins){
@@ -334,7 +329,6 @@ export default {
             companyId: this.$store.getters.userInfo.company.id,
             basins: this.basinsData,
           }
-          console.log("elseeeee");
           this.addCompanyBasins(data)
         }
       },
@@ -347,20 +341,11 @@ export default {
       getSubCate(catId){
         this.getSubCategories(catId);
       },
-<<<<<<< HEAD
-      loderShow(){
-        setTimeout(()=>{
-          alert('loader');
-          this.loader = false;
-        },5000);
-      }
-=======
       msgShow() {
       setTimeout(() => {
         this.loading = false
       }, 3000)
     },
->>>>>>> 6191541cd4a304f9b856b00b8f672bec9ba276ec
   },
   created(){
 
@@ -369,12 +354,8 @@ export default {
   },
   mounted() {
     document.title = "Company Profile - BidOut";
-<<<<<<< HEAD
-     this.loderShow();
-=======
     this.msgShow();
     this.getCategories();
->>>>>>> 6191541cd4a304f9b856b00b8f672bec9ba276ec
     this.getCompany(this.$store.getters.userInfo.company.id);
   }
 };
