@@ -97,6 +97,15 @@
                         </v-col>
                       </v-row>
                     </div>
+                      <div class="company-news mb-12" v-if="companyData.corporateNews.length > 0">
+                    <h1 class="mb-4 font-weight-bold">Corporate News & Press Releases</h1>
+                    <div class="news-list" v-for="news in companyData.corporateNews">
+                       <p>{{news.date | moment('MM/DD/YYYY')}} -  <a :href="news.url" target="_blank" class="text-decoration-none">{{news.title}}</a></p>
+                    </div>
+                    <div class="news-list" v-if="!companyData.corporateNews">
+                      <h3 class="text-center">No news to show</h3>
+                    </div>
+                  </div>
                     <div class="company-leadership mb-12" v-if="companyData.executiveLeadership.length > 0">
                       <h1 class="mb-4 font-weight-bold">Executive Leadership</h1>
                       <div class="leader-list text-left mt-10">
