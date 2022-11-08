@@ -4,8 +4,13 @@
   </div>
    <v-col class="companyProfile-module inner-Company pa-0 pa-sm-3 pl-sm-0" :class="[ showSideBar ? 'col-md-9 col-12 col-sm-9' : 'mid-content-collapse', activityPanel ? 'd-sm-block' : 'd-md-block']" v-show="!activityPanel" v-else>
       <div class="mid-content">
+<<<<<<< HEAD
         
         <div class="content-section">
+=======
+       
+        <div class="content-section" v-if="companyData">
+>>>>>>> 6191541cd4a304f9b856b00b8f672bec9ba276ec
           <v-row class="mx-0">
             <v-col cols="12" sm="12" md="12" class="d-sm-block px-0">
               <div class="manage-sections pa-4 px-0">
@@ -69,7 +74,7 @@
                                   </template>
                                   <template>
                                     <v-list-item min-height="30px" prepend-inner-icon="mdi-close"
-                                      v-for="subcategory in category.subCategories"
+                                      v-for="subcategory in subCategoriesAlign(category.subCategories)"
                                       :key="subcategory.id"
                                     >
                                       <template>
@@ -89,11 +94,11 @@
                         <label class="d-block text-center main-label mb-5">Selected Services</label>
                         
                           <div class="subservice-cate service-cate">
-                            <v-list class="px-5">
-                              <v-list-group v-for="category in companyData.categories" v-if="category.subCategories.length > 0">
+                            <v-list class="px-5" :expand="true">
+                              <v-list-group v-for="(category,i) in companyData.categories" v-if="category.subCategories.length > 0" :value="true">
                                 <template v-slot:activator>
                                   <v-list-item-content>
-                                    <v-list-item-title v-text="category.name" class="text-left font-weight-bold"></v-list-item-title>
+                                    <v-list-item-title v-text="category.name" class="text-left font-weight-bold black--text"></v-list-item-title>
                                   </v-list-item-content>
                                 </template>
                                 <v-list-item min-height="30px"
@@ -146,6 +151,9 @@
             </v-col>
           </v-row>
         </div>
+        <div class="content-section fill-height d-flex justify-center align-center"  v-else>
+        <v-progress-circular :width="3" color="green" indeterminate ></v-progress-circular>
+      </div>
       </div>
    </v-col>
 </template>
@@ -186,8 +194,9 @@ export default {
       region: ['Gulf Coast','Northwest','Rockies','Mid-Con','Permian','Arklatex','Offshore','Other'],
       basins: [],
       basinsData: [],
-      profileName: this.$store.getters.companyData.companyData.company,
-      profileSummary: this.$store.getters.companyData.companyData.overview,
+      loading: true,
+      profileName: '',
+      profileSummary: '',
       services: '',
       companyService: '',
       companyService: [],
@@ -205,15 +214,22 @@ export default {
     },
     allcategories(){
       if(this.searchService){
-        return this.$store.getters.categories.filter((item)=>{
+        return _.orderBy(this.$store.getters.categories.filter((item)=>{
           return this.searchService.toLowerCase().split(' ').every(v => item.name.toLowerCase().includes(v))
-        })
+        }))
       }else{
-        return this.$store.getters.categories;
+        return _.orderBy(this.$store.getters.categories, "orderNumber", "asc");
       }
     },
     companyData(){
-      return this.$store.getters.companyData;
+    
+      if(this.$store.getters.companyData){
+        this.profileName = this.$store.getters.companyData.companyData.company;
+        this.profileSummary = this.$store.getters.companyData.companyData.overview;
+       return this.$store.getters.companyData;
+      }else{
+       return [];
+      }
     },
     basinsDatass(){
       if(this.$store.getters.companyData.companyData.basins.length > 0){
@@ -261,20 +277,33 @@ export default {
       getAllCategories(){
         this.getCategories();
       },
+      subCategoriesAlign(subCats) {
+        return _.orderBy(subCats, "orderNumber", "asc");
+      },
       addService(subcate){
-        if(this.$store.getters.companyData.companyData.services){
-          this.companyService = this.$store.getters.companyData.companyData.services;
-        }
+      if(this.$store.getters.companyData.companyData.services){
+        this.companyService = this.$store.getters.companyData.companyData.services;
+      }
+      
         var servicedata = {
           name: subcate.name,
           id: subcate.id,
           slug: subcate.slug,
         }
-        this.companyService.push(servicedata);
-        this.addCompanyService({companyId: this.$store.getters.userInfo.company.id,subCategories: this.companyService});
-        this.services = '';
-        this.subservices = '';
-      },
+    
+         this.companyService.push(servicedata);
+        
+        var result = this.companyService.reduce((unique, o) => {
+          if(!unique.some(obj => obj.id === o.id)) {
+            unique.push(o);
+          }
+          return unique;
+      },[]);
+      // console.log(result);
+      this.addCompanyService({companyId: this.$store.getters.userInfo.company.id,subCategories: result});
+      this.services = '';
+      this.subservices = '';
+    },
       deleteService(item){
         if(this.$store.getters.companyData.companyData.services){
           this.companyService = this.$store.getters.companyData.companyData.services;
@@ -318,12 +347,20 @@ export default {
       getSubCate(catId){
         this.getSubCategories(catId);
       },
+<<<<<<< HEAD
       loderShow(){
         setTimeout(()=>{
           alert('loader');
           this.loader = false;
         },5000);
       }
+=======
+      msgShow() {
+      setTimeout(() => {
+        this.loading = false
+      }, 3000)
+    },
+>>>>>>> 6191541cd4a304f9b856b00b8f672bec9ba276ec
   },
   created(){
 
@@ -332,7 +369,12 @@ export default {
   },
   mounted() {
     document.title = "Company Profile - BidOut";
+<<<<<<< HEAD
      this.loderShow();
+=======
+    this.msgShow();
+    this.getCategories();
+>>>>>>> 6191541cd4a304f9b856b00b8f672bec9ba276ec
     this.getCompany(this.$store.getters.userInfo.company.id);
   }
 };
