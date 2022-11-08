@@ -67,7 +67,7 @@ const routes = [
         },
       },
       {
-        path: "/bid-detail/:name",
+        path: "/view-bids/:serial",
         name: "BidDetail",
         component: () => import("@/views/Bid/BidDetail.vue"),
         beforeEnter: (to, from, next) => {

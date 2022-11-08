@@ -76,7 +76,7 @@
                       <td class="text-left">{{ bid.dueDate | moment('DD/MM/YYYY') }} {{bid.dueTime}}</td>
                       <td class="text-left d-none d-sm-block pt-3"><router-link
                         :to="{
-                          path: `/bid-detail/${bid.title}`,
+                          path: `/view-bids/${bid.serial}`,
                         }"
                         >View Details</router-link
                       ></td>
