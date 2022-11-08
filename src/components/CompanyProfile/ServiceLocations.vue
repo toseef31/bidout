@@ -96,8 +96,20 @@ export default {
         ];
       }
 
+    var zooming = 4;
+        if(LocationsForMap.length == 1){
+            zooming = 10;
+        }else if(LocationsForMap.length == 2){
+            zooming = 9;
+        }else if(LocationsForMap.length == 3){
+            zooming = 8;
+        }else if(LocationsForMap.length == 4){
+            zooming = 7;
+        }else{
+          zooming = 4;
+        }
       var map = new google.maps.Map(document.getElementById('map'), {
-        zoom: 4,
+        zoom: zooming,
         center: new google.maps.LatLng(LocationsForMap[0].lattitude, LocationsForMap[0].longitude),
         mapTypeId: google.maps.MapTypeId.ROADMAP
       });
