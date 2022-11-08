@@ -3,8 +3,8 @@ import store from "../../store";
 import axios from 'axios'
 
 export default {
-  async getCompany({commit}, payload){
-    await axios.get('company/getCompanyById/'+payload)
+  getCompany({commit}, payload){
+    axios.get('company/getCompanyById/'+payload)
      .then(responce => {
       commit('setCompany',responce.data)
      

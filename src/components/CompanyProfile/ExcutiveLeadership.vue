@@ -158,7 +158,6 @@ export default {
 
       this.$refs.form.validate();
       var files = e.target.files || e.dataTransfer.files;
-      // alert(files);
       if (!files.length) return;
       this.logoName = files[0].name;
       this.dialogProfile = true;
