@@ -1,10 +1,11 @@
 <template>
-  <!-- <section class="fill-height company-module white"> -->
-    
   <v-col class="company-module companySupplier-module white pa-0 pa-sm-3" :class="[ showSideBar ? 'col-md-9 col-12 col-sm-7' : 'mid-content-collapse', activityPanel ? 'd-sm-block' : 'd-md-block']" v-show="!activityPanel">
     <div class="mid-content">
-      <div class="content-section fill-height">
-        <div class="get-Header d-flex py-5">
+      <div class="content-section fill-height d-flex justify-center align-center"  v-if="loading">
+        <v-progress-circular :width="3" color="green" indeterminate ></v-progress-circular>
+      </div>
+      <div class="content-section fill-height" v-else>
+        <div class="get-Header d-flex pt-5">
           <v-container fill-height class="pl-0">
             <v-row
               align="center"
@@ -12,9 +13,18 @@
             >
               <v-col
                 class="text-left"
-                cols="3"
+                cols="12" sm="4"
               >
                 <v-img :src="companyData.image"></v-img>
+                <h4 class="pl-3 mt-2"><span v-if="companyData.isPremium"><span v-if="companyData.isPremium == 'true'"></span><v-icon color="#0D9647">mdi-check-decagram</v-icon>Premium Service Provider</span></h4>
+              </v-col>
+              <v-col
+                class="text-left"
+                cols="12" sm="8"
+              >
+                <div class="company-title">
+                  <h1>{{companyData.company}}</h1>
+                </div>
               </v-col>
             </v-row>
           </v-container>
@@ -125,47 +135,50 @@
                         </v-row>
                       </div>
                     </template>
+                </div>
+              </v-col>
+              <v-col cols="12" md="3" class="pl-0">
+                <aside class="company-leftSidebar">
+                  <div>
+                    <v-btn color="#0D9647" large tile dense width="100%" height="56" class="font-weight-bold text-capitalize mb-4" type="submit" outlined>Place Order <v-icon class="pl-2">mdi-arrow-right-circle</v-icon></v-btn>
+                    <router-link to="/create-bid" class="text-decoration-none"><v-btn color="#0D9647" large tile dense width="100%" height="56" class="font-weight-bold text-capitalize" type="submit" outlined>Create RFP <v-icon class="pl-2">mdi-arrow-right-circle</v-icon></v-btn></router-link>
                   </div>
-                </v-col>
-                <v-col cols="12" md="3" class="pl-0">
-                  <aside class="company-leftSidebar">
-                    <div>
-                      <v-btn color="#0D9647" large tile dense width="100%" height="56" class="font-weight-bold text-capitalize mb-4" type="submit" outlined>Place Order <v-icon class="pl-2">mdi-arrow-right-circle</v-icon></v-btn>
-                      <router-link to="/create-bid" class="text-decoration-none"><v-btn color="#0D9647" large tile dense width="100%" height="56" class="font-weight-bold text-capitalize" type="submit" outlined>Create RFP <v-icon class="pl-2">mdi-arrow-right-circle</v-icon></v-btn></router-link>
-                    </div>
-                    <div class="facts-data pa-6 text-left">
-                      <h3 class="mb-4"><font color="#013D3A">Key Facts</font></h3>
-                      <p><font class="font-weight-bold">Founded:</font> {{companyData.founded}}</p>
-                      <p><font class="font-weight-bold">Employees:</font> {{companyData.employees}}</p>
-                      <p><font class="font-weight-bold">HQ Location:</font> {{companyData.hqlocation}}</p>
-                      <!-- <p><font class="font-weight-bold">Stock Price:</font> {{companyData.stockPrice}} </p> -->
-                        <div class="company-links mt-6">
-                          <p><a :href="companyData.website" target="_blank">Website</a><v-icon class="pl-2" color="#013D3A">mdi-arrow-top-right-bold-box-outline</v-icon></p>
-                          <p><a :href="companyData.linkedin" target="_blank">LinkedIn</a><v-icon class="pl-2" color="#013D3A">mdi-arrow-top-right-bold-box-outline</v-icon></p>
-                          <p><a :href="companyData.careers" target="_blank">Careers</a><v-icon class="pl-2" color="#013D3A">mdi-arrow-top-right-bold-box-outline</v-icon></p>
-                        </div>
-                    </div>
-                    <div class="facts-data pa-6 text-left">
-                      <h3 class="mb-4"><font color="#013D3A">Account Contacts</font></h3>
-                      <div class="contact-list mb-4" v-for="contacts in companyData.accountContacts">
-                        <h4 class="mb-0 font-weight-bold">{{contacts.name}}</h4>
-                        <h4>{{contacts.position}}</h4>
+                  <div class="facts-data pa-6 text-left" v-if="companyData.founded != null || companyData.employees != null  || companyData.hqlocation != null || companyData.website != null || companyData.linkedin != null || companyData.careers != null">
+                    <h3 class="mb-4"><font color="#013D3A">Key Facts</font></h3>
+                    <p><font class="font-weight-bold">Founded:</font> {{companyData.founded}}</p>
+                    <p><font class="font-weight-bold">Employees:</font> {{companyData.employees}}</p>
+                    <p><font class="font-weight-bold">HQ Location:</font> {{companyData.hqlocation}}</p>
+                    <!-- <p><font class="font-weight-bold">Stock Price:</font> {{companyData.stockPrice}} </p> -->
+                      <div class="company-links mt-6">
+                        <p><a :href="companyData.website" target="_blank">Website</a><v-icon class="pl-2" color="#013D3A">mdi-arrow-top-right-bold-box-outline</v-icon></p>
+                        <p><a :href="companyData.linkedin" target="_blank">LinkedIn</a><v-icon class="pl-2" color="#013D3A">mdi-arrow-top-right-bold-box-outline</v-icon></p>
+                        <p><a :href="companyData.careers" target="_blank">Careers</a><v-icon class="pl-2" color="#013D3A">mdi-arrow-top-right-bold-box-outline</v-icon></p>
                       </div>
-                      <h4 v-if="!companyData.accountContacts" class="text-center"> No contacts</h4>
+                  </div>
+                  <div class="facts-data pa-5 text-left">
+                    <h3 class="mb-4"><font color="#013D3A">Account Contacts</font></h3>
+                    <div class="contact-list mb-4" v-for="contacts in companyData.accountContacts">
+                      <h4 class="mb-0 font-weight-bold">{{contacts.name}}</h4>
+                      <h4 class="font-weight-medium">{{contacts.position}}</h4>
+                      <h4 class="font-weight-medium"><span class="font-weight-bold">Email:</span> <a :href="'mailto:'+contacts.email" class="text-decoration-none"><font color="#013D3A">{{contacts.email}}</font></a></h4>
+                      <h4 class="font-weight-medium"><span class="font-weight-bold">Phone:</span> {{contacts.phoneNo}}</h4>
                     </div>
-                    <div class="tag-box pa-3 d-flex align-center" v-if="!companyData.isPremium">
-                      <h4 class="font-weight-bold mb-0"><a href="mailto:hello@bidout.app" class="text-decoration-none green-color"><v-icon color="#0D9647">mdi-check-decagram-outline</v-icon> Upgrade to a Premium Profile Today</a></h4>
-                    </div>
-                  </aside>
-                </v-col>
-              </v-row>
-            </v-main>
-          </v-container>
-        </div>
+                    <h4 v-if="!companyData.accountContacts" class="text-center"> No contacts</h4>
+                  </div>
+                  <div class="tag-box pa-3 d-flex align-center" v-if="!companyData.isPremium">
+                    <h4 class="font-weight-bold mb-0"><a href="mailto:hello@bidout.app" class="text-decoration-none green-color"><v-icon color="#0D9647">mdi-check-decagram-outline</v-icon> Upgrade to a Premium Profile Today</a></h4>
+                  </div>
+                </aside>
+              </v-col>
+            </v-row>
+          </v-main>
+        </v-container> 
       </div>
-    </v-col>
+    </div>
+  </v-col>
 </template>
 <script>
+  import { mapActions } from "vuex";
   import NavbarBeforeLogin from '../../components/Layout/NavbarBeforeLogin.vue'
   import Footer from '../../components/Layout/Footer.vue'
 export default {
@@ -177,6 +190,7 @@ export default {
   
   data() {
     return {
+      loading: true,
       mapOptions: '',
       markerOptions: '',
       esgData:  [
@@ -212,11 +226,14 @@ export default {
        return this.$store.getters.g_activityPanel;
    },
    companyData(){
-     return this.$store.getters.companyData.companyData;
+     return this.$store.getters.supplierCompany.companyData;
+   },
+   companyCategories(){
+     return this.$store.getters.supplierCompany.categories;
    },
    esgCompanyData(){
      var target = this.esgData;
-     var source = this.$store.getters.companyData.companyData.esgInitiatives;
+     var source = this.$store.getters.supplierCompany.companyData.esgInitiatives;
      Array.prototype.push.apply(target, source);
      let uniqueObjArray = [
        ...new Map(target.map((item) => [item["type"], item])).values(),
@@ -225,34 +242,36 @@ export default {
    }
   },
   methods: {
+    ...mapActions(["getCompanyInfo"]),
     getLocation(){
     
-    var LocationsForMap = this.$store.getters.companyData.companyData.companyLocations;
-    console.log(LocationsForMap[0].lattitude);
-    var map = new google.maps.Map(document.getElementById('map'), {
-      zoom: 2,
-      center: new google.maps.LatLng(LocationsForMap[0].lattitude, LocationsForMap[0].longitude),
-      mapTypeId: google.maps.MapTypeId.ROADMAP
-    });
-
-    var infowindow = new google.maps.InfoWindow();
-
-    var marker, i;
-
-    for (i = 0; i < LocationsForMap.length; i++) {  
-      marker = new google.maps.Marker({
-        position: new google.maps.LatLng(LocationsForMap[i].lattitude, LocationsForMap[i].longitude),
-        map: map,
-        title: 'Marker',
-        anchorPoint: new google.maps.Point(0, -29),
+    setTimeout(() => {
+      var LocationsForMap = this.$store.getters.supplierCompany.companyData.companyLocations;
+      var map = new google.maps.Map(document.getElementById('map'), {
+        zoom: 2,
+        center: new google.maps.LatLng(LocationsForMap[0].lattitude, LocationsForMap[0].longitude),
+        mapTypeId: google.maps.MapTypeId.ROADMAP
       });
-      google.maps.event.addListener(marker, 'click', (function(marker, i) {
-        return function() {
-          infowindow.setContent(LocationsForMap[i].location);
-          infowindow.open(map, marker);
-        }
-      })(marker, i));
-    }
+
+      var infowindow = new google.maps.InfoWindow();
+
+      var marker, i;
+
+      for (i = 0; i < LocationsForMap.length; i++) {  
+        marker = new google.maps.Marker({
+          position: new google.maps.LatLng(LocationsForMap[i].lattitude, LocationsForMap[i].longitude),
+          map: map,
+          title: 'Marker',
+          anchorPoint: new google.maps.Point(0, -29),
+        });
+        google.maps.event.addListener(marker, 'click', (function(marker, i) {
+          return function() {
+            infowindow.setContent(LocationsForMap[i].location);
+            infowindow.open(map, marker);
+          }
+        })(marker, i));
+      }
+    },6000)
         
     },
     get_url_extension( url ) {
@@ -261,9 +280,19 @@ export default {
     get_url_name( url ) {
       return url.split('/').pop();
     },
+    viewPublicCompany() {
+      this.getCompanyInfo({ slug : this.$route.fullPath.split('/').pop()});
+    },
+    msgShow() {
+      setTimeout(() => {
+        this.loading = false
+      }, 3000)
+    },
   },
   mounted() {
     document.title = "Company Profile - BidOut" ;
+    this.msgShow();
+    this.viewPublicCompany();
     this.getLocation();
   }
 };

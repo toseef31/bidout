@@ -1,5 +1,5 @@
 <template>
-  <v-form class="excutive-form">
+  <v-form class="excutive-form" ref="form" >
     <v-container class="pa-sm-10 pa-4">
       <v-row>
         <v-col cols="12" sm="12">
@@ -9,7 +9,7 @@
       <v-row>
         <v-col cols="12" sm="6" text="left">
           <label class="d-block text-left input-label mb-2">Executive's name</label>
-          <v-text-field placeholder="Enter executive's name" v-model="excutiveName" single-line outlined></v-text-field>
+          <v-text-field placeholder="Enter executive's name"  v-model="excutiveName" single-line outlined required></v-text-field>
         </v-col>
         <v-col cols="12" sm="6" text="left">
           <label class="d-block text-left input-label mb-2">Role</label>
@@ -24,8 +24,15 @@
         <v-col cols="12" sm="6" text="left">
           <label class="d-block text-left input-label mb-2">Profile</label>
           <label class="profile-input font-weight-bold" for="profile-input">
-          <input type="file" id="profile-input" accept="image/*" class="d-none"  @change="cropProfile($event)">
-          Add Image</label>
+
+          <input type="file" id="profile-input" ref="imageUploader" @click="resetImageUploader"  accept="image/*" :rules="[v => !!v || 'File is mandatory']" class="d-none"  @change="cropProfile($event)" required>
+          <template v-if="logoName">
+           {{ logoName.substring(0,45)+".." }}
+          </template>
+          <template v-else>
+            Add Image
+          </template>
+          </label>
           <v-dialog
             v-model="dialogProfile"
             width="700"
@@ -59,35 +66,44 @@
       </v-row>
       <v-row>
         <v-col cols="12" sm="12">
-          <v-btn color="#0D9648" large class="text-capitalize white--text" height="54px" width="176px" @click="addExcutive">Add Executive</v-btn>
+          <v-btn color="#0D9648" large class="text-capitalize white--text" height="54px" width="176px" @click="addExcutive" :disabled="!valid">Add Executive</v-btn>
         </v-col>
       </v-row>
       <div class="service-list text-left mt-10">
-        <div class="profile-list" v-if="croppedProfile">
-          <v-icon color="#F32349" class="pa-1 white">mdi-trash-can-outline</v-icon>
-          <v-img :src="croppedProfile" width="173"></v-img>
-          <h6>{{excutiveName}}</h6>
-          <p>{{excutiveRole}}</p>
-          <v-icon color="#013D3A">mdi-linkedin</v-icon>
-        </div>
-        <div class="profile-list" v-for="(excutive,index) in companyData.executiveLeadership">
-          <v-icon color="#F32349" class="pa-1 white" @click="deleteExcutive(excutive)">mdi-trash-can-outline</v-icon>
-          <v-img :src="excutive.profilePicture" width="173"></v-img>
-          <h6>{{excutive.name}}</h6>
-          <p>{{excutive.role}}</p>
-          <a v-if="excutive.linkedin" class="text-decoration-none" target="_blank" :href="excutive.linkedin">
-            <v-icon color="#013D3A">mdi-linkedin</v-icon>
-          </a>
-        </div>
+        <draggable
+          :list="executiveLeadership"
+          :disabled="!enabled"
+          class="list-group"
+          ghost-class="ghost"
+          @start="dragging = true"
+          @end="checkMove"
+        > 
+          <div class="profile-list" v-for="(excutive,index) in orderCate(executiveLeadership)">
+            <v-icon color="#F32349" class="pa-1 white" @click="deleteExcutive(excutive)">mdi-trash-can-outline</v-icon>
+            <v-img :src="excutive.profilePicture" width="173"></v-img>
+            <h6>{{excutive.name}}</h6>
+            <p>{{excutive.role}}</p>
+            <a v-if="excutive.linkedin" class="text-decoration-none" target="_blank" :href="excutive.linkedin">
+              <v-icon color="#013D3A">mdi-linkedin</v-icon>
+            </a>
+          </div>
+        </draggable>
       </div>
     </v-container>
   </v-form>
 </template>
 <script>
+  import draggable from 'vuedraggable'
+  import _ from "lodash";
   import { mapActions } from "vuex";
 export default {
+  components: {
+    draggable,
+  },
   data() {
     return {
+      valid: false,
+    
       croppieProfile: '',
       croppedProfile: null,
       dialogProfile: false,
@@ -97,18 +113,50 @@ export default {
       excutiveRole: '',
       logoName: '',
       executiveLeadership: this.$store.getters.companyData.companyData.executiveLeadership,
-
+      enabled: true,
+      dragging: false,
+      sortData: [],
     };
   },
   computed:{
     companyData(){
       return this.$store.getters.companyData.companyData;
+    },
+    draggingInfo() {
+      return this.dragging ? "under drag" : "";
     }
   },
+  watch:{
+    croppieProfile(){
+      if(this.excutiveRole.length && this.croppieProfile && this.excutiveName.length){
+        this.valid = true;
+      }else{
+        this.valid = false;
+      }
+    },
+    excutiveRole(){
+      if(this.excutiveRole.length && this.croppieProfile && this.excutiveName.length){
+        this.valid = true;
+      }else{
+        this.valid = false;
+      }
+    },
+    excutiveName(){
+      if(this.excutiveRole.length && this.croppieProfile && this.excutiveName.length){
+        this.valid = true;
+      }else{
+        this.valid = false;
+      }
+    },
+  },
   methods: {
-    ...mapActions(["addCompanyExcutive","deleteCompanyExcutive"]),
+    ...mapActions(["addCompanyExcutive","deleteCompanyExcutive","editCompanyExcutive"]),
+    resetImageUploader() {
+      this.$refs.imageUploader.value = '';
+    },
     cropProfile (e) {
-      console.log(e);
+
+      this.$refs.form.validate();
       var files = e.target.files || e.dataTransfer.files;
       // alert(files);
       if (!files.length) return;
@@ -130,7 +178,6 @@ export default {
       });
     },
     cropImage() {
-      
       let options = {
         type: 'blob',
         size: { width: 175, height: 175 },
@@ -145,18 +192,22 @@ export default {
           this.imageSrc = this.base64data;
         }
         this.croppedProfile = this.croppieProfile = output;
+
           this.dialogProfile = false;
         });
     },
     addExcutive(){
+     
       const head = Date.now().toString();
       const tail = Math.random().toString().substr(2);
+      let order = this.$store.getters.companyData.companyData.executiveLeadership.length;
       var leader = {
         profilePicture : this.croppieProfile,
         name: this.excutiveName,
         role: this.excutiveRole,
         linkedin: this.excutivelinkdinProfile,
         id: head + tail,
+        orderNumber: order + 1,
       }
       var data = {
         companyId: this.$store.getters.userInfo.company.id,
@@ -167,13 +218,26 @@ export default {
       this.excutiveName = '';
       this.excutiveRole = '';
       this.excutivelinkdinProfile = '';
+      this.logoName = '';
     },
     deleteExcutive(data){
+      this.deleteCompanyExcutive(data);
+    },
+    checkMove: function(e) {
+      console.log(this.executiveLeadership);
+      this.executiveLeadership = JSON.parse(JSON.stringify(this.executiveLeadership.map((item, index) => {
+        item.orderNumber = index + 1;
+        return item;
+      })));
+
       var data = {
         companyId: this.$store.getters.userInfo.company.id,
-        executiveLeadership: data,
+        leadership: this.executiveLeadership,
       }
-      this.deleteCompanyExcutive(data);
+      this.editCompanyExcutive(data);
+    },
+    orderCate(leadership){
+      return _.orderBy(leadership, "orderNumber", "asc");
     }
   },
   mounted() {
