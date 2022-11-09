@@ -7,6 +7,8 @@ export default {
     axios.get('company/getCompanyById/'+payload)
      .then(responce => {
       commit('setCompany',responce.data)
+      commit('setBasinLoading',false)
+      commit('setPageLoader',false)
      
     }).catch(err => {
           console.log(err);
