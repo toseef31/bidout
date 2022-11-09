@@ -248,8 +248,8 @@ export default {
     
     setTimeout(() => {
       var LocationsForMap = this.$store.getters.supplierCompany.companyData.companyLocations;
+  
       var map = new google.maps.Map(document.getElementById('map'), {
-        zoom: 2,
         center: new google.maps.LatLng(LocationsForMap[0].lattitude, LocationsForMap[0].longitude),
         mapTypeId: google.maps.MapTypeId.ROADMAP
       });
@@ -257,7 +257,7 @@ export default {
       var infowindow = new google.maps.InfoWindow();
 
       var marker, i;
-
+      var latlngbounds =new google.maps.LatLngBounds();
       for (i = 0; i < LocationsForMap.length; i++) {  
         marker = new google.maps.Marker({
           position: new google.maps.LatLng(LocationsForMap[i].lattitude, LocationsForMap[i].longitude),
@@ -271,7 +271,10 @@ export default {
             infowindow.open(map, marker);
           }
         })(marker, i));
+        latlngbounds.extend(marker.position);
       }
+        map.setCenter(latlngbounds.getCenter());
+        map.fitBounds(latlngbounds);
     },6000)
         
     },
