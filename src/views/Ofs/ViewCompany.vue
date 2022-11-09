@@ -261,22 +261,24 @@ export default {
     msgShow() {
       setTimeout(() => {
         this.loading = false
+        
       }, 3000)
     },
   },
   created(){
-
+    
   },
   mounted() {
-    document.title = "Company Profile - BidOut" 
     this.msgShow();
     this.viewPublicCompany();
-    this.getLocation();
+    document.title = ''+this.companyInfo.company + "-" + this.companyInfo.companyHq +' - BidOut Profile' ;
     const descEl = document.querySelector('head meta[name="description"]');
     const titleEl = document.querySelector('head title');
     console.log(descEl);
     descEl.setAttribute('content', this.$store.getters.publicCompany.companyData.overview);
-    titleEl.textContent = this.$store.getters.publicCompany.companyData.company;
+    titleEl.textContent = ''+this.companyInfo.company + "-" + this.companyInfo.companyHq +' - BidOut Profile' ;
+    this.getLocation();
+    
   }
 };
 </script>
