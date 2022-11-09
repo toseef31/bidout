@@ -30,7 +30,7 @@
     </v-form>
     <v-row align="center" justify="space-between" class="news-list mt-10" v-for="(news,index) in companyData.corporateNews">
       <v-col cols="12" sm="8" text="left">
-        <p class="text-left mb-0">{{news.date}} -  <a :href="news.url" class="text-decoration-none">{{news.title}}</a></p>
+        <p class="text-left mb-0">{{news.date | moment('MM/DD/YYYY')}} -  <a :href="news.url" class="text-decoration-none">{{news.title}}</a></p>
       </v-col>
       <v-col cols="12" sm="4" class="text-right">
         

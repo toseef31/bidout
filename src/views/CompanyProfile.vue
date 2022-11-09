@@ -1,7 +1,9 @@
 <template>
-   <v-col class="companyProfile-module inner-Company pa-0 pa-sm-3 pl-sm-0" :class="[ showSideBar ? 'col-md-9 col-12 col-sm-9' : 'mid-content-collapse', activityPanel ? 'd-sm-block' : 'd-md-block']" v-show="!activityPanel">
+  <div class="companyProfile-module inner-Company fill-height d-flex justify-center align-center"  v-if="loading">
+    <v-progress-circular :width="3" color="green" indeterminate ></v-progress-circular>
+  </div>
+   <v-col class="companyProfile-module inner-Company pa-0 pa-sm-3 pl-sm-0" :class="[ showSideBar ? 'col-md-9 col-12 col-sm-9' : 'mid-content-collapse', activityPanel ? 'd-sm-block' : 'd-md-block']" v-show="!activityPanel" v-else>
       <div class="mid-content">
-       
         <div class="content-section" v-if="companyData">
           <v-row class="mx-0">
             <v-col cols="12" sm="12" md="12" class="d-sm-block px-0">
@@ -120,6 +122,7 @@
                             @change="addBasin"
                             hide-details
                             ></v-checkbox>
+                            <label class="d-none">{{basinsDatass}}</label>
                         </v-col>
                       </v-row>
                   </v-container>
@@ -181,6 +184,10 @@ export default {
   
   data() {
     return {
+      loader: true,
+      region: ['Gulf Coast','Northwest','Rockies','Mid-Con','Permian','Arklatex','Offshore','Other'],
+      basins: [],
+      basinsData: [],
       loading: true,
       profileName: '',
       profileSummary: '',
@@ -188,9 +195,6 @@ export default {
       companyService: '',
       companyService: [],
       subservices: '',
-      region: ['Gulf Coast','Northwest','Rockies','Mid-Con','Permian','Arklatex','Offshore','Other'],
-      basins: '',
-      basinsData: [],
       searchService: '',
       servData: [],
     };
@@ -203,16 +207,20 @@ export default {
         return this.$store.getters.g_activityPanel;
     },
     allcategories(){
-      if(this.searchService){
-        return _.orderBy(this.$store.getters.categories.filter((item)=>{
-          return this.searchService.toLowerCase().split(' ').every(v => item.name.toLowerCase().includes(v))
-        }))
+      if(this.$store.getters.categories){
+        if(this.searchService){
+          return _.orderBy(this.$store.getters.categories.filter((item)=>{
+            return this.searchService.toLowerCase().split(' ').every(v => item.name.toLowerCase().includes(v))
+          }))
+        }else{
+          return _.orderBy(this.$store.getters.categories, "orderNumber", "asc");
+        }
       }else{
-        return _.orderBy(this.$store.getters.categories, "orderNumber", "asc");
+        return [];
       }
+      
     },
     companyData(){
-    
       if(this.$store.getters.companyData){
         this.profileName = this.$store.getters.companyData.companyData.company;
         this.profileSummary = this.$store.getters.companyData.companyData.overview;
@@ -220,6 +228,21 @@ export default {
       }else{
        return [];
       }
+    },
+    basinsDatass(){
+      if(!this.$store.getters.companyData.companyData.basins){
+        this.basins = [];
+        return this.basins;
+      }else{
+        if(this.$store.getters.companyData.companyData.basins.length > 0 || this.$store.getters.companyData.companyData.basins.length == 0){
+          this.basins = this.$store.getters.companyData.companyData.basins;
+          return this.basins;
+        }else{
+          this.basins = [];
+          return this.basins;
+        }
+      }
+      
     },
     serviceSubId(){
       if(this.$store.getters.companyData.companyData.services){
@@ -263,13 +286,11 @@ export default {
       if(this.$store.getters.companyData.companyData.services){
         this.companyService = this.$store.getters.companyData.companyData.services;
       }
-      
         var servicedata = {
           name: subcate.name,
           id: subcate.id,
           slug: subcate.slug,
         }
-    
          this.companyService.push(servicedata);
         
         var result = this.companyService.reduce((unique, o) => {
@@ -278,7 +299,7 @@ export default {
           }
           return unique;
       },[]);
-      // console.log(result);
+      
       this.addCompanyService({companyId: this.$store.getters.userInfo.company.id,subCategories: result});
       this.services = '';
       this.subservices = '';
@@ -297,13 +318,24 @@ export default {
       addBasin(){
         if(this.$store.getters.companyData.basins){
           this.basinsData = this.$store.getters.companyData.companyData.basins;
+          this.basins = this.$store.getters.companyData.companyData.basins;
         }
         this.basinsData.push(this.basins);
-        var data = {
-          companyId: this.$store.getters.userInfo.company.id,
-          basins: this.basins,
+        if(!this.$store.getters.companyData.companyData.basins){
+          var data = {
+             companyId: this.$store.getters.userInfo.company.id,
+             basins: this.basins,
+           }
+           this.addCompanyBasins(data)
+        }else{
+          if(this.$store.getters.companyData.companyData.basins.length == 0 || this.$store.getters.companyData.companyData.basins.length > 0){
+            var data = {
+              companyId: this.$store.getters.userInfo.company.id,
+              basins: this.basins,
+            }
+            this.addCompanyBasins(data);
+          }
         }
-        this.addCompanyBasins(data);
       },
       get_url_extension( url ) {
         return url.split(/[#?]/)[0].split('.').pop().trim();
@@ -320,14 +352,16 @@ export default {
       }, 3000)
     },
   },
+  created(){
+
+    this.getCategories();
+    
+  },
   mounted() {
     document.title = "Company Profile - BidOut";
     this.msgShow();
     this.getCategories();
     this.getCompany(this.$store.getters.userInfo.company.id);
-    if(this.$store.getters.companyData.companyData.basins){
-      this.basins = this.$store.getters.companyData.companyData.basins;
-    }
   }
 };
 </script>
