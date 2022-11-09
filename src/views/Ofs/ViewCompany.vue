@@ -13,7 +13,9 @@
               <aside class="company-leftSidebar">
                 <div class="company-logo">
                   <v-img :src="companyInfo.image" class="mb-3"></v-img>
-                  <h4 class="mb-3"><span v-if="companyInfo.isPremium || companyInfo.isPremium == 'true'"><v-icon color="#0D9647">mdi-check-decagram</v-icon>Premium Service Provider</span></h4>
+
+                  <h4 class="mb-3"><span v-if="companyInfo.isPremium || companyInfo.isPremium == 1"><v-icon color="#0D9647">mdi-check-decagram</v-icon>Premium Service Provider</span></h4>
+
                 </div>
                 <div>
                   <router-link to="/login" class="text-decoration-none">
@@ -23,7 +25,6 @@
                     <v-btn color="#0D9647" large tile dense width="100%" height="56" class="font-weight-bold text-capitalize" type="submit" outlined>Create RFP <v-icon class="pl-2">mdi-arrow-right-circle</v-icon></v-btn>
                   </router-link>
                 </div>
-
                 <div class="facts-data pa-6 text-left" v-if="companyInfo.founded != null || companyInfo.employees != null  || companyInfo.hqlocation != null || companyInfo.website != null || companyInfo.linkedin != null || companyInfo.careers != null">
                   <h3 class="mb-4"><font color="#013D3A">Key Facts</font></h3>
                   <p v-if="companyInfo.founded"><font class="font-weight-bold">Founded:</font> {{companyInfo.founded}}</p>
@@ -44,7 +45,7 @@
                   </div>
                   <router-link to="/login" class="text-decoration-none"><v-btn color="#0D9647" large tile dense width="100%" height="56" class="font-weight-bold white--text text-capitalize" type="submit">Login to View Contact Details <v-icon class="pl-2" color="#fff">mdi-arrow-right-circle</v-icon></v-btn></router-link>
                 </div>
-                <div class="tag-box pa-3 d-flex align-center" v-if="!companyInfo.isPremium || companyInfo.isPremium == 'false'">
+                <div class="tag-box pa-3 d-flex align-center" v-if="!companyInfo.isPremium">
                   <h4 class="font-weight-bold mb-0"><a href="mailto:hello@bidout.app" class="text-decoration-none green-color"><v-icon color="#0D9647">mdi-check-decagram-outline</v-icon> Upgrade to a Premium Profile Today</a></h4>
                 </div>
               </aside>
@@ -76,7 +77,7 @@
                   <div id="map"class="map" style="height:350px" v-if="companyInfo.companyLocations"></div>
                   <h3 class="text-center" v-if="!companyInfo.companyLocations">Location not added</h3>
                 </div>
-                <template v-if="companyInfo.isPremium || companyInfo.isPremium == 'true'">
+                <template v-if="companyInfo.isPremium || companyInfo.isPremium == 1">
                   <div class="company-location mb-12" v-if="companyInfo.corporateVideos.length > 0">
                     <h1 class="mb-4 font-weight-bold">Corporate Videos</h1>
                     <v-row>
@@ -127,7 +128,7 @@
                   <div class="company-leadership mb-12" v-if="companyInfo.executiveLeadership.length > 0">
                     <h1 class="mb-4 font-weight-bold">Executive Leadership</h1>
                     <div class="leader-list text-left mt-10">
-                      <div class="profile-list" v-for="excutive in companyInfo.executiveLeadership">
+                      <div class="profile-list" v-for="excutive in orderCate(companyInfo.executiveLeadership)">
                         <v-img  width="175px" height="175px" :src="excutive.profilePicture"></v-img>
                         <h6>{{excutive.name}}</h6>
                         <p>{{excutive.role}}</p>
@@ -162,6 +163,7 @@
 </template>
 <script>
   import { mapActions } from "vuex";
+  import _ from "lodash";
   import NavbarBeforeLogin from '../../components/Layout/NavbarBeforeLogin.vue'
   import Footer from '../../components/Layout/Footer.vue'
 export default {
@@ -199,7 +201,6 @@ export default {
       ],
     };
   },
-
   computed:{
    companyInfo(){
      return this.$store.getters.publicCompany.companyData;
@@ -241,17 +242,13 @@ export default {
     getLocation(){
       setTimeout(() => {
         var LocationsForMap = this.$store.getters.publicCompany.companyData.companyLocations;
-             
         var map = new google.maps.Map(document.getElementById('map'), {
-          zoom: 2,
           center: new google.maps.LatLng(LocationsForMap[0].lattitude, LocationsForMap[0].longitude),
           mapTypeId: google.maps.MapTypeId.ROADMAP
         });
-
         var infowindow = new google.maps.InfoWindow();
-
         var marker, i;
-
+        var latlngbounds =new google.maps.LatLngBounds();
         for (i = 0; i < LocationsForMap.length; i++) {  
           marker = new google.maps.Marker({
             position: new google.maps.LatLng(LocationsForMap[i].lattitude, LocationsForMap[i].longitude),
@@ -265,7 +262,10 @@ export default {
               infowindow.open(map, marker);
             }
           })(marker, i));
-        }
+          latlngbounds.extend(marker.position);
+      }
+        map.setCenter(latlngbounds.getCenter());
+        map.fitBounds(latlngbounds);
       },4000)
       
     },
@@ -278,6 +278,9 @@ export default {
     viewPublicCompany() {
       this.getPublicCompanyInfo({ slug : this.$route.fullPath.split('/').pop() });
     },
+    orderCate(leadership){
+      return _.orderBy(leadership, "orderNumber", "asc");
+    },
   },
   created(){
     this.viewPublicCompany();
@@ -289,5 +292,4 @@ export default {
 };
 </script>
 <style scoped lang="scss">
-
 </style>
