@@ -263,22 +263,21 @@ export default {
     msgShow() {
       setTimeout(() => {
         this.loading = false
-        
-      }, 3000)
+      }, 4000)
     },
   },
   created(){
-    
+    this.viewPublicCompany();
+    document.title = ''+this.companyInfo.company + " - " + this.companyInfo.companyHq +' - BidOut Profile' ;
+    const descEl = document.querySelector('head meta[name="description"]');
+    const titleEl = document.querySelector('head meta[name="title"]');
+    descEl.setAttribute('content', this.$store.getters.publicCompany.companyData.overview);
+    titleEl.setAttribute('content', ''+this.companyInfo.company + " - " + this.companyInfo.companyHq +' - BidOut Profile' );
+    console.log(descEl);
   },
   mounted() {
     this.msgShow();
-    this.viewPublicCompany();
-    document.title = ''+this.companyInfo.company + "-" + this.companyInfo.companyHq +' - BidOut Profile' ;
-    const descEl = document.querySelector('head meta[name="description"]');
-    const titleEl = document.querySelector('head title');
-    console.log(descEl);
-    descEl.setAttribute('content', this.$store.getters.publicCompany.companyData.overview);
-    titleEl.textContent = ''+this.companyInfo.company + "-" + this.companyInfo.companyHq +' - BidOut Profile' ;
+    
     this.getLocation();
     
   }

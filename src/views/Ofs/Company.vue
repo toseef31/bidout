@@ -193,6 +193,7 @@ export default {
       loading: true,
       mapOptions: '',
       markerOptions: '',
+      overView: this.$store.getters.supplierCompany.companyData.overview,
       esgData:  [
         {
           name: 'Environmental',
@@ -218,13 +219,17 @@ export default {
       ],
     };
   },
-  metaInfo() {
-    return {
-      title: this.metaTitle,
+  metaInfo:{
+      title: ' ',
+      titleTemplate: '%s - BidOut Profile',
+      htmlAttrs: {
+        lang: 'en',
+        amp: true
+      },
       meta: [
-        { vmid: 'description', name: 'description', content: this.metaDescription}
+        { charset: 'utf-8' },
+        { name: 'title', content: this.overView },
       ]
-    }
   },
   computed:{
    showSideBar(){
@@ -294,13 +299,20 @@ export default {
     msgShow() {
       setTimeout(() => {
         this.loading = false;
-        document.title = ''+this.companyData.company + "-" + this.companyData.companyHq +' - BidOut Profile' ;
+        // document.title = ''+this.companyData.company + "-" + this.companyData.companyHq +' - BidOut Profile' ;
       }, 3000)
     },
   },
+  created(){
+    this.viewPublicCompany();
+    this.metaInfo.title = ''+this.companyData.company + " - " + this.companyData.companyHq +' - BidOut Profile' ;
+    // const descEl = document.querySelector('head meta[name="description"]');
+    // const titleEl = document.querySelector('head meta[name="title"]');
+    // descEl.setAttribute('content', this.$store.getters.publicCompany.companyData.overview);
+    // titleEl.setAttribute('content', ''+this.companyInfo.company + " - " + this.companyInfo.companyHq +' - BidOut Profile' );
+  },
   mounted() {
     this.msgShow();
-    this.viewPublicCompany();
     this.getLocation();
   }
 };
