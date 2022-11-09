@@ -203,6 +203,7 @@ export default {
       ],
     };
   },
+ 
   computed:{
    companyInfo(){
      return this.$store.getters.publicCompany.companyData;

@@ -67,7 +67,7 @@
       <v-row>
         <v-col cols="12" sm="12">
 
-          <v-btn color="#0D9648" large class="text-capitalize white--text" height="54px" width="176px" :loading="loading" :disabled="loading" @click="addExcutive">Add Executive</v-btn>
+          <v-btn color="#0D9648" large class="text-capitalize white--text" height="54px" width="176px" :loading="loading" :disabled="!valid" @click="addExcutive">Add Executive</v-btn>
 
         </v-col>
       </v-row>
