@@ -187,10 +187,8 @@ export default {
     NavbarBeforeLogin,
     Footer,
   },
-  
   data() {
     return {
-      loading: true,
       mapOptions: '',
       markerOptions: '',
       
@@ -219,29 +217,16 @@ export default {
       ],
     };
   },
-  metaInfo() {
-      return {
-        title: "test meta data with vue",
-        htmlAttrs: {
-          lang: 'en',
-          amp: true
-        },
-        meta: [
-          {
-            vmid: "description",
-            name: "description",
-            content:
-              "hello world, this is an example of adding a description with vueMeta"
-          }
-        ]
-      };
-    },
+  
   computed:{
    showSideBar(){
        return this.$store.getters.g_sideBarOpen;
    },
    activityPanel(){
        return this.$store.getters.g_activityPanel;
+   },
+   loading(){
+    return this.$store.getters.pageLoader;
    },
    companyData(){
      return this.$store.getters.supplierCompany.companyData;
@@ -258,6 +243,22 @@ export default {
      ];
      return uniqueObjArray;
    }
+  },
+  metaInfo(){
+    return {
+      title: ''+this.companyData.company + " - " + this.companyData.companyHq +' - BidOut Profile' ,
+      meta: [
+        {
+          name: 'title',
+          content: ''+this.companyData.company + " - " + this.companyData.companyHq +' - BidOut Profile' ,
+        },
+        {
+          name: 'description',
+          content: this.companyData.overview,
+        },
+        
+      ],
+    }
   },
   methods: {
     ...mapActions(["getCompanyInfo"]),
@@ -301,27 +302,12 @@ export default {
     viewPublicCompany() {
       this.getCompanyInfo({ slug : this.$route.fullPath.split('/').pop()});
     },
-    msgShow() {
-      setTimeout(() => {
-        this.loading = false;
-        
-        // document.title = ''+this.companyData.company + "-" + this.companyData.companyHq +' - BidOut Profile' ;
-      }, 3000)
-    },
   },
   created(){
     this.viewPublicCompany();
-
-    // this.metaInfo.title = ''+this.companyData.company + " - " + this.companyData.companyHq +' - BidOut Profile' ;
-    // const descEl = document.querySelector('head meta[name="description"]');
-    // const titleEl = document.querySelector('head meta[name="title"]');
-    // descEl.setAttribute('content', this.$store.getters.publicCompany.companyData.overview);
-    // titleEl.setAttribute('content', ''+this.companyInfo.company + " - " + this.companyInfo.companyHq +' - BidOut Profile' );
   },
   mounted() {
-    this.msgShow();
     this.getLocation();
-    console.log(this.title,'sa');
   }
 };
 </script>

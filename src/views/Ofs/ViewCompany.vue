@@ -170,10 +170,8 @@ export default {
     NavbarBeforeLogin,
     Footer,
   },
-  
   data() {
     return {
-      loading: true,
       mapOptions: '',
       markerOptions: '',
       esgData:  [
@@ -201,6 +199,7 @@ export default {
       ],
     };
   },
+
   computed:{
    companyInfo(){
      return this.$store.getters.publicCompany.companyData;
@@ -216,7 +215,26 @@ export default {
        ...new Map(target.map((item) => [item["type"], item])).values(),
      ];
      return uniqueObjArray;
-   }
+   },
+   loading(){
+    return this.$store.getters.pageLoader;
+   },
+  },
+  metaInfo(){
+    return {
+      title: ''+this.companyInfo.company + " - " + this.companyInfo.companyHq +' - BidOut Profile' ,
+      meta: [
+        {
+          name: 'title',
+          content: ''+this.companyInfo.company + " - " + this.companyInfo.companyHq +' - BidOut Profile' ,
+        },
+        {
+          name: 'description',
+          content: this.companyInfo.overview,
+        },
+        
+      ],
+    }
   },
   methods: {
     ...mapActions(["getPublicCompanyInfo"]),
@@ -260,24 +278,11 @@ export default {
     viewPublicCompany() {
       this.getPublicCompanyInfo({ slug : this.$route.fullPath.split('/').pop() });
     },
-    msgShow() {
-      setTimeout(() => {
-        this.loading = false
-      }, 4000)
-    },
   },
   created(){
     this.viewPublicCompany();
-    document.title = ''+this.companyInfo.company + " - " + this.companyInfo.companyHq +' - BidOut Profile' ;
-    const descEl = document.querySelector('head meta[name="description"]');
-    const titleEl = document.querySelector('head meta[name="title"]');
-    descEl.setAttribute('content', this.$store.getters.publicCompany.companyData.overview);
-    titleEl.setAttribute('content', ''+this.companyInfo.company + " - " + this.companyInfo.companyHq +' - BidOut Profile' );
-    console.log(descEl);
   },
   mounted() {
-    this.msgShow();
-    
     this.getLocation();
     
   }

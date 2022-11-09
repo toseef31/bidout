@@ -98,6 +98,7 @@ export default {
       .then((responce) => {
         commit("setSupplierCompany", responce.data);
         // localStorage.setItem("companyData", JSON.stringify(responce.data));
+        commit('setPageLoader', false);
       })
       .catch((err) => {
         console.log(err);

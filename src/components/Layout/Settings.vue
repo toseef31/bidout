@@ -20,19 +20,7 @@
   import RightSidebar from './Dashboard/RightSidebar.vue'
 export default {
   name: 'Settings',
-  metaInfo: {
-    title: 'BidOut',
-    titleTemplate: '%s | BidOut',
-    htmlAttrs: {
-      lang: 'en',
-      amp: true,
-    },
-    meta: [
-      { charset: 'utf-8' },
-      { name: 'description', content: 'An example Vue application with vue-meta.' },
-      { name: 'viewport', content: 'width=device-width, initial-scale=1' }
-    ]
-  },
+  
   components: {
     Navbar,
     LeftSidebar,
