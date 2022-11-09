@@ -121,6 +121,8 @@
                             :value="basin"
                             @change="addBasin"
                             hide-details
+                            :disabled="loadingBasin"
+                            loading="loading"
                             ></v-checkbox>
                             <label class="d-none">{{basinsDatass}}</label>
                         </v-col>
@@ -197,6 +199,8 @@ export default {
       subservices: '',
       searchService: '',
       servData: [],
+      loadingBasin: false,
+      basinLoader: null,
     };
   },
   computed:{
@@ -326,7 +330,11 @@ export default {
              companyId: this.$store.getters.userInfo.company.id,
              basins: this.basins,
            }
-           this.addCompanyBasins(data)
+           this.addCompanyBasins(data);
+           this.loadingBasin = true;
+           setTimeout(()=>{
+            this.loadingBasin = false;
+           },3000);
         }else{
           if(this.$store.getters.companyData.companyData.basins.length == 0 || this.$store.getters.companyData.companyData.basins.length > 0){
             var data = {
@@ -334,6 +342,10 @@ export default {
               basins: this.basins,
             }
             this.addCompanyBasins(data);
+            this.loadingBasin = true;
+             setTimeout(()=>{
+              this.loadingBasin = false;
+             },3000);
           }
         }
       },
