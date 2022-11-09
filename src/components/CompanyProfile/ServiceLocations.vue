@@ -26,7 +26,18 @@
       <v-col cols="12" sm="12">
         <v-row>
           <v-col cols="12" class="-list text-left pt-2"  v-for="(location,index) in companyData.companyLocations">
-            <label class="d-flex justify-space-between"><span><v-icon>mdi-map-marker-outline</v-icon>{{location.location}}</span> <v-icon color="#F32349"   @click="deleteLocation(location,index)">mdi-trash-can-outline</v-icon></label>
+            <div  class="d-flex justify-space-between">
+            <label>
+              <span>
+              <v-icon>mdi-map-marker-outline</v-icon>
+                {{location.location}}
+              </span>
+            </label>
+            <label>
+            <v-icon color="#F32349" @click="deleteLocation(location,index)">mdi-trash-can-outline
+            </v-icon>
+        </label>
+      </div>
           </v-col>
         </v-row>
       </v-col>
@@ -62,17 +73,18 @@ export default {
   methods: {
     ...mapActions(["addCompanyLocation","deleteCompanyLocation"]),
     getLocation(){
-      if(this.$store.getters.companyData.companyData.companyLocations){
+     
+        if(this.$store.getters.companyData.companyData.companyLocations && this.$store.getters.companyData.companyData.companyLocations.length > 0){
         var lat = this.$store.getters.companyData.companyData.companyLocations[0].lattitude;
       }else{
         var lat = 29.721085;
       }
-      if(this.$store.getters.companyData.companyData.companyLocations){
+      if(this.$store.getters.companyData.companyData.companyLocations && this.$store.getters.companyData.companyData.companyLocations.length > 0){
         var lng = this.$store.getters.companyData.companyData.companyLocations[0].longitude;
       }else{
         var lng = -95.342049;
       }
-      if(this.$store.getters.companyData.companyData.companyLocations){
+      if(this.$store.getters.companyData.companyData.companyLocations && this.$store.getters.companyData.companyData.companyLocations.length > 0){
         var LocationsForMap = this.$store.getters.companyData.companyData.companyLocations;
       }else{
         var LocationsForMap = [
@@ -92,21 +104,41 @@ export default {
 
       var infowindow = new google.maps.InfoWindow();
       var marker, i;
-      for (i = 0; i < LocationsForMap.length; i++) {  
-        marker = new google.maps.Marker({
-          position: new google.maps.LatLng(LocationsForMap[i].lattitude, LocationsForMap[i].longitude),
-          map: map,
-          title: 'Marker',
-          anchorPoint: new google.maps.Point(0, -29),
-        });
-        
-        google.maps.event.addListener(marker, 'click', (function(marker, i) {
-          return function() {
-            infowindow.setContent(LocationsForMap[i].location);
-            infowindow.open(map, marker);
+      if(this.$store.getters.companyData.companyData.companyLocations.length > 0){
+            for (i = 0; i < LocationsForMap.length; i++) {  
+            marker = new google.maps.Marker({
+
+              position: new google.maps.LatLng(LocationsForMap[i].lattitude, LocationsForMap[i].longitude),
+
+              map: map,
+              title: 'Marker',
+              anchorPoint: new google.maps.Point(0, -29),
+            });
+            
+            google.maps.event.addListener(marker, 'click', (function(marker, i) {
+              return function() {
+                infowindow.setContent(LocationsForMap[i].location);
+                infowindow.open(map, marker);
+              }
+            })(marker, i));
+          } 
+          }else{
+            for (i = 0; i < LocationsForMap.length; i++) {  
+            marker = new google.maps.Marker({
+              map: map,
+              title: 'Marker',
+              anchorPoint: new google.maps.Point(0, -29),
+            });
+            
+            google.maps.event.addListener(marker, 'click', (function(marker, i) {
+              return function() {
+                infowindow.setContent(LocationsForMap[i].location);
+                infowindow.open(map, marker);
+              }
+            })(marker, i));
           }
-        })(marker, i));
-      }
+          }
+    
 
 
         // [START maps_places_autocomplete_creation]
@@ -183,6 +215,7 @@ export default {
           this.lng = place.geometry.location.lng();
           this.address = document.getElementById("pac-input").value;
         });
+      
     },
     addLocation(){
       const head = Date.now().toString();
@@ -200,6 +233,7 @@ export default {
       setTimeout(() => {
         this.loading = false,
         document.getElementById("pac-input").value = '';
+        this.getLocation();
       }, 5000)
     },
     deleteLocation(data,indexing){
@@ -220,7 +254,7 @@ export default {
       this.companyData.companyLocations.splice(indexOfObject, 1);
     
       this.deleteCompanyLocation(data);
-      
+      this.getLocation();
     },
   },
   mounted() {
