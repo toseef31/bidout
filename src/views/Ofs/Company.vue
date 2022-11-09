@@ -16,7 +16,7 @@
                 cols="12" sm="4"
               >
                 <v-img :src="companyData.image"></v-img>
-                <h4 class="pl-3 mt-2"><span v-if="companyData.isPremium"><span v-if="companyData.isPremium == 'true'"></span><v-icon color="#0D9647">mdi-check-decagram</v-icon>Premium Service Provider</span></h4>
+                <h4 class="pl-3 mt-2"><span v-if="companyData.isPremium"><span v-if="companyData.isPremium == 1"></span><v-icon color="#0D9647">mdi-check-decagram</v-icon>Premium Service Provider</span></h4>
               </v-col>
               <v-col
                 class="text-left"
@@ -29,35 +29,35 @@
             </v-row>
           </v-container>
         </div>
-        <v-container>
-          <v-main class="mb-16 pt-0">
-            <v-row justify="center">
-              <v-col cols="12" md="9">
-                <div class="company-content text-left">
-                  <div class="company-desc">
-                    <h1 class="mb-4 font-weight-bold">Corporate Summary</h1>
-                    <p>{{companyData.overview}}</p>
-                    <h3 class="text-center" v-if="!companyData.overview">No summary added yet</h3>
-                  </div>
-                  <div class="company-service mb-12" v-if="companyData.services.length > 0">
-                    <h1 class="mb-4 font-weight-bold">Services Portfolio</h1>
-                    <div class="service-list text-left mt-4">
-                      <template v-for="services in companyCategories"  v-if="services.subCategories.length > 0">
-                          <label v-for="(sub,index) in services.subCategories">
-                            <v-icon>mdi-check</v-icon>
-                            <span>{{services.name}}: {{sub.subname}}  </span>
-                          </label>
-                        </template>
+          <v-container>
+            <v-main class="mb-16 pt-0">
+              <v-row justify="center">
+                <v-col cols="12" md="9">
+                  <div class="company-content text-left">
+                   <div class="company-desc">
+                      <h1 class="mb-4 font-weight-bold">Corporate Summary</h1>
+                      <p>{{companyData.overview}}</p>
+                      <h3 class="text-center" v-if="!companyData.overview">No summary added yet</h3>
                     </div>
-                      <h3 v-if="!companyData.services" class="text-center">No services added yet</h3>
-                    <!-- <p class="text-right">View all services</p> -->
-                  </div>
+                    <div class="company-service mb-12" v-if="companyData.services.length > 0">
+                      <h1 class="mb-4 font-weight-bold">Services Portfolio</h1>
+                      <div class="service-list text-left mt-4">
+                        <template v-for="services in companyCategories"  v-if="services.subCategories.length > 0">
+                            <label v-for="(sub,index) in services.subCategories">
+                              <v-icon>mdi-check</v-icon>
+                              <span>{{services.name}}: {{sub.subname}}  </span>
+                            </label>
+                          </template>
+                      </div>
+                        <h3 v-if="!companyData.services" class="text-center">No services added yet</h3>
+                      <!-- <p class="text-right">View all services</p> -->
+                    </div>
                   <div class="company-location mb-12"  v-if="companyData.companyLocations.length > 0">
                     <h1 class="mb-4 font-weight-bold">Service Locations</h1>
                     <div id="map"class="map" style="height:350px" v-if="companyData.companyLocations"></div>
                     <h3 class="text-center" v-if="!companyData.companyLocations">Location not added</h3>
                   </div>
-                  <template v-if="companyData.isPremium || companyData.isPremium == 'true'">
+                  <template v-if="companyData.isPremium || companyData.isPremium == 1">
                     <div class="company-location mb-12" v-if="companyData.corporateVideos.length > 0">
                       <h1 class="mb-4 font-weight-bold">Corporate Videos</h1>
                       <v-row>
@@ -89,7 +89,7 @@
                               <v-img v-else-if="get_url_extension(docs.attachment) == 'xlsx' || get_url_extension(docs.attachment) == 'xls'" :src="require('@/assets/images/profile/excel.png')" width="80px" class="mx-auto"></v-img>
                               <v-img v-else :src="require('@/assets/images/profile/other.png')" width="80px" class="mx-auto"></v-img>
                             </a>
-                            <a :href="docs.attachment" target="_blank" class="text-decoration-none"><p>{{get_url_name(docs.attachment)}}</p></a>
+                            <a :href="docs.attachment" target="_blank" class="text-decoration-none"><p>{{docs.name}}</p></a>
                           </div>
                         </v-col>
                         <v-col cols="12" sm="12" v-if="!companyData.corporateDocuments">
@@ -97,42 +97,44 @@
                         </v-col>
                       </v-row>
                     </div>
-                    <div class="company-news mb-12" v-if="companyData.corporateNews.length > 0">
-                      <h1 class="mb-4 font-weight-bold">Corporate News & Press Releases</h1>
-                      <div class="news-list" v-for="news in companyData.corporateNews">
-                        <p>{{news.date | moment('MM/DD/YYYY')}} -  <a :href="news.url" target="_blank" class="text-decoration-none">{{news.title}}</a></p>
-                      </div>
-                      <div class="news-list" v-if="!companyData.corporateNews">
-                        <h3 class="text-center">No news to show</h3>
-                      </div>
+                      <div class="company-news mb-12" v-if="companyData.corporateNews.length > 0">
+                    <h1 class="mb-4 font-weight-bold">Corporate News & Press Releases</h1>
+                    <div class="news-list" v-for="news in companyData.corporateNews">
+                       <p>{{news.date | moment('MM/DD/YYYY')}} -  <a :href="news.url" target="_blank" class="text-decoration-none">{{news.title}}</a></p>
                     </div>
+                    <div class="news-list" v-if="!companyData.corporateNews">
+                      <h3 class="text-center">No news to show</h3>
+                    </div>
+                  </div>
                     <div class="company-leadership mb-12" v-if="companyData.executiveLeadership.length > 0">
                       <h1 class="mb-4 font-weight-bold">Executive Leadership</h1>
                       <div class="leader-list text-left mt-10">
-                        <div class="profile-list" v-for="excutive in companyData.executiveLeadership">
+                        <div class="profile-list" v-for="excutive in orderCate(companyData.executiveLeadership)">
                           <v-img  width="175px" height="175px" :src="excutive.profilePicture"></v-img>
                           <h6>{{excutive.name}}</h6>
                           <p>{{excutive.role}}</p>
                           <a v-if="excutive.linkedin" class="text-decoration-none" target="_blank" :href="excutive.linkedin">
                             <v-icon color="#013D3A">mdi-linkedin</v-icon>
                           </a>
-                        </div>
-                      </div>
-                      <h3 v-if="!companyData.executiveLeadership" class="text-center">No data to show</h3>
-                    </div>
-                    <div class="company-esg mb-16" v-if="companyData.esgInitiatives.length > 0">
-                      <h1 class="mb-4 font-weight-bold">ESG Inititives</h1>
-                      <v-row class="mt-5">
-                        <v-col cols="12" sm="4" v-for="esg in esgCompanyData">
-                          <div class="esg-list text-left">
-                            <h4 class="text-left mb-5">{{esg.name}}</h4>
-                            <p class="text-left">{{esg.description}}</p>
-                            <a :href="esg.attachment" target="_blank" download class="text-decoration-none px-5" v-if="esg.attachment">Download <v-icon>mdi-tray-arrow-down</v-icon></a>
+
                           </div>
-                        </v-col>
-                      </v-row>
-                    </div>
-                  </template>
+                        </div>
+                        <h3 v-if="!companyData.executiveLeadership" class="text-center">No data to show</h3>
+                      </div>
+                      
+                      <div class="company-esg mb-16" v-if="companyData.esgInitiatives.length > 0">
+                        <h1 class="mb-4 font-weight-bold">ESG Inititives</h1>
+                        <v-row class="mt-5">
+                          <v-col cols="12" sm="4" v-for="esg in esgCompanyData">
+                            <div class="esg-list text-left">
+                              <h4 class="text-left mb-5">{{esg.name}}</h4>
+                              <p class="text-left">{{esg.description}}</p>
+                              <a :href="esg.attachment" download class="text-decoration-none px-5" v-if="esg.attachment">Download <v-icon>mdi-tray-arrow-down</v-icon></a>
+                            </div>
+                          </v-col>
+                        </v-row>
+                      </div>
+                    </template>
                 </div>
               </v-col>
               <v-col cols="12" md="3" class="pl-0">
@@ -177,6 +179,7 @@
 </template>
 <script>
   import { mapActions } from "vuex";
+  import _ from "lodash";
   import NavbarBeforeLogin from '../../components/Layout/NavbarBeforeLogin.vue'
   import Footer from '../../components/Layout/Footer.vue'
 export default {
@@ -318,6 +321,10 @@ export default {
     viewPublicCompany() {
       this.getCompanyInfo({ slug : this.$route.fullPath.split('/').pop()});
     },
+
+    orderCate(leadership){
+      return _.orderBy(leadership, "orderNumber", "asc");
+    },
     msgShow() {
       setTimeout(() => {
         this.loading = false
@@ -330,6 +337,7 @@ export default {
     this.viewPublicCompany();
     this.getLocation();
   }
+  
 };
 </script>
 <style scoped lang="scss">
