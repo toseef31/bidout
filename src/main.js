@@ -49,7 +49,10 @@ Vue.use(VueMoment, {
     moment,
 });
 Vue.use(VueMeta, {
-  // optional pluginOptions
+  keyName: 'metaInfo',
+  attribute: 'data-vue-meta',
+  ssrAttribute: 'data-vue-meta-server-rendered',
+  tagIDKeyName: 'vmid',
   refreshOnceOnNavigation: true
 });
 // Vue.use(momentTimeZone);

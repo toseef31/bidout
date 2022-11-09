@@ -193,7 +193,7 @@ export default {
       loading: true,
       mapOptions: '',
       markerOptions: '',
-      overView: this.$store.getters.supplierCompany.companyData.overview,
+      
       esgData:  [
         {
           name: 'Environmental',
@@ -219,18 +219,23 @@ export default {
       ],
     };
   },
-  metaInfo:{
-      title: ' ',
-      titleTemplate: '%s - BidOut Profile',
-      htmlAttrs: {
-        lang: 'en',
-        amp: true
-      },
-      meta: [
-        { charset: 'utf-8' },
-        { name: 'title', content: this.overView },
-      ]
-  },
+  metaInfo() {
+      return {
+        title: "test meta data with vue",
+        htmlAttrs: {
+          lang: 'en',
+          amp: true
+        },
+        meta: [
+          {
+            vmid: "description",
+            name: "description",
+            content:
+              "hello world, this is an example of adding a description with vueMeta"
+          }
+        ]
+      };
+    },
   computed:{
    showSideBar(){
        return this.$store.getters.g_sideBarOpen;
@@ -299,13 +304,15 @@ export default {
     msgShow() {
       setTimeout(() => {
         this.loading = false;
+        
         // document.title = ''+this.companyData.company + "-" + this.companyData.companyHq +' - BidOut Profile' ;
       }, 3000)
     },
   },
   created(){
     this.viewPublicCompany();
-    this.metaInfo.title = ''+this.companyData.company + " - " + this.companyData.companyHq +' - BidOut Profile' ;
+
+    // this.metaInfo.title = ''+this.companyData.company + " - " + this.companyData.companyHq +' - BidOut Profile' ;
     // const descEl = document.querySelector('head meta[name="description"]');
     // const titleEl = document.querySelector('head meta[name="title"]');
     // descEl.setAttribute('content', this.$store.getters.publicCompany.companyData.overview);
@@ -314,6 +321,7 @@ export default {
   mounted() {
     this.msgShow();
     this.getLocation();
+    console.log(this.title,'sa');
   }
 };
 </script>
