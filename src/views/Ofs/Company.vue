@@ -243,7 +243,6 @@ export default {
     ...mapActions(["getCompanyInfo"]),
     getLocation(){
     
-    setTimeout(() => {
     if(this.$store.getters.supplierCompany.companyData.companyLocations.length == 1){
       var LocationsForMap = this.$store.getters.supplierCompany.companyData.companyLocations;
   
@@ -305,9 +304,6 @@ export default {
         map.fitBounds(latlngbounds);
     }
 
-     
-    },6000)
-        
     },
     get_url_extension( url ) {
       return url.split(/[#?]/)[0].split('.').pop().trim();
@@ -324,11 +320,13 @@ export default {
       }, 3000)
     },
   },
+  updated(){
+    this.getLocation();
+  },
   mounted() {
     document.title = "Company Profile - BidOut" ;
     this.msgShow();
     this.viewPublicCompany();
-    this.getLocation();
   }
 };
 </script>

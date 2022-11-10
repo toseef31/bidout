@@ -95,12 +95,7 @@ export default {
           }
         ];
       }
-     
-     // if(this.$store.getters.companyData.companyData.companyLocations.length == 1){
 
-     // }else{
-
-     // }
      if(this.$store.getters.companyData.companyData.companyLocations.length == 1){
           var map = new google.maps.Map(document.getElementById('map'), {
             zoom: 9,
