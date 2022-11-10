@@ -22,7 +22,7 @@
                 class="text-left"
                 cols="12" sm="8"
               >
-                <div class="company-title">
+                <div class="company-title ml-10">
                   <h1>{{companyData.company}}</h1>
                 </div>
               </v-col>
