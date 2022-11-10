@@ -22,7 +22,7 @@
                 class="text-left"
                 cols="12" sm="8"
               >
-                <div class="company-title">
+                <div class="company-title ml-10">
                   <h1>{{companyData.company}}</h1>
                 </div>
               </v-col>
@@ -188,12 +188,11 @@ export default {
     NavbarBeforeLogin,
     Footer,
   },
-  
   data() {
     return {
-      loading: true,
       mapOptions: '',
       markerOptions: '',
+      metaTitle: this.$store.getters.supplierCompany.companyData.company,
       esgData:  [
         {
           name: 'Environmental',
@@ -219,6 +218,7 @@ export default {
       ],
     };
   },
+  
   computed:{
    showSideBar(){
        return this.$store.getters.g_sideBarOpen;
@@ -226,11 +226,17 @@ export default {
    activityPanel(){
        return this.$store.getters.g_activityPanel;
    },
+   loading(){
+    return this.$store.getters.pageLoader;
+   },
    companyData(){
      return this.$store.getters.supplierCompany.companyData;
    },
    companyCategories(){
      return this.$store.getters.supplierCompany.categories;
+   },
+   pageTitle(){
+    return this.$store.getters.pageTitle;
    },
    esgCompanyData(){
      var target = this.esgData;
@@ -241,6 +247,22 @@ export default {
      ];
      return uniqueObjArray;
    }
+  },
+  metaInfo(){
+    return {
+      title: this.$store.getters.pageTitle,
+      meta: [
+        {
+          name: 'title',
+          content: this.$store.getters.pageTitle,
+        },
+        {
+          name: 'description',
+          content: this.$store.getters.pageDescription,
+        },
+        
+      ],
+    }
   },
   methods: {
     ...mapActions(["getCompanyInfo"]),
@@ -317,23 +339,22 @@ export default {
     viewPublicCompany() {
       this.getCompanyInfo({ slug : this.$route.fullPath.split('/').pop()});
     },
-
     orderCate(leadership){
       return _.orderBy(leadership, "orderNumber", "asc");
     },
-    msgShow() {
-      setTimeout(() => {
-        this.loading = false
-      }, 3000)
-    },
+  },
+  async created(){
+    await this.viewPublicCompany();
   },
   updated(){
     this.getLocation();
   },
   mounted() {
+
     document.title = "Company Profile - BidOut" ;
     this.msgShow();
     this.viewPublicCompany();
+
   }
   
 };
