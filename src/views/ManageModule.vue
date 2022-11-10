@@ -87,8 +87,8 @@ export default {
         return this.$store.getters.g_activityPanel;
     },
     moduleData(){
-      if(this.$store.getters.companyData.companyData.contracts){
-        return this.$store.getters.companyData.companyData.contracts.filter((item)=>{
+      if(this.$store.getters.userInfo.company.contracts){
+        return this.$store.getters.userInfo.company.contracts.filter((item)=>{
           return this.$store.getters.userInfo.id == item.signedBy
         })
       }
