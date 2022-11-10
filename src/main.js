@@ -56,12 +56,11 @@ Sentry.init({
   integrations: [
     new BrowserTracing({
       routingInstrumentation: Sentry.vueRouterInstrumentation(router),
-      tracingOrigins: ["localhost", "http://localhost:8080/", /^\//],
+      tracingOrigins: ["localhost", window.location.origin, /^\//],
     }),
   ],
-  
+  tracesSampleRate: 1.0,
 })
-
 
 LogRocket.getSessionURL(sessionURL => {
   Sentry.configureScope(scope => {
