@@ -14,4 +14,10 @@ export default {
   setSupplierCompany(state, payload){
     state.supplierCompany = payload
   },
+  setPageTitle(state, payload){
+    state.pageTitle = payload
+  },
+  setPageDescription(state, payload){
+    state.pageDescription = payload
+  },
 }

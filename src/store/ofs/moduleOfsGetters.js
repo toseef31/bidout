@@ -14,4 +14,10 @@ export default {
    supplierCompany (state){
       return state.supplierCompany
    },
+   pageTitle (state){
+      return state.pageTitle
+   },
+   pageDescription (state){
+      return state.pageDescription
+   },
 }

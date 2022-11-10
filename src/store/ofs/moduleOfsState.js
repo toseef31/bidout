@@ -4,4 +4,6 @@ export default {
    premiumCompanies:null,
    publicCompany: null,
    supplierCompany: null,
+   pageTitle: null,
+   pageDescription: null,
 }

@@ -172,10 +172,8 @@ export default {
     NavbarBeforeLogin,
     Footer,
   },
-  
   data() {
     return {
-      loading: true,
       mapOptions: '',
       markerOptions: '',
       esgData:  [
@@ -203,7 +201,6 @@ export default {
       ],
     };
   },
- 
   computed:{
    companyInfo(){
      return this.$store.getters.publicCompany.companyData;
@@ -219,7 +216,26 @@ export default {
        ...new Map(target.map((item) => [item["type"], item])).values(),
      ];
      return uniqueObjArray;
-   }
+   },
+   loading(){
+    return this.$store.getters.pageLoader;
+   },
+  },
+  metaInfo(){
+    return {
+      title: this.$store.getters.pageTitle,
+      meta: [
+        {
+          name: 'title',
+          content: this.$store.getters.pageTitle,
+        },
+        {
+          name: 'description',
+          content: this.$store.getters.pageDescription,
+        },
+        
+      ],
+    }
   },
   methods: {
     ...mapActions(["getPublicCompanyInfo"]),
@@ -265,18 +281,13 @@ export default {
     orderCate(leadership){
       return _.orderBy(leadership, "orderNumber", "asc");
     },
-    msgShow() {
-      setTimeout(() => {
-        this.loading = false
-      }, 3000)
-    },
   },
-  
+  async created(){
+    await this.viewPublicCompany();
+  },
   mounted() {
-    document.title = "Company Profile - BidOut" 
-    this.msgShow();
-    this.viewPublicCompany();
     this.getLocation();
+    
   }
 };
 </script>
