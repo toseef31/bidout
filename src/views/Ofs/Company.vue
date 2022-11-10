@@ -351,10 +351,6 @@ export default {
   },
   mounted() {
 
-    document.title = "Company Profile - BidOut" ;
-    this.msgShow();
-    this.viewPublicCompany();
-
   }
   
 };

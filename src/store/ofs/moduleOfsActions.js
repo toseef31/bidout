@@ -97,11 +97,11 @@ export default {
       .get(`/company/getCompanyBySlug/${payload.slug}`)
       .then((responce) => {
         commit("setSupplierCompany", responce.data);
-        console.log(responce.data.companyData.company);
+        // console.log(responce.data.companyData.company);
         // localStorage.setItem("companyData", JSON.stringify(responce.data));
-        commit('setPageLoader', false);
         commit('setPageTitle', responce.data.companyData.company+' - '+responce.data.companyData.companyHq+' - BidOut Profile');
         commit('setPageDescription', responce.data.companyData.overview);
+        commit('setPageLoader', false);
       })
       .catch((err) => {
         console.log(err);
@@ -113,6 +113,9 @@ export default {
       .then((responce) => {
         commit("setPublicCompany", responce.data);
         // localStorage.setItem("companyData", JSON.stringify(responce.data));
+        commit('setPageTitle', responce.data.companyData.company+' - '+responce.data.companyData.companyHq+' - BidOut Profile');
+        commit('setPageDescription', responce.data.companyData.overview);
+        commit('setPageLoader', false);
       })
       .catch((err) => {
         console.log(err);
