@@ -92,6 +92,7 @@ export default {
       });
   },
   getCompanyInfo({ commit }, payload) {
+    commit('setPageLoader', true);
     const url = encodeURIComponent(payload.name);
     axios
       .get(`/company/getCompanyBySlug/${payload.slug}`)
@@ -108,6 +109,7 @@ export default {
       });
   },
   getPublicCompanyInfo({ commit }, payload) {
+    commit('setPageLoader', true);
     axios
       .get(`/company/getCompanyBySlug/${payload.slug}`)
       .then((responce) => {
