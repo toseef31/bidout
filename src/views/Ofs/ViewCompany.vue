@@ -240,33 +240,67 @@ export default {
   methods: {
     ...mapActions(["getPublicCompanyInfo"]),
     getLocation(){
-      setTimeout(() => {
-        var LocationsForMap = this.$store.getters.publicCompany.companyData.companyLocations;
-        var map = new google.maps.Map(document.getElementById('map'), {
-          center: new google.maps.LatLng(LocationsForMap[0].lattitude, LocationsForMap[0].longitude),
-          mapTypeId: google.maps.MapTypeId.ROADMAP
+
+
+    if(this.$store.getters.publicCompany.companyData.companyLocations.length == 1){
+      var LocationsForMap = this.$store.getters.publicCompany.companyData.companyLocations;
+  
+      var map = new google.maps.Map(document.getElementById('map'), {
+        zoom: 9,
+        center: new google.maps.LatLng(LocationsForMap[0].lattitude, LocationsForMap[0].longitude),
+        mapTypeId: google.maps.MapTypeId.ROADMAP
+      });
+
+      var infowindow = new google.maps.InfoWindow();
+
+      var marker, i;
+      for (i = 0; i < LocationsForMap.length; i++) {  
+        marker = new google.maps.Marker({
+          position: new google.maps.LatLng(LocationsForMap[i].lattitude, LocationsForMap[i].longitude),
+          map: map,
+          title: 'Marker',
+          anchorPoint: new google.maps.Point(0, -29),
         });
-        var infowindow = new google.maps.InfoWindow();
-        var marker, i;
-        var latlngbounds =new google.maps.LatLngBounds();
-        for (i = 0; i < LocationsForMap.length; i++) {  
-          marker = new google.maps.Marker({
-            position: new google.maps.LatLng(LocationsForMap[i].lattitude, LocationsForMap[i].longitude),
-            map: map,
-            title: 'Marker',
-            anchorPoint: new google.maps.Point(0, -29),
-          });
-          google.maps.event.addListener(marker, 'click', (function(marker, i) {
-            return function() {
-              infowindow.setContent(LocationsForMap[i].location);
-              infowindow.open(map, marker);
-            }
-          })(marker, i));
-          latlngbounds.extend(marker.position);
+        google.maps.event.addListener(marker, 'click', (function(marker, i) {
+          return function() {
+            infowindow.setContent(LocationsForMap[i].location);
+            infowindow.open(map, marker);
+          }
+        })(marker, i));
+
       }
+    
+    }else{
+      var LocationsForMap = this.$store.getters.publicCompany.companyData.companyLocations;
+  
+      var map = new google.maps.Map(document.getElementById('map'), {
+        center: new google.maps.LatLng(LocationsForMap[0].lattitude, LocationsForMap[0].longitude),
+        mapTypeId: google.maps.MapTypeId.ROADMAP
+      });
+
+      var infowindow = new google.maps.InfoWindow();
+
+      var marker, i;
+      var latlngbounds =new google.maps.LatLngBounds();
+      for (i = 0; i < LocationsForMap.length; i++) {  
+        marker = new google.maps.Marker({
+          position: new google.maps.LatLng(LocationsForMap[i].lattitude, LocationsForMap[i].longitude),
+          map: map,
+          title: 'Marker',
+          anchorPoint: new google.maps.Point(0, -29),
+        });
+        google.maps.event.addListener(marker, 'click', (function(marker, i) {
+          return function() {
+            infowindow.setContent(LocationsForMap[i].location);
+            infowindow.open(map, marker);
+          }
+        })(marker, i));
+        latlngbounds.extend(marker.position);
+      }
+      
         map.setCenter(latlngbounds.getCenter());
         map.fitBounds(latlngbounds);
-      },4000)
+    }
       
     },
     get_url_extension( url ) {
@@ -282,12 +316,16 @@ export default {
       return _.orderBy(leadership, "orderNumber", "asc");
     },
   },
-  async created(){
-    await this.viewPublicCompany();
+
+  updated(){
+
+    this.getLocation();
   },
   mounted() {
-    this.getLocation();
-    
+    document.title = "Company Profile - BidOut" 
+    this.msgShow();
+    this.viewPublicCompany();
+
   }
 };
 </script>

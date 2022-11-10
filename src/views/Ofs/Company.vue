@@ -268,7 +268,36 @@ export default {
     ...mapActions(["getCompanyInfo"]),
     getLocation(){
     
-    setTimeout(() => {
+    if(this.$store.getters.supplierCompany.companyData.companyLocations.length == 1){
+      var LocationsForMap = this.$store.getters.supplierCompany.companyData.companyLocations;
+  
+      var map = new google.maps.Map(document.getElementById('map'), {
+        zoom: 9,
+        center: new google.maps.LatLng(LocationsForMap[0].lattitude, LocationsForMap[0].longitude),
+        mapTypeId: google.maps.MapTypeId.ROADMAP
+      });
+
+      var infowindow = new google.maps.InfoWindow();
+
+      var marker, i;
+      for (i = 0; i < LocationsForMap.length; i++) {  
+        marker = new google.maps.Marker({
+          position: new google.maps.LatLng(LocationsForMap[i].lattitude, LocationsForMap[i].longitude),
+          map: map,
+          title: 'Marker',
+          anchorPoint: new google.maps.Point(0, -29),
+        });
+        google.maps.event.addListener(marker, 'click', (function(marker, i) {
+          return function() {
+            infowindow.setContent(LocationsForMap[i].location);
+            infowindow.open(map, marker);
+          }
+        })(marker, i));
+      }
+      
+        map.setCenter(latlngbounds.getCenter());
+        map.fitBounds(latlngbounds);
+    }else{
       var LocationsForMap = this.$store.getters.supplierCompany.companyData.companyLocations;
   
       var map = new google.maps.Map(document.getElementById('map'), {
@@ -295,10 +324,11 @@ export default {
         })(marker, i));
         latlngbounds.extend(marker.position);
       }
+      
         map.setCenter(latlngbounds.getCenter());
         map.fitBounds(latlngbounds);
-    },6000)
-        
+    }
+
     },
     get_url_extension( url ) {
       return url.split(/[#?]/)[0].split('.').pop().trim();
@@ -316,11 +346,15 @@ export default {
   async created(){
     await this.viewPublicCompany();
   },
-  mounted() {
+  updated(){
     this.getLocation();
-    
-    console.log(this.$route);
-    
+  },
+  mounted() {
+
+    document.title = "Company Profile - BidOut" ;
+    this.msgShow();
+    this.viewPublicCompany();
+
   }
   
 };
