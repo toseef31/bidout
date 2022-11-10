@@ -223,15 +223,15 @@ export default {
   },
   metaInfo(){
     return {
-      title: ''+this.companyInfo.company + " - " + this.companyInfo.companyHq +' - BidOut Profile' ,
+      title: this.$store.getters.pageTitle,
       meta: [
         {
           name: 'title',
-          content: ''+this.companyInfo.company + " - " + this.companyInfo.companyHq +' - BidOut Profile' ,
+          content: this.$store.getters.pageTitle,
         },
         {
           name: 'description',
-          content: this.companyInfo.overview,
+          content: this.$store.getters.pageDescription,
         },
         
       ],
@@ -282,8 +282,8 @@ export default {
       return _.orderBy(leadership, "orderNumber", "asc");
     },
   },
-  created(){
-    this.viewPublicCompany();
+  async created(){
+    await this.viewPublicCompany();
   },
   mounted() {
     this.getLocation();

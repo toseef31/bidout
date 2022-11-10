@@ -192,7 +192,7 @@ export default {
     return {
       mapOptions: '',
       markerOptions: '',
-      
+      metaTitle: this.$store.getters.supplierCompany.companyData.company,
       esgData:  [
         {
           name: 'Environmental',
@@ -235,6 +235,9 @@ export default {
    companyCategories(){
      return this.$store.getters.supplierCompany.categories;
    },
+   pageTitle(){
+    return this.$store.getters.pageTitle;
+   },
    esgCompanyData(){
      var target = this.esgData;
      var source = this.$store.getters.supplierCompany.companyData.esgInitiatives;
@@ -247,15 +250,15 @@ export default {
   },
   metaInfo(){
     return {
-      title: ''+this.companyData.company + " - " + this.companyData.companyHq +' - BidOut Profile' ,
+      title: this.$store.getters.pageTitle,
       meta: [
         {
           name: 'title',
-          content: ''+this.companyData.company + " - " + this.companyData.companyHq +' - BidOut Profile' ,
+          content: this.$store.getters.pageTitle,
         },
         {
           name: 'description',
-          content: this.companyData.overview,
+          content: this.$store.getters.pageDescription,
         },
         
       ],
@@ -310,11 +313,14 @@ export default {
       return _.orderBy(leadership, "orderNumber", "asc");
     },
   },
-  created(){
-    this.viewPublicCompany();
+  async created(){
+    await this.viewPublicCompany();
   },
   mounted() {
     this.getLocation();
+    
+    console.log(this.$route);
+    
   }
   
 };
