@@ -4,5 +4,8 @@ export default {
    },
    subCategories (state){
       return state.subCategories
+   },
+   loadingBasin (state){
+      return state.loadingBasin
    }
 }

@@ -3,7 +3,7 @@ const state = {
     authenticated: false,
     sideBarOpen: true,
     activityPanel: false,
-    pageLoader: true,
+    pageLoader: false,
     isCreateBid: false,
 }
 

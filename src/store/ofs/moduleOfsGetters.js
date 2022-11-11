@@ -20,4 +20,7 @@ export default {
    pageDescription (state){
       return state.pageDescription
    },
+   innerLoader (state){
+      return state.innerLoader
+   },
 }
