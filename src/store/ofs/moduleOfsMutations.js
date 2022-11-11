@@ -20,4 +20,7 @@ export default {
   setPageDescription(state, payload){
     state.pageDescription = payload
   },
+  setLoader(state, payload){
+    state.innerLoader = payload
+  },
 }

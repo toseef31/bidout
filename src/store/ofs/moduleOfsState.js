@@ -6,4 +6,5 @@ export default {
    supplierCompany: null,
    pageTitle: null,
    pageDescription: null,
+   innerLoader: false,
 }
