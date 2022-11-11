@@ -225,10 +225,12 @@ export default {
       title: this.$store.getters.pageTitle,
       meta: [
         {
+          vmid: 'title',
           name: 'title',
           content: this.$store.getters.pageTitle,
         },
         {
+          vmid: 'description',
           name: 'description',
           content: this.$store.getters.pageDescription,
         },

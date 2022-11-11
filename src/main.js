@@ -21,7 +21,7 @@ import '@/assets/styles/index.scss';
 import VueCroppie from 'vue-croppie';
 import 'croppie/croppie.css';
 import VueGtag from "vue-gtag";
-import VueMeta from 'vue-meta'
+import VueMeta from 'vue-meta';
 // Your web app's Firebase configuration
 var firebaseConfig = {
   apiKey: import.meta.env.VITE_FIREBASE_API_KEY,
@@ -64,11 +64,12 @@ Sentry.init({
   integrations: [
     new BrowserTracing({
       routingInstrumentation: Sentry.vueRouterInstrumentation(router),
-      tracingOrigins: ["localhost", window.location.origin, /^\//],
+      tracingOrigins: ["localhost", "http://localhost:8080/", /^\//],
     }),
   ],
-  tracesSampleRate: 1.0,
+  
 })
+
 
 LogRocket.getSessionURL(sessionURL => {
   Sentry.configureScope(scope => {
