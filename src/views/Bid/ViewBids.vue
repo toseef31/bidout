@@ -203,14 +203,15 @@ export default {
       }
     },
     bidsList() {
-      console.log('hello', this.$store.getters.bidsList);
-
       if (this.$store.getters.bidsList.length > 0) {
         this.$store.getters.bidsList.filter((item) => {
           if (!item.status) {
-            this.openBids.push(item);
+            const found = this.openBids.find((el) => el.id === item.id);
+            if (!found) this.openBids.push(item);
           } else {
-            this.closedBids.push(item);
+            const foundC = this.closedBids.find((el) => el.id === item.id);
+
+            if (!foundC) this.closedBids.push(item);
           }
         });
         return this.$store.getters.bidsList;
@@ -221,11 +222,11 @@ export default {
   methods: {
     ...mapActions(['getDraftBids', 'getBidsLists']),
   },
-  async mounted() {
+  mounted() {
     document.title = 'Bids - BidOut';
     this.users = this.$store.getters.userInfo;
-    await this.getDraftBids(this.users.id);
-    await this.getBidsLists(this.users.id);
+    this.getDraftBids(this.users.id);
+    this.getBidsLists(this.users.id);
   },
 };
 </script>
