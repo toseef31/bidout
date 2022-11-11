@@ -24,7 +24,7 @@
               <v-col md="11">
                 <div class="mr-2 bid-item">
                   <label class="d-block input-label text-left" v-if="index === 0">Line Item Description</label>
-                  <v-text-field placeholder="Item Description" v-model="bidLines[index]['description']" height="31px" width="200px" single-line outlined type="text" hide-details>
+                  <v-text-field placeholder="Item Description" @change="savedraftOnchange()" v-model="bidLines[index]['description']" height="31px" width="200px" single-line outlined type="text" hide-details>
                   </v-text-field>
                 </div>
               </v-col>
@@ -34,26 +34,26 @@
           <v-col md="2" class="pl-0">
             <div class="mr-2 bid-item">
               <label class="d-block input-label text-left" v-if="index === 0">Unit/Measure</label>
-              <v-select outlined hide-details v-model="bidLines[index]['unit']" :items="units"></v-select>
+              <v-select outlined hide-details v-model="bidLines[index]['unit']" @change="savedraftOnchange()" :items="units"></v-select>
             </div>
           </v-col>
           <v-col md="2" class="pl-0">
             <div class="mr-2 bid-item">
               <label class="d-block input-label text-left" v-if="index === 0">Input Type</label>
-              <v-select outlined hide-details v-model="bidLines[index]['type']" :items="inputType"></v-select>
+              <v-select outlined hide-details v-model="bidLines[index]['type']" @change="savedraftOnchange()" :items="inputType"></v-select>
             </div>
           </v-col>
           <v-col md="2" class="pl-0">
             <div class="mr-2 bid-item">
               <label class="d-block input-label text-left" v-if="index === 0">QTY</label>
-              <v-text-field placeholder="Quantity" height="31px" single-line outlined  hide-details v-model="bidLines[index]['quantity']" @keypress="isLetterOrNumber($event)">
+              <v-text-field placeholder="Quantity" @change="savedraftOnchange()" height="31px" single-line outlined  hide-details v-model="bidLines[index]['quantity']" @keypress="isLetterOrNumber($event)">
               </v-text-field>
             </div>
           </v-col>
           <v-col md="3" class="d-flex pl-0">
             <div class="mr-2 bid-item">
               <label class="d-block input-label text-left" v-if="index === 0">Buyer Comment</label>
-              <v-text-field placeholder="Buyer Comment"  v-model="bidLines[index]['buyerComment']" height="31px" single-line outlined type="text" hide-details>
+              <v-text-field placeholder="Buyer Comment" @change="savedraftOnchange()" v-model="bidLines[index]['buyerComment']" height="31px" single-line outlined type="text" hide-details>
               </v-text-field>
             </div>
             <div class="d-flex">
@@ -87,7 +87,7 @@
             <v-col md="11">
               <div class="mr-2 bid-item">
                 <label class="d-block input-label text-left" v-if="index === 0">Line Item Description</label>
-                <v-text-field placeholder="Line Item Description" v-model="bidLines[elements.indexValue]['description']" height="31px" width="200px" single-line outlined type="text" hide-details readonly>
+                <v-text-field placeholder="Line Item Description" @change="savedraftOnchange()" v-model="bidLines[elements.indexValue]['description']" height="31px" width="200px" single-line outlined type="text" hide-details readonly>
                 </v-text-field>
               </div>
             </v-col>
@@ -96,26 +96,26 @@
         <v-col md="2">
           <div class="mr-2 bid-item">
             <label class="d-block input-label text-left" v-if="index === 0">Unit/Measure</label>
-            <v-select outlined hide-details :items="units" v-model="exampleItems[index]['unit']" readonly></v-select>
+            <v-select outlined hide-details :items="units" @change="savedraftOnchange()" v-model="exampleItems[index]['unit']" readonly></v-select>
           </div>
         </v-col>
         <v-col md="2">
           <div class="mr-2 bid-item">
             <label class="d-block input-label text-left" v-if="index === 0">Input Type</label>
-            <v-select outlined hide-details :items="inputType" v-model="exampleItems[index]['type']" readonly></v-select>
+            <v-select outlined hide-details :items="inputType" @change="savedraftOnchange()" v-model="exampleItems[index]['type']" readonly></v-select>
           </div>
         </v-col>
         <v-col md="2">
           <div class="mr-2 bid-item">
             <label class="d-block input-label text-left" v-if="index === 0">QTY</label>
-            <v-text-field placeholder="Line Item Description" height="31px" single-line outlined v-model="exampleItems[index]['quantity']" @keypress="isLetterOrNumber($event)" hide-details>
+            <v-text-field placeholder="Line Item Description" height="31px" single-line outlined v-model="exampleItems[index]['quantity']" @change="savedraftOnchange()" @keypress="isLetterOrNumber($event)" hide-details>
             </v-text-field>
           </div>
         </v-col>
         <v-col md="3" class="d-flex">
           <div class="mr-2 bid-item">
             <label class="d-block input-label text-left" v-if="index === 0">Buyer Comment</label>
-            <v-text-field placeholder="Line Item Description" height="31px" single-line outlined type="text" v-model="exampleItems[index]['buyerComment']" hide-details readonly>
+            <v-text-field placeholder="Line Item Description" @change="savedraftOnchange()" height="31px" single-line outlined type="text" v-model="exampleItems[index]['buyerComment']" hide-details readonly>
             </v-text-field>
           </div>
           <div class="d-flex">
@@ -233,7 +233,16 @@ export default {
     },
     removeBidLine(index){
       this.bidLines.splice(index,1);
-    }
+    },
+    savedraftOnchange(){
+      const timer = setInterval(() => {
+        this.updateDraftBid({'bidlines':this.bidLines,'exampleItems':this.bidLines});
+      }, 60000);
+
+      this.$once("hook:beforeDestroy", () => {
+        clearInterval(timer);
+      });
+    },
   },
   created() {
     // this.interval = setInterval(() => this.saveDraftBid({'invitedSuppliers':this.repsInvited}), 100000);

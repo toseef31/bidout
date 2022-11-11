@@ -2,6 +2,7 @@
 	<div>
 		<v-row class="my-4 supplier-row fill-height" no-gutters>
 		  <v-col sm="2" v-if="categories" class="category-col"> 
+        {{itemBidId}}
 		  	<v-list class="pt-0">
   	      <v-list-group
   	        v-for="category in allcategories"
@@ -318,6 +319,7 @@ export default {
       companySearch: '',
       companyBasin: 'all',
       invitedCompanies: [],
+      itembidData: [],
       interval: '',
       valid: false,
     };
@@ -329,6 +331,10 @@ export default {
     },
     salesRepsList(){
     	return this.$store.getters.salesRepsList;
+    },
+    itemBidId(){
+      console.log(this.$store.getters.itemBidData);
+      return this.$store.getters.itemBidData;
     },
     companiesList(){
     	return this.$store.getters.companiesList;
@@ -369,6 +375,7 @@ export default {
     		bidDueTime: JSON.parse(localStorage.getItem('bidData')).dueTime,
     	}
       this.inviteNewSupplier(supplier);
+      this.savedraftOnchange();
       this.supplierDialog = false;
       const data = {
       	type: 'user',
@@ -395,10 +402,12 @@ export default {
     	}
     	this.repsInvited.push(data);
     	this.$store.getters.salesRepsList.splice(index,1);
+      this.savedraftOnchange();
     },
     removeReps(list,index){
     	this.$store.getters.salesRepsList.push(list.item);
     	this.repsInvited.splice(index,1);
+      this.savedraftOnchange();
     },
     getCompanies(){
     	this.searchByCompany({'query':this.companySearch,'basin':this.companyBasin})
@@ -413,6 +422,7 @@ export default {
     	}
     	this.repsInvited.push(data);
     	this.$store.getters.companiesList.splice(index,1);
+      this.savedraftOnchange();
     },
     addServiceCompany(company,index){
     	var data = {
@@ -421,11 +431,22 @@ export default {
     	}
     	this.repsInvited.push(data);
     	this.$store.getters.companiesList.splice(index,1);
+      this.savedraftOnchange();
     },
     removeCompany(company,index){
     	this.repsInvited.splice(index,1);
     	this.$store.getters.companiesList.push(company.item);
-    }
+      this.savedraftOnchange();
+    },
+    savedraftOnchange(){
+      const timer = setInterval(() => {
+        this.updateDraftBid({'invitedSuppliers':this.repsInvited});
+      }, 60000);
+
+      this.$once("hook:beforeDestroy", () => {
+        clearInterval(timer);
+      });
+    },
   },
   created() {
     // this.interval = setInterval(() => this.updateDraftBid({'invitedSuppliers':this.repsInvited}));

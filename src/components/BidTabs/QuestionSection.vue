@@ -252,6 +252,15 @@ export default {
       this.categories.push(data);
     }
   },
+  created(){
+     const timer = setInterval(() => {
+        this.updateQuestion();
+      }, 60000);
+
+      this.$once("hook:beforeDestroy", () => {
+        clearInterval(timer);
+      });
+  }
   mounted() {
     
   } 

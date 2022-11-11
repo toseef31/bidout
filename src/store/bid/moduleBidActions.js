@@ -166,7 +166,8 @@ export default {
       const res = await axios.post('bid/inviteSupplier/',{'firstName': payload.firstName,'lastName':payload.lastName,'company': payload.company,'phone':payload.phone,'email':payload.email,'bidTitle':payload.bidTitle,'bidType':payload.bidType,'bidDueDate':payload.bidDueDate,'bidDueTime':payload.bidDueTime});
        if(res.status == 200){
         // localStorage.removeItem('bidData');
-        // commit('setBidData',null);
+        console.log(res.data);
+        commit('setItemBidData',res.data);
        }
     },
     async uploadBidAttach({commit,state}, payload){
