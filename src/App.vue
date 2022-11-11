@@ -8,7 +8,7 @@ export default {
   name: 'Settings',
   
   metaInfo:{
-    title: 'BidOut – Oil & Gas Procurement Platform',
+    // title: 'BidOut – Oil & Gas Procurement Platform',
     meta: [
       {
         vmid: 'title',
