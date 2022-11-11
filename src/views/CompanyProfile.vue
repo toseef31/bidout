@@ -121,6 +121,7 @@
                             :value="basin"
                             @change="addBasin"
                             hide-details
+                            :disabled="loadingBasin"
                             ></v-checkbox>
                             <label class="d-none">{{basinsDatass}}</label>
                         </v-col>
@@ -165,7 +166,7 @@
   import CompanyVideos from '../components/CompanyProfile/CompanyVideos.vue'
   import CompanyLogo from '../components/CompanyProfile/CompanyLogo.vue'
   import _ from 'lodash';
-  import { mapActions } from "vuex"
+  import { mapActions,mapMutations } from "vuex"
 export default {
   name : "CompanyProfile",
   components: {
@@ -188,7 +189,6 @@ export default {
       region: ['Gulf Coast','Northwest','Rockies','Mid-Con','Permian','Arklatex','Offshore','Other'],
       basins: [],
       basinsData: [],
-      loading: true,
       profileName: '',
       profileSummary: '',
       services: '',
@@ -197,6 +197,8 @@ export default {
       subservices: '',
       searchService: '',
       servData: [],
+      
+      basinLoader: null,
     };
   },
   computed:{
@@ -264,10 +266,17 @@ export default {
     },
     subCategories(){
       return this.$store.getters.subCategories;
+    },
+    loadingBasin(){
+      return this.$store.getters.loadingBasin;
+    },
+    loading(){
+      return this.$store.getters.pageLoader;
     }
   },
   methods: {
     ...mapActions(["getCompany","getCategories","getSubCategories","updateBasicProfile","addCompanyService","addCompanyBasins"]),
+    ...mapMutations(["setBasinLoading"]),
       updateBasic(){
         var data = {
           companyId: this.$store.getters.userInfo.company.id,
@@ -326,7 +335,9 @@ export default {
              companyId: this.$store.getters.userInfo.company.id,
              basins: this.basins,
            }
-           this.addCompanyBasins(data)
+           this.addCompanyBasins(data);
+           this.$store.commit('setBasinLoading', true);
+           
         }else{
           if(this.$store.getters.companyData.companyData.basins.length == 0 || this.$store.getters.companyData.companyData.basins.length > 0){
             var data = {
@@ -334,6 +345,7 @@ export default {
               basins: this.basins,
             }
             this.addCompanyBasins(data);
+            this.$store.commit('setBasinLoading', true);
           }
         }
       },
@@ -346,11 +358,6 @@ export default {
       getSubCate(catId){
         this.getSubCategories(catId);
       },
-      msgShow() {
-      setTimeout(() => {
-        this.loading = false
-      }, 3000)
-    },
   },
   created(){
 
@@ -359,8 +366,6 @@ export default {
   },
   mounted() {
     document.title = "Company Profile - BidOut";
-    this.msgShow();
-    this.getCategories();
     this.getCompany(this.$store.getters.userInfo.company.id);
   }
 };
