@@ -15,10 +15,12 @@
                   <v-tabs-slider color="yellow"></v-tabs-slider>
 
                   <v-tab class="text-capitalize font-weight-bold mr-8" :href="'#tab-0'" ripple rounded
+
                   >
                   Open Bids {{openBids.length}}
                   </v-tab>
                   <v-tab class="text-capitalize font-weight-bold mr-8" :href="'#tab-1'" ripple rounded
+
                   >
                   Closed Bids {{closedBids.length}}
                   </v-tab>
@@ -36,24 +38,25 @@
               </div>
             </div>
           </div>
+
           <v-tabs-items v-model="tab">
             <v-tab-item
               value="tab-0"
             >
-              <v-simple-table class="bids-table">
+              <v-simple-table class="bids-table open-bid-table">
                 <template v-slot:default>
                   <thead>
                     <tr>
                       <th class="text-left pl-sm-6 black--text font-weight-bold">
-                        Bid ID
+                        Bid Serial
                       </th>
                       <th class="text-left black--text font-weight-bold">
                         Title
                       </th>
-                      <th class="text-left black--text font-weight-bold">
+                      <th class="text-center black--text font-weight-bold">
                         Creator
                       </th>
-                      <th class="text-center black--text font-weight-bold">
+                      <th class="text-left black--text font-weight-bold">
                         Entries
                       </th>
                       <th class="text-left black--text font-weight-bold">
@@ -71,8 +74,8 @@
                     >
                       <td class="text-left pl-sm-6">{{ bid.serial }}</td>
                       <td class="text-left">{{ bid.title }}</td>
-                      <td class="text-left">{{ userDatas.firstName }} {{ userDatas.lastName }}</td>
-                      <td class="text-center">0</td>
+                      <td class="text-center">{{ userDatas.firstName }} {{ userDatas.lastName }}</td>
+                      <td class="text-left">{{ bid.entries ? bid.entries.length : 0 }}</td>
                       <td class="text-left">{{ bid.dueDate | moment('DD/MM/YYYY') }} {{bid.dueTime}}</td>
                       <td class="text-left d-none d-sm-block pt-3"><router-link
                         :to="{
@@ -91,16 +94,17 @@
               </div>
               <v-simple-table class="bids-table draft-table">
                 <template v-slot:default>
+
                   <tbody>
                     <template v-if="draftBidsList">
                       <tr
                       v-for="bid in draftBidsList"
                       :key="bid.id"
                     >
-                      <td class="text-left pl-sm-6">{{ bid.id }}</td>
+                      <td class="text-left pl-sm-6">{{ bid.serial }}</td>
                       <td class="text-left">{{ bid.title }}</td>
-                      <td class="text-left">{{ userDatas.firstName }} {{ userDatas.lastName }}</td>
-                      <td class="text-center">0</td>
+                      <td class="text-center">{{ userDatas.firstName }} {{ userDatas.lastName }}</td>
+                      <td class="text-left">{{ bid.entries ? bid.entries.length : 0 }}</td>
                       <td class="text-left">{{ bid.dueDate | moment('DD/MM/YYYY') }} {{bid.dueTime}}</td>
                       <td class="text-left d-none d-sm-block pt-3"><a href="">Edit Draft</a></td>
                     </tr>
@@ -117,7 +121,7 @@
                   <thead>
                     <tr>
                       <th class="text-left pl-sm-6 black--text font-weight-bold">
-                        Bid ID
+                        Bid Serial
                       </th>
                       <th class="text-left black--text font-weight-bold">
                         Title
@@ -144,7 +148,7 @@
                       <td class="text-left pl-sm-6">{{ bid.serial }}</td>
                       <td class="text-left">{{ bid.title }}</td>
                       <td class="text-left">{{ userDatas.firstName }} {{ userDatas.lastName }}</td>
-                      <td class="text-center">0</td>
+                      <td class="text-center">{{ bid.entries ? bid.entries.length : 0 }}</td>
                       <td class="text-left">{{ bid.dueDate | moment('DD/MM/YYYY') }} {{bid.dueTime}}</td>
                       <td class="text-left d-none d-sm-block pt-3"><a href="">View Details</a></td>
                     </tr>
@@ -154,123 +158,7 @@
             </v-tab-item>
           </v-tabs-items>
         </div>
-        <v-tabs-items v-model="tab">
-          <v-tab-item value="tab-0">
-            <v-simple-table class="bids-table">
-              <template v-slot:default>
-                <thead>
-                  <tr>
-                    <th class="text-left pl-sm-6 black--text font-weight-bold">
-                      Bid ID
-                    </th>
-                    <th class="text-left black--text font-weight-bold">
-                      Title
-                    </th>
-                    <th class="text-left black--text font-weight-bold">
-                      Creator
-                    </th>
-                    <th class="text-center black--text font-weight-bold">
-                      Entries
-                    </th>
-                    <th class="text-left black--text font-weight-bold">
-                      End Time
-                    </th>
-                    <th class="text-left black--text font-weight-bold">
-                      <span class="d-none d-sm-block">Action</span>
-                    </th>
-                  </tr>
-                </thead>
-                <tbody>
-                  <tr v-for="bid in bids" :key="bid.id">
-                    <td class="text-left pl-sm-6">{{ bid.id }}</td>
-                    <td class="text-left">{{ bid.title }}</td>
-                    <td class="text-left">{{ bid.creator }}</td>
-                    <td class="text-center">{{ bid.entries }}</td>
-                    <td class="text-left">{{ bid.endTime }}</td>
-                    <td class="text-left d-none d-sm-block pt-3">
-                      <router-link
-                        :to="{
-                          path: `/bid-detail/${bid.title}`,
-                        }"
-                        >View Details</router-link
-                      >
-                    </td>
-                  </tr>
-                </tbody>
-              </template>
-            </v-simple-table>
-            <div
-              class="title-block d-flex justify-space-between px-4 px-sm-6 py-4 align-center"
-            >
-              <div>
-                <h3 class="font-weight-bold">
-                  Draft Bids
-                  <font color="#B8B8B8">({{ draftBidsList.length }})</font>
-                </h3>
-              </div>
-            </div>
-            <v-simple-table class="bids-table draft-table">
-              <template v-slot:default>
-                <tbody>
-                  <tr v-for="bid in draftBidsList" :key="bid.id">
-                    <td class="text-left pl-sm-6">{{ bid.id }}</td>
-                    <td class="text-left">{{ bid.title }}</td>
-                    <td class="text-left">
-                      {{ userDatas.firstName }} {{ userDatas.lastName }}
-                    </td>
-                    <td class="text-center">0</td>
-                    <td class="text-left">
-                      {{ bid.dueDate | moment("DD/MM/YYYY") }} {{ bid.dueTime }}
-                    </td>
-                    <td class="text-left d-none d-sm-block pt-3">
-                      <a href="">Edit Draft</a>
-                    </td>
-                  </tr>
-                </tbody>
-              </template>
-            </v-simple-table>
-          </v-tab-item>
-          <v-tab-item value="tab-1">
-            <v-simple-table class="bids-table">
-              <template v-slot:default>
-                <thead>
-                  <tr>
-                    <th class="text-left pl-sm-6 black--text font-weight-bold">
-                      Bid ID
-                    </th>
-                    <th class="text-left black--text font-weight-bold">
-                      Title
-                    </th>
-                    <th class="text-left black--text font-weight-bold">
-                      Creator
-                    </th>
-                    <th class="text-left black--text font-weight-bold">
-                      Entries
-                    </th>
-                    <th class="text-left black--text font-weight-bold">
-                      End Time
-                    </th>
-                    <th class="text-left black--text font-weight-bold">
-                      <span class="d-none d-sm-block">Action</span>
-                    </th>
-                  </tr>
-                </thead>
-                <tbody>
-                  <tr v-for="bid in bids" :key="bid.id">
-                    <td class="text-left pl-sm-6">{{ bid.id }}</td>
-                    <td class="text-left">{{ bid.title }}</td>
-                    <td class="text-left">{{ bid.creator }}</td>
-                    <td class="text-left">{{ bid.entries }}</td>
-                    <td class="text-left">{{ bid.dueDate }}</td>
-                    <td class="text-left d-none d-sm-block pt-3">
-                      <a href="">View Details</a>
-                    </td>
-                  </tr>
-                </tbody>
-              </template>
-            </v-simple-table>
-          </v-tab-item>
-        </v-tabs-items>
+
       </div>
     </div>
   </v-col>
@@ -318,7 +206,7 @@ export default {
       console.log('hello', this.$store.getters.bidsList);
 
       if (this.$store.getters.bidsList.length > 0) {
-        const membr = this.$store.getters.bidsList.filter((item) => {
+        this.$store.getters.bidsList.filter((item) => {
           if (!item.status) {
             this.openBids.push(item);
           } else {
@@ -333,11 +221,11 @@ export default {
   methods: {
     ...mapActions(['getDraftBids', 'getBidsLists']),
   },
-  mounted() {
+  async mounted() {
     document.title = 'Bids - BidOut';
     this.users = this.$store.getters.userInfo;
-    this.getDraftBids(this.users.id);
-    this.getBidsLists(this.users.id);
+    await this.getDraftBids(this.users.id);
+    await this.getBidsLists(this.users.id);
   },
 };
 </script>
