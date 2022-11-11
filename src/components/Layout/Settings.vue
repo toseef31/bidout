@@ -20,7 +20,6 @@
   import RightSidebar from './Dashboard/RightSidebar.vue'
 export default {
   name: 'Settings',
-  
   components: {
     Navbar,
     LeftSidebar,

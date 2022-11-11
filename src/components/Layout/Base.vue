@@ -11,5 +11,6 @@ export default {
   name: 'Base',
   components: {
   },
+ 
 };
 </script>

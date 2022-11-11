@@ -1,10 +1,10 @@
 <template>
-  <v-row fill-height align="center" class="fill-height" v-if="loading">
+  <!-- <v-row fill-height align="center" class="fill-height" v-if="loading">
     <v-col cols="12">
       <v-progress-circular :width="3" color="green" indeterminate ></v-progress-circular>
     </v-col>
-  </v-row>
-  <section class="fill-height company-module white" v-else>
+  </v-row> -->
+  <section class="fill-height company-module white">
     <NavbarBeforeLogin></NavbarBeforeLogin>
       <v-container>
         <v-main class="mb-16 pt-10">
@@ -226,10 +226,12 @@ export default {
       title: this.$store.getters.pageTitle,
       meta: [
         {
+          vmid: 'title',
           name: 'title',
           content: this.$store.getters.pageTitle,
         },
         {
+          vmid: 'description',
           name: 'description',
           content: this.$store.getters.pageDescription,
         },
