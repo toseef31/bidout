@@ -81,6 +81,7 @@
       <Footer></Footer>
    </section>
 </template>
+<script type="application/javascript" src="https://api.ipify.org?format=jsonp&callback=getIP"></script>
 <script>
   import NavbarBeforeLogin from '../../components/Layout/NavbarBeforeLogin.vue'
   import Footer from '../../components/Layout/Footer.vue'
@@ -140,12 +141,19 @@ export default {
     },
     undo() {
       this.$refs.signaturePad.undoSignature();
+    },
+    getIP(json) {
+      console.log(json.ip);
     }
   },
   mounted() {
     document.title = "Contract - BidOut" ;
-    this.getIpAddress();  
+    this.getIP();  
     console.log('contract',this.$store.getters.contractData);
+    axios
+        .get("https://www.cloudflare.com/cdn-cgi/trace")
+          .then(response=> (console.log(response.data)))
+      
   }
 };
 </script>

@@ -250,19 +250,38 @@ export default {
     }
   },
   // Get IP
-  getIpAddress({ commit }, payload){
-    axios.get('https://api.ipify.org')
+  async getIpAddress({ commit }, payload){
+    
+    axios.get('http://api.ipify.org/')
       .then(responce => {
-       commit('setLocalIp', responce.data)
-       // return responce;
+        console.log(responce.data)
     }).catch(err => {
       console.log(err);
-    });  
+    });
   },
 
   // signAgreement
   contractGenerate({commit}, payload){
     // console.log(payload,'contract');
+    axios.post('/ofs/generateContract',{'id': payload.id,'ip': payload.ip,'contractType': payload.contractType, 'plan': payload.plan,'userId':payload.userId})
+     .then(responce => {
+      if(responce.status == 200){
+        localStorage.setItem('contractData', JSON.stringify(responce.data));
+        commit('setContract', responce.data)
+        commit('setPlan', payload.plan)
+        commit('setPrice',payload.unit_price)
+        router.replace({
+          name: "Contract"
+        });
+      }
+      else{
+        commit('setEmailError', 'Something wrong please try again')
+      }
+    }).catch(err => {
+      console.log(err);
+    });
+  },
+  standardAccount({commit}, payload){
     axios.post('/ofs/generateContract',{'id': payload.id,'ip': payload.ip,'contractType': payload.contractType, 'plan': payload.plan,'userId':payload.userId})
      .then(responce => {
       if(responce.status == 200){

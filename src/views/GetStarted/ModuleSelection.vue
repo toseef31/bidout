@@ -205,7 +205,7 @@
                 </template>
                 <v-row justify="center mt-10">
                   <v-col cols="12" md="3">
-                    <router-link to="payment" class="white--text text-decoration-none"><v-btn color="#0D9647" large dense width="100%" height="56" class="font-weight-bold white--text text-capitalize" :disabled="ofsModule == true || rfxModule == true ?  true : false">Next <v-icon class="pl-2" color="#fff">mdi-arrow-right-circle</v-icon></v-btn></router-link>
+                    <v-btn color="#0D9647" large dense width="100%" height="56" class="font-weight-bold white--text text-capitalize" :disabled="ofsModule == true && rfxModule == true ?  true : false" to="payment">Next <v-icon class="pl-2" color="#fff">mdi-arrow-right-circle</v-icon></v-btn>
                   </v-col>
                 </v-row>
 
@@ -293,7 +293,7 @@
                   </v-row>
                   <v-row v-else>
                     <v-col cols="12" sm="4" text="left">
-                      <router-link to="confirmation" class="text-decoration-none"><v-btn color="#0D9647" large dense width="260px" height="56" class="font-weight-bold white--text text-capitalize pa-4" :loading="loading">Confirm Account <v-icon class="pl-2" color="#fff">mdi-arrow-right-circle</v-icon></v-btn></router-link>
+                      <v-btn color="#0D9647" large dense width="260px" height="56" class="font-weight-bold white--text text-capitalize pa-4" :loading="loading" @click="createStandard('ofs')">Confirm Account <v-icon class="pl-2" color="#fff">mdi-arrow-right-circle</v-icon></v-btn>
                     </v-col>
                   </v-row>
                 </div>
@@ -398,7 +398,7 @@ export default {
    }
   },
   methods: {
-    ...mapActions(["contractGenerate","getIpAddress"]),
+    ...mapActions(["contractGenerate","getIpAddress","standardAccount"]),
     generateContract(type){
       if(this.package == 1){
         if(this.billing_cycles == 1){
@@ -437,6 +437,7 @@ export default {
       if(this.trial_end == 'free'){
         this.unit_price = 0;
         this.billing_cycles = 0;
+        var plan = 0;
       } 
       var contract = {
         ip: this.$store.getters.userIp,
@@ -456,6 +457,19 @@ export default {
         this.rfxBtn = false;
       }
     },
+    createStandard(type){
+      var contract = {
+        ip: this.$store.getters.userIp,
+        contractType: type,
+        plan: 0,
+        id: this.$store.getters.companyId,
+        userId: this.$store.getters.id,
+        customer_id: this.$store.getters.customerId,
+        unit_price: 0,
+      }
+      this.standardAccount(contract);
+      this.loading = 'loading';
+    },
     getCycle(){
       if(this.billingCycle == 'Yearly'){
         this.billing_cycles = 12;
@@ -474,6 +488,7 @@ export default {
   mounted() {
     document.title = "Module Selection - BidOut" 
     this.getIpAddress();
+    
   }
 };
 </script>
