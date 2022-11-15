@@ -296,7 +296,7 @@ export default {
       this.$once("hook:beforeDestroy", () => {
         clearInterval(timer);
       });
-  }
+  },
   mounted() {
     
   } 
