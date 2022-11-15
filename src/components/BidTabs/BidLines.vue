@@ -57,12 +57,21 @@
               </v-text-field>
             </div>
             <div class="d-flex">
-              <v-checkbox
-                v-model="items.switch1"
-                inset class="mr-2 ml-2" hide-details :class="[index != 0 ? 'mt-0' : 'mt-4']"
-              ></v-checkbox>
-              <v-icon color="#0D9648" class="mr-2"  :class="[index != 0 ? 'mt-0' : 'mt-6']" @click="clone(items,index)">mdi-content-copy</v-icon>
-              <v-icon color="#F32349" :class="[index != 0 ? 'mt-0' : 'mt-6']" @click="removeBidLine(index)">mdi-trash-can-outline</v-icon>
+
+              <v-tooltip top>
+                <template v-slot:activator="{ on, attrs }">
+                  <v-simple-checkbox color="#0D9648"
+                    v-bind="attrs"
+                    v-on="on"
+                    v-model="items.switch1"
+                    inset class="mr-2 ml-2" hide-details :class="[index != 0 ? 'mt-0' : 'mt-4']"
+                  ></v-simple-checkbox>
+                </template>
+                <span>Required Line Item</span>
+              </v-tooltip>
+              <v-icon color="#F32349" :class="[index != 0 ? 'mt-0' : 'mt-6']" @click="removeBidLine(index)"
+                v-bind="attrs"
+                v-on="on">mdi-trash-can-outline</v-icon>
             </div>
           </v-col>
         </v-row>
@@ -74,60 +83,6 @@
         <v-btn rounded color="rgba(13, 150, 72, 0.1)" elevation="0" class="text-capitalize font-weight-bold"  @click="addItem"><v-icon color="#0D9648" class="pr-2">mdi-plus</v-icon> Add 5 Line Items</v-btn>
       </v-col>
     </v-row>
-    <div class="bidline-section bid-list">
-      <h4 class="text-left pl-4 font-weight-bold black--text my-4" v-if="index === 0">Bid Example</h4>
-      <v-row class="bidline-list d-flex align-center px-6 mt-0" v-for="(elements,index) in exampleItems">
-        <v-col md="3" class="d-flex">
-          <v-row>
-            <v-col md="1" class="pl-1">
-              <div class="mr-2 bid-item" :class="[index != 0 ? 'mt-1' : 'mt-6']">
-                <img :src="require('@/assets/images/bids/DotsSix.png')">
-              </div>
-            </v-col>
-            <v-col md="11">
-              <div class="mr-2 bid-item">
-                <label class="d-block input-label text-left" v-if="index === 0">Line Item Description</label>
-                <v-text-field placeholder="Line Item Description" v-model="bidLines[elements.indexValue]['description']" height="31px" width="200px" single-line outlined type="text" hide-details readonly>
-                </v-text-field>
-              </div>
-            </v-col>
-          </v-row>
-        </v-col>
-        <v-col md="2">
-          <div class="mr-2 bid-item">
-            <label class="d-block input-label text-left" v-if="index === 0">Unit/Measure</label>
-            <v-select outlined hide-details :items="units" v-model="exampleItems[index]['unit']" readonly></v-select>
-          </div>
-        </v-col>
-        <v-col md="2">
-          <div class="mr-2 bid-item">
-            <label class="d-block input-label text-left" v-if="index === 0">Input Type</label>
-            <v-select outlined hide-details :items="inputType" v-model="exampleItems[index]['type']" readonly></v-select>
-          </div>
-        </v-col>
-        <v-col md="2">
-          <div class="mr-2 bid-item">
-            <label class="d-block input-label text-left" v-if="index === 0">QTY</label>
-            <v-text-field placeholder="Line Item Description" height="31px" single-line outlined v-model="exampleItems[index]['quantity']" @keypress="isLetterOrNumber($event)" hide-details>
-            </v-text-field>
-          </div>
-        </v-col>
-        <v-col md="3" class="d-flex">
-          <div class="mr-2 bid-item">
-            <label class="d-block input-label text-left" v-if="index === 0">Buyer Comment</label>
-            <v-text-field placeholder="Line Item Description" height="31px" single-line outlined type="text" v-model="exampleItems[index]['buyerComment']" hide-details readonly>
-            </v-text-field>
-          </div>
-          <div class="d-flex">
-            <v-checkbox
-              v-model="exampleItems[index]['switch1']"
-              inset class="mr-2 ml-2" hide-details readonly :class="[index != 0 ? 'mt-0' : 'mt-4']"
-            ></v-checkbox>
-            <v-icon color="#F32349" class="mr-4" :class="[index != 0 ? 'mt-0' : 'mt-6']" @click="removeExample(index)">mdi-trash-can-outline</v-icon>
-          </div>
-        </v-col>
-      </v-row>
-    </div>
     <v-row justify="center" align="center" no-gutters class="my-12">
       <v-col cols="12">
         <v-btn color="#0D9648" elevation="0" class="white--text text-capitalize font-weight-bold save-btn py-4 px-9" large height="56px" @click="changeTab">Save Changes</v-btn>
@@ -192,7 +147,7 @@ export default {
   methods: {
     ...mapActions(["updateDraftBid"]),
     changeTab(){
-      this.updateDraftBid({'bidlines':this.bidLines,'exampleItems':this.bidLines});
+      this.updateDraftBid({'bidlines':this.bidLines});
       this.$emit('changetab', 'tab-5');
     },
     addItem(){
@@ -209,17 +164,6 @@ export default {
         })
       }
     },
-    clone(item,index){
-      this.exampleItems.push({
-        type: item.type,
-        description: item.description,
-        unit: item.unit,
-        quantity: item.quantity,
-        buyerComment: item.buyerComment,
-        switch1: item.switch1,
-        indexValue: index
-      })
-    },
     checkMove: function(e) {
       console.log("Future index: " + e.draggedContext.futureIndex);
     },
@@ -227,9 +171,6 @@ export default {
         let char = String.fromCharCode(e.keyCode);
         if (/^[0-9]+$/.test(char)) return true;
         else e.preventDefault();
-    },
-    removeExample(index){
-      this.exampleItems.splice(index,1);
     },
     removeBidLine(index){
       this.bidLines.splice(index,1);

@@ -275,7 +275,7 @@
 	import VuePhoneNumberInput from 'vue-phone-number-input';
 	import 'vue-phone-number-input/dist/vue-phone-number-input.css';
 	import _ from 'lodash';
-  import { mapActions } from "vuex";
+  import { mapActions,mapGetters } from "vuex";
 export default {
 	components: {
 		VuePhoneNumberInput
@@ -320,9 +320,11 @@ export default {
       invitedCompanies: [],
       interval: '',
       valid: false,
+      newsupplier: [],
     };
   },
   computed:{
+  	...mapGetters(["newSupplier"]),
     allcategories(){
       setTimeout(() => this.loading = false, 500);
       return _.orderBy(this.$store.getters.categories, 'orderNumber', 'asc');
@@ -348,6 +350,7 @@ export default {
   },
   methods: {
   	...mapActions(["getCategories","getSalesReps","getCompanyInfo","searchByCompany","getCompanyByServices","saveDraftBid","inviteNewSupplier","updateDraftBid"]),
+  	...mapGetters(["newSupplier"]),
     changeTab(){
     	this.updateDraftBid({'invitedSuppliers':this.repsInvited});
       this.$emit('changetab', 'tab-3');

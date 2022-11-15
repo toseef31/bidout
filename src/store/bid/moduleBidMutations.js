@@ -26,4 +26,7 @@ export default {
   setDraftTime(state, payload){
     state.draftTime = payload
   },
+  setNewSupplier(state, payload){
+    state.newSupplier.push(payload.id)
+  },
 }

@@ -142,15 +142,6 @@ export default {
           formData.append('lineItems['+i+'][buyerComment]', payload.bidlines[i].buyerComment);
         }
       }
-      if(payload.exampleItems){
-        for(let i=0; i<payload.exampleItems.length; i++){
-          formData.append('exampleItems['+i+'][description]', payload.exampleItems[i].description);
-          formData.append('exampleItems['+i+'][unit]', payload.exampleItems[i].unit);
-          formData.append('exampleItems['+i+'][inputType]', payload.exampleItems[i].type);
-          formData.append('exampleItems['+i+'][quantity]', payload.exampleItems[i].quantity);
-          formData.append('exampleItems['+i+'][buyerComment]', payload.exampleItems[i].buyerComment);
-        }
-      }
       if(payload.attachement){
         for(let i=0; i<payload.attachement.length; i++){
           formData.append('attachment['+i+'][fileName]', payload.attachement[i].fileName);
@@ -175,6 +166,7 @@ export default {
     async inviteNewSupplier({commit,state}, payload){
       const res = await axios.post('bid/inviteSupplier/',{'firstName': payload.firstName,'lastName':payload.lastName,'company': payload.company,'phone':payload.phone,'email':payload.email,'bidTitle':payload.bidTitle,'bidType':payload.bidType,'bidDueDate':payload.bidDueDate,'bidDueTime':payload.bidDueTime});
        if(res.status == 200){
+        commit('setNewSupplier',res.data);
         // localStorage.removeItem('bidData');
         // commit('setBidData',null);
        }

@@ -12,4 +12,5 @@ export default {
    bidData: JSON.parse(localStorage.getItem('bidData')),
    attachData: null,
    draftTime: null,
+   newSupplier: [],
 }

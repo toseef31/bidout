@@ -26,4 +26,7 @@ export default {
    draftTime(state){
       return state.draftTime;
    },
+   newSupplier(state){
+      return state.newSupplier;
+   },
 }
