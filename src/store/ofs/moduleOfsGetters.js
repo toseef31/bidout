@@ -8,4 +8,19 @@ export default {
    premiumCompanies (state){
       return state.premiumCompanies
    },
+   publicCompany (state){
+      return state.publicCompany
+   },
+   supplierCompany (state){
+      return state.supplierCompany
+   },
+   pageTitle (state){
+      return state.pageTitle
+   },
+   pageDescription (state){
+      return state.pageDescription
+   },
+   innerLoader (state){
+      return state.innerLoader
+   },
 }

@@ -154,7 +154,7 @@ export default {
     },
   },
   mounted(){
-    document.title = "Reset Password - BidOut";
+    document.title = "Reset Password - BidOut ";
     this.verify();
   }
 };

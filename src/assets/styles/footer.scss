@@ -1,5 +1,6 @@
 .footer-module{
-	padding: 8rem 5rem 3.66rem !important;
+	font-family: 'Poppins', sans-serif;
+	padding: 8.69rem 5.5rem 2rem 5.25rem !important;
 	background-image: url(https://bidout.app/wp-content/uploads/2022/10/footer-shape-1.png);
   background-position: top right;
   background-repeat: no-repeat;
@@ -30,7 +31,8 @@
 		color: #747474;
 	}
 	.footer-logo{
-		max-width: 200px;
+		max-width: 197px;
+		margin-bottom: 14px;
 		img{
 			width: 100%;
 		}
@@ -47,63 +49,129 @@
 			font-size: 14px;
 			font-style: italic;
 			color: hsla(0,0%,100%,.4);
-	    font-weight: 600;
+	    font-weight: 500;
+	    margin-bottom: 26px;
 		}
 		.made-by{
 			position: relative;
-			margin-top: 6rem;
+			margin-top: 7.7rem;
 			font-style: normal;
+			font-size: 17px;
+			font-weight: 400;
+			margin-bottom: 14px;
 			&:before{
 				position: absolute;
 		    content: "";
-		    right: 28%;
-		    top: 0px;
-		    width: 25px;
-		    height: 26px;
-		    background: url(https://bidoutapp.com/wp-content/themes/bidout/images/madein-img.png);
+		    right: 16.4%;
+		    top: -5px;
+		    width: 40px;
+		    height: 43px;
+		    background: url(https://bidout.app/wp-content/uploads/texas-logo.png);
 		    background-repeat: no-repeat;
 		    background-position: 50%;
 			}
 		}
 	}
+	.col2-menu{
+		padding-left: 26px;
+		.product-title{
+			padding-top: 2px;
+		}
+		.footer-menu{
+			margin-top: -1px;
+		}
+	}
+	.col-menu3{
+		margin-left: -3px;
+		padding-left: 0;
+	}
+
 	.second-col{
 		position: relative;
 		a{
-			font-size: 14px;
-			.v-list-item__title{
-				font-size: 14px;
-			}
+			font-weight: 300;
+  		line-height: 22px;
+			font-size: 16px;
 			color: #747B89 !important;
+			.v-list-item__title{
+				font-size: 16px;
+			}
 			:hover{
 				color: #0d9648;
 			}
 		}
 		.phone{
-			font-size: 16px;
+			font-size: 16.5px;
+			padding-top: 6px;
 		}
 		.router-link-exact-active{
 			color: #0d9648 !important;
 		}
 		h4{
 			font-size: 18px;
-			font-weight: 700;
+			font-weight: 600;
 		}
 		.sub-heading{
 			font-size: 16px;
+			font-weight: 500;
 			color: hsla(0,0%,100%,.4);
+			padding-left: 5px;
 		}
 		.footer-menu{
 			.v-list{
 				background: transparent;
 		    color: #fff;
 			}
+			.privacy-menu{
+				padding-top: 26px;
+			}
 		}
+	}
+	.col-menu4{
+		padding-left: 2px;
+    padding-top: 12px;
+		.second-col{
+			.address{
+				p{
+					padding-top: 6px;
+				}
+			}
+			a{
+				font-size: 16.5px;
+				font-weight: 400;
+			}
+			.mdi-map-marker{
+				margin-top: -2px;
+			}
+			.mdi-phone{
+				margin-left: 3px;
+			}
+			.phone-text{
+				padding-left: 2px;
+			}
+		}
+		
 	}
 	.last-col{
 		position: relative;
-		padding-top: 3.5rem;
+		padding-top: 43px;
+		padding-left: 2px;
+		.email-box{
+			margin-bottom: 5px;
+			.v-icon{
+				margin-top: -2px;
+			}
+		}
+		.sales-box{
+			margin-bottom: 5px;
+			margin-top: 66px;
+			.v-icon{
+				margin-top: -2px;
+			}
+		}
 		a{
-			font-size: 16px;
+			font-size: 16.5px;
+			font-weight: 400;
 			&:hover{
 				color: #0d9648 !important;
 			}

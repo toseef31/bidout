@@ -6,13 +6,13 @@
         <v-row justify="center">
           <v-col cols="12" md="12">
             <div class="category-list">
-              <h1 class="text-left service-title mb-8">{{ companyName }}</h1>
+              <h1 class="text-left service-title mb-8">{{ allcompanies.category.name }}</h1>
               <div class="d-flex align-center tabs-header">
                 <v-tabs v-model="tab" hide-slider class="service-tabs mb-5">
                   <v-tab
                     v-for="item in items"
                     :key="item"
-                    @click="getByBasin(item, companyName)"
+                    @click="getByBasin(item)"
                   >
                     <span class="text-capitalize">{{ item }}</span>
                   </v-tab>
@@ -44,14 +44,11 @@
                         </tr>
                       </thead>
                       <tbody>
-                        <tr v-for="company in allcompanies" :key="company.id">
+                        <tr v-for="company in allcompanies.companies" :key="company.id">
                           <td class="pl-8">
                             <span
-                              @click="
-                                viewPublicCompany(company.id, company.company)
-                              "
                               class="text-decoration-none company-link"
-                              >{{ company.company }}
+                              ><router-link :to="company.slug ? '/company-profiles/'+company.slug: '' " class="text-decoration-none">{{ company.company }}</router-link>
                             </span>
                           </td>
 
@@ -77,11 +74,8 @@
                           </td>
                           <td>
                             <span
-                              @click="
-                                viewPublicCompany(company.id, company.company)
-                              "
                               class="text-decoration-none company-link"
-                              >View Details</span
+                              ><router-link :to="company.slug ? '/company-profiles/'+company.slug: '' " class="text-decoration-none">View Details</router-link></span
                             >
                           </td>
                         </tr>
@@ -117,7 +111,7 @@ export default {
       filterCompany: "",
       page: 1,
       items: [
-        "All",
+        "all",
         "Gulf Coast",
         "Northwest",
         "Rockies",
@@ -162,6 +156,8 @@ export default {
       "getPublicCompanyInfo",
       "searchCompany",
       "getCompanyByBasin",
+      "getSupplierCompanyByservice",
+      "getSupplierMainService"
     ]),
     viewPublicCompany(id, name) {
       this.getPublicCompanyInfo({ id, name });
@@ -169,19 +165,13 @@ export default {
     companySearch() {
       this.searchCompany();
     },
-    getByBasin(basin, service) {
-      if (basin == "All") {
-        return this.$store.getters.serviceCompanies.data;
-      }
-      const data = {
-        basin,
-        name: service,
-      };
-      this.getCompanyByBasin(data);
+    getByBasin(basin) {
+      this.getCompanyByBasin({ basin, slug: this.$route.fullPath.split('/').pop() });
     },
   },
   mounted() {
     document.title = "Categories - BidOut";
+    this.getCompanyByBasin({ basin: 'all', slug: this.$route.fullPath.split('/').pop() });
   },
 };
 </script>

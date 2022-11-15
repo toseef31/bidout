@@ -15,14 +15,14 @@ export default {
   getCompanyByservice({ commit }, payload) {
     const url = encodeURIComponent(payload.service);
     axios
-      .get(`/company/getCompaniesByService/${url}`)
+      .get(`/company/getCompaniesByService/${payload.subSlug}`)
       .then((responce) => {
         const data = {
           data: responce.data,
           name: payload.service,
         };
         commit("setCompanies", data);
-        router.replace(`/ofs-directory/${payload.slug}/${url}`);
+        // router.replace(`/ofs-directory/${payload.slug}/${payload.subSlug}`);
       })
       .catch((err) => {
         console.log(err);
@@ -32,7 +32,7 @@ export default {
   getSupplierCompanyByservice({ commit }, payload) {
     const url = encodeURIComponent(payload.service);
     axios
-      .get(`/company/getCompaniesByService/${url}`)
+      .get(`/company/getCompaniesByService/${payload.subSlug}`)
       .then((responce) => {
         const data = {
           data: responce.data,
@@ -40,48 +40,50 @@ export default {
           slug: payload.slug,
         };
         commit("setCompanies", data);
-        router.replace(`/ofs-supplier/${payload.slug}/${url}`);
       })
       .catch((err) => {
         console.log(err);
       });
   },
-  getSupplierMainService({commit},payload){
-    var url = encodeURIComponent(payload.name);
-    axios.get(`/company/getCompaniesByMainService/${payload.name}/${payload.id}`)
-      .then(responce => {
+  getSupplierMainService({ commit }, payload) {
+    const url = encodeURIComponent(payload.name);
+    axios
+      .get(`/company/getCompaniesByMainService/${payload.slug}`)
+      .then((responce) => {
         const data = {
           data: responce.data,
-          name: payload.name
-        }
-      commit('setCompanies',data)
-      router.replace(`/ofs-supplier/${url}`);
-    }).catch(err => {
-          console.log(err);
+          name: payload.name,
+          id: payload.id,
+        };
+        commit("setCompanies", data);
+      })
+      .catch((err) => {
+        console.log(err);
       });
   },
   getCompanyMainService({ commit }, payload) {
     const url = encodeURIComponent(payload.name);
     axios
-      .get(`/company/getCompaniesByMainService/${payload.name}/${payload.id}`)
-      .then(responce => {
-        const data = {
-          data: responce.data,
-          name: payload.name
-        }
-      commit('setCompanies',data)
-      router.replace(`/ofs-directory/${url}`);
-    }).catch(err => {
-          console.log(err);
-      });
-  },
-  getCompanyByBasin({ commit }, payload) {
-    axios
-      .get(`/company/getCompanyByBasin/${payload.basin}`)
+      .get(`/company/getCompaniesByMainService/${payload.slug}`)
       .then((responce) => {
         const data = {
           data: responce.data,
           name: payload.name,
+          id: payload.id,
+        };
+        commit("setCompanies", data);
+        router.replace(`/ofs-directory/${payload.slug}`);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  },
+  getCompanyByBasin({ commit }, payload) {
+    axios
+      .get(`/company/getCompanyByBasin/${payload.basin}/${payload.slug}`)
+      .then((responce) => {
+        const data = {
+          data: responce.data,
         };
         commit("setCompanies", data);
       })
@@ -90,26 +92,28 @@ export default {
       });
   },
   getCompanyInfo({ commit }, payload) {
-    const url = encodeURIComponent(payload.name);
+    commit('setPageLoader', true);
     axios
-      .get(`/company/getCompanyById/${payload.id}`)
+      .get(`/company/getCompanyBySlug/${payload.slug}`)
       .then((responce) => {
-        commit("setCompany", responce.data);
-        localStorage.setItem("companyData", JSON.stringify(responce.data));
-        router.replace(`/company/${url}`);
+        commit("setSupplierCompany", responce.data);
+        commit('setPageTitle', responce.data.companyData.company+' - '+responce.data.companyData.companyHq+' - BidOut Profile');
+        commit('setPageDescription', responce.data.companyData.overview);
+        commit('setPageLoader', false);
       })
       .catch((err) => {
         console.log(err);
       });
   },
   getPublicCompanyInfo({ commit }, payload) {
-    const url = encodeURIComponent(payload.name);
+    commit('setPageLoader', true);
     axios
-      .get(`/company/getCompanyById/${payload.id}`)
+      .get(`/company/getCompanyBySlug/${payload.slug}`)
       .then((responce) => {
-        commit("setCompany", responce.data);
-        localStorage.setItem("companyData", JSON.stringify(responce.data));
-        router.replace(`/company-profiles/${url}`);
+        commit("setPublicCompany", responce.data);
+        commit('setPageTitle', responce.data.companyData.company+' - '+responce.data.companyData.companyHq+' - BidOut Profile');
+        commit('setPageDescription', responce.data.companyData.overview);
+        commit('setPageLoader', false);
       })
       .catch((err) => {
         console.log(err);

@@ -21,6 +21,7 @@ import '@/assets/styles/index.scss';
 import VueCroppie from 'vue-croppie';
 import 'croppie/croppie.css';
 import VueGtag from "vue-gtag";
+import VueMeta from 'vue-meta';
 // Your web app's Firebase configuration
 var firebaseConfig = {
   apiKey: import.meta.env.VITE_FIREBASE_API_KEY,
@@ -47,6 +48,13 @@ Vue.use(Vuex,axios);
 // Vue.use(moment);
 Vue.use(VueMoment, {
     moment,
+});
+Vue.use(VueMeta, {
+  keyName: 'metaInfo',
+  attribute: 'data-vue-meta',
+  ssrAttribute: 'data-vue-meta-server-rendered',
+  tagIDKeyName: 'vmid',
+  refreshOnceOnNavigation: true
 });
 // Vue.use(momentTimeZone);
 Vue.use(VueSignaturePad);

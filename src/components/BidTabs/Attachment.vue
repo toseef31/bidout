@@ -1,92 +1,122 @@
 <template>
-	<div>
-		<div class="attachment-list">
-		  <v-simple-table
-		      fixed-header
-		      height="300px"
-		    >
-		    {{validat}}
-		    <template v-slot:default>
-		      <thead>
-		        <tr>
-		          <th class="text-left">
-		            
-		          </th>
-		          <th class="text-left">
-		            File Name
-		          </th>
-		          <th class="text-left">
-		            Comment
-		          </th>
-		          <th class="text-left">
-		            File Size
-		          </th>
-		          <th class="text-left">
-		            Uploaded By
-		          </th>
-		          <th class="text-left">
-		            Uploaded Date
-		          </th>
-		          <th class="text-left">
-		            
-		          </th>
-		        </tr>
-		      </thead>
-		      <tbody>
-		        <tr v-for="(doc,index) in docsList">
-		          <td class="text-left"><img :src="require('@/assets/images/bids/FilePdf.png')"></td>
-		          <td class="text-left">{{doc.fileName}}</td>
-		          <td class="text-left">
-		          	
-		          	<div v-if="edit === index && isEdit" class="d-flex edit-comment align-center"><v-text-field outlined height="30px" width="150px" hide-details v-model="docsList[index]['comment']"></v-text-field><v-checkbox color="#0D9648" @change="saveComment(doc)"></v-checkbox></div>
-		          	<span v-else>{{doc.comment}}</span>
-		          </td>
-		          <td class="text-left">{{size(doc.fileSize)}}</td>
-		          <td class="text-left">{{doc.uploadedBy}}</td>
-		          <td class="text-left">{{doc.uploadedAt | moment('MM/DD/YYYY hh:mm a')}}</td>
-		          <td>
-		            <div class="d-flex">
-		              <img :src="require('@/assets/images/bids/chatdots.png')" class="mr-3" @click="openComment(index)">
-		              <v-icon color="#F32349" @click="deleteAttach(index)">mdi-trash-can-outline</v-icon>
-		            </div>
-		          </td>
-		        </tr>
-		      </tbody>
-		    </template>
-		  </v-simple-table>
-		</div>
-		<v-row no-gutters align="center" class="px-6 mt-16">
-		  <v-col cols="12" sm="12" md="12">
-		    <div class="upload-attach">
-		      	<input type="hidden" name="" :value="validat">
-		      <label for="uploadFile" class="upload-file pa-8 d-block font-weight-medium" >
-		      	<input type="file" ref="documentUploader" class="d-none" id="uploadFile"  @change="handleDocumentUpload($event)">
-		         Upload or Drop Attachments Here
-		      </label>
-		    </div>
-		  </v-col>
-		  
-		</v-row>
-	</div>
+  <div>
+    <div class="attachment-list">
+      <v-simple-table fixed-header height="300px">
+        <template v-slot:default>
+          <thead>
+            <tr>
+              <th class="text-left"></th>
+              <th class="text-left">File Name</th>
+              <th class="text-left">Comment</th>
+              <th class="text-left">File Size</th>
+              <th class="text-left">Uploaded By</th>
+              <th class="text-left">Uploaded Date</th>
+              <th class="text-left"></th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr v-for="(doc, index) in docsList">
+              <td class="text-left">
+                <img :src="require('@/assets/images/bids/FilePdf.png')" />
+              </td>
+              <td class="text-left">{{ doc.fileName }}</td>
+              <td class="text-left">
+                <div
+                  v-if="edit === index && isEdit"
+                  class="d-flex edit-comment align-center"
+                >
+                  <v-text-field
+                    outlined
+                    height="30px"
+                    width="150px"
+                    hide-details
+                    v-model="docsList[index]['comment']"
+                  ></v-text-field
+                  ><v-checkbox
+                    color="#0D9648"
+                    @change="saveComment(doc)"
+                  ></v-checkbox>
+                </div>
+                <span v-else>{{ doc.comment }}</span>
+              </td>
+              <td class="text-left">{{ size(doc.fileSize) }}</td>
+              <td class="text-left">{{ doc.uploadedBy }}</td>
+              <td class="text-left">
+                {{ doc.uploadedAt | moment("MM/DD/YYYY hh:mm a") }}
+              </td>
+              <td>
+                <div class="d-flex">
+                  <img
+                    :src="require('@/assets/images/bids/chatdots.png')"
+                    class="mr-3"
+                    @click="openComment(index)"
+                  />
+                  <v-icon color="#F32349" @click="deleteAttach(index)"
+                    >mdi-trash-can-outline</v-icon
+                  >
+                </div>
+              </td>
+            </tr>
+          </tbody>
+        </template>
+      </v-simple-table>
+    </div>
+
+    <v-row no-gutters align="center" class="px-6 mt-16">
+      <v-col cols="12" sm="12" md="12">
+        <div class="upload-attach">
+          <v-progress-circular
+            v-if="isAttachingDoc"
+            :width="3"
+            color="green"
+            indeterminate
+          ></v-progress-circular>
+          <label
+            v-else
+            for="uploadFile"
+            class="upload-file pa-8 d-block font-weight-medium"
+          >
+            <input
+              type="file"
+              ref="documentUploader"
+              class="d-none"
+              id="uploadFile"
+              @change="handleDocumentUpload($event)"
+            />
+
+            <span>Upload or Drop Attachments Here</span>
+          </label>
+        </div>
+      </v-col>
+    </v-row>
+  </div>
 </template>
 <script>
-  import { mapActions } from "vuex";
+import { mapActions } from "vuex";
+
 export default {
   data() {
     return {
-    	edit: '',
-    	isEdit: false,
-    	file: '',
-    	fileName: '',
-    	fileExt: '',
-    	fileSize: '',
-    	documents: [],
-    	valid: false,
+      edit: "",
+      isEdit: false,
+      file: "",
+      fileName: "",
+      fileExt: "",
+      fileSize: "",
+      documents: [],
+      isAttaching: false,
+      valid: false,
     };
   },
-  computed:{
-    uploadedBy(){
-    	return this.$store.getters.userInfo.firstName+' '+this.$store.getters.userInfo.lastName;
+  computed: {
+    uploadedBy() {
+      return `${this.$store.getters.userInfo.firstName} ${this.$store.getters.userInfo.lastName}`;
+    },
+    docsList() {
+      return this.$store.getters.attachData;
+    },
+    isAttachingDoc() {
+      return this.isAttaching;
     },
     docsList(){
     	return this.$store.getters.attachData;
@@ -102,58 +132,64 @@ export default {
     },
   },
   methods: {
-  	...mapActions(["uploadBidAttach","updateDraftBid"]),
-    changeTab(){
-      this.$emit('changetab', 'tab-6');
+    ...mapActions(["uploadBidAttach", "updateDraftBid"]),
+    changeTab() {
+      this.$emit("changetab", "tab-6");
     },
-     uploadDocument() {
-      this.isSelecting = true
-      window.addEventListener('focus', () => {
-        this.isSelecting = false
-      }, { once: true })
+    uploadDocument() {
+      this.isSelecting = true;
+      window.addEventListener(
+        "focus",
+        () => {
+          this.isSelecting = false;
+        },
+        { once: true }
+      );
 
-      this.$refs.documentUploader.click()
+      this.$refs.documentUploader.click();
     },
-    handleDocumentUpload( event ){
+    async handleDocumentUpload(event) {
+      this.isAttaching = true;
       this.file = event.target.files[0];
       this.fileName = this.file.name;
-      this.fileExt =  this.fileName.split('.').pop();
-      this.fileSize = (this.file.size / (1024*1024)).toFixed(2);
+      this.fileExt = this.fileName.split(".").pop();
+      this.fileSize = (this.file.size / (1024 * 1024)).toFixed(2);
       console.log(this.fileSize);
       // this.previewDoc();
       this.documents.push(this.file);
       const head = Date.now().toString();
       const tail = Math.random().toString().substr(2);
-      var data = {
-        uploadedBy: this.$store.getters.userInfo.firstName+' '+this.$store.getters.userInfo.lastName,
+      const data = {
+        uploadedBy: `${this.$store.getters.userInfo.firstName} ${this.$store.getters.userInfo.lastName}`,
         attachement: this.documents,
-      }
+      };
       // this.documents.push(this.file);
-      this.uploadBidAttach(data);
+      await this.uploadBidAttach(data);
+      this.isAttaching = false;
     },
-    size(size){
-    	var sizeInMB = (size / (1024*1024)).toFixed(2);
-    	return sizeInMB+'mb';
+    size(size) {
+      const sizeInMB = (size / (1024 * 1024)).toFixed(2);
+      return `${sizeInMB}mb`;
     },
-    deleteAttach(index){
-    	this.documents.splice(index,1);
-    	this.$store.getters.attachData.splice(index,1);
+    deleteAttach(index) {
+      this.documents.splice(index, 1);
+      this.$store.getters.attachData.splice(index, 1);
     },
-    openComment(index){
-    	this.edit = index;
-    	this.isEdit = true;
+    openComment(index) {
+      this.edit = index;
+      this.isEdit = true;
     },
-    saveComment(doc){
-    	console.log(this.docsList,'dpc');
-    	this.isEdit = false;
-    	this.updateDraftBid({'attachement':this.docsList});
-    }
+    saveComment(doc) {
+      console.log(this.docsList, "dpc");
+      this.isEdit = false;
+      this.updateDraftBid({ attachement: this.docsList });
+    },
   },
   mounted() {
-  	console.log(this.$store.getters.attachData,'attachement');
-    if(this.$store.getters.attachData){
-    	this.documents = this.$store.getters.attachData;
+    console.log(this.$store.getters.attachData, "attachement");
+    if (this.$store.getters.attachData) {
+      this.documents = this.$store.getters.attachData;
     }
-	}	
+  },
 };
 </script>
