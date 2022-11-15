@@ -312,7 +312,6 @@
   import VuePhoneNumberInput from 'vue-phone-number-input';
   import 'vue-phone-number-input/dist/vue-phone-number-input.css';
   import { mapActions } from "vuex";
-  const url = "http://ipinfo.io/json";
 export default {
   name : "GetStarted",
   components: {

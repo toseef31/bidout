@@ -148,12 +148,8 @@ export default {
   },
   mounted() {
     document.title = "Contract - BidOut" ;
-    this.getIP();  
-    console.log('contract',this.$store.getters.contractData);
-    axios
-        .get("https://www.cloudflare.com/cdn-cgi/trace")
-          .then(response=> (console.log(response.data)))
-      
+    this.getIpAddress();  
+
   }
 };
 </script>
