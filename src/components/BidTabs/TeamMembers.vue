@@ -116,11 +116,22 @@ export default {
     addMember(member,index){
     	this.membersAdded.push(member);
   		this.$store.getters.teamMembers.splice(index,1);
+  		this.savedraftOnchange();
     },
     remove(member,index){
 	  	this.$store.getters.teamMembers.push(member);
 			this.membersAdded.splice(index,1);
-    }
+			this.savedraftOnchange();
+    },
+    savedraftOnchange(){
+      const timer = setInterval(() => {
+        this.updateDraftBid({'invitedTeamMembers':this.membersAdded});
+      }, 60000);
+
+      this.$once("hook:beforeDestroy", () => {
+        clearInterval(timer);
+      });
+    },
   },
   created() {
     // this.interval = setInterval(() => this.updateDraftBid({'invitedTeamMembers':this.membersAdded}));

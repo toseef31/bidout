@@ -20,6 +20,9 @@ export default {
   setBidData(state, payload){
     state.bidData = payload
   },
+  setItemBidData(state, payload){
+    state.itemBidData = payload
+  },
   setAttachData(state, payload){
     state.attachData = payload
   },

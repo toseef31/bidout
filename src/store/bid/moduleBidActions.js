@@ -168,7 +168,8 @@ export default {
        if(res.status == 200){
         commit('setNewSupplier',res.data);
         // localStorage.removeItem('bidData');
-        // commit('setBidData',null);
+        console.log(res.data);
+        commit('setItemBidData',res.data);
        }
     },
     async uploadBidAttach({commit,state}, payload){

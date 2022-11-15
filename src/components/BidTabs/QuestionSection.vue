@@ -288,6 +288,15 @@ export default {
       console.log("Future index: " + e.draggedContext.futureIndex);
     },
   },
+  created(){
+     const timer = setInterval(() => {
+        this.updateQuestion();
+      }, 60000);
+
+      this.$once("hook:beforeDestroy", () => {
+        clearInterval(timer);
+      });
+  }
   mounted() {
     
   } 
