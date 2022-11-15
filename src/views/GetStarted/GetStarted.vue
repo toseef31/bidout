@@ -544,7 +544,6 @@ export default {
   },
   mounted() {
     document.title = "Get Started - BidOut"
-    this.getIpAddress();
     
     
   }

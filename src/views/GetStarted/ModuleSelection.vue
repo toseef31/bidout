@@ -67,7 +67,7 @@
                     </div>
                     <p class="font-weight-medium">BidOut's flagship RFP Platform. The ability to create and distribute RPF's to BidOut's network or <br>service providers.</p>
                     <div class="d-inline-block">
-                      <v-btn color="#0D9647" large dense width="260px" height="56" class="font-weight-bold white--text text-capitalize pa-4" @click="generateContract('rfx')" :disabled="rfxBtn == true ?  false : true" :loading="loading">Execute Agreement Now <v-icon class="pl-2" color="#fff">mdi-arrow-right-circle</v-icon></v-btn>
+                      <v-btn color="#0D9647" large dense width="260px" height="56" class="font-weight-bold white--text text-capitalize pa-4" @click="generateContract('rfx')" :disabled="rfxBtn == true ?  false : true" :loading="loadingRfx">Execute Agreement Now <v-icon class="pl-2" color="#fff">mdi-arrow-right-circle</v-icon></v-btn>
                     </div>
                   </div>
                 </template>
@@ -201,15 +201,18 @@
                         <v-btn color="#0D9647" large dense width="260px" height="56" class="font-weight-bold white--text text-capitalize pa-4" @click="generateContract('ofs-premium')" :disabled="ofsBtn == true ?  false : true" :loading="loading">Execute Agreement Now <v-icon class="pl-2" color="#fff">mdi-arrow-right-circle</v-icon></v-btn>
                       </v-col>
                     </v-row>
+                    
                   </div>
                 </template>
+                
                 <v-row justify="center mt-10">
                   <v-col cols="12" md="3">
-                    <v-btn color="#0D9647" large dense width="100%" height="56" class="font-weight-bold white--text text-capitalize" :disabled="ofsModule == true && rfxModule == true ?  true : false" to="payment">Next <v-icon class="pl-2" color="#fff">mdi-arrow-right-circle</v-icon></v-btn>
+                    <v-btn color="#0D9647" large dense width="100%" height="56" class="font-weight-bold white--text text-capitalize" :disabled="buttonStatus" to="payment">Next <v-icon class="pl-2" color="#fff">mdi-arrow-right-circle</v-icon></v-btn>
                   </v-col>
                 </v-row>
 
               </v-form>
+
               <v-form v-else>
                 <div class="create-bid text-left mt-5 pa-4">
                   <div class="d-flex justify-space-between align-center mb-5 label-title">
@@ -223,7 +226,7 @@
                   </div>
                   <p class="font-weight-medium">BidOut's flagship RFP Platform. The ability to create and distribute RPF's to BidOut's network or <br>service providers.</p>
                   <div class="d-inline-block">
-                    <v-btn color="#0D9647" large dense width="260px" height="56" class="font-weight-bold white--text text-capitalize pa-4" @click="generateContract('rfx')" :disabled="rfxBtn == true ?  false : true" :loading="loading">Execute Agreement Now <v-icon class="pl-2" color="#fff">mdi-arrow-right-circle</v-icon></v-btn>
+                    <v-btn color="#0D9647" large dense width="260px" height="56" class="font-weight-bold white--text text-capitalize pa-4" @click="generateContract('rfx')" :disabled="rfxBtn == true ?  false : true" :loading="loadingRfx">Execute Agreement Now <v-icon class="pl-2" color="#fff">mdi-arrow-right-circle</v-icon></v-btn>
                   </div>
                 </div>
                 
@@ -335,10 +338,13 @@ export default {
   data() {
     return {
       loading: false,
+      loadingRfx: false,
       rfxModule: true,
+      rfxModuleSign: false,
       rfxBtn: true,
       bidRespond: false,
       ofsModule: true,
+      ofsModuleSign: true,
       ofsBtn: true,
       rfxActiveModule: true,
       ofsActiveModule: true,
@@ -374,6 +380,7 @@ export default {
     if(this.$store.getters.contractData){
       return this.$store.getters.contractData.company.contracts.filter((item)=>{
         if(this.$store.getters.id == item.signedBy){
+          if(item.contractType == 'ofs-premium'){this.ofsModuleSign = true;}
           return item.contractType == 'ofs-premium'
         }
       })
@@ -384,11 +391,29 @@ export default {
     if(this.$store.getters.contractData){
       return this.$store.getters.contractData.company.contracts.filter((item)=>{
         if(this.$store.getters.id == item.signedBy){
+          if(item.contractType == 'rfx'){this.rfxModuleSign = true;}
           return item.contractType == 'rfx'
         }
       })
     }
     // return this.$store.getters.contractData;
+   },
+   buttonStatus(){
+    if(this.ofsModule == true && this.rfxModule == true){
+      return true;
+    }else if(this.rfxModuleSign == true && this.ofsModuleSign == true){
+      return false;
+    }else if(this.rfxModuleSign == true && this.ofsModule == true){
+      return true;
+    }else if(this.ofsModuleSign == true && this.rfxModule == true){
+      return true;
+    }else if(this.rfxModuleSign == true && this.ofsModule == false){
+      return false;
+    }else if(this.ofsModuleSign == true && this.rfxModule == false){
+      return false;
+    }else{
+      return false;
+    }
    },
    ip(){
     return this.$store.getters.userIp;
@@ -453,7 +478,7 @@ export default {
         this.loading = 'loading';
         this.ofsBtn = false;
       }else{
-        this.loading = 'loading';
+        this.loadingRfx = 'loading';
         this.rfxBtn = false;
       }
     },

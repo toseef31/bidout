@@ -142,9 +142,6 @@ export default {
     undo() {
       this.$refs.signaturePad.undoSignature();
     },
-    getIP(json) {
-      console.log(json.ip);
-    }
   },
   mounted() {
     document.title = "Contract - BidOut" ;
