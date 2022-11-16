@@ -27,10 +27,10 @@
                           <div class="panels pb-4" v-for="modules in moduleData">
                             <div class="panel">
                               <div class="d-flex justify-space-between panel-header">
-                                <h6 v-if="modules.contractType == 'rfx'">BidOut Procurement Platform</h6>
-                                <h6 v-else>OFS Directory - Premium</h6>
+                                <h6 v-if="modules.contractType == 'ofs-premium'">OFS Directory - Premium</h6>
+                                <h6 v-else>BidOut Procurement Platform</h6>
                                 <div class="btn-section">
-                                  <a href="" class="text-decoration-none text-right toggle-btn" max-width="150px" v-if="modules.contractType == 'rfx'"><v-icon>mdi-bookmark-outline</v-icon>Upgrade to Enterpise</a>
+                                  <a href="" class="text-decoration-none text-right toggle-btn" max-width="150px" v-if="modules.contractType != 'ofs-premium'"><v-icon>mdi-bookmark-outline</v-icon>Upgrade to Enterpise</a>
                                   <a :href="modules.filePath" target="_blank" class="text-decoration-none text-right contract-btn" max-width="150px"><v-icon>mdi-file-outline</v-icon>View Contract</a>
                                 </div>
                               </div>
