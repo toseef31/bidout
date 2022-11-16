@@ -64,12 +64,12 @@
                     v-bind="attrs"
                     v-on="on"
                     v-model="items.switch1"
-                    inset class="mr-2 ml-2" hide-details :class="[index != 0 ? 'mt-0' : 'mt-4']"
+                    inset class="mr-2 ml-2" hide-details :class="[index != 0 ? 'mt-0' : 'mt-6']"
                   ></v-simple-checkbox>
                 </template>
                 <span>Required Line Item</span>
               </v-tooltip>
-              <v-icon color="#F32349" :class="[index != 0 ? 'mt-0' : 'mt-6']" @click="removeBidLine(index)"
+              <v-icon color="#F32349" :class="[index != 0 ? 'mt-0' : 'mt-5']" @click="removeBidLine(index)"
                 v-bind="attrs"
                 v-on="on">mdi-trash-can-outline</v-icon>
             </div>
