@@ -124,13 +124,13 @@ export default {
 			this.savedraftOnchange();
     },
     savedraftOnchange(){
-      const timer = setInterval(() => {
-        this.updateDraftBid({'invitedTeamMembers':this.membersAdded});
-      }, 60000);
+      // const timer = setInterval(() => {
+      //   this.updateDraftBid({'invitedTeamMembers':this.membersAdded});
+      // }, 60000);
 
-      this.$once("hook:beforeDestroy", () => {
-        clearInterval(timer);
-      });
+      // this.$once("hook:beforeDestroy", () => {
+      //   clearInterval(timer);
+      // });
     },
   },
   created() {

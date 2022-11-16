@@ -176,13 +176,13 @@ export default {
       this.bidLines.splice(index,1);
     },
     savedraftOnchange(){
-      const timer = setInterval(() => {
-        this.updateDraftBid({'bidlines':this.bidLines,'exampleItems':this.bidLines});
-      }, 60000);
+      // const timer = setInterval(() => {
+      //   this.updateDraftBid({'bidlines':this.bidLines,'exampleItems':this.bidLines});
+      // }, 60000);
 
-      this.$once("hook:beforeDestroy", () => {
-        clearInterval(timer);
-      });
+      // this.$once("hook:beforeDestroy", () => {
+      //   clearInterval(timer);
+      // });
     },
   },
   created() {

@@ -35,19 +35,159 @@
     </v-row>
     <v-row justify="center" no-gutters class="mx-3">
       <v-col md="12">
+        <draggable
+          :list="questions"
+          :disabled="!enabled"
+          class="list-group"
+          ghost-class="ghost"
+          :move="checkMove"
+          @start="dragging = true"
+          @end="dragging = false"
+        >
+          <div class="ml-5 question-body" v-for="(question,i) in questions" v-if="question.catIndex == -1">
+            <template v-if="question.questionType == 'checkbox'">
+              <div class="d-flex align-center justify-space-between">
+                <div class="d-flex align-center">
+                  
+                  <img :src="require('@/assets/images/bids/DotsSix.png')" class="mr-4"> 
+                  <template v-if="editQues === i && isQues"><v-text-field outlined height="30px" min-height="32px" width="150px" hide-details v-model="questions[i]['questionTitle']"></v-text-field></template>
+                  <template v-else><p class="mb-0 black--text subtitle">{{question.questionTitle}}</p></template>
+
+                  <a @click="editQusTitle(i)" class="text-muted ml-5" v-if="!isQues">Edit</a>
+                  <a v-if="editQues === i && isQues" @click="isQues = !isQues" class="text-muted ml-5">Save</a>
+                  <a @click="deleteQuestion(i)" class="text-muted ml-5">Delete</a>
+                </div>
+                <div class="d-flex align-center mr-4 mr-sm-6">
+                  <v-switch
+                    v-model="questions[i]['required']"
+                    inset class="mr-4 mt-0" hide-details
+                  ></v-switch>
+                  <span class="text-muted">Required Question </span>
+                </div>
+              </div>
+              <div class="d-flex align-center ml-10 mt-5 ">
+                <div class="option-box"> 
+                  <v-checkbox
+                      v-model="questions[i]['options']"
+                      label="Yes"
+                      color="#0D9648"
+                      class="mt-0"
+                      hide-details
+                    ></v-checkbox>
+                </div>
+                <div class="ml-8 mt-1">
+                  <a href="" class="mr-3 text-muted">Edit</a>
+                  <a href="" class="text-muted">Delete</a>
+                </div>
+              </div>
+              <!-- <div class="text-left ml-10 mt-5 text-muted">
+                <a href="" class="text-muted">Add Option</a>
+              </div> -->
+            </template>
+          <!-- </div> -->
+          <!-- <div class="sub-innerQuestions question-body"> -->
+            <div class="text-left mt-5 mr-4 mr-sm-6">
+              <template v-if="question.questionType == 'textfield'">
+                <div class="d-flex justify-space-between mb-2 question-header">
+                  <div class="d-flex align-center mb-2">
+                    <img :src="require('@/assets/images/bids/DotsSix.png')" class="mr-4">
+                    <template v-if="editQues === i && isQues"><v-text-field outlined height="30px" min-height="32px" width="150px" hide-details v-model="questions[i]['questionTitle']"></v-text-field></template>
+                    <template v-else><label class="mb-0 black--text subtitle">{{question.questionTitle}}</label></template>
+                    <a @click="editQusTitle(i)" class="text-muted ml-5" v-if="!isQues">Edit</a>
+                    <a v-if="editQues === i && isQues" @click="isQues = !isQues" class="text-muted ml-5">Save</a>
+                    <a @click="deleteQuestion(i)" class="text-muted ml-5">Delete</a>
+                  </div>
+                  <div class="d-flex align-center mb-2">
+                    <v-switch
+                      v-model="questions[i]['required']"
+                      inset class="mr-4 mt-0" hide-details
+                    ></v-switch>
+                    <span class="text-muted">Required Question </span>
+                  </div>
+                </div>
+                <div class="ml-10">
+                  <v-text-field single-line outlined type="text" height="56px" hide-details class="mb-8">
+                  </v-text-field>
+                </div>
+              
+              </template>
+              <template v-if="question.questionType == 'uploadFile'">
+                <div class="d-flex justify-space-between mb-2 mt-8 question-header">
+                  <div class="d-flex align-center mb-2">
+                    <img :src="require('@/assets/images/bids/DotsSix.png')" class="mr-4">
+                    <template v-if="editQues === i && isQues"><v-text-field outlined height="30px" min-height="32px" width="150px" hide-details v-model="questions[i]['questionTitle']"></v-text-field></template>
+                    <template v-else><label class="mb-0 black--text subtitle">{{question.questionTitle}}</label></template>
+
+                    <a @click="editQusTitle(i)" class="text-muted ml-5" v-if="!isQues">Edit</a>
+                    <a v-if="editQues === i && isQues" @click="isQues = !isQues" class="text-muted ml-5">Save</a>
+                    <a @click="deleteQuestion(i)" class="text-muted ml-5">Delete</a>
+                  </div>
+                  <div class="d-flex align-center mb-2">
+                    <v-switch
+                      v-model="questions[i]['required']"
+                      inset class="mr-4 mt-0" hide-details
+                    ></v-switch>
+                    <span class="text-muted">Required Question </span>
+                  </div>
+                </div>
+                <div class="upload-attach mb-8 ml-10">
+                  <label for="uploadFile" class="upload-file pa-4 d-block font-weight-medium text-center">
+                    <v-file-input
+                        label="File input"
+                        filled
+                        color="#fff" id="uploadFile"
+                      ></v-file-input> Upload or Drop Attachments Here
+                  </label>
+                </div>
+              
+              </template>
+              <template v-if="question.questionType == 'textarea'">
+                <div class="d-flex justify-space-between mb-2 mt-8 question-header">
+                  <div class="d-flex align-center mb-2">
+                    <img :src="require('@/assets/images/bids/DotsSix.png')" class="mr-4">
+                    <template v-if="editQues === i && isQues">
+                      <v-text-field outlined solo height="30px" min-height="32px" width="150px" hide-details v-model="questions[i]['questionTitle']"></v-text-field>
+                    </template>
+                    <template v-else>
+                      <label class="mb-0 black--text subtitle">{{question.questionTitle}}</label>
+                    </template>
+
+                    <a @click="editQusTitle(i)" class="text-muted ml-5" v-if="!isQues">Edit</a>
+                    <a v-if="editQues === i && isQues" @click="isQues = !isQues" class="text-muted ml-5">Save</a>
+                    <a @click="deleteQuestion(i)" class="text-muted ml-5">Delete</a>
+                  </div>
+                  <div class="d-flex align-center">
+                    <v-switch
+                      v-model="questions[i]['required']"
+                      inset class="mr-4 mt-0" hide-details
+                    ></v-switch>
+                    <span class="text-muted">Required Question </span>
+                  </div>
+                </div>
+                <div class="upload-attach ml-10">
+                  <v-textarea
+                     outlined
+                    color="#fff"
+                  ></v-textarea>
+                </div>
+              </template>
+            </div>
+          </div>
+        </draggable>
         <div class="operational-question pl-3" v-for="(cat,index) in categories">
           
           <div class="d-flex align-center justify-space-between question-header">
             <div class="d-flex align-center question-title mb-5">
               <!-- <img :src="require('@/assets/images/bids/DotsSix.png')" class="mr-4">  -->
+               
               <h4>
-                <template v-if="editCat === index && isCate"><v-text-field outlined height="30px" width="150px" hide-details v-model="categories[index]['title']"></v-text-field></template>
+                <template v-if="editCat === index && isCate[index]"><v-text-field outlined height="30px" width="150px" min-height="40px" hide-details v-model="categories[index]['title']"></v-text-field></template>
                 <template v-else>{{cat.title}}</template>
               </h4>
               <div class="ml-5">
-                <v-icon color="#0D9648" class="mr-6" v-if="!isCate" @click="editCatTitle(index)">mdi-square-edit-outline</v-icon>
-                <v-icon color="#0D9648" class="mr-6" v-if="isCate" @click="isCate = !isCate">mdi-content-save</v-icon>
-                <v-icon color="#F32349" @click="deleteCat">mdi-trash-can-outline</v-icon>
+                <v-icon color="#0D9648" class="mr-6" v-if="!isCate[index]" @click="editCatTitle(index)">mdi-square-edit-outline</v-icon>
+                <v-icon color="#0D9648" class="mr-6" v-if="isCate[index]" @click="saveTitle(index)">mdi-content-save</v-icon>
+                <v-icon color="#F32349" @click="deleteCat(i)">mdi-trash-can-outline</v-icon>
               </div>
             </div>
           </div>
@@ -60,17 +200,17 @@
             @start="dragging = true"
             @end="dragging = false"
           >
-            <div class="ml-5 question-body" v-for="(question,i) in questions">
+            <div class="ml-5 question-body" v-for="(question,i) in questions" v-if="question.catIndex == index">
               <template v-if="question.questionType == 'checkbox'">
                 <div class="d-flex align-center justify-space-between">
                   <div class="d-flex align-center">
                     
                     <img :src="require('@/assets/images/bids/DotsSix.png')" class="mr-4"> 
-                    <template v-if="editQues === i && isQues"><v-text-field outlined height="30px" min-height="32px" width="150px" hide-details v-model="questions[i]['questionTitle']"></v-text-field></template>
+                    <template v-if="editQues === i && isQues[i]"><v-text-field outlined height="30px" min-height="32px" width="150px" hide-details v-model="questions[i]['questionTitle']"></v-text-field></template>
                     <template v-else><p class="mb-0 black--text subtitle">{{question.questionTitle}}</p></template>
 
-                    <a @click="editQusTitle(i)" class="text-muted ml-5" v-if="!isQues">Edit</a>
-                    <a v-if="editQues === i && isQues" @click="isQues = !isQues" class="text-muted ml-5">Save</a>
+                    <a @click="editQusTitle(i)" class="text-muted ml-5" v-if="!isQues[i]">Edit</a>
+                    <a v-if="isQues[i]" @click="editSaveTitle(i)" class="text-muted ml-5">Save</a>
                     <a @click="deleteQuestion(i)" class="text-muted ml-5">Delete</a>
                   </div>
                   <div class="d-flex align-center mr-4 mr-sm-6">
@@ -107,10 +247,10 @@
                   <div class="d-flex justify-space-between mb-2 question-header">
                     <div class="d-flex align-center mb-2">
                       <img :src="require('@/assets/images/bids/DotsSix.png')" class="mr-4">
-                      <template v-if="editQues === i && isQues"><v-text-field outlined height="30px" min-height="32px" width="150px" hide-details v-model="questions[i]['questionTitle']"></v-text-field></template>
+                      <template v-if="editQues === i && isQues[i]"><v-text-field outlined height="30px" min-height="32px" width="150px" hide-details v-model="questions[i]['questionTitle']"></v-text-field></template>
                       <template v-else><label class="mb-0 black--text subtitle">{{question.questionTitle}}</label></template>
-                      <a @click="editQusTitle(i)" class="text-muted ml-5" v-if="!isQues">Edit</a>
-                      <a v-if="editQues === i && isQues" @click="isQues = !isQues" class="text-muted ml-5">Save</a>
+                      <a @click="editQusTitle(i)" class="text-muted ml-5" v-if="!isQues[i]">Edit</a>
+                      <a v-if="isQues[i]" @click="editSaveTitle(i)" class="text-muted ml-5">Save</a>
                       <a @click="deleteQuestion(i)" class="text-muted ml-5">Delete</a>
                     </div>
                     <div class="d-flex align-center mb-2">
@@ -131,11 +271,11 @@
                   <div class="d-flex justify-space-between mb-2 mt-8 question-header">
                     <div class="d-flex align-center mb-2">
                       <img :src="require('@/assets/images/bids/DotsSix.png')" class="mr-4">
-                      <template v-if="editQues === i && isQues"><v-text-field outlined height="30px" min-height="32px" width="150px" hide-details v-model="questions[i]['questionTitle']"></v-text-field></template>
+                      <template v-if="editQues === i && isQues[i]"><v-text-field outlined height="30px" min-height="32px" width="150px" hide-details v-model="questions[i]['questionTitle']"></v-text-field></template>
                       <template v-else><label class="mb-0 black--text subtitle">{{question.questionTitle}}</label></template>
 
-                      <a @click="editQusTitle(i)" class="text-muted ml-5" v-if="!isQues">Edit</a>
-                      <a v-if="editQues === i && isQues" @click="isQues = !isQues" class="text-muted ml-5">Save</a>
+                      <a @click="editQusTitle(i)" class="text-muted ml-5" v-if="!isQues[i]">Edit</a>
+                      <a v-if="isQues[i]" @click="editSaveTitle(i)" class="text-muted ml-5">Save</a>
                       <a @click="deleteQuestion(i)" class="text-muted ml-5">Delete</a>
                     </div>
                     <div class="d-flex align-center mb-2">
@@ -161,15 +301,15 @@
                   <div class="d-flex justify-space-between mb-2 mt-8 question-header">
                     <div class="d-flex align-center mb-2">
                       <img :src="require('@/assets/images/bids/DotsSix.png')" class="mr-4">
-                      <template v-if="editQues === i && isQues">
+                      <template v-if="editQues === i && isQues[i]">
                         <v-text-field outlined solo height="30px" min-height="32px" width="150px" hide-details v-model="questions[i]['questionTitle']"></v-text-field>
                       </template>
                       <template v-else>
                         <label class="mb-0 black--text subtitle">{{question.questionTitle}}</label>
                       </template>
 
-                      <a @click="editQusTitle(i)" class="text-muted ml-5" v-if="!isQues">Edit</a>
-                      <a v-if="editQues === i && isQues" @click="isQues = !isQues" class="text-muted ml-5">Save</a>
+                      <a @click="editQusTitle(i)" class="text-muted ml-5" v-if="!isQues[i]">Edit</a>
+                      <a v-if="isQues[i]" @click="editSaveTitle(i)" class="text-muted ml-5">Save</a>
                       <a @click="deleteQuestion(i)" class="text-muted ml-5">Delete</a>
                     </div>
                     <div class="d-flex align-center">
@@ -222,13 +362,14 @@ export default {
         {title:'Upload Field', type: 'uploadFile'},
       ],
       editCat: '',
-      isCate: false,
+      isCate: [false],
       offset: true,
       categories:[],
       questions: [],
       switch1: false,
       editQues: '',
-      isQues: false,
+      isQues: [false],
+      catCount: null,
       enabled: true,
       dragging: false
     };
@@ -249,9 +390,15 @@ export default {
       this.categories.push(data);
     },
     createQuestion(type){
+      if(this.categories.length > 0){
+        this.catCount = this.categories.length - 1;
+      }else{
+        this.catCount = -1;
+      }
       var qusData = {
         questionTitle: "add question title here",
         questionType: type,
+        catIndex: this.catCount,
       }
       this.questions.push(qusData);
       var data = {
@@ -263,12 +410,19 @@ export default {
     },
     editCatTitle(index){
       this.editCat = index;
-      this.isCate = true;
+      this.isCate[index] = true;
+    },
+    saveTitle(index){
+      this.editCat = -1;
+      this.isCate[index] = false;
     },
     editQusTitle(index){
       this.editQues = index;
-      console.log(index,'index',this.editQues);
-      this.isQues = true;
+      this.isQues[index] = true;
+    },
+    editSaveTitle(index){
+      this.editQues = -1;
+      this.isQues[index] = false;
     },
     updateQuestion(){
       this.updateDraftBid(this.categories);
@@ -280,22 +434,22 @@ export default {
       // }
       // this.categories.push(data);
     },
-    deleteCat(){
-      this.categories = [];
-      this.questions = [];
+    deleteCat(index){
+      this.categories.splice(index,1);
+     
     },
     checkMove: function(e) {
       console.log("Future index: " + e.draggedContext.futureIndex);
     },
   },
   created(){
-     const timer = setInterval(() => {
-        this.updateQuestion();
-      }, 60000);
+     // const timer = setInterval(() => {
+     //    this.updateQuestion();
+     //  }, 60000);
 
-      this.$once("hook:beforeDestroy", () => {
-        clearInterval(timer);
-      });
+     //  this.$once("hook:beforeDestroy", () => {
+     //    clearInterval(timer);
+     //  });
   },
   mounted() {
     

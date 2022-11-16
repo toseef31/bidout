@@ -203,13 +203,13 @@ export default {
       })
     },
     savedraftOnchange(){
-      const timer = setInterval(() => {
-        this.savedraft()
-      }, 60000);
+      // const timer = setInterval(() => {
+      //   this.savedraft()
+      // }, 60000);
 
-      this.$once("hook:beforeDestroy", () => {
-        clearInterval(timer);
-      });
+      // this.$once("hook:beforeDestroy", () => {
+      //   clearInterval(timer);
+      // });
     },
   
    remove (index) {
