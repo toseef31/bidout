@@ -406,6 +406,19 @@
 							color: #0D9648 !important;
 						}
 					}
+					.dropzone {
+					  box-sizing: border-box;
+					  display: none;
+					  position: absolute;
+					  width: 51.5%;
+					  height: 82%;
+					  z-index: 99999;
+					  background: #80808066;
+					  border: 6px dashed #0d9648;
+					}
+					.dropzoneActive{
+						display: block;
+					}
 					.upload-file{
 						border: 1px solid #B8B8B8;
 						border-radius: 4px;

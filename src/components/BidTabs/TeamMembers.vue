@@ -23,7 +23,7 @@
 		          </div>
 		        </div>
 		        <div class="companies-list">
-		          <div class="d-flex align-center justify-space-between list-company pa-4" v-for="(team,index) in teamMembers">
+		          <div class="d-flex align-center justify-space-between list-company pa-4" v-for="(team,index) in teamMembers" v-if="user.id != team.id">
 		            <div class="comapny-data d-flex align-center">
 		              <div class="company-img">
 		                <img v-if="!team.image" :src="require('@/assets/images/chat/chatUser.png')">
@@ -82,6 +82,7 @@ export default {
       searchMember: '',
       membersAdded: [],
       valid: false,
+      user: '',
     };
   },
   computed:{
@@ -137,6 +138,7 @@ export default {
     // this.interval = setInterval(() => this.updateDraftBid({'invitedTeamMembers':this.membersAdded}));
   },
   mounted() {
+  	this.user = this.$store.getters.userInfo
     this.getTeamMembers(this.$store.getters.userInfo.company.company);
 	}	
 };

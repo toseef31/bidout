@@ -16,7 +16,7 @@
 
   	        <v-list-item class="ml-3"
   	          v-for="subcategry in subCategories(category.subCategories)"
-  	          :key="subcategry.name"  @click="getByCategory(subcategry.name)"
+  	          :key="subcategry.name"  @click="getByCategory(subcategry.slug)"
   	        >
   	          <v-list-item-content>
   	            <v-list-item-title v-text="subcategry.name" class="text-left"></v-list-item-title>
@@ -57,7 +57,7 @@
 		          </div>
 		        </div>
 		        <div class="companies-list">
-		          <div class="d-flex align-center justify-space-between list-company pa-4" v-for="(company,index) in companiesList">
+		          <div class="d-flex align-center justify-space-between list-company pa-4" v-for="(company,index) in companiesList" v-if="user.company.id != company.objectID">
 		            <div class="comapny-data d-flex align-center">
 		              <div class="company-img">
 		                <img v-if="!company.image" :src="require('@/assets/images/bids/patterson.png')">
@@ -91,7 +91,7 @@
 		          </div>
 		        </div>
 		        <div class="companies-list">
-		          <div class="d-flex align-center justify-space-between list-company pa-4" v-for="(list,index) in salesRepsList">
+		          <div class="d-flex align-center justify-space-between list-company pa-4" v-for="(list,index) in salesRepsList" v-if="user.id != list.objectID">
 		            <div class="comapny-data d-flex align-center">
 		              <div class="company-img">
 		                <img v-if="!list.image" :src="require('@/assets/images/chat/chatUser.png')">
@@ -116,7 +116,7 @@
 		        </div>
 		        <div class="companies-list">
 		          <div>
-		            <div class="d-flex align-center justify-space-between list-company pa-4" v-for="(company,index) in companiesList">
+		            <div class="d-flex align-center justify-space-between list-company pa-4" v-for="(company,index) in companiesList" v-if="user.company.id != company.id">
 		              <div class="comapny-data d-flex align-center">
 		                <!-- <div class="pr-4">
 		                  <v-icon>mdi-chevron-down</v-icon>
@@ -323,6 +323,7 @@ export default {
       interval: '',
       valid: false,
       newsupplier: [],
+      user: '',
     };
   },
   computed:{
@@ -455,6 +456,7 @@ export default {
     // this.interval = setInterval(() => this.updateDraftBid({'invitedSuppliers':this.repsInvited}));
   },
   mounted() {
+  	this.user = this.$store.getters.userInfo;
     this.getCategories();
     this.getSales();
     this.getCompanies();

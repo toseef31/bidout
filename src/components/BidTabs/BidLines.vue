@@ -114,7 +114,7 @@ export default {
             },
       bidLines: [
         {
-          switch1: true,
+          switch1: false,
           description: '',
           unit: 'Feet',
           type: 'USD',
