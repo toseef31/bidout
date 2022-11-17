@@ -181,39 +181,45 @@
             </div>
           </div>
         </draggable>
-        <div class="operational-question pl-3" v-for="(cat,index) in categories">
-          
+        <draggable
+          :list="questionCategories"
+          :disabled="!enabled"
+          class="list-group"
+          ghost-class="ghost"
+          @start="draggingCate = true"
+          @end="moveCategory($event, questionCategories)"
+        >
+        <div class="operational-question pl-3 mt-15" v-for="(cat,index) in questionCategories">
           <div class="d-flex align-center justify-space-between question-header">
             <div class="d-flex align-center question-title mb-5">
               <!-- <img :src="require('@/assets/images/bids/DotsSix.png')" class="mr-4">  -->
-               
               <h4>
-                <template v-if="editCat === index && isCate[index]"><v-text-field outlined height="30px" width="150px" min-height="40px" hide-details v-model="categories[index]['title']"></v-text-field></template>
+                <template v-if="editCat === index && isCate[index]"><v-text-field outlined height="30px" width="150px" min-height="40px" hide-details v-model="questionCategories[index]['title']"></v-text-field></template>
                 <template v-else>{{cat.title}}</template>
               </h4>
               <div class="ml-5">
                 <v-icon color="#0D9648" class="mr-6" v-if="!isCate[index]" @click="editCatTitle(index)">mdi-square-edit-outline</v-icon>
                 <v-icon color="#0D9648" class="mr-6" v-if="isCate[index]" @click="saveTitle(index)">mdi-content-save</v-icon>
-                <v-icon color="#F32349" @click="deleteCat(i)">mdi-trash-can-outline</v-icon>
+                <v-icon color="#F32349" @click="deleteCat(index)">mdi-trash-can-outline</v-icon>
               </div>
             </div>
           </div>
           <draggable
-            :list="questions"
+            :list="cat.question"
             :disabled="!enabled"
             class="list-group"
             ghost-class="ghost"
-            :move="checkMove"
             @start="dragging = true"
-            @end="dragging = false"
+            @end="moveQuestion($event, cat.id, cat.question)"
           >
-            <div class="ml-5 question-body" v-for="(question,i) in questions" v-if="question.catIndex == index">
+
+            <div class="ml-5 question-body" v-for="(question,i) in cat.question">
               <template v-if="question.questionType == 'checkbox'">
                 <div class="d-flex align-center justify-space-between">
                   <div class="d-flex align-center">
                     
                     <img :src="require('@/assets/images/bids/DotsSix.png')" class="mr-4"> 
-                    <template v-if="editQues === i && isQues[i]"><v-text-field outlined height="30px" min-height="32px" width="150px" hide-details v-model="questions[i]['questionTitle']"></v-text-field></template>
+                    <template v-if="editQues === i && isQues[i]"><v-text-field outlined height="30px" min-height="32px" width="150px" hide-details v-model="cat.question[i]['questionTitle']"></v-text-field></template>
                     <template v-else><p class="mb-0 black--text subtitle">{{question.questionTitle}}</p></template>
 
                     <a @click="editQusTitle(i)" class="text-muted ml-5" v-if="!isQues[i]">Edit</a>
@@ -222,7 +228,7 @@
                   </div>
                   <div class="d-flex align-center mr-4 mr-sm-6">
                     <v-switch
-                      v-model="questions[i]['required']"
+                      v-model="cat.question[i]['required']"
                       inset class="mr-4 mt-0" hide-details
                     ></v-switch>
                     <span class="text-muted">Required Question </span>
@@ -262,7 +268,7 @@
                   <div class="d-flex justify-space-between mb-2 question-header">
                     <div class="d-flex align-center mb-2">
                       <img :src="require('@/assets/images/bids/DotsSix.png')" class="mr-4">
-                      <template v-if="editQues === i && isQues[i]"><v-text-field outlined height="30px" min-height="32px" width="150px" hide-details v-model="questions[i]['questionTitle']"></v-text-field></template>
+                      <template v-if="editQues === i && isQues[i]"><v-text-field outlined height="30px" min-height="32px" width="150px" hide-details v-model="cat.question[i]['questionTitle']"></v-text-field></template>
                       <template v-else><label class="mb-0 black--text subtitle">{{question.questionTitle}}</label></template>
                       <a @click="editQusTitle(i)" class="text-muted ml-5" v-if="!isQues[i]">Edit</a>
                       <a v-if="isQues[i]" @click="editSaveTitle(i)" class="text-muted ml-5">Save</a>
@@ -270,7 +276,7 @@
                     </div>
                     <div class="d-flex align-center mb-2">
                       <v-switch
-                        v-model="questions[i]['required']"
+                        v-model="cat.question[i]['required']"
                         inset class="mr-4 mt-0" hide-details
                       ></v-switch>
                       <span class="text-muted">Required Question </span>
@@ -286,7 +292,7 @@
                   <div class="d-flex justify-space-between mb-2 mt-8 question-header">
                     <div class="d-flex align-center mb-2">
                       <img :src="require('@/assets/images/bids/DotsSix.png')" class="mr-4">
-                      <template v-if="editQues === i && isQues[i]"><v-text-field outlined height="30px" min-height="32px" width="150px" hide-details v-model="questions[i]['questionTitle']"></v-text-field></template>
+                      <template v-if="editQues === i && isQues[i]"><v-text-field outlined height="30px" min-height="32px" width="150px" hide-details v-model="cat.question[i]['questionTitle']"></v-text-field></template>
                       <template v-else><label class="mb-0 black--text subtitle">{{question.questionTitle}}</label></template>
 
                       <a @click="editQusTitle(i)" class="text-muted ml-5" v-if="!isQues[i]">Edit</a>
@@ -295,7 +301,7 @@
                     </div>
                     <div class="d-flex align-center mb-2">
                       <v-switch
-                        v-model="questions[i]['required']"
+                        v-model="cat.question[i]['required']"
                         inset class="mr-4 mt-0" hide-details
                       ></v-switch>
                       <span class="text-muted">Required Question </span>
@@ -317,7 +323,7 @@
                     <div class="d-flex align-center mb-2">
                       <img :src="require('@/assets/images/bids/DotsSix.png')" class="mr-4">
                       <template v-if="editQues === i && isQues[i]">
-                        <v-text-field outlined solo height="30px" min-height="32px" width="150px" hide-details v-model="questions[i]['questionTitle']"></v-text-field>
+                        <v-text-field outlined solo height="30px" min-height="32px" width="150px" hide-details v-model="cat.question[i]['questionTitle']"></v-text-field>
                       </template>
                       <template v-else>
                         <label class="mb-0 black--text subtitle">{{question.questionTitle}}</label>
@@ -329,7 +335,7 @@
                     </div>
                     <div class="d-flex align-center">
                       <v-switch
-                        v-model="questions[i]['required']"
+                        v-model="cat.question[i]['required']"
                         inset class="mr-4 mt-0" hide-details
                       ></v-switch>
                       <span class="text-muted">Required Question </span>
@@ -347,6 +353,7 @@
             </div>
           </draggable>
         </div>
+      </draggable>
         <v-divider class="my-5"></v-divider>
         <!-- Legal Question -->
         
@@ -362,6 +369,7 @@
 </template>
 <script>
   import draggable from 'vuedraggable'
+  import _ from 'lodash'
   import { mapActions } from "vuex";
 export default {
   components: {
@@ -389,21 +397,31 @@ export default {
       catCount: null,
       enabled: true,
       dragging: false,
+      draggingCate: false,
       multiOptions:[ {label: 'yes',choice: ''}],
+      catIds: '',
     };
   },
   computed:{
     draggingInfo() {
       return this.dragging ? "under drag" : "";
     },
+    questionCategories(){
+      return _.orderBy(this.categories, "orderNumber");
+    }
   },
   methods: {
     ...mapActions(["updateDraftBid"]),
     createCategory(){
+      const head = Date.now().toString();
+      const tail = Math.random().toString().substr(2);
       var title = "add your category title here";
+      const order = this.categories.length;
       var data = {
         title: title,
-        question: this.questions,
+        id: head + tail,
+        question: [],
+        orderNumber: order + 1,
       }
       this.categories.push(data);
     },
@@ -413,18 +431,33 @@ export default {
       }else{
         this.catCount = -1;
       }
+      if(this.catCount != -1){
+
+        JSON.parse(JSON.stringify(this.categories.map((item, index) => {
+          if(index == this.catCount){
+            // console.log(item.id);
+          this.catIds = item.id;
+          }
+        })))
+      }else{
+        this.catIds = null;
+      }
+
+      const head = Date.now().toString();
+      const tail = Math.random().toString().substr(2);
       var qusData = {
         questionTitle: "add question title here",
         questionType: type,
         catIndex: this.catCount,
+        id: head + tail,
+        catId: this.catIds,
       }
       this.questions.push(qusData);
       var data = {
         question: this.questions,
       }
-      
-      // this.categories.push(data);
-   
+      this.categories[this.catCount].question.push(qusData);
+      console.log(this.categories,'categoriess');
     },
     editCatTitle(index){
       this.editCat = index;
@@ -473,6 +506,30 @@ export default {
     saveLabel(index){
       this.editLbl = -1;
       this.isLbl[index] = false;
+    },
+    moveQuestion(e, id, items) {
+      // console.log(e,"dasdas");
+      this.categories.filter((service) => service.id === id)[0].question.forEach((subQuestion, index) => {
+        // console.log(subQuestion.catId,'items',items);
+        const subQuestionIndex = items.findIndex((item) => item.catId === subQuestion.catId);
+        // const subQuestionValue = items.find((item) => item.catId === subQuestion.catId);
+      console.log(id,'itemss',subQuestionValue,'new index',subQuestionIndex)
+
+        this.categories.filter((service) => service.id === id)[0].question[index].catIndex = subQuestionIndex;
+        // this.categories.filter((service) => service.id === id)[0].question.push(subQuestionValue);
+        console.log(this.categories);
+      });
+      
+    },
+    moveCategory(e,category) {
+      console.log("Future index: ",category);
+    },
+    moveCategory(e, category) {
+      this.categories.forEach((subService, index) => {
+        const subServiceIndex = category.findIndex((item) => item.id === subService.id);
+        this.categories[index].orderNumber = subServiceIndex;
+      });
+     
     },
     checkMove: function(e) {
       console.log("Future index: " + e.draggedContext.futureIndex);
