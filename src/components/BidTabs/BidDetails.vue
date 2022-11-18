@@ -36,7 +36,7 @@
           <v-row justify="center">
             <v-col cols="12" sm="6" text="left">
               <label class="d-block text-left input-label mb-2 font-weight-bold">Due Time </label>
-              <v-select outlined :items="time" v-model="dueTime" @change="savedraftOnchange()" :rules="dueTimeRules">
+              <v-select outlined :items="time" item-text="label" item-value="value" v-model="dueTime" :rules="dueTimeRules">
                               
               </v-select>
             </v-col>
@@ -140,7 +140,12 @@ export default {
       qAndAEnabled: 'yes',
       showAdditional: false,
       type: ['RFP','RFI','BidOut Process'],
-      time: ['1pm CST','2pm CST','3pm CST','4pm CST'],
+      time: [
+        { label:'1pm CST', value:'1pm' },
+        { label:'2pm CST',value:'2pm' },
+        { label:'3pm CST',value:'3pm' },
+        { label:'4pm CST',value:'4pm' }
+      ],
       region: ['Gulf Coast','Northwest','Rockies','Mid-Con','Permian','Arklatex','Offshore','Other'],
       textFields: [],
       interval: '',
