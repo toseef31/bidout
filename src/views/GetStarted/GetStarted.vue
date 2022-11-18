@@ -304,6 +304,7 @@
       <Footer></Footer>
    </section>
 </template>
+<script type="application/javascript" src="https://api.ipify.org?format=jsonp&callback=getIP"></script>
 <script>
   import NavbarBeforeLogin from '../../components/Layout/NavbarBeforeLogin.vue'
   import Footer from '../../components/Layout/Footer.vue'
@@ -443,7 +444,7 @@ export default {
     },
   },
   methods: {
-    ...mapActions(["supplierSignUpAction","searchSupplier","checkEmail","buyerSignUpAction"]),
+    ...mapActions(["supplierSignUpAction","searchSupplier","checkEmail","buyerSignUpAction","getIpAddress"]),
     onUpdate (payload) {
       this.results = payload.formattedNumber
     },
@@ -538,10 +539,13 @@ export default {
       setTimeout(() => this.hideList = false, 1000);
       this.hideList = false;
       this.companyInfo = false;
-    }
+    },
+    
   },
   mounted() {
     document.title = "Get Started - BidOut"
+    
+    
   }
 };
 </script>
