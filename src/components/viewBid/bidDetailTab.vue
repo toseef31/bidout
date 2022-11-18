@@ -6,49 +6,63 @@
         <br />
 
         <div class="title-desc">
-          <p><span>Bid Title:</span> Annual Chemical Bid</p>
-          <p><span>Bid Type:</span> RFP</p>
-          <p><span>Due Date/Time:</span> 08/29/2022 @ 12:00pm CST</p>
-          <p><span>Region:</span> Permian Basin</p>
-          <p><span>Q&A:</span> No</p>
+          <p><span>Bid Title:</span> {{ bidDetail.bidData.title }}</p>
+          <p><span>Bid Type:</span> {{ bidDetail.bidData.type }}</p>
+          <p>
+            <span>Due Date/Time:</span> {{ bidDetail.bidData.dueDate }} @
+            {{ bidDetail.bidData.dueTime }}
+          </p>
+          <p><span>Region:</span> {{ bidDetail.bidData.regions }}</p>
+          <p>
+            <span>Q&A:</span>
+            {{ bidDetail.bidData.qAndAEnabled ? "Yes" : "No" }}
+          </p>
         </div>
         <br />
 
         <p class="bid-desc">
-          <span>Bid Description:</span> Praesent ac pulvinar diam, at aliquet
-          quam. Vivamus eu metus blandit, maximus massa id, semper nisi. Quisque
-          vel libero ornare, rhoncus diam in, vulputate lectus. Ut rhoncus
-          hendrerit magna in pretium. Curabitur tristique blandit turpis sed
-          vestibulum. Suspendisse porttitor lectus ac ipsum convallis, non
-          tristique nibh venenatis. Phasellus quis porttitor sapien. Nam gravida
-          ullamcorper lorem, eget vulputate tortor cursus eu. Mauris ut augue
-          vel felis dictum tincidunt eu sed justo. Vivamus venenatis turpis non
-          mi tincidunt, vel euismod mi posuere. Class aptent taciti sociosqu ad
-          litora torquent per conubia nostra, per inceptos himenaeos. Mauris nec
-          semper magna.
+          <span>Description:</span>
+          {{
+            bidDetail.bidData.bidDescriptions &&
+            Array.isArray(bidDetail.bidData.bidDescriptions)
+              ? bidDetail.bidData.bidDescriptions[0].body
+              : "None"
+          }}
         </p>
         <br />
 
-        <p class="bid-headline">
-          <span>Saftey Headline:</span> Curabitur elementum pellentesque massa.
-          Duis id feugiat erat. Donec porta feugiat quam at ullamcorper. Quisque
-          et sollicitudin dui. Nulla ullamcorper condimentum nibh, id dapibus
-          arcu. Morbi finibus libero lectus, eget pharetra urna vestibulum
-          vitae. Etiam in eros vel ligula suscipit porta.
+        <p
+          class="bid-headline"
+          v-if="bidDetail.bidData && bidDetail.bidData.bidDescriptions"
+          v-for="(item, index) in bidDetail.bidData.bidDescriptions.slice(1)"
+          :key="index"
+        >
+          <span>{{ item.name }}:</span> {{ item.body }}
+          <br />
         </p>
       </div>
     </div>
     <div class="px-5 pt-8 bid-row-2">
       <div class="title-detail">Invited Suppliers</div>
-      <div class="d-flex bid-section-2">
+      <div
+        class="d-flex bid-section-2"
+        v-if="
+          bidDetail.bidData &&
+          bidDetail.bidData.invitedSuppliers &&
+          bidDetail.bidData.invitedSuppliers.length
+        "
+        v-for="item in bidDetail.bidData.invitedSuppliers"
+      >
         <div class="d-flex align-center">
           <v-img
+            v-if="item.image"
             width="88px"
             height="29px"
-            :src="require('@/assets/images/ofs/company/subs-3.png')"
+            :src="item.image"
           ></v-img>
+          <v-icon v-else size="40">mdi-domain</v-icon>
           <div class="ml-5">
-            <div class="font-weight-bold">KLX Energy Services</div>
+            <div class="font-weight-bold">{{ item.company }}</div>
             <a href="#" class="text-decoration-underline text-body-2"
               >View profile</a
             >
@@ -67,140 +81,65 @@
           </v-row>
         </div>
       </div>
-      <div class="d-flex bid-section-2">
-        <div class="d-flex align-center">
-          <v-img
-            width="88px"
-            height="29px"
-            :src="require('@/assets/images/ofs/company/subs-3.png')"
-          ></v-img>
-          <div class="ml-5">
-            <div class="font-weight-bold">Tetra Technologies</div>
-            <a href="#" class="text-decoration-underline text-body-2"
-              >View profile</a
-            >
-          </div>
-        </div>
-        <div class="ml-auto">
-          <v-row>
-            <v-col class="mr-2">
-              <v-badge color="#D5D91C" dot overlap>
-                <v-icon>mdi-domain</v-icon>
-              </v-badge>
-            </v-col>
-            <v-col class="mr-2"> <v-icon>mdi-eye-outline</v-icon></v-col>
-            <v-col class="mr-2"> <v-icon>mdi-circle-outline</v-icon> </v-col>
-            <v-col> <v-icon>mdi-circle-outline</v-icon> </v-col>
-          </v-row>
-        </div>
-      </div>
-      <div class="d-flex bid-section-2">
-        <div class="d-flex align-center">
-          <v-img
-            width="88px"
-            height="29px"
-            :src="require('@/assets/images/ofs/company/subs-3.png')"
-          ></v-img>
-          <div class="ml-5">
-            <div class="font-weight-bold">KLX Energy Services</div>
-            <a href="#" class="text-decoration-underline text-body-2"
-              >View profile</a
-            >
-          </div>
-        </div>
-        <div class="ml-auto">
-          <v-row>
-            <v-col class="mr-2">
-              <v-icon>mdi-domain</v-icon>
-            </v-col>
-            <v-col class="mr-2"> <v-icon>mdi-eye-outline</v-icon></v-col>
-            <v-col class="mr-2">
-              <v-icon color="#0D9648">mdi-check-circle-outline</v-icon>
-            </v-col>
-            <v-col> <v-icon color="#0D9648">mdi-currency-usd</v-icon> </v-col>
-          </v-row>
-        </div>
-      </div>
-      <div class="d-flex bid-section-2">
-        <div class="d-flex align-center">
-          <v-img
-            width="88px"
-            height="29px"
-            :src="require('@/assets/images/ofs/company/subs-3.png')"
-          ></v-img>
-          <div class="ml-5">
-            <div class="font-weight-bold">KLX Energy Services</div>
-            <a href="#" class="text-decoration-underline text-body-2"
-              >View profile</a
-            >
-          </div>
-        </div>
-        <div class="ml-auto">
-          <v-row>
-            <v-col class="mr-2">
-              <v-icon>mdi-domain</v-icon>
-            </v-col>
-            <v-col class="mr-2"> <v-icon>mdi-eye-outline</v-icon></v-col>
-            <v-col class="mr-2">
-              <v-icon color="#F32349">mdi-close-circle-outline</v-icon>
-            </v-col>
-            <v-col>
-              <v-icon color="#F32349">mdi-close-circle-outline</v-icon>
-            </v-col>
-          </v-row>
-        </div>
-      </div>
+
+      <div v-else class="attachment-none pt-3 pb-6">None</div>
     </div>
 
     <div class="px-5 pt-8 pb-14 bid-row-2">
       <div class="title-detail">Team member</div>
-      <v-row class="mt-10" justify="space-around" align="center">
-        <v-col>
-          <v-avatar color="#0d96481a" size="62">
-            <v-icon color="#0d9648" large>mdi-account-outline </v-icon>
-          </v-avatar>
-          <span class="text--black px-4 bid-creator">Tyler Cherry</span>
-          <span class="bid-creator-title">Bid Creator</span>
-        </v-col>
-        <v-col>
-          <v-avatar color="#0d96481a" size="62">
-            <v-icon color="#0d9648" large>mdi-account-outline </v-icon>
-          </v-avatar>
-          <span class="text--black px-4 bid-creator">Tyler Cherry</span>
-        </v-col>
-        <v-col>
-          <v-avatar color="#0d96481a" size="62">
-            <v-icon color="#0d9648" large>mdi-account-outline </v-icon>
-          </v-avatar>
-          <span class="text--black px-4 bid-creator">Tyler Cherry</span>
-        </v-col>
-      </v-row>
-      <v-row class="mt-10" justify="space-around" align="center">
-        <v-col>
-          <v-avatar color="#0d96481a" size="62">
-            <v-icon color="#0d9648" large>mdi-account-outline </v-icon>
-          </v-avatar>
-          <span class="text--black px-4 bid-creator">Tyler Cherry</span>
-        </v-col>
-        <v-col>
-          <v-avatar color="#0d96481a" size="62">
-            <v-icon color="#0d9648" large>mdi-account-outline </v-icon>
-          </v-avatar>
-          <span class="text--black px-4 bid-creator">Tyler Cherry</span>
-        </v-col>
-        <v-col>
-          <v-avatar color="#0d96481a" size="62">
-            <v-icon color="#0d9648" large>mdi-account-outline </v-icon>
-          </v-avatar>
-          <span class="text--black px-4 bid-creator">Tyler Cherry</span>
-        </v-col>
-      </v-row>
+      <div
+        class="mt-10 d-flex flex-row flex-wrap team-member"
+        v-if="
+          bidDetail.bidData &&
+          bidDetail.bidData.invitedTeamMembers &&
+          bidDetail.bidData.invitedTeamMembers.length > 0
+        "
+      >
+        <div
+          class="flex-child"
+          v-for="(item, index) in bidDetail.bidData.invitedTeamMembers"
+          :key="index"
+        >
+          <div v-if="item">
+            <v-img
+              v-if="item.image"
+              width="48px"
+              height="48px"
+              :src="item.image"
+            ></v-img>
+            <v-avatar v-else color="#0d96481a" size="62">
+              <v-icon color="#0d9648" large>mdi-account-outline </v-icon>
+            </v-avatar>
+            <span class="text--black px-4 bid-creator"
+              >{{ item.firstName }} {{ item.lastName }}</span
+            >
+            <span
+              class="bid-creator-title"
+              v-if="
+                bidDetail.bidData.userId.firstName === item.firstName &&
+                bidDetail.bidData.userId.lastName === item.lastName
+              "
+              >Bid Creator</span
+            >
+          </div>
+          <div v-else class="attachment-none">None</div>
+        </div>
+      </div>
+
+      <div v-else class="attachment-none">None</div>
     </div>
 
     <div class="pt-8 pb-14 bid-row-2">
       <div class="title-detail px-6">Line items</div>
 
-      <v-simple-table class="template-table-style mt-8">
+      <v-simple-table
+        class="template-table-style mt-8"
+        v-if="
+          bidDetail.bidData &&
+          bidDetail.bidData.lineItems &&
+          bidDetail.bidData.lineItems.length > 0
+        "
+      >
         <template v-slot:default>
           <thead>
             <tr>
@@ -212,24 +151,35 @@
             </tr>
           </thead>
           <tbody>
-            <tr v-for="n in 6" :key="n">
-              <td class="text-left">Diesel</td>
-              <td class="text-left">Gallon</td>
-              <td class="text-left px-10">USD</td>
-              <td class="text-left px-10">1000</td>
+            <tr
+              v-for="(item, index) in bidDetail.bidData.lineItems"
+              :key="index"
+            >
+              <td class="text-left">{{ item.description }}</td>
+              <td class="text-left">{{ item.unit }}</td>
+              <td class="text-left">{{ item.inputType }}</td>
+              <td class="text-left">{{ item.quantity }}</td>
               <td class="text-left">
-                Lorem Ipsum sit amet alote monaco forgarden toprecio uno amargo
-                calette riona
+                {{ item.buyerComment }}
               </td>
             </tr>
           </tbody>
         </template>
       </v-simple-table>
+
+      <div v-else class="attachment-none">None</div>
     </div>
 
     <div class="py-8 bid-row-2">
       <div class="title-detail px-6">Attachments</div>
-      <div class="attachment-list-style">
+      <div
+        class="attachment-list-style"
+        v-if="
+          bidDetail.bidData &&
+          bidDetail.bidData.attachments &&
+          bidDetail.bidData.attachments.length
+        "
+      >
         <v-simple-table fixed-header>
           <template v-slot:default>
             <thead>
@@ -243,7 +193,10 @@
               </tr>
             </thead>
             <tbody>
-              <tr v-for="(doc, index) in docsList">
+              <tr
+                v-for="(doc, index) in bidDetail.bidData.attachments"
+                :key="index"
+              >
                 <td class="text-left">
                   <img :src="require('@/assets/images/bids/FilePdf.png')" />
                 </td>
@@ -254,64 +207,37 @@
                 <td class="text-left">{{ doc.fileSize }}</td>
                 <td class="text-left">{{ doc.uploadedBy }}</td>
                 <td class="text-left">
-                  {{ doc.uploadedAt | moment("MM/DD/YYYY hh:mm a") }}
+                  {{ doc.uploadedAt | moment("MM/DD/YYYY") }}
                 </td>
               </tr>
             </tbody>
           </template>
         </v-simple-table>
       </div>
+
+      <div v-else class="attachment-none">None</div>
     </div>
 
     <div class="pt-8 bid-row-3">
       <div class="question-section-title">
         <span class="title-detail px-6">Big Questions</span>
       </div>
-      <div class="question-sub-section">
+      <div
+        class="question-sub-section"
+        v-if="bidDetail.bidData.questions && bidDetail.bidData.questions.length"
+      >
         <span class="sub-section-title px-6">Operational Questions</span>
         <v-row
           class="px-10 pt-6 operational-ques"
           justify="space-between"
           align="center"
+          v-for="(item, index) in bidDetail.bidData.questions"
+          :key="index"
         >
-          <v-col md="6" offset-md="1" class="first-child"
-            >I agree that this pricing is valid and Supplier Name can performe
-            the work?</v-col
-          >
-          <div class="second-child">Required Question</div>
-        </v-row>
-      </div>
-      <div class="legal-sub-section">
-        <span class="sub-section-title px-6">Legal Questions</span>
-        <v-row
-          class="px-10 pt-6 legal-ques"
-          justify="space-between"
-          align="center"
-        >
-          <v-col md="6" offset-md="1" class="first-child"
-            >Do you curently have a MSA with buyer?</v-col
-          >
-          <div class="second-child">Required Question</div>
-        </v-row>
-        <v-row class="px-10 legal-ques" justify="space-between" align="center">
-          <v-col md="6" offset-md="1" class="first-child"
-            >Please explain your Previous safety incident
-          </v-col>
-          <div class="second-child">Required Question</div>
-        </v-row>
-        <v-divider inset class="mt-10 mb-8"></v-divider>
-        <v-row class="px-10 legal-ques" justify="space-between" align="center">
-          <v-col md="6" offset-md="1" class="first-child"
-            >Upload your certificate of insurance
-          </v-col>
-          <div class="second-child">Required Question</div>
-        </v-row>
-        <v-divider inset class="mt-10 mb-8"></v-divider>
-        <v-row class="px-10 legal-ques" justify="space-between" align="center">
-          <v-col md="6" offset-md="1" class="first-child"
-            >Upload your certificate of insurance
-          </v-col>
-          <div class="second-child">Required Question</div>
+          <v-col md="6" offset-md="1" class="first-child">{{
+            item.title
+          }}</v-col>
+          <div class="second-child" v-if="item.required">Required Question</div>
         </v-row>
       </div>
     </div>
@@ -324,28 +250,17 @@ import { mapActions } from "vuex";
 export default {
   data() {
     return {
-      document: [
-        {
-          fileName: "SafteyPlan.pdf",
-          comment: "Saftey Plan",
-          fileSize: "16kb",
-          uploadedBy: "Tyler Cherry",
-          uploadedAt: "08/08/2022 1:29 pm",
-        },
-        {
-          fileName: "SafteyPlan.pdf",
-          comment: "Saftey Plan",
-          fileSize: "16kb",
-          uploadedBy: "Tyler Cherry",
-          uploadedAt: "08/08/2022 1:29 pm",
-        },
-      ],
+      users: "",
     };
   },
+  methods: {
+    ...mapActions(["getBidBySerial"]),
+  },
   computed: {
-    docsList() {
-      return this.document;
+    bidDetail() {
+      return this.$store.getters.bidData;
     },
   },
+  mounted() {},
 };
 </script>

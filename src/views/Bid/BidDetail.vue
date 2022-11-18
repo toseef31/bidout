@@ -12,14 +12,22 @@
               class="font-weight-bold text--primary"
               style="font-family: 'Mulish', sans-serif; font-size: 20px"
             >
-              Annual Chemical Bid
+              {{ bidDetail.bidData.title }}
             </div>
 
             <div class="detail">
-              <div>Bid: #10523</div>
-              <div>Due Date/Time: 08/29/2022 @ 12:00pm CST</div>
-              <div>Created by: Tyler Cherry</div>
-              <div>Bid Type: RFP</div>
+              <div>
+                Bid: <span class="serial">#{{ bidDetail.bidData.serial }}</span>
+              </div>
+              <div>
+                Due Date/Time: {{ bidDetail.bidData.dueDate }} @
+                {{ bidDetail.bidData.dueTime }}
+              </div>
+              <div>
+                Created by: {{ bidDetail.bidData.userId.firstName }}
+                {{ bidDetail.bidData.userId.lastName }}
+              </div>
+              <div>Bid Type: {{ bidDetail.bidData.type }}</div>
             </div>
           </div>
         </v-col>
@@ -30,17 +38,44 @@
             rounded="lg"
             height="101"
             width="244"
-            style="background-color: rgba(13, 150, 72, 0.1)"
+            :style="[
+              !bidDetail.receivingBids && !bidDetail.bidout
+                ? { 'background-color': '#FFF4DB' }
+                : { 'background-color': 'rgba(13, 150, 72, 0.1)' },
+            ]"
           >
-            <div class="status">Status: Receiving Bids</div>
-
-            <div class="time pt-2">
-              <v-icon small> mdi-timer-outline</v-icon> 3 days, 2 hours, 54 min,
-              18 sec remaining
+            <div class="status" v-if="bidDetail.receivingBids">
+              Status: Receiving Bids
+            </div>
+            <div class="status" v-else-if="bidDetail.bidout">
+              Status: BidOut Phase
+            </div>
+            <div v-else class="award-status">Status: Award Phase</div>
+            <div
+              class="time pt-2"
+              v-if="bidDetail.receivingBids || bidDetail.bidout"
+            >
+              <v-icon small> mdi-timer-outline</v-icon>
+              {{ days }} days, {{ hours }} hours, {{ minutes }} min,
+              {{ seconds }} sec remaining
             </div>
 
-            <v-divider color="#0D9648"></v-divider>
-            <div class="bid-number">3 Bids Received</div>
+            <v-divider
+              v-if="!bidDetail.receivingBids && !bidDetail.bidout"
+              class="mt-3"
+              color="#b489251c"
+            ></v-divider>
+            <v-divider v-else color="#0D9648"></v-divider>
+
+            <div
+              :class="[
+                !bidDetail.receivingBids && !bidDetail.bidout
+                  ? 'award-bid-number'
+                  : 'bid-number',
+              ]"
+            >
+              3 Bids Received
+            </div>
           </v-sheet>
         </v-col>
 
@@ -112,6 +147,8 @@ import BidQandA from "@/components/viewBid/bidQandA.vue";
 import BidChat from "@/components/viewBid/bidChat.vue";
 import BidSubmission from "@/components/viewBid/bidDetailTab.vue";
 import BidAuditTrail from "@/components/viewBid/bidAuditTrail.vue";
+import moment from "moment-timezone";
+import { mapActions } from "vuex";
 
 export default {
   name: "BidDetail",
@@ -129,6 +166,14 @@ export default {
       currentItem: "tab-1",
       validate: "",
       value: "",
+      users: "",
+      actualTime: moment().format("X"),
+      years: 0,
+      months: 0,
+      days: 0,
+      hours: 0,
+      minutes: 0,
+      seconds: 0,
       tabs: [
         {
           text: "Bid Detail",
@@ -158,14 +203,59 @@ export default {
     };
   },
   methods: {
+    ...mapActions(["getBidBySerial"]),
     ChangeT(tab) {
       this.currentItem = tab;
     },
-  },
+    addOneSecondToActualTimeEverySecond() {
+      const component = this;
+      component.actualTime = moment().format("X");
+      setTimeout(() => {
+        component.addOneSecondToActualTimeEverySecond();
+      }, 1000);
+    },
+    getDiffInSeconds() {
+      const bidDueDate = this.bidDetail.bidData.dueDate;
+      const bidDueTime = this.bidDetail.bidData.dueTime;
+      const momentTime = moment(bidDueTime, ["h:mm:ss A"]).format("HH:mm:ss");
 
+      const stringDate = `${bidDueDate}T${momentTime}`;
+      const momentDueDate = moment(stringDate);
+      return moment(momentDueDate).format("X") - this.actualTime;
+    },
+    compute() {
+      const duration = moment.duration(this.getDiffInSeconds(), "seconds");
+      this.years = duration.years() > 0 ? duration.years() : 0;
+      this.months = duration.months() > 0 ? duration.months() : 0;
+      this.days = duration.days() > 0 ? duration.days() : 0;
+      this.hours = duration.hours() > 0 ? duration.hours() : 0;
+      this.minutes = duration.minutes() > 0 ? duration.minutes() : 0;
+      this.seconds = duration.seconds() > 0 ? duration.seconds() : 0;
+    },
+  },
+  computed: {
+    bidDetail() {
+      return this.$store.getters.bidData;
+    },
+  },
   mounted() {
     document.title = "Bid Detail - BidOut";
-    this.users = JSON.parse(localStorage.getItem("userData")).user;
+    this.users = this.$store.getters.userInfo;
+    this.getBidBySerial({
+      serial: this.$route.fullPath.split("/").pop(),
+      id: this.users.id,
+    });
+
+    this.remainingTime;
+  },
+  created() {
+    this.compute();
+    this.addOneSecondToActualTimeEverySecond();
+  },
+  watch: {
+    actualTime(val, oldVal) {
+      this.compute();
+    },
   },
 };
 </script>
