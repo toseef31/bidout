@@ -6,7 +6,7 @@ import store from "../../store";
 import axios from 'axios'
 export default {
     
-  updateProfileImg({commit}, payload){
+  updateProfileImg({commit,dispatch}, payload){
     var config = {
       headers: {
         "Content-Type": "multipart/form-data",
@@ -17,39 +17,60 @@ export default {
     formData.append('files', payload.files)
     axios.post('/user/updateProfilePicture/'+payload.userid,formData,config)
      .then(responce => {
-      axios.get('/user/getUserData/'+payload.email)
-       .then(responce => {
-        commit('setUser',responce.data)
-        localStorage.setItem("userData",JSON.stringify(responce.data));
-      })
+      if(responce.status === 403){
+       dispatch('refreshToken');
+       dispatch('updateProfileImg',payload);
+      }
+      if(responce.status === 200){
+        axios.get('/user/getUserData/'+payload.email)
+         .then(responce => {
+          commit('setUser',responce.data)
+          localStorage.setItem("userData",JSON.stringify(responce.data));
+        }).catch(err => {
+          console.log(err);
+        });
+      }
     }).catch(err => {
           console.log(err);
       });
   },  
-  updateProfile({commit}, payload){
+  updateProfile({commit,dispatch}, payload){
     axios.post('/user/updateUser/'+payload.userid,{'email': payload.email,'firstName': payload.firstName,'lastName': payload.lastName,'phoneNumber': payload.phoneNumber,'title':payload.title,'timezone':payload.timezone})
      .then(responce => {
-      axios.get('/user/getUserData/'+payload.email)
-       .then(responce => {
-        commit('setUser',responce.data)
-        localStorage.setItem("userData",JSON.stringify(responce.data));
-      }).catch(err => {
-          console.log(err);
-      });
+      if(responce.status === 403){
+       dispatch('refreshToken');
+       dispatch('updateProfile',payload);
+      }
+      if(responce.status === 200){
+        axios.get('/user/getUserData/'+payload.email)
+         .then(responce => {
+          commit('setUser',responce.data)
+          localStorage.setItem("userData",JSON.stringify(responce.data));
+        }).catch(err => {
+            console.log(err);
+        });
+      }
+      
     }).catch(err => {
           console.log(err);
       });
   },  
-  changePassword({commit}, payload){
+  changePassword({commit,dispatch}, payload){
     
     axios.post('/user/changePassword/'+payload.userid,{'currentPassword': payload.currentPassword,'newPassword': payload.newPassword})
      .then(responce => {
-      commit('setUserImg',responce.data.messages)
+      if(responce.status === 403){
+       dispatch('refreshToken');
+       dispatch('changePassword',payload);
+      }
+      if(responce.status === 200){
+        commit('setUserImg',responce.data.messages)
+      }
     }).catch(err => {
           console.log(err);
       });
   },  
-  loginHistory({commit}, payload){
+  loginHistory({commit,dispatch}, payload){
     axios.get('/user/getUserLoginHistory/'+payload.userid)
      .then(responce => {
       commit('setLoginHistory',responce.data)
@@ -57,37 +78,54 @@ export default {
           console.log(err);
       });
   },  
-  adminsCompany({commit}, payload){
+  adminsCompany({commit,dispatch}, payload){
     
     axios.get('/company/getCompanyAdmins/'+payload.company)
      .then(responce => {
-      commit('setCompanyAdmin',responce.data)
+      if(responce.status === 403){
+       dispatch('refreshToken');
+       dispatch('adminsCompany',payload);
+      }
+      if(responce.status === 200){
+        commit('setCompanyAdmin',responce.data)
+      }
     }).catch(err => {
           console.log(err);
       });
   },  
-  updateNotifications({commit}, payload){
+  updateNotifications({commit,dispatch}, payload){
     axios.post('/user/updateNotificationPreference/'+payload.userid,{'notificationPreference':payload.notificationPreference})
      .then(responce => {
-      axios.get('/user/getUserData/'+payload.email)
-       .then(responce => {
-        
-        commit('setUser',responce.data)
-        localStorage.setItem("userData",JSON.stringify(responce.data));
-      }).catch(err => {
-          console.log(err);
-      });
+      if(responce.status === 403){
+       dispatch('refreshToken');
+       dispatch('updateNotifications',payload);
+      }
+      if(responce.status === 200){
+        axios.get('/user/getUserData/'+payload.email)
+         .then(responce => {
+          
+          commit('setUser',responce.data)
+          localStorage.setItem("userData",JSON.stringify(responce.data));
+        }).catch(err => {
+            console.log(err);
+        });
+      }
     }).catch(err => {
           console.log(err);
       });
   }, 
-  inviteUser({commit},payload){
+  inviteUser({commit,dispatch},payload){
     
     axios.post('/company/addInvitedUser/',{'firstName':payload.firstName,'lastName': payload.lastName,'company': payload.company,'email':payload.email,'parent': payload.parent,'role': payload.role})
      .then(responce => {
-        
-        commit('setMessage','User invited successfully')
-        router.replace({ name: "ManageUsers" });
+        if(responce.status === 403){
+         dispatch('refreshToken');
+         dispatch('inviteUser',payload);
+        }
+        if(responce.status === 200){
+          commit('setMessage','User invited successfully')
+          router.replace({ name: "ManageUsers" });
+        }
     }).catch(err => {
           console.log(err);
       });
@@ -96,46 +134,66 @@ export default {
     commit('setEditData',payload);
     router.replace({ name: "EditUser" });
   },
-  updateUser({commit},payload){
+  updateUser({commit,dispatch},payload){
     
     axios.post('/company/updateUser/'+payload.id,{'firstName':payload.firstName,'lastName': payload.lastName,'role': payload.role})
      .then(responce => {
-        
-        commit('setMessage','User updated successfully')
-        commit('showErrorAlert')
-        router.replace({ name: "ManageUsers" });
+        if(responce.status === 403){
+          dispatch('refreshToken');
+          dispatch('updateUser',payload);
+        }
+        if(responce.status === 200){
+          commit('setMessage','User updated successfully')
+          commit('showErrorAlert')
+          router.replace({ name: "ManageUsers" });
+        }
     }).catch(err => {
           console.log(err);
       });
   },
-  updateInvite({commit},payload){
+  updateInvite({commit,dispatch},payload){
     
     axios.post('/company/updateInvitedUser/'+payload.id,{'firstName':payload.firstName,'lastName': payload.lastName,'role': payload.role})
      .then(responce => {
-        
-        commit('setMessage','User updated successfully')
-        commit('showErrorAlert')
-        router.replace({ name: "ManageUsers" });
+        if(responce.status === 403){
+          dispatch('refreshToken');
+          dispatch('updateInvite',payload);
+        }
+        if(responce.status === 200){
+          commit('setMessage','User updated successfully')
+          commit('showErrorAlert')
+          router.replace({ name: "ManageUsers" });
+        }
     }).catch(err => {
           console.log(err);
       });
   },
-  getDisabledUsers({commit},payload){
+  getDisabledUsers({commit,dispatch},payload){
     axios.get('/company/getDisabledUsersByCompany/'+ payload)
       .then(responce => {
-      // console.log(responce.data);
-      commit('setDisableUsersList',responce.data)
-      commit('showErrorAlert')
+      if(responce.status === 403){
+        dispatch('refreshToken');
+        dispatch('getDisabledUsers',payload);
+      }
+      if(responce.status === 200){
+        commit('setDisableUsersList',responce.data)
+        commit('showErrorAlert')
+      }
     }).catch(err => {
           console.log(err);
       });
   }, 
-  getPendingUsers({commit},payload){
+  getPendingUsers({commit,dispatch},payload){
     axios.get('/user/getPendingUsers/'+ payload)
       .then(responce => {
-      
-      commit('setPendingUsersList',responce.data.data)
-      commit('showErrorAlert')
+      if(responce.status === 403){
+        dispatch('refreshToken');
+        dispatch('getPendingUsers',payload);
+      }
+      if(responce.status === 200){
+        commit('setPendingUsersList',responce.data.data)
+        commit('showErrorAlert')
+      }
     }).catch(err => {
           console.log(err);
       });

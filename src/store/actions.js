@@ -22,6 +22,22 @@ const actions = {
         });
     });
   },
+  refreshToken({commit,dispatch}){
+    const user = firebase.auth().currentUser;
+    if(user){
+     user.getIdToken(true)
+      .then(idToken => {
+        console.log(idToken,'tokenn');
+        commit('setToken',idToken);
+        localStorage.setItem("token",JSON.stringify(idToken));
+      }).catch(function(error) {
+         dispatch('signOutAction')
+      });
+    }else{
+      dispatch('signOutAction')
+    }
+    
+  },
 }
 
 export default actions
