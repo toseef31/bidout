@@ -22,17 +22,22 @@ const actions = {
         });
     });
   },
-  refreshToken({commit,dispatch}){
+  async refreshToken({commit,dispatch}){
     const user = firebase.auth().currentUser;
     if(user){
-     user.getIdToken(true)
-      .then(idToken => {
-        console.log(idToken,'tokenn');
-        commit('setToken',idToken);
-        localStorage.setItem("token",JSON.stringify(idToken));
-      }).catch(function(error) {
-         dispatch('signOutAction')
-      });
+      return new Promise(async (resolve, reject) => {
+        try{
+          const token =  await user.getIdToken(true);
+          console.log(token);
+          commit('setToken',token);
+          localStorage.setItem("token",JSON.stringify(token));
+          resolve(token);
+        } catch(error) {
+            dispatch('signOutAction')
+            reject(error)
+        }
+      })
+          
     }else{
       dispatch('signOutAction')
     }

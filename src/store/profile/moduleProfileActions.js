@@ -17,41 +17,51 @@ export default {
     formData.append('files', payload.files)
     axios.post('/user/updateProfilePicture/'+payload.userid,formData,config)
      .then(responce => {
-      if(responce.status === 403){
-       dispatch('refreshToken');
-       dispatch('updateProfileImg',payload);
-      }
+      
       if(responce.status === 200){
         axios.get('/user/getUserData/'+payload.email)
          .then(responce => {
           commit('setUser',responce.data)
           localStorage.setItem("userData",JSON.stringify(responce.data));
         }).catch(err => {
+          if(err.response.status === 403){
+           dispatch('refreshToken');
+           dispatch('updateProfileImg',payload);
+          }
           console.log(err);
         });
       }
     }).catch(err => {
+        if(err.response.status === 403){
+         dispatch('refreshToken');
+         dispatch('updateProfileImg',payload);
+        }
           console.log(err);
       });
   },  
   updateProfile({commit,dispatch}, payload){
     axios.post('/user/updateUser/'+payload.userid,{'email': payload.email,'firstName': payload.firstName,'lastName': payload.lastName,'phoneNumber': payload.phoneNumber,'title':payload.title,'timezone':payload.timezone})
      .then(responce => {
-      if(responce.status === 403){
-       dispatch('refreshToken');
-       dispatch('updateProfile',payload);
-      }
+      
       if(responce.status === 200){
         axios.get('/user/getUserData/'+payload.email)
          .then(responce => {
           commit('setUser',responce.data)
           localStorage.setItem("userData",JSON.stringify(responce.data));
         }).catch(err => {
+          if(err.response.status === 403){
+           dispatch('refreshToken');
+           dispatch('updateProfile',payload);
+          }
             console.log(err);
         });
       }
       
     }).catch(err => {
+        if(err.response.status === 403){
+         dispatch('refreshToken');
+         dispatch('updateProfile',payload);
+        }
           console.log(err);
       });
   },  
@@ -59,14 +69,15 @@ export default {
     
     axios.post('/user/changePassword/'+payload.userid,{'currentPassword': payload.currentPassword,'newPassword': payload.newPassword})
      .then(responce => {
-      if(responce.status === 403){
-       dispatch('refreshToken');
-       dispatch('changePassword',payload);
-      }
+      
       if(responce.status === 200){
         commit('setUserImg',responce.data.messages)
       }
     }).catch(err => {
+        if(err.response.status === 403){
+         dispatch('refreshToken');
+         dispatch('changePassword',payload);
+        }
           console.log(err);
       });
   },  
@@ -82,24 +93,22 @@ export default {
     
     axios.get('/company/getCompanyAdmins/'+payload.company)
      .then(responce => {
-      if(responce.status === 403){
-       dispatch('refreshToken');
-       dispatch('adminsCompany',payload);
-      }
+      
       if(responce.status === 200){
         commit('setCompanyAdmin',responce.data)
       }
     }).catch(err => {
+      if(err.response.status === 403){
+       dispatch('refreshToken');
+       dispatch('adminsCompany',payload);
+      }
           console.log(err);
       });
   },  
   updateNotifications({commit,dispatch}, payload){
     axios.post('/user/updateNotificationPreference/'+payload.userid,{'notificationPreference':payload.notificationPreference})
      .then(responce => {
-      if(responce.status === 403){
-       dispatch('refreshToken');
-       dispatch('updateNotifications',payload);
-      }
+      
       if(responce.status === 200){
         axios.get('/user/getUserData/'+payload.email)
          .then(responce => {
@@ -107,10 +116,18 @@ export default {
           commit('setUser',responce.data)
           localStorage.setItem("userData",JSON.stringify(responce.data));
         }).catch(err => {
+          if(err.response.status === 403){
+           dispatch('refreshToken');
+           dispatch('updateNotifications',payload);
+          }
             console.log(err);
         });
       }
     }).catch(err => {
+        if(err.response.status === 403){
+         dispatch('refreshToken');
+         dispatch('updateNotifications',payload);
+        }
           console.log(err);
       });
   }, 
@@ -118,15 +135,16 @@ export default {
     
     axios.post('/company/addInvitedUser/',{'firstName':payload.firstName,'lastName': payload.lastName,'company': payload.company,'email':payload.email,'parent': payload.parent,'role': payload.role})
      .then(responce => {
-        if(responce.status === 403){
-         dispatch('refreshToken');
-         dispatch('inviteUser',payload);
-        }
+        
         if(responce.status === 200){
           commit('setMessage','User invited successfully')
           router.replace({ name: "ManageUsers" });
         }
     }).catch(err => {
+        if(err.response.status === 403){
+         dispatch('refreshToken');
+         dispatch('inviteUser',payload);
+        }
           console.log(err);
       });
   },
@@ -138,16 +156,17 @@ export default {
     
     axios.post('/company/updateUser/'+payload.id,{'firstName':payload.firstName,'lastName': payload.lastName,'role': payload.role})
      .then(responce => {
-        if(responce.status === 403){
-          dispatch('refreshToken');
-          dispatch('updateUser',payload);
-        }
+        
         if(responce.status === 200){
           commit('setMessage','User updated successfully')
           commit('showErrorAlert')
           router.replace({ name: "ManageUsers" });
         }
     }).catch(err => {
+        if(err.response.status === 403){
+          dispatch('refreshToken');
+          dispatch('updateUser',payload);
+        }
           console.log(err);
       });
   },
@@ -155,46 +174,49 @@ export default {
     
     axios.post('/company/updateInvitedUser/'+payload.id,{'firstName':payload.firstName,'lastName': payload.lastName,'role': payload.role})
      .then(responce => {
-        if(responce.status === 403){
-          dispatch('refreshToken');
-          dispatch('updateInvite',payload);
-        }
+        
         if(responce.status === 200){
           commit('setMessage','User updated successfully')
           commit('showErrorAlert')
           router.replace({ name: "ManageUsers" });
         }
     }).catch(err => {
+        if(err.response.status === 403){
+          dispatch('refreshToken');
+          dispatch('updateInvite',payload);
+        }
           console.log(err);
       });
   },
   getDisabledUsers({commit,dispatch},payload){
     axios.get('/company/getDisabledUsersByCompany/'+ payload)
       .then(responce => {
-      if(responce.status === 403){
-        dispatch('refreshToken');
-        dispatch('getDisabledUsers',payload);
-      }
+      
       if(responce.status === 200){
         commit('setDisableUsersList',responce.data)
         commit('showErrorAlert')
       }
     }).catch(err => {
+        if(err.response.status === 403){
+          dispatch('refreshToken');
+          dispatch('getDisabledUsers',payload);
+        }
           console.log(err);
       });
   }, 
   getPendingUsers({commit,dispatch},payload){
     axios.get('/user/getPendingUsers/'+ payload)
       .then(responce => {
-      if(responce.status === 403){
-        dispatch('refreshToken');
-        dispatch('getPendingUsers',payload);
-      }
+      
       if(responce.status === 200){
         commit('setPendingUsersList',responce.data.data)
         commit('showErrorAlert')
       }
     }).catch(err => {
+        if(err.response.status === 403){
+          dispatch('refreshToken');
+          dispatch('getPendingUsers',payload);
+        }
           console.log(err);
       });
   }, 
