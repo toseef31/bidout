@@ -81,6 +81,7 @@
       <Footer></Footer>
    </section>
 </template>
+<script type="application/javascript" src="https://api.ipify.org?format=jsonp&callback=getIP"></script>
 <script>
   import NavbarBeforeLogin from '../../components/Layout/NavbarBeforeLogin.vue'
   import Footer from '../../components/Layout/Footer.vue'
@@ -140,12 +141,12 @@ export default {
     },
     undo() {
       this.$refs.signaturePad.undoSignature();
-    }
+    },
   },
   mounted() {
     document.title = "Contract - BidOut" ;
     this.getIpAddress();  
-    console.log('contract',this.$store.getters.contractData);
+
   }
 };
 </script>
