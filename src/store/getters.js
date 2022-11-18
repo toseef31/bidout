@@ -8,6 +8,9 @@ const getters = {
     pageLoader (state){
       return state.pageLoader
     }, 
+    userToken (state){
+      return state.userToken
+    },
 }
 
 export default getters

@@ -3,24 +3,36 @@ import store from "../../store";
 import axios from 'axios'
 
 export default {
-    async getTeamMembers({commit}, payload){
+    async getTeamMembers({commit, dispatch}, payload){
       const res = await axios.get('company/getTeamMembers/'+payload);
+      if(res.status === 403){
+       dispatch('getToken');
+       dispatch('getTeamMembers',payload);
+      }
        if(res.status == 200){
        	commit('setTeamMembers',res.data);
        }else{
        	commit('setTeamMembers',null);
        }
     },
-    async getSalesReps({commit}, payload){
+    async getSalesReps({commit, dispatch}, payload){
       const res = await axios.post('company/getSalesReps/',{'query': payload.query,'basin':payload.basin});
+       if(res.status === 403){
+        dispatch('getToken');
+        dispatch('getSalesReps',payload);
+       }
        if(res.status == 200){
        	commit('setSalesReps',res.data);
        }else{
        	commit('setSalesReps',null);
        }
     },
-    async searchByCompany({commit}, payload){
+    async searchByCompany({commit, dispatch}, payload){
       const res = await axios.post('company/searchCompanies/',{'query': payload.query,'basin':payload.basin});
+       if(res.status === 403){
+        dispatch('getToken');
+        dispatch('searchByCompany',payload);
+       }
        if(res.status == 200){
        	commit('setCompaniesList',res.data);
        }else{
@@ -28,8 +40,12 @@ export default {
        }
     },
     
-    async getCompanyByServices({commit}, payload){
+    async getCompanyByServices({commit, dispatch}, payload){
       const res = await axios.get('company/getCompaniesByService/'+payload);
+      if(res.status === 403){
+       dispatch('getToken');
+       dispatch('searchByCompany',payload);
+      }
        if(res.status == 200){
        	commit('setCompaniesList',res.data);
        }else{
