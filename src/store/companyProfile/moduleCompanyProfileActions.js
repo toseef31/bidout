@@ -12,24 +12,24 @@ export default {
         commit('setPageLoader',false)
       }
      
-    }).catch(err => {
+    }).catch(async(err) => {
       if(err.response.status === 403){
-       dispatch('refreshToken');
+       await dispatch('refreshToken');
        dispatch('getCompany',payload);
       }
       console.log(err);
     });
   },
-  async getSubCategories({commit,dispatch}, payload){
-    await axios.get('serviceCategory/getSubCategories/'+payload)
+  getSubCategories({commit,dispatch}, payload){
+    axios.get('serviceCategory/getSubCategories/'+payload)
      .then(responce => {
       
       if(responce.status === 200){
         commit('setSubCategories',responce.data)
       }
-    }).catch(err => {
+    }).catch(async(err) => {
       if(err.response.status === 403){
-       dispatch('refreshToken');
+       await dispatch('refreshToken');
        dispatch('getSubCategories',payload);
       }
       console.log(err);
@@ -51,9 +51,9 @@ export default {
       if(responce.status === 200){
         dispatch("getCompany",payload.companyId)
       }
-    }).catch(err => {
+    }).catch(async(err) => {
       if(err.response.status === 403){
-       dispatch('refreshToken');
+       await dispatch('refreshToken');
        dispatch('companyProfileImg',payload);
       }
           console.log(err);
@@ -66,9 +66,9 @@ export default {
       if(responce.status === 200){
         dispatch("getCompany",payload.companyId)
       }
-    }).catch(err => {
+    }).catch(async(err) => {
       if(err.response.status === 403){
-       dispatch('refreshToken');
+       await dispatch('refreshToken');
        dispatch('updateBasicProfile',payload);
       }
           console.log(err);
@@ -81,9 +81,9 @@ export default {
       if(responce.status === 200){
         dispatch("getCompany",payload.companyId)
       }
-    }).catch(err => {
+    }).catch(async(err) => {
       if(err.response.status === 403){
-       dispatch('refreshToken');
+       await dispatch('refreshToken');
        dispatch('addCompanyService',payload);
       }
           console.log(err);
@@ -96,10 +96,10 @@ export default {
       if(responce.status === 200){
         dispatch("getCompany",payload.companyId)
       }
-    }).catch(err => {
+    }).catch(async(err) => {
       console.log(err);
       if(err.response.status === 403){
-       dispatch('refreshToken');
+       await dispatch('refreshToken');
        dispatch('addCompanyBasins',payload);
       }
     });
@@ -111,9 +111,9 @@ export default {
       if(responce.status === 200){
         dispatch("getCompany",payload.companyId)
       }
-    }).catch(err => {
+    }).catch(async(err) => {
       if(err.response.status === 403){
-       dispatch('refreshToken');
+       await dispatch('refreshToken');
        dispatch('addCompanyLocation',payload);
       }
           console.log(err);
@@ -127,9 +127,9 @@ export default {
       if(responce.status === 200){
         dispatch("getCompany",payload.companyId)
       }
-    }).catch(err => {
+    }).catch(async(err) => {
       if(err.response.status === 403){
-       dispatch('refreshToken');
+       await dispatch('refreshToken');
        dispatch('deleteCompanyLocation',payload);
       }
           console.log(err);
@@ -143,9 +143,9 @@ export default {
       if(responce.status === 200){
         dispatch("getCompany",payload.companyId)
       }
-    }).catch(err => {
+    }).catch(async(err) => {
       if(err.response.status === 403){
-       dispatch('refreshToken');
+       await dispatch('refreshToken');
        dispatch('addCompanyVideos',payload);
       }
           console.log(err);
@@ -170,9 +170,9 @@ export default {
       if(responce.status === 200){
         dispatch("getCompany",payload.companyId)
       }
-    }).catch(err => {
+    }).catch(async(err) => {
       if(err.response.status === 403){
-       dispatch('refreshToken');
+       await dispatch('refreshToken');
        dispatch('addCompanyDocument',payload);
       }
           console.log(err);
@@ -197,25 +197,24 @@ export default {
       if(responce.status === 200){
         dispatch("getCompany",payload.companyId)
       }
-    }).catch(err => {
+    }).catch(async(err) => {
       if(err.response.status === 403){
-       dispatch('refreshToken');
+       await dispatch('refreshToken');
        dispatch('deleteCompanyDocument',payload);
       }
           console.log(err);
       });
   },
   editCompanyDocument({commit,dispatch}, payload){
-    console.log(payload);
       axios.post('/company/editCompanyDocumentName/',{'companyId': payload.companyId,'docData': payload.corporateDocument})
        .then(responce => {
         
         if(responce.status === 200){
           dispatch("getCompany",payload.companyId)
         }
-      }).catch(err => {
+      }).catch(async(err) => {
         if(err.response.status === 403){
-         dispatch('refreshToken');
+         await dispatch('refreshToken');
          dispatch('editCompanyDocument',payload);
         }
             console.log(err);
@@ -229,9 +228,9 @@ export default {
       if(responce.status === 200){
         dispatch("getCompany",payload.companyId)
       }
-    }).catch(err => {
+    }).catch(async(err) => {
       if(err.response.status === 403){
-       dispatch('refreshToken');
+       await dispatch('refreshToken');
        dispatch('addCompanyNews',payload);
       }
           console.log(err);
@@ -245,9 +244,9 @@ export default {
       if(responce.status === 200){
         dispatch("getCompany",payload.companyId)
       }
-    }).catch(err => {
+    }).catch(async(err) => {
       if(err.response.status === 403){
-       dispatch('refreshToken');
+       await dispatch('refreshToken');
        dispatch('addCompanyFacts',payload);
       }
           console.log(err);
@@ -261,9 +260,9 @@ export default {
       if(responce.status === 200){
         dispatch("getCompany",payload.companyId)
       }
-    }).catch(err => {
+    }).catch(async(err) => {
       if(err.response.status === 403){
-       dispatch('refreshToken');
+       await dispatch('refreshToken');
        dispatch('addCompanyContacts',payload);
       }
           console.log(err);
@@ -290,9 +289,9 @@ export default {
       if(responce.status === 200){
         dispatch("getCompany",payload.companyId)
       }
-    }).catch(err => {
+    }).catch(async(err) => {
       if(err.response.status === 403){
-       dispatch('refreshToken');
+       await dispatch('refreshToken');
        dispatch('addCompanyExcutive',payload);
       }
           console.log(err);
@@ -306,9 +305,9 @@ export default {
       if(responce.status === 200){
         dispatch("getCompany",payload.companyId)
       }
-    }).catch(err => {
+    }).catch(async(err) => {
       if(err.response.status === 403){
-       dispatch('refreshToken');
+       await dispatch('refreshToken');
        dispatch('editCompanyExcutive',payload);
       }
           console.log(err);
@@ -335,9 +334,9 @@ export default {
       if(responce.status === 200){
         dispatch("getCompany",payload.companyId)
       }
-    }).catch(err => {
+    }).catch(async(err) => {
       if(err.response.status === 403){
-       dispatch('refreshToken');
+       await dispatch('refreshToken');
        dispatch('deleteCompanyExcutive',payload);
       }
           console.log(err);
@@ -366,9 +365,9 @@ export default {
       if(responce.status === 200){
         dispatch("getCompany",payload.companyId)
       }
-    }).catch(err => {
+    }).catch(async(err) => {
       if(err.response.status === 403){
-       dispatch('refreshToken');
+       await dispatch('refreshToken');
        dispatch('addCompanyEsg',payload);
       }
           console.log(err);
@@ -395,9 +394,9 @@ export default {
       if(responce.status === 200){
         dispatch("getCompany",payload.companyId)
       }
-    }).catch(err => {
+    }).catch(async(err) => {
       if(err.response.status === 403){
-       dispatch('refreshToken');
+       await dispatch('refreshToken');
        dispatch('deleteCompanyEsg',payload);
       }
           console.log(err);

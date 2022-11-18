@@ -23,17 +23,17 @@ export default {
          .then(responce => {
           commit('setUser',responce.data)
           localStorage.setItem("userData",JSON.stringify(responce.data));
-        }).catch(err => {
+        }).catch(async(err) => {
           if(err.response.status === 403){
-           dispatch('refreshToken');
+           await dispatch('refreshToken');
            dispatch('updateProfileImg',payload);
           }
           console.log(err);
         });
       }
-    }).catch(err => {
+    }).catch(async(err) => {
         if(err.response.status === 403){
-         dispatch('refreshToken');
+         await dispatch('refreshToken');
          dispatch('updateProfileImg',payload);
         }
           console.log(err);
@@ -48,18 +48,18 @@ export default {
          .then(responce => {
           commit('setUser',responce.data)
           localStorage.setItem("userData",JSON.stringify(responce.data));
-        }).catch(err => {
+        }).catch(async(err) => {
           if(err.response.status === 403){
-           dispatch('refreshToken');
+           await dispatch('refreshToken');
            dispatch('updateProfile',payload);
           }
             console.log(err);
         });
       }
       
-    }).catch(err => {
+    }).catch(async(err) => {
         if(err.response.status === 403){
-         dispatch('refreshToken');
+         await dispatch('refreshToken');
          dispatch('updateProfile',payload);
         }
           console.log(err);
@@ -73,9 +73,9 @@ export default {
       if(responce.status === 200){
         commit('setUserImg',responce.data.messages)
       }
-    }).catch(err => {
+    }).catch(async(err) => {
         if(err.response.status === 403){
-         dispatch('refreshToken');
+         await dispatch('refreshToken');
          dispatch('changePassword',payload);
         }
           console.log(err);
@@ -97,9 +97,9 @@ export default {
       if(responce.status === 200){
         commit('setCompanyAdmin',responce.data)
       }
-    }).catch(err => {
+    }).catch(async(err) => {
       if(err.response.status === 403){
-       dispatch('refreshToken');
+       await dispatch('refreshToken');
        dispatch('adminsCompany',payload);
       }
           console.log(err);
@@ -115,17 +115,17 @@ export default {
           
           commit('setUser',responce.data)
           localStorage.setItem("userData",JSON.stringify(responce.data));
-        }).catch(err => {
+        }).catch(async(err) => {
           if(err.response.status === 403){
-           dispatch('refreshToken');
+           await dispatch('refreshToken');
            dispatch('updateNotifications',payload);
           }
             console.log(err);
         });
       }
-    }).catch(err => {
+    }).catch(async(err) => {
         if(err.response.status === 403){
-         dispatch('refreshToken');
+         await dispatch('refreshToken');
          dispatch('updateNotifications',payload);
         }
           console.log(err);
@@ -140,9 +140,9 @@ export default {
           commit('setMessage','User invited successfully')
           router.replace({ name: "ManageUsers" });
         }
-    }).catch(err => {
+    }).catch(async(err) => {
         if(err.response.status === 403){
-         dispatch('refreshToken');
+         await dispatch('refreshToken');
          dispatch('inviteUser',payload);
         }
           console.log(err);
@@ -162,9 +162,9 @@ export default {
           commit('showErrorAlert')
           router.replace({ name: "ManageUsers" });
         }
-    }).catch(err => {
+    }).catch(async(err) => {
         if(err.response.status === 403){
-          dispatch('refreshToken');
+          await dispatch('refreshToken');
           dispatch('updateUser',payload);
         }
           console.log(err);
@@ -180,9 +180,9 @@ export default {
           commit('showErrorAlert')
           router.replace({ name: "ManageUsers" });
         }
-    }).catch(err => {
+    }).catch(async(err) => {
         if(err.response.status === 403){
-          dispatch('refreshToken');
+          await dispatch('refreshToken');
           dispatch('updateInvite',payload);
         }
           console.log(err);
@@ -196,9 +196,9 @@ export default {
         commit('setDisableUsersList',responce.data)
         commit('showErrorAlert')
       }
-    }).catch(err => {
+    }).catch(async(err) => {
         if(err.response.status === 403){
-          dispatch('refreshToken');
+          await dispatch('refreshToken');
           dispatch('getDisabledUsers',payload);
         }
           console.log(err);
@@ -212,9 +212,9 @@ export default {
         commit('setPendingUsersList',responce.data.data)
         commit('showErrorAlert')
       }
-    }).catch(err => {
+    }).catch(async(err) => {
         if(err.response.status === 403){
-          dispatch('refreshToken');
+          await dispatch('refreshToken');
           dispatch('getPendingUsers',payload);
         }
           console.log(err);

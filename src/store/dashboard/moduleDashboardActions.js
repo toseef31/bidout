@@ -11,9 +11,9 @@ export default {
           commit('setPendingCount',responce.data.size)
         }
       
-    }).catch(err => {
+    }).catch(async(err) => {
         if(err.response.status === 403){
-         dispatch('refreshToken');
+         await dispatch('refreshToken');
          dispatch('pendingUserCount',payload);
         }
           console.log(err);
@@ -26,9 +26,9 @@ export default {
         if(responce.status === 200){
           commit('setInvitedUsersList',responce.data)
         }
-    }).catch(err => {
+    }).catch(async(err) => {
         if(err.response.status === 403){
-         dispatch('refreshToken');
+         await dispatch('refreshToken');
          dispatch('getPendingList',payload);
         }
           console.log(err);
@@ -41,7 +41,7 @@ export default {
         if(responce.status === 200){
           commit('getUsersList',responce.data)
         }
-    }).catch(err => {
+    }).catch(async(err) => {
         if(err.response.status === 403){
          await dispatch('refreshToken');
          dispatch('manageUsers',payload);
@@ -56,9 +56,9 @@ export default {
         if(responce.status === 200){
           commit('setInvitedUsersList',responce.data)
         }
-    }).catch(err => {
+    }).catch(async(err) => {
         if(err.response.status === 403){
-         dispatch('refreshToken');
+         await dispatch('refreshToken');
          dispatch('getInvitedList',payload);
         }
           console.log(err);
@@ -75,9 +75,9 @@ export default {
           commit('showErrorAlert')
           router.replace({ name: "DisabledUsers" });
         }
-    }).catch(err => {
+    }).catch(async(err) => {
       if(err.response.status === 403){
-       dispatch('refreshToken');
+       await dispatch('refreshToken');
        dispatch('disableUser',payload);
       }
           console.log(err);
@@ -94,9 +94,9 @@ export default {
           commit('showErrorAlert')
           router.replace({ name: "ManageUsers" });
         }
-    }).catch(err => {
+    }).catch(async(err) => {
         if(err.response.status === 403){
-         dispatch('refreshToken');
+         await dispatch('refreshToken');
          dispatch('enableUser',payload);
         }
           console.log(err);
@@ -111,9 +111,9 @@ export default {
         commit('setStatusMessage','User accepted sucessfully!')
         commit('showErrorAlert')
       }
-    }).catch(err => {
+    }).catch(async(err) => {
       if(err.response.status === 403){
-       dispatch('refreshToken');
+       await dispatch('refreshToken');
        dispatch('acceptPendingUser',payload);
       }
           console.log(err);
@@ -126,9 +126,9 @@ export default {
         if(responce.status === 200){
           commit('setActivityList',responce.data)
         }
-    }).catch(err => {
+    }).catch(async(err) => {
         if(err.response.status === 403){
-         dispatch('refreshToken');
+         await dispatch('refreshToken');
          dispatch('getActivities',payload);
         }
           console.log(err);
