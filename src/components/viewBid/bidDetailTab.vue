@@ -37,7 +37,7 @@
           v-for="(item, index) in bidDetail.bidData.bidDescriptions.slice(1)"
           :key="index"
         >
-          <span>{{ item.name }}:</span> {{ item.body }}
+          <span>{{ item && item.name }}:</span> {{ item && item.body }}
           <br />
         </p>
       </div>
@@ -55,14 +55,14 @@
       >
         <div class="d-flex align-center">
           <v-img
-            v-if="item.image"
+            v-if="item && item.image"
             width="60px"
             height="auto"
-            :src="item.image"
+            :src="item && item.image"
           ></v-img>
           <v-icon v-else size="40">mdi-domain</v-icon>
           <div class="ml-5">
-            <div class="font-weight-bold">{{ item.company }}</div>
+            <div class="font-weight-bold">{{ item && item.company }}</div>
             <a href="#" class="text-decoration-underline text-body-2"
               >View profile</a
             >
@@ -110,7 +110,7 @@
             <v-icon color="#0d9648" large>mdi-account-outline </v-icon>
           </v-avatar>
           <span class="text--black px-4 bid-creator"
-            >{{ item.firstName }} {{ item.lastName }}</span
+            >{{ item && item.firstName }} {{ item && item.lastName }}</span
           >
           <span
             class="bid-creator-title"
