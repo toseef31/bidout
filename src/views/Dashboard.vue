@@ -30,16 +30,26 @@
                           </tr>
                         </thead>
                         <tbody>
-                          <tr
-                            v-for="bid in bids"
-                            :key="bid.id"
-                          >
-                            <td class="text-left">{{ bid.id }}</td>
-                            <td class="text-left">{{ bid.title }}</td>
-                            <td class="text-left">{{ bid.entries }}</td>
-                            <td class="text-left">{{ bid.endTime }}</td>
-                            <td class="text-left d-none d-sm-block pt-3">View Details</td>
-                            <td class="text-left d-flex d-sm-none align-center"><span class="icon-circle"><v-icon>mdi-chevron-right</v-icon></span></td>
+                          <template v-if="bidsList.length > 0">
+                            <tr
+                              v-for="bid in bidsList"
+                              :key="bid.id" v-if=""
+                            >
+                              <td class="text-left">{{ bid.serial }}</td>
+                              <td class="text-left">{{ bid.title }}</td>
+                              <td class="text-left">{{ bid.entries ? bid.entries.length : 0 }}</td>
+                              <td class="text-left">{{ bid.dueDate | moment('MM/DD/YYYY') }} {{bid.dueTime}}</td>
+                              <td class="text-left d-none d-sm-block pt-3"><router-link class="text-decoration-none"
+                                :to="{
+                                  path: `/view-bids/${bid.serial}`,
+                                }"
+                                >View Details</router-link
+                              ></td>
+                              <td class="text-left d-flex d-sm-none align-center"><span class="icon-circle"><v-icon>mdi-chevron-right</v-icon></span></td>
+                            </tr>
+                          </template>
+                          <tr v-else>
+                            <td colspan="5">No Bids to show</td>
                           </tr>
                         </tbody>
                       </template>
@@ -78,6 +88,7 @@
   import Navbar from '../components/Layout/Navbar.vue'
   import LeftSidebar from '../components/Layout/Dashboard/LeftSidebar.vue'
   import RightSidebar from '../components/Layout/Dashboard/RightSidebar.vue'
+  import _ from 'lodash'
   import { mapActions } from "vuex";
 export default {
   name : "Dashboard",
@@ -90,44 +101,6 @@ export default {
   data() {
     return {
       isActivity : false,
-      bids: [
-        {
-          id: 10007,
-          title: 'Water Job',
-          entries: 0,
-          endTime: '-',
-        },
-        {
-          id: 10008,
-          title: 'Water Job',
-          entries: 0,
-          endTime: '-',
-        },
-        {
-          id: 10009,
-          title: 'Water Job',
-          entries: 0,
-          endTime: '-',
-        },
-        {
-          id: 10010,
-          title: 'Water Job',
-          entries: 0,
-          endTime: '-',
-        },
-        {
-          id: 10010,
-          title: 'Water Job',
-          entries: 0,
-          endTime: '-',
-        },
-        {
-          id: 10010,
-          title: 'Water Job',
-          entries: 0,
-          endTime: '-',
-        },
-      ],
       bidss:{},
       mapOptions: {},
       markerOptions: {},
@@ -157,6 +130,9 @@ export default {
     loading(){
      return this.$store.getters.pageLoader;
     },
+    bidsList(){
+      return _.orderBy(this.$store.getters.bidsList.slice(0,6),'serial','desc');
+    }
   },
   methods: {
     ...mapActions(["pendingUserCount","getAllLocations"]),
@@ -207,8 +183,10 @@ export default {
     },
   },
   async created(){
+    this.users = JSON.parse(localStorage.getItem("userData")).user;
     await this.getAllLocations();
     await this.getLocation();
+    await this.getBidsLists(this.users.id);
   },
   mounted() {
     document.title = "Dashboard - BidOut";

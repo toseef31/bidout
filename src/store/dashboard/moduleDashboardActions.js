@@ -73,6 +73,7 @@ export default {
   getActivities({commit},payload){
     axios.get('/activity/getActivities/'+payload)
       .then(responce => {
+        console.log(responce.data);
       commit('setActivityList',responce.data)
     }).catch(err => {
           console.log(err);

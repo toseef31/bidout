@@ -6,40 +6,44 @@
       </div>
       <v-list>
         <v-list-item-group
-          v-model="selected"
           active-class="success--text"
           multiple
         >
-          <template v-for="(item, index) in itemsActive">
-            <v-list-item :key="item.title">
+          <template v-if="activities.length == 0 || !activities">
+            <h4 class="text-center py-3">
+              No activity
+            </h4>
+          </template>
+          <template v-for="(item, index) in activities" v-if="activities.length > 0 || activities">
+            <v-list-item :key="item.index">
               <template v-slot:default="{ active }">
                 
                 <v-list-item-avatar class="my-1">
                   <v-icon
                     class="notification-icon"
-                    v-text="item.icon"
-                  >
+                  >mdi-email-outline
                   </v-icon>
                 </v-list-item-avatar>
                 <v-list-item-content>
-                  <v-list-item-title v-text="item.title"></v-list-item-title>
+                  <v-list-item-title v-text="item.action"></v-list-item-title>
 
                 </v-list-item-content>
 
                 <v-list-item-action >
-                  <v-list-item-action-text v-text="item.action"></v-list-item-action-text>
+                  <v-list-item-action-text>{{item.action_date | moment("MM/D/YYYY")}}</v-list-item-action-text>
                 </v-list-item-action>
               </template>
             </v-list-item>
 
             <v-divider
-              v-if="index < itemsActive.length - 1"
+              v-if="index < activities.length - 1"
               :key="index"
             ></v-divider>
           </template>
+          
         </v-list-item-group>
       </v-list>
-      <div class="pa-3 view-all"> 
+      <div class="pa-3 view-all" v-if="activities.length > 9"> 
           <a href="">View all </a>     
       </div> 
     </div>    
@@ -88,79 +92,25 @@ export default {
   name : "RightSidebar",
   data() {
     return {
-     selected: [2],
-     itemsActive: [
-       {
-         action: '12min',
-         title: 'Laura sent you new messages.',
-         icon: 'mdi-email-outline'
-       },
-       {
-         action: '32min',
-         title: 'Aubrey sent you a new message.',
-         icon: 'mdi-email-outline'
-       },
-       {
-         action: '1hr',
-         title: 'Laura sent you new messages.',
-         icon: 'mdi-email-outline'
-       },
-       {
-         action: '1d',
-         title: 'Your bid Water Job was created.',
-         icon: 'mdi-check'
-       },
-       {
-         action: '1d',
-         title: 'Your bid Water Job was created.',
-         icon: 'mdi-check'
-       },
-       {
-         action: '1d',
-         title: 'Peter sent you new messages.',
-         icon: 'mdi-email-outline'
-       },
-       {
-         action: '1d',
-         title: 'Your bid Water Job was created.',
-         icon: 'mdi-check'
-       },
-       {
-         action: '1d',
-         title: 'Your bid Water Job was created.',
-         icon: 'mdi-check'
-       },
-       {
-         action: '1d',
-         title: 'Your bid Water Job was created.',
-         icon: 'mdi-check'
-       },
-       {
-         action: '1d',
-         title: 'Your bid Water Job was created.',
-         icon: 'mdi-check'
-       },
-       {
-         action: '1d',
-         title: 'Your bid Water Job was created.',
-         icon: 'mdi-check'
-       },
-     ],
+     
     };
   },
   computed:{
     activityPanel(){
         return this.$store.getters.g_activityPanel;
+    },
+    activities(){
+      return this.$store.getters.activities.slice(0,10);
     }
   },
   methods: {
     ...mapActions(["getActivities"]),
-    activities(id){
-      this.getActivities(id);
-    }
+    istoday(date) {
+      return moment(date).calendar();
+    },
   },
   mounted() {
-    this.activities(this.$store.getters.userInfo.id);
+    this.getActivities(this.$store.getters.userInfo.id);
   }
 };
 </script>
