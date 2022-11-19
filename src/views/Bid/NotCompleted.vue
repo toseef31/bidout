@@ -102,7 +102,7 @@
               <v-tab-item
                 value="tab-6" class="question-tab mt-5"
               >
-                <question-section></question-section>
+                <question-section2></question-section2>
               </v-tab-item>
             </v-tabs-items>
           </div>
@@ -119,7 +119,7 @@
   import BidLines from '../../components/BidTabs/BidLines.vue'
   import Attachment from '../../components/BidTabs/Attachment.vue'
   import BidDetails from '../../components/BidTabs/BidDetails.vue'
-  import QuestionSection from '../../components/BidTabs/QuestionSection.vue'
+  import QuestionSection2 from '../../components/BidTabs/QuestionSection2.vue'
   import { mapActions } from "vuex";
 export default {
   name : "NotCompleted",
@@ -132,7 +132,7 @@ export default {
     BidLines,
     Attachment,
     BidDetails,
-    QuestionSection
+    QuestionSection2
   },
   
   data() {
