@@ -22,5 +22,8 @@ export default {
   },
   setPendingCount (state, payload){
    state.pendingCount = payload
+  },
+  setAllLocations (state, payload){
+   state.allLocations = payload
   }
 }

@@ -145,11 +145,6 @@ export default {
          title: 'Your bid Water Job was created.',
          icon: 'mdi-check'
        },
-       {
-         action: '1d',
-         title: 'Your bid Water Job was created.',
-         icon: 'mdi-check'
-       },
      ],
     };
   },

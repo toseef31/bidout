@@ -57,7 +57,10 @@
                     </div>
                   </div>
                   <div class="map-section">
-                    <div id="map" class="map" height="400px"></div>
+                    <div class="map" height="415px" v-if="loading">
+                      <v-progress-circular :width="3" color="green" indeterminate ></v-progress-circular>
+                    </div>
+                    <div id="map" class="map" height="415px" v-else></div>
                   </div>
                 </div>
             </v-col>
@@ -148,35 +151,67 @@ export default {
     pendingCount(){
       return this.$store.getters.pendingCount;
     },
+    locations(){
+      return this.$store.getters.allLocations;
+    },
+    loading(){
+     return this.$store.getters.pageLoader;
+    },
   },
   methods: {
-    ...mapActions(["pendingUserCount"]),
-    shipMap(){
-      this.mapOptions = {
-        center: new google.maps.LatLng(29.721085, -95.342049),
-        zoom: 19,
-        mapTypeId: 'terrain',
-        mapTypeControl: false,
-        scaleControl: false,
-        streetViewControl: false,
-        rotateControl: false,
-        fullscreenControl: true,
-        disableDefaultUi: false,
-        zoomControl: true,
-        scrollwheel: false,
-      },
-      this.markerOptions = {
-        url: '/assets/images/dashboard/mapMobile.png',
-        size: {width: 60, height: 90, f: 'px', b: 'px',},
-        scaledSize: {width: 30, height: 45, f: 'px', b: 'px',},
-      },
-      this.map = new google.maps.Map(document.getElementById("map"), this.mapOptions);
+    ...mapActions(["pendingUserCount","getAllLocations"]),
+    getLocation(){
+      var LocationsForMap = this.locations;
+      console.log(LocationsForMap[0].locations[0],'gfg');
+      var map = new google.maps.Map(document.getElementById('map'), {
+        center: new google.maps.LatLng(LocationsForMap[0].locations[0].lattitude, LocationsForMap[0].locations[0].longitude),
+        mapTypeId: google.maps.MapTypeId.ROADMAP
+      });
+
+      var infowindow = new google.maps.InfoWindow();
+
+      var marker, i,j;
+      var latlngbounds =new google.maps.LatLngBounds();
+      for (i = 0; i < LocationsForMap.length; i++) {  
+        for (j = 0; j < LocationsForMap[i].locations.length; j++){
+          marker = new google.maps.Marker({
+            position: new google.maps.LatLng(LocationsForMap[i].locations[j].lattitude, LocationsForMap[i].locations[j].longitude),
+            map: map,
+            title: 'Marker',
+            anchorPoint: new google.maps.Point(0, -29),
+          });
+          const contentString =
+            '<div id="content">' +
+            '<div id="siteNotice">' +
+            "</div>" +
+            '<h1 id="firstHeading" class="firstHeading"><img src="'+LocationsForMap[i].companyImage+'" height="50px" width="100px"></h1>' +
+            '<div id="bodyContent">' +
+            '<p><b>'+LocationsForMap[i].companyName+': </b><a href="company/'+LocationsForMap[i].companySlug+'">' +
+            "View Profile</a> </p>" +
+            "<p><b>"+LocationsForMap[i].locations[j].location+"<b></p> " +
+            "</div>" +
+            "</div>";
+          google.maps.event.addListener(marker, 'click', (function(marker, i) {
+            return function() {
+              infowindow.setContent(contentString);
+              infowindow.open(map, marker);
+            }
+          })(marker, j));
+          latlngbounds.extend(marker.position);
+        }
+      }
+      
+        map.setCenter(latlngbounds.getCenter());
+        map.fitBounds(latlngbounds);
+
     },
-    
+  },
+  async created(){
+    await this.getAllLocations();
+    await this.getLocation();
   },
   mounted() {
     document.title = "Dashboard - BidOut";
-    this.shipMap();
     this.pendingUserCount(this.$store.getters.userInfo.company.id)
     this.users = JSON.parse(localStorage.getItem("userData")).user;
     
