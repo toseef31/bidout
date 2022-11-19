@@ -1,11 +1,11 @@
 <template>
-  <v-col class="px-5 py-8">
+  <v-col class="pl-0 pr-3 pb-0 pt-3">
     <v-card
       class="fill-height main-card"
       :elevation="0"
       style="border: 1px solid #b8b8b8"
     >
-      <v-row class="px-5 my-5 row-title" no-gutters justify="space-between">
+      <v-row class="px-5 my-5 row-title" no-gutters>
         <v-col>
           <div class="pa-1 text-left text--primary">
             <div
@@ -32,7 +32,7 @@
           </div>
         </v-col>
 
-        <v-col>
+        <v-col class="status-sec mx-auto">
           <v-sheet
             class="py-2 px-4"
             rounded="lg"

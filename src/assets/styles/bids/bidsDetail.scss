@@ -1,11 +1,6 @@
 .main-card {
   border-radius: 8px;
 }
-.row-title {
-  border-left: 4px solid #0d9648;
-  border-bottom-left-radius: 4px;
-  border-top-left-radius: 4px;
-}
 
 .detail {
   font-size: 14px;
@@ -72,6 +67,57 @@
 
 .bid-section-2 {
   margin: 30px 105px;
+  align-items: center;
+}
+
+@media (max-width: 960px) {
+  .bid-section-2 {
+    margin: 30px 50px;
+  }
+}
+
+@media (max-width: 600px) {
+  .bid-section-2 {
+    margin: 30px 10px;
+  }
+}
+
+.invitedS-sec {
+  margin-left: auto;
+}
+
+.row-title {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+}
+
+@media (max-width: 680px) {
+  .row-title {
+    flex-direction: column;
+    justify-content: center;
+  }
+
+  .status-sec {
+    align-items: center;
+    margin-top: 20px;
+  }
+  .setting {
+    margin-top: 30px;
+  }
+}
+
+@media (max-width: 470px) {
+  .bid-section-2 {
+    flex-direction: column;
+    align-items: center;
+    justify-items: flex-start;
+  }
+
+  .invitedS-sec {
+    margin-left: 0px;
+    margin-top: 20px;
+  }
 }
 
 .bid-creator {

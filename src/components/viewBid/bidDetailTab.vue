@@ -56,8 +56,8 @@
         <div class="d-flex align-center">
           <v-img
             v-if="item.image"
-            width="88px"
-            height="29px"
+            width="60px"
+            height="auto"
             :src="item.image"
           ></v-img>
           <v-icon v-else size="40">mdi-domain</v-icon>
@@ -68,7 +68,7 @@
             >
           </div>
         </div>
-        <div class="ml-auto">
+        <div class="invitedS-sec">
           <v-row>
             <v-col class="mr-2">
               <v-badge color="#0D9648" dot overlap>
@@ -96,33 +96,30 @@
         "
       >
         <div
-          class="flex-child"
           v-for="(item, index) in bidDetail.bidData.invitedTeamMembers"
           :key="index"
+          class="d-flex align-center"
         >
-          <div v-if="item">
-            <v-img
-              v-if="item.image"
-              width="48px"
-              height="48px"
-              :src="item.image"
-            ></v-img>
-            <v-avatar v-else color="#0d96481a" size="62">
-              <v-icon color="#0d9648" large>mdi-account-outline </v-icon>
-            </v-avatar>
-            <span class="text--black px-4 bid-creator"
-              >{{ item.firstName }} {{ item.lastName }}</span
-            >
-            <span
-              class="bid-creator-title"
-              v-if="
-                bidDetail.bidData.userId.firstName === item.firstName &&
-                bidDetail.bidData.userId.lastName === item.lastName
-              "
-              >Bid Creator</span
-            >
-          </div>
-          <div v-else class="attachment-none">None</div>
+          <v-img
+            v-if="item.image"
+            width="48px"
+            height="48px"
+            :src="item.image"
+          ></v-img>
+          <v-avatar v-else color="#0d96481a" size="62">
+            <v-icon color="#0d9648" large>mdi-account-outline </v-icon>
+          </v-avatar>
+          <span class="text--black px-4 bid-creator"
+            >{{ item.firstName }} {{ item.lastName }}</span
+          >
+          <span
+            class="bid-creator-title"
+            v-if="
+              bidDetail.bidData.userId.firstName === item.firstName &&
+              bidDetail.bidData.userId.lastName === item.lastName
+            "
+            >Bid Creator</span
+          >
         </div>
       </div>
 
@@ -220,15 +217,14 @@
 
     <div class="pt-8 bid-row-3">
       <div class="question-section-title">
-        <span class="title-detail px-6">Big Questions</span>
+        <span class="title-detail px-6">Bid Questions</span>
       </div>
       <div
         class="question-sub-section"
         v-if="bidDetail.bidData.questions && bidDetail.bidData.questions.length"
       >
-        <span class="sub-section-title px-6">Operational Questions</span>
         <v-row
-          class="px-10 pt-6 operational-ques"
+          class="px-10 operational-ques"
           justify="space-between"
           align="center"
           v-for="(item, index) in bidDetail.bidData.questions"
