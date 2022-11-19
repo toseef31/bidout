@@ -5,7 +5,7 @@ const state = {
     activityPanel: false,
     pageLoader: false,
     isCreateBid: false,
-    userToken: JSON.parse(localStorage.getItem('token')),
+    apiCounter: 0,
 }
 
 export default state

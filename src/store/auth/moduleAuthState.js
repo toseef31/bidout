@@ -3,6 +3,7 @@ import store from "../../store";
 
 export default {
     userInfo: JSON.parse(localStorage.getItem('userData')),
+    userToken: JSON.parse(localStorage.getItem('token')),
     userId: '',
     companyId: '',
     error: null,

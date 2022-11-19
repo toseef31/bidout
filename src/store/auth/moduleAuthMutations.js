@@ -2,6 +2,9 @@ export default {
     setUser (state, payload){
     	state.userInfo = payload
     },
+    setToken (state, payload){
+      state.userToken = payload
+    },
     setUserId (state, payload){
       state.userId = payload
     },

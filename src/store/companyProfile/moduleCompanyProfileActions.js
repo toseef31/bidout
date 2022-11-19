@@ -3,7 +3,7 @@ import store from "../../store";
 import axios from 'axios'
 
 export default {
-  getCompany({commit,dispatch}, payload){
+  getCompany({commit,dispatch,state}, payload){
     axios.get('company/getCompanyById/'+payload)
      .then(responce => {
       if(responce.status === 200){
@@ -13,14 +13,20 @@ export default {
       }
      
     }).catch(async(err) => {
-      if(err.response.status === 403){
-       await dispatch('refreshToken');
-       dispatch('getCompany',payload);
+      if(state.apiCounter === 2){
+        
+        dispatch('signOutAction')
+      }else{
+        if(err.response.status === 403){
+         await dispatch('refreshToken');
+         state.apiCounter = 2;
+         dispatch('getCompany',payload);
+        }
       }
       console.log(err);
     });
   },
-  getSubCategories({commit,dispatch}, payload){
+  getSubCategories({commit,dispatch,state}, payload){
     axios.get('serviceCategory/getSubCategories/'+payload)
      .then(responce => {
       
@@ -28,14 +34,20 @@ export default {
         commit('setSubCategories',responce.data)
       }
     }).catch(async(err) => {
-      if(err.response.status === 403){
-       await dispatch('refreshToken');
-       dispatch('getSubCategories',payload);
+      if(state.apiCounter === 2){
+        
+        dispatch('signOutAction')
+      }else{
+        if(err.response.status === 403){
+         await dispatch('refreshToken');
+         state.apiCounter = 2;
+         dispatch('getSubCategories',payload);
+        }
       }
       console.log(err);
     });
   },
-  companyProfileImg({commit,dispatch}, payload){
+  companyProfileImg({commit,dispatch,state}, payload){
     var config = {
       headers: {
         "Content-Type": "multipart/form-data",
@@ -52,14 +64,20 @@ export default {
         dispatch("getCompany",payload.companyId)
       }
     }).catch(async(err) => {
-      if(err.response.status === 403){
-       await dispatch('refreshToken');
-       dispatch('companyProfileImg',payload);
+      if(state.apiCounter === 2){
+        
+        dispatch('signOutAction')
+      }else{
+        if(err.response.status === 403){
+         await dispatch('refreshToken');
+         state.apiCounter = 2;
+         dispatch('companyProfileImg',payload);
+        }
       }
           console.log(err);
       });
   },  
-  updateBasicProfile({commit,dispatch}, payload){
+  updateBasicProfile({commit,dispatch,state}, payload){
     axios.post('/company/updateBasicProfile/',{'companyId': payload.companyId,'profileName': payload.profileName,'profileSummary': payload.profileSummary})
      .then(responce => {
       
@@ -67,14 +85,20 @@ export default {
         dispatch("getCompany",payload.companyId)
       }
     }).catch(async(err) => {
-      if(err.response.status === 403){
-       await dispatch('refreshToken');
-       dispatch('updateBasicProfile',payload);
+      if(state.apiCounter === 2){
+        
+        dispatch('signOutAction')
+      }else{
+        if(err.response.status === 403){
+         await dispatch('refreshToken');
+         state.apiCounter = 2;
+         dispatch('updateBasicProfile',payload);
+        }
       }
           console.log(err);
       });
   }, 
-  addCompanyService({commit,dispatch}, payload){
+  addCompanyService({commit,dispatch,state}, payload){
     axios.post('/company/addCompanyService/',{'companyId': payload.companyId,'subCategories': payload.subCategories})
      .then(responce => {
       
@@ -82,14 +106,20 @@ export default {
         dispatch("getCompany",payload.companyId)
       }
     }).catch(async(err) => {
-      if(err.response.status === 403){
-       await dispatch('refreshToken');
-       dispatch('addCompanyService',payload);
+      if(state.apiCounter === 2){
+        
+        dispatch('signOutAction')
+      }else{
+        if(err.response.status === 403){
+         await dispatch('refreshToken');
+         state.apiCounter = 2;
+         dispatch('addCompanyService',payload);
+        }
       }
           console.log(err);
       });
   }, 
-  addCompanyBasins({commit,dispatch}, payload){
+  addCompanyBasins({commit,dispatch,state}, payload){
     axios.post('/company/addCompanyBasin/',{'companyId': payload.companyId,'basins': payload.basins})
      .then(responce => {
       
@@ -98,13 +128,19 @@ export default {
       }
     }).catch(async(err) => {
       console.log(err);
-      if(err.response.status === 403){
-       await dispatch('refreshToken');
-       dispatch('addCompanyBasins',payload);
+      if(state.apiCounter === 2){
+        
+        dispatch('signOutAction')
+      }else{
+        if(err.response.status === 403){
+         await dispatch('refreshToken');
+         state.apiCounter = 2;
+         dispatch('addCompanyBasins',payload);
+        }
       }
     });
   }, 
-  addCompanyLocation({commit,dispatch}, payload){
+  addCompanyLocation({commit,dispatch,state}, payload){
     axios.post('/company/addCompanyLocation/',{'id': payload.id,'companyId': payload.companyId,'location': payload.location,'lat':payload.lat,'long':payload.long})
      .then(responce => {
       
@@ -112,14 +148,20 @@ export default {
         dispatch("getCompany",payload.companyId)
       }
     }).catch(async(err) => {
-      if(err.response.status === 403){
-       await dispatch('refreshToken');
-       dispatch('addCompanyLocation',payload);
+      if(state.apiCounter === 2){
+        
+        dispatch('signOutAction')
+      }else{
+        if(err.response.status === 403){
+         await dispatch('refreshToken');
+         state.apiCounter = 2;
+         dispatch('addCompanyLocation',payload);
+        }
       }
           console.log(err);
     });
   }, 
-  deleteCompanyLocation({commit,dispatch}, payload){
+  deleteCompanyLocation({commit,dispatch,state}, payload){
     
     axios.post('/company/deleteCompanyLocation/',{'id': payload.id,'companyId': payload.companyId,'location': payload.location,'lat':payload.lat,'long':payload.long})
      .then(responce => {
@@ -128,14 +170,20 @@ export default {
         dispatch("getCompany",payload.companyId)
       }
     }).catch(async(err) => {
-      if(err.response.status === 403){
-       await dispatch('refreshToken');
-       dispatch('deleteCompanyLocation',payload);
+      if(state.apiCounter === 2){
+        
+        dispatch('signOutAction')
+      }else{
+        if(err.response.status === 403){
+         await dispatch('refreshToken');
+         state.apiCounter = 2;
+         dispatch('deleteCompanyLocation',payload);
+        }
       }
           console.log(err);
     });
   }, 
-  addCompanyVideos({commit,dispatch}, payload){
+  addCompanyVideos({commit,dispatch,state}, payload){
    
     axios.post('/company/addCompanyVideo/',{'companyId': payload.companyId,'videoLinks': payload.videoLinks})
      .then(responce => {
@@ -144,14 +192,20 @@ export default {
         dispatch("getCompany",payload.companyId)
       }
     }).catch(async(err) => {
-      if(err.response.status === 403){
-       await dispatch('refreshToken');
-       dispatch('addCompanyVideos',payload);
+      if(state.apiCounter === 2){
+        
+        dispatch('signOutAction')
+      }else{
+        if(err.response.status === 403){
+         await dispatch('refreshToken');
+         state.apiCounter = 2;
+         dispatch('addCompanyVideos',payload);
+        }
       }
           console.log(err);
       });
   },
-  addCompanyDocument({commit,dispatch}, payload){
+  addCompanyDocument({commit,dispatch,state}, payload){
     var config = {
       headers: {
         "Content-Type": "multipart/form-data",
@@ -171,14 +225,19 @@ export default {
         dispatch("getCompany",payload.companyId)
       }
     }).catch(async(err) => {
-      if(err.response.status === 403){
-       await dispatch('refreshToken');
-       dispatch('addCompanyDocument',payload);
+      if(state.apiCounter === 2){
+        dispatch('signOutAction')
+      }else{
+        if(err.response.status === 403){
+         await dispatch('refreshToken');
+         state.apiCounter = 2;
+         dispatch('addCompanyDocument',payload);
+        }
       }
           console.log(err);
     });
   },
-  deleteCompanyDocument({commit,dispatch}, payload){
+  deleteCompanyDocument({commit,dispatch,state}, payload){
     var config = {
       headers: {
         "Content-Type": "multipart/form-data",
@@ -198,14 +257,19 @@ export default {
         dispatch("getCompany",payload.companyId)
       }
     }).catch(async(err) => {
-      if(err.response.status === 403){
-       await dispatch('refreshToken');
-       dispatch('deleteCompanyDocument',payload);
+      if(state.apiCounter === 2){
+        dispatch('signOutAction')
+      }else{
+        if(err.response.status === 403){
+         await dispatch('refreshToken');
+         state.apiCounter = 2;
+         dispatch('deleteCompanyDocument',payload);
+        }
       }
           console.log(err);
       });
   },
-  editCompanyDocument({commit,dispatch}, payload){
+  editCompanyDocument({commit,dispatch,state}, payload){
       axios.post('/company/editCompanyDocumentName/',{'companyId': payload.companyId,'docData': payload.corporateDocument})
        .then(responce => {
         
@@ -213,14 +277,19 @@ export default {
           dispatch("getCompany",payload.companyId)
         }
       }).catch(async(err) => {
-        if(err.response.status === 403){
-         await dispatch('refreshToken');
-         dispatch('editCompanyDocument',payload);
+        if(state.apiCounter === 2){
+          dispatch('signOutAction')
+        }else{
+          if(err.response.status === 403){
+           await dispatch('refreshToken');
+           state.apiCounter = 2;
+           dispatch('editCompanyDocument',payload);
+          }
         }
             console.log(err);
         });
   },
-  addCompanyNews({commit,dispatch}, payload){
+  addCompanyNews({commit,dispatch,state}, payload){
     
     axios.post('/company/addCompanyNews/',{'companyId': payload.companyId,'corporateNews': payload.corporateNews})
      .then(responce => {
@@ -229,14 +298,19 @@ export default {
         dispatch("getCompany",payload.companyId)
       }
     }).catch(async(err) => {
-      if(err.response.status === 403){
-       await dispatch('refreshToken');
-       dispatch('addCompanyNews',payload);
+      if(state.apiCounter === 2){
+        dispatch('signOutAction')
+      }else{
+        if(err.response.status === 403){
+         await dispatch('refreshToken');
+         state.apiCounter = 2;
+         dispatch('addCompanyNews',payload);
+        }
       }
           console.log(err);
       });
   },
-  addCompanyFacts({commit,dispatch}, payload){
+  addCompanyFacts({commit,dispatch,state}, payload){
     
     axios.post('/company/addCompanyKeyfacts/',{'companyId':payload.companyId,'founded':payload.founded,'employees':payload.employees,'hqlocation':payload.hqLocation,'website':payload.website,'linkedin':payload.linkedin,'careers':payload.careers})
      .then(responce => {
@@ -245,14 +319,19 @@ export default {
         dispatch("getCompany",payload.companyId)
       }
     }).catch(async(err) => {
-      if(err.response.status === 403){
-       await dispatch('refreshToken');
-       dispatch('addCompanyFacts',payload);
+      if(state.apiCounter === 2){
+        dispatch('signOutAction')
+      }else{
+        if(err.response.status === 403){
+         await dispatch('refreshToken');
+         state.apiCounter = 2;
+         dispatch('addCompanyFacts',payload);
+        }
       }
           console.log(err);
       });
   },
-  addCompanyContacts({commit,dispatch}, payload){
+  addCompanyContacts({commit,dispatch,state}, payload){
     
     axios.post('/company/addCompanyContact/',{'companyId':payload.companyId,'accountContacts':payload.accountContacts})
      .then(responce => {
@@ -261,14 +340,19 @@ export default {
         dispatch("getCompany",payload.companyId)
       }
     }).catch(async(err) => {
-      if(err.response.status === 403){
-       await dispatch('refreshToken');
-       dispatch('addCompanyContacts',payload);
+      if(state.apiCounter === 2){
+        dispatch('signOutAction')
+      }else{
+        if(err.response.status === 403){
+         await dispatch('refreshToken');
+         state.apiCounter = 2;
+         dispatch('addCompanyContacts',payload);
+        }
       }
           console.log(err);
       });
   },
-  addCompanyExcutive({commit,dispatch}, payload){
+  addCompanyExcutive({commit,dispatch,state}, payload){
     var config = {
       headers: {
         "Content-Type": "multipart/form-data",
@@ -290,14 +374,19 @@ export default {
         dispatch("getCompany",payload.companyId)
       }
     }).catch(async(err) => {
-      if(err.response.status === 403){
-       await dispatch('refreshToken');
-       dispatch('addCompanyExcutive',payload);
+      if(state.apiCounter === 2){
+        dispatch('signOutAction')
+      }else{
+        if(err.response.status === 403){
+         await dispatch('refreshToken');
+         state.apiCounter = 2;
+         dispatch('addCompanyExcutive',payload);
+        }
       }
           console.log(err);
       });
   },
-  editCompanyExcutive({commit,dispatch}, payload){
+  editCompanyExcutive({commit,dispatch,state}, payload){
     // console.log(payload);
     axios.post('/company/updateCompanyLeadership/',{'companyId': payload.companyId, 'leadershipData': payload.leadership})
      .then(responce => {
@@ -306,14 +395,19 @@ export default {
         dispatch("getCompany",payload.companyId)
       }
     }).catch(async(err) => {
-      if(err.response.status === 403){
-       await dispatch('refreshToken');
-       dispatch('editCompanyExcutive',payload);
+      if(state.apiCounter === 2){
+        dispatch('signOutAction')
+      }else{
+        if(err.response.status === 403){
+         await dispatch('refreshToken');
+         state.apiCounter = 2;
+         dispatch('editCompanyExcutive',payload);
+        }
       }
           console.log(err);
       });
   },
-  deleteCompanyExcutive({commit,dispatch}, payload){
+  deleteCompanyExcutive({commit,dispatch,state}, payload){
     var config = {
       headers: {
         "Content-Type": "multipart/form-data",
@@ -335,14 +429,19 @@ export default {
         dispatch("getCompany",payload.companyId)
       }
     }).catch(async(err) => {
-      if(err.response.status === 403){
-       await dispatch('refreshToken');
-       dispatch('deleteCompanyExcutive',payload);
+      if(state.apiCounter === 2){
+        dispatch('signOutAction')
+      }else{
+        if(err.response.status === 403){
+         await dispatch('refreshToken');
+         state.apiCounter = 2;
+         dispatch('deleteCompanyExcutive',payload);
+        }
       }
           console.log(err);
       });
   },
-  addCompanyEsg({commit,dispatch}, payload){
+  addCompanyEsg({commit,dispatch,state}, payload){
     var config = {
       headers: {
         "Content-Type": "multipart/form-data",
@@ -366,14 +465,19 @@ export default {
         dispatch("getCompany",payload.companyId)
       }
     }).catch(async(err) => {
-      if(err.response.status === 403){
-       await dispatch('refreshToken');
-       dispatch('addCompanyEsg',payload);
+      if(state.apiCounter === 2){
+        dispatch('signOutAction')
+      }else{
+        if(err.response.status === 403){
+         await dispatch('refreshToken');
+         state.apiCounter = 2;
+         dispatch('addCompanyEsg',payload);
+        }
       }
           console.log(err);
       });
   }, 
-  deleteCompanyEsg({commit,dispatch}, payload){
+  deleteCompanyEsg({commit,dispatch,state}, payload){
     var config = {
       headers: {
         "Content-Type": "multipart/form-data",
@@ -395,9 +499,14 @@ export default {
         dispatch("getCompany",payload.companyId)
       }
     }).catch(async(err) => {
-      if(err.response.status === 403){
-       await dispatch('refreshToken');
-       dispatch('deleteCompanyEsg',payload);
+      if(state.apiCounter == 2){
+        dispatch('signOutAction');
+      }else{
+        if(err.response.status === 403){
+         await dispatch('refreshToken');
+         state.apiCounter = 2;
+         dispatch('deleteCompanyEsg',payload);
+        }
       }
           console.log(err);
       });

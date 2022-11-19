@@ -3,7 +3,7 @@ import store from "../../store";
 import axios from 'axios'
 
 export default {
-    async getTeamMembers({commit, dispatch}, payload){
+    async getTeamMembers({commit, dispatch,state}, payload){
       try {
         const res = await axios.get('company/getTeamMembers/'+payload);
        if(res.status == 200){
@@ -12,13 +12,20 @@ export default {
        	commit('setTeamMembers',null);
        }
       }catch(err){
-         if(err.response.status === 403){
-          await dispatch('refreshToken');
-          dispatch('getTeamMembers',payload);
-         }
+          if(state.apiCounter === 2){
+            console.log(state.apiCounter,'counter');
+            dispatch('signOutAction')
+          }else{
+            if(err.response.status === 403){
+             await dispatch('refreshToken');
+             state.apiCounter = 2;
+             dispatch('getTeamMembers',payload);
+
+            }
+          }
       }
     },
-    async getSalesReps({commit, dispatch}, payload){
+    async getSalesReps({commit, dispatch,state}, payload){
       try {
         const res = await axios.post('company/getSalesReps/',{'query': payload.query,'basin':payload.basin});
          
@@ -28,13 +35,18 @@ export default {
          	commit('setSalesReps',null);
          }
       }catch(err){
-        if(err.response.status === 403){
-         await dispatch('refreshToken');
-         dispatch('getSalesReps',payload);
+        if(state.apiCounter == 2){
+          dispatch('signOutAction');
+        }else{
+          if(err.response.status === 403){
+           await dispatch('refreshToken');
+           state.apiCounter = 2;
+           dispatch('getSalesReps',payload);
+          }
         }
       }
     },
-    async searchByCompany({commit, dispatch}, payload){
+    async searchByCompany({commit, dispatch,state}, payload){
       try {
         const res = await axios.post('company/searchCompanies/',{'query': payload.query,'basin':payload.basin});
          
@@ -44,14 +56,19 @@ export default {
          	commit('setCompaniesList',null);
          }
        }catch(err){
-        if(err.response.status === 403){
-         await dispatch('refreshToken');
-         dispatch('searchByCompany',payload);
+        if(state.apiCounter == 2){
+          dispatch('signOutAction');
+        }else{
+          if(err.response.status === 403){
+           await dispatch('refreshToken');
+           state.apiCounter = 2;
+           dispatch('searchByCompany',payload);
+          }
         }
       }
     },
     
-    async getCompanyByServices({commit, dispatch}, payload){
+    async getCompanyByServices({commit, dispatch,state}, payload){
       try {
         const res = await axios.get('company/getCompaniesByService/'+payload);
         
@@ -61,13 +78,18 @@ export default {
          	commit('setCompaniesList',null);
          }
        }catch(err){
-        if(err.response.status === 403){
-         await dispatch('refreshToken');
-         dispatch('getCompanyByServices',payload);
+        if(state.apiCounter == 2){
+          dispatch('signOutAction');
+        }else{
+          if(err.response.status === 403){
+           await dispatch('refreshToken');
+           state.apiCounter = 2;
+           dispatch('getCompanyByServices',payload);
+          }
         }
        }
     },
-    async getDraftBids({commit,dispatch}, payload){
+    async getDraftBids({commit,dispatch,state}, payload){
       try {
         const res = await axios.get('bid/draft/getUserDrafts/'+payload);
           
@@ -75,26 +97,36 @@ export default {
           commit('setDraftBidsList',res.data);
           }
         }catch(err){
-          if(err.response.status === 403){
-           await dispatch('refreshToken');
-           dispatch('getDraftBids',payload);
+          if(state.apiCounter == 2){
+            dispatch('signOutAction');
+          }else{
+            if(err.response.status === 403){
+             await dispatch('refreshToken');
+             state.apiCounter = 2;
+             dispatch('getDraftBids',payload);
+            }
           }
         }
     },
-    async getBidsLists({commit, dispatch}, payload){
+    async getBidsLists({commit, dispatch,state}, payload){
       try {
         const res = await axios.get('bid/getBidList/'+payload);
           if(res.status === 200){
             commit('setBidsList',res.data);
           }
         }catch(err){
-          if(err.response.status === 403){
-           await dispatch('refreshToken');
-           dispatch('getBidsLists',payload);
+          if(state.apiCounter == 2){
+            dispatch('signOutAction');
+          }else{
+            if(err.response.status === 403){
+             await dispatch('refreshToken');
+             state.apiCounter = 2;
+             dispatch('getBidsLists',payload);
+            }
           }
         }
     },
-    async saveDraftBid({commit,dispatch}, payload){
+    async saveDraftBid({commit,dispatch,state}, payload){
       var config = {
         headers: {
           "Content-Type": "multipart/form-data",
@@ -143,9 +175,14 @@ export default {
           commit('setDraftBidsList',null);
         }
       }catch(err){
-        if(err.response.status === 403){
-         await dispatch('refreshToken');
-         dispatch('saveDraftBid',payload);
+        if(state.apiCounter == 2){
+          dispatch('signOutAction');
+        }else{
+          if(err.response.status === 403){
+           await dispatch('refreshToken');
+           state.apiCounter = 2;
+           dispatch('saveDraftBid',payload);
+          }
         }
       }
       
@@ -217,9 +254,14 @@ export default {
           // commit('setDraftBidsList',null);
         }
       }catch(err){
-        if(err.response.status === 403){
-         await dispatch('refreshToken');
-         dispatch('updateDraftBid',payload);
+        if(state.apiCounter == 2){
+          dispatch('signOutAction');
+        }else{
+          if(err.response.status === 403){
+           await dispatch('refreshToken');
+           state.apiCounter = 2;
+           dispatch('updateDraftBid',payload);
+          }
         }
       }
       
@@ -235,9 +277,14 @@ export default {
           commit('setBidData',null);
          }
       }catch(err){
-        if(err.response.status === 403){
-         await dispatch('refreshToken');
-         dispatch('inviteNewSupplier',payload);
+        if(state.apiCounter == 2){
+          dispatch('signOutAction');
+        }else{
+          if(err.response.status === 403){
+           await dispatch('refreshToken');
+           state.apiCounter = 2;
+           dispatch('inviteNewSupplier',payload);
+          }
         }
       }
     },
@@ -264,9 +311,14 @@ export default {
           commit('setAttachData',null);
          }
       }catch(err){
-        if(err.response.status === 403){
-         await dispatch('refreshToken');
-         dispatch('uploadBidAttach',payload);
+        if(state.apiCounter == 2){
+          dispatch('signOutAction');
+        }else{
+          if(err.response.status === 403){
+           await dispatch('refreshToken');
+           state.apiCounter = 2;
+           dispatch('uploadBidAttach',payload);
+          }
         }
       }
     },

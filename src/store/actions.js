@@ -11,6 +11,7 @@ const actions = {
   activityPanel({ commit }){
     commit('toggleActivityPanel')
   },
+  
   getToken({commit}){
     firebase.auth().onAuthStateChanged(user => {
       user.getIdToken(/* forceRefresh */ true)
@@ -22,6 +23,7 @@ const actions = {
         });
     });
   },
+
   async refreshToken({commit,dispatch}){
     const user = firebase.auth().currentUser;
     if(user){

@@ -12,9 +12,6 @@ const mutations = {
     setPageLoader (state, payload){
         state.pageLoader = payload;
     },
-    setToken (state, payload){
-      state.userToken = payload
-    }, 
 }
 
 export default mutations
