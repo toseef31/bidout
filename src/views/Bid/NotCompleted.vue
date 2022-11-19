@@ -40,18 +40,7 @@
                   </v-icon>
                 </template>
                 
-                <template  v-if="index === 1">
-                  <v-icon small right v-if="supplierValid == true && supplierValue == item.value" color="#0D9648">mdi-check-circle-outline</v-icon>
-                  <v-icon right small color="#F32349" v-else>
-                    {{item.icon}}
-                  </v-icon>
-                </template>
-                <template  v-if="index === 2">
-                  <v-icon small right v-if="teamValid == true && teamValue == item.value" color="#0D9648">mdi-check-circle-outline</v-icon>
-                  <v-icon right small color="#F32349" v-else>
-                    {{item.icon}}
-                  </v-icon>
-                </template>
+                
                 <template  v-if="index === 3">
                   <v-icon small right v-if="itemsValid == true && itemsValue == item.value" color="#0D9648">mdi-check-circle-outline</v-icon>
                   <v-icon right small color="#F32349" v-else>
