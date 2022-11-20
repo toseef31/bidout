@@ -1,5 +1,10 @@
 <template>
-  <v-col class="dashboard-module pa-0 pa-sm-3 pl-sm-0" :class="[ showSideBar ? 'col-md-6 col-12 col-sm-7' : 'mid-content-collapse', activityPanel ? 'd-sm-block' : 'd-md-block']" v-show="!activityPanel">
+  <v-row fill-height align="center" class="fill-height" v-if="loading">
+    <v-col cols="12">
+      <v-progress-circular :width="3" color="green" indeterminate ></v-progress-circular>
+    </v-col>
+  </v-row>
+  <v-col class="dashboard-module pa-0 pa-sm-3 pl-sm-0" :class="[ showSideBar ? 'col-md-6 col-12 col-sm-7' : 'mid-content-collapse', activityPanel ? 'd-sm-block' : 'd-md-block']" v-show="!activityPanel" v-else>
           <v-row>
             <v-col class="col-md-8 col-12 col-sm-8">
               <div class="mid-content">
@@ -67,10 +72,7 @@
                     </div>
                   </div>
                   <div class="map-section">
-                    <div class="map" height="415px" v-if="loading">
-                      <v-progress-circular :width="3" color="green" indeterminate ></v-progress-circular>
-                    </div>
-                    <div id="map" class="map" height="415px" v-else></div>
+                    <div id="map" class="map" height="415px"></div>
                   </div>
                 </div>
             </v-col>

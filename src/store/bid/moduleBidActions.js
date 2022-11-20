@@ -42,9 +42,11 @@ export default {
         commit('setDraftBidsList',res.data);
     },
     async getBidsLists({commit}, payload){
+      commit('setPageLoader', true);
       const res = await axios.get('bid/getBidList/'+payload);
         console.log(res);
         commit('setBidsList',res.data);
+        commit('setPageLoader',false)
     },
     async getBidsLists({commit}, payload){
       const res = await axios.get('bid/getBidList/'+payload);

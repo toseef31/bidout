@@ -1,5 +1,10 @@
 <template>
-  <div class="rightSide-Module">
+  <v-row fill-height align="center" class="fill-height" v-if="loading">
+    <v-col cols="12">
+      <v-progress-circular :width="3" color="green" indeterminate ></v-progress-circular>
+    </v-col>
+  </v-row>
+  <div class="rightSide-Module" v-else>
     <div class="activity-section" :class="[ activityPanel ? '' : 'desktop-section']">
       <div class="title">
         <h3 class="font-weight-bold text-left">Activity</h3>
@@ -101,7 +106,10 @@ export default {
     },
     activities(){
       return this.$store.getters.activities.slice(0,10);
-    }
+    },
+    loading(){
+     return this.$store.getters.pageLoader;
+    },
   },
   methods: {
     ...mapActions(["getActivities"]),
@@ -109,8 +117,14 @@ export default {
       return moment(date).calendar();
     },
   },
-  mounted() {
-    this.getActivities(this.$store.getters.userInfo.id);
+  // async created(){
+  //   await this.getActivities(this.$store.getters.userInfo.id);
+  // },
+  updated(){
+
+  },
+  async mounted() {
+    await this.getActivities(this.$store.getters.userInfo.id);
   }
 };
 </script>

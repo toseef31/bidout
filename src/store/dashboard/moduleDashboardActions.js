@@ -71,19 +71,21 @@ export default {
       });
   }, 
   getActivities({commit},payload){
+    // commit('setPageLoader', true);
     axios.get('/activity/getActivities/'+payload)
       .then(responce => {
-        console.log(responce.data);
       commit('setActivityList',responce.data)
+      commit('setPageLoader', false);
     }).catch(err => {
           console.log(err);
       })
   }, 
   async getAllLocations({commit},payload){
+    // commit('setPageLoader',true)
     try{
       const res = await axios.get('/company/getCompanyLocations');
       commit('setAllLocations',res.data)
-      commit('setPageLoader',false)
+      // commit('setPageLoader',false)
     }catch(err){
       console.log(err);
     }
