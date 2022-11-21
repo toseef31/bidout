@@ -135,7 +135,7 @@ export default {
      return this.$store.getters.pageLoader;
     },
     bidsList(){
-      return _.orderBy(this.$store.getters.bidsList.slice(0,6),'serial','desc');
+      return _.orderBy(this.$store.getters.bidsList.slice(0,6),'dueDate','desc');
     }
   },
   methods: {
