@@ -48,19 +48,19 @@
                   <thead>
                     <tr>
                       <th class="text-left pl-sm-6 black--text font-weight-bold">
-                        Bid Serial
+                        Bid ID
                       </th>
                       <th class="text-left black--text font-weight-bold">
                         Title
                       </th>
-                      <th class="text-center black--text font-weight-bold">
+                      <th class="text-left black--text font-weight-bold">
                         Creator
                       </th>
                       <th class="text-left black--text font-weight-bold">
                         Entries
                       </th>
                       <th class="text-left black--text font-weight-bold">
-                        End Time
+                        End Date/Time
                       </th>
                       <th class="text-left black--text font-weight-bold">
                         <span class=" d-none d-sm-block">Action</span>
@@ -74,14 +74,14 @@
                     >
                       <td class="text-left pl-sm-6">{{ bid.serial }}</td>
                       <td class="text-left">{{ bid.title }}</td>
-                      <td class="text-center">{{ userDatas.firstName }} {{ userDatas.lastName }}</td>
+                      <td class="text-left">{{ userDatas.firstName }} {{ userDatas.lastName }}</td>
                       <td class="text-left">{{ bid.entries ? bid.entries.length : 0 }}</td>
-                      <td class="text-left">{{ bid.dueDate | moment('DD/MM/YYYY') }} {{bid.dueTime}}</td>
+                      <td class="text-left">{{ bid.dueDate | moment('MM/DD/YYYY') }} {{bid.dueTime}}</td>
                       <td class="text-left d-none d-sm-block pt-3"><router-link
                         :to="{
                           path: `/view-bids/${bid.serial}`,
                         }"
-                        >View Details</router-link
+                        >View Bid</router-link
                       ></td>
                     </tr>
                   </tbody>
@@ -103,9 +103,9 @@
                     >
                       <td class="text-left pl-sm-6">{{ bid.serial }}</td>
                       <td class="text-left">{{ bid.title }}</td>
-                      <td class="text-center">{{ userDatas.firstName }} {{ userDatas.lastName }}</td>
+                      <td class="text-left">{{ userDatas.firstName }} {{ userDatas.lastName }}</td>
                       <td class="text-left">{{ bid.entries ? bid.entries.length : 0 }}</td>
-                      <td class="text-left">{{ bid.dueDate | moment('DD/MM/YYYY') }} {{bid.dueTime}}</td>
+                      <td class="text-left">{{ bid.dueDate | moment('MM/DD/YYYY') }} {{bid.dueTime}}</td>
                       <td class="text-left d-none d-sm-block pt-3"><a href="">Edit Draft</a></td>
                     </tr>
                     </template>
@@ -121,7 +121,7 @@
                   <thead>
                     <tr>
                       <th class="text-left pl-sm-6 black--text font-weight-bold">
-                        Bid Serial
+                        Bid ID
                       </th>
                       <th class="text-left black--text font-weight-bold">
                         Title
@@ -133,7 +133,7 @@
                         Entries
                       </th>
                       <th class="text-left black--text font-weight-bold">
-                        End Time
+                        End Date/Time
                       </th>
                       <th class="text-left black--text font-weight-bold">
                         <span class=" d-none d-sm-block">Action</span>
@@ -148,9 +148,9 @@
                       <td class="text-left pl-sm-6">{{ bid.serial }}</td>
                       <td class="text-left">{{ bid.title }}</td>
                       <td class="text-left">{{ userDatas.firstName }} {{ userDatas.lastName }}</td>
-                      <td class="text-center">{{ bid.entries ? bid.entries.length : 0 }}</td>
-                      <td class="text-left">{{ bid.dueDate | moment('DD/MM/YYYY') }} {{bid.dueTime}}</td>
-                      <td class="text-left d-none d-sm-block pt-3"><a href="">View Details</a></td>
+                      <td class="text-left">{{ bid.entries ? bid.entries.length : 0 }}</td>
+                      <td class="text-left">{{ bid.dueDate | moment('MM/DD/YYYY') }} {{bid.dueTime}}</td>
+                      <td class="text-left d-none d-sm-block pt-3"><a href="">View Bid</a></td>
                     </tr>
                   </tbody>
                 </template>
@@ -214,6 +214,13 @@ export default {
             if (!foundC) this.closedBids.push(item);
           }
         });
+
+        if (this.searchBid) {
+          this.openBids = this.openBids.filter((item) => this.searchBid
+            .toLowerCase()
+            .split(' ')
+            .every((v) => item.title.toLowerCase().includes(v)));
+        }
         return this.$store.getters.bidsList;
       }
       return [];
