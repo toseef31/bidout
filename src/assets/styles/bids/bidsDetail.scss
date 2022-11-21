@@ -70,6 +70,12 @@
   align-items: center;
 }
 
+.loading-chat {
+  height: 50vh;
+  text-align: center;
+  margin-top: auto;
+  margin-bottom: auto;
+}
 @media (max-width: 960px) {
   .bid-section-2 {
     margin: 30px 50px;
@@ -354,16 +360,54 @@
     .available-data {
       border-right: 1px solid #b8b8b8;
       min-height: 70vh;
-      .v-input__icon.v-input__icon--prepend-inner i {
-        font-size: 30px;
-        color: #b8b8b8;
-        margin-right: 15px;
-      }
+      // .companies-list {
+      //   padding-top: 50px;
+      //   div:focus {
+      //     background-color: #f1f1f1;
+      //   }
+      //   overflow: auto;
+      //   &::-webkit-scrollbar {
+      //     width: 4px;
+      //     height: 5px;
+      //   }
+      //   &::-webkit-scrollbar-thumb {
+      //     background: #e1e1e1;
+      //     border: 14px solid #0d9647;
+      //     border-radius: 26px;
+      //   }
+      //   &::-webkit-scrollbar-thumb:hover {
+      //     background: #ffffff;
+      //   }
+      //   &::-webkit-scrollbar-thumb:active {
+      //     background: #0d9647;
+      //   }
+      //   &::-webkit-scrollbar-track {
+      //     /*background: #666666;*/
+      //     /*border: 36px solid #e3e3e3;*/
+      //     border-radius: 42px;
+      //   }
+      //   &::-webkit-scrollbar-track:hover {
+      //     background: #666666;
+      //   }
+      //   &::-webkit-scrollbar-track:active {
+      //     background: #0d9647;
+      //   }
+      //   &::-webkit-scrollbar-corner {
+      //     background: transparent;
+      //   }
+      //   .list-company {
+      //     .company-title {
+      //       p {
+      //         font-size: 12px;
+      //         font-weight: 600;
+      //       }
+      //     }
+      //   }
+      // }
 
-      .companies-list {
-        div:focus {
-          background-color: #f1f1f1;
-        }
+      .v-list {
+        padding-top: 50px;
+        height: calc(100vh - 243px);
         overflow: auto;
         &::-webkit-scrollbar {
           width: 4px;
@@ -381,8 +425,6 @@
           background: #0d9647;
         }
         &::-webkit-scrollbar-track {
-          /*background: #666666;*/
-          /*border: 36px solid #e3e3e3;*/
           border-radius: 42px;
         }
         &::-webkit-scrollbar-track:hover {
@@ -394,19 +436,36 @@
         &::-webkit-scrollbar-corner {
           background: transparent;
         }
-        .list-company {
-          .company-title {
-            p {
-              font-size: 12px;
-              font-weight: 600;
-            }
-          }
+      }
+      .v-list-item {
+        height: 80px;
+        padding-left: 29px;
+        border-bottom: 1px solid #f1f1f1;
+        .img-class {
+          object-fit: contain;
+        }
+        .v-list-item__icon:first-child {
+          margin-right: 24px;
+        }
+      }
+      .v-list-item__content {
+        text-align: left;
+        .v-list-item__title {
+          color: #0d1139;
+          font-weight: 700;
+          font-size: 14px;
+        }
+        .v-list-item__subtitle {
+          color: #0d1139 !important;
+          font-size: 12px;
+          font-weight: 400;
         }
       }
     }
 
     .msg-header {
       border-bottom: 1px solid #b8b8b8;
+
       .company-title {
         h4 {
           font-size: 20px;
@@ -460,9 +519,71 @@
         }
       }
     }
+    .messages-section {
+      height: calc(100vh - 329px);
+      .dropzone {
+        box-sizing: border-box;
+        display: none;
+        position: absolute;
+        width: 51.5%;
+        height: 82%;
+        z-index: 99999;
+        background: #80808066;
+        border: 6px dashed #0d9648;
+      }
+      .dropzoneActive {
+        display: block;
+      }
+      .own-user {
+        background: #fbfbfb;
+      }
+      .message-list {
+        min-height: 95px;
+        .v-list-item__title {
+          font-weight: 700;
+          font-size: 16px;
+          color: #0d1139;
+          line-height: 20px;
+        }
+        .v-list-item__subtitle {
+          color: #201b1b !important;
+          font-size: 15px;
+          font-weight: 400;
+          line-height: 20px;
+        }
+      }
+      &::-webkit-scrollbar {
+        width: 5px;
+        height: 5px;
+      }
+      &::-webkit-scrollbar-thumb {
+        background: #e1e1e1;
+        border: 14px solid #0d9647;
+        border-radius: 26px;
+      }
+      &::-webkit-scrollbar-thumb:hover {
+        background: #ffffff;
+      }
+      &::-webkit-scrollbar-thumb:active {
+        background: #0d9647;
+      }
+      &::-webkit-scrollbar-track {
+        /*background: #666666;*/
+        border: 36px solid #e3e3e3;
+        border-radius: 42px;
+      }
+      &::-webkit-scrollbar-track:hover {
+        background: #666666;
+      }
+      &::-webkit-scrollbar-track:active {
+        background: #0d9647;
+      }
+      &::-webkit-scrollbar-corner {
+        background: transparent;
+      }
+    }
     .message-send-area {
       position: relative;
-      margin-top: 440px;
       .fileName {
         position: absolute;
         left: 20px;

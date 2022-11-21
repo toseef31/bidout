@@ -19,6 +19,18 @@ const routes = [
         },
       },
       {
+        path: "/view-bids/:serial",
+        name: "BidDetail",
+        component: () => import("@/views/Bid/BidDetail.vue"),
+        beforeEnter: (to, from, next) => {
+          if (localStorage.getItem("userData") == null) {
+            next("/login");
+          } else {
+            next();
+          }
+        },
+      },
+      {
         path: "/create",
         name: "CreateBid",
         component: () => import("@/views/Bid/CreateBid.vue"),
@@ -58,18 +70,6 @@ const routes = [
         path: "/completed",
         name: "Completed",
         component: () => import("@/views/Bid/Completed.vue"),
-        beforeEnter: (to, from, next) => {
-          if (localStorage.getItem("userData") == null) {
-            next("/login");
-          } else {
-            next();
-          }
-        },
-      },
-      {
-        path: "/view-bids/:serial",
-        name: "BidDetail",
-        component: () => import("@/views/Bid/BidDetail.vue"),
         beforeEnter: (to, from, next) => {
           if (localStorage.getItem("userData") == null) {
             next("/login");
