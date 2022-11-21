@@ -26,8 +26,8 @@
               <div class="alert-section">
                 <v-img :src="require('@/assets/images/getStarted/warning.png')" max-width="120px" class="mx-auto mb-8"></v-img>
                 <!-- <v-icon color="#0D9647" x-large>mdi-alert-outline</v-icon> -->
-                <p>An existing account already exists for <strong>Baker Hughes</strong>.</p>
-                <p>A notification has been sent to the Administrator on the account to approve your access request. For immediate assistence, please reach out your team members at Baker Hughes wich include: <strong>Tyler Cherry, Tom Hall</strong>.</p>
+                <p>An existing account already exists for <strong>{{companyName}}</strong>.</p>
+                <p>A notification has been sent to the Administrator on the account to approve your access request. For immediate assistence, please reach out your team members at {{companyName}} which include: <strong>Tyler Cherry, Tom Hall</strong>.</p>
               </div>
             </v-col>
           </v-row>
@@ -65,6 +65,9 @@ export default {
   computed:{
     activityPanel(){
         return this.$store.getters.g_activityPanel;
+    },
+    companyName(){
+        return this.$store.getters.companyName;
     },
   },
   methods: {

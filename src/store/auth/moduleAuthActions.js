@@ -133,9 +133,9 @@ export default {
        .then(responce => {
         if(responce.data.exists == true){
           commit('setEmailExistSuccess', 'Email aleardy Exists! Please try different one')
-          router.replace({
-          name: "ExistingAccount"
-        });
+        //   router.replace({
+        //   name: "ExistingAccount"
+        // });
         }else{
           if(payload.id){
             axios.post('/ofs/queueSupplierUser',{'id': payload.id, 'email': payload.email, 'firstName': payload.firstName, 'lastName': payload.lastName,'phoneNumber':payload.phoneNumber, 'title': payload.title, 'password': payload.password})
@@ -145,7 +145,7 @@ export default {
                 commit('setCompanyId', payload.id);
                 commit('setCompanyName', payload.companyName);
                 router.replace({
-                  name: "ModuleSelection"
+                  name: "ExistingAccount"
                 });
                 commit('setEmailSuccess', 'Email sent successfully! Please check your email')
               }
