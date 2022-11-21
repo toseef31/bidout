@@ -39,6 +39,9 @@
                   </v-tabs>
                 </template>
               </div>
+              <v-alert type="error" class="text-left" v-show="showErrorAlert" v-if="companyMsg != ''">
+                {{ companyMsg }}
+              </v-alert>
               <v-tabs-items v-model="currentItem">
                 <v-tab-item>
                   <v-form @submit.prevent="buyerRequest" ref="form">
@@ -438,6 +441,9 @@ export default {
     emailMsg(){
       this.emailExist= true;
       return this.$store.getters.emailExists;
+    },
+    showErrorAlert(){
+     return this.$store.getters.showErrorAlert;
     },
     companyMsg(){
       return this.$store.getters.companyError;

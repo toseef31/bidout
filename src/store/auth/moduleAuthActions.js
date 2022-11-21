@@ -184,7 +184,13 @@ export default {
               else{
                 commit('setCompanyError', 'Please try with different Company details')
               }
-            })
+            }).catch(err => {
+            if(err.response.status === 400){
+              commit('setCompanyError', err.response.data.message)
+              commit('showErrorAlert')
+            }
+            console.log(err);
+          });
            }   
         } 
       })
@@ -243,6 +249,10 @@ export default {
               commit('setCompanyError', 'Please try with different Company details')
             }
           }).catch(err => {
+            if(err.response.status === 400){
+              commit('setCompanyError', err.response.data.message)
+              commit('showErrorAlert')
+            }
             console.log(err);
           });
         }
