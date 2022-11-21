@@ -48,9 +48,9 @@
           
         </v-list-item-group>
       </v-list>
-      <div class="pa-3 view-all" v-if="activities.length > 11"> 
+      <!-- <div class="pa-3 view-all" v-if="activities.length > 11"> 
           <a href="">View all </a>     
-      </div> 
+      </div>  -->
     </div>    
     <div class="social-section pa-2 mt-3" :class="[ activityPanel ? 'd-none d-md-block' : 'd-block']">
       <v-row class="align-center d-none d-sm-flex">
@@ -105,7 +105,7 @@ export default {
         return this.$store.getters.g_activityPanel;
     },
     activities(){
-      return _.orderBy(this.$store.getters.activities.slice(0,12),'date','desc');
+      return _.orderBy(this.$store.getters.activities.slice(0,13),'date','desc');
     },
     loading(){
      return this.$store.getters.pageLoader;
