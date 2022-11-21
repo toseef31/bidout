@@ -216,18 +216,10 @@ export default {
         });
 
         if (this.searchBid) {
-          console.log(this.searchBid);
-          console.log(this.openBids);
-          this.openBids = this.openBids.filter((item) => {
-            console.log(this.searchBid
-              .toLowerCase()
-              .split(' ')
-              .every((v) => item.title.toLowerCase().includes(v)));
-            return this.searchBid
-              .toLowerCase()
-              .split(' ')
-              .every((v) => item.title.toLowerCase().includes(v) || item.title.);
-          });
+          this.openBids = this.openBids.filter((item) => this.searchBid
+            .toLowerCase()
+            .split(' ')
+            .every((v) => item.title.toLowerCase().includes(v)));
         }
         return this.$store.getters.bidsList;
       }
