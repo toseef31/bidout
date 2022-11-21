@@ -145,6 +145,7 @@ export default {
       var map = new google.maps.Map(document.getElementById('map'), {
         center: new google.maps.LatLng(LocationsForMap[0].locations[0].lattitude, LocationsForMap[0].locations[0].longitude),
         streetViewControl: false,
+        mapTypeControl: false,
         mapTypeId: google.maps.MapTypeId.ROADMAP
       });
 
