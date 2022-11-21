@@ -89,9 +89,8 @@
 </template>
 
 <script>
-import firebase from 'firebase/compat/app';
-import 'firebase/compat/auth';
-import 'firebase/compat/firestore';
+import VueMoment from 'vue-moment';
+import moment from 'moment-timezone';
 import { mapActions } from "vuex";
 export default {
   name : "RightSidebar",
@@ -117,7 +116,7 @@ export default {
   methods: {
     ...mapActions(["getActivities"]),
     istoday(date) {
-      return moment(date).calendar();
+      return moment(date).startOf('hour').fromNow();
     },
   },
   // async created(){
