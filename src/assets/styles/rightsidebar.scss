@@ -3,6 +3,7 @@
     border: 1px solid #B8B8B8;
     border-radius: 8px;
     background-color: #fff;
+    padding-bottom: 6px;
     .title{
       flex-direction: row;
       align-items: center;
@@ -32,7 +33,7 @@
       .v-list-item--link:before{
         background-color: transparent;
       }
-      .v-list-item--link:first-child:before{
+      /*.v-list-item--link:first-child:before{
         width: 5px;
         height: 5px;
         background-color: #0d9648;
@@ -40,7 +41,7 @@
         border-radius: 50%;
         left: 5px;
         top: 23px;   
-      }
+      }*/
     }  
     .view-all{
       border-top: 1px solid rgba(0, 0, 0, 0.12);

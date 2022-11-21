@@ -1,6 +1,12 @@
 <template>
-  <v-col class="dashboard-module pa-0 pa-sm-3 pl-sm-0" :class="[ showSideBar ? 'col-md-6 col-12 col-sm-7' : 'mid-content-collapse', activityPanel ? 'd-sm-block' : 'd-md-block']" v-show="!activityPanel">
+  <v-row fill-height align="center" class="fill-height dashboard-module" v-if="loading">
+    <v-col cols="12">
+      <v-progress-circular :width="3" color="green" indeterminate ></v-progress-circular>
+    </v-col>
+  </v-row>
+  <v-col class="dashboard-module pa-0 pa-sm-3 pl-sm-0" :class="[ showSideBar ? 'col-md-6 col-12 col-sm-7' : 'mid-content-collapse', activityPanel ? 'd-sm-block' : 'd-md-block']" v-show="!activityPanel" v-else>
           <v-row>
+           
             <v-col class="col-md-8 col-12 col-sm-8">
               <div class="mid-content">
                   <div class="content-section">
@@ -29,17 +35,28 @@
                             </th>
                           </tr>
                         </thead>
+
                         <tbody>
-                          <tr
-                            v-for="bid in bids"
-                            :key="bid.id"
-                          >
-                            <td class="text-left">{{ bid.id }}</td>
-                            <td class="text-left">{{ bid.title }}</td>
-                            <td class="text-left">{{ bid.entries }}</td>
-                            <td class="text-left">{{ bid.endTime }}</td>
-                            <td class="text-left d-none d-sm-block pt-3">View Details</td>
-                            <td class="text-left d-flex d-sm-none align-center"><span class="icon-circle"><v-icon>mdi-chevron-right</v-icon></span></td>
+                          <template v-if="bidsList.length > 0">
+                            <tr
+                              v-for="bid in bidsList"
+                              :key="bid.id" v-if=""
+                            >
+                              <td class="text-left">{{ bid.serial }}</td>
+                              <td class="text-left">{{ bid.title }}</td>
+                              <td class="text-left">{{ bid.entries ? bid.entries.length : 0 }}</td>
+                              <td class="text-left">{{ bid.dueDate | moment('MM/DD/YYYY') }} {{bid.dueTime}}</td>
+                              <td class="text-left d-none d-sm-block pt-3"><router-link class="text-decoration-none"
+                                :to="{
+                                  path: `/view-bids/${bid.serial}`,
+                                }"
+                                >View Bid</router-link
+                              ></td>
+                              <td class="text-left d-flex d-sm-none align-center"><span class="icon-circle"><v-icon>mdi-chevron-right</v-icon></span></td>
+                            </tr>
+                          </template>
+                          <tr v-else>
+                            <td colspan="5">There are no active bids, <router-link to="/create">create a new bid?</router-link></td>
                           </tr>
                         </tbody>
                       </template>
@@ -57,7 +74,7 @@
                     </div>
                   </div>
                   <div class="map-section">
-                    <div id="map" class="map" height="400px"></div>
+                    <div id="map" class="map" height="415px"></div>
                   </div>
                 </div>
             </v-col>
@@ -75,6 +92,7 @@
   import Navbar from '../components/Layout/Navbar.vue'
   import LeftSidebar from '../components/Layout/Dashboard/LeftSidebar.vue'
   import RightSidebar from '../components/Layout/Dashboard/RightSidebar.vue'
+  import _ from 'lodash'
   import { mapActions } from "vuex";
 export default {
   name : "Dashboard",
@@ -87,44 +105,6 @@ export default {
   data() {
     return {
       isActivity : false,
-      bids: [
-        {
-          id: 10007,
-          title: 'Water Job',
-          entries: 0,
-          endTime: '-',
-        },
-        {
-          id: 10008,
-          title: 'Water Job',
-          entries: 0,
-          endTime: '-',
-        },
-        {
-          id: 10009,
-          title: 'Water Job',
-          entries: 0,
-          endTime: '-',
-        },
-        {
-          id: 10010,
-          title: 'Water Job',
-          entries: 0,
-          endTime: '-',
-        },
-        {
-          id: 10010,
-          title: 'Water Job',
-          entries: 0,
-          endTime: '-',
-        },
-        {
-          id: 10010,
-          title: 'Water Job',
-          entries: 0,
-          endTime: '-',
-        },
-      ],
       bidss:{},
       mapOptions: {},
       markerOptions: {},
@@ -148,37 +128,81 @@ export default {
     pendingCount(){
       return this.$store.getters.pendingCount;
     },
+    locations(){
+      return this.$store.getters.allLocations;
+    },
+    loading(){
+     return this.$store.getters.pageLoader;
+    },
+    bidsList(){
+      return _.orderBy(this.$store.getters.bidsList.slice(0,6),'dueDate','desc');
+    }
   },
   methods: {
-    ...mapActions(["pendingUserCount"]),
-    shipMap(){
-      this.mapOptions = {
-        center: new google.maps.LatLng(29.721085, -95.342049),
-        zoom: 19,
-        mapTypeId: 'terrain',
-        mapTypeControl: false,
-        scaleControl: false,
+    ...mapActions(["pendingUserCount","getAllLocations","getBidDashboard"]),
+    getLocation(){
+      var LocationsForMap = this.locations;
+      var map = new google.maps.Map(document.getElementById('map'), {
+        center: new google.maps.LatLng(LocationsForMap[0].locations[0].lattitude, LocationsForMap[0].locations[0].longitude),
         streetViewControl: false,
-        rotateControl: false,
-        fullscreenControl: true,
-        disableDefaultUi: false,
-        zoomControl: true,
-        scrollwheel: false,
-      },
-      this.markerOptions = {
-        url: '/assets/images/dashboard/mapMobile.png',
-        size: {width: 60, height: 90, f: 'px', b: 'px',},
-        scaledSize: {width: 30, height: 45, f: 'px', b: 'px',},
-      },
-      this.map = new google.maps.Map(document.getElementById("map"), this.mapOptions);
+        mapTypeControl: false,
+        mapTypeId: google.maps.MapTypeId.ROADMAP
+      });
+
+      var infowindow = new google.maps.InfoWindow();
+
+      var marker, i,j;
+      var latlngbounds =new google.maps.LatLngBounds();
+      for (i = 0; i < LocationsForMap.length; i++) {  
+        for (j = 0; j < LocationsForMap[i].locations.length; j++){
+          marker = new google.maps.Marker({
+            position: new google.maps.LatLng(LocationsForMap[i].locations[j].lattitude, LocationsForMap[i].locations[j].longitude),
+            map: map,
+            title: 'Marker',
+            anchorPoint: new google.maps.Point(0, -29),
+          });
+          const contentString =
+            '<div id="content">' +
+            '<div id="siteNotice">' +
+            "</div>" +
+            '<h1 id="firstHeading" class="firstHeading"><img src="'+LocationsForMap[i].companyImage+'" height="50px" width="100px"></h1>' +
+            '<div id="bodyContent">' +
+            '<p><b>'+LocationsForMap[i].companyName+': </b><a href="company/'+LocationsForMap[i].companySlug+'">' +
+            "View Profile</a> </p>" +
+            "<p><b>"+LocationsForMap[i].locations[j].location+"<b></p> " +
+            "</div>" +
+            "</div>";
+          google.maps.event.addListener(marker, 'click', (function(marker, i) {
+            return function() {
+              infowindow.setContent(contentString);
+              infowindow.open(map, marker);
+            }
+          })(marker, j));
+          latlngbounds.extend(marker.position);
+        }
+      }
+      
+        map.setCenter(latlngbounds.getCenter());
+        map.fitBounds(latlngbounds);
+
     },
+  },
+  async created(){
+    this.users = JSON.parse(localStorage.getItem("userData")).user;
+    await this.getAllLocations();
+    await this.getLocation();
+    
+    
+  },
+  updated(){
     
   },
   mounted() {
     document.title = "Dashboard - BidOut";
-    this.shipMap();
     this.pendingUserCount(this.$store.getters.userInfo.company.id)
     this.users = JSON.parse(localStorage.getItem("userData")).user;
+    this.getBidDashboard(this.userDatas.id);
+    
     
 }
 };

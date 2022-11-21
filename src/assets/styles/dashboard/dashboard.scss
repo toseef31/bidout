@@ -1,6 +1,7 @@
 .dashboard-module{
 	flex: 0 0 78%;
 	max-width: 78%;
+	min-height: calc(100vh - 110px);
 	.mid-content{
 		flex: 0 0 100%;
 		max-width: 100%;
@@ -46,7 +47,10 @@
 				table tbody tr td {
 			   	color: #0D1139;
 			    font-weight: 600;
-			    font-size: 16px;
+			    font-size: 14px;
+			    a:hover{
+			    	text-decoration: underline !important;
+			    }
 			 	}
 			 	.icon-circle{
 			 		background: rgba(0, 0, 0, 0.1);
@@ -76,7 +80,7 @@
 			border: 1px solid #B8B8B8;
 	    border-radius: 8px;
 	    .map{
-	    	height: 400px;
+	    	height: 415px;
 	    }
 	    img{
 	    	height: 100%;

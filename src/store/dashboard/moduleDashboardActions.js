@@ -160,6 +160,7 @@ export default {
         
         if(responce.status === 200){
           commit('setActivityList',responce.data)
+          commit('setPageLoader', false);
         }
     }).catch(async(err) => {
       if(state.apiCounter === 2){
@@ -174,5 +175,31 @@ export default {
           console.log(err);
       })
   }, 
+  async getAllLocations({commit},payload){
+    // commit('setPageLoader',true)
+    try{
+      const res = await axios.get('/company/getCompanyLocations');
+      commit('setAllLocations',res.data)
+      // commit('setPageLoader',false)
+    }catch(err){
+      console.log(err);
+    }  
+  }, 
+  async getBidDashboard({commit}, payload){
+    var config = {
+      headers: {
+        "Authorization": `Bearer ${JSON.parse(localStorage.getItem('token'))}`
+      },
+    };
+    commit('setPageLoader',true)
+    try{
+      const res = await axios.get('bid/getBidList/'+payload,config);
+        commit('setBidsList',res.data);
+        commit('setPageLoader',false)
+    }catch(err){
+      console.log(err);
+    }
+    
+  },
   
 }
