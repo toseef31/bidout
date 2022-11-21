@@ -6,6 +6,7 @@
   </v-row>
   <v-col class="dashboard-module pa-0 pa-sm-3 pl-sm-0" :class="[ showSideBar ? 'col-md-6 col-12 col-sm-7' : 'mid-content-collapse', activityPanel ? 'd-sm-block' : 'd-md-block']" v-show="!activityPanel" v-else>
           <v-row>
+           
             <v-col class="col-md-8 col-12 col-sm-8">
               <div class="mid-content">
                   <div class="content-section">
@@ -34,6 +35,7 @@
                             </th>
                           </tr>
                         </thead>
+
                         <tbody>
                           <template v-if="bidsList.length > 0">
                             <tr
@@ -48,13 +50,13 @@
                                 :to="{
                                   path: `/view-bids/${bid.serial}`,
                                 }"
-                                >View Details</router-link
+                                >View Bid</router-link
                               ></td>
                               <td class="text-left d-flex d-sm-none align-center"><span class="icon-circle"><v-icon>mdi-chevron-right</v-icon></span></td>
                             </tr>
                           </template>
                           <tr v-else>
-                            <td colspan="5">No Bids to show</td>
+                            <td colspan="5">There are no active bids, <router-link to="/create">create a new bid?</router-link></td>
                           </tr>
                         </tbody>
                       </template>
@@ -137,12 +139,12 @@ export default {
     }
   },
   methods: {
-    ...mapActions(["pendingUserCount","getAllLocations"]),
+    ...mapActions(["pendingUserCount","getAllLocations","getBidDashboard"]),
     getLocation(){
       var LocationsForMap = this.locations;
-      console.log(LocationsForMap[0].locations[0],'gfg');
       var map = new google.maps.Map(document.getElementById('map'), {
         center: new google.maps.LatLng(LocationsForMap[0].locations[0].lattitude, LocationsForMap[0].locations[0].longitude),
+        streetViewControl: false,
         mapTypeId: google.maps.MapTypeId.ROADMAP
       });
 
@@ -188,12 +190,18 @@ export default {
     this.users = JSON.parse(localStorage.getItem("userData")).user;
     await this.getAllLocations();
     await this.getLocation();
-    await this.getBidsLists(this.users.id);
+    
+    
+  },
+  updated(){
+    
   },
   mounted() {
     document.title = "Dashboard - BidOut";
     this.pendingUserCount(this.$store.getters.userInfo.company.id)
     this.users = JSON.parse(localStorage.getItem("userData")).user;
+    this.getBidDashboard(this.userDatas.id);
+    
     
 }
 };

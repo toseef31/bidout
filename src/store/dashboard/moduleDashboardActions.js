@@ -88,8 +88,17 @@ export default {
       // commit('setPageLoader',false)
     }catch(err){
       console.log(err);
+    }  
+  }, 
+  async getBidDashboard({commit}, payload){
+    try{
+      const res = await axios.get('bid/getBidList/'+payload);
+        commit('setBidsList',res.data);
+        commit('setPageLoader',false)
+    }catch(err){
+      console.log(err);
     }
     
-  }, 
+  },
   
 }

@@ -46,7 +46,10 @@
 				table tbody tr td {
 			   	color: #0D1139;
 			    font-weight: 600;
-			    font-size: 16px;
+			    font-size: 14px;
+			    a:hover{
+			    	text-decoration: underline !important;
+			    }
 			 	}
 			 	.icon-circle{
 			 		background: rgba(0, 0, 0, 0.1);

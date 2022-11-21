@@ -110,6 +110,9 @@ export default {
     loading(){
      return this.$store.getters.pageLoader;
     },
+    userDatas(){
+        return this.$store.getters.userInfo;
+    },
   },
   methods: {
     ...mapActions(["getActivities"]),
@@ -124,7 +127,8 @@ export default {
 
   },
   async mounted() {
-    await this.getActivities(this.$store.getters.userInfo.id);
+    console.log(this.userDatas);
+    await this.getActivities(this.userDatas.id);
   }
 };
 </script>
