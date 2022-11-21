@@ -35,7 +35,7 @@
                 </v-list-item-content>
 
                 <v-list-item-action >
-                  <v-list-item-action-text>{{item.action_date | moment("MM/D/YYYY")}}</v-list-item-action-text>
+                  <v-list-item-action-text>{{istoday(item.date)}}</v-list-item-action-text>
                 </v-list-item-action>
               </template>
             </v-list-item>
@@ -127,7 +127,6 @@ export default {
 
   },
   async mounted() {
-    console.log(this.userDatas);
     await this.getActivities(this.userDatas.id);
   }
 };
