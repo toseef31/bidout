@@ -91,8 +91,14 @@ export default {
     }  
   }, 
   async getBidDashboard({commit}, payload){
+    var config = {
+      headers: {
+        "Authorization": `Bearer ${JSON.parse(localStorage.getItem('token'))}`
+      },
+    };
+    commit('setPageLoader',true)
     try{
-      const res = await axios.get('bid/getBidList/'+payload);
+      const res = await axios.get('bid/getBidList/'+payload,config);
         commit('setBidsList',res.data);
         commit('setPageLoader',false)
     }catch(err){

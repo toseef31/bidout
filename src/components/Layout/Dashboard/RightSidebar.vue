@@ -48,7 +48,7 @@
           
         </v-list-item-group>
       </v-list>
-      <div class="pa-3 view-all" v-if="activities.length > 9"> 
+      <div class="pa-3 view-all" v-if="activities.length > 10"> 
           <a href="">View all </a>     
       </div> 
     </div>    
@@ -105,7 +105,7 @@ export default {
         return this.$store.getters.g_activityPanel;
     },
     activities(){
-      return this.$store.getters.activities.slice(0,10);
+      return this.$store.getters.activities.slice(0,11);
     },
     loading(){
      return this.$store.getters.pageLoader;

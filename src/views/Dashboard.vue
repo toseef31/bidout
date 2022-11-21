@@ -1,5 +1,5 @@
 <template>
-  <v-row fill-height align="center" class="fill-height" v-if="loading">
+  <v-row fill-height align="center" class="fill-height dashboard-module" v-if="loading">
     <v-col cols="12">
       <v-progress-circular :width="3" color="green" indeterminate ></v-progress-circular>
     </v-col>
