@@ -48,7 +48,7 @@
           
         </v-list-item-group>
       </v-list>
-      <div class="pa-3 view-all" v-if="activities.length > 10"> 
+      <div class="pa-3 view-all" v-if="activities.length > 11"> 
           <a href="">View all </a>     
       </div> 
     </div>    
@@ -91,6 +91,7 @@
 <script>
 import VueMoment from 'vue-moment';
 import moment from 'moment-timezone';
+import _ from 'lodash';
 import { mapActions } from "vuex";
 export default {
   name : "RightSidebar",
@@ -104,7 +105,7 @@ export default {
         return this.$store.getters.g_activityPanel;
     },
     activities(){
-      return this.$store.getters.activities.slice(0,11);
+      return _.orderBy(this.$store.getters.activities.slice(0,12),'date','desc');
     },
     loading(){
      return this.$store.getters.pageLoader;
