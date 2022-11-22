@@ -7,4 +7,5 @@ export default {
    activities: null, 
    invitedList: [], 
    pendingCount : 0,
+   allLocations: null,
 }

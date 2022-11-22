@@ -39,6 +39,9 @@
                   </v-tabs>
                 </template>
               </div>
+              <v-alert type="error" class="text-left" v-show="showErrorAlert" v-if="companyMsg != ''">
+                {{ companyMsg }}
+              </v-alert>
               <v-tabs-items v-model="currentItem">
                 <v-tab-item>
                   <v-form @submit.prevent="buyerRequest" ref="form">
@@ -304,6 +307,7 @@
       <Footer></Footer>
    </section>
 </template>
+<script type="application/javascript" src="https://api.ipify.org?format=jsonp&callback=getIP"></script>
 <script>
   import NavbarBeforeLogin from '../../components/Layout/NavbarBeforeLogin.vue'
   import Footer from '../../components/Layout/Footer.vue'
@@ -438,12 +442,15 @@ export default {
       this.emailExist= true;
       return this.$store.getters.emailExists;
     },
+    showErrorAlert(){
+     return this.$store.getters.showErrorAlert;
+    },
     companyMsg(){
       return this.$store.getters.companyError;
     },
   },
   methods: {
-    ...mapActions(["supplierSignUpAction","searchSupplier","checkEmail","buyerSignUpAction"]),
+    ...mapActions(["supplierSignUpAction","searchSupplier","checkEmail","buyerSignUpAction","getIpAddress"]),
     onUpdate (payload) {
       this.results = payload.formattedNumber
     },
@@ -538,10 +545,13 @@ export default {
       setTimeout(() => this.hideList = false, 1000);
       this.hideList = false;
       this.companyInfo = false;
-    }
+    },
+    
   },
   mounted() {
     document.title = "Get Started - BidOut"
+    
+    
   }
 };
 </script>

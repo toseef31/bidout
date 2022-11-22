@@ -3,63 +3,123 @@ import axios from "axios";
 import store from "..";
 
 export default {
-  async getTeamMembers({ commit }, payload) {
-    const res = await axios.get(`company/getTeamMembers/${payload}`);
-    if (res.status == 200) {
-      commit("setTeamMembers", res.data);
-    } else {
-      commit("setTeamMembers", null);
+  async getTeamMembers({ commit, dispatch, state }, payload) {
+    try {
+      const res = await axios.get(`company/getTeamMembers/${payload}`);
+      if (res.status == 200) {
+        commit("setTeamMembers", res.data);
+      } else {
+        commit("setTeamMembers", null);
+      }
+    } catch (err) {
+      if (state.apiCounter === 2) {
+        console.log(state.apiCounter, "counter");
+        dispatch("signOutAction");
+      } else if (err.response.status === 403) {
+        await dispatch("refreshToken");
+        state.apiCounter = 2;
+        dispatch("getTeamMembers", payload);
+      }
     }
   },
-  async getSalesReps({ commit }, payload) {
-    const res = await axios.post("company/getSalesReps/", {
-      query: payload.query,
-      basin: payload.basin,
-    });
-    if (res.status == 200) {
-      commit("setSalesReps", res.data);
-    } else {
-      commit("setSalesReps", null);
+  async getSalesReps({ commit, dispatch, state }, payload) {
+    try {
+      const res = await axios.post("company/getSalesReps/", {
+        query: payload.query,
+        basin: payload.basin,
+      });
+
+      if (res.status == 200) {
+        commit("setSalesReps", res.data);
+      } else {
+        commit("setSalesReps", null);
+      }
+    } catch (err) {
+      if (state.apiCounter == 2) {
+        dispatch("signOutAction");
+      } else if (err.response.status === 403) {
+        await dispatch("refreshToken");
+        state.apiCounter = 2;
+        dispatch("getSalesReps", payload);
+      }
     }
   },
-  async searchByCompany({ commit }, payload) {
-    const res = await axios.post("company/searchCompanies/", {
-      query: payload.query,
-      basin: payload.basin,
-    });
-    if (res.status == 200) {
-      commit("setCompaniesList", res.data);
-    } else {
-      commit("setCompaniesList", null);
+  async searchByCompany({ commit, dispatch, state }, payload) {
+    try {
+      const res = await axios.post("company/searchCompanies/", {
+        query: payload.query,
+        basin: payload.basin,
+      });
+
+      if (res.status == 200) {
+        commit("setCompaniesList", res.data);
+      } else {
+        commit("setCompaniesList", null);
+      }
+    } catch (err) {
+      if (state.apiCounter == 2) {
+        dispatch("signOutAction");
+      } else if (err.response.status === 403) {
+        await dispatch("refreshToken");
+        state.apiCounter = 2;
+        dispatch("searchByCompany", payload);
+      }
     }
   },
 
-  async getCompanyByServices({ commit }, payload) {
-    const res = await axios.get(`company/getCompaniesByService/${payload}`);
-    if (res.status == 200) {
-      commit("setCompaniesList", res.data);
-    } else {
-      commit("setCompaniesList", null);
+  async getCompanyByServices({ commit, dispatch, state }, payload) {
+    try {
+      const res = await axios.get(`company/getCompaniesByService/${payload}`);
+
+      if (res.status == 200) {
+        commit("setCompaniesList", res.data);
+      } else {
+        commit("setCompaniesList", null);
+      }
+    } catch (err) {
+      if (state.apiCounter == 2) {
+        dispatch("signOutAction");
+      } else if (err.response.status === 403) {
+        await dispatch("refreshToken");
+        state.apiCounter = 2;
+        dispatch("getCompanyByServices", payload);
+      }
     }
   },
-  async getDraftBids({ commit }, payload) {
-    const res = await axios.get(`bid/draft/getUserDrafts/${payload}`);
-    console.log(res);
-    commit("setDraftBidsList", res.data);
-  },
-  async getBidsLists({ commit }, payload) {
-    const res = await axios.get(`bid/getBidList/${payload}`);
-    console.log(res);
-    commit("setBidsList", res.data);
-  },
-  async getBidsLists({ commit }, payload) {
-    const res = await axios.get(`bid/getBidList/${payload}`);
-    if (res.status == 200) {
-      commit("setBidsList", res.data);
-    } else {
-      commit("setBidsList", null);
+  async getDraftBids({ commit, dispatch, state }, payload) {
+    try {
+      const res = await axios.get(`bid/draft/getUserDrafts/${payload}`);
+
+      if (res.status === 200) {
+        commit("setDraftBidsList", res.data);
+      }
+    } catch (err) {
+      if (state.apiCounter == 2) {
+        dispatch("signOutAction");
+      } else if (err.response.status === 403) {
+        await dispatch("refreshToken");
+        state.apiCounter = 2;
+        dispatch("getDraftBids", payload);
+      }
     }
   },
+  async getBidsLists({ commit, dispatch, state }, payload) {
+    try {
+      const res = await axios.get(`bid/getBidList/${payload}`);
+      if (res.status === 200) {
+        commit("setBidsList", res.data);
+      }
+    } catch (err) {
+      if (state.apiCounter == 2) {
+        dispatch("signOutAction");
+      } else if (err.response.status === 403) {
+        await dispatch("refreshToken");
+        state.apiCounter = 2;
+        dispatch("getBidsLists", payload);
+      }
+    }
+  },
+
   async getBidBySerial({ commit }, payload) {
     const res = await axios.get(
       `bid/getBidBySerial/${payload.serial}/${payload.id}`
@@ -70,7 +130,8 @@ export default {
       commit("setBidData", res.data);
     }
   },
-  async saveDraftBid({ commit }, payload) {
+
+  async saveDraftBid({ commit, dispatch, state }, payload) {
     const config = {
       headers: {
         "Content-Type": "multipart/form-data",
@@ -99,7 +160,6 @@ export default {
     formData.append("regions", payload.regions);
     formData.append("qAndAEnabled", payload.qAndAEnabled);
     formData.append("bidDescriptions[0][body]", payload.bidDescriptions);
-    console.log(payload.description);
     if (payload.description) {
       for (let d = 0; d < payload.description.length; d++) {
         formData.append(
@@ -117,16 +177,25 @@ export default {
 
     formData.append("lineItems", []);
     formData.append("exampleItems", []);
-
-    const res = await axios.post("bid/draft/createDraft", formData, config);
-    if (res.status == 200) {
-      commit("setDraftBidsList", res.data);
-      commit("setDraftTime", new Date().toLocaleString());
-    } else {
-      commit("setDraftBidsList", null);
+    try {
+      const res = await axios.post("bid/draft/createDraft", formData, config);
+      if (res.status == 200) {
+        commit("setDraftBidsList", res.data);
+        commit("setDraftTime", new Date().toLocaleString());
+      } else {
+        commit("setDraftBidsList", null);
+      }
+    } catch (err) {
+      if (state.apiCounter == 2) {
+        dispatch("signOutAction");
+      } else if (err.response.status === 403) {
+        await dispatch("refreshToken");
+        state.apiCounter = 2;
+        dispatch("saveDraftBid", payload);
+      }
     }
   },
-  async updateDraftBid({ commit, state }, payload) {
+  async updateDraftBid({ commit, state, dispatch }, payload) {
     console.log(payload, "update");
     const config = {
       headers: {
@@ -228,40 +297,60 @@ export default {
         formData.append(`attachment[${i}][id]`, payload.attachement[i].id);
       }
     }
+    try {
+      const res = await axios.post(
+        `bid/draft/updateDraft/${state.draftBidsList}`,
+        formData,
+        config
+      );
+      if (res.status == 200) {
+        console.log(res);
+        // commit('setDraftBidsList',null);
+        commit("setDraftTime", new Date().toLocaleString());
+      } else {
+        // commit('setDraftBidsList',null);
+      }
+    } catch (err) {
+      if (state.apiCounter == 2) {
+        dispatch("signOutAction");
+      } else if (err.response.status === 403) {
+        await dispatch("refreshToken");
+        state.apiCounter = 2;
+        dispatch("updateDraftBid", payload);
+      }
+    }
+  },
+  async inviteNewSupplier({ commit, state, dispatch }, payload) {
+    try {
+      const res = await axios.post("bid/inviteSupplier/", {
+        firstName: payload.firstName,
+        lastName: payload.lastName,
+        company: payload.company,
+        phone: payload.phone,
+        email: payload.email,
+        bidTitle: payload.bidTitle,
+        bidType: payload.bidType,
+        bidDueDate: payload.bidDueDate,
+        bidDueTime: payload.bidDueTime,
+      });
 
-    const res = await axios.post(
-      `bid/draft/updateDraft/${state.draftBidsList}`,
-      formData,
-      config
-    );
-    if (res.status == 200) {
-      console.log(res);
-      // commit('setDraftBidsList',null);
-      commit("setDraftTime", new Date().toLocaleString());
-    } else {
-      // commit('setDraftBidsList',null);
+      if (res.status == 200) {
+        localStorage.removeItem("bidData");
+        commit("setBidData", null);
+      } else {
+        commit("setBidData", null);
+      }
+    } catch (err) {
+      if (state.apiCounter == 2) {
+        dispatch("signOutAction");
+      } else if (err.response.status === 403) {
+        await dispatch("refreshToken");
+        state.apiCounter = 2;
+        dispatch("inviteNewSupplier", payload);
+      }
     }
   },
-  async inviteNewSupplier({ commit, state }, payload) {
-    const res = await axios.post("bid/inviteSupplier/", {
-      firstName: payload.firstName,
-      lastName: payload.lastName,
-      company: payload.company,
-      phone: payload.phone,
-      email: payload.email,
-      bidTitle: payload.bidTitle,
-      bidType: payload.bidType,
-      bidDueDate: payload.bidDueDate,
-      bidDueTime: payload.bidDueTime,
-    });
-    if (res.status == 200) {
-      localStorage.removeItem("bidData");
-      commit("setBidData", null);
-    } else {
-      commit("setBidData", null);
-    }
-  },
-  async uploadBidAttach({ commit, state }, payload) {
+  async uploadBidAttach({ commit, state, dispatch }, payload) {
     const config = {
       headers: {
         "Content-Type": "multipart/form-data",
@@ -275,11 +364,26 @@ export default {
         formData.append(`attachement[${i}]`, payload.attachement[i]);
       }
     }
-    const res = await axios.post("bid/uploadBidAttachment/", formData, config);
-    if (res.status == 200) {
-      commit("setAttachData", res.data);
-    } else {
-      commit("setAttachData", null);
+    try {
+      const res = await axios.post(
+        "bid/uploadBidAttachment/",
+        formData,
+        config
+      );
+
+      if (res.status == 200) {
+        commit("setAttachData", res.data);
+      } else {
+        commit("setAttachData", null);
+      }
+    } catch (err) {
+      if (state.apiCounter == 2) {
+        dispatch("signOutAction");
+      } else if (err.response.status === 403) {
+        await dispatch("refreshToken");
+        state.apiCounter = 2;
+        dispatch("uploadBidAttach", payload);
+      }
     }
   },
 };

@@ -55,7 +55,7 @@
 
                           <td class="text-left font-weight-medium">{{ user.firstName }} {{ user.lastName }}</td>
                           <td class="text-left font-weight-medium">{{ user.email }}</td>
-                          <td class="text-left font-weight-medium"><span v-if="user.lastSeen">{{ user.lastSeen | moment("MM/D/YYYY") }}</span><span v-else>no history</span></td>
+                          <td class="text-left font-weight-medium"><span v-if="user.lastSeen">{{ user.lastSeen | moment("MM/DD/YYYY") }}</span><span v-else>no history</span></td>
                           <td class="text-left font-weight-medium text-capitalize">
                             <template v-if="user.role == 'admin'">Administrator</template>
                             <template v-if="user.role == 'user'">User</template>
@@ -84,7 +84,7 @@
 
                           <td class="text-left font-weight-medium">{{ user.firstName }} {{ user.lastName }}</td>
                           <td class="text-left font-weight-medium">{{ user.email }}</td>
-                          <td class="text-left font-weight-medium"><span v-if="user.lastSeen">{{ user.lastSeen | moment("MM/D/YYYY") }}</span><span v-else>no history</span></td>
+                          <td class="text-left font-weight-medium"><span v-if="user.lastSeen">{{ user.lastSeen | moment("MM/DD/YYYY") }}</span><span v-else>no history</span></td>
                           <td class="text-left font-weight-medium text-capitalize">
                             <template v-if="user.role == 'admin'">Administrator</template>
                             <template v-else>User</template>
@@ -202,7 +202,7 @@ export default {
       this.getPendingUsers(company);
     },
     accept(user){
-      this.acceptPendingUser(user);
+      this.acceptPendingUser({user, companyName: this.user.company.company});
     },
   },
   mounted() {

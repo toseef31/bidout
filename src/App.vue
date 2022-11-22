@@ -3,10 +3,8 @@
 </template>
 
 <script>
-  
 export default {
   name: 'Settings',
-  
   metaInfo:{
     // title: 'BidOut – Oil & Gas Procurement Platform',
     meta: [

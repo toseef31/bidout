@@ -3,80 +3,204 @@ import axios from 'axios'
 
 export default {
 
-  pendingUserCount({commit},payload){
+  pendingUserCount({commit,dispatch,state},payload){
     axios.get('/user/getQueueUsersCount/'+payload)
       .then(responce => {
-      commit('setPendingCount',responce.data.size)
-    }).catch(err => {
+        
+        if(responce.status === 200){
+          commit('setPendingCount',responce.data.size)
+        }
+      
+    }).catch(async(err) => {
+      if(state.apiCounter === 2){
+        dispatch('signOutAction')
+      }else{
+        if(err.response.status === 403){
+         await dispatch('refreshToken');
+         state.apiCounter = 2;
+         dispatch('pendingUserCount',payload);
+        }
+      }
           console.log(err);
       });
   }, 
-  getPendingList({commit},payload){
+  getPendingList({commit,dispatch,state},payload){
     axios.get('/company/getCompanyInvitedUsers/'+ payload)
       .then(responce => {
-      commit('setInvitedUsersList',responce.data)
-    }).catch(err => {
+        
+        if(responce.status === 200){
+          commit('setInvitedUsersList',responce.data)
+        }
+    }).catch(async(err) => {
+      if(state.apiCounter === 2){
+        dispatch('signOutAction')
+      }else{
+        if(err.response.status === 403){
+         await dispatch('refreshToken');
+         state.apiCounter = 2;
+         dispatch('getPendingList',payload);
+        }
+      }
           console.log(err);
       });
   },
-  manageUsers({commit},payload){
+  manageUsers({commit,dispatch,state},payload){
     axios.get('/company/getUsersByCompany/'+ payload)
       .then(responce => {
-      commit('getUsersList',responce.data)
-    }).catch(err => {
+        
+        if(responce.status === 200){
+          commit('getUsersList',responce.data)
+        }
+    }).catch(async(err) => {
+      if(state.apiCounter === 2){
+        dispatch('signOutAction')
+      }else{
+        if(err.response.status === 403){
+         await dispatch('refreshToken');
+         state.apiCounter = 2;
+         dispatch('manageUsers',payload);
+        }
+      }
           console.log(err);
       });
   }, 
-  getInvitedList({commit},payload){
+  getInvitedList({commit,dispatch,state},payload){
     axios.get('/company/getCompanyInvitedUsers/'+ payload)
       .then(responce => {
-      commit('setInvitedUsersList',responce.data)
-    }).catch(err => {
+        
+        if(responce.status === 200){
+          commit('setInvitedUsersList',responce.data)
+        }
+    }).catch(async(err) => {
+        if(state.apiCounter === 2){
+          dispatch('signOutAction')
+        }else{
+          if(err.response.status === 403){
+           await dispatch('refreshToken');
+           state.apiCounter = 2;
+           dispatch('getInvitedList',payload);
+          }
+        }
           console.log(err);
       });
   },
 
-  disableUser({commit},payload){
+  disableUser({commit,dispatch,state},payload){
     axios.get('/company/disableUser/'+ payload)
       .then(responce => {
-      commit('setStatusMessage', 'User disabled sucessfully!')
-      commit('setUserStatus',false)
-      commit('showErrorAlert')
-      router.replace({ name: "DisabledUsers" });
-    }).catch(err => {
+        
+        if(responce.status === 200){
+          commit('setStatusMessage', 'User disabled sucessfully!')
+          commit('setUserStatus',false)
+          commit('showErrorAlert')
+          router.replace({ name: "DisabledUsers" });
+        }
+    }).catch(async(err) => {
+      if(state.apiCounter === 2){
+        dispatch('signOutAction')
+      }else{
+        if(err.response.status === 403){
+         await dispatch('refreshToken');
+         state.apiCounter = 2;
+         dispatch('disableUser',payload);
+        }
+      }
           console.log(err);
       });
   }, 
 
-  enableUser({commit},payload){
+  enableUser({commit,dispatch,state},payload){
     axios.get('/company/enableUser/'+payload)
       .then(responce => {
-      commit('setStatusMessage','User enabled sucessfully!')
-      commit('setUserStatus',true)
-      commit('showErrorAlert')
-      router.replace({ name: "ManageUsers" });
-    }).catch(err => {
-          console.log(err);
+        
+        if(responce.status === 200){
+          commit('setStatusMessage','User enabled sucessfully!')
+          commit('setUserStatus',true)
+          commit('showErrorAlert')
+          router.replace({ name: "ManageUsers" });
+        }
+    }).catch(async(err) => {
+      if(state.apiCounter === 2){
+        dispatch('signOutAction')
+      }else{
+        if(err.response.status === 403){
+         await dispatch('refreshToken');
+         state.apiCounter = 2;
+         dispatch('enableUser',payload);
+        }
+      }
+        console.log(err);
       });
   }, 
-  acceptPendingUser({commit},payload){
-    
-    axios.post('/user/acceptPendingUser/',{ 'userId':payload.id, 'email': payload.email,'firstName':payload.firstName,'lastName':payload.lastName,'companyId':payload.companyId,'phoneNumber':payload.phoneNumber,'title':payload.title})
+  acceptPendingUser({commit,dispatch,state},payload){
+    axios.post('/user/acceptPendingUser/',{ 'userId':payload.user.id, 'email': payload.user.email,'firstName':payload.user.firstName,'lastName':payload.user.lastName,'companyId':payload.user.companyId,'phoneNumber':payload.user.phoneNumber,'title':payload.user.title})
       .then(responce => {
-     
-      commit('setStatusMessage','User accepted sucessfully!')
-      commit('showErrorAlert')
-    }).catch(err => {
+      
+      if(responce.status === 200){
+        commit('setStatusMessage','User accepted sucessfully!')
+        commit('showErrorAlert')
+        dispatch('manageUsers',payload.companyName)
+        dispatch('getPendingUsers',payload.user.companyId)
+      }
+    }).catch(async(err) => {
+      if(state.apiCounter === 2){
+        dispatch('signOutAction')
+      }else{
+        if(err.response.status === 403){
+         await dispatch('refreshToken');
+         state.apiCounter = 2;
+         dispatch('acceptPendingUser',payload);
+        }
+      }
           console.log(err);
       });
   }, 
-  getActivities({commit},payload){
+  getActivities({commit,dispatch,state},payload){
     axios.get('/activity/getActivities/'+payload)
       .then(responce => {
-      commit('setActivityList',responce.data)
-    }).catch(err => {
+        
+        if(responce.status === 200){
+          commit('setActivityList',responce.data)
+          commit('setPageLoader', false);
+        }
+    }).catch(async(err) => {
+      if(state.apiCounter === 2){
+        dispatch('signOutAction')
+      }else{
+        if(err.response.status === 403){
+         await dispatch('refreshToken');
+         state.apiCounter = 2;
+         dispatch('getActivities',payload);
+        }
+      }
           console.log(err);
       })
   }, 
+  async getAllLocations({commit},payload){
+    // commit('setPageLoader',true)
+    try{
+      const res = await axios.get('/company/getCompanyLocations');
+      commit('setAllLocations',res.data)
+      // commit('setPageLoader',false)
+    }catch(err){
+      console.log(err);
+    }  
+  }, 
+  async getBidDashboard({commit}, payload){
+    var config = {
+      headers: {
+        "Authorization": `Bearer ${JSON.parse(localStorage.getItem('token'))}`
+      },
+    };
+    commit('setPageLoader',true)
+    try{
+      const res = await axios.get('bid/getBidList/'+payload,config);
+        commit('setBidsList',res.data);
+        commit('setPageLoader',false)
+    }catch(err){
+      console.log(err);
+    }
+    
+  },
   
 }
