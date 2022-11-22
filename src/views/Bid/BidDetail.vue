@@ -34,15 +34,16 @@
 
         <v-col class="status-sec mx-auto">
           <v-sheet
-            class="py-2 px-4"
+            class="py-2 px-5"
             rounded="lg"
-            height="101"
-            width="244"
-            :style="[
-              !bidDetail.receivingBids && !bidDetail.bidout
-                ? { 'background-color': '#FFF4DB' }
-                : { 'background-color': 'rgba(13, 150, 72, 0.1)' },
+            height="119"
+            width="290"
+            :class="[
+              !bidDetail.bidData.awardees || !bidDetail.bidData.rejectees
+                ? 'status-card'
+                : '',
             ]"
+            v-if="!bidDetail.bidData.awardees || !bidDetail.bidData.rejectees"
           >
             <div class="status" v-if="bidDetail.receivingBids">
               Status: Receiving Bids
@@ -50,7 +51,7 @@
             <div class="status" v-else-if="bidDetail.bidout">
               Status: BidOut Phase
             </div>
-            <div v-else class="award-status">Status: Award Phase</div>
+            <div v-else class="award-status">Status: Not Awarded</div>
             <div
               class="time pt-2"
               v-if="bidDetail.receivingBids || bidDetail.bidout"
@@ -80,11 +81,80 @@
         </v-col>
 
         <v-col cols="auto">
-          <v-sheet
-            class="pa-2 setting"
-            style="background-color: rgba(13, 150, 72, 0.1)"
-          >
-            <v-icon color="#0D9648"> mdi-cog-outline</v-icon>
+          <div class="toggle-setting" v-if="!isAfterDueDate">
+            <v-btn
+              class="py-2 setting"
+              plain
+              color="#0d96481a"
+              @click="isSetting = !isSetting"
+              ><v-icon color="#0D9648"> mdi-cog-outline</v-icon></v-btn
+            >
+            <div v-show="isSetting">
+              <v-card
+                tile
+                outlined
+                class="mx-auto setting-card"
+                min-width="312"
+              >
+                <v-list class="pa-0">
+                  <v-list-item-group color="success">
+                    <v-list-item class="edit-item">
+                      <router-link to="#" class="text-decoration-none">
+                        <v-list-item-icon
+                          class="mr-2 my-2"
+                          @click="isSetting = !isSetting"
+                        >
+                          <v-icon size="24" color="#0D9648"
+                            >mdi-note-edit-outline</v-icon
+                          >
+                        </v-list-item-icon>
+                      </router-link>
+                      <v-list-item-content
+                        align-start
+                        color="#0D9648"
+                        class="pa-0"
+                      >
+                        <router-link to="#" class="text-decoration-none">
+                          <v-list-item-title
+                            color="#0D9648"
+                            @click="isSetting = !isSetting"
+                            class="py-3"
+                            >Edit Bid</v-list-item-title
+                          >
+                        </router-link>
+                      </v-list-item-content>
+                    </v-list-item>
+                    <v-list-item class="delete-item">
+                      <router-link to="#" class="text-decoration-none">
+                        <v-list-item-icon
+                          class="mr-2 my-2"
+                          @click="isSetting = !isSetting"
+                        >
+                          <v-icon size="24" color="#F32349"
+                            >mdi-trash-can-outline</v-icon
+                          >
+                        </v-list-item-icon>
+                      </router-link>
+                      <v-list-item-content
+                        align-start
+                        color="#0D9648"
+                        class="pa-0"
+                      >
+                        <v-list-item-title
+                          color="#F32349"
+                          @click="isSetting = !isSetting"
+                          class="py-3"
+                          >Delete Bid</v-list-item-title
+                        >
+                      </v-list-item-content>
+                    </v-list-item>
+                  </v-list-item-group>
+                </v-list>
+              </v-card>
+            </div>
+          </div>
+          <v-sheet v-else width="151" class="py-3 px-2" color="#F03F20" rounded>
+            <div class="choose-supplier">Choose Supplier</div>
           </v-sheet>
         </v-col>
       </v-row>
@@ -165,6 +235,7 @@ export default {
     return {
       currentItem: "tab-1",
       validate: "",
+      isSetting: false,
       value: "",
       users: "",
       actualTime: moment().format("X"),
@@ -236,6 +307,19 @@ export default {
   computed: {
     bidDetail() {
       return this.$store.getters.bidData;
+    },
+    isAfterDueDate() {
+      const bidDueDate = this.bidDetail.bidData.dueDate;
+      const bidDueTime = this.bidDetail.bidData.dueTime;
+      const currentDate = moment();
+      const Time = moment(bidDueTime, ["h:mm:ss A"]).format("HH:mm:ss");
+      const stringDate = `${bidDueDate}T${Time}`;
+      const momentDueDate = moment(stringDate);
+
+      const isAfter = moment(currentDate).isAfter(momentDueDate);
+
+      console.log(isAfter);
+      return moment(currentDate).isAfter(momentDueDate);
     },
   },
   mounted() {

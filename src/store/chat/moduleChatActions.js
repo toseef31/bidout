@@ -180,4 +180,17 @@ export default {
         console.log(err);
       });
   },
+  async sendBroadcast({}, payload) {
+    await axios
+      .post("/chat/newbroadcastMessage/", {
+        messageContent: payload.messageContent,
+        bidId: payload.bidId,
+      })
+      .then((responce) => {
+        console.log(responce);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  },
 };

@@ -4,7 +4,7 @@
       <div class="title-detail mb-2">Bid Broadcast</div>
       <div class="broadcast-desc">
         This Bid Broadcast sends a notice to all invited service providers
-        (regordless of their bid status) to both their emails and via internal
+        (regardless of their bid status) to both their emails and via internal
         Bidout chat system.
       </div>
 
@@ -13,7 +13,7 @@
         single-line
         outlined
         type="text"
-        v-model="bidDescriptions"
+        v-model="messageContent"
       >
       </v-textarea>
 
@@ -22,13 +22,37 @@
           color="#0D9648"
           height="56"
           class="text-capitalize white--text font-weight-bold save-button px-9"
-          @click="changeTab"
+          @click="broadcastMessage"
           large
-          >Save Changes</v-btn
+          >Send Broadcast</v-btn
         >
       </div>
     </div>
   </v-col>
 </template>
 
-<script></script>
+<script>
+import { mapActions } from "vuex";
+
+export default {
+  data() {
+    return {
+      messageContent: "",
+    };
+  },
+  computed: {
+    bidId() {
+      return this.$store.getters.bidData.bidData.id;
+    },
+  },
+  methods: {
+    ...mapActions(["sendBroadcast"]),
+    broadcastMessage() {
+      this.sendBroadcast({
+        messageContent: this.messageContent,
+        bidId: this.bidId,
+      });
+    },
+  },
+};
+</script>
