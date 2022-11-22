@@ -133,13 +133,14 @@ export default {
       });
   }, 
   acceptPendingUser({commit,dispatch,state},payload){
-    
-    axios.post('/user/acceptPendingUser/',{ 'userId':payload.id, 'email': payload.email,'firstName':payload.firstName,'lastName':payload.lastName,'companyId':payload.companyId,'phoneNumber':payload.phoneNumber,'title':payload.title})
+    axios.post('/user/acceptPendingUser/',{ 'userId':payload.user.id, 'email': payload.user.email,'firstName':payload.user.firstName,'lastName':payload.user.lastName,'companyId':payload.user.companyId,'phoneNumber':payload.user.phoneNumber,'title':payload.user.title})
       .then(responce => {
       
       if(responce.status === 200){
         commit('setStatusMessage','User accepted sucessfully!')
         commit('showErrorAlert')
+        dispatch('manageUsers',payload.companyName)
+        dispatch('getPendingUsers',payload.user.companyId)
       }
     }).catch(async(err) => {
       if(state.apiCounter === 2){
