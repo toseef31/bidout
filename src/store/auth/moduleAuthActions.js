@@ -293,6 +293,7 @@ export default {
     axios.post('/ofs/signContract',{'sign': payload.sign,'contractType': payload.contractType,'fileName':payload.fileName,'companyId':payload.companyId,'userId':payload.userId,'yearly':payload.yearly,'plan':payload.plan})
      .then(responce => {
       if(responce.status == 200){
+        localStorage.setItem('contractData', null);
         commit('setContract', responce.data)
         // commit('setContract', 'Contract generated successfully!')
 
