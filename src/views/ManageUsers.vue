@@ -65,7 +65,7 @@
                               <v-icon>mdi-square-edit-outline</v-icon>
                             Edit Details</v-btn>
                            
-                            <v-btn depressed color="transparent" class="text-capitalize" v-if="user.id != user.id" @click="disable(user.id)">
+                            <v-btn depressed color="transparent" class="text-capitalize" v-if="user.id != userInfo.id" @click="disable(user.id)">
                               <v-icon color="#F32349">mdi-window-close</v-icon>
                             Disable </v-btn>
 
@@ -146,6 +146,7 @@ export default {
   data() {
     return {
       isHidden : false,
+      userInfo : '',
     };
   },
   computed:{
@@ -208,7 +209,7 @@ export default {
   mounted() {
     document.title = "Manage Users - BidOut";
     this.user = this.$store.getters.userInfo;
-    console.log(this.user);
+    this.userInfo = this.$store.getters.userInfo;
     this.getUsers(this.user.company.company);
     this.invitedUsers(this.user.company.company);
     this.getPendingUsers(this.user.company.id);
