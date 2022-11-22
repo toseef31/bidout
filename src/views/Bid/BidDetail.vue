@@ -38,12 +38,8 @@
             rounded="lg"
             height="119"
             width="290"
-            :class="[
-              !bidDetail.bidData.awardees || !bidDetail.bidData.rejectees
-                ? 'status-card'
-                : '',
-            ]"
-            v-if="!bidDetail.bidData.awardees || !bidDetail.bidData.rejectees"
+            :class="[!isAfterDueDate ? 'status-card' : '']"
+            v-if="!isAfterDueDate"
           >
             <div class="status" v-if="bidDetail.receivingBids">
               Status: Receiving Bids
@@ -317,7 +313,7 @@ export default {
       const momentDueDate = moment(stringDate);
 
       const isAfter = moment(currentDate).isAfter(momentDueDate);
-
+      console.log(momentDueDate);
       console.log(isAfter);
       return moment(currentDate).isAfter(momentDueDate);
     },
