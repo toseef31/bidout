@@ -13,7 +13,7 @@ export default {
       
     }).catch(async(err) => {
       if(state.apiCounter === 2){
-        dispatch('signOutAction')
+        dispatch('apiSignOutAction')
       }else{
         if(err.response.status === 403){
          await dispatch('refreshToken');
@@ -33,7 +33,7 @@ export default {
         }
     }).catch(async(err) => {
       if(state.apiCounter === 2){
-        dispatch('signOutAction')
+        dispatch('apiSignOutAction')
       }else{
         if(err.response.status === 403){
          await dispatch('refreshToken');
@@ -47,13 +47,13 @@ export default {
   manageUsers({commit,dispatch,state},payload){
     axios.get('/company/getUsersByCompany/'+ payload)
       .then(responce => {
-        
+        console.log(responce.data);
         if(responce.status === 200){
           commit('getUsersList',responce.data)
         }
     }).catch(async(err) => {
       if(state.apiCounter === 2){
-        dispatch('signOutAction')
+        dispatch('apiSignOutAction')
       }else{
         if(err.response.status === 403){
          await dispatch('refreshToken');
@@ -73,7 +73,7 @@ export default {
         }
     }).catch(async(err) => {
         if(state.apiCounter === 2){
-          dispatch('signOutAction')
+          dispatch('apiSignOutAction')
         }else{
           if(err.response.status === 403){
            await dispatch('refreshToken');
@@ -97,7 +97,7 @@ export default {
         }
     }).catch(async(err) => {
       if(state.apiCounter === 2){
-        dispatch('signOutAction')
+        dispatch('apiSignOutAction')
       }else{
         if(err.response.status === 403){
          await dispatch('refreshToken');
@@ -121,7 +121,7 @@ export default {
         }
     }).catch(async(err) => {
       if(state.apiCounter === 2){
-        dispatch('signOutAction')
+        dispatch('apiSignOutAction')
       }else{
         if(err.response.status === 403){
          await dispatch('refreshToken');
@@ -144,7 +144,7 @@ export default {
       }
     }).catch(async(err) => {
       if(state.apiCounter === 2){
-        dispatch('signOutAction')
+        dispatch('apiSignOutAction')
       }else{
         if(err.response.status === 403){
          await dispatch('refreshToken');
@@ -165,7 +165,7 @@ export default {
         }
     }).catch(async(err) => {
       if(state.apiCounter === 2){
-        dispatch('signOutAction')
+        dispatch('apiSignOutAction')
       }else{
         if(err.response.status === 403){
          await dispatch('refreshToken');
