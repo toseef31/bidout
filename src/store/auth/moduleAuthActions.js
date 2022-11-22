@@ -144,8 +144,9 @@ export default {
                 // localStorage.setItem("userId",payload.id);
                 commit('setCompanyId', payload.id);
                 commit('setCompanyName', payload.companyName);
+                commit('setCompanyAdmins', responce.data.admins);
                 router.replace({
-                  name: "ModuleSelection"
+                  name: "ExistingAccount"
                 });
                 commit('setEmailSuccess', 'Email sent successfully! Please check your email')
               }

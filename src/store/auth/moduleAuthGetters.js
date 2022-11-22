@@ -68,4 +68,7 @@ export default {
     credentials (state){
        return state.credentials
     },
+    companyAdmins (state){
+       return state.companyAdmins
+    },
 }
