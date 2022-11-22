@@ -23,4 +23,7 @@ export default {
    pendingCount (state){
       return state.pendingCount
    },
+   allLocations (state){
+      return state.allLocations
+   },
 }

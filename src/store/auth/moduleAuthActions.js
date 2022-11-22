@@ -32,7 +32,8 @@ export default {
             })
             commit('setUser',responce.data)
             localStorage.setItem("userData",JSON.stringify(responce.data));
-            router.replace({ name: "Dashboard" });
+            // router.replace({ name: "Dashboard" });
+            window.location.href ="/dashboard";
           }
           
         })
@@ -183,7 +184,13 @@ export default {
               else{
                 commit('setCompanyError', 'Please try with different Company details')
               }
-            })
+            }).catch(err => {
+            if(err.response.status === 400){
+              commit('setCompanyError', err.response.data.message)
+              commit('showErrorAlert')
+            }
+            console.log(err);
+          });
            }   
         } 
       })
@@ -242,6 +249,10 @@ export default {
               commit('setCompanyError', 'Please try with different Company details')
             }
           }).catch(err => {
+            if(err.response.status === 400){
+              commit('setCompanyError', err.response.data.message)
+              commit('showErrorAlert')
+            }
             console.log(err);
           });
         }
@@ -308,17 +319,7 @@ export default {
       console.log(err);
     });
   },
-  getToken({commit}){
-    firebase.auth().onAuthStateChanged(user => {
-      user.getIdToken(/* forceRefresh */ true)
-        .then(idToken => {
-          commit('setToken',idToken);
-          localStorage.setItem("token",JSON.stringify(idToken));
-        }).catch(function(error) {
-           // Handle error
-        });
-    });
-  },
+  
   savePaymentsDetails({commit},payload){
     axios.post('/chargeBee/savePaymentDetails',{'userId': payload.userId,'customer_id': payload.customer_id,'cardNumber':payload.cardNumber,'CVV':payload.CVV,'expiryMonth':payload.expiryMonth,'expiryYear':payload.expiryYear,'billing_zip':payload.billing_zip,'billing_country':payload.billing_country})
      .then(responce => {

@@ -1,133 +1,155 @@
-.bids-module{
-	.mid-content{
-		.content-section{
-			.title-block{
-				h3{
-					font-size: 20px;
-				}
-			}
-			.__searchBox{
-				.v-input{
-					&__slot{
-						min-height: 45px;
-						width: 272px;
-						fieldset{
-							border-color: #F1F1F1;
-						}
-					}
-					&__prepend-inner{
-						margin-top: 13px;
-						.v-icon{
-							color: #B8B8B8;
-						}
-					}
-				}
-			}
-			.bid-tab{
-				.v-tabs-bar{
-					align-items: center;
-					height: 31px;
-				}
-				.v-tab{
-					height: 31px;
-					border-radius: 16px;
-					background: #FBFBFB;
-					color: #0D1139;
-					&--active{
-						background: rgba(13, 150, 72, 0.1);
-						color: #0D9648 !important;
-					}
-				}
-			}
-			.bids-table{
-				thead{
-					tr{
-						th{
-							font-size: 16px;
-							border-bottom: thin solid #F1F1F1 !important;
-						}
-					}
-				}
-				tbody{
-					tr{
-						td{
-							color: #0D1139;
-							font-size: 16px;
-							font-weight: 600;
-							border-bottom: 0 !important;
-						}
-						&:nth-child(even){
-							background: #FBFBFB;
-						}
-					}
-				}
-			}
-			.draft-table{
-				tbody{
-					tr{
-						td:first-child{
-							width: 11.621%;
-						}
-						td:nth-child(2){
-							width: 23.426%;
-						}
-						td:nth-child(3){
-							width: 16.4%;
-						}
-						td:nth-child(4){
-							width: 10.06%;
-						}
-						td:nth-child(5){
-							width: 23.44%;
-						}
-						&:nth-child(odd){
-							background: #FBFBFB;
-						}
-						&:nth-child(even){
-							background: #FFFFFF;
-						}
-					}
-				}
-			}
-		}
-	}
+.bids-module {
+  .mid-content {
+    .content-section {
+      .title-block {
+        h3 {
+          font-size: 20px;
+        }
+      }
+      .__searchBox {
+        .v-input {
+          &__slot {
+            min-height: 45px;
+            width: 272px;
+            fieldset {
+              border-color: #f1f1f1;
+            }
+          }
+          &__prepend-inner {
+            margin-top: 13px;
+            .v-icon {
+              color: #b8b8b8;
+            }
+          }
+        }
+      }
+      .bid-tab {
+        .v-tabs-bar {
+          align-items: center;
+          height: 31px;
+        }
+        .v-tab {
+          height: 31px;
+          border-radius: 16px;
+          background: #fbfbfb;
+          color: #0d1139;
+          &--active {
+            background: rgba(13, 150, 72, 0.1);
+            color: #0d9648 !important;
+          }
+        }
+      }
+      .bids-table {
+        thead {
+          tr {
+            th {
+              font-size: 16px;
+              border-bottom: thin solid #f1f1f1 !important;
+            }
+          }
+        }
+        tbody {
+          tr {
+            td {
+              color: #0d1139;
+              font-size: 16px;
+              font-weight: 600;
+              border-bottom: 0 !important;
+            }
+            &:nth-child(even) {
+              background: #fbfbfb;
+            }
+          }
+        }
+      }
+      .draft-table {
+        tbody {
+          tr {
+            td:first-child {
+              width: 9%;
+            }
+            td:nth-child(2) {
+              width: 29%;
+            }
+            td:nth-child(3) {
+              width: 18.7%;
+            }
+            td:nth-child(4) {
+              width: 6.55%;
+            }
+            td:nth-child(5) {
+              width: 25%;
+            }
+            &:nth-child(odd) {
+              background: #fbfbfb;
+            }
+            &:nth-child(even) {
+              background: #ffffff;
+            }
+          }
+        }
+      }
+
+      .open-bid-table {
+        tbody {
+          tr {
+            td:first-child {
+              width: 9%;
+            }
+            td:nth-child(2) {
+              width: 29%;
+            }
+            td:nth-child(3) {
+              width: 18.7%;
+            }
+            td:nth-child(4) {
+              width: 5%;
+            }
+            td:nth-child(5) {
+              width: 25%;
+            }
+          }
+        }
+      }
+    }
+  }
 }
-@media(max-width: 768px){
-	.bids-module{
-		.mid-content{
-			.content-section{
-				.__searchBox{
-					.v-input__slot{
-						width: 100%;
-					}
-				} 
-				.bid-tab{
-					.v-slide-group{
-						&__next{
-							display: none;
-						}
-						&__prev{
-							display: none;
-						}
-					}
-				}
-				.bids-table{
-					thead{
-						tr{
-							th{
-								font-size: 14px;
-							}	
-						}	
-					}
-					tbody{
-						tr{
-							td{
-								font-size: 14px;
-							}	
-						}	
-					}
-				}   
-			}
-		}
-	}
+@media (max-width: 768px) {
+  .bids-module {
+    .mid-content {
+      .content-section {
+        .__searchBox {
+          .v-input__slot {
+            width: 100%;
+          }
+        }
+        .bid-tab {
+          .v-slide-group {
+            &__next {
+              display: none;
+            }
+            &__prev {
+              display: none;
+            }
+          }
+        }
+        .bids-table {
+          thead {
+            tr {
+              th {
+                font-size: 14px;
+              }
+            }
+          }
+          tbody {
+            tr {
+              td {
+                font-size: 14px;
+              }
+            }
+          }
+        }
+      }
+    }
+  }
 }

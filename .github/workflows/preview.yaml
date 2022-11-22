@@ -46,7 +46,12 @@ jobs:
         with:
           name: Dist
           path: dist/
+      - uses: 'google-github-actions/auth@v1'
+        name: 'Authenticate to Google Cloud'
+        with:
+          credentials_json: ${{ secrets.gcp_credentials }}
       - uses: google-github-actions/deploy-appengine@main
+        name: 'Deploy to App Engine'
         with:
           credentials: ${{ secrets.gcp_credentials }}
           deliverables: 'preview.yaml'
