@@ -14,7 +14,7 @@ export default {
       }catch(err){
           if(state.apiCounter === 2){
             console.log(state.apiCounter,'counter');
-            dispatch('signOutAction')
+            dispatch('apiSignOutAction')
           }else{
             if(err.response.status === 403){
              await dispatch('refreshToken');
@@ -36,7 +36,7 @@ export default {
          }
       }catch(err){
         if(state.apiCounter == 2){
-          dispatch('signOutAction');
+          dispatch('apiSignOutAction');
         }else{
           if(err.response.status === 403){
            await dispatch('refreshToken');
@@ -57,7 +57,7 @@ export default {
          }
        }catch(err){
         if(state.apiCounter == 2){
-          dispatch('signOutAction');
+          dispatch('apiSignOutAction');
         }else{
           if(err.response.status === 403){
            await dispatch('refreshToken');
@@ -79,7 +79,7 @@ export default {
          }
        }catch(err){
         if(state.apiCounter == 2){
-          dispatch('signOutAction');
+          dispatch('apiSignOutAction');
         }else{
           if(err.response.status === 403){
            await dispatch('refreshToken');
@@ -98,7 +98,7 @@ export default {
           }
         }catch(err){
           if(state.apiCounter == 2){
-            dispatch('signOutAction');
+            dispatch('apiSignOutAction');
           }else{
             if(err.response.status === 403){
              await dispatch('refreshToken');
@@ -116,7 +116,7 @@ export default {
           }
         }catch(err){
           if(state.apiCounter == 2){
-            dispatch('signOutAction');
+            dispatch('apiSignOutAction');
           }else{
             if(err.response.status === 403){
              await dispatch('refreshToken');
@@ -176,7 +176,7 @@ export default {
         }
       }catch(err){
         if(state.apiCounter == 2){
-          dispatch('signOutAction');
+          dispatch('apiSignOutAction');
         }else{
           if(err.response.status === 403){
            await dispatch('refreshToken');
@@ -255,7 +255,7 @@ export default {
         }
       }catch(err){
         if(state.apiCounter == 2){
-          dispatch('signOutAction');
+          dispatch('apiSignOutAction');
         }else{
           if(err.response.status === 403){
            await dispatch('refreshToken');
@@ -278,7 +278,7 @@ export default {
          }
       }catch(err){
         if(state.apiCounter == 2){
-          dispatch('signOutAction');
+          dispatch('apiSignOutAction');
         }else{
           if(err.response.status === 403){
            await dispatch('refreshToken');
@@ -312,7 +312,7 @@ export default {
          }
       }catch(err){
         if(state.apiCounter == 2){
-          dispatch('signOutAction');
+          dispatch('apiSignOutAction');
         }else{
           if(err.response.status === 403){
            await dispatch('refreshToken');
