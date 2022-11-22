@@ -284,7 +284,6 @@ export default {
     axios.post('/ofs/generateContract',{'id': payload.id,'ip': payload.ip,'contractType': payload.contractType, 'plan': payload.plan,'userId':payload.userId})
      .then(responce => {
       if(responce.status == 200){
-        localStorage.setItem('contractData', JSON.stringify(responce.data));
         commit('setContract', responce.data)
         commit('setPlan', payload.plan)
         commit('setPrice',payload.unit_price)
@@ -304,7 +303,6 @@ export default {
     axios.post('/ofs/signContract',{'sign': payload.sign,'contractType': payload.contractType,'fileName':payload.fileName,'companyId':payload.companyId,'userId':payload.userId,'yearly':payload.yearly,'plan':payload.plan})
      .then(responce => {
       if(responce.status == 200){
-        localStorage.setItem('contractData', null);
         commit('setContract', responce.data)
         // commit('setContract', 'Contract generated successfully!')
 
@@ -325,7 +323,6 @@ export default {
      .then(responce => {
       if(responce.status == 200){
         commit('setContract', null);
-        localStorage.removeItem('contractData');
          commit('setPlan', null);
          // axios.post('/chargeBee/createAuthorizePayment',{'customer_id': payload.customer_id,'amount':payload.amount})
          //  .then(responce => {
