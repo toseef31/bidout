@@ -106,7 +106,6 @@ export default {
       }
     },
     async updateDraftBid({commit,state}, payload){
-      console.log(payload,'update');
       var config = {
         headers: {
           "Content-Type": "multipart/form-data",
@@ -153,6 +152,22 @@ export default {
           formData.append('attachment['+i+'][id]', payload.attachement[i].id);
         }
       }
+      if(payload.questions){
+        for(let i=0; i<payload.questions.length; i++){
+          formData.append('questions['+i+'][id]', payload.questions[i]['id']);
+          formData.append('questions['+i+'][order]', payload.questions[i]['order']);
+          formData.append('questions['+i+'][title]', payload.questions[i]['title']);
+          formData.append('questions['+i+'][type]', payload.questions[i]['type']);
+          formData.append('questions['+i+'][questionType]', payload.questions[i]['questionType']);
+          if(payload.questions[i]['options']) {
+            for(let j=0; j<payload.questions[i]['options'].length; j++){
+              formData.append('questions['+i+'][options]['+j+'][id]', payload.questions[i]['options'][j]['id']);
+              formData.append('questions['+i+'][options]['+j+'][label]', payload.questions[i]['options'][j]['label']);
+              formData.append('questions['+i+'][options]['+j+'][title]', payload.questions[i]['options'][j]['title']);
+            }
+          }
+        }
+      }
       
       const res = await axios.post('bid/draft/updateDraft/'+state.draftBidsList,formData,config);
       if(res.status == 200){
@@ -161,6 +176,25 @@ export default {
         commit('setDraftTime',new Date().toLocaleString());
       }else{
         // commit('setDraftBidsList',null);
+      }
+    },
+    async publishBid({commit, state}, payload) {
+      console.log('publishBid')
+      try {
+        const res = await axios.post('bid/publishBid', {
+          draftBidId: state.draftBidsList
+        })
+        if(res.status == 200){
+          commit('setDraftBidsList',null);
+          commit('setDraftTime',null);
+        }else{
+          commit('setDraftBidsList',null);
+          commit('setDraftTime',null);
+        }
+        return
+      } catch (err) {
+        console.log(err);
+        return
       }
     },
     async inviteNewSupplier({commit,state}, payload){

@@ -143,13 +143,13 @@
                   </div>
                 </div>
                 <div
-                  v-for="(option, optIndex) in multiOptions"
+                  v-for="(option, optIndex) in cat.options"
                   :key="`opt-${optIndex}`"
                 >
                   <div v-if="option.quesIndex == index" class="d-flex align-center ml-10 mt-5">
                     <div class="option-box">
                       <v-checkbox
-                        v-model="multiOptions[optIndex]['choice']"
+                        v-model="option['choice']"
                         color="#0D9648"
                         class="mt-0"
                         hide-details
@@ -157,7 +157,7 @@
                         <template v-slot:label>
                           <v-text-field
                             v-if="editLbl === optIndex && isLbl[optIndex]"
-                            v-model="multiOptions[optIndex]['label']"
+                            v-model="option['label']"
                           ></v-text-field>
                           <div v-else>
                             {{ option.label }}
@@ -178,7 +178,7 @@
                         class="mr-3 text-muted"
                         >Save</a
                       >
-                      <a @click="deleteOption(optIndex)" class="text-muted"
+                      <a @click="deleteOption(index, optIndex)" class="text-muted"
                         >Delete</a
                       >
                     </div>
@@ -407,12 +407,18 @@
         <v-divider class="my-5"></v-divider>
       </v-col>
     </v-row>
+    <v-row justify="center" no-gutters class="mt-10 mb-8">
+      <v-col cols="12">
+        <v-btn color="#0D9648" large height="56px" class="white--text text-capitalize font-weight-bold save-btn px-9" @click="updateQuestion">Save Changes</v-btn>
+      </v-col>
+    </v-row>
   </div>
 </template>
 
 <script>
 import draggable from 'vuedraggable';
 import { v4 as uuidv4 } from 'uuid';
+import { mapActions } from 'vuex';
 
 export default {
   name: 'QuestionSection2',
@@ -434,7 +440,7 @@ export default {
       editLbl: '',
       isQues: [false],
       isLbl: [false],
-      multiOptions: [{ label: 'yes', choice: '' }],
+      multiOptions: [],
     };
   },
   watch: {
@@ -449,6 +455,7 @@ export default {
     },
   },
   methods: {
+    ...mapActions(['updateDraftBid']),
     createCategory() {
       const title = 'add your category title here';
       const data = {
@@ -456,6 +463,7 @@ export default {
         id: uuidv4(),
         order: this.categories.length,
         type: 'category',
+        options: [],
       };
       this.categories.push(data);
     },
@@ -467,6 +475,7 @@ export default {
         order: this.categories ? this.categories.length : 0,
         categoryId: this.categories.id,
         type: 'question',
+        options: [],
       };
       this.categories.push(qusData);
     },
@@ -497,7 +506,8 @@ export default {
       this.isCate[index] = false;
     },
     addOptions(index) {
-      this.multiOptions.push({
+      this.categories[index].options.push({
+        id: uuidv4(),
         choice: '',
         label: 'add label here',
         quesIndex: index,
@@ -510,6 +520,12 @@ export default {
     saveLabel(index) {
       this.editLbl = -1;
       this.isLbl[index] = false;
+    },
+    updateQuestion() {
+      this.updateDraftBid({ questions: this.categories });
+    },
+    deleteOption(index, optIndex) {
+      this.categories[index].options.splice(optIndex, 1);
     },
   },
 };

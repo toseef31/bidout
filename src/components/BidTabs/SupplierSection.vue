@@ -60,7 +60,7 @@
 		          <div class="d-flex align-center justify-space-between list-company pa-4" v-for="(company,index) in companiesList" v-if="user.company.id != company.objectID">
 		            <div class="comapny-data d-flex align-center">
 		              <div class="company-img">
-		                <img v-if="!company.image" :src="require('@/assets/images/bids/patterson.png')">
+		                <img v-if="!company.image" :src="require('@/assets/images/bids/company.png')">
 		                <img v-else :src="company.image" width="88px" height="48px">
 		              </div>
 		              <div class="company-title text-left pl-4">
@@ -122,7 +122,7 @@
 		                  <v-icon>mdi-chevron-down</v-icon>
 		                </div> -->
 		                <div class="company-img">
-		                  <img v-if="!company.image" :src="require('@/assets/images/bids/patterson.png')">
+		                  <img v-if="!company.image" :src="require('@/assets/images/bids/company.png')">
 		                  <img v-else :src="company.image" width="88px" height="48px">
 		                </div>
 		                <div class="company-title text-left pl-4">
@@ -151,7 +151,7 @@
 		        	<div class="d-flex align-center justify-space-between list-company pa-4" v-if="company.type == 'company'">
 		        	  <div class="comapny-data d-flex align-center">
 		        	    <div class="company-img">
-		        	      <img v-if="!company.item.image" :src="require('@/assets/images/bids/greatplans.png')">
+		        	      <img v-if="!company.item.image" :src="require('@/assets/images/bids/company.png')">
 		        	      <img v-else :src="company.item.image" width="88px" height="48px">
 		        	    </div>
 		        	    <div class="company-title text-left pl-4">

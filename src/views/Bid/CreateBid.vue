@@ -1,12 +1,12 @@
 <template>
-  
+
    <v-col class="createBid-module pa-0 pa-sm-3 pl-sm-0 pb-sm-0" :class="[ showSideBar ? 'col-md-9 col-12 col-sm-7' : 'mid-content-collapse', activityPanel ? 'd-sm-block' : 'd-md-block']" v-show="!activityPanel">
       <div class="mid-content">
         <div class="content-section fill-height d-flex align-center">
           <v-row align="center" justify="center" class="fill-height mx-0">
             <v-col cols="12" md="4">
               <h1 class="text-left mb-7">Create Bid</h1>
-              <router-link to="/create-bid" class="text-decoration-none">
+              <a to="" @click="createBid" class="text-decoration-none">
                 <div class="bid-box">
                   <div class="icon-box pa-8">
                     <img :src="require('@/assets/images/bids/FileX.png')">
@@ -16,7 +16,7 @@
                     <small>RFx: RFP or RFI</small>
                   </div>
                 </div>
-              </router-link>
+              </a>
             </v-col>
             <v-col cols="12" md="4" class="mt-16">
               <router-link to="/templates" class="text-decoration-none">
@@ -29,7 +29,7 @@
                     <small>RFx: RFP or RFI</small>
                   </div>
                 </div>
-              </router-link>  
+              </router-link>
             </v-col>
           </v-row>
         </div>
@@ -37,42 +37,39 @@
    </v-col>
 </template>
 <script>
-  import Navbar from '../../components/Layout/Navbar.vue'
-  import LeftSidebar from '../../components/Layout/Dashboard/LeftSidebar.vue'
-  import RightSidebar from '../../components/Layout/Dashboard/RightSidebar.vue'
-  import { mapActions } from "vuex";
 export default {
-  name : "Create Bid",
+  name: 'Create Bid',
   components: {
-    Navbar,
-    LeftSidebar,
-    RightSidebar,
   },
-  
+
   data() {
     return {
-      isHidden : false,
-      users: ''
+      isHidden: false,
+      users: '',
     };
   },
-  computed:{
-    showSideBar(){
-        return this.$store.getters.g_sideBarOpen;
+  computed: {
+    showSideBar() {
+      return this.$store.getters.g_sideBarOpen;
     },
-    activityPanel(){
-        return this.$store.getters.g_activityPanel;
+    activityPanel() {
+      return this.$store.getters.g_activityPanel;
     },
-    userDatas(){
-        return this.$store.getters.userInfo;
+    userDatas() {
+      return this.$store.getters.userInfo;
     },
   },
   methods: {
-    
+    createBid() {
+      this.$store.commit('setDraftBidsList', null);
+      this.$store.commit('setDraftTime', null);
+      this.$router.push('/create-bid');
+    },
   },
   mounted() {
-    document.title = "Create Bid - BidOut";
-    this.users = JSON.parse(localStorage.getItem("userData")).user;
-}
+    document.title = 'Create Bid - BidOut';
+    this.users = JSON.parse(localStorage.getItem('userData')).user;
+  },
 };
 </script>
 <style scoped lang="scss">
