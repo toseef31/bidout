@@ -26,4 +26,7 @@ export default {
   setDraftTime(state, payload){
     state.draftTime = payload
   },
+  setBidTemplates(state, payload){
+    state.bidTemplates = payload
+  },
 }

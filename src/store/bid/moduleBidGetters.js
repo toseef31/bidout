@@ -26,4 +26,7 @@ export default {
    draftTime(state){
       return state.draftTime;
    },
+   bidTemplates(state){
+      return state.bidTemplates;
+   },
 }
