@@ -20,6 +20,9 @@ export default {
   bidsList(state) {
     return state.bidsLists;
   },
+  itemBidData(state) {
+    return state.itemBidData;
+  },
   attachData(state) {
     return state.attachData;
   },
@@ -28,5 +31,14 @@ export default {
   },
   bidData(state) {
     return state.bidData;
+  },
+  newSupplier(state) {
+    return state.newSupplier;
+  },
+  lineItemsComplete(state) {
+    return state.lineItemsComplete;
+  },
+  bidDetailsComplete(state) {
+    return state.bidDetailsComplete;
   },
 };

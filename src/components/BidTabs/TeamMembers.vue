@@ -12,6 +12,7 @@
 		      <div>
 		        <div class="available-search mt-5 px-4">
 		          <div>
+		          	<input type="hidden" name="" :value="validat">
 		            <v-text-field
 		              type="text" hide-details
 		              outlined
@@ -22,7 +23,7 @@
 		          </div>
 		        </div>
 		        <div class="companies-list">
-		          <div class="d-flex align-center justify-space-between list-company pa-4" v-for="(team,index) in teamMembers">
+		          <div class="d-flex align-center justify-space-between list-company pa-4" v-for="(team,index) in teamMembers" v-if="user.id != team.id">
 		            <div class="comapny-data d-flex align-center">
 		              <div class="company-img">
 		                <img v-if="!team.image" :src="require('@/assets/images/chat/chatUser.png')">
@@ -80,6 +81,8 @@ export default {
       inviteTeam: null,
       searchMember: '',
       membersAdded: [],
+      valid: false,
+      user: '',
     };
   },
   computed:{
@@ -91,7 +94,16 @@ export default {
     	}else{
   			return this.$store.getters.teamMembers;
     	}
-    }
+    },
+    validat(){
+    	if(this.membersAdded.length > 0){
+    		this.$emit('validation',{'valid': true,'team': '3'});
+    		return this.valid;
+    	}else{
+    		this.$emit('validation',{'valid': false,'team': '3'});
+    		return this.valid;
+    	}
+    },
   },
   methods: {
   	...mapActions(["getTeamMembers","getCompanyInfo","updateDraftBid"]),
@@ -105,16 +117,28 @@ export default {
     addMember(member,index){
     	this.membersAdded.push(member);
   		this.$store.getters.teamMembers.splice(index,1);
+  		this.savedraftOnchange();
     },
     remove(member,index){
 	  	this.$store.getters.teamMembers.push(member);
 			this.membersAdded.splice(index,1);
-    }
+			this.savedraftOnchange();
+    },
+    savedraftOnchange(){
+      // const timer = setInterval(() => {
+      //   this.updateDraftBid({'invitedTeamMembers':this.membersAdded});
+      // }, 60000);
+
+      // this.$once("hook:beforeDestroy", () => {
+      //   clearInterval(timer);
+      // });
+    },
   },
   created() {
     // this.interval = setInterval(() => this.updateDraftBid({'invitedTeamMembers':this.membersAdded}));
   },
   mounted() {
+  	this.user = this.$store.getters.userInfo
     this.getTeamMembers(this.$store.getters.userInfo.company.company);
 	}	
 };

@@ -113,6 +113,7 @@ export default {
       }
     }
   },
+
   async getBidBySerial({ commit, dispatch, state }, payload) {
     try {
       const res = await axios.get(
@@ -154,6 +155,7 @@ export default {
       }
     }
   },
+
   async saveDraftBid({ commit, dispatch, state }, payload) {
     const config = {
       headers: {
@@ -212,8 +214,7 @@ export default {
       }
     }
   },
-  async updateDraftBid({ commit, state, dispatch }, payload) {
-    console.log(payload, 'update');
+  async updateDraftBid({ commit, state }, payload) {
     const config = {
       headers: {
         'Content-Type': 'multipart/form-data',
@@ -249,15 +250,6 @@ export default {
         formData.append(`lineItems[${i}][buyerComment]`, payload.bidlines[i].buyerComment);
       }
     }
-    if (payload.exampleItems) {
-      for (let i = 0; i < payload.exampleItems.length; i++) {
-        formData.append(`exampleItems[${i}][description]`, payload.exampleItems[i].description);
-        formData.append(`exampleItems[${i}][unit]`, payload.exampleItems[i].unit);
-        formData.append(`exampleItems[${i}][inputType]`, payload.exampleItems[i].type);
-        formData.append(`exampleItems[${i}][quantity]`, payload.exampleItems[i].quantity);
-        formData.append(`exampleItems[${i}][buyerComment]`, payload.exampleItems[i].buyerComment);
-      }
-    }
     if (payload.attachement) {
       for (let i = 0; i < payload.attachement.length; i++) {
         formData.append(`attachment[${i}][fileName]`, payload.attachement[i].fileName);
@@ -267,6 +259,22 @@ export default {
         formData.append(`attachment[${i}][uploadedAt]`, payload.attachement[i].uploadedAt);
         formData.append(`attachment[${i}][comment]`, payload.attachement[i].comment);
         formData.append(`attachment[${i}][id]`, payload.attachement[i].id);
+      }
+    }
+    if (payload.questions) {
+      for (let i = 0; i < payload.questions.length; i++) {
+        formData.append(`questions[${i}][id]`, payload.questions[i].id);
+        formData.append(`questions[${i}][order]`, payload.questions[i].order);
+        formData.append(`questions[${i}][title]`, payload.questions[i].title);
+        formData.append(`questions[${i}][type]`, payload.questions[i].type);
+        formData.append(`questions[${i}][questionType]`, payload.questions[i].questionType);
+        if (payload.questions[i].options) {
+          for (let j = 0; j < payload.questions[i].options.length; j++) {
+            formData.append(`questions[${i}][options][${j}][id]`, payload.questions[i].options[j].id);
+            formData.append(`questions[${i}][options][${j}][label]`, payload.questions[i].options[j].label);
+            formData.append(`questions[${i}][options][${j}][title]`, payload.questions[i].options[j].title);
+          }
+        }
       }
     }
     try {
@@ -308,6 +316,33 @@ export default {
         state.apiCounter = 2;
         dispatch('inviteNewSupplier', payload);
       }
+    }
+  },
+  async publishBid({ commit, state }, payload) {
+    console.log('publishBid');
+    try {
+      const res = await axios.post('bid/publishBid', {
+        draftBidId: state.draftBidsList,
+      });
+      if (res.status == 200) {
+        commit('setDraftBidsList', null);
+        commit('setDraftTime', null);
+      } else {
+      }
+      return;
+    } catch (err) {
+      console.log(err);
+    }
+  },
+  async inviteNewSupplier({ commit, state }, payload) {
+    const res = await axios.post('bid/inviteSupplier/', {
+      firstName: payload.firstName, lastName: payload.lastName, company: payload.company, phone: payload.phone, email: payload.email, bidTitle: payload.bidTitle, bidType: payload.bidType, bidDueDate: payload.bidDueDate, bidDueTime: payload.bidDueTime,
+    });
+    if (res.status == 200) {
+      commit('setNewSupplier', res.data);
+      // localStorage.removeItem('bidData');
+      console.log(res.data);
+      commit('setItemBidData', res.data);
     }
   },
   async uploadBidAttach({ commit, state, dispatch }, payload) {
