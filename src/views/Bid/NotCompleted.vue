@@ -247,8 +247,13 @@ export default {
       this.attachValid = event.valid;
       this.attachValue = event.attach;
     },
-    publishBid() {
-      this.$store.dispatch('publishBid');
+    async publishBid() {
+      try {
+        await this.$store.dispatch('publishBid');
+        this.$router.push('/view-bids');
+      } catch (error) {
+        console.log(error);
+      }
     },
   },
   mounted() {

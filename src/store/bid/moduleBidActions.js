@@ -304,8 +304,6 @@ export default {
           commit('setDraftBidsList',null);
           commit('setDraftTime',null);
         }else{
-          commit('setDraftBidsList',null);
-          commit('setDraftTime',null);
         }
         return
       } catch (err) {
