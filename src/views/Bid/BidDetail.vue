@@ -1,10 +1,14 @@
 <template>
   <v-col class="pl-0 pr-3 pb-0 pt-3">
+    <v-alert type="success"  v-show="isAlert">
+      You are successfully deleted a bid!
+    </v-alert>
     <v-card
       class="fill-height main-card"
       :elevation="0"
       style="border: 1px solid #b8b8b8"
     >
+
       <v-row class="px-5 my-5 row-title" no-gutters>
         <v-col>
           <div class="pa-1 text-left text--primary">
@@ -34,11 +38,10 @@
 
         <v-col class="status-sec mx-auto">
           <v-sheet
-            class="py-2 px-5"
+            class="py-2 px-5 bid-status-card text-left"
             rounded="lg"
             height="119"
             width="290"
-            :class="[!isAfterDueDate ? 'status-card' : '']"
             v-if="!isAfterDueDate"
           >
             <div class="status" v-if="bidDetail.receivingBids">
@@ -57,19 +60,30 @@
               {{ seconds }} sec remaining
             </div>
 
-            <v-divider
-              v-if="!bidDetail.receivingBids && !bidDetail.bidout"
-              class="mt-3"
-              color="#b489251c"
-            ></v-divider>
             <v-divider v-else color="#0D9648"></v-divider>
 
             <div
-              :class="[
-                !bidDetail.receivingBids && !bidDetail.bidout
-                  ? 'award-bid-number'
-                  : 'bid-number',
-              ]"
+              class="bid-number"
+            >
+              3 Bids Received
+            </div>
+          </v-sheet>
+          <v-sheet  class="py-2 px-5 text-left award-status-card"
+            rounded="lg"
+            height="85"
+            width="290"
+            v-if="bidDetail.user_status
+ !== 'waiting'">
+
+ <div  class="award-status">Status: {{bidDetail.user_status === 'awarded' ? 'Awarded' : 'Not Awarded'}}</div>
+
+ <v-divider
+
+              class="mt-1"
+              color="#b489251c"
+            ></v-divider>
+            <div
+             class="award-bid-number"
             >
               3 Bids Received
             </div>
@@ -77,7 +91,8 @@
         </v-col>
 
         <v-col cols="auto">
-          <div class="toggle-setting" v-if="!isAfterDueDate">
+      <div class="toggle-setting" v-if="!isAfterDueDate">
+
             <v-btn
               class="py-2 setting"
               plain
@@ -124,7 +139,7 @@
                       <router-link to="#" class="text-decoration-none">
                         <v-list-item-icon
                           class="mr-2 my-2"
-                          @click="isSetting = !isSetting"
+                          @click="isSetting = !isSetting; deleteB()"
                         >
                           <v-icon size="24" color="#F32349"
                             >mdi-trash-can-outline</v-icon
@@ -136,22 +151,61 @@
                         color="#0D9648"
                         class="pa-0"
                       >
-                        <v-list-item-title
-                          color="#F32349"
-                          @click="isSetting = !isSetting"
-                          class="py-3"
-                          >Delete Bid</v-list-item-title
-                        >
-                      </v-list-item-content>
-                    </v-list-item>
-                  </v-list-item-group>
-                </v-list>
-              </v-card>
+                      <v-dialog
+                        class="dialog-class"
+                        v-model="dialog"
+                        width="300"
+                      >
+                      <template v-slot:activator="{ on, attrs }">
+                          <v-btn
+                            color="#F32349"
+
+                            plain
+
+                            v-bind="attrs"
+                            @click="isSetting = !isSetting"
+                            v-on="on"
+                          >
+                            Delete Bid
+                          </v-btn>
+                         </template>
+
+                                    <v-card>
+                    <v-card-title  class="text-h5 justify-center">
+                      Delete Bid
+                    </v-card-title>
+                    <v-card-text>Are you sure you really want to delete this bid?</v-card-text>
+                    <v-divider></v-divider>
+                    <v-card-actions>
+                      <v-spacer></v-spacer>
+
+                      <v-btn
+                        color="#0d9648"
+
+                        @click="dialog = false"
+                      >
+                        Cancel
+                      </v-btn>
+                      <v-btn
+                        color="#F32349"
+
+                        @click="dialog = false;deleteB()"
+                      >
+                        Agree
+                          </v-btn>
+                            </v-card-actions>
+                                    </v-card>
+                                  </v-dialog>
+                                  </v-list-item-content>
+                                </v-list-item>
+                              </v-list-item-group>
+                            </v-list>
+                          </v-card>
             </div>
           </div>
-          <v-sheet v-else width="151" class="py-3 px-2" color="#F03F20" rounded>
-            <div class="choose-supplier">Choose Supplier</div>
-          </v-sheet>
+          <v-btn v-else  color="#F03F20" depressed @click="ChangeT('tab-2')">
+            Select Supplier
+          </v-btn>
         </v-col>
       </v-row>
       <div class="bidDetailtabs-section mt-7">
@@ -206,18 +260,18 @@
 </template>
 
 <script>
-import BidDetailTab from "@/components/viewBid/bidDetailTab.vue";
-import BidBroadcast from "@/components/viewBid/bidBroadcast.vue";
-import TeamMembers from "@/components/BidTabs/TeamMembers.vue";
-import BidQandA from "@/components/viewBid/bidQandA.vue";
-import BidChat from "@/components/viewBid/bidChat.vue";
-import BidSubmission from "@/components/viewBid/bidDetailTab.vue";
-import BidAuditTrail from "@/components/viewBid/bidAuditTrail.vue";
-import moment from "moment-timezone";
-import { mapActions } from "vuex";
+import BidDetailTab from '@/components/viewBid/bidDetailTab.vue';
+import BidBroadcast from '@/components/viewBid/bidBroadcast.vue';
+import TeamMembers from '@/components/BidTabs/TeamMembers.vue';
+import BidQandA from '@/components/viewBid/bidQandA.vue';
+import BidChat from '@/components/viewBid/bidChat.vue';
+import BidSubmission from '@/components/viewBid/bidDetailTab.vue';
+import BidAuditTrail from '@/components/viewBid/bidAuditTrail.vue';
+import moment from 'moment-timezone';
+import { mapActions } from 'vuex';
 
 export default {
-  name: "BidDetail",
+  name: 'BidDetail',
   components: {
     BidDetailTab,
     BidBroadcast,
@@ -229,54 +283,69 @@ export default {
   },
   data() {
     return {
-      currentItem: "tab-1",
-      validate: "",
+      currentItem: 'tab-1',
+      validate: '',
       isSetting: false,
-      value: "",
-      users: "",
-      actualTime: moment().format("X"),
+      value: '',
+      users: '',
+      actualTime: moment().format('X'),
       years: 0,
       months: 0,
       days: 0,
       hours: 0,
       minutes: 0,
       seconds: 0,
+      dialog: false,
+      alert: false,
       tabs: [
         {
-          text: "Bid Detail",
+          text: 'Bid Detail',
           value: 1,
         },
         {
-          text: "Bid Submissions",
+          text: 'Bid Submissions',
           value: 2,
         },
         {
-          text: "Bid Chat",
+          text: 'Bid Chat',
           value: 3,
         },
         {
-          text: "Bid Broadcast",
+          text: 'Bid Broadcast',
           value: 4,
         },
         {
-          text: "Q&A",
+          text: 'Q&A',
           value: 5,
         },
         {
-          text: "Audit Trail",
+          text: 'Audit Trail',
           value: 6,
         },
       ],
     };
   },
   methods: {
-    ...mapActions(["getBidBySerial"]),
+    ...mapActions(['getBidBySerial', 'deleteBid']),
     ChangeT(tab) {
       this.currentItem = tab;
     },
+    async deleteB() {
+      await this.deleteBid({ bidId: this.bidDetail.bidData.id });
+
+      if (!this.bidDetail) {
+        this.alert = true;
+        setTimeout(() => {
+          this.$router.push('/view-bids');
+        }, 2000);
+
+        return;
+      }
+      console.log('Some thing wrong');
+    },
     addOneSecondToActualTimeEverySecond() {
       const component = this;
-      component.actualTime = moment().format("X");
+      component.actualTime = moment().format('X');
       setTimeout(() => {
         component.addOneSecondToActualTimeEverySecond();
       }, 1000);
@@ -284,14 +353,14 @@ export default {
     getDiffInSeconds() {
       const bidDueDate = this.bidDetail.bidData.dueDate;
       const bidDueTime = this.bidDetail.bidData.dueTime;
-      const momentTime = moment(bidDueTime, ["h:mm:ss A"]).format("HH:mm:ss");
+      const momentTime = moment(bidDueTime, ['h:mm:ss A']).format('HH:mm:ss');
 
       const stringDate = `${bidDueDate}T${momentTime}`;
       const momentDueDate = moment(stringDate);
-      return moment(momentDueDate).format("X") - this.actualTime;
+      return moment(momentDueDate).format('X') - this.actualTime;
     },
     compute() {
-      const duration = moment.duration(this.getDiffInSeconds(), "seconds");
+      const duration = moment.duration(this.getDiffInSeconds(), 'seconds');
       this.years = duration.years() > 0 ? duration.years() : 0;
       this.months = duration.months() > 0 ? duration.months() : 0;
       this.days = duration.days() > 0 ? duration.days() : 0;
@@ -304,25 +373,26 @@ export default {
     bidDetail() {
       return this.$store.getters.bidData;
     },
+
+    isAlert() {
+      return this.alert;
+    },
     isAfterDueDate() {
       const bidDueDate = this.bidDetail.bidData.dueDate;
       const bidDueTime = this.bidDetail.bidData.dueTime;
       const currentDate = moment();
-      const Time = moment(bidDueTime, ["h:mm:ss A"]).format("HH:mm:ss");
+      const Time = moment(bidDueTime, ['h:mm:ss A']).format('HH:mm:ss');
       const stringDate = `${bidDueDate}T${Time}`;
       const momentDueDate = moment(stringDate);
 
-      const isAfter = moment(currentDate).isAfter(momentDueDate);
-      console.log(momentDueDate);
-      console.log(isAfter);
       return moment(currentDate).isAfter(momentDueDate);
     },
   },
   mounted() {
-    document.title = "Bid Detail - BidOut";
+    document.title = 'Bid Detail - BidOut';
     this.users = this.$store.getters.userInfo;
     this.getBidBySerial({
-      serial: this.$route.fullPath.split("/").pop(),
+      serial: this.$route.fullPath.split('/').pop(),
       id: this.users.id,
     });
 
