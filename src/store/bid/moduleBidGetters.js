@@ -29,6 +29,9 @@ export default {
   draftTime(state) {
     return state.draftTime;
   },
+  bidData(state) {
+    return state.bidData;
+  },
   newSupplier(state) {
     return state.newSupplier;
   },

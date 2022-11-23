@@ -270,6 +270,48 @@
         </v-col>
       </v-row>
     </div>
+
+    <v-simple-table class="button-table-style mt-8">
+      <template v-slot:default>
+        <tbody>
+          <tr v-for="n in 1" :key="n">
+            <td class="text-left"></td>
+            <td class="text-center">
+              <v-btn   color="#0d9648" depressed >
+            Award Bid
+          </v-btn>
+          <v-btn   color="#F03F20" depressed  class="mt-2">
+            Disqualify Bid
+          </v-btn>
+            </td>
+            <td class="text-center ">
+              <v-btn   color="#0d9648" depressed >
+            Award Bid
+          </v-btn>
+          <v-btn   color="#F03F20" depressed class="mt-2" >
+            Disqualify Bid
+          </v-btn>
+            </td>
+            <td class="text-center ">
+              <v-btn   color="#0d9648" depressed >
+            Award Bid
+          </v-btn>
+          <v-btn   color="#F03F20" depressed class="mt-2" >
+            Disqualify Bid
+          </v-btn>
+            </td>
+            <td class="text-center ">
+              <v-btn   color="#0d9648" depressed >
+            Award Bid
+          </v-btn>
+          <v-btn   color="#F03F20" depressed class="mt-2" >
+            Disqualify Bid
+          </v-btn>
+            </td>
+          </tr>
+        </tbody>
+      </template>
+    </v-simple-table>
   </v-col>
 </template>
 
@@ -279,8 +321,8 @@ export default {
     return {
       listItem: [
         {
-          "Line Item": "Water Transfer Pump Rentals",
-          "": "Pumps",
+          'Line Item': 'Water Transfer Pump Rentals',
+          '': 'Pumps',
         },
       ],
     };
