@@ -133,6 +133,27 @@ export default {
       }
     }
   },
+
+  async deleteBid({ commit, dispatch, state }, payload) {
+    try {
+      const res = await axios.post('bid/deleteBid/', {
+        bidId: payload.bidId,
+      });
+
+      if (res.status === 200) {
+        localStorage.removeItem('bidData');
+        commit('setBidData', null);
+      }
+    } catch (err) {
+      if (state.apiCounter == 2) {
+        dispatch('apiSignOutAction');
+      } else if (err.response.status === 403) {
+        await dispatch('refreshToken');
+        state.apiCounter = 2;
+        dispatch('deleteBid', payload);
+      }
+    }
+  },
   async saveDraftBid({ commit, dispatch, state }, payload) {
     const config = {
       headers: {
