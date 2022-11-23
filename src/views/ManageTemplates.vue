@@ -21,7 +21,7 @@
                   Type
                 </th>
                 <th class="text-left">
-                  Created Data
+                  Created Date
                 </th>
                 <th class="text-left">
                   Creator
