@@ -70,6 +70,34 @@ export default {
       }) ;
   },  
 
+  apiSignOutAction({ commit }) {
+    
+    // Try to sigout
+    firebase
+      .auth()
+      .signOut()
+      .then((result) => {
+        commit('setUser', null)
+        commit('setToken', null)
+        commit('setUserId', null)
+        commit('setError', null)
+        commit('setCompany', null)
+        commit('setCredentials', null)
+        // console.log(result);
+        localStorage.removeItem("userData");
+        // localStorage.removeItem("userId");
+        localStorage.removeItem("token");
+        localStorage.removeItem("companyData");
+        localStorage.removeItem("companyId");
+        router.replace({
+          name: "Login"
+        });
+      })
+      .catch((error) => {
+        commit('setError', error.message)
+      }) ;
+  },  
+
   forgotEmail({ commit },payload) {
     let email = payload.email;
     // Try to sendForgot email

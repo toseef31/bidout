@@ -25,7 +25,7 @@ export default {
           localStorage.setItem("userData",JSON.stringify(responce.data));
         }).catch(async(err) => {
           if(state.apiCounter === 2){
-            dispatch('signOutAction')
+            dispatch('apiSignOutAction')
           }else{
             if(err.response.status === 403){
              await dispatch('refreshToken');
@@ -38,7 +38,7 @@ export default {
       }
     }).catch(async(err) => {
       if(state.apiCounter === 2){
-        dispatch('signOutAction')
+        dispatch('apiSignOutAction')
       }else{
         if(err.response.status === 403){
          await dispatch('refreshToken');
@@ -60,7 +60,7 @@ export default {
           localStorage.setItem("userData",JSON.stringify(responce.data));
         }).catch(async(err) => {
           if(state.apiCounter === 2){
-            dispatch('signOutAction')
+            dispatch('apiSignOutAction')
           }else{
             if(err.response.status === 403){
              await dispatch('refreshToken');
@@ -74,7 +74,7 @@ export default {
       
     }).catch(async(err) => {
       if(state.apiCounter === 2){
-        dispatch('signOutAction')
+        dispatch('apiSignOutAction')
       }else{
         if(err.response.status === 403){
          await dispatch('refreshToken');
@@ -95,7 +95,7 @@ export default {
       }
     }).catch(async(err) => {
       if(state.apiCounter === 2){
-        dispatch('signOutAction')
+        dispatch('apiSignOutAction')
       }else{
         if(err.response.status === 403){
          await dispatch('refreshToken');
@@ -124,7 +124,7 @@ export default {
       }
     }).catch(async(err) => {
       if(state.apiCounter === 2){
-        dispatch('signOutAction')
+        dispatch('apiSignOutAction')
       }else{
         if(err.response.status === 403){
          await dispatch('refreshToken');
@@ -156,7 +156,7 @@ export default {
       }
     }).catch(async(err) => {
       if(state.apiCounter === 2){
-        dispatch('signOutAction')
+        dispatch('apiSignOutAction')
       }else{
         if(err.response.status === 403){
          await dispatch('refreshToken');
@@ -178,7 +178,7 @@ export default {
         }
     }).catch(async(err) => {
       if(state.apiCounter === 2){
-        dispatch('signOutAction')
+        dispatch('apiSignOutAction')
       }else{
         if(err.response.status === 403){
          await dispatch('refreshToken');
@@ -205,7 +205,7 @@ export default {
         }
     }).catch(async(err) => {
       if(state.apiCounter === 2){
-        dispatch('signOutAction')
+        dispatch('apiSignOutAction')
       }else{
         if(err.response.status === 403){
           await dispatch('refreshToken');
@@ -228,7 +228,7 @@ export default {
         }
     }).catch(async(err) => {
       if(state.apiCounter === 2){
-        dispatch('signOutAction')
+        dispatch('apiSignOutAction')
       }else{
         if(err.response.status === 403){
           await dispatch('refreshToken');
@@ -249,7 +249,7 @@ export default {
       }
     }).catch(async(err) => {
       if(state.apiCounter === 2){
-        dispatch('signOutAction')
+        dispatch('apiSignOutAction')
       }else{
         if(err.response.status === 403){
           await dispatch('refreshToken');
@@ -270,7 +270,7 @@ export default {
       }
     }).catch(async(err) => {
       if(state.apiCounter === 2){
-        dispatch('signOutAction')
+        dispatch('apiSignOutAction')
       }else{
         if(err.response.status === 403){
           await dispatch('refreshToken');
