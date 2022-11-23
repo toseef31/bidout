@@ -35,4 +35,10 @@ export default {
   createMsg(state) {
     return state.createMsg;
   },
+  showSuccessBroadcast(state) {
+    return state.alertBroadcast;
+  },
+  showErrorBroadcast(state) {
+    return state.errorBroadcast
+  }
 };

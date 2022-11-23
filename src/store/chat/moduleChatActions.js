@@ -1,11 +1,11 @@
-import axios from "axios";
+import axios from 'axios';
 
 export default {
   unreadMessagesCount({ commit }, payload) {
     axios
-      .post("/chat/countUnreadMessages", { userId: payload.userId })
+      .post('/chat/countUnreadMessages', { userId: payload.userId })
       .then((responce) => {
-        commit("setUnreadCount", responce.data.totalUnreadMessages);
+        commit('setUnreadCount', responce.data.totalUnreadMessages);
       })
       .catch((err) => {
         console.log(err);
@@ -15,8 +15,8 @@ export default {
     await axios
       .get(`/chat/getConversations/${payload}`)
       .then((responce) => {
-        commit("setConverstaionList", responce.data.conversations);
-        commit("setPageLoader", false);
+        commit('setConverstaionList', responce.data.conversations);
+        commit('setPageLoader', false);
       })
       .catch((err) => {
         console.log(err);
@@ -26,7 +26,7 @@ export default {
     await axios
       .get(`/chat/getBidConversations/${payload}`)
       .then((responce) => {
-        commit("setBidConversationList", responce.data);
+        commit('setBidConversationList', responce.data);
       })
       .catch((err) => {
         console.log(err);
@@ -36,8 +36,8 @@ export default {
     axios
       .get(`/chat/getMessages/${payload.conversationId}`)
       .then((responce) => {
-        commit("setMessagesList", responce.data.messages);
-        dispatch("unreadMessagesCount", { userId: payload.userId });
+        commit('setMessagesList', responce.data.messages);
+        dispatch('unreadMessagesCount', { userId: payload.userId });
       })
       .catch((err) => {
         console.log(err);
@@ -46,22 +46,22 @@ export default {
   sendMessage({ commit, state, dispatch }, payload) {
     const config = {
       header: {
-        "Content-Type": "multipart/form-data",
+        'Content-Type': 'multipart/form-data',
       },
     };
     const formData = new FormData();
-    formData.append("conversationId", payload.conversationId);
-    formData.append("sender[id]", payload.sender.id);
-    formData.append("sender[name]", payload.sender.name);
-    formData.append("sender[company]", payload.sender.company);
-    formData.append("sender[profilePicture]", payload.sender.profilePicture);
-    formData.append("content", payload.content);
-    formData.append("attachment", payload.attachment);
+    formData.append('conversationId', payload.conversationId);
+    formData.append('sender[id]', payload.sender.id);
+    formData.append('sender[name]', payload.sender.name);
+    formData.append('sender[company]', payload.sender.company);
+    formData.append('sender[profilePicture]', payload.sender.profilePicture);
+    formData.append('content', payload.content);
+    formData.append('attachment', payload.attachment);
     axios
-      .post("chat/sendMessage", formData, config)
+      .post('chat/sendMessage', formData, config)
       .then((responce) => {
-        dispatch("getAllConversations", state.userId.id);
-        commit("setNewMessages", responce.data.message);
+        dispatch('getAllConversations', state.userId.id);
+        commit('setNewMessages', responce.data.message);
       })
       .catch((err) => {
         console.log(err);
@@ -69,12 +69,12 @@ export default {
   },
   unreadMessagesCountCon({ commit }, payload) {
     axios
-      .post("/chat/countUnreadMessagesInConversation", {
+      .post('/chat/countUnreadMessagesInConversation', {
         userId: payload.userId,
         conversationId: payload.conversationId,
       })
       .then((responce) => {
-        commit("setUnMessageCount", responce.data.count);
+        commit('setUnMessageCount', responce.data.count);
       })
       .catch((err) => {
         console.log(err);
@@ -82,7 +82,7 @@ export default {
   },
   lastMessageRead({ commit }, payload) {
     axios
-      .post("/chat/setLastMessageReadAt", {
+      .post('/chat/setLastMessageReadAt', {
         userId: payload.userId,
         conversationId: payload.conversationId,
       })
@@ -94,14 +94,14 @@ export default {
   // Archive Chat
   archiveChat({ commit, state, dispatch }, payload) {
     axios
-      .post("/chat/archiveConversation", {
+      .post('/chat/archiveConversation', {
         userId: payload.userId,
         conversationId: payload.conversationId,
       })
       .then((responce) => {
-        commit("setMessagesList", null);
-        dispatch("getAllConversations", state.userId.id);
-        dispatch("getArchiveChats", state.userId.id);
+        commit('setMessagesList', null);
+        dispatch('getAllConversations', state.userId.id);
+        dispatch('getArchiveChats', state.userId.id);
       })
       .catch((err) => {
         console.log(err);
@@ -110,9 +110,9 @@ export default {
   // Supplier List
   supplierList({ commit }, payload) {
     axios
-      .get("/company/getSupplierCompaniesAndUsers")
+      .get('/company/getSupplierCompaniesAndUsers')
       .then((responce) => {
-        commit("setMembersList", responce.data);
+        commit('setMembersList', responce.data);
       })
       .catch((err) => {
         console.log(err);
@@ -123,7 +123,7 @@ export default {
     axios
       .get(`/user/searchSupplierUser/${payload}`)
       .then((responce) => {
-        commit("setSuppliersUsers", responce.data);
+        commit('setSuppliersUsers', responce.data);
       })
       .catch((err) => {
         console.log(err);
@@ -132,12 +132,12 @@ export default {
   // Supplier Users List
   createConversation({ commit, state, dispatch }, payload) {
     axios
-      .post("/chat/createConversation/", payload)
+      .post('/chat/createConversation/', payload)
       .then((responce) => {
-        dispatch("getAllConversations", state.userId.id);
-        commit("setCreateMsg", responce.data.message);
+        dispatch('getAllConversations', state.userId.id);
+        commit('setCreateMsg', responce.data.message);
         setTimeout(() => {
-          commit("setCreateMsg", null);
+          commit('setCreateMsg', null);
         }, 5000);
       })
       .catch((err) => {
@@ -147,9 +147,9 @@ export default {
 
   removeConvUser({ commit, state, dispatch }, payload) {
     axios
-      .post("/chat/removeParticipantsFromConversation/", payload)
+      .post('/chat/removeParticipantsFromConversation/', payload)
       .then((responce) => {
-        dispatch("getAllConversations", state.userId.id);
+        dispatch('getAllConversations', state.userId.id);
       })
       .catch((err) => {
         console.log(err);
@@ -160,7 +160,7 @@ export default {
     axios
       .get(`/chat/getArchivedConversations/${payload}`)
       .then((responce) => {
-        commit("setArchiveConverstaionList", responce.data.conversations);
+        commit('setArchiveConverstaionList', responce.data.conversations);
       })
       .catch((err) => {
         console.log(err);
@@ -168,29 +168,30 @@ export default {
   },
   unArchiveConversation({ commit, dispatch }, payload) {
     axios
-      .post("/chat/unarchiveConversation/", {
+      .post('/chat/unarchiveConversation/', {
         conversationId: payload.conversationId,
         userId: payload.userId,
       })
       .then((responce) => {
-        dispatch("getAllConversations", payload.userId);
-        dispatch("getArchiveChats", payload.userId);
+        dispatch('getAllConversations', payload.userId);
+        dispatch('getArchiveChats', payload.userId);
       })
       .catch((err) => {
         console.log(err);
       });
   },
-  async sendBroadcast({}, payload) {
+  async sendBroadcast({ commit }, payload) {
     await axios
-      .post("/chat/newbroadcastMessage/", {
+      .post('/chat/newbroadcastMessage/', {
         messageContent: payload.messageContent,
         bidId: payload.bidId,
       })
       .then((responce) => {
-        console.log(responce);
+        commit('showBroadcastAlert');
       })
       .catch((err) => {
         console.log(err);
+        commit('showErrorBroadcast');
       });
   },
 };

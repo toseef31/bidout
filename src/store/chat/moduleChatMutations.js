@@ -38,4 +38,16 @@ export default {
   setCreateMsg(state, payload) {
     state.createMsg = payload;
   },
+  showBroadcastAlert(state) {
+    state.alertBroadcast = true;
+    setTimeout(() => {
+      state.alertBroadcast = false;
+    }, 5000);
+  },
+  showErrorBroadcast(state) {
+    state.errorBroadcast = true;
+    setTimeout(() => {
+      state.errorBroadcast = false;
+    }, 5000);
+  },
 };
