@@ -74,4 +74,7 @@ export default {
     setCredentials (state, payload){
       state.credentials = payload
     },
+    setCompanyAdmins (state, payload){
+      state.companyAdmins = payload
+    },
 }

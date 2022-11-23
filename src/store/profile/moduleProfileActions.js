@@ -6,7 +6,7 @@ import store from "../../store";
 import axios from 'axios'
 export default {
     
-  updateProfileImg({commit}, payload){
+  updateProfileImg({commit,dispatch,state}, payload){
     var config = {
       headers: {
         "Content-Type": "multipart/form-data",
@@ -17,39 +17,96 @@ export default {
     formData.append('files', payload.files)
     axios.post('/user/updateProfilePicture/'+payload.userid,formData,config)
      .then(responce => {
-      axios.get('/user/getUserData/'+payload.email)
-       .then(responce => {
-        commit('setUser',responce.data)
-        localStorage.setItem("userData",JSON.stringify(responce.data));
-      })
-    }).catch(err => {
+      
+      if(responce.status === 200){
+        axios.get('/user/getUserData/'+payload.email)
+         .then(responce => {
+          commit('setUser',responce.data)
+          localStorage.setItem("userData",JSON.stringify(responce.data));
+        }).catch(async(err) => {
+          if(state.apiCounter === 2){
+            dispatch('apiSignOutAction')
+          }else{
+            if(err.response.status === 403){
+             await dispatch('refreshToken');
+             state.apiCounter = 2;
+             dispatch('updateProfileImg',payload);
+            }
+          }
+          console.log(err);
+        });
+      }
+    }).catch(async(err) => {
+      if(state.apiCounter === 2){
+        dispatch('apiSignOutAction')
+      }else{
+        if(err.response.status === 403){
+         await dispatch('refreshToken');
+         state.apiCounter = 2;
+         dispatch('updateProfileImg',payload);
+        }
+      }
           console.log(err);
       });
   },  
-  updateProfile({commit}, payload){
+  updateProfile({commit,dispatch,state}, payload){
     axios.post('/user/updateUser/'+payload.userid,{'email': payload.email,'firstName': payload.firstName,'lastName': payload.lastName,'phoneNumber': payload.phoneNumber,'title':payload.title,'timezone':payload.timezone})
      .then(responce => {
-      axios.get('/user/getUserData/'+payload.email)
-       .then(responce => {
-        commit('setUser',responce.data)
-        localStorage.setItem("userData",JSON.stringify(responce.data));
-      }).catch(err => {
-          console.log(err);
-      });
-    }).catch(err => {
+      
+      if(responce.status === 200){
+        axios.get('/user/getUserData/'+payload.email)
+         .then(responce => {
+          commit('setUser',responce.data)
+          localStorage.setItem("userData",JSON.stringify(responce.data));
+        }).catch(async(err) => {
+          if(state.apiCounter === 2){
+            dispatch('apiSignOutAction')
+          }else{
+            if(err.response.status === 403){
+             await dispatch('refreshToken');
+             state.apiCounter = 2;
+             dispatch('updateProfile',payload);
+            }
+          }
+            console.log(err);
+        });
+      }
+      
+    }).catch(async(err) => {
+      if(state.apiCounter === 2){
+        dispatch('apiSignOutAction')
+      }else{
+        if(err.response.status === 403){
+         await dispatch('refreshToken');
+         state.apiCounter = 2;
+         dispatch('updateProfile',payload);
+        }
+      }
           console.log(err);
       });
   },  
-  changePassword({commit}, payload){
+  changePassword({commit,dispatch,state}, payload){
     
     axios.post('/user/changePassword/'+payload.userid,{'currentPassword': payload.currentPassword,'newPassword': payload.newPassword})
      .then(responce => {
-      commit('setUserImg',responce.data.messages)
-    }).catch(err => {
+      
+      if(responce.status === 200){
+        commit('setUserImg',responce.data.messages)
+      }
+    }).catch(async(err) => {
+      if(state.apiCounter === 2){
+        dispatch('apiSignOutAction')
+      }else{
+        if(err.response.status === 403){
+         await dispatch('refreshToken');
+         state.apiCounter = 2;
+         dispatch('changePassword',payload);
+        }
+      }
           console.log(err);
       });
   },  
-  loginHistory({commit}, payload){
+  loginHistory({commit,dispatch}, payload){
     axios.get('/user/getUserLoginHistory/'+payload.userid)
      .then(responce => {
       commit('setLoginHistory',responce.data)
@@ -57,38 +114,78 @@ export default {
           console.log(err);
       });
   },  
-  adminsCompany({commit}, payload){
+  adminsCompany({commit,dispatch,state}, payload){
     
     axios.get('/company/getCompanyAdmins/'+payload.company)
      .then(responce => {
-      commit('setCompanyAdmin',responce.data)
-    }).catch(err => {
+      
+      if(responce.status === 200){
+        commit('setCompanyAdmin',responce.data)
+      }
+    }).catch(async(err) => {
+      if(state.apiCounter === 2){
+        dispatch('apiSignOutAction')
+      }else{
+        if(err.response.status === 403){
+         await dispatch('refreshToken');
+         state.apiCounter = 2;
+         dispatch('adminsCompany',payload);
+        }
+      }
           console.log(err);
       });
   },  
-  updateNotifications({commit}, payload){
+  updateNotifications({commit,dispatch,state}, payload){
     axios.post('/user/updateNotificationPreference/'+payload.userid,{'notificationPreference':payload.notificationPreference})
      .then(responce => {
-      axios.get('/user/getUserData/'+payload.email)
-       .then(responce => {
-        
-        commit('setUser',responce.data)
-        localStorage.setItem("userData",JSON.stringify(responce.data));
-      }).catch(err => {
-          console.log(err);
-      });
-    }).catch(err => {
+      
+      if(responce.status === 200){
+        axios.get('/user/getUserData/'+payload.email)
+         .then(responce => {
+          
+          commit('setUser',responce.data)
+          localStorage.setItem("userData",JSON.stringify(responce.data));
+        }).catch(async(err) => {
+          if(err.response.status === 403){
+           await dispatch('refreshToken');
+           state.apiCounter = 2;
+           dispatch('updateNotifications',payload);
+          }
+            console.log(err);
+        });
+      }
+    }).catch(async(err) => {
+      if(state.apiCounter === 2){
+        dispatch('apiSignOutAction')
+      }else{
+        if(err.response.status === 403){
+         await dispatch('refreshToken');
+         state.apiCounter = 2;
+         dispatch('updateNotifications',payload);
+        }
+      }
           console.log(err);
       });
   }, 
-  inviteUser({commit},payload){
+  inviteUser({commit,dispatch,state},payload){
     
     axios.post('/company/addInvitedUser/',{'firstName':payload.firstName,'lastName': payload.lastName,'company': payload.company,'email':payload.email,'parent': payload.parent,'role': payload.role})
      .then(responce => {
         
-        commit('setMessage','User invited successfully')
-        router.replace({ name: "ManageUsers" });
-    }).catch(err => {
+        if(responce.status === 200){
+          commit('setMessage','User invited successfully')
+          router.replace({ name: "ManageUsers" });
+        }
+    }).catch(async(err) => {
+      if(state.apiCounter === 2){
+        dispatch('apiSignOutAction')
+      }else{
+        if(err.response.status === 403){
+         await dispatch('refreshToken');
+         state.apiCounter = 2;
+         dispatch('inviteUser',payload);
+        }
+      }
           console.log(err);
       });
   },
@@ -96,47 +193,91 @@ export default {
     commit('setEditData',payload);
     router.replace({ name: "EditUser" });
   },
-  updateUser({commit},payload){
+  updateUser({commit,dispatch,state},payload){
     
     axios.post('/company/updateUser/'+payload.id,{'firstName':payload.firstName,'lastName': payload.lastName,'role': payload.role})
      .then(responce => {
         
-        commit('setMessage','User updated successfully')
-        commit('showErrorAlert')
-        router.replace({ name: "ManageUsers" });
-    }).catch(err => {
+        if(responce.status === 200){
+          commit('setMessage','User updated successfully')
+          commit('showErrorAlert')
+          router.replace({ name: "ManageUsers" });
+        }
+    }).catch(async(err) => {
+      if(state.apiCounter === 2){
+        dispatch('apiSignOutAction')
+      }else{
+        if(err.response.status === 403){
+          await dispatch('refreshToken');
+          state.apiCounter = 2;
+          dispatch('updateUser',payload);
+        }
+      }
           console.log(err);
       });
   },
-  updateInvite({commit},payload){
+  updateInvite({commit,dispatch,state},payload){
     
     axios.post('/company/updateInvitedUser/'+payload.id,{'firstName':payload.firstName,'lastName': payload.lastName,'role': payload.role})
      .then(responce => {
         
-        commit('setMessage','User updated successfully')
-        commit('showErrorAlert')
-        router.replace({ name: "ManageUsers" });
-    }).catch(err => {
+        if(responce.status === 200){
+          commit('setMessage','User updated successfully')
+          commit('showErrorAlert')
+          router.replace({ name: "ManageUsers" });
+        }
+    }).catch(async(err) => {
+      if(state.apiCounter === 2){
+        dispatch('apiSignOutAction')
+      }else{
+        if(err.response.status === 403){
+          await dispatch('refreshToken');
+          state.apiCounter = 2;
+          dispatch('updateInvite',payload);
+        }
+      }
           console.log(err);
       });
   },
-  getDisabledUsers({commit},payload){
+  getDisabledUsers({commit,dispatch,state},payload){
     axios.get('/company/getDisabledUsersByCompany/'+ payload)
       .then(responce => {
-      // console.log(responce.data);
-      commit('setDisableUsersList',responce.data)
-      commit('showErrorAlert')
-    }).catch(err => {
+      
+      if(responce.status === 200){
+        commit('setDisableUsersList',responce.data)
+        commit('showErrorAlert')
+      }
+    }).catch(async(err) => {
+      if(state.apiCounter === 2){
+        dispatch('apiSignOutAction')
+      }else{
+        if(err.response.status === 403){
+          await dispatch('refreshToken');
+          state.apiCounter = 2;
+          dispatch('getDisabledUsers',payload);
+        }
+      }
           console.log(err);
       });
   }, 
-  getPendingUsers({commit},payload){
+  getPendingUsers({commit,dispatch,state},payload){
     axios.get('/user/getPendingUsers/'+ payload)
       .then(responce => {
       
-      commit('setPendingUsersList',responce.data.data)
-      commit('showErrorAlert')
-    }).catch(err => {
+      if(responce.status === 200){
+        commit('setPendingUsersList',responce.data.data)
+        commit('showErrorAlert')
+      }
+    }).catch(async(err) => {
+      if(state.apiCounter === 2){
+        dispatch('apiSignOutAction')
+      }else{
+        if(err.response.status === 403){
+          await dispatch('refreshToken');
+          state.apiCounter = 2;
+          dispatch('getPendingUsers',payload);
+        }
+      }
           console.log(err);
       });
   }, 

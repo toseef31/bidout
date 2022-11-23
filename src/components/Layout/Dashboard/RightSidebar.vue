@@ -1,47 +1,56 @@
 <template>
-  <div class="rightSide-Module">
+  <v-row fill-height align="center" class="fill-height" v-if="loading">
+    <v-col cols="12">
+      <v-progress-circular :width="3" color="green" indeterminate ></v-progress-circular>
+    </v-col>
+  </v-row>
+  <div class="rightSide-Module" v-else>
     <div class="activity-section" :class="[ activityPanel ? '' : 'desktop-section']">
       <div class="title">
         <h3 class="font-weight-bold text-left">Activity</h3>
       </div>
       <v-list>
         <v-list-item-group
-          v-model="selected"
           active-class="success--text"
           multiple
         >
-          <template v-for="(item, index) in itemsActive">
-            <v-list-item :key="item.title">
+          <template v-if="activities.length == 0 || !activities">
+            <h4 class="text-center py-3">
+              No activity
+            </h4>
+          </template>
+          <template v-for="(item, index) in activities" v-if="activities.length > 0 || activities">
+            <v-list-item :key="item.index">
               <template v-slot:default="{ active }">
                 
                 <v-list-item-avatar class="my-1">
                   <v-icon
                     class="notification-icon"
-                    v-text="item.icon"
-                  >
+                  >mdi-email-outline
                   </v-icon>
                 </v-list-item-avatar>
                 <v-list-item-content>
-                  <v-list-item-title v-text="item.title"></v-list-item-title>
+                  <v-list-item-title v-text="item.action"></v-list-item-title>
 
                 </v-list-item-content>
 
                 <v-list-item-action >
-                  <v-list-item-action-text v-text="item.action"></v-list-item-action-text>
+                  <v-list-item-action-text>{{istoday(item.date)}}</v-list-item-action-text>
                 </v-list-item-action>
               </template>
             </v-list-item>
 
             <v-divider
-              v-if="index < itemsActive.length - 1"
+              v-if="index < activities.length - 1"
               :key="index"
             ></v-divider>
           </template>
+          
         </v-list-item-group>
       </v-list>
-      <div class="pa-3 view-all"> 
+      <!-- <div class="pa-3 view-all" v-if="activities.length > 11"> 
           <a href="">View all </a>     
-      </div> 
+      </div>  -->
     </div>    
     <div class="social-section pa-2 mt-3" :class="[ activityPanel ? 'd-none d-md-block' : 'd-block']">
       <v-row class="align-center d-none d-sm-flex">
@@ -80,92 +89,45 @@
 </template>
 
 <script>
-import firebase from 'firebase/compat/app';
-import 'firebase/compat/auth';
-import 'firebase/compat/firestore';
+import VueMoment from 'vue-moment';
+import moment from 'moment-timezone';
+import _ from 'lodash';
 import { mapActions } from "vuex";
 export default {
   name : "RightSidebar",
   data() {
     return {
-     selected: [2],
-     itemsActive: [
-       {
-         action: '12min',
-         title: 'Laura sent you new messages.',
-         icon: 'mdi-email-outline'
-       },
-       {
-         action: '32min',
-         title: 'Aubrey sent you a new message.',
-         icon: 'mdi-email-outline'
-       },
-       {
-         action: '1hr',
-         title: 'Laura sent you new messages.',
-         icon: 'mdi-email-outline'
-       },
-       {
-         action: '1d',
-         title: 'Your bid Water Job was created.',
-         icon: 'mdi-check'
-       },
-       {
-         action: '1d',
-         title: 'Your bid Water Job was created.',
-         icon: 'mdi-check'
-       },
-       {
-         action: '1d',
-         title: 'Peter sent you new messages.',
-         icon: 'mdi-email-outline'
-       },
-       {
-         action: '1d',
-         title: 'Your bid Water Job was created.',
-         icon: 'mdi-check'
-       },
-       {
-         action: '1d',
-         title: 'Your bid Water Job was created.',
-         icon: 'mdi-check'
-       },
-       {
-         action: '1d',
-         title: 'Your bid Water Job was created.',
-         icon: 'mdi-check'
-       },
-       {
-         action: '1d',
-         title: 'Your bid Water Job was created.',
-         icon: 'mdi-check'
-       },
-       {
-         action: '1d',
-         title: 'Your bid Water Job was created.',
-         icon: 'mdi-check'
-       },
-       {
-         action: '1d',
-         title: 'Your bid Water Job was created.',
-         icon: 'mdi-check'
-       },
-     ],
+     
     };
   },
   computed:{
     activityPanel(){
         return this.$store.getters.g_activityPanel;
-    }
+    },
+    activities(){
+      return _.orderBy(this.$store.getters.activities.slice(0,13),'date','desc');
+    },
+    loading(){
+     return this.$store.getters.pageLoader;
+    },
+    userDatas(){
+        return this.$store.getters.userInfo;
+    },
   },
   methods: {
     ...mapActions(["getActivities"]),
-    activities(id){
-      this.getActivities(id);
-    }
+    istoday(date) {
+      return moment(date).startOf('hour').fromNow();
+    },
   },
-  mounted() {
-    this.activities(this.$store.getters.userInfo.id);
+  // async created(){
+  //   await this.getActivities(this.$store.getters.userInfo.id);
+  // },
+  updated(){
+
+  },
+  async mounted() {
+    await this.getActivities(this.userDatas.id);
   }
 };
 </script>

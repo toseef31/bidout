@@ -19,7 +19,6 @@ import actions from './actions'
 Vue.use(Vuex);
 const logrocketPlugin = createPlugin(LogRocket);
 export default new Vuex.Store({
-  namespaced: true,
   getters,
   mutations,
   state,

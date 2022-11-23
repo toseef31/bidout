@@ -19,7 +19,6 @@
           </v-row>
         </v-container>
       </div>
-      {{credent}}
       <v-container>
         <v-main class="pt-15">
           <v-row justify="center">

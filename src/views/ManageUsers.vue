@@ -55,7 +55,7 @@
 
                           <td class="text-left font-weight-medium">{{ user.firstName }} {{ user.lastName }}</td>
                           <td class="text-left font-weight-medium">{{ user.email }}</td>
-                          <td class="text-left font-weight-medium"><span v-if="user.lastSeen">{{ user.lastSeen | moment("MM/D/YYYY") }}</span><span v-else>no history</span></td>
+                          <td class="text-left font-weight-medium"><span v-if="user.lastSeen">{{ user.lastSeen | moment("MM/DD/YYYY") }}</span><span v-else>no history</span></td>
                           <td class="text-left font-weight-medium text-capitalize">
                             <template v-if="user.role == 'admin'">Administrator</template>
                             <template v-if="user.role == 'user'">User</template>
@@ -65,7 +65,7 @@
                               <v-icon>mdi-square-edit-outline</v-icon>
                             Edit Details</v-btn>
                            
-                            <v-btn depressed color="transparent" class="text-capitalize" v-if="user.id != user.id" @click="disable(user.id)">
+                            <v-btn depressed color="transparent" class="text-capitalize" v-if="user.id != userInfo.id" @click="disable(user.id)">
                               <v-icon color="#F32349">mdi-window-close</v-icon>
                             Disable </v-btn>
 
@@ -84,7 +84,7 @@
 
                           <td class="text-left font-weight-medium">{{ user.firstName }} {{ user.lastName }}</td>
                           <td class="text-left font-weight-medium">{{ user.email }}</td>
-                          <td class="text-left font-weight-medium"><span v-if="user.lastSeen">{{ user.lastSeen | moment("MM/D/YYYY") }}</span><span v-else>no history</span></td>
+                          <td class="text-left font-weight-medium"><span v-if="user.lastSeen">{{ user.lastSeen | moment("MM/DD/YYYY") }}</span><span v-else>no history</span></td>
                           <td class="text-left font-weight-medium text-capitalize">
                             <template v-if="user.role == 'admin'">Administrator</template>
                             <template v-else>User</template>
@@ -146,6 +146,7 @@ export default {
   data() {
     return {
       isHidden : false,
+      userInfo : '',
     };
   },
   computed:{
@@ -202,13 +203,13 @@ export default {
       this.getPendingUsers(company);
     },
     accept(user){
-      this.acceptPendingUser(user);
+      this.acceptPendingUser({user, companyName: this.user.company.company});
     },
   },
   mounted() {
     document.title = "Manage Users - BidOut";
     this.user = this.$store.getters.userInfo;
-    console.log(this.user);
+    this.userInfo = this.$store.getters.userInfo;
     this.getUsers(this.user.company.company);
     this.invitedUsers(this.user.company.company);
     this.getPendingUsers(this.user.company.id);

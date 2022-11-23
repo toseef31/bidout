@@ -20,10 +20,11 @@ export default {
     userIp: null,
     companyName: '',
     verifyData: {},
-    contractData: JSON.parse(localStorage.getItem('contractData')),
+    contractData: '',
     plan: null,
     id: null,
     customerId: null,
     price: null,
     credentials: null,
+    companyAdmins: null,
 }
