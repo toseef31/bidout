@@ -23,4 +23,7 @@ export default {
    innerLoader (state){
       return state.innerLoader
    },
+   orderStatus (state){
+      return state.orderStatus
+   },
 }
