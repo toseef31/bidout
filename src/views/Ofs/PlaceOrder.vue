@@ -23,12 +23,12 @@
                   <v-form>
                     <v-row>
                       <v-col cols="12" md="12">
-                        <v-textarea outlined placeholder="Please submit your needs here" rows="8" v-model="orderDescription"></v-textarea>
+                        <v-textarea outlined placeholder="Please submit your needs here" rows="8" v-model="content"></v-textarea>
                       </v-col>
                     </v-row>
                     <v-row>
                       <v-col>
-                        <v-btn width="220px" height="52px" color="#0D9648" class="white--text text-capitalize submit-btn font-weight-bold" @click="orderComplete = !orderComplete">Submit</v-btn>
+                        <v-btn width="220px" height="52px" color="#0D9648" class="white--text text-capitalize submit-btn font-weight-bold" @click="orderPlace">Submit</v-btn>
                       </v-col>
                     </v-row>
                   </v-form>
@@ -68,6 +68,7 @@ export default {
   data() {
     return {
       orderComplete: false,
+      content: '',
     };
   },
   computed: {
@@ -88,10 +89,14 @@ export default {
   methods: {
     ...mapActions([
       "getCompanyInfo",
+      "placeOrder",
     ]),
     viewPublicCompany() {
       this.getCompanyInfo({ slug : this.$route.fullPath.split('/').pop()});
     },
+    orderPlace(){
+      this.placeOrder({companyId:this.supplierData.id,content:this.content});
+    }
   },
   async created(){
     await this.viewPublicCompany();

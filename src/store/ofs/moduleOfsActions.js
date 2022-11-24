@@ -139,4 +139,16 @@ export default {
         console.log(err);
       });
   },
+  async placeOrder({commit, dispatch,state}, payload){
+    try {
+      const res = await axios.post('order/placeOrder',{'companyId': payload.companyId,'content':payload.content}); 
+       if(res.status == 200){
+        commit('setCompaniesList',res.data);
+       }else{
+        commit('setCompaniesList',null);
+       }
+     }catch(err){
+      console.log(err);
+    }
+  },
 };
