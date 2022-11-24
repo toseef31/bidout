@@ -13,4 +13,6 @@ export default {
   newSupplier: [],
   lineItemsComplete: false,
   bidDetailsComplete: false,
+  alertDeleteBidSuccess: false,
+  alertDeleteBidError: false
 };

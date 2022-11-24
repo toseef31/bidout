@@ -3,6 +3,9 @@
    <v-col class="createBid-module bids-module pa-0 pa-sm-3 pl-sm-0 pb-sm-0" :class="[ showSideBar ? 'col-md-9 col-12 col-sm-7' : 'mid-content-collapse', activityPanel ? 'd-sm-block' : 'd-md-block']" v-show="!activityPanel">
       <div class="mid-content">
         <div class="content-section fill-height">
+          <v-alert type="success"  v-show="showSuccessDeleteBidAlert" class="mx-5 mt-3">
+      You are successfully deleted a bid!
+    </v-alert>
           <div class="title-block d-block d-sm-flex justify-space-between pa-4 pa-sm-6 align-center">
             <div>
               <h3 class="font-weight-bold text-left mb-4 mb-sm-0">All Bids <font color="#B8B8B8">({{bidsList.length}})</font></h3>
@@ -224,6 +227,9 @@ export default {
         return this.$store.getters.bidsList;
       }
       return [];
+    },
+    showSuccessDeleteBidAlert() {
+      return this.$store.getters.showSuccessDeleteBid;
     },
   },
   methods: {

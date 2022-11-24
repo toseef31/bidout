@@ -144,8 +144,11 @@ export default {
       if (res.status === 200) {
         localStorage.removeItem('bidData');
         commit('setBidData', null);
+        router.push('/view-bids');
+        commit('setSuccessDeleteBid');
       }
     } catch (err) {
+      commit('setErrorDeleteBid');
       if (state.apiCounter == 2) {
         dispatch('apiSignOutAction');
       } else if (err.response.status === 403) {
