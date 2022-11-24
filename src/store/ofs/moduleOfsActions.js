@@ -141,11 +141,15 @@ export default {
   },
   async placeOrder({commit, dispatch,state}, payload){
     try {
-      const res = await axios.post('order/placeOrder',{'companyId': payload.companyId,'content':payload.content}); 
+      const res = await axios.post('order/placeOrder',{
+        'companyId': payload.companyId,
+        'content': payload.content,
+        'buyerId': payload.buyerId,
+      }); 
        if(res.status == 200){
-        commit('setCompaniesList',res.data);
+        commit('setOrderStatus',true);
        }else{
-        commit('setCompaniesList',null);
+        commit('setOrderStatus',false);
        }
      }catch(err){
       console.log(err);
