@@ -80,6 +80,18 @@ const routes = [
            }
        }
       },
+      {
+        path: '/confirm-order/:slug',
+        name: 'ConfirmOrder',
+        component: () => import('@/views/Ofs/OrderConfirm.vue'),
+        beforeEnter: (to, from, next) => {
+           if(localStorage.getItem("userData") == null) {
+               next('/login');
+           } else {
+               next();
+           }
+       }
+      },
       // { 
       //   path: "*", 
       //   component: () => import('@/components/PageNotFoundLogin.vue'),

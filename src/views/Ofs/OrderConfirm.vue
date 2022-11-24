@@ -19,19 +19,16 @@
                     <v-img :src="supplierData.image" width="330px" height="90px"></v-img>
                   </div>
                 </div>
-                <div class="order-box mt-10">
-                  <v-form>
-                    <v-row>
-                      <v-col cols="12" md="12">
-                        <v-textarea outlined placeholder="Please submit your needs here" rows="8" v-model="content"></v-textarea>
-                      </v-col>
-                    </v-row>
-                    <v-row>
-                      <v-col>
-                        <v-btn width="220px" height="52px" color="#0D9648" class="white--text text-capitalize submit-btn font-weight-bold" @click="orderPlace">Submit</v-btn>
-                      </v-col>
-                    </v-row>
-                  </v-form>
+                <div class="order-placed my-16">
+                  <v-row justify="center">
+                    <v-col cols="12" md="6">
+                      <div class="order-content">
+                        <v-img :src="require('@/assets/images/ofs/checked.png')" width="48px" height="48px" class="mx-auto"></v-img>
+                        <p class="mt-6 text-left">This order has been sent to {{supplierData.company}}, you will be contacted directly from your account rep shortly.</p>
+                      </div>
+                    <router-link :to="'/place-order/'+supplierData.slug" class="pt-5">Back to Order</router-link>
+                    </v-col>
+                  </v-row>
                 </div>
               </div>
             </v-col>
@@ -85,19 +82,6 @@ export default {
     viewPublicCompany() {
       this.getCompanyInfo({ slug : this.$route.fullPath.split('/').pop()});
     },
-    orderPlace(){
-      var data = {
-        companyId: this.supplierData.id,
-        companyName: this.supplierData.company,
-        content: this.content,
-        buyerId: this.$store.getters.userInfo.id,
-        slug: this.supplierData.slug,
-      }
-      this.placeOrder(data);
-    },
-    setOrder(){
-      this.orderStatus = false;
-    }
   },
   async created(){
     await this.viewPublicCompany();

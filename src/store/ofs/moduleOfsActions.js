@@ -143,10 +143,12 @@ export default {
     try {
       const res = await axios.post('order/placeOrder',{
         'companyId': payload.companyId,
+        'companyName': payload.companyName,
         'content': payload.content,
         'buyerId': payload.buyerId,
       }); 
        if(res.status == 200){
+        router.replace(`/confirm-order/${payload.slug}`)
         commit('setOrderStatus',true);
        }else{
         commit('setOrderStatus',false);
