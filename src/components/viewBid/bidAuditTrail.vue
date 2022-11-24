@@ -1,8 +1,8 @@
 <template>
-  <v-col class="pa-0 pb-3 audit-tab" align="start">
-    <div class="title-detail px-6 title-border">Activity</div>
+  <v-col class="pa-0 pb-3 audit-tab fill-height" align="start">
+    <!-- <div class="title-detail px-6 title-border">Activity</div> -->
 
-    <v-list>
+    <!-- <v-list>
       <v-list-item-group
         v-model="selected"
         active-class="success--text"
@@ -40,7 +40,8 @@
           ></v-divider>
         </template>
       </v-list-item-group>
-    </v-list>
+    </v-list> -->
+    <div class="text-center title-detail my-auto mt-16">Audit Trail Data is Currently Being Collected</div>
   </v-col>
 </template>
 
@@ -51,75 +52,75 @@ export default {
       selected: [2],
       itemsActive: [
         {
-          action: "12min",
-          title: "Laura sent you new messages.",
-          icon: "mdi-email-outline",
+          action: '12min',
+          title: 'Laura sent you new messages.',
+          icon: 'mdi-email-outline',
           color: true,
         },
         {
-          action: "32min",
-          title: "Aubrey sent you a new message.",
-          icon: "mdi-email-outline",
+          action: '32min',
+          title: 'Aubrey sent you a new message.',
+          icon: 'mdi-email-outline',
           color: true,
         },
         {
-          action: "1hr",
-          title: "Laura sent you new messages.",
-          icon: "mdi-email-outline",
+          action: '1hr',
+          title: 'Laura sent you new messages.',
+          icon: 'mdi-email-outline',
           color: false,
         },
         {
-          action: "1d",
-          title: "Your bid Water Job was created.",
-          icon: "mdi-check",
+          action: '1d',
+          title: 'Your bid Water Job was created.',
+          icon: 'mdi-check',
           color: false,
         },
         {
-          action: "1d",
-          title: "Your bid Water Job was created.",
-          icon: "mdi-check",
+          action: '1d',
+          title: 'Your bid Water Job was created.',
+          icon: 'mdi-check',
           color: false,
         },
         {
-          action: "1d",
-          title: "Peter sent you new messages.",
-          icon: "mdi-email-outline",
+          action: '1d',
+          title: 'Peter sent you new messages.',
+          icon: 'mdi-email-outline',
           color: false,
         },
         {
-          action: "1d",
-          title: "Your bid Water Job was created.",
-          icon: "mdi-check",
+          action: '1d',
+          title: 'Your bid Water Job was created.',
+          icon: 'mdi-check',
           color: false,
         },
         {
-          action: "1d",
-          title: "Your bid Water Job was created.",
-          icon: "mdi-check",
+          action: '1d',
+          title: 'Your bid Water Job was created.',
+          icon: 'mdi-check',
           color: false,
         },
         {
-          action: "1d",
-          title: "Your bid Water Job was created.",
-          icon: "mdi-check",
+          action: '1d',
+          title: 'Your bid Water Job was created.',
+          icon: 'mdi-check',
           color: false,
         },
         {
-          action: "1d",
-          title: "Your bid Water Job was created.",
-          icon: "mdi-check",
+          action: '1d',
+          title: 'Your bid Water Job was created.',
+          icon: 'mdi-check',
           color: false,
         },
         {
-          action: "1d",
-          title: "Your bid Water Job was created.",
-          icon: "mdi-check",
+          action: '1d',
+          title: 'Your bid Water Job was created.',
+          icon: 'mdi-check',
           color: false,
         },
         {
-          action: "1d",
-          title: "Your bid Water Job was created.",
-          icon: "mdi-check",
+          action: '1d',
+          title: 'Your bid Water Job was created.',
+          icon: 'mdi-check',
           color: false,
         },
       ],
