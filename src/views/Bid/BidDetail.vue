@@ -1,7 +1,7 @@
 <template>
   <v-col class="pl-0 pr-3 pb-0 pt-3">
-    <v-alert type="success"  v-show="isAlert">
-      You are successfully deleted a bid!
+    <v-alert type="error"  v-show="showErrorDeleteAlert" class="mx-5">
+      Deleting this bid was failed. Please Try again!
     </v-alert>
     <v-card
       class="fill-height main-card"
@@ -38,7 +38,7 @@
 
         <v-col class="status-sec mx-auto">
           <v-sheet
-            class="py-2 px-5 bid-status-card text-left"
+            class="py-2 px-4 bid-status-card text-left"
             rounded="lg"
             height="119"
             width="290"
@@ -47,20 +47,19 @@
             <div class="status" v-if="bidDetail.receivingBids">
               Status: Receiving Bids
             </div>
-            <div class="status" v-else-if="bidDetail.bidout">
+            <div class="status" v-if="bidDetail.bidout">
               Status: BidOut Phase
             </div>
-            <div v-else class="award-status">Status: Not Awarded</div>
+            <div class="status">Status: Receiving Bids</div>
             <div
-              class="time pt-2"
-              v-if="bidDetail.receivingBids || bidDetail.bidout"
+              class="time pt-2 align-center"
             >
-              <v-icon small> mdi-timer-outline</v-icon>
+              <v-icon small color="#0D9648"> mdi-timer-outline</v-icon>
               {{ days }} days, {{ hours }} hours, {{ minutes }} min,
               {{ seconds }} sec remaining
             </div>
 
-            <v-divider v-else color="#0D9648"></v-divider>
+            <v-divider color="#0D9648"></v-divider>
 
             <div
               class="bid-number"
@@ -68,18 +67,18 @@
               3 Bids Received
             </div>
           </v-sheet>
-          <v-sheet  class="py-2 px-5 text-left award-status-card"
+        <v-sheet  class="py-2 px-5 text-left award-status-card"
             rounded="lg"
             height="85"
             width="290"
-            v-if="bidDetail.user_status
- !== 'waiting'">
+            v-else>
 
- <div  class="award-status">Status: {{bidDetail.user_status === 'awarded' ? 'Awarded' : 'Not Awarded'}}</div>
+              <div  class="award-status" v-if="bidDetail.user_status === 'waiting'">Status: Not Awarded</div>
 
- <v-divider
+              <div class="award-status" v-if="bidDetail.user_status === 'awarded' ||bidDetail.user_status === 'rejected'">Status: Awarded</div>
+              <v-divider
 
-              class="mt-1"
+              class="mt-3"
               color="#b489251c"
             ></v-divider>
             <div
@@ -139,7 +138,7 @@
                       <router-link to="#" class="text-decoration-none">
                         <v-list-item-icon
                           class="mr-2 my-2"
-                          @click="isSetting = !isSetting; deleteB()"
+                          @click="isSetting = !isSetting"
                         >
                           <v-icon size="24" color="#F32349"
                             >mdi-trash-can-outline</v-icon
@@ -159,9 +158,10 @@
                       <template v-slot:activator="{ on, attrs }">
                           <v-btn
                             color="#F32349"
-
+                            block
                             plain
-
+                            :ripple="false"
+                            class="delete-button"
                             v-bind="attrs"
                             @click="isSetting = !isSetting"
                             v-on="on"
@@ -204,7 +204,7 @@
             </div>
           </div>
           <v-btn v-else  color="#F03F20" depressed @click="ChangeT('tab-2')">
-            Select Supplier
+            <div class="supplier-class">Select Supplier</div>
           </v-btn>
         </v-col>
       </v-row>
@@ -330,18 +330,8 @@ export default {
     ChangeT(tab) {
       this.currentItem = tab;
     },
-    async deleteB() {
-      await this.deleteBid({ bidId: this.bidDetail.bidData.id });
-
-      if (!this.bidDetail) {
-        this.alert = true;
-        setTimeout(() => {
-          this.$router.push('/view-bids');
-        }, 2000);
-
-        return;
-      }
-      console.log('Some thing wrong');
+    deleteB() {
+      this.deleteBid({ bidId: this.bidDetail.bidData.id });
     },
     addOneSecondToActualTimeEverySecond() {
       const component = this;
@@ -373,9 +363,8 @@ export default {
     bidDetail() {
       return this.$store.getters.bidData;
     },
-
-    isAlert() {
-      return this.alert;
+    showErrorDeleteAlert() {
+      return this.$store.getters.showErrorDeleteBid;
     },
     isAfterDueDate() {
       const bidDueDate = this.bidDetail.bidData.dueDate;

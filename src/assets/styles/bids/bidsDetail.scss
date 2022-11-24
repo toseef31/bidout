@@ -13,20 +13,22 @@
 
 .status {
   color: #0d9648;
-  font-size: 20px;
+  font-size: 17px;
   font-weight: 700;
 }
 
 .award-status {
-  color: #192739;
-  font-size: 20px;
+  color: #0D1139;
+  font-size: 17px;
   font-weight: 700;
 }
 
 .time {
-  font-size: 9px;
+  font-size: 12px;
+  line-height: 15px;
   font-weight: 600;
-  color: black;
+  color: #0D9648;
+  margin-bottom: 10px;
 }
 
 .v-divider {
@@ -35,17 +37,17 @@
 }
 
 .bid-number {
-  font-size: 16px;
+  font-size: 14px;
   font-weight: 700;
   color: #0d9648;
-  margin-top: 4px;
+  margin-top: 10px;
 }
 
 .award-bid-number {
-  color: #192739;
-  font-size: 16px;
+  color: #0D1139;
+  font-size: 14px;
   font-weight: 700;
-  margin-top: 4px;
+  margin-top: 10px;
 }
 
 .v-dialog > .v-card > .v-card__text {
@@ -75,10 +77,13 @@
 
 
 .toggle-setting {
+  .v-btn:not(.v-btn--round).v-size--default {
+    min-width: 44px;
+  }
   position: relative;
   .v-btn.v-btn--plain.v-size--default {
-    height: 44px ;
-    min-width: 44px;
+    min-height: 44px ;
+    max-width: 44px;
     padding: 12px ;
   }
   .setting {
@@ -223,18 +228,24 @@
   background-size: 100% 100%;
 }
 
+.delete-button {
+  margin-left: -5px;
+}
 
 .row-title {
   .v-btn:not(.v-btn--round).v-size--default {
     width: 151px;
     height: 43px;
+    padding: 0 5px;
     .v-btn__content {
-     color: white;
+     color: #F32349;
      text-transform: capitalize;
      font-weight: 500;
      font-size: 15px;
      letter-spacing: normal;
-
+     .supplier-class {
+      color: white
+     }
    }
    }
 }

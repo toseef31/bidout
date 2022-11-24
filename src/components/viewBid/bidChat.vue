@@ -164,10 +164,10 @@
   </v-row>
 </template>
 <script>
-import vueDropzone from "vue2-dropzone";
-import moment from "moment-timezone";
-import { mapActions } from "vuex";
-import Conversation from "@/components/viewBid/BidChat/Conversation.vue";
+import vueDropzone from 'vue2-dropzone';
+import moment from 'moment-timezone';
+import { mapActions } from 'vuex';
+import Conversation from '@/components/viewBid/BidChat/Conversation.vue';
 
 export default {
   components: {
@@ -176,14 +176,14 @@ export default {
   },
   data() {
     return {
-      user: "",
-      conversationId: "",
-      message: "",
-      filename: "",
+      user: '',
+      conversationId: '',
+      message: '',
+      filename: '',
       uploadDrag: false,
-      fileExt: "",
-      chatData: "",
-      searchMessage: "",
+      fileExt: '',
+      chatData: '',
+      searchMessage: '',
       loading: true,
       showMsgBlock: false,
       dropzoneOptions: {
@@ -193,7 +193,7 @@ export default {
         maxFiles: 10,
         maxFilesize: 420,
         chunking: true,
-        headers: { "My-Awesome-Header": "header value" },
+        headers: { 'My-Awesome-Header': 'header value' },
       },
     };
   },
@@ -201,18 +201,16 @@ export default {
   computed: {
     messagesList() {
       if (this.searchMessage) {
-        return this.$store.getters.messages.filter((item) =>
-          this.searchMessage
-            .toLowerCase()
-            .split(" ")
-            .every((v) => item.content.toLowerCase().includes(v))
-        );
+        return this.$store.getters.messages.filter((item) => this.searchMessage
+          .toLowerCase()
+          .split(' ')
+          .every((v) => item.content.toLowerCase().includes(v)));
       }
       return this.$store.getters.messages;
     },
   },
   methods: {
-    ...mapActions(["getAllMessages", "lastMessageRead", "sendMessage"]),
+    ...mapActions(['getAllMessages', 'lastMessageRead', 'sendMessage']),
 
     openChat(conversation) {
       this.chatData = {
@@ -244,21 +242,21 @@ export default {
       this.filename = this.$refs.msgFile.files[0].name;
     },
     dragfileupload(file, xhr, formData) {
-      formData.append("conversationId", this.conversationId);
-      formData.append("sender[id]", this.user.id);
+      formData.append('conversationId', this.conversationId);
+      formData.append('sender[id]', this.user.id);
       formData.append(
-        "sender[name]",
-        `${this.user.firstName} ${this.user.lastName}`
+        'sender[name]',
+        `${this.user.firstName} ${this.user.lastName}`,
       );
-      formData.append("sender[company]", this.chatData.conversation.company);
-      formData.append("sender[profilePicture]", this.user.image);
-      formData.append("content", this.message);
+      formData.append('sender[company]', this.chatData.conversation.company);
+      formData.append('sender[profilePicture]', this.user.image);
+      formData.append('content', this.message);
     },
     afterComplete(file, response) {
-      this.message = "";
+      this.message = '';
       this.$refs.msgFile.value = null;
       this.$refs.myVueDropzone.removeFile(file);
-      document.getElementById("dropzone").style.display = "none";
+      document.getElementById('dropzone').style.display = 'none';
       const ids = {
         userId: this.user.id,
         conversationId: response.message.conversationId,
@@ -266,7 +264,7 @@ export default {
       this.getAllMessages(ids);
     },
     messageSend() {
-      this.filename = "";
+      this.filename = '';
 
       const chat_file = this.$refs.msgFile.files;
       if (chat_file.length > 0) {
@@ -292,11 +290,11 @@ export default {
       setTimeout(() => {
         container.scrollTop = container.scrollHeight;
       }, 500);
-      this.message = "";
-      this.filename = "";
+      this.message = '';
+      this.filename = '';
     },
     uploadfile(event) {
-      this.filename = "";
+      this.filename = '';
       const chat_file = this.$refs.msgFile.files;
       if (chat_file.length > 0) {
         this.filename = chat_file[0].name;
@@ -317,19 +315,19 @@ export default {
       setTimeout(() => {
         container.scrollTop = container.scrollHeight;
       }, 500);
-      this.message = "";
-      this.filename = "";
+      this.message = '';
+      this.filename = '';
     },
     istoday(date) {
       return moment(date).calendar();
     },
     get_url_extension(url) {
-      return url.split(/[#?]/)[0].split(".").pop().trim();
+      return url.split(/[#?]/)[0].split('.').pop().trim();
     },
     msgShow() {
       setTimeout(() => {
         this.loading = false;
-      }, 2000);
+      }, 4000);
     },
   },
   beforeMount() {
@@ -338,23 +336,23 @@ export default {
   mounted() {
     this.msgShow();
 
-    document.addEventListener("dragenter", (e) => {
+    document.addEventListener('dragenter', (e) => {
       if (
-        e.target.className == "message-area" ||
-        e.target.className == "messages-section" ||
-        e.target.className == "v-list-item__content" ||
-        e.target.className == "v-list-item__title" ||
-        e.target.className ==
-          "v-list own-user message-list v-sheet theme--light v-list--two-line" ||
-        e.target.className == "v-item-group theme--light v-list-item-group" ||
-        e.target.className == "message-send-area" ||
-        e.target.className == "row" ||
-        e.target.className == "col-sm-10 col-md-10 col-12" ||
-        e.target.className == "msg-text-box"
+        e.target.className == 'message-area'
+        || e.target.className == 'messages-section'
+        || e.target.className == 'v-list-item__content'
+        || e.target.className == 'v-list-item__title'
+        || e.target.className
+          == 'v-list own-user message-list v-sheet theme--light v-list--two-line'
+        || e.target.className == 'v-item-group theme--light v-list-item-group'
+        || e.target.className == 'message-send-area'
+        || e.target.className == 'row'
+        || e.target.className == 'col-sm-10 col-md-10 col-12'
+        || e.target.className == 'msg-text-box'
       ) {
-        document.getElementById("dropzone").style.display = "block";
+        document.getElementById('dropzone').style.display = 'block';
       } else {
-        document.getElementById("dropzone").style.display = "none";
+        document.getElementById('dropzone').style.display = 'none';
       }
     });
   },
