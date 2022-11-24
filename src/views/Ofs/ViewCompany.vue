@@ -19,7 +19,7 @@
                   <router-link to="/login" class="text-decoration-none">
                     <v-btn color="#0D9647" large tile dense width="100%" height="56" class="font-weight-bold text-capitalize mb-4" type="submit" outlined>Place Order <v-icon class="pl-2">mdi-arrow-right-circle</v-icon></v-btn>
                   </router-link>
-                  <router-link to="/login" class="text-decoration-none">
+                  <router-link to="/create" class="text-decoration-none">
                     <v-btn color="#0D9647" large tile dense width="100%" height="56" class="font-weight-bold text-capitalize" type="submit" outlined>Create RFP <v-icon class="pl-2">mdi-arrow-right-circle</v-icon></v-btn>
                   </router-link>
                 </div>
