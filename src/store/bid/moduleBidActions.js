@@ -341,6 +341,7 @@ export default {
       }
     },
     async deleteTemplate({commit,state,dispatch}, payload){
+      console.log(payload.id);
       try{
         const res = await axios.post('bid/deleteTemplateBid/',{'templateId':payload.id});
          if(res.status == 200){

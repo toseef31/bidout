@@ -41,10 +41,32 @@
                 <td class="text-left">{{template.type}}</td>
                 <td class="text-left">{{template.createdDate}}</td>
                 <td class="text-left">{{template.creator}}</td>
-                <td class="text-left">{{template.bidDescription}}</td>
+                <td class="text-left">{{template.bidDescription}}
+                  <div
+                    v-if="edit === index && isEdit"
+                    class="d-flex edit-comment align-center"
+                  >
+                    <v-text-field
+                      outlined
+                      height="30px"
+                      width="150px"
+                      hide-details
+                      v-model="bidTemplates[index]['notes']"
+                    ></v-text-field
+                    ><v-checkbox
+                      color="#0D9648"
+                      @change="saveNote(template)"
+                    ></v-checkbox>
+                  </div>
+                  <img
+                    :src="require('@/assets/images/bids/chatdots.png')"
+                    class="mr-3"
+                    @click="openNote(index)"
+                  />
+                </td>
                 <td class="text-left pr-6">
                   <v-icon color="#0D9648" class="mr-4">mdi-pencil-outline</v-icon>
-                  <v-icon color="#F32349" @click="deleteTemplate(template.id)">mdi-trash-can-outline</v-icon>
+                  <v-icon color="#F32349" @click="deleteTemp(template.id)">mdi-trash-can-outline</v-icon>
                 </td>
               </tr>
             </tbody>
@@ -70,6 +92,8 @@ export default {
   data() {
     return {
       users: '',
+      edit: "",
+      isEdit: false,
     };
   },
   computed:{
@@ -88,9 +112,17 @@ export default {
   },
   methods: {
     ...mapActions(["getBidTemplates","deleteTemplate"]),
-    delete(id){
-      this.deleteTemplate(id);
-    }
+    deleteTemp(id){
+      this.deleteTemplate({id:id});
+    },
+    openNote(index) {
+      this.edit = index;
+      this.isEdit = true;
+    },
+    saveNote(doc) {
+      this.isEdit = false;
+      // this.updateDraftBid({ attachement: this.docsList });
+    },
   },
   async created(){
     await this.getBidTemplates();
