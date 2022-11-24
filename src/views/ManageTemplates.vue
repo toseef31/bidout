@@ -41,32 +41,38 @@
                 <td class="text-left">{{template.type}}</td>
                 <td class="text-left">{{template.createdDate}}</td>
                 <td class="text-left">{{template.creator}}</td>
-                <td class="text-left">{{template.bidDescription}}
-                  <div
-                    v-if="edit === index && isEdit"
-                    class="d-flex edit-comment align-center"
-                  >
-                    <v-text-field
-                      outlined
-                      height="30px"
-                      width="150px"
-                      hide-details
-                      v-model="bidTemplates[index]['notes']"
-                    ></v-text-field
-                    ><v-checkbox
-                      color="#0D9648"
-                      @change="saveNote(template)"
-                    ></v-checkbox>
+                <td class="text-left">
+                  <div class="">
+                    <div
+                      v-if="edit === index && isEdit"
+                      class="d-flex edit-comment align-center"
+                    >
+                      <v-text-field
+                        outlined
+                        height="30px"
+                        width="150px"
+                        hide-details
+                        v-model="bidTemplates[index]['note']"
+                      ></v-text-field
+                      ><v-checkbox
+                        color="#0D9648"
+                        @change="saveNote(template)"
+                      ></v-checkbox>
+                    </div>
+                    <div v-else class="d-flex justify-space-between">
+                      {{template.note}}
+                      <img
+                        :src="require('@/assets/images/bids/chatdots.png')"
+                        class="mr-3"
+                        @click="openNote(index)"
+                      />
+                    </div>
+                    
                   </div>
-                  <img
-                    :src="require('@/assets/images/bids/chatdots.png')"
-                    class="mr-3"
-                    @click="openNote(index)"
-                  />
                 </td>
                 <td class="text-left pr-6">
                   <v-icon color="#0D9648" class="mr-4">mdi-pencil-outline</v-icon>
-                  <v-icon color="#F32349" @click="deleteTemp(template.id)">mdi-trash-can-outline</v-icon>
+                  <v-icon color="#F32349" @click="deleteTemp(template.id,index)">mdi-trash-can-outline</v-icon>
                 </td>
               </tr>
             </tbody>
@@ -94,6 +100,7 @@ export default {
       users: '',
       edit: "",
       isEdit: false,
+      editIcon: [true],
     };
   },
   computed:{
@@ -118,9 +125,11 @@ export default {
     openNote(index) {
       this.edit = index;
       this.isEdit = true;
+      this.editIcon[index] = false;
     },
-    saveNote(doc) {
+    saveNote(doc,index) {
       this.isEdit = false;
+      this.editIcon[index] = true;
       // this.updateDraftBid({ attachement: this.docsList });
     },
   },
