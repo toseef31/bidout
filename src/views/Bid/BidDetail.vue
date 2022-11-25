@@ -1,20 +1,19 @@
 <template>
-  <v-col class="pl-0 pr-3 pb-0 pt-3">
+  <v-col class="pl-0 pr-3 pb-0 pt-3 bid-detail-module">
     <v-alert type="error"  v-show="showErrorDeleteAlert" class="mx-5">
       Deleting this bid was failed. Please Try again!
     </v-alert>
     <v-card
       class="fill-height main-card"
       :elevation="0"
-      style="border: 1px solid #b8b8b8"
     >
 
       <v-row class="px-5 my-5 row-title" no-gutters>
         <v-col>
           <div class="pa-1 text-left text--primary">
             <div
-              class="font-weight-bold text--primary"
-              style="font-family: 'Mulish', sans-serif; font-size: 20px"
+              class="font-weight-bold text--primary bid-title"
+
             >
               {{ bidDetail.bidData.title }}
             </div>
@@ -155,6 +154,7 @@
                         v-model="dialog"
                         width="300"
                       >
+
                       <template v-slot:activator="{ on, attrs }">
                           <v-btn
                             color="#F32349"
@@ -170,31 +170,32 @@
                           </v-btn>
                          </template>
 
-                                    <v-card>
-                    <v-card-title  class="text-h5 justify-center">
+                                    <v-card >
+                    <v-card-title  class="text-h5 justify-center grey lighten-2">
                       Delete Bid
                     </v-card-title>
-                    <v-card-text>Are you sure you really want to delete this bid?</v-card-text>
+                    <v-card-text class="pt-3 mb-n2">Are you sure you really want to delete this bid?</v-card-text>
                     <v-divider></v-divider>
                     <v-card-actions>
                       <v-spacer></v-spacer>
 
                       <v-btn
                         color="#0d9648"
-
+                        outlined
                         @click="dialog = false"
                       >
                         Cancel
                       </v-btn>
                       <v-btn
                         color="#F32349"
-
+                        outlined
                         @click="dialog = false;deleteB()"
                       >
                         Agree
                           </v-btn>
                             </v-card-actions>
                                     </v-card>
+
                                   </v-dialog>
                                   </v-list-item-content>
                                 </v-list-item>
@@ -208,7 +209,7 @@
           </v-btn>
         </v-col>
       </v-row>
-      <div class="bidDetailtabs-section mt-7">
+      <div class="bidDetail-tabs-section mt-7">
         <v-tabs
           v-model="currentItem"
           class="bids-tabs"
