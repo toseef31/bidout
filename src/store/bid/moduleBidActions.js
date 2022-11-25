@@ -187,8 +187,8 @@ export default {
     formData.append('bidDescriptions[0][body]', payload.bidDescriptions);
     if (payload.description) {
       for (let d = 0; d < payload.description.length; d++) {
-        formData.append(`bidDescriptions[${d}][name]`, payload.description[d].name);
-        formData.append(`bidDescriptions[${d}][body]`, payload.description[d].body);
+        formData.append(`bidDescriptions[${d + 1}][name]`, payload.description[d].name);
+        formData.append(`bidDescriptions[${d + 1}][body]`, payload.description[d].body);
       }
     }
     formData.append('userId', payload.userId);
@@ -228,12 +228,12 @@ export default {
     formData.append('dueTime', state.bidData.dueTime);
     formData.append('regions', state.bidData.regions);
     formData.append('qAndAEnabled', state.bidData.qAndAEnabled);
-    formData.append('bidDescriptions', state.bidData.bidDescriptions);
+    // formData.append('bidDescriptions', state.bidData.bidDescriptions);
     formData.append('userId', state.bidData.userId);
     formData.append('companyId', state.bidData.companyId);
     if (payload.invitedSuppliers) {
       for (let i = 0; i < payload.invitedSuppliers.length; i++) {
-        formData.append(`invitedSuppliers[${i}]`, payload.invitedSuppliers[i].objectID);
+        formData.append(`invitedSuppliers[${i}]`, payload.invitedSuppliers[i].item.objectID);
       }
     }
     if (payload.invitedTeamMembers) {
