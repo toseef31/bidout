@@ -146,7 +146,7 @@
                   v-for="(option, optIndex) in cat.options"
                   :key="`opt-${optIndex}`"
                 >
-                  <div v-if="option.quesIndex == index" class="d-flex align-center ml-10 mt-5">
+                  <div class="d-flex align-center ml-10 mt-5">
                     <div class="option-box">
                       <v-checkbox
                         v-model="option['choice']"
@@ -523,6 +523,9 @@ export default {
     },
     updateQuestion() {
       this.updateDraftBid({ questions: this.categories });
+    },
+    deleteQuestion(index) {
+      this.questions.splice(index, 1);
     },
     deleteOption(index, optIndex) {
       this.categories[index].options.splice(optIndex, 1);
