@@ -41,4 +41,10 @@ export default {
   bidDetailsComplete(state) {
     return state.bidDetailsComplete;
   },
+  showSuccessDeleteBid(state) {
+    return state.alertDeleteBidSuccess;
+  },
+  showErrorDeleteBid(state) {
+    return state.alertDeleteBidError;
+  },
 };
