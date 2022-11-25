@@ -140,8 +140,8 @@
               <v-col cols="12" md="3" class="pl-0">
                 <aside class="company-leftSidebar">
                   <div>
-                    <v-btn color="#0D9647" large tile dense width="100%" height="56" class="font-weight-bold text-capitalize mb-4" type="submit" outlined>Place Order <v-icon class="pl-2">mdi-arrow-right-circle</v-icon></v-btn>
-                    <router-link to="/create-bid" class="text-decoration-none"><v-btn color="#0D9647" large tile dense width="100%" height="56" class="font-weight-bold text-capitalize" type="submit" outlined>Create RFP <v-icon class="pl-2">mdi-arrow-right-circle</v-icon></v-btn></router-link>
+                    <router-link :to="'/place-order/'+supplierData.slug" class="text-decoration-none"><v-btn color="#0D9647" large tile dense width="100%" height="56" class="font-weight-bold text-capitalize mb-4" outlined>Place Order <v-icon class="pl-2">mdi-arrow-right-circle</v-icon></v-btn></router-link>
+                    <router-link to="/create" class="text-decoration-none"><v-btn color="#0D9647" large tile dense width="100%" height="56" class="font-weight-bold text-capitalize" type="submit" outlined>Create RFP <v-icon class="pl-2">mdi-arrow-right-circle</v-icon></v-btn></router-link>
                   </div>
                   <div class="facts-data pa-6 text-left" v-if="supplierData.founded != null || supplierData.employees != null  || supplierData.hqlocation != null || supplierData.website != null || supplierData.linkedin != null || supplierData.careers != null">
                     <h3 class="mb-4"><font color="#013D3A">Key Facts</font></h3>

@@ -23,4 +23,7 @@ export default {
   setLoader(state, payload){
     state.innerLoader = payload
   },
+  setOrderStatus(state, payload){
+    state.orderStatus = payload
+  },
 }

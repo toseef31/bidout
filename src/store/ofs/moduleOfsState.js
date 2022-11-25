@@ -7,4 +7,5 @@ export default {
    pageTitle: null,
    pageDescription: null,
    innerLoader: false,
+   orderStatus: false,
 }

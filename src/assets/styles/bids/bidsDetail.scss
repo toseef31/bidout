@@ -1,20 +1,24 @@
 .main-card {
   border-radius: 8px;
 }
-.row-title {
-  border-left: 4px solid #0d9648;
-  border-bottom-left-radius: 4px;
-  border-top-left-radius: 4px;
-}
 
 .detail {
   font-size: 14px;
   font-weight: 500;
   margin-top: 3px;
+  .serial {
+    font-weight: 700;
+  }
 }
 
 .status {
   color: #0d9648;
+  font-size: 20px;
+  font-weight: 700;
+}
+
+.award-status {
+  color: #192739;
   font-size: 20px;
   font-weight: 700;
 }
@@ -37,10 +41,92 @@
   margin-top: 4px;
 }
 
-.setting {
-  width: 44px;
-  height: 44px;
-  border-radius: 4px;
+.award-bid-number {
+  color: #192739;
+  font-size: 16px;
+  font-weight: 700;
+  margin-top: 4px;
+}
+
+.v-dialog > .v-card > .v-card__text {
+  padding: 10px 15px;
+}
+
+.v-dialog > .v-card > .v-card__title {
+  background-color: #F32349;
+  color: white;
+}
+
+.v-card__actions > .v-btn.v-btn {
+  padding: 8px 8px;
+}
+    .v-card {
+     
+      .v-card__actions {
+        .v-btn {
+          width: 90px;
+          .v-btn__content {
+            color: white
+          }
+        }
+      }
+ 
+}
+
+
+.toggle-setting {
+  position: relative;
+  .v-btn.v-btn--plain.v-size--default {
+    height: 44px ;
+    min-width: 44px;
+    padding: 12px ;
+  }
+  .setting {
+    border-radius: 4px;
+    background-color: rgba(13, 150, 72, 0.1);
+  }
+  .setting-card {
+    position: absolute;
+    right: 0;
+    top: 45px;
+    border: 2px solid #b8b8b8;
+    border-radius: 8px 8px 8px 8px !important;
+    .setting-card .v-list {
+      padding: 0;
+    }
+    .edit-item {
+      .v-list-item__title {
+        color: #0d9648;
+      }
+    }
+
+    .delete-item {
+     .v-btn {    
+        padding: 0;
+        .v-btn__content {
+          justify-content: start;
+          opacity: 1;
+          text-transform: capitalize;
+          font-size: 16px;
+          letter-spacing: normal;
+        }
+      }
+      .v-btn--plain:not(.v-btn--active):not(.v-btn--loading):not(:focus):not(:hover) .v-btn__content {
+        opacity: 1;
+      }
+      .v-list-item__title {
+        color: #f32349;
+      }
+      
+     
+    }
+    .v-list-item__icon {
+      margin-right: 10px;
+    }
+    .v-list-item__content {
+      text-align: left;
+    }
+  }
 }
 
 .title-detail {
@@ -56,6 +142,63 @@
 
 .bid-section-2 {
   margin: 30px 105px;
+  align-items: center;
+}
+
+.loading-chat {
+  height: 50vh;
+  text-align: center;
+  margin-top: auto;
+  margin-bottom: auto;
+}
+@media (max-width: 960px) {
+  .bid-section-2 {
+    margin: 30px 50px;
+  }
+}
+
+@media (max-width: 600px) {
+  .bid-section-2 {
+    margin: 30px 10px;
+  }
+}
+
+.invitedS-sec {
+  margin-left: auto;
+}
+
+.row-title {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+}
+
+@media (max-width: 680px) {
+  .row-title {
+    flex-direction: column;
+    justify-content: center;
+  }
+
+  .status-sec {
+    align-items: center;
+    margin-top: 20px;
+  }
+  .setting {
+    margin-top: 30px;
+  }
+}
+
+@media (max-width: 470px) {
+  .bid-section-2 {
+    flex-direction: column;
+    align-items: center;
+    justify-items: flex-start;
+  }
+
+  .invitedS-sec {
+    margin-left: 0px;
+    margin-top: 20px;
+  }
 }
 
 .bid-creator {
@@ -66,6 +209,34 @@
 .bid-creator-title {
   font-size: 12px;
   color: #959595;
+}
+
+.bid-status-card {
+  background-image: url(@/assets/images/bids/green.png);
+  background-size: 100% 100%;
+  filter: drop-shadow(-1px 10px 20px rgba(13, 150, 72, 0.05));
+}
+
+.award-status-card {
+  background-image: url(@/assets/images/bids/yellow.png);
+  filter: drop-shadow(-1px 10px 20px rgba(255, 244, 222, 0.05));
+  background-size: 100% 100%;
+}
+
+
+.row-title {
+  .v-btn:not(.v-btn--round).v-size--default {
+    width: 151px;
+    height: 43px;
+    .v-btn__content {
+     color: white;
+     text-transform: capitalize;
+     font-weight: 500;
+     font-size: 15px;
+     letter-spacing: normal;
+
+   }
+   }
 }
 
 .bidDetailtabs-section {
@@ -114,6 +285,13 @@
     }
     .bid-row-2 {
       border-bottom: 1px solid #f1f1f1;
+      .team-member {
+        row-gap: 35px;
+        column-gap: 128px;
+        .flex-child {
+          width: auto;
+        }
+      }
       .template-table-style {
         table {
           thead {
@@ -174,6 +352,11 @@
             }
           }
         }
+      }
+
+      .attachment-none {
+        text-align: center;
+        color: #959595;
       }
     }
     .bid-row-3 {
@@ -280,16 +463,10 @@
     .available-data {
       border-right: 1px solid #b8b8b8;
       min-height: 70vh;
-      .v-input__icon.v-input__icon--prepend-inner i {
-        font-size: 30px;
-        color: #b8b8b8;
-        margin-right: 15px;
-      }
 
-      .companies-list {
-        div:focus {
-          background-color: #f1f1f1;
-        }
+      .v-list {
+        padding-top: 50px;
+        height: calc(100vh - 243px);
         overflow: auto;
         &::-webkit-scrollbar {
           width: 4px;
@@ -307,8 +484,6 @@
           background: #0d9647;
         }
         &::-webkit-scrollbar-track {
-          /*background: #666666;*/
-          /*border: 36px solid #e3e3e3;*/
           border-radius: 42px;
         }
         &::-webkit-scrollbar-track:hover {
@@ -320,19 +495,36 @@
         &::-webkit-scrollbar-corner {
           background: transparent;
         }
-        .list-company {
-          .company-title {
-            p {
-              font-size: 12px;
-              font-weight: 600;
-            }
-          }
+      }
+      .v-list-item {
+        height: 80px;
+        padding-left: 29px;
+        border-bottom: 1px solid #f1f1f1;
+        .img-class {
+          object-fit: contain;
+        }
+        .v-list-item__icon:first-child {
+          margin-right: 24px;
+        }
+      }
+      .v-list-item__content {
+        text-align: left;
+        .v-list-item__title {
+          color: #0d1139;
+          font-weight: 700;
+          font-size: 14px;
+        }
+        .v-list-item__subtitle {
+          color: #0d1139 !important;
+          font-size: 12px;
+          font-weight: 400;
         }
       }
     }
 
     .msg-header {
       border-bottom: 1px solid #b8b8b8;
+
       .company-title {
         h4 {
           font-size: 20px;
@@ -386,9 +578,71 @@
         }
       }
     }
+    .messages-section {
+      height: calc(100vh - 329px);
+      .dropzone {
+        box-sizing: border-box;
+        display: none;
+        position: absolute;
+        width: 51.5%;
+        height: 82%;
+        z-index: 99999;
+        background: #80808066;
+        border: 6px dashed #0d9648;
+      }
+      .dropzoneActive {
+        display: block;
+      }
+      .own-user {
+        background: #fbfbfb;
+      }
+      .message-list {
+        min-height: 95px;
+        .v-list-item__title {
+          font-weight: 700;
+          font-size: 16px;
+          color: #0d1139;
+          line-height: 20px;
+        }
+        .v-list-item__subtitle {
+          color: #201b1b !important;
+          font-size: 15px;
+          font-weight: 400;
+          line-height: 20px;
+        }
+      }
+      &::-webkit-scrollbar {
+        width: 5px;
+        height: 5px;
+      }
+      &::-webkit-scrollbar-thumb {
+        background: #e1e1e1;
+        border: 14px solid #0d9647;
+        border-radius: 26px;
+      }
+      &::-webkit-scrollbar-thumb:hover {
+        background: #ffffff;
+      }
+      &::-webkit-scrollbar-thumb:active {
+        background: #0d9647;
+      }
+      &::-webkit-scrollbar-track {
+        /*background: #666666;*/
+        border: 36px solid #e3e3e3;
+        border-radius: 42px;
+      }
+      &::-webkit-scrollbar-track:hover {
+        background: #666666;
+      }
+      &::-webkit-scrollbar-track:active {
+        background: #0d9647;
+      }
+      &::-webkit-scrollbar-corner {
+        background: transparent;
+      }
+    }
     .message-send-area {
       position: relative;
-      margin-top: 440px;
       .fileName {
         position: absolute;
         left: 20px;
@@ -491,6 +745,40 @@
           tr:nth-of-type(odd) {
             background-color: #fbfbfb;
           }
+        }
+      }
+    }
+
+    .button-table-style {
+      margin-bottom: 10px;
+      .v-btn:not(.v-btn--round).v-size--default {
+        width: 137px;
+        height: 43px;
+        .v-btn__content {
+         color: white;
+         text-transform: capitalize;
+         font-weight: 500;
+         font-size: 15px;
+         letter-spacing: normal;
+    
+       }
+       }
+      table {
+
+        tbody {
+          tr {
+            padding-left: 24px;
+            padding-right: 24px;
+            td {
+              padding-top: 16px;
+              padding-bottom: 16px;
+              padding-left: 26px;
+            }
+            td:first-child {
+              width: 22%;
+            }
+          }
+         
         }
       }
     }

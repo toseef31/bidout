@@ -1,0 +1,37 @@
+.order-module{
+	.mid-content{
+		.content-section{
+			.order-section{
+				.top-section{
+					h3{
+						font-size: 20px;
+						color: #0D1139;
+					}
+				}
+				.order-box{
+					.v-input{
+						&__slot{
+							fieldset{
+								border-color: #F1F1F1;
+							}
+						}
+					}
+					.submit-btn{
+						border-radius: 8px;
+						font-size: 16px;
+					}
+				}
+				.order-placed{
+					.order-content{
+						p{
+							color: #B8B8B8;
+							font-size: 16px;
+							font-weight: 400;
+							line-height: 20px;
+						}
+					}
+				}
+			}
+		}
+	}
+}

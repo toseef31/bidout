@@ -7,14 +7,11 @@
         <span class="white--text badge">2</span>
       </v-avatar>
 
-      <v-expansion-panels accordion multiple>
-        <v-expansion-panel v-for="(item, i) in 2" :key="i">
+      <v-expansion-panels accordion multiple v-model="panel" :readonly="true">
+        <v-expansion-panel v-model="panel" v-for="(item, i) in 2" :key="i">
           <v-expansion-panel-header>
             <template v-slot:actions>
-              <v-col align="center">
-                <span class="icon-desc">Open to replay</span
-                ><v-icon> $expand </v-icon></v-col
-              >
+              <v-col align="center"> <v-icon> </v-icon></v-col>
             </template>
             <template v-slot:default="{ open }">
               <div class="header d-flex flex-column">
@@ -82,4 +79,12 @@
   </v-col>
 </template>
 
-<script></script>
+<script>
+export default {
+  data() {
+    return {
+      panel: [0, 1],
+    };
+  },
+};
+</script>

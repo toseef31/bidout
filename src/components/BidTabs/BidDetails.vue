@@ -5,15 +5,15 @@
         <v-container>
           <v-row justify="center">
             <v-col cols="12" sm="12" text="left">
-              <input type="hidden" name="" :value="validat">
+              <input type="hidden" name="" :value="validate">
               <label class="d-block text-left input-label mb-2 font-weight-bold">Bid Title</label>
-              <v-text-field placeholder="Bid Title" v-model="title" single-line outlined type="text" :rules="titleRules">
+              <v-text-field placeholder="Bid Title" v-model="title" @change="savedraftOnchange()" single-line outlined type="text" :rules="titleRules">
               </v-text-field>
             </v-col>
           </v-row>
           <v-row justify="center">
             <v-col cols="12" sm="6" text="left">
-              <label class="d-block text-left input-label mb-2 font-weight-bold">Bid Type 
+              <label class="d-block text-left input-label mb-2 font-weight-bold">Bid Type
                 <v-tooltip right>
                   <template v-slot:activator="{ on, attrs }">
                     <v-icon small v-bind="attrs"
@@ -22,34 +22,34 @@
                   <span>Choose Bid Type</span>
                 </v-tooltip>
               </label>
-              <v-select outlined :items="type" v-model="bidType" :rules="bidTypeRules">
-                
+              <v-select outlined :items="type" v-model="bidType" @change="savedraftOnchange()" :rules="bidTypeRules">
+
               </v-select>
             </v-col>
             <v-col cols="12" sm="6" text="left">
               <label class="d-block text-left input-label mb-2 font-weight-bold">Due Date </label>
-              <v-text-field placeholder="Due Date" single-line outlined type="date" v-model="dueDate" :rules="dueDateRules" >
+              <v-text-field placeholder="Due Date" single-line outlined type="date" @change="savedraftOnchange()" v-model="dueDate" :rules="dueDateRules" :min="new Date().toISOString().substr(0, 10)">
               </v-text-field>
-              
+
             </v-col>
           </v-row>
           <v-row justify="center">
             <v-col cols="12" sm="6" text="left">
               <label class="d-block text-left input-label mb-2 font-weight-bold">Due Time </label>
               <v-select outlined :items="time" item-text="label" item-value="value" v-model="dueTime" :rules="dueTimeRules">
-                              
+
               </v-select>
             </v-col>
             <v-col cols="12" sm="6" text="left">
               <label class="d-block text-left input-label mb-2 font-weight-bold">Region </label>
-              <v-select outlined :items="region" v-model="bidRegions" :rules="bidRegionsRules">
-                              
+              <v-select outlined :items="region" @change="savedraftOnchange()" v-model="bidRegions" :rules="bidRegionsRules">
+
               </v-select>
             </v-col>
           </v-row>
           <v-row>
             <v-col cols="12" sm="6" text="left">
-              <label class="d-block text-left input-label mb-2 font-weight-bold">Q&A 
+              <label class="d-block text-left input-label mb-2 font-weight-bold">Q&A
                 <v-tooltip right>
                   <template v-slot:activator="{ on, attrs }">
                     <v-icon small v-bind="attrs"
@@ -58,7 +58,7 @@
                   <span>Check the Q&A options</span>
                 </v-tooltip>
               </label>
-              
+
               <v-radio-group
                 row
                 v-model="qAndAEnabled"
@@ -77,17 +77,17 @@
           <v-row justify="center">
             <v-col cols="12" sm="12" text="left">
               <label class="d-block text-left input-label mb-2 font-weight-bold">Bid Description</label>
-              <v-textarea placeholder="Describe here..." single-line outlined type="text" v-model="bidDescriptions" :rules="descRules">
+              <v-textarea placeholder="Describe here..." single-line outlined type="text" @change="savedraftOnchange()" v-model="bidDescriptions" :rules="descRules">
               </v-textarea>
             </v-col>
           </v-row>
           <v-row justify="center" v-for="(textField, i) in textFields"
              :key="i">
             <v-col cols="12" sm="12" text="left">
-              <label class="d-block text-left input-label mb-2 font-weight-bold">Additional Information <v-icon color="#F32349" @click="remove(i)">mdi-trash-can-outline</v-icon></label> 
-              <v-text-field placeholder="Title" single-line outlined type="text" v-model="textFields[i]['name']">
+              <label class="d-block text-left input-label mb-2 font-weight-bold">Additional Information <v-icon color="#F32349" @click="remove(i)">mdi-trash-can-outline</v-icon></label>
+              <v-text-field placeholder="Title" single-line outlined type="text" @change="savedraftOnchange()" v-model="textFields[i]['name']">
               </v-text-field>
-              <v-textarea placeholder="Desribe here" single-line outlined type="text" hide-details v-model="textFields[i]['body']">
+              <v-textarea placeholder="Desribe here" single-line outlined type="text" @change="savedraftOnchange()" hide-details v-model="textFields[i]['body']">
               </v-textarea>
             </v-col>
           </v-row>
@@ -108,65 +108,68 @@
   </v-row>
 </template>
 <script>
-  import { mapActions } from "vuex";
+import { mapActions } from 'vuex';
+
 export default {
   data() {
     return {
       valid: true,
       title: '',
       titleRules: [
-        v => !!v || 'Title is required',
+        (v) => !!v || 'Title is required',
       ],
       bidType: '',
       bidTypeRules: [
-        v => !!v || 'Please select bid type',
+        (v) => !!v || 'Please select bid type',
       ],
       dueDate: '',
       dueDateRules: [
-        v => !!v || 'Due date is required',
+        (v) => !!v || 'Due date is required',
       ],
       dueTime: '',
       dueTimeRules: [
-        v => !!v || 'Please select due time',
+        (v) => !!v || 'Please select due time',
       ],
       bidRegions: '',
       bidRegionsRules: [
-        v => !!v || 'Please select region',
+        (v) => !!v || 'Please select region',
       ],
       bidDescriptions: '',
       descRules: [
-        v => !!v || 'Description is required',
+        (v) => !!v || 'Description is required',
       ],
       qAndAEnabled: 'yes',
       showAdditional: false,
-      type: ['RFP','RFI','BidOut Process'],
+      type: ['RFP', 'RFI', 'BidOut Process'],
       time: [
-        { label:'1pm CST', value:'1pm' },
-        { label:'2pm CST',value:'2pm' },
-        { label:'3pm CST',value:'3pm' },
-        { label:'4pm CST',value:'4pm' }
+        { label: '1pm CST', value: '1pm' },
+        { label: '2pm CST', value: '2pm' },
+        { label: '3pm CST', value: '3pm' },
+        { label: '4pm CST', value: '4pm' },
       ],
-      region: ['Gulf Coast','Northwest','Rockies','Mid-Con','Permian','Arklatex','Offshore','Other'],
+      region: ['Gulf Coast', 'Northwest', 'Rockies', 'Mid-Con', 'Permian', 'Arklatex', 'Offshore', 'Other'],
       textFields: [],
       interval: '',
-      disabledDates: {
-        to: new Date(Date.now() - 8640000)
-      }
+
     };
   },
-  computed:{
-    validat(){
-      this.$emit('validation',{'valid': this.valid,'value': '1','bidTitle':this.title});
+  computed: {
+    validate() {
+      this.$emit('validation', { valid: this.valid, value: '1', bidTitle: this.title });
+      this.$store.commit('setBidDetailsComplete', this.valid);
       return this.valid;
-    }
+    },
+
   },
   watch: {
-    
+    date() {
+      this.dueDate = this.formatDate(this.date);
+    },
   },
   methods: {
-    ...mapActions(["saveDraftBid"]),
-    changeTab(){
-      var bidDetails = {
+    ...mapActions(['saveDraftBid']),
+    changeTab() {
+      const bidDetails = {
         title: this.title,
         type: this.bidType,
         dueDate: this.dueDate,
@@ -177,14 +180,14 @@ export default {
         userId: this.$store.getters.userInfo.id,
         description: this.textFields,
         companyId: this.$store.getters.userInfo.company.id,
-      }
-      if(this.$refs.form.validate()){
+      };
+      if (this.$refs.form.validate()) {
         this.saveDraftBid(bidDetails);
         this.$emit('changetab', 'tab-2');
       }
     },
-    savedraft(){
-      var bidDetails = {
+    savedraft() {
+      const bidDetails = {
         title: this.title,
         type: this.bidType,
         dueDate: this.dueDate,
@@ -195,26 +198,22 @@ export default {
         qAndAEnabled: this.qAndAEnabled,
         userId: this.$store.getters.userInfo.id,
         companyId: this.$store.getters.userInfo.company.id,
-      }
-      if(this.$refs.form.validate()){
+      };
+      if (this.$refs.form.validate()) {
         this.saveDraftBid(bidDetails);
       }
     },
-    add () {
-      this.textFields.push({  
-        name: "",
-        body: ""
-      })
+    add() {
+      this.textFields.push({
+        name: '',
+        body: '',
+      });
     },
-  
-   remove (index) {
-       this.textFields.splice(index, 1)
-   }
+
+    remove(index) {
+      this.textFields.splice(index, 1);
+    },
+
   },
-  created() {
-      // this.interval = setInterval(() => this.savedraft());
-  },
-  mounted() {
-  } 
 };
 </script>

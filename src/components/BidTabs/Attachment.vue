@@ -25,6 +25,7 @@
                   v-if="edit === index && isEdit"
                   class="d-flex edit-comment align-center"
                 >
+                  <input type="hidden" :value="validat">
                   <v-text-field
                     outlined
                     height="30px"
@@ -48,7 +49,7 @@
                 <div class="d-flex">
                   <img
                     :src="require('@/assets/images/bids/chatdots.png')"
-                    class="mr-3"
+                    class="mr-3 v-card--link"
                     @click="openComment(index)"
                   />
                   <v-icon color="#F32349" @click="deleteAttach(index)"
@@ -84,7 +85,7 @@
               @change="handleDocumentUpload($event)"
             />
 
-            <span>Upload or Drop Attachments Here</span>
+            <span>Upload Attachments Here</span>
           </label>
         </div>
       </v-col>
@@ -105,6 +106,7 @@ export default {
       fileSize: "",
       documents: [],
       isAttaching: false,
+      valid: false,
     };
   },
   computed: {
@@ -116,6 +118,18 @@ export default {
     },
     isAttachingDoc() {
       return this.isAttaching;
+    },
+    docsList(){
+    	return this.$store.getters.attachData;
+    },
+    validat(){
+      if(this.$store.getters.attachData){
+        this.$emit('validation',{'valid': true,'attach': '5'});
+        return this.valid;
+      }else{
+        this.$emit('validation',{'valid': false,'attach': '5'});
+        return this.valid;
+      }
     },
   },
   methods: {
@@ -171,9 +185,9 @@ export default {
       this.isEdit = false;
       this.updateDraftBid({ attachement: this.docsList });
     },
+    
   },
   mounted() {
-    console.log(this.$store.getters.attachData, "attachement");
     if (this.$store.getters.attachData) {
       this.documents = this.$store.getters.attachData;
     }

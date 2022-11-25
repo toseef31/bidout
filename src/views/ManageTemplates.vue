@@ -72,8 +72,45 @@
                 </td>
                 <td class="text-left pr-6">
                   <v-icon color="#0D9648" class="mr-4">mdi-pencil-outline</v-icon>
-                  <v-icon color="#F32349" @click="deleteTemp(template.id,index)">mdi-trash-can-outline</v-icon>
+                  <v-icon color="#F32349" @click="dialog = true">mdi-trash-can-outline</v-icon>
                 </td>
+                
+                  <v-dialog
+                        v-model="dialog"
+                        width="500"
+                      >
+
+                        <v-card>
+                          <v-card-title class="text-h5 grey lighten-2">
+                            Confirm
+                          </v-card-title>
+
+                          <v-card-text>
+                            Are you sure you want to delete?
+                          </v-card-text>
+
+                          <v-divider></v-divider>
+
+                          <v-card-actions>
+                            <v-spacer></v-spacer>
+                            
+                            <v-btn
+                              color="primary"
+                              text
+                              @click="dialog = false"
+                            >
+                              Cancel
+                            </v-btn>
+                            <v-btn
+                              color="red"
+                              text
+                              @click="deleteTemp(template.id,index)"
+                            >
+                              Confirm
+                            </v-btn>
+                          </v-card-actions>
+                        </v-card>
+                      </v-dialog>
               </tr>
             </tbody>
           </template>
@@ -101,6 +138,7 @@ export default {
       edit: "",
       isEdit: false,
       editIcon: [true],
+      dialog: false,
     };
   },
   computed:{
@@ -121,6 +159,7 @@ export default {
     ...mapActions(["getBidTemplates","deleteTemplate"]),
     deleteTemp(id){
       this.deleteTemplate({id:id});
+      this.dialog = false;
     },
     openNote(index) {
       this.edit = index;
