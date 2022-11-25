@@ -107,7 +107,7 @@
                         min-height="32px"
                         width="150px"
                         hide-details
-                        v-model="cat['questionTitle']"
+                        v-model="categories['questionTitle']"
                       ></v-text-field
                     ></template>
                     <template v-else
@@ -134,7 +134,7 @@
                   </div>
                   <div class="d-flex align-center mr-4 mr-sm-6">
                     <v-switch
-                      v-model="cat['required']"
+                      v-model="categories['required']"
                       inset
                       class="mr-4 mt-0"
                       hide-details
@@ -209,7 +209,7 @@
                           min-height="32px"
                           width="150px"
                           hide-details
-                          v-model="cat['questionTitle']"
+                          v-model="categories['questionTitle']"
                         ></v-text-field
                       ></template>
                       <template v-else
@@ -235,7 +235,7 @@
                     </div>
                     <div class="d-flex align-center mb-2">
                       <v-switch
-                        v-model="cat['required']"
+                        v-model="categories['required']"
                         inset
                         class="mr-4 mt-0"
                         hide-details
@@ -277,7 +277,7 @@
                           min-height="32px"
                           width="150px"
                           hide-details
-                          v-model="cat['questionTitle']"
+                          v-model="categories['questionTitle']"
                         ></v-text-field
                       ></template>
                       <template v-else
@@ -304,7 +304,7 @@
                     </div>
                     <div class="d-flex align-center mb-2">
                       <v-switch
-                        v-model="cat['required']"
+                        v-model="categories['required']"
                         inset
                         class="mr-4 mt-0"
                         hide-details
@@ -356,7 +356,7 @@
                           min-height="32px"
                           width="150px"
                           hide-details
-                          v-model="cat['questionTitle']"
+                          v-model="categories['questionTitle']"
                         ></v-text-field>
                       </template>
                       <template v-else>
@@ -383,7 +383,7 @@
                     </div>
                     <div class="d-flex align-center">
                       <v-switch
-                        v-model="cat['required']"
+                        v-model="categories['required']"
                         inset
                         class="mr-4 mt-0"
                         hide-details

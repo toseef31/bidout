@@ -361,9 +361,8 @@ export default {
   	...mapActions(['getCategories', 'getSalesReps', 'getCompanyInfo', 'searchByCompany', 'getCompanyByServices', 'saveDraftBid', 'inviteNewSupplier', 'updateDraftBid']),
   	...mapGetters(['newSupplier']),
     changeTab() {
-    	// console.log(this.repsInvited);
     	this.updateDraftBid({ invitedSuppliers: this.repsInvited });
-      // this.$emit('changetab', 'tab-3');
+      this.$emit('changetab', 'tab-3');
     },
     onUpdate(payload) {
       this.results = payload.formattedNumber;
