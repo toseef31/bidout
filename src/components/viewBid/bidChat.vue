@@ -1,5 +1,5 @@
 <template>
-  <v-row fill-height align="center" class="loading-chat" v-if="loading">
+  <v-row fill-height align="center" class="loading-chat" v-if="isLoading">
     <v-col cols="12">
       <v-progress-circular
         :width="3"
@@ -10,10 +10,50 @@
   </v-row>
   <v-row class="bid-chat-row mt-4" fill-height no-gutters v-else>
     <v-col cols="12" sm="4" md="4" class="available-data pt-6">
-      <Conversation @chatData="changeC($event)" @openC="openChat" />
+      <v-list two-line class="pb-0">
+      <v-list-item-group v-model="selectedUser" active-class="grey--text">
+        <v-list-item
+          v-for="(list, index) in conversationsList"
+          @click="openChat(list)"
+          :class="{
+            'grey--text v-list-item--active':
+              list._id === chatData.conversation._id,
+          }"
+          :key="index"
+        >
+          <template>
+            <img
+              v-if="list.image != null"
+              width="88"
+              height="auto"
+              class="img-class"
+              :src="list.image"
+            />
+            <v-list-item-icon v-else align-center>
+              <v-icon size="40">mdi-domain</v-icon>
+            </v-list-item-icon>
+            <v-list-item-content align-center>
+              <v-list-item-title v-text="list.company"></v-list-item-title>
+              <v-list-item-subtitle>
+                <a href="#" class="text-decoration-underline"
+                  >View Profile</a
+                ></v-list-item-subtitle
+              >
+            </v-list-item-content>
+          </template>
+        </v-list-item>
+      </v-list-item-group>
+    </v-list>
     </v-col>
-    <v-col cols="12" sm="8" md="8" v-show="showMsgBlock">
-      <div class="message-area">
+    <v-col cols="12" sm="8" md="8">
+      <v-row cols="12" v-if="isMessageLoading" class="justify-center  loading-message">
+      <v-progress-circular
+        :width="3"
+        color="green"
+        indeterminate
+      ></v-progress-circular>
+    </v-row>
+      <div class="message-area" v-else>
         <div class="msg-header px-5 pb-5">
           <v-row align="center">
             <v-col cols="12" md="6">
@@ -166,17 +206,17 @@
 <script>
 import vueDropzone from 'vue2-dropzone';
 import moment from 'moment-timezone';
+import _ from 'lodash';
 import { mapActions } from 'vuex';
-import Conversation from '@/components/viewBid/BidChat/Conversation.vue';
 
 export default {
   components: {
     vueDropzone,
-    Conversation,
   },
   data() {
     return {
       user: '',
+      bidId: '',
       conversationId: '',
       message: '',
       filename: '',
@@ -186,6 +226,9 @@ export default {
       searchMessage: '',
       loading: true,
       showMsgBlock: false,
+      selectedUser: null,
+      pageLoading: true,
+      messageLoading: true,
       dropzoneOptions: {
         url: `${import.meta.env.VITE_API_BASE_URL}/chat/sendMessage`,
         thumbnailWidth: 100,
@@ -208,11 +251,24 @@ export default {
       }
       return this.$store.getters.messages;
     },
+    isLoading() {
+      return this.pageLoading;
+    },
+    isMessageLoading() {
+      return this.messageLoading;
+    },
+    conversationsList() {
+      return _.orderBy(
+        this.$store.getters.bidConversations,
+        'latestMessage',
+        'desc',
+      );
+    },
   },
   methods: {
-    ...mapActions(['getAllMessages', 'lastMessageRead', 'sendMessage']),
+    ...mapActions(['getAllMessages', 'lastMessageRead', 'sendMessage', 'getBidAllConversations']),
 
-    openChat(conversation) {
+    async openChat(conversation) {
       this.chatData = {
         conversation,
       };
@@ -222,21 +278,19 @@ export default {
         userId: this.user.id,
         conversationId: this.conversationId,
       };
-      this.getAllMessages(ids);
-
+      await this.getAllMessages(ids);
+      this.messageLoading = false;
       var container = this.$refs.messagesSection;
       setTimeout(() => {
-        container.scrollTop = container.scrollHeight;
+        if (container) {
+          container.scrollTop = container.scrollHeight;
+        }
       }, 4000);
       this.lastMessageRead(ids);
       var container = this.$refs.messagesSection;
       setTimeout(() => {
-        container.scrollTop = container.scrollHeight;
+        if (container) container.scrollTop = container.scrollHeight;
       }, 1000);
-    },
-    changeC(data) {
-      this.chatData = data;
-      this.showMsgBlock = true;
     },
     fileUpload() {
       this.filename = this.$refs.msgFile.files[0].name;
@@ -324,17 +378,23 @@ export default {
     get_url_extension(url) {
       return url.split(/[#?]/)[0].split('.').pop().trim();
     },
-    msgShow() {
-      setTimeout(() => {
-        this.loading = false;
-      }, 4000);
-    },
   },
   beforeMount() {
     this.user = this.$store.getters.userInfo;
+    this.bidId = this.$store.getters.bidData.bidData.id;
   },
-  mounted() {
-    this.msgShow();
+  async mounted() {
+    await this.getBidAllConversations(this.bidId);
+    this.pageLoading = false;
+    const convo = await _.orderBy(
+      this.$store.getters.bidConversations,
+      'latestMessage',
+      'desc',
+    )[0];
+
+    if (convo) {
+      await this.openChat(convo);
+    }
 
     document.addEventListener('dragenter', (e) => {
       if (
