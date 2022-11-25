@@ -56,14 +56,14 @@
                       ></v-text-field
                       ><v-checkbox
                         color="#0D9648"
-                        @change="saveNote(template)"
+                        @change="saveNote(template,index)"
                       ></v-checkbox>
                     </div>
                     <div v-else class="d-flex justify-space-between">
                       {{template.note}}
                       <img
                         :src="require('@/assets/images/bids/chatdots.png')"
-                        class="mr-3"
+                        class="mr-3" width="24px" height="24px"
                         @click="openNote(index)"
                       />
                     </div>
@@ -72,46 +72,38 @@
                 </td>
                 <td class="text-left pr-6">
                   <v-icon color="#0D9648" class="mr-4">mdi-pencil-outline</v-icon>
-                  <v-icon color="#F32349" @click="dialog = true">mdi-trash-can-outline</v-icon>
+                  <v-icon color="#F32349" @click="openConfirm(template.id,index)">mdi-trash-can-outline</v-icon>
                 </td>
-                
-                  <v-dialog
-                        v-model="dialog"
-                        width="500"
-                      >
-
-                        <v-card>
-                          <v-card-title class="text-h5 grey lighten-2">
-                            Confirm
-                          </v-card-title>
-
-                          <v-card-text>
-                            Are you sure you want to delete?
-                          </v-card-text>
-
-                          <v-divider></v-divider>
-
-                          <v-card-actions>
-                            <v-spacer></v-spacer>
-                            
-                            <v-btn
-                              color="primary"
-                              text
-                              @click="dialog = false"
-                            >
-                              Cancel
-                            </v-btn>
-                            <v-btn
-                              color="red"
-                              text
-                              @click="deleteTemp(template.id,index)"
-                            >
-                              Confirm
-                            </v-btn>
-                          </v-card-actions>
-                        </v-card>
-                      </v-dialog>
               </tr>
+              <v-dialog
+                v-model="dialog"
+                width="500"
+              >
+                <v-card>
+                  <v-card-title class="text-h5 grey">
+                    Confirm
+                  </v-card-title>
+                  <v-card-text>
+                    Are you sure you want to delete?
+                  </v-card-text>
+                  <v-divider></v-divider>
+                  <v-card-actions>
+                    <v-spacer></v-spacer>
+                    <v-btn
+                      color="primary"
+                      @click="dialog = false"
+                    >
+                      Cancel
+                    </v-btn>
+                    <v-btn
+                      color="rgb(243, 35, 73)"
+                      @click="deleteTemp()"
+                    >
+                      Confirm
+                    </v-btn>
+                  </v-card-actions>
+                </v-card>
+              </v-dialog>
             </tbody>
           </template>
         </v-simple-table>
@@ -139,6 +131,8 @@ export default {
       isEdit: false,
       editIcon: [true],
       dialog: false,
+      templateId: '',
+      templateIndex: '',
     };
   },
   computed:{
@@ -156,9 +150,14 @@ export default {
     },
   },
   methods: {
-    ...mapActions(["getBidTemplates","deleteTemplate"]),
-    deleteTemp(id){
-      this.deleteTemplate({id:id});
+    ...mapActions(["getBidTemplates","deleteTemplate","updateTemplateNote"]),
+    openConfirm(id,index){
+      this.dialog = true;
+      this.templateId = id;
+      this.templateIndex = index;
+    },
+    deleteTemp(){
+      this.deleteTemplate({id:this.templateId});
       this.dialog = false;
     },
     openNote(index) {
@@ -166,10 +165,10 @@ export default {
       this.isEdit = true;
       this.editIcon[index] = false;
     },
-    saveNote(doc,index) {
+    saveNote(template,index) {
       this.isEdit = false;
       this.editIcon[index] = true;
-      // this.updateDraftBid({ attachement: this.docsList });
+      this.updateTemplateNote({ templateId: template.id, note: template.note });
     },
   },
   async created(){

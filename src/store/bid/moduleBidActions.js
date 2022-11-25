@@ -396,9 +396,26 @@ export default {
     }
   },
   async deleteTemplate({commit,state,dispatch}, payload){
-    console.log(payload.id);
     try{
       const res = await axios.post('bid/deleteTemplateBid/',{'templateId':payload.id});
+       if(res.status == 200){
+        dispatch('getBidTemplates')
+       }
+    }catch(err){
+      if(state.apiCounter == 2){
+        dispatch('apiSignOutAction');
+      }else{
+        if(err.response.status === 403){
+         await dispatch('refreshToken');
+         state.apiCounter = 2;
+         dispatch('deleteTemplate',payload);
+        }
+      }
+    }
+  },
+  async updateTemplateNote({commit,state,dispatch}, payload){
+    try{
+      const res = await axios.post('bid/editTemplateNote/',{'templateId':payload.templateId, 'note':payload.note });
        if(res.status == 200){
         dispatch('getBidTemplates')
        }
