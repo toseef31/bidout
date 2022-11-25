@@ -367,7 +367,7 @@ export default {
     onUpdate(payload) {
       this.results = payload.formattedNumber;
     },
-    validate() {
+    async validate() {
       this.$refs.form.validate();
       const supplier = {
         firstName: this.firstName,
@@ -380,14 +380,18 @@ export default {
     		bidDueDate: JSON.parse(localStorage.getItem('bidData')).dueDate,
     		bidDueTime: JSON.parse(localStorage.getItem('bidData')).dueTime,
     	};
-      this.inviteNewSupplier(supplier);
-      this.savedraftOnchange();
-      this.supplierDialog = false;
-      const data = {
-      	type: 'user',
-      	item: supplier,
-      };
-      this.repsInvited.push(data);
+			try {
+				await this.inviteNewSupplier(supplier);
+				this.savedraftOnchange();
+				this.supplierDialog = false;
+				const data = {
+					type: 'user',
+					item: supplier,
+				};
+				this.repsInvited.push(data);
+			} catch(error) {
+				console.log(error)
+			}
     },
     hideCategories() {
     	this.categories = false;

@@ -232,8 +232,13 @@ export default {
     formData.append('userId', state.bidData.userId);
     formData.append('companyId', state.bidData.companyId);
     if (payload.invitedSuppliers) {
+      console.log(payload.invitedSuppliers);
       for (let i = 0; i < payload.invitedSuppliers.length; i++) {
-        formData.append(`invitedSuppliers[${i}]`, payload.invitedSuppliers[i].objectID);
+        if (payload.invitedSuppliers[i].type == 'user') {
+          formData.append(`invitedSuppliers[${i}]`, payload.invitedSuppliers[i].item.companyId);
+        } else {
+          formData.append(`invitedSuppliers[${i}]`, payload.invitedSuppliers[i].item.objectID);
+        }
       }
     }
     if (payload.invitedTeamMembers) {
@@ -248,6 +253,7 @@ export default {
         formData.append(`lineItems[${i}][inputType]`, payload.bidlines[i].type);
         formData.append(`lineItems[${i}][quantity]`, payload.bidlines[i].quantity);
         formData.append(`lineItems[${i}][buyerComment]`, payload.bidlines[i].buyerComment);
+        formData.append(`lineItems[${i}][required]`, payload.bidlines[i].required);
       }
     }
     if (payload.attachement) {
