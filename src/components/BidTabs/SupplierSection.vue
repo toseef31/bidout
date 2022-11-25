@@ -330,13 +330,13 @@ export default {
     };
   },
   computed: {
-  	...mapGetters(['newSupplier']),
+  	...mapGetters(['newSupplier', 'userInfo']),
     allcategories() {
       setTimeout(() => this.loading = false, 500);
       return _.orderBy(this.$store.getters.categories, 'orderNumber', 'asc');
     },
     salesRepsList() {
-    	return this.$store.getters.salesRepsList;
+    	return this.$store.getters.salesRepsList.filter(rep => rep.company != this.userInfo.company.company);
     },
     itemBidId() {
       console.log(this.$store.getters.itemBidData);

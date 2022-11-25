@@ -525,10 +525,13 @@ export default {
       this.updateDraftBid({ questions: this.categories });
     },
     deleteQuestion(index) {
-      this.questions.splice(index, 1);
+      this.categories.splice(index, 1);
     },
     deleteOption(index, optIndex) {
       this.categories[index].options.splice(optIndex, 1);
+    },
+    deleteCat(index) {
+      this.categories.splice(index, 1);
     },
   },
 };
