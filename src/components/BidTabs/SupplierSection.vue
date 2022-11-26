@@ -336,7 +336,7 @@ export default {
       return _.orderBy(this.$store.getters.categories, 'orderNumber', 'asc');
     },
     salesRepsList() {
-    	return this.$store.getters.salesRepsList.filter(rep => rep.company != this.userInfo.company.company);
+			return this.$store.getters.salesRepsList ? this.$store.getters.salesRepsList.filter((rep) => rep.company !== this.userInfo.company.company) : [];
     },
     itemBidId() {
       console.log(this.$store.getters.itemBidData);

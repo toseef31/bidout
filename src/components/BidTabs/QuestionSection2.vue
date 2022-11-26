@@ -107,12 +107,12 @@
                         min-height="32px"
                         width="150px"
                         hide-details
-                        v-model="cat['questionTitle']"
+                        v-model="cat['title']"
                       ></v-text-field
                     ></template>
                     <template v-else
                       ><p class="mb-0 black--text subtitle">
-                        {{ cat.questionTitle }}
+                        {{ cat.title }}
                       </p></template
                     >
 
@@ -209,12 +209,12 @@
                           min-height="32px"
                           width="150px"
                           hide-details
-                          v-model="cat['questionTitle']"
+                          v-model="cat['title']"
                         ></v-text-field
                       ></template>
                       <template v-else
                         ><label class="mb-0 black--text subtitle">{{
-                          cat.questionTitle
+                          cat.title
                         }}</label></template
                       >
                       <a
@@ -277,12 +277,12 @@
                           min-height="32px"
                           width="150px"
                           hide-details
-                          v-model="cat['questionTitle']"
+                          v-model="cat['title']"
                         ></v-text-field
                       ></template>
                       <template v-else
                         ><label class="mb-0 black--text subtitle">{{
-                          cat.questionTitle
+                          cat.title
                         }}</label></template
                       >
 
@@ -356,12 +356,12 @@
                           min-height="32px"
                           width="150px"
                           hide-details
-                          v-model="cat['questionTitle']"
+                          v-model="cat['title']"
                         ></v-text-field>
                       </template>
                       <template v-else>
                         <label class="mb-0 black--text subtitle">{{
-                          cat.questionTitle
+                          cat.title
                         }}</label>
                       </template>
 
@@ -469,7 +469,7 @@ export default {
     },
     createQuestion(type) {
       const qusData = {
-        questionTitle: 'add question title here',
+        title: 'add question title here',
         questionType: type,
         id: uuidv4(),
         order: this.categories ? this.categories.length : 0,

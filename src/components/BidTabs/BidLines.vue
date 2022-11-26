@@ -131,6 +131,7 @@ export default {
           quantity: '',
           buyerComment: '',
           valid: false,
+          required: true,
         },
       ],
       descRules: [
@@ -181,6 +182,7 @@ export default {
           quantity: '',
           buyerComment: '',
           switch1: '',
+          required: true,
         });
       }
     },
