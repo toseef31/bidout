@@ -330,13 +330,13 @@ export default {
     };
   },
   computed: {
-  	...mapGetters(['newSupplier']),
+  	...mapGetters(['newSupplier', 'userInfo']),
     allcategories() {
       setTimeout(() => this.loading = false, 500);
       return _.orderBy(this.$store.getters.categories, 'orderNumber', 'asc');
     },
     salesRepsList() {
-    	return this.$store.getters.salesRepsList;
+			return this.$store.getters.salesRepsList ? this.$store.getters.salesRepsList.filter((rep) => rep.company !== this.userInfo.company.company) : [];
     },
     itemBidId() {
       console.log(this.$store.getters.itemBidData);
@@ -367,7 +367,7 @@ export default {
     onUpdate(payload) {
       this.results = payload.formattedNumber;
     },
-    validate() {
+    async validate() {
       this.$refs.form.validate();
       const supplier = {
         firstName: this.firstName,
@@ -380,14 +380,18 @@ export default {
     		bidDueDate: JSON.parse(localStorage.getItem('bidData')).dueDate,
     		bidDueTime: JSON.parse(localStorage.getItem('bidData')).dueTime,
     	};
-      this.inviteNewSupplier(supplier);
-      this.savedraftOnchange();
-      this.supplierDialog = false;
-      const data = {
-      	type: 'user',
-      	item: supplier,
-      };
-      this.repsInvited.push(data);
+			try {
+				await this.inviteNewSupplier(supplier);
+				this.savedraftOnchange();
+				this.supplierDialog = false;
+				const data = {
+					type: 'user',
+					item: supplier,
+				};
+				this.repsInvited.push(data);
+			} catch(error) {
+				console.log(error)
+			}
     },
     hideCategories() {
     	this.categories = false;

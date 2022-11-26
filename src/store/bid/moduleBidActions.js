@@ -1,3 +1,4 @@
+/* eslint-disable no-underscore-dangle */
 import router from '@/router';
 import axios from 'axios';
 import store from '..';
@@ -144,8 +145,11 @@ export default {
       if (res.status === 200) {
         localStorage.removeItem('bidData');
         commit('setBidData', null);
+        router.push('/view-bids');
+        commit('setSuccessDeleteBid');
       }
     } catch (err) {
+      commit('setErrorDeleteBid');
       if (state.apiCounter == 2) {
         dispatch('apiSignOutAction');
       } else if (err.response.status === 403) {
@@ -232,8 +236,13 @@ export default {
     formData.append('userId', state.bidData.userId);
     formData.append('companyId', state.bidData.companyId);
     if (payload.invitedSuppliers) {
+      console.log(payload.invitedSuppliers);
       for (let i = 0; i < payload.invitedSuppliers.length; i++) {
-        formData.append(`invitedSuppliers[${i}]`, payload.invitedSuppliers[i].item.objectID);
+        if (payload.invitedSuppliers[i].type == 'user') {
+          formData.append(`invitedSuppliers[${i}]`, payload.invitedSuppliers[i].item.companyId);
+        } else {
+          formData.append(`invitedSuppliers[${i}]`, payload.invitedSuppliers[i].item.objectID);
+        }
       }
     }
     if (payload.invitedTeamMembers) {
@@ -248,6 +257,7 @@ export default {
         formData.append(`lineItems[${i}][inputType]`, payload.bidlines[i].type);
         formData.append(`lineItems[${i}][quantity]`, payload.bidlines[i].quantity);
         formData.append(`lineItems[${i}][buyerComment]`, payload.bidlines[i].buyerComment);
+        formData.append(`lineItems[${i}][required]`, payload.bidlines[i].required);
       }
     }
     if (payload.attachement) {
@@ -319,7 +329,6 @@ export default {
     }
   },
   async publishBid({ commit, state }, payload) {
-    console.log('publishBid');
     try {
       const res = await axios.post('bid/publishBid', {
         draftBidId: state.draftBidsList,
@@ -327,6 +336,8 @@ export default {
       if (res.status == 200) {
         commit('setDraftBidsList', null);
         commit('setDraftTime', null);
+        const bidDetail = await axios.get(`bid/getBid/${res.data._path.segments[1]}`);
+        return bidDetail.data.serial;
       } else {
       }
       return;

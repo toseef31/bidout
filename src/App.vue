@@ -5,7 +5,7 @@
 <script>
 export default {
   name: 'Settings',
-  metaInfo:{
+  metaInfo: {
     // title: 'BidOut – Oil & Gas Procurement Platform',
     meta: [
       {
@@ -19,7 +19,20 @@ export default {
         content: 'BidOut is the leading oil & gas procurement platform with offices based in Houston, TX.',
       },
     ],
-    
+
+  },
+  data() {
+    return {
+      timer: null,
+    };
+  },
+  mounted() {
+    this.timer = setInterval(() => {
+      this.$store.dispatch('refreshToken');
+    }, 300000);
+  },
+  beforeDestroy() {
+    clearInterval(this.timer);
   },
 };
 </script>

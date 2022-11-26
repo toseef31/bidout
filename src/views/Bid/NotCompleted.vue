@@ -249,8 +249,10 @@ export default {
     },
     async publishBid() {
       try {
-        await this.$store.dispatch('publishBid');
-        this.$router.push('/view-bids');
+        const serial = await this.$store.dispatch('publishBid');
+        console.log(serial);
+        this.$router.push(`/view-bids/${serial}`);
+        this.$store.commit('setDraftBidsList', null);
       } catch (error) {
         console.log(error);
       }
