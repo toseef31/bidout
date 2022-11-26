@@ -14,5 +14,10 @@ export default {
   lineItemsComplete: false,
   bidDetailsComplete: false,
   alertDeleteBidSuccess: false,
-  alertDeleteBidError: false
+  alertDeleteBidError: false,
+  invitedSuppliers: null,
+  invitedTeamMembers: null,
+  bidlines: null,
+  attachement: null,
+  questions: null,
 };
