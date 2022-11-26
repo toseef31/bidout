@@ -87,7 +87,7 @@
               <label class="d-block text-left input-label mb-2 font-weight-bold">Additional Information <v-icon color="#F32349" @click="remove(i)">mdi-trash-can-outline</v-icon></label>
               <v-text-field placeholder="Title" single-line outlined type="text" v-model="textFields[i]['name']">
               </v-text-field>
-              <v-textarea placeholder="Desribe here" single-line outlined type="text" hide-details v-model="textFields[i]['body']">
+              <v-textarea placeholder="Describe here" single-line outlined type="text" hide-details v-model="textFields[i]['body']">
               </v-textarea>
             </v-col>
           </v-row>

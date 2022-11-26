@@ -1,3 +1,4 @@
+/* eslint-disable no-underscore-dangle */
 import router from '@/router';
 import axios from 'axios';
 import store from '..';
@@ -325,7 +326,6 @@ export default {
     }
   },
   async publishBid({ commit, state }, payload) {
-    console.log('publishBid');
     try {
       const res = await axios.post('bid/publishBid', {
         draftBidId: state.draftBidsList,
@@ -333,6 +333,8 @@ export default {
       if (res.status == 200) {
         commit('setDraftBidsList', null);
         commit('setDraftTime', null);
+        const bidDetail = await axios.get(`bid/getBid/${res.data._path.segments[1]}`);
+        return bidDetail.data.serial;
       } else {
       }
       return;
