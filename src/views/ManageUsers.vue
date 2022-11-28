@@ -112,7 +112,7 @@
                           <td class="text-left font-weight-medium">{{ user.email }}</td>
                           <td class="text-left font-weight-medium">no history</td>
                           
-                          <td class="text-left font-weight-medium">Permission not defined yet</td>
+                          <td class="text-left font-weight-medium">User</td>
                           <td class="text-center">
                             <v-btn depressed color="transparent" class="text-capitalize edit-btn" @click="accept(user)" >
                                 <v-icon>mdi-check</v-icon>
