@@ -201,6 +201,10 @@
     }
   
     .bid-detail-tab {
+      .no-data {
+        text-align: center;
+        color: #959595;
+      }
       .bid-row {
         border-bottom: 1px solid #f1f1f1;
   
@@ -310,30 +314,30 @@
           }
         }
   
-        .attachment-none {
-          text-align: center;
-          color: #959595;
-        }
+    
       }
       .bid-row-3 {
-        .question-section-title {
-          border-bottom: 1px solid #f1f1f1;
-          padding-bottom: 24px;
-        }
         .question-sub-section {
           border-bottom: 1px solid #f1f1f1;
-          padding-bottom: 20px;
-          padding-top: 20px;
+          padding-bottom: 16px;
+          padding-top: 23px;
           .sub-section-title {
             font-weight: 700;
             font-size: 16px;
+            color: #201B1B;
+            margin-top: 10px;
           }
           .operational-ques {
             .first-child {
               font-weight: 600;
+              font-size: 14px;
+              color: black;
+              padding-left: 40px;
+              
             }
             .second-child {
               font-weight: 600;
+              font-size: 14px;
               color: #959595;
             }
           }
