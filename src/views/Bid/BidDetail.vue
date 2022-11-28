@@ -59,11 +59,10 @@
             </div>
 
             <v-divider color="#0D9648"></v-divider>
-
             <div
               class="bid-number"
             >
-              {{noOfBidSubmitted.length}} Bids Received
+              {{noOfBidSubmitted}} Bids Received
             </div>
           </v-sheet>
         <v-sheet  class="py-2 px-5 text-left award-status-card"
@@ -263,10 +262,9 @@
 <script>
 import BidDetailTab from '@/components/viewBid/bidDetailTab.vue';
 import BidBroadcast from '@/components/viewBid/bidBroadcast.vue';
-import TeamMembers from '@/components/BidTabs/TeamMembers.vue';
 import BidQandA from '@/components/viewBid/bidQandA.vue';
 import BidChat from '@/components/viewBid/bidChat.vue';
-import BidSubmission from '@/components/viewBid/bidDetailTab.vue';
+import BidSubmission from '@/components/viewBid/bidSubmission.vue';
 import BidAuditTrail from '@/components/viewBid/bidAuditTrail.vue';
 import moment from 'moment-timezone';
 import { mapActions } from 'vuex';
@@ -276,7 +274,6 @@ export default {
   components: {
     BidDetailTab,
     BidBroadcast,
-    TeamMembers,
     BidQandA,
     BidChat,
     BidSubmission,
@@ -378,17 +375,21 @@ export default {
       return moment(currentDate).isAfter(momentDueDate);
     },
     noOfBidSubmitted() {
-      return this.$store.getters.submittedBid;
+      return this.$store.getters.submittedBid.length;
     },
   },
-  mounted() {
-    document.title = 'Bid Detail - BidOut';
+  beforeMount() {
     this.users = this.$store.getters.userInfo;
-    this.getBidBySerial({
+  },
+  async mounted() {
+    document.title = 'Bid Detail - BidOut';
+
+    await this.getBidBySerial({
       serial: this.$route.fullPath.split('/').pop(),
       id: this.users.id,
     });
-    this.getSubmittedBid({
+
+    await this.getSubmittedBid({
       userId: this.users.id,
       bidId: this.bidDetail.bidData.id,
     });
