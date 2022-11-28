@@ -637,11 +637,12 @@
     }
   
     .bid-submission-tab {
+      overflow-x: auto;
       .template-table-style {
         table {
           thead {
             tr {
-              padding-left: 20px;
+     
               padding-right: 20px;
               th {
                 color: #000000;
@@ -663,6 +664,10 @@
                 font-weight: 500;
                 padding-top: 16px;
                 padding-bottom: 16px;
+                padding-left: 17px;
+              }
+              td:first-child {
+                width: 30%;
                 padding-left: 26px;
               }
             }
@@ -724,19 +729,58 @@
          }
          }
         table {
-  
+          table-layout: fixed;
           tbody {
+            tr:hover {
+              background-color: transparent !important;
+           }
             tr {
               padding-left: 24px;
               padding-right: 24px;
               td {
                 padding-top: 16px;
                 padding-bottom: 16px;
-                padding-left: 26px;
+                padding-left: 17px;
               }
               td:first-child {
-                width: 22%;
+                width: 30%;
               }
+              
+            }
+           
+          }
+        }
+      }
+
+      .award-table-style {
+        margin-bottom: 10px;
+        .action {
+          border: 1px solid #f1f1f1;
+          border-radius: 8px;
+          column-gap: 15px;
+          font-size: 14px;
+          font-weight: 700;
+          color: #0D1139;
+          padding: 8px 12px
+        }
+        table {
+          table-layout: fixed;
+          tbody {
+            tr:hover {
+              background-color: transparent !important;
+           }
+            tr {
+              padding-left: 24px;
+              padding-right: 24px;
+              td {
+                padding-top: 16px;
+                padding-bottom: 16px;
+                padding-left: 17px;
+              }
+              td:first-child {
+                width: 30%;
+              }
+              
             }
            
           }
@@ -744,10 +788,72 @@
       }
   
       .submission-section {
-        border-bottom: 1px solid #f1f1f1;
+        border-top: 1px solid #f1f1f1;
         font-weight: 600;
-        .first-title {
-          font-weight: 700;
+        margin-top: 10px;
+        .submission-table-style {
+          table {
+            table-layout: fixed;
+            tbody {
+              tr:hover {
+                background-color: transparent !important;
+             }
+              tr {
+                padding-left: 24px;
+                padding-right: 24px;
+                background-color: white;
+                td {
+                  color: #0d1139;
+                  font-size: 16px;
+                  font-weight: 500;
+                  padding-top: 48px;
+                  padding-bottom: 48px;
+                  padding-left: 17px;
+                  vertical-align: top;
+                }
+                td:first-child {
+                  width: 30%;
+                  padding-left: 26px;
+                  font-weight: 700;
+                }
+                td:nth-child(2) {
+                  width: 18.27%
+                }
+              }
+            }
+          }
+        }
+
+        .supplier-answer-table-style {
+          table {
+            table-layout: fixed;
+            tbody {
+              tr {
+                padding-left: 24px;
+                padding-right: 24px;
+                background-color: white;
+                td {
+                  color: #0d1139;
+                  font-size: 16px;
+                  font-weight: 500;
+                  padding-top: 20px;
+                  padding-bottom: 20px;
+                  padding-left: 17px;
+                  vertical-align: middle;
+                }
+                td:first-child {
+                  width: 30%;
+                  padding-left: 26px;
+                }
+                td:nth-child(2) {
+                  width: 18.27%
+                }
+              }
+              tr:nth-of-type(odd) {
+                background-color: #fbfbfb;
+              }
+            }
+          }
         }
         .none-class {
           color: #b8b8b8;
@@ -765,6 +871,7 @@
         font-size: 16px;
         font-weight: 700;
         line-height: 25px;
+        margin-left: 26px;
       }
     }
   
