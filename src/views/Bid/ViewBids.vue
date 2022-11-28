@@ -109,7 +109,7 @@
                       <td class="text-left">{{ userDatas.firstName }} {{ userDatas.lastName }}</td>
                       <td class="text-left">{{ bid.entries ? bid.entries.length : 0 }}</td>
                       <td class="text-left">{{ bid.dueDate | moment('MM/DD/YYYY') }} {{bid.dueTime}}</td>
-                      <td class="text-left d-none d-sm-block pt-3"><a href="">Edit Draft</a></td>
+                      <td class="text-left d-none d-sm-block pt-3"><router-link to="edit-bid">Edit Draft</router-link></td>
                     </tr>
                     </template>
                   </tbody>

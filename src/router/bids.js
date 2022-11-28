@@ -67,6 +67,18 @@ const routes = [
         },
       },
       {
+        path: "/edit-bid",
+        name: "EditBid",
+        component: () => import("@/views/Bid/EditBid.vue"),
+        beforeEnter: (to, from, next) => {
+          if (localStorage.getItem("userData") == null) {
+            next("/login");
+          } else {
+            next();
+          }
+        },
+      },
+      {
         path: "/completed",
         name: "Completed",
         component: () => import("@/views/Bid/Completed.vue"),
