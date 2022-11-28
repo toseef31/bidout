@@ -100,7 +100,7 @@
 
                           </td>
                         </tr>
-                        <tr v-if="invitedList.length < 1">
+                        <tr v-if="invitedList.length < 1 && pendingUsers.length < 1">
                           <td colspan="5"><h4>There is no invited user.</h4></td>
                         </tr>
                         <tr
@@ -109,12 +109,12 @@
                         >
 
                           <td class="text-left font-weight-medium">{{ user.firstName }} {{ user.lastName }}</td>
-                          <td class="text-left font-weight-medium text-capitalize">{{user.title}}</td>
                           <td class="text-left font-weight-medium">{{ user.email }}</td>
+                          <td class="text-left font-weight-medium">no history</td>
                           
-                          <td class="text-left font-weight-medium"><span v-if="user.phoneNumber">{{ user.phoneNumber }}</span><span v-else>no phone</span></td>
+                          <td class="text-left font-weight-medium">Permission not defined yet</td>
                           <td class="text-center">
-                            <v-btn depressed color="transparent" class="text-capitalize" @click="accept(user)" >
+                            <v-btn depressed color="transparent" class="text-capitalize edit-btn" @click="accept(user)" >
                                 <v-icon>mdi-check</v-icon>
                               Approve </v-btn>
                           </td>
