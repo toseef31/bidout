@@ -158,7 +158,24 @@ export default {
       }
     }
   },
+  async getSubmittedBid({ commit, dispatch, state }, payload) {
+    try {
+      const res = await axios.get(`bidSubmission/getSubmittedBids/${payload.userId}/${payload.bidId}`);
 
+      console.log("DATA - ",res.data);
+      if (res.status === 200) {
+        commit('setSubmittedBids', res.data);
+      }
+    } catch (err) {
+      if (state.apiCounter == 2) {
+        dispatch('apiSignOutAction');
+      } else if (err.response.status === 403) {
+        await dispatch('refreshToken');
+        state.apiCounter = 2;
+        dispatch('setSubmittedBids', payload);
+      }
+    }
+  },
   async saveDraftBid({ commit, dispatch, state }, payload) {
     const config = {
       headers: {

@@ -38,6 +38,9 @@ export default {
   lineItemsComplete(state) {
     return state.lineItemsComplete;
   },
+  submittedBid(state) {
+    return state.submittedBids;
+  },
   bidDetailsComplete(state) {
     return state.bidDetailsComplete;
   },

@@ -11,6 +11,7 @@ export default {
   attachData: null,
   draftTime: null,
   newSupplier: [],
+  submittedBids: [],
   lineItemsComplete: false,
   bidDetailsComplete: false,
   alertDeleteBidSuccess: false,
