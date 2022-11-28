@@ -201,7 +201,9 @@ export default {
     try {
       const res = await axios.post('bid/draft/createDraft', formData, config);
       if (res.status == 200) {
-        commit('setDraftBidsList', res.data);
+        console.log(res);
+        commit('setDraftBidsList', res.data.id);
+        commit('setBidSerial', res.data.serial);
         commit('setDraftTime', new Date().toLocaleString());
       } else {
         commit('setDraftBidsList', null);
@@ -233,6 +235,7 @@ export default {
     formData.append('userId', state.bidData.userId);
     formData.append('companyId', state.bidData.companyId);
     formData.append('bidDescriptions[0][body]', state.bidData.bidDescriptions);
+    formData.append('serial', state.bidSerial);
     if (state.bidData.description) {
       for (let d = 0; d < state.bidData.description.length; d++) {
         formData.append(`bidDescriptions[${d + 1}][name]`, state.bidData.description[d].name);

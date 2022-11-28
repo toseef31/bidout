@@ -20,4 +20,5 @@ export default {
   bidlines: null,
   attachement: null,
   questions: null,
+  bidSerial: null,
 };
