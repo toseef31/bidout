@@ -23,7 +23,7 @@
                 Bid: <span class="serial">#{{ bidDetail.bidData.serial }}</span>
               </div>
               <div>
-                Due Date/Time: {{ bidDetail.bidData.dueDate }} @
+                Due Date/Time: {{ bidDetail.bidData.dueDate | moment('MM/DD/YYYY') }} @
                 {{ bidDetail.bidData.dueTime }}
               </div>
               <div>
