@@ -63,7 +63,7 @@
             <div
               class="bid-number"
             >
-              3 Bids Received
+              {{noOfBidSubmitted.length}} Bids Received
             </div>
           </v-sheet>
         <v-sheet  class="py-2 px-5 text-left award-status-card"
@@ -83,7 +83,7 @@
             <div
              class="award-bid-number"
             >
-              3 Bids Received
+              {{noOfBidSubmitted.length}} Bids Received
             </div>
           </v-sheet>
         </v-col>
@@ -327,7 +327,7 @@ export default {
     };
   },
   methods: {
-    ...mapActions(['getBidBySerial', 'deleteBid']),
+    ...mapActions(['getBidBySerial', 'deleteBid', 'getSubmittedBid']),
     ChangeT(tab) {
       this.currentItem = tab;
     },
@@ -377,6 +377,9 @@ export default {
 
       return moment(currentDate).isAfter(momentDueDate);
     },
+    noOfBidSubmitted() {
+      return this.$store.getters.submittedBid;
+    },
   },
   mounted() {
     document.title = 'Bid Detail - BidOut';
@@ -385,8 +388,10 @@ export default {
       serial: this.$route.fullPath.split('/').pop(),
       id: this.users.id,
     });
-
-    this.remainingTime;
+    this.getSubmittedBid({
+      userId: this.users.id,
+      bidId: this.bidDetail.bidData.id,
+    });
   },
   created() {
     this.compute();

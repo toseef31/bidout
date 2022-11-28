@@ -26,14 +26,14 @@
             bidDetail.bidData.bidDescriptions &&
             Array.isArray(bidDetail.bidData.bidDescriptions)
               ? bidDetail.bidData.bidDescriptions[0].body
-              : "None"
+              : bidDetail.bidData.bidDescriptions
           }}
         </p>
         <br />
 
         <p
           class="bid-headline"
-          v-if="bidDetail.bidData && bidDetail.bidData.bidDescriptions"
+          v-if="bidDetail.bidData && bidDetail.bidData.bidDescriptions && Array.isArray(bidDetail.bidData.bidDescriptions)"
           v-for="(item, index) in bidDetail.bidData.bidDescriptions.slice(1)"
           :key="index"
         >
@@ -42,16 +42,19 @@
         </p>
       </div>
     </div>
+
     <div class="px-5 pt-8 bid-row-2">
       <div class="title-detail">Invited Suppliers</div>
+
+ <div   v-if="
+          bidDetail.bidData &&
+          Array.isArray(bidDetail.bidData.invitedSuppliers)
+        ">
       <div
         class="d-flex bid-section-2"
-        v-if="
-          bidDetail.bidData &&
-          bidDetail.bidData.invitedSuppliers &&
-          bidDetail.bidData.invitedSuppliers.length
-        "
-        v-for="item in bidDetail.bidData.invitedSuppliers"
+
+        v-for="(item,i) in bidDetail.bidData.invitedSuppliers"
+        :key="i"
       >
         <div class="d-flex align-center">
           <v-img
@@ -82,10 +85,11 @@
         </div>
       </div>
 
-      <div v-else class="attachment-none pt-3 pb-6">None</div>
+    </div>
+    <div v-else class="attachment-none pt-3 pb-6">None</div>
     </div>
 
-    <div class="px-5 pt-8 pb-14 bid-row-2">
+    <div class="px-5 pt-8 pb-10 bid-row-2">
       <div class="title-detail">Team member</div>
       <div
         class="mt-10 d-flex flex-row flex-wrap team-member"
@@ -126,7 +130,7 @@
       <div v-else class="attachment-none">None</div>
     </div>
 
-    <div class="pt-8 pb-14 bid-row-2">
+    <div class="pt-8 pb-10 bid-row-2">
       <div class="title-detail px-6">Line items</div>
 
       <v-simple-table
@@ -241,16 +245,16 @@
 </template>
 
 <script>
-import { mapActions } from "vuex";
+import { mapActions } from 'vuex';
 
 export default {
   data() {
     return {
-      users: "",
+      users: '',
     };
   },
   methods: {
-    ...mapActions(["getBidBySerial"]),
+    ...mapActions(['getBidBySerial']),
   },
   computed: {
     bidDetail() {
