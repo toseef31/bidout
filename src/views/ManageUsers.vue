@@ -113,7 +113,7 @@
                           <td class="text-left font-weight-medium">no history</td>
                           
                           <td class="text-left font-weight-medium">User</td>
-                          <td class="text-center">
+                          <td class="text-left">
                             <v-btn depressed color="transparent" class="text-capitalize edit-btn" @click="accept(user)" >
                                 <v-icon>mdi-check</v-icon>
                               Approve </v-btn>
