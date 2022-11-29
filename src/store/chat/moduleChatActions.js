@@ -194,4 +194,14 @@ export default {
         commit('showErrorBroadcast');
       });
   },
+  bidMessageUnreadCount({ commit }, payload) {
+    axios
+      .post('/chat/countUnreadMessagesInBid', { userId: payload.userId, bidId: payload.bidId })
+      .then((responce) => {
+        commit('setBidMessageUnreadCount', responce.data.totalUnreadMessages);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  },
 };
