@@ -38,6 +38,9 @@ export default {
   lineItemsComplete(state) {
     return state.lineItemsComplete;
   },
+  bidViewData(state) {
+    return state.bidViewData;
+  },
   submittedBid(state) {
     return state.submittedBids;
   },
@@ -49,5 +52,8 @@ export default {
   },
   showErrorDeleteBid(state) {
     return state.alertDeleteBidError;
+  },
+  showViewBidError(state) {
+    return state.viewBidError;
   },
 };

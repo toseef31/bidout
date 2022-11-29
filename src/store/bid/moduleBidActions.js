@@ -116,15 +116,22 @@ export default {
 
   async getBidBySerial({ commit, dispatch, state }, payload) {
     try {
+      commit('setPageLoader', true);
       const res = await axios.get(
         `bid/getBidBySerial/${payload.serial}/${payload.id}`,
       );
 
       if (res.status === 200) {
-        localStorage.setItem('bidData', JSON.stringify(res.data));
-        commit('setBidData', res.data);
+        commit('setBidViewData', res.data);
+        commit('setPageLoader', false);
+        commit('setViewBidError', false);
+      } else {
+        commit('setPageLoader', false);
+        commit('setViewBidError', false);
       }
     } catch (err) {
+      commit('setPageLoader', false);
+      commit('setViewBidError', true);
       if (state.apiCounter == 2) {
         dispatch('apiSignOutAction');
       } else if (err.response.status === 403) {
@@ -162,7 +169,6 @@ export default {
     try {
       const res = await axios.get(`bidSubmission/getSubmittedBids/${payload.userId}/${payload.bidId}`);
 
-      console.log("DATA - ",res.data);
       if (res.status === 200) {
         commit('setSubmittedBids', res.data);
       }

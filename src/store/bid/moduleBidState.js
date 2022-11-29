@@ -15,5 +15,7 @@ export default {
   lineItemsComplete: false,
   bidDetailsComplete: false,
   alertDeleteBidSuccess: false,
-  alertDeleteBidError: false
+  alertDeleteBidError: false,
+  bidViewData: null,
+  viewBidError: false,
 };
