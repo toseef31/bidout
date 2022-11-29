@@ -22,4 +22,5 @@ export default {
   attachement: null,
   questions: null,
   bidSerial: null,
+  singleTemplate: null,
 };

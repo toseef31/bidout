@@ -515,4 +515,196 @@ export default {
       }
     }
   },
+  async getEditTemplate({commit,state,dispatch},payload){
+    try{
+      const res = await axios.get(`bid/getBidDetailsById/${payload}`);
+       if(res.status == 200){
+        commit('getSingleTemplate',res.data)
+       }
+    }catch(err){
+      if(state.apiCounter == 2){
+        dispatch('apiSignOutAction');
+      }else{
+        if(err.response.status === 403){
+         await dispatch('refreshToken');
+         state.apiCounter = 2;
+         dispatch('getEditTemplate',payload);
+        }
+      }
+    }
+  },
+  async updateTemplate({ commit, state }, payload) {
+    const config = {
+      headers: {
+        'Content-Type': 'multipart/form-data',
+        Authorization: `Bearer ${JSON.parse(localStorage.getItem('token'))}`,
+      },
+    };
+    const formData = new FormData();
+    
+    if(state.bidData != null){
+      formData.append('templateId', state.bidData.templateId);
+      formData.append('title', state.bidData.title);
+      formData.append('type', state.bidData.type);
+      formData.append('dueDate', state.bidData.dueDate);
+      formData.append('dueTime', state.bidData.dueTime);
+      formData.append('regions', state.bidData.regions);
+      formData.append('qAndAEnabled', state.bidData.qAndAEnabled);
+      formData.append('userId', state.bidData.userId);
+      formData.append('companyId', state.bidData.companyId);
+      formData.append('bidDescriptions[0][body]', state.bidData.bidDescriptions);
+      for (let d = 0; d < state.bidData.description.length; d++) {
+        formData.append(`bidDescriptions[${d + 1}][name]`, state.bidData.description[d].name);
+        formData.append(`bidDescriptions[${d + 1}][body]`, state.bidData.description[d].body);
+      }
+    }else{
+      formData.append('templateId', payload.templateId);
+      formData.append('title', payload.title);
+      formData.append('type', payload.type);
+      formData.append('dueDate', payload.dueDate);
+      formData.append('dueTime', payload.dueTime);
+      formData.append('regions', payload.regions);
+      formData.append('qAndAEnabled', payload.qAndAEnabled);
+      formData.append('userId', payload.userId);
+      formData.append('companyId', payload.companyId);
+      formData.append('bidDescriptions[0][body]', payload.bidDescriptions);
+      if (payload.description) {
+        for (let d = 0; d < payload.description.length; d++) {
+          formData.append(`bidDescriptions[${d + 1}][name]`, payload.description[d].name);
+          formData.append(`bidDescriptions[${d + 1}][body]`, payload.description[d].body);
+        }
+      }
+    }
+    
+    if (payload.invitedSuppliers) {
+      state.invitedSuppliers = payload.invitedSuppliers;
+      for (let i = 0; i < payload.invitedSuppliers.length; i++) {
+        if (payload.invitedSuppliers[i].type == 'user') {
+          formData.append(`invitedSuppliers[${i}]`, payload.invitedSuppliers[i].item.companyId);
+        } else {
+          formData.append(`invitedSuppliers[${i}]`, payload.invitedSuppliers[i].item.objectID);
+        }
+      }
+    }else{
+      if(state.invitedSuppliers != null){
+        for (let i = 0; i < state.invitedSuppliers.length; i++) {
+          if (state.invitedSuppliers[i].type == 'user') {
+            formData.append(`invitedSuppliers[${i}]`, state.invitedSuppliers[i].item.companyId);
+          } else {
+            formData.append(`invitedSuppliers[${i}]`, state.invitedSuppliers[i].item.objectID);
+          }
+        }
+      }
+    }
+    if (payload.invitedTeamMembers) {
+      state.invitedTeamMembers = payload.invitedTeamMembers;
+      for (let t = 0; t < payload.invitedTeamMembers.length; t++) {
+        formData.append(`invitedTeamMembers[${t}]`, payload.invitedTeamMembers[t].id);
+      }
+    }else{
+      if(state.invitedTeamMembers != null){
+        for (let t = 0; t < state.invitedTeamMembers.length; t++) {
+          formData.append(`invitedTeamMembers[${t}]`, state.invitedTeamMembers[t].id);
+        }
+      }
+    }
+    if (payload.bidlines) {
+      state.bidlines = payload.bidlines;
+      for (let i = 0; i < payload.bidlines.length; i++) {
+        formData.append(`lineItems[${i}][description]`, payload.bidlines[i].description);
+        formData.append(`lineItems[${i}][unit]`, payload.bidlines[i].unit);
+        formData.append(`lineItems[${i}][inputType]`, payload.bidlines[i].type);
+        formData.append(`lineItems[${i}][quantity]`, payload.bidlines[i].quantity);
+        formData.append(`lineItems[${i}][buyerComment]`, payload.bidlines[i].buyerComment);
+        formData.append(`lineItems[${i}][required]`, payload.bidlines[i].required);
+      }
+    }else{
+      if(state.bidlines != null){
+        for (let i = 0; i < state.bidlines.length; i++) {
+          formData.append(`lineItems[${i}][description]`, state.bidlines[i].description);
+          formData.append(`lineItems[${i}][unit]`, state.bidlines[i].unit);
+          formData.append(`lineItems[${i}][inputType]`, state.bidlines[i].type);
+          formData.append(`lineItems[${i}][quantity]`, state.bidlines[i].quantity);
+          formData.append(`lineItems[${i}][buyerComment]`, state.bidlines[i].buyerComment);
+          formData.append(`lineItems[${i}][required]`, state.bidlines[i].required);
+        }
+      }
+    }
+    if (payload.attachement) {
+      state.attachement = payload.attachement;
+      for (let i = 0; i < payload.attachement.length; i++) {
+        formData.append(`attachment[${i}][fileName]`, payload.attachement[i].fileName);
+        formData.append(`attachment[${i}][fileSize]`, payload.attachement[i].fileSize);
+        formData.append(`attachment[${i}][uploadedBy]`, payload.attachement[i].uploadedBy);
+        formData.append(`attachment[${i}][url]`, payload.attachement[i].url);
+        formData.append(`attachment[${i}][uploadedAt]`, payload.attachement[i].uploadedAt);
+        formData.append(`attachment[${i}][comment]`, payload.attachement[i].comment);
+        formData.append(`attachment[${i}][id]`, payload.attachement[i].id);
+      }
+    }else{
+      if(state.attachement != null){
+        for (let i = 0; i < state.attachement.length; i++) {
+          formData.append(`attachment[${i}][fileName]`, state.attachement[i].fileName);
+          formData.append(`attachment[${i}][fileSize]`, state.attachement[i].fileSize);
+          formData.append(`attachment[${i}][uploadedBy]`, state.attachement[i].uploadedBy);
+          formData.append(`attachment[${i}][url]`, state.attachement[i].url);
+          formData.append(`attachment[${i}][uploadedAt]`, state.attachement[i].uploadedAt);
+          formData.append(`attachment[${i}][comment]`, state.attachement[i].comment);
+          formData.append(`attachment[${i}][id]`, state.attachement[i].id);
+        }
+      }
+    }
+    if (payload.questions) {
+      state.questions = payload.questions;
+      for (let i = 0; i < payload.questions.length; i++) {
+        formData.append(`questions[${i}][id]`, payload.questions[i].id);
+        formData.append(`questions[${i}][order]`, payload.questions[i].order);
+        formData.append(`questions[${i}][title]`, payload.questions[i].title);
+        formData.append(`questions[${i}][type]`, payload.questions[i].type);
+        formData.append(`questions[${i}][questionType]`, payload.questions[i].questionType);
+        if (payload.questions[i].options) {
+          for (let j = 0; j < payload.questions[i].options.length; j++) {
+            formData.append(`questions[${i}][options][${j}][id]`, payload.questions[i].options[j].id);
+            formData.append(`questions[${i}][options][${j}][label]`, payload.questions[i].options[j].label);
+            formData.append(`questions[${i}][options][${j}][title]`, payload.questions[i].options[j].title);
+          }
+        }
+      }
+    }else{
+      if(state.questions != null){
+        for (let i = 0; i < state.questions.length; i++) {
+          formData.append(`questions[${i}][id]`, state.questions[i].id);
+          formData.append(`questions[${i}][order]`, state.questions[i].order);
+          formData.append(`questions[${i}][title]`, state.questions[i].title);
+          formData.append(`questions[${i}][type]`, state.questions[i].type);
+          formData.append(`questions[${i}][questionType]`, state.questions[i].questionType);
+          if (state.questions[i].options) {
+            for (let j = 0; j < state.questions[i].options.length; j++) {
+              formData.append(`questions[${i}][options][${j}][id]`, state.questions[i].options[j].id);
+              formData.append(`questions[${i}][options][${j}][label]`, state.questions[i].options[j].label);
+              formData.append(`questions[${i}][options][${j}][title]`, state.questions[i].options[j].title);
+            }
+          }
+        }
+      }
+    }
+    try {
+      const res = await axios.post(`bid/editTemplateBid/`, formData, config);
+      if (res.status == 200) {
+        console.log(res);
+        // commit('setDraftBidsList',null);
+        // commit('setDraftTime', new Date().toLocaleString());
+      } else {
+        // commit('setDraftBidsList',null);
+      }
+    } catch (err) {
+      if (state.apiCounter == 2) {
+        dispatch('apiSignOutAction');
+      } else if (err.response.status === 403) {
+        await dispatch('refreshToken');
+        state.apiCounter = 2;
+        dispatch('updateDraftBid', payload);
+      }
+    }
+  },
 };

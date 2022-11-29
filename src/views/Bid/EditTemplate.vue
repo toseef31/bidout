@@ -88,10 +88,10 @@
           </v-tabs>
           <v-tabs-items v-model="currentItem">
             <v-tab-item value="tab-1">
-              <bid-details
+              <edit-bid-details
                 @changetab="ChangeT($event)"
                 @validation="validateValue($event)"
-              ></bid-details>
+              ></edit-bid-details>
             </v-tab-item>
             <v-tab-item value="tab-2">
               <SupplierSection
@@ -140,12 +140,12 @@
 </template>
 <script>
 import { mapGetters } from 'vuex';
-import SupplierSection from '../../components/EditTemplate/SupplierSection.vue';
-import TeamMembers from '../../components/EditTemplate/TeamMembers.vue';
-import BidLines from '../../components/EditTemplate/BidLines.vue';
-import Attachment from '../../components/EditTemplate/Attachment.vue';
-import BidDetails from '../../components/EditTemplate/BidDetails.vue';
-import QuestionSection2 from '../../components/EditTemplate/QuestionSection2.vue';
+import SupplierSection from '../../components/EditTemplateBid/EditSupplierSection.vue';
+import TeamMembers from '../../components/EditTemplateBid/EditTeamMembers.vue';
+import BidLines from '../../components/EditTemplateBid/EditBidLines.vue';
+import Attachment from '../../components/EditTemplateBid/EditAttachment.vue';
+import EditBidDetails from '../../components/EditTemplateBid/EditBidDetails.vue';
+import QuestionSection2 from '../../components/EditTemplateBid/EditQuestionSection2.vue';
 
 export default {
   name: 'EditTemplate',
@@ -154,7 +154,7 @@ export default {
     TeamMembers,
     BidLines,
     Attachment,
-    BidDetails,
+    EditBidDetails,
     QuestionSection2,
   },
 

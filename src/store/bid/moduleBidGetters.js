@@ -43,7 +43,7 @@ export default {
   },
   bidTemplates(state){
      return state.bidTemplates;
-   }
+   },
   showSuccessDeleteBid(state) {
     return state.alertDeleteBidSuccess;
   },
@@ -52,5 +52,8 @@ export default {
   },
   bidSerial(state) {
     return state.bidSerial;
+  },
+  singleTemplate(state) {
+    return state.singleTemplate;
   },
 };

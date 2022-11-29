@@ -114,7 +114,7 @@ export default {
   data() {
     return {
       valid: true,
-      title: '',
+      title: this.$store.getters.singleTemplate.bidTitle,
       titleRules: [
         (v) => !!v || 'Title is required',
       ],
@@ -159,7 +159,9 @@ export default {
       this.$store.commit('setBidDetailsComplete', this.valid);
       return this.valid;
     },
-
+    singleTemplate(){
+      return this.$store.getters.singleTemplate;
+    }
   },
   watch: {
     date() {
@@ -167,9 +169,10 @@ export default {
     },
   },
   methods: {
-    ...mapActions(['saveDraftBid']),
+    ...mapActions(['updateTemplate','getEditTemplate']),
     changeTab() {
       const bidDetails = {
+        templateId: this.$route.params.id, 
         title: this.title,
         type: this.bidType,
         dueDate: this.dueDate,
@@ -182,7 +185,7 @@ export default {
         companyId: this.$store.getters.userInfo.company.id,
       };
       if (this.$refs.form.validate()) {
-        this.saveDraftBid(bidDetails);
+        this.updateTemplate(bidDetails);
         this.$emit('changetab', 'tab-2');
       }
     },
@@ -215,5 +218,11 @@ export default {
     },
 
   },
+  async created(){
+    await this.getEditTemplate(this.$route.params.id);
+  },
+  mounted() {
+    console.log(this.$store.getters.singleTemplate);
+  }
 };
 </script>

@@ -40,7 +40,7 @@ export default {
   },
   setBidTemplates(state, payload){
     state.bidTemplates = payload
-  }
+  },
   setSuccessDeleteBid(state) {
     state.alertDeleteBidSuccess = true;
     setTimeout(() => {
@@ -55,5 +55,8 @@ export default {
   },
   setBidSerial(state, payload) {
     state.bidSerial = payload;
+  },
+  getSingleTemplate(state, payload) {
+    state.singleTemplate = payload;
   },
 };
