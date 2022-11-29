@@ -1,8 +1,39 @@
 <template>
-  <v-col class="pl-0 pr-3 pb-0 pt-3 bid-detail-module">
+    <v-row fill-height align="center" class="bid-alert" v-if="getPageLoading || getViewBidError">
+    <v-col cols="12">
+      <v-progress-circular v-if="getPageLoading" :width="3" color="green" indeterminate ></v-progress-circular>
+      <div class="alert-section" v-if="getViewBidError && !getPageLoading" >
+             <div class="error-title mb-5">
+              <h1 class="font-weight-bold">Opps!</h1>
+              <h1 class="font-weight-medium">This page is not available.</h1>
+             </div>
+
+             <div class="btn-section mt-8 mb-16 pb-16">
+              <a class="text-decoration-none" href="https://bidout.app"><v-btn
+              large
+              outlined
+              color="#0D9647"
+              height="52"
+              class="mr-5 font-weight-bold text-capitalize"
+              >Access Homepage</v-btn></a>
+              <router-link to="/dashboard" class="text-decoration-none"><v-btn
+              large
+              outlined
+              color="#0D9647"
+              class="font-weight-bold text-capitalize"
+              height="52"
+              >Access Dashboard</v-btn></router-link>
+             </div>
+           </div>
+
+    </v-col>
+  </v-row>
+
+  <v-col v-else  class="pl-0 pr-3 pb-0 pt-3 bid-detail-module  ">
     <v-alert type="error"  v-show="showErrorDeleteAlert" class="mx-5">
       Deleting this bid was failed. Please Try again!
     </v-alert>
+
     <v-card
       class="fill-height main-card"
       :elevation="0"
@@ -82,7 +113,7 @@
             <div
              class="award-bid-number"
             >
-              {{noOfBidSubmitted.length}} Bids Received
+              {{noOfBidSubmitted}} Bids Received
             </div>
           </v-sheet>
         </v-col>
@@ -257,6 +288,7 @@
       </div>
     </v-card>
   </v-col>
+
 </template>
 
 <script>
@@ -359,12 +391,13 @@ export default {
   },
   computed: {
     bidDetail() {
-      return this.$store.getters.bidData;
+      return this.$store.getters.bidViewData;
     },
     showErrorDeleteAlert() {
       return this.$store.getters.showErrorDeleteBid;
     },
     isAfterDueDate() {
+      console.log(this.bidDetail.bidData.dueDate);
       const bidDueDate = this.bidDetail.bidData.dueDate;
       const bidDueTime = this.bidDetail.bidData.dueTime;
       const currentDate = moment();
@@ -377,24 +410,35 @@ export default {
     noOfBidSubmitted() {
       return this.$store.getters.submittedBid.length;
     },
+    getPageLoading() {
+      return this.$store.getters.pageLoader;
+    },
+    getViewBidError() {
+      return this.$store.getters.showViewBidError;
+    },
   },
   beforeMount() {
-    this.users = this.$store.getters.userInfo;
+
   },
   async mounted() {
     document.title = 'Bid Detail - BidOut';
-
-    await this.getBidBySerial({
-      serial: this.$route.fullPath.split('/').pop(),
-      id: this.users.id,
-    });
 
     await this.getSubmittedBid({
       userId: this.users.id,
       bidId: this.bidDetail.bidData.id,
     });
+    // await this.getSubmittedBid({
+    //   userId: 'nSJ4rgmgUTBbiyeJoHIE',
+    //   bidId: 'N3x4CzqfrYqpsLWYrX0k',
+    // });
   },
-  created() {
+  async created() {
+    this.users = this.$store.getters.userInfo;
+
+    await this.getBidBySerial({
+      serial: this.$route.params.serial,
+      id: this.users.id,
+    });
     this.compute();
     this.addOneSecondToActualTimeEverySecond();
   },
