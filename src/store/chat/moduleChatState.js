@@ -13,6 +13,7 @@ export default {
   archiveList: [],
   createMsg: null,
   alertBroadcast: false,
-  errorBroadcast: null,
+  errorBroadcast: false,
   bidMessageUnreadCount: 0,
+  supplierBroadcastError: false,
 };

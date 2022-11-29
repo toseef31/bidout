@@ -44,13 +44,19 @@ export default {
       state.alertBroadcast = false;
     }, 5000);
   },
-  setErrorBroadcast(state, payload) {
-    state.errorBroadcast = payload;
+  setErrorBroadcast(state) {
+    state.errorBroadcast = true;
     setTimeout(() => {
-      state.errorBroadcast = null;
+      state.errorBroadcast = false;
     }, 5000);
   },
   setBidMessageUnreadCount(state, payload) {
     state.bidMessageUnreadCount = payload;
+  },
+  setSupplierBroadcastError(state) {
+    state.supplierBroadcastError = true;
+    setTimeout(() => {
+      state.supplierBroadcastError = false;
+    }, 5000);
   },
 };
