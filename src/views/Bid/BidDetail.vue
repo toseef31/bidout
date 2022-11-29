@@ -66,7 +66,7 @@
               3 Bids Received
             </div>
           </v-sheet>
-        <v-sheet  class="py-2 px-5 text-left award-status-card"
+          <v-sheet  class="py-2 px-5 text-left award-status-card"
             rounded="lg"
             height="85"
             width="290"
@@ -89,8 +89,7 @@
         </v-col>
 
         <v-col cols="auto">
-      <div class="toggle-setting" v-if="!isAfterDueDate">
-
+          <div class="toggle-setting" v-if="!isAfterDueDate">
             <v-btn
               class="py-2 setting"
               plain
@@ -100,108 +99,108 @@
             >
             <div v-show="isSetting">
               <v-card
-                tile
-                outlined
-                class="mx-auto setting-card"
-                min-width="312"
+              tile
+              outlined
+              class="mx-auto setting-card"
+              min-width="312"
               >
-                <v-list class="pa-0">
-                  <v-list-item-group color="success">
-                    <v-list-item class="edit-item">
-                      <router-link to="#" class="text-decoration-none">
-                        <v-list-item-icon
-                          class="mr-2 my-2"
-                          @click="isSetting = !isSetting"
-                        >
-                          <v-icon size="24" color="#0D9648"
-                            >mdi-note-edit-outline</v-icon
-                          >
-                        </v-list-item-icon>
-                      </router-link>
-                      <v-list-item-content
-                        align-start
-                        color="#0D9648"
-                        class="pa-0"
+              <v-list class="pa-0">
+                <v-list-item-group color="success">
+                  <v-list-item class="edit-item">
+                    <router-link to="#" class="text-decoration-none">
+                      <v-list-item-icon
+                      class="mr-2 my-2"
+                      @click="isSetting = !isSetting"
                       >
-                        <router-link to="#" class="text-decoration-none">
-                          <v-list-item-title
-                            color="#0D9648"
-                            @click="isSetting = !isSetting"
-                            class="py-3"
-                            >Edit Bid</v-list-item-title
-                          >
-                        </router-link>
-                      </v-list-item-content>
-                    </v-list-item>
-                    <v-list-item class="delete-item">
-                      <router-link to="#" class="text-decoration-none">
-                        <v-list-item-icon
-                          class="mr-2 my-2"
-                          @click="isSetting = !isSetting"
-                        >
-                          <v-icon size="24" color="#F32349"
-                            >mdi-trash-can-outline</v-icon
-                          >
-                        </v-list-item-icon>
-                      </router-link>
-                      <v-list-item-content
-                        align-start
-                        color="#0D9648"
-                        class="pa-0"
+                      <v-icon size="24" color="#0D9648"
+                      >mdi-note-edit-outline</v-icon
                       >
-                      <v-dialog
-                        class="dialog-class"
-                        v-model="dialog"
-                        width="300"
+                    </v-list-item-icon>
+                  </router-link>
+                  <v-list-item-content
+                  align-start
+                  color="#0D9648"
+                  class="pa-0"
+                  >
+                    <router-link to="#" class="text-decoration-none">
+                      <v-list-item-title
+                      color="#0D9648"
+                      @click="isSetting = !isSetting"
+                      class="py-3"
+                      >Edit Bid</v-list-item-title
                       >
+                    </router-link>
+                  </v-list-item-content>
+                </v-list-item>
+                <v-list-item class="delete-item">
+                  <router-link to="#" class="text-decoration-none">
+                    <v-list-item-icon
+                    class="mr-2 my-2"
+                    @click="isSetting = !isSetting"
+                    >
+                    <v-icon size="24" color="#F32349"
+                    >mdi-trash-can-outline</v-icon
+                    >
+                  </v-list-item-icon>
+                </router-link>
+                <v-list-item-content
+                  align-start
+                  color="#0D9648"
+                  class="pa-0"
+                  >
+                  <v-dialog
+                  class="dialog-class"
+                  v-model="dialog"
+                  width="300"
+                  >
 
-                      <template v-slot:activator="{ on, attrs }">
-                          <v-btn
-                            color="#F32349"
-                            block
-                            plain
-                            :ripple="false"
-                            class="delete-button"
-                            v-bind="attrs"
-                            @click="isSetting = !isSetting"
-                            v-on="on"
-                          >
-                            Delete Bid
-                          </v-btn>
-                         </template>
-
-                                    <v-card >
-                    <v-card-title  class="text-h5 justify-center grey lighten-2">
-                      Delete Bid
-                    </v-card-title>
-                    <v-card-text class="pt-3 mb-n2">Are you sure you really want to delete this bid?</v-card-text>
-                    <v-divider></v-divider>
-                    <v-card-actions>
-                      <v-spacer></v-spacer>
-
+                    <template v-slot:activator="{ on, attrs }">
                       <v-btn
+                      color="#F32349"
+                      block
+                      plain
+                      :ripple="false"
+                      class="delete-button"
+                      v-bind="attrs"
+                      @click="isSetting = !isSetting"
+                      v-on="on"
+                      >
+                      Delete Bid
+                      </v-btn>
+                    </template>
+
+                    <v-card >
+                      <v-card-title  class="text-h5 justify-center grey lighten-2">
+                        Delete Bid
+                      </v-card-title>
+                      <v-card-text class="pt-3 mb-n2">Are you sure you really want to delete this bid?</v-card-text>
+                      <v-divider></v-divider>
+                      <v-card-actions>
+                        <v-spacer></v-spacer>
+
+                        <v-btn
                         color="#0d9648"
                         outlined
                         @click="dialog = false"
-                      >
+                        >
                         Cancel
-                      </v-btn>
-                      <v-btn
+                        </v-btn>
+                        <v-btn
                         color="#F32349"
                         outlined
                         @click="dialog = false;deleteB()"
-                      >
+                        >
                         Agree
-                          </v-btn>
-                            </v-card-actions>
-                                    </v-card>
+                        </v-btn>
+                      </v-card-actions>
+                    </v-card>
 
-                                  </v-dialog>
-                                  </v-list-item-content>
-                                </v-list-item>
-                              </v-list-item-group>
-                            </v-list>
-                          </v-card>
+                  </v-dialog>
+                </v-list-item-content>
+              </v-list-item>
+            </v-list-item-group>
+            </v-list>
+          </v-card>
             </div>
           </div>
           <v-btn v-else  color="#F03F20" depressed @click="ChangeT('tab-2')">
@@ -332,7 +331,7 @@ export default {
       this.currentItem = tab;
     },
     deleteB() {
-      this.deleteBid({ bidId: this.bidDetail.bidData.id });
+      this.deleteBid({ bidId: this.bidDetail.bidData.id ,userid: this.users.id});
     },
     addOneSecondToActualTimeEverySecond() {
       const component = this;

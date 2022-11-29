@@ -72,7 +72,7 @@
                   </thead>
                   <tbody>
                     <tr
-                      v-for="bid in openBids"
+                      v-for="bid in bidsList"
                       :key="bid.id"
                     >
                       <td class="text-left pl-sm-6">{{ bid.serial }}</td>

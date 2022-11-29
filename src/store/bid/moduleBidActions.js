@@ -145,7 +145,7 @@ export default {
       if (res.status === 200) {
         localStorage.removeItem('bidData');
         commit('setBidData', null);
-        router.push('/view-bids');
+        router.replace({ name: "ViewBids" });
         commit('setSuccessDeleteBid');
       }
     } catch (err) {
