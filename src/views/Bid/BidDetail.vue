@@ -253,16 +253,26 @@
             :href="'#tab-' + item.value"
             class="text-capitalize black--text font-weight-bold"
           >
+          {{ item.text }}
             <v-badge
-              v-if="item.value === 3 || item.value === 5"
+              v-if="item.value === 3 && showBidMessageC !== 0"
               color="#0D9648"
-              content="6"
+              :content="showBidMessageC"
               inline
               tile
             >
-              {{ item.text }}
+
             </v-badge>
-            <div v-else>{{ item.text }}</div>
+            <v-badge
+              v-if=" item.value === 5"
+              color="#0D9648"
+              :content="6"
+              inline
+              tile
+            >
+
+            </v-badge>
+
           </v-tab>
         </v-tabs>
         <v-tabs-items v-model="currentItem">
@@ -356,7 +366,7 @@ export default {
     };
   },
   methods: {
-    ...mapActions(['getBidBySerial', 'deleteBid', 'getSubmittedBid']),
+    ...mapActions(['getBidBySerial', 'deleteBid', 'getSubmittedBid', 'bidMessageUnreadCount']),
     ChangeT(tab) {
       this.currentItem = tab;
     },
@@ -397,7 +407,6 @@ export default {
       return this.$store.getters.showErrorDeleteBid;
     },
     isAfterDueDate() {
-      console.log(this.bidDetail.bidData.dueDate);
       const bidDueDate = this.bidDetail.bidData.dueDate;
       const bidDueTime = this.bidDetail.bidData.dueTime;
       const currentDate = moment();
@@ -415,6 +424,9 @@ export default {
     },
     getViewBidError() {
       return this.$store.getters.showViewBidError;
+    },
+    showBidMessageC() {
+      return this.$store.getters.bidMessageUnreadCount;
     },
   },
   beforeMount() {
@@ -445,6 +457,10 @@ export default {
       bidId: this.bidDetail.bidData.id,
     });
 
+    await this.bidMessageUnreadCount({
+      userId: this.users.id,
+      bidId: this.bidDetail.bidData.id,
+    });
     if (this.$route.query.new) {
       this.$toasted.show(`Success! Bid #${this.$route.params.serial} has been created and all invitations have been sent to the suppliers`, {
         class: 'success-toast',
