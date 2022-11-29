@@ -9,7 +9,9 @@
     </v-col>
   </v-row>
   <v-row class="bid-chat-row mt-4" fill-height no-gutters v-else>
-    <v-col cols="12" sm="4" md="4" class="available-data pt-6">
+
+    <div v-if="conversationsList.length ===0" class="text-center c-title-detail">There are currently no suppliers included on this bid, please edit this bid to add suppliers to begin chat conversations. </div>
+    <v-col v-else cols="12" sm="4" md="4" class="available-data pt-6" >
       <v-list two-line class="pb-0">
       <v-list-item-group v-model="selectedUser" active-class="grey--text">
         <v-list-item
@@ -45,15 +47,8 @@
       </v-list-item-group>
     </v-list>
     </v-col>
-    <v-col cols="12" sm="8" md="8">
-      <v-row cols="12" v-if="isMessageLoading" class="justify-center  loading-message">
-      <v-progress-circular
-        :width="3"
-        color="green"
-        indeterminate
-      ></v-progress-circular>
-    </v-row>
-      <div class="message-area" v-else>
+    <v-col cols="12" sm="8" md="8" v-if="conversationsList.length !==0">
+      <div class="message-area">
         <div class="msg-header px-5 pb-5">
           <v-row align="center">
             <v-col cols="12" md="6">
@@ -228,7 +223,6 @@ export default {
       showMsgBlock: false,
       selectedUser: null,
       pageLoading: true,
-      messageLoading: true,
       dropzoneOptions: {
         url: `${import.meta.env.VITE_API_BASE_URL}/chat/sendMessage`,
         thumbnailWidth: 100,
@@ -254,9 +248,6 @@ export default {
     isLoading() {
       return this.pageLoading;
     },
-    isMessageLoading() {
-      return this.messageLoading;
-    },
     conversationsList() {
       return _.orderBy(
         this.$store.getters.bidConversations,
@@ -268,7 +259,7 @@ export default {
   methods: {
     ...mapActions(['getAllMessages', 'lastMessageRead', 'sendMessage', 'getBidAllConversations']),
 
-    async openChat(conversation) {
+    openChat(conversation) {
       this.chatData = {
         conversation,
       };
@@ -278,8 +269,7 @@ export default {
         userId: this.user.id,
         conversationId: this.conversationId,
       };
-      await this.getAllMessages(ids);
-      this.messageLoading = false;
+      this.getAllMessages(ids);
       var container = this.$refs.messagesSection;
       setTimeout(() => {
         if (container) {
@@ -381,7 +371,7 @@ export default {
   },
   beforeMount() {
     this.user = this.$store.getters.userInfo;
-    this.bidId = this.$store.getters.bidData.bidData.id;
+    this.bidId = this.$store.getters.bidViewData.bidData.id;
   },
   async mounted() {
     await this.getBidAllConversations(this.bidId);
