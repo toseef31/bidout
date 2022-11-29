@@ -47,4 +47,7 @@ export default {
   showErrorDeleteBid(state) {
     return state.alertDeleteBidError;
   },
+  bidSerial(state) {
+    return state.bidSerial;
+  },
 };

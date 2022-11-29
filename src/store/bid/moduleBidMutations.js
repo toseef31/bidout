@@ -50,4 +50,7 @@ export default {
       state.alertDeleteBidError = false;
     }, 5000);
   },
+  setBidSerial(state, payload) {
+    state.bidSerial = payload;
+  },
 };
