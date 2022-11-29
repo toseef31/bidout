@@ -420,13 +420,13 @@ export default {
   beforeMount() {
 
   },
-  async mounted() {
+  mounted() {
     document.title = 'Bid Detail - BidOut';
-
-    await this.getSubmittedBid({
-      userId: this.users.id,
-      bidId: this.bidDetail.bidData.id,
-    });
+    // console.log(this.users);
+    // this.getSubmittedBid({
+    //   userId: this.users.id,
+    //   bidId: this.bidDetail.bidData.id,
+    // });
     // await this.getSubmittedBid({
     //   userId: 'nSJ4rgmgUTBbiyeJoHIE',
     //   bidId: 'N3x4CzqfrYqpsLWYrX0k',
@@ -438,6 +438,11 @@ export default {
     await this.getBidBySerial({
       serial: this.$route.params.serial,
       id: this.users.id,
+    });
+
+    await this.getSubmittedBid({
+      userId: this.users.id,
+      bidId: this.bidDetail.bidData.id,
     });
     this.compute();
     this.addOneSecondToActualTimeEverySecond();
