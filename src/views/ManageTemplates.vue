@@ -71,7 +71,7 @@
                   </div>
                 </td>
                 <td class="text-left pr-6">
-                  <v-icon color="#0D9648" class="mr-4">mdi-pencil-outline</v-icon>
+                  <router-link :to="'/edit-template/'+template.id"><v-icon color="#0D9648" class="mr-4">mdi-pencil-outline</v-icon></router-link>
                   <v-icon color="#F32349" @click="openConfirm(template.id,index)">mdi-trash-can-outline</v-icon>
                 </td>
               </tr>

@@ -66,6 +66,19 @@ const routes = [
           }
         },
       },
+
+      {
+        path: "/edit-template/:id",
+        name: "EditTemplate",
+        component: () => import("@/views/Bid/EditTemplate.vue"),
+        beforeEnter: (to, from, next) => {
+          if (localStorage.getItem("userData") == null) {
+            next("/login");
+          } else {
+            next();
+          }
+        },
+      },
       {
         path: "/completed",
         name: "Completed",
