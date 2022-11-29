@@ -403,6 +403,7 @@ export default {
         commit('setDraftBidsList', null);
         commit('setDraftTime', null);
         commit('setDraftTime', null);
+        commit('setAttachData', null);
         state.invitedTeamMembers = null;
         state.invitedSuppliers = null;
         state.bidlines = null;

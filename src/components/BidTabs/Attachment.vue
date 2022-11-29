@@ -119,9 +119,6 @@ export default {
     isAttachingDoc() {
       return this.isAttaching;
     },
-    docsList(){
-    	return this.$store.getters.attachData;
-    },
     validat(){
       if(this.$store.getters.attachData){
         this.$emit('validation',{'valid': true,'attach': '5'});
@@ -181,7 +178,6 @@ export default {
       this.isEdit = true;
     },
     saveComment(doc) {
-      console.log(this.docsList, "dpc");
       this.isEdit = false;
       this.updateDraftBid({ attachement: this.docsList });
     },
