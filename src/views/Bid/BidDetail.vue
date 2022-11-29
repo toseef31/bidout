@@ -385,8 +385,13 @@ export default {
       serial: this.$route.fullPath.split('/').pop(),
       id: this.users.id,
     });
-
-    this.remainingTime;
+    if (this.$route.query.new) {
+      this.$toasted.show(`Success! Bid #${this.$route.params.serial} has been created and all invitations have been sent to the suppliers`, {
+        class: 'success-toast',
+        duration: 5000,
+        position: 'top-center',
+      });
+    }
   },
   created() {
     this.compute();
