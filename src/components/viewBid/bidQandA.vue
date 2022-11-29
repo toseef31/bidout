@@ -1,6 +1,6 @@
 <template>
-  <v-col class="my-7 pa-0 qanda-section" align="start">
-    <div class="px-6">
+  <v-col class="my-7 pa-0 qanda-section fill-height" align="start">
+    <!-- <div class="px-6">
       <span class="title-detail">Unanswered questions</span>
 
       <v-avatar rounded size="35" color="#0D9648" class="ml-4">
@@ -75,7 +75,9 @@
         <span class="sub-title mt-4">By Rodney Giles (Patterson-UTI) </span>
         <span class="sub-title mt-1">08/22/2022 - 2:09pm</span>
       </div>
-    </div>
+    </div> -->
+    <div class="text-center q-title-detail ">There are currently not any questions, which have been asked by suppliers. Once suppliers as a question this tab will be populated.</div>
+
   </v-col>
 </template>
 

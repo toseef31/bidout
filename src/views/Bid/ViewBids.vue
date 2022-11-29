@@ -4,7 +4,7 @@
       <div class="mid-content">
         <div class="content-section fill-height">
           <v-alert type="success"  v-show="showSuccessDeleteBidAlert" class="mx-5 mt-3">
-      You are successfully deleted a bid!
+            You have successfully deleted this bid!
     </v-alert>
           <div class="title-block d-block d-sm-flex justify-space-between pa-4 pa-sm-6 align-center">
             <div>

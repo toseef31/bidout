@@ -1,8 +1,39 @@
 <template>
-  <v-col class="pl-0 pr-3 pb-0 pt-3 bid-detail-module">
+    <v-row fill-height align="center" class="bid-alert" v-if="getPageLoading || getViewBidError">
+    <v-col cols="12">
+      <v-progress-circular v-if="getPageLoading" :width="3" color="green" indeterminate ></v-progress-circular>
+      <div class="alert-section" v-if="getViewBidError && !getPageLoading" >
+             <div class="error-title mb-5">
+              <h1 class="font-weight-bold">Opps!</h1>
+              <h1 class="font-weight-medium">This page is not available.</h1>
+             </div>
+
+             <div class="btn-section mt-8 mb-16 pb-16">
+              <a class="text-decoration-none" href="https://bidout.app"><v-btn
+              large
+              outlined
+              color="#0D9647"
+              height="52"
+              class="mr-5 font-weight-bold text-capitalize"
+              >Access Homepage</v-btn></a>
+              <router-link to="/dashboard" class="text-decoration-none"><v-btn
+              large
+              outlined
+              color="#0D9647"
+              class="font-weight-bold text-capitalize"
+              height="52"
+              >Access Dashboard</v-btn></router-link>
+             </div>
+           </div>
+
+    </v-col>
+  </v-row>
+
+  <v-col v-else  class="pl-0 pr-3 pb-0 pt-3 bid-detail-module  ">
     <v-alert type="error"  v-show="showErrorDeleteAlert" class="mx-5">
       Deleting this bid was failed. Please Try again!
     </v-alert>
+
     <v-card
       class="fill-height main-card"
       :elevation="0"
@@ -23,7 +54,7 @@
                 Bid: <span class="serial">#{{ bidDetail.bidData.serial }}</span>
               </div>
               <div>
-                Due Date/Time: {{ bidDetail.bidData.dueDate }} @
+                Due Date/Time: {{ bidDetail.bidData.dueDate | moment('MM/DD/YYYY') }} @
                 {{ bidDetail.bidData.dueTime }}
               </div>
               <div>
@@ -59,11 +90,10 @@
             </div>
 
             <v-divider color="#0D9648"></v-divider>
-
             <div
               class="bid-number"
             >
-              3 Bids Received
+              {{noOfBidSubmitted}} Bids Received
             </div>
           </v-sheet>
           <v-sheet  class="py-2 px-5 text-left award-status-card"
@@ -83,7 +113,7 @@
             <div
              class="award-bid-number"
             >
-              3 Bids Received
+              {{noOfBidSubmitted}} Bids Received
             </div>
           </v-sheet>
         </v-col>
@@ -222,16 +252,26 @@
             :href="'#tab-' + item.value"
             class="text-capitalize black--text font-weight-bold"
           >
+          {{ item.text }}
             <v-badge
-              v-if="item.value === 3 || item.value === 5"
+              v-if="item.value === 3 && showBidMessageC !== 0"
               color="#0D9648"
-              content="6"
+              :content="showBidMessageC"
               inline
               tile
             >
-              {{ item.text }}
+
             </v-badge>
-            <div v-else>{{ item.text }}</div>
+            <v-badge
+              v-if=" item.value === 5"
+              color="#0D9648"
+              :content="6"
+              inline
+              tile
+            >
+
+            </v-badge>
+
           </v-tab>
         </v-tabs>
         <v-tabs-items v-model="currentItem">
@@ -257,15 +297,15 @@
       </div>
     </v-card>
   </v-col>
+
 </template>
 
 <script>
 import BidDetailTab from '@/components/viewBid/bidDetailTab.vue';
 import BidBroadcast from '@/components/viewBid/bidBroadcast.vue';
-import TeamMembers from '@/components/BidTabs/TeamMembers.vue';
 import BidQandA from '@/components/viewBid/bidQandA.vue';
 import BidChat from '@/components/viewBid/bidChat.vue';
-import BidSubmission from '@/components/viewBid/bidDetailTab.vue';
+import BidSubmission from '@/components/viewBid/bidSubmission.vue';
 import BidAuditTrail from '@/components/viewBid/bidAuditTrail.vue';
 import moment from 'moment-timezone';
 import { mapActions } from 'vuex';
@@ -275,7 +315,6 @@ export default {
   components: {
     BidDetailTab,
     BidBroadcast,
-    TeamMembers,
     BidQandA,
     BidChat,
     BidSubmission,
@@ -326,7 +365,7 @@ export default {
     };
   },
   methods: {
-    ...mapActions(['getBidBySerial', 'deleteBid']),
+    ...mapActions(['getBidBySerial', 'deleteBid', 'getSubmittedBid', 'bidMessageUnreadCount']),
     ChangeT(tab) {
       this.currentItem = tab;
     },
@@ -361,7 +400,7 @@ export default {
   },
   computed: {
     bidDetail() {
-      return this.$store.getters.bidData;
+      return this.$store.getters.bidViewData;
     },
     showErrorDeleteAlert() {
       return this.$store.getters.showErrorDeleteBid;
@@ -376,13 +415,50 @@ export default {
 
       return moment(currentDate).isAfter(momentDueDate);
     },
+    noOfBidSubmitted() {
+      return this.$store.getters.submittedBid.length;
+    },
+    getPageLoading() {
+      return this.$store.getters.pageLoader;
+    },
+    getViewBidError() {
+      return this.$store.getters.showViewBidError;
+    },
+    showBidMessageC() {
+      return this.$store.getters.bidMessageUnreadCount;
+    },
+  },
+  beforeMount() {
+
   },
   mounted() {
     document.title = 'Bid Detail - BidOut';
+    // console.log(this.users);
+    // this.getSubmittedBid({
+    //   userId: this.users.id,
+    //   bidId: this.bidDetail.bidData.id,
+    // });
+    // await this.getSubmittedBid({
+    //   userId: 'nSJ4rgmgUTBbiyeJoHIE',
+    //   bidId: 'N3x4CzqfrYqpsLWYrX0k',
+    // });
+  },
+  async created() {
     this.users = this.$store.getters.userInfo;
-    this.getBidBySerial({
+
+    await this.getBidBySerial({
       serial: this.$route.params.serial,
       id: this.users.id,
+    });
+
+    await this.getSubmittedBid({
+      userId: this.users.id,
+      bidId: this.bidDetail.bidData.id,
+    });
+
+    await this.bidMessageUnreadCount({
+      userId: this.users.id,
+      bidId: this.bidDetail.bidData.id,
     });
     if (this.$route.query.new) {
       this.$toasted.show(`Success! Bid #${this.$route.params.serial} has been created and all invitations have been sent to the suppliers`, {
@@ -391,8 +467,7 @@ export default {
         position: 'top-center',
       });
     }
-  },
-  created() {
+
     this.compute();
     this.addOneSecondToActualTimeEverySecond();
   },
