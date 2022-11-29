@@ -382,7 +382,7 @@ export default {
     document.title = 'Bid Detail - BidOut';
     this.users = this.$store.getters.userInfo;
     this.getBidBySerial({
-      serial: this.$route.fullPath.split('/').pop(),
+      serial: this.$route.params.serial,
       id: this.users.id,
     });
     if (this.$route.query.new) {
