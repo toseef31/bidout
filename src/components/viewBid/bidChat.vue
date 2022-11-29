@@ -35,7 +35,7 @@
               <v-icon size="40">mdi-domain</v-icon>
             </v-list-item-icon>
             <v-list-item-content align-center>
-              <v-list-item-title v-text="list.company"></v-list-item-title>
+              <v-list-item-title v-text="list.name || list.company"></v-list-item-title>
               <v-list-item-subtitle>
                 <a href="#" class="text-decoration-underline"
                   >View Profile</a
@@ -249,8 +249,17 @@ export default {
       return this.pageLoading;
     },
     conversationsList() {
+      const bidConvo = this.$store.getters.bidConversations;
+
+      const name = [];
+      
+      for (let i = 0; i < bidConvo.length; i++) {
+        name[i] = bidConvo[i].name && bidConvo[i].name.split('|||').find((el) => el.trim() !== this.user.company.company);
+
+        bidConvo[i].name = name[i] && name[i].trim();
+      }
       return _.orderBy(
-        this.$store.getters.bidConversations,
+        bidConvo,
         'latestMessage',
         'desc',
       );
