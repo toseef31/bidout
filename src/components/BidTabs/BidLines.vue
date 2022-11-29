@@ -37,7 +37,7 @@
               <v-select outlined hide-details v-model="bidLines[index]['unit']" :items="units"></v-select>
             </div>
           </v-col>
-          <v-col md="1" class="px-0">
+          <v-col md="2" class="px-0">
             <div class="mr-2 bid-item">
               <label class="d-block input-label text-left" v-if="index === 0">Input Type</label>
               <v-select outlined hide-details v-model="bidLines[index]['type']" :items="inputType"></v-select>
@@ -50,14 +50,14 @@
               </v-text-field>
             </div>
           </v-col>
-          <v-col md="3" class="">
+          <v-col md="2" class="">
             <v-row>
-              <v-col md="9" class="bid-item px-0">
+              <v-col md="8" class="bid-item px-0">
                 <label class="d-block input-label text-left" v-if="index === 0">Buyer Comment</label>
                 <v-text-field placeholder="Buyer Comment" v-model="bidLines[index]['buyerComment']" height="31px" single-line outlined type="text" hide-details>
                 </v-text-field>
               </v-col>
-              <v-col md="3" class="d-flex px-0">
+              <v-col md="4" class="d-flex px-0">
                 <v-tooltip top>
                 <template v-slot:activator="{ on, attrs }">
                   <v-simple-checkbox color="#0D9648"
