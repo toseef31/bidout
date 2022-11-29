@@ -7,7 +7,7 @@
             <v-col cols="12" sm="12" text="left">
               <input type="hidden" name="" :value="validate">
               <label class="d-block text-left input-label mb-2 font-weight-bold">Bid Title</label>
-              <v-text-field placeholder="Bid Title" v-model="title" @change="savedraftOnchange()" single-line outlined type="text" :rules="titleRules">
+              <v-text-field placeholder="Bid Title" v-model="title" single-line outlined type="text" :rules="titleRules">
               </v-text-field>
             </v-col>
           </v-row>
@@ -22,13 +22,13 @@
                   <span>Choose Bid Type</span>
                 </v-tooltip>
               </label>
-              <v-select outlined :items="type" v-model="bidType" @change="savedraftOnchange()" :rules="bidTypeRules">
+              <v-select outlined :items="type" v-model="bidType" :rules="bidTypeRules">
 
               </v-select>
             </v-col>
             <v-col cols="12" sm="6" text="left">
               <label class="d-block text-left input-label mb-2 font-weight-bold">Due Date </label>
-              <v-text-field placeholder="Due Date" single-line outlined type="date" @change="savedraftOnchange()" v-model="dueDate" :rules="dueDateRules" :min="new Date().toISOString().substr(0, 10)">
+              <v-text-field placeholder="Due Date" single-line outlined type="date" v-model="dueDate" :rules="dueDateRules" :min="new Date().toISOString().substr(0, 10)">
               </v-text-field>
 
             </v-col>
@@ -42,7 +42,7 @@
             </v-col>
             <v-col cols="12" sm="6" text="left">
               <label class="d-block text-left input-label mb-2 font-weight-bold">Region </label>
-              <v-select outlined :items="region" @change="savedraftOnchange()" v-model="bidRegions" :rules="bidRegionsRules">
+              <v-select outlined :items="region" v-model="bidRegions" :rules="bidRegionsRules">
 
               </v-select>
             </v-col>
@@ -77,7 +77,7 @@
           <v-row justify="center">
             <v-col cols="12" sm="12" text="left">
               <label class="d-block text-left input-label mb-2 font-weight-bold">Bid Description</label>
-              <v-textarea placeholder="Describe here..." single-line outlined type="text" @change="savedraftOnchange()" v-model="bidDescriptions" :rules="descRules">
+              <v-textarea placeholder="Describe here..." single-line outlined type="text" v-model="bidDescriptions" :rules="descRules">
               </v-textarea>
             </v-col>
           </v-row>
@@ -85,9 +85,9 @@
              :key="i">
             <v-col cols="12" sm="12" text="left">
               <label class="d-block text-left input-label mb-2 font-weight-bold">Additional Information <v-icon color="#F32349" @click="remove(i)">mdi-trash-can-outline</v-icon></label>
-              <v-text-field placeholder="Title" single-line outlined type="text" @change="savedraftOnchange()" v-model="textFields[i]['name']">
+              <v-text-field placeholder="Title" single-line outlined type="text" v-model="textFields[i]['name']">
               </v-text-field>
-              <v-textarea placeholder="Desribe here" single-line outlined type="text" @change="savedraftOnchange()" hide-details v-model="textFields[i]['body']">
+              <v-textarea placeholder="Describe here" single-line outlined type="text" hide-details v-model="textFields[i]['body']">
               </v-textarea>
             </v-col>
           </v-row>

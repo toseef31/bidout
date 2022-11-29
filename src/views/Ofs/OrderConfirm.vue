@@ -26,7 +26,7 @@
                         <v-img :src="require('@/assets/images/ofs/checked.png')" width="48px" height="48px" class="mx-auto"></v-img>
                         <p class="mt-6 text-left">This order has been sent to {{supplierData.company}}, you will be contacted directly from your account rep shortly.</p>
                       </div>
-                    <router-link :to="'/place-order/'+supplierData.slug" class="pt-5">Back to Order</router-link>
+                    <router-link to="/view-ofs-suppliers" class="pt-5">View OFS Directory</router-link>
                     </v-col>
                   </v-row>
                 </div>

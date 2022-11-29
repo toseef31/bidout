@@ -193,6 +193,7 @@ export default {
                 axios.post('/ofs/createUser',{'company': payload.company,'firstName': payload.firstName, 'lastName': payload.lastName,'email': payload.email,'phoneNumber':payload.phoneNumber, 'title': payload.title, 'password': payload.password,'companyId':responce.data.data.companyId})
                  .then(responce => {
                   if(responce.status == 200){
+                    commit('setSameAsData',{'firstName': payload.firstName,'lastName': payload.lastName,'email':payload.email,'phoneNumber':payload.phoneNumber})
                     commit('setCredentials',{'email':payload.email,'password': payload.password})
                      commit("setId",responce.data.data.id);
                      commit("setCustomerId",responce.data.data.chargebee_customer_id);
@@ -258,6 +259,7 @@ export default {
               axios.post('/ofs/createUser',{'company': payload.company,'firstName': payload.firstName, 'lastName': payload.lastName,'email': payload.email,'phoneNumber':payload.phoneNumber, 'title': payload.title, 'password': payload.password,'companyId':responce.data.data.companyId})
                .then(responce => {
                 if(responce.status == 200){
+                  commit('setSameAsData',{'firstName': payload.firstName,'lastName': payload.lastName,'email':payload.email,'phoneNumber':payload.phoneNumber})
                   commit('setCredentials',{'email':payload.email,'password': payload.password})
                   commit("setId",responce.data.data.id);
                   commit("setCustomerId",responce.data.data.chargebee_customer_id);
@@ -370,7 +372,14 @@ export default {
       console.log(err);
     });
    },
-
+   async savePaymentsNet30({commit},payload){
+    const res = await axios.post('chargeBee/saveNet30Payment',{'customerId':payload.customerId,'sameAsyou':payload.sameAsYou,'email':payload.email,'first_name':payload.firstName,'last_name':payload.lastName,'phone':payload.phone})
+    if(res.status == 200){
+      router.replace({
+        name: "Confirmation"
+      });
+    }
+   },
   signInWithCustomToken({ commit }, payload) {
     return new Promise(async (resolve, reject) => {
       try {

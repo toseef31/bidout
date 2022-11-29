@@ -22,6 +22,8 @@ import VueCroppie from 'vue-croppie';
 import 'croppie/croppie.css';
 import VueGtag from "vue-gtag";
 import VueMeta from 'vue-meta';
+import Toasted from 'vue-toasted';
+
 // Your web app's Firebase configuration
 var firebaseConfig = {
   apiKey: import.meta.env.VITE_FIREBASE_API_KEY,
@@ -57,6 +59,7 @@ Vue.use(VueMeta, {
 // Vue.use(momentTimeZone);
 Vue.use(VueSignaturePad);
 Vue.use(VueCroppie);
+Vue.use(Toasted);
 Sentry.init({
   Vue: Vue,
   dsn: import.meta.env.VITE_SENTRY_DSN,

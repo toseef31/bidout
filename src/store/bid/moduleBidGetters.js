@@ -43,5 +43,14 @@ export default {
   },
   bidTemplates(state){
      return state.bidTemplates;
+   }
+  showSuccessDeleteBid(state) {
+    return state.alertDeleteBidSuccess;
+  },
+  showErrorDeleteBid(state) {
+    return state.alertDeleteBidError;
+  },
+  bidSerial(state) {
+    return state.bidSerial;
   },
 };
