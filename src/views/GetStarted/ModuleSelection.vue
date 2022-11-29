@@ -468,7 +468,7 @@ export default {
       if(type == 'ofs-premium'){
         var plan = this.package;
       }else{
-        
+        this.unit_price = 0;
         var plan = 0;
       }
       if(this.trial_end == 'free'){
