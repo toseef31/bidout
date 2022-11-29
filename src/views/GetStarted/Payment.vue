@@ -239,17 +239,17 @@
         ],
         type: 'Credit Card',
         showCard: true,
-        sameAsYou: true,
+        sameAsYou: false,
         country: "US",
         zipCode: '',
         expiryMonth: '',
         expiryYear: '',
         loading: false,
         disable: false,
-        first_name: this.$store.getters.credentials.firstName,
-        last_name: this.$store.getters.credentials.lastName,
-        phone: this.$store.getters.credentials.phoneNumber,
-        email: this.$store.getters.credentials.email,
+        first_name: '',
+        last_name: '',
+        phone: '',
+        email: '',
         defaultCountry: 'US',
         translations: {
           countrySelectorLabel: 'Country Code',
@@ -281,6 +281,9 @@
          return this.$store.getters.contractData.company.contracts;
        }
       },
+      sameAsData(){
+        return this.$store.getters.sameAsData;
+      }
     },
     watch: {
       cardYear () {
@@ -404,11 +407,17 @@
       },
       sameAsAction(){
         if(this.sameAsYou == false){
-          this.sameAsYou = '',
-          this.first_name = '',
-          this.last_name = '',
+          this.sameAsYou = '';
+          this.first_name = '';
+          this.last_name = '';
           this.email = '';
           this.phone = '';
+        }else{
+          this.sameAsYou = true;
+          this.first_name = this.sameAsData.firstName;
+          this.last_name = this.sameAsData.lastName;
+          this.email = this.sameAsData.email;
+          this.phone = this.sameAsData.phoneNumber;
         }
       },
       saveNet30(){

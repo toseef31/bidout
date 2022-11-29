@@ -38,6 +38,15 @@ export default {
   setBidDetailsComplete(state, payload) {
     state.bidDetailsComplete = payload;
   },
+  setBidViewData(state, payload) {
+    state.bidViewData = payload;
+  },
+  setViewBidError(state, payload) {
+    state.viewBidError = payload;
+  },
+  setSubmittedBids(state, payload) {
+    state.submittedBids = payload;
+  },
   setSuccessDeleteBid(state) {
     state.alertDeleteBidSuccess = true;
     setTimeout(() => {

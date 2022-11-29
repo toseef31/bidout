@@ -50,4 +50,7 @@ export default {
       state.errorBroadcast = false;
     }, 5000);
   },
+  setBidMessageUnreadCount(state, payload) {
+    state.bidMessageUnreadCount = payload;
+  },
 };

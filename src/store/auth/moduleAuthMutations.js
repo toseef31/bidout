@@ -77,4 +77,7 @@ export default {
     setCompanyAdmins (state, payload){
       state.companyAdmins = payload
     },
+    setSameAsData (state, payload){
+      state.sameAsData = payload
+    },
 }

@@ -27,4 +27,5 @@ export default {
     price: null,
     credentials: null,
     companyAdmins: null,
+    sameAsData: null,
 }
