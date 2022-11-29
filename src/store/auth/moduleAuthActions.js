@@ -371,7 +371,14 @@ export default {
       console.log(err);
     });
    },
-
+   async savePaymentsNet30({commit},payload){
+    const res = await axios.post('chargeBee/saveNet30Payment',{'customerId':payload.customerId,'sameAsyou':payload.sameAsYou,'email':payload.email,'first_name':payload.firstName,'last_name':payload.lastName,'phone':payload.phone})
+    if(res.status == 200){
+      router.replace({
+        name: "Confirmation"
+      });
+    }
+   },
   signInWithCustomToken({ commit }, payload) {
     return new Promise(async (resolve, reject) => {
       try {
