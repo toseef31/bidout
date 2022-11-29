@@ -63,11 +63,11 @@
             height="auto"
             :src="item && item.image"
           ></v-img>
-          <v-icon v-else size="40">mdi-domain</v-icon>
+          <v-icon size="42" v-else >mdi-domain</v-icon>
           <div class="ml-5">
             <div class="font-weight-bold">{{ item && item.company }}</div>
-            <a href="#" class="text-decoration-underline text-body-2"
-              >View profile</a
+            <router-link :to="item.slug ? '/company/' + item.slug: ''" class="text-decoration-underline text-body-2"
+              >View profile</router-link
             >
           </div>
         </div>
@@ -267,7 +267,7 @@ export default {
   },
   computed: {
     bidDetail() {
-      return this.$store.getters.bidData;
+      return this.$store.getters.bidViewData;
     },
   },
   mounted() {},
