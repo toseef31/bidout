@@ -190,8 +190,7 @@ export default {
         commit('showBroadcastAlert');
       })
       .catch((err) => {
-        console.log(err);
-        commit('showErrorBroadcast');
+        commit('setErrorBroadcast', err.response.data.message);
       });
   },
   bidMessageUnreadCount({ commit }, payload) {

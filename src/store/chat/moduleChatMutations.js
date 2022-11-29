@@ -44,10 +44,10 @@ export default {
       state.alertBroadcast = false;
     }, 5000);
   },
-  showErrorBroadcast(state) {
-    state.errorBroadcast = true;
+  setErrorBroadcast(state, payload) {
+    state.errorBroadcast = payload;
     setTimeout(() => {
-      state.errorBroadcast = false;
+      state.errorBroadcast = null;
     }, 5000);
   },
   setBidMessageUnreadCount(state, payload) {

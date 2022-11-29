@@ -4,8 +4,8 @@
     <v-alert type="success"  v-show="showBroadCastAlert" class="mx-5">
       You are successfully broadcast a message!
     </v-alert>
-    <v-alert type="error"  v-show="showErrorBroadCast" class="mx-5">
-      Broadcasting a message was failed. Please Try again!
+    <v-alert type="error"  v-show="(showErrorBroadCast !== null)" class="mx-5">
+      {{showErrorBroadCast}}
     </v-alert>
     <div class="px-5">
       <div class="title-detail mb-2">Bid Broadcast</div>
