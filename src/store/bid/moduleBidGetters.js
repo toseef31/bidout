@@ -56,4 +56,7 @@ export default {
   showViewBidError(state) {
     return state.viewBidError;
   },
+  bidSerial(state) {
+    return state.bidSerial;
+  },
 };

@@ -13,8 +13,8 @@
         @start="dragging = true"
         @end="dragging = false"
       >
-        <v-row class="bidline-list d-flex align-center px-6 mt-0" v-for="(items,index) in bidLines" :key="index">
-          <v-col md="3" class="d-flex">
+        <v-row class="bidline-list d-flex align-center px-6 mt-0" gap v-for="(items,index) in bidLines" :key="index">
+          <v-col md="4" class="d-flex px-0">
             <v-row>
               <v-col md="1" class="pl-1">
                 <div class="mr-2 bid-item" :class="[index != 0 ? 'mt-1' : 'mt-6']">
@@ -31,41 +31,41 @@
             </v-row>
           </v-col>
 
-          <v-col md="2" class="pl-0">
+          <v-col md="2" class="px-0">
             <div class="mr-2 bid-item">
               <label class="d-block input-label text-left" v-if="index === 0">Unit/Measure</label>
               <v-select outlined hide-details v-model="bidLines[index]['unit']" :items="units"></v-select>
             </div>
           </v-col>
-          <v-col md="2" class="pl-0">
+          <v-col md="2" class="px-0">
             <div class="mr-2 bid-item">
               <label class="d-block input-label text-left" v-if="index === 0">Input Type</label>
               <v-select outlined hide-details v-model="bidLines[index]['type']" :items="inputType"></v-select>
             </div>
           </v-col>
-          <v-col md="2" class="pl-0">
+          <v-col md="2" class="px-0">
             <div class="mr-2 bid-item">
               <label class="d-block input-label text-left" v-if="index === 0">QTY</label>
-              <v-text-field placeholder="Quantity" height="31px" single-line outlined  hide-details v-model="bidLines[index]['quantity']" @keypress="isLetterOrNumber($event)">
+              <v-text-field placeholder="Quantity" height="31px" single-line outlined  hide-details v-model="bidLines[index]['quantity']" type="number">
               </v-text-field>
             </div>
           </v-col>
-          <v-col md="3" class="d-flex pl-0">
-            <div class="mr-2 bid-item">
-              <label class="d-block input-label text-left" v-if="index === 0">Buyer Comment</label>
-              <v-text-field placeholder="Buyer Comment" v-model="bidLines[index]['buyerComment']" height="31px" single-line outlined type="text" hide-details>
-              </v-text-field>
-            </div>
-            <div class="d-flex">
-
-              <v-tooltip top>
+          <v-col md="2" class="">
+            <v-row>
+              <v-col md="8" class="bid-item px-0">
+                <label class="d-block input-label text-left" v-if="index === 0">Buyer Comment</label>
+                <v-text-field placeholder="Buyer Comment" v-model="bidLines[index]['buyerComment']" height="31px" single-line outlined type="text" hide-details>
+                </v-text-field>
+              </v-col>
+              <v-col md="4" class="d-flex px-0">
+                <v-tooltip top>
                 <template v-slot:activator="{ on, attrs }">
                   <v-simple-checkbox color="#0D9648"
                     v-bind="attrs"
                     v-on="on"
                     v-model="bidLines[index]['required']"
                     :ripple="false"
-                    inset class="mr-2 ml-2" hide-details :class="[index != 0 ? 'mt-0' : 'mt-6']"
+                    inset class="mr-1 ml-2" hide-details :class="[index != 0 ? 'mt-0' : 'mt-6']"
                     @input="validate"
                   ></v-simple-checkbox>
                 </template>
@@ -74,7 +74,13 @@
               <v-icon color="#F32349" :class="[index != 0 ? 'mt-0' : 'mt-5']" @click="removeBidLine(index)"
                 v-bind="attrs"
                 v-on="on">mdi-trash-can-outline</v-icon>
+              </v-col>
+            </v-row>
+            <!-- <div class="mr-2 bid-item">
             </div>
+            <div class="d-flex">
+
+            </div> -->
           </v-col>
         </v-row>
       </draggable>
@@ -125,6 +131,7 @@ export default {
           quantity: '',
           buyerComment: '',
           valid: false,
+          required: true,
         },
       ],
       descRules: [
@@ -175,6 +182,7 @@ export default {
           quantity: '',
           buyerComment: '',
           switch1: '',
+          required: true,
         });
       }
     },

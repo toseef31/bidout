@@ -107,12 +107,12 @@
                         min-height="32px"
                         width="150px"
                         hide-details
-                        v-model="cat['questionTitle']"
+                        v-model="cat['title']"
                       ></v-text-field
                     ></template>
                     <template v-else
                       ><p class="mb-0 black--text subtitle">
-                        {{ cat.questionTitle }}
+                        {{ cat.title }}
                       </p></template
                     >
 
@@ -146,7 +146,7 @@
                   v-for="(option, optIndex) in cat.options"
                   :key="`opt-${optIndex}`"
                 >
-                  <div v-if="option.quesIndex == index" class="d-flex align-center ml-10 mt-5">
+                  <div class="d-flex align-center ml-10 mt-5">
                     <div class="option-box">
                       <v-checkbox
                         v-model="option['choice']"
@@ -209,12 +209,12 @@
                           min-height="32px"
                           width="150px"
                           hide-details
-                          v-model="cat['questionTitle']"
+                          v-model="cat['title']"
                         ></v-text-field
                       ></template>
                       <template v-else
                         ><label class="mb-0 black--text subtitle">{{
-                          cat.questionTitle
+                          cat.title
                         }}</label></template
                       >
                       <a
@@ -277,12 +277,12 @@
                           min-height="32px"
                           width="150px"
                           hide-details
-                          v-model="cat['questionTitle']"
+                          v-model="cat['title']"
                         ></v-text-field
                       ></template>
                       <template v-else
                         ><label class="mb-0 black--text subtitle">{{
-                          cat.questionTitle
+                          cat.title
                         }}</label></template
                       >
 
@@ -356,12 +356,12 @@
                           min-height="32px"
                           width="150px"
                           hide-details
-                          v-model="cat['questionTitle']"
+                          v-model="cat['title']"
                         ></v-text-field>
                       </template>
                       <template v-else>
                         <label class="mb-0 black--text subtitle">{{
-                          cat.questionTitle
+                          cat.title
                         }}</label>
                       </template>
 
@@ -469,7 +469,7 @@ export default {
     },
     createQuestion(type) {
       const qusData = {
-        questionTitle: 'add question title here',
+        title: 'add question title here',
         questionType: type,
         id: uuidv4(),
         order: this.categories ? this.categories.length : 0,
@@ -524,8 +524,14 @@ export default {
     updateQuestion() {
       this.updateDraftBid({ questions: this.categories });
     },
+    deleteQuestion(index) {
+      this.categories.splice(index, 1);
+    },
     deleteOption(index, optIndex) {
       this.categories[index].options.splice(optIndex, 1);
+    },
+    deleteCat(index) {
+      this.categories.splice(index, 1);
     },
   },
 };
