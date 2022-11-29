@@ -251,7 +251,7 @@ export default {
       try {
         const serial = await this.$store.dispatch('publishBid');
         console.log(serial);
-        this.$router.push(`/view-bids/${serial}`);
+        this.$router.push(`/view-bids/${serial}?new=true`);
         this.$store.commit('setDraftBidsList', null);
       } catch (error) {
         console.log(error);
