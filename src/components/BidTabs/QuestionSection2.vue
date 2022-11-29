@@ -134,7 +134,7 @@
                   </div>
                   <div class="d-flex align-center mr-4 mr-sm-6">
                     <v-switch
-                      v-model="categories['required']"
+                      v-model="cat['required']"
                       inset
                       class="mr-4 mt-0"
                       hide-details
@@ -235,7 +235,7 @@
                     </div>
                     <div class="d-flex align-center mb-2">
                       <v-switch
-                        v-model="categories['required']"
+                        v-model="cat['required']"
                         inset
                         class="mr-4 mt-0"
                         hide-details
@@ -304,7 +304,7 @@
                     </div>
                     <div class="d-flex align-center mb-2">
                       <v-switch
-                        v-model="categories['required']"
+                        v-model="cat['required']"
                         inset
                         class="mr-4 mt-0"
                         hide-details
@@ -383,7 +383,7 @@
                     </div>
                     <div class="d-flex align-center">
                       <v-switch
-                        v-model="categories['required']"
+                        v-model="cat['required']"
                         inset
                         class="mr-4 mt-0"
                         hide-details
