@@ -259,6 +259,7 @@ export default {
               axios.post('/ofs/createUser',{'company': payload.company,'firstName': payload.firstName, 'lastName': payload.lastName,'email': payload.email,'phoneNumber':payload.phoneNumber, 'title': payload.title, 'password': payload.password,'companyId':responce.data.data.companyId})
                .then(responce => {
                 if(responce.status == 200){
+                  commit('setSameAsData',{'firstName': payload.firstName,'lastName': payload.lastName,'email':payload.email,'phoneNumber':payload.phoneNumber})
                   commit('setCredentials',{'email':payload.email,'password': payload.password})
                   commit("setId",responce.data.data.id);
                   commit("setCustomerId",responce.data.data.chargebee_customer_id);
