@@ -172,6 +172,7 @@ export default {
     deleteAttach(index) {
       this.documents.splice(index, 1);
       this.$store.getters.attachData.splice(index, 1);
+      this.$store.commit('setDocuments',this.documents);
     },
     openComment(index) {
       this.edit = index;

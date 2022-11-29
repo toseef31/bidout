@@ -149,6 +149,7 @@ export default {
       if (this.bidLines.length > 0 && this.bidLines.filter((item) => item.required === true).length > 0) {
         this.$emit('validation', { valid: true, items: '4' });
         this.$store.commit('setLineItemsComplete', true);
+        this.$store.commit('setBidlines',this.bidLines)
         return this.valid;
       }
       this.$emit('validation', { valid: false, items: '4' });

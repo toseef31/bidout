@@ -50,4 +50,7 @@ export default {
   bidSerial(state) {
     return state.bidSerial;
   },
+  invitedSuppliersData(state) {
+    return state.invitedSuppliersData;
+  },
 };

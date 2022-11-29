@@ -53,4 +53,19 @@ export default {
   setBidSerial(state, payload) {
     state.bidSerial = payload;
   },
+  setInvitedSuppliersData(state, payload) {
+    state.invitedSuppliers = payload;
+  },
+  setInvitedTeamMembers(state, payload) {
+    state.invitedTeamMembers = payload;
+  },
+  setBidlines(state, payload) {
+    state.bidlines = payload;
+  },
+  setAttachement(state, payload) {
+    state.attachement = payload;
+  },
+  setQuestions(state, payload) {
+    state.questions = payload;
+  },
 };
