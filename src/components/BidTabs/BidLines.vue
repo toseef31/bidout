@@ -125,10 +125,10 @@ export default {
       bidLines: [
         {
           switch1: false,
-          description: '',
+          description: null,
           unit: 'Feet',
           type: 'USD',
-          quantity: '',
+          quantity: null,
           buyerComment: '',
           valid: false,
           required: true,
@@ -146,7 +146,7 @@ export default {
       return this.dragging ? 'under drag' : '';
     },
     validate() {
-      if (this.bidLines.length > 0 && this.bidLines.filter((item) => item.required === true).length > 0) {
+      if (this.bidLines.length > 0 && this.bidLines.filter((item) => item.required === true && item.description && item.quantity).length > 0) {
         this.$emit('validation', { valid: true, items: '4' });
         this.$store.commit('setLineItemsComplete', true);
         return this.valid;
