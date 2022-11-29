@@ -179,7 +179,6 @@ export default {
       companyId: payload.companyId,
       description: payload.description,
     };
-    localStorage.setItem('bidData', JSON.stringify(bidData));
     commit('setBidData', bidData);
     const formData = new FormData();
     formData.append('title', payload.title);
