@@ -114,6 +114,7 @@ export default {
       return `${this.$store.getters.userInfo.firstName} ${this.$store.getters.userInfo.lastName}`;
     },
     docsList() {
+      this.$store.commit('setDocuments',this.$store.getters.attachData);
       return this.$store.getters.attachData;
     },
     isAttachingDoc() {

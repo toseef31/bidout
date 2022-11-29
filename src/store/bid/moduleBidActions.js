@@ -471,6 +471,7 @@ export default {
 
       if (res.status == 200) {
         commit('setAttachData', res.data);
+        commit('setAttachement',res.data);
       } else {
         commit('setAttachData', null);
       }
