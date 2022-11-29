@@ -28,10 +28,19 @@
         <v-btn
           color="#0D9648"
           height="56"
+          width="220"
           class="text-capitalize white--text font-weight-bold save-button px-9"
           @click="broadcastMessage"
+          :disabled="showLoading"
           large
-          >Send Broadcast</v-btn
+
+          >
+          <v-progress-circular
+          v-if="showLoading"
+      indeterminate
+      color="#0D9648"
+    ></v-progress-circular>
+          <div v-else>Send Broadcast</div></v-btn
         >
       </div>
     </div>
@@ -45,11 +54,12 @@ export default {
   data() {
     return {
       messageContent: '',
+      loading: false,
     };
   },
   computed: {
     bidId() {
-      return this.$store.getters.bidData.bidData.id;
+      return this.$store.getters.bidViewData.bidData.id;
     },
     showBroadCastAlert() {
       return this.$store.getters.showSuccessBroadcast;
@@ -57,15 +67,19 @@ export default {
     showErrorBroadCast() {
       return this.$store.getters.showErrorBroadcast;
     },
+    showLoading() {
+      return this.loading;
+    },
   },
   methods: {
     ...mapActions(['sendBroadcast']),
-    broadcastMessage() {
-      this.sendBroadcast({
+    async broadcastMessage() {
+      this.loading = true;
+      await this.sendBroadcast({
         messageContent: this.messageContent,
         bidId: this.bidId,
       });
-
+      this.loading = false;
       this.messageContent = '';
     },
   },
