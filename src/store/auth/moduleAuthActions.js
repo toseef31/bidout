@@ -398,7 +398,9 @@ export default {
           localStorage.setItem('companyData', JSON.stringify(companyResp.data));
           commit('setUser',userResp.data)
           localStorage.setItem("userData",JSON.stringify(userResp.data));
-          router.replace({ name: "Dashboard" });
+          router.replace({ name: "Dashboard" }).then(() => {
+            window.location.reload();
+          });
         }
         resolve(result)
       } catch(err) {
