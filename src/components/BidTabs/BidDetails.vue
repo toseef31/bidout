@@ -1,7 +1,7 @@
 <template>
   <v-row class="my-8" justify="center">
     <v-col cols="12" sm="9">
-      <v-form @submit.prevent="bidForm" ref="form" v-model="valid">
+      <v-form @submit.prevent="bidForm" ref="form" v-model="valid" @input="fieldUpdate">
         <v-container>
           <v-row justify="center">
             <v-col cols="12" sm="12" text="left">
@@ -150,7 +150,8 @@ export default {
       region: ['Gulf Coast', 'Northwest', 'Rockies', 'Mid-Con', 'Permian', 'Arklatex', 'Offshore', 'Other'],
       textFields: [],
       interval: '',
-
+      bidFormData: '',
+      formStatus: false,
     };
   },
   computed: {
@@ -213,7 +214,24 @@ export default {
     remove(index) {
       this.textFields.splice(index, 1);
     },
+    fieldUpdate() {
+      this.formStatus = true;
+    },
+    savedraftOnInterval(){
+      const timer = setInterval(() => {
+        if(this.formStatus == true){
+          this.savedraft();
+          this.formStatus = false;
+        }
+      }, 60000);
 
+      this.$once("hook:beforeDestroy", () => {
+        clearInterval(timer);
+      });
+    },
   },
+  mounted(){
+    this.savedraftOnInterval();
+  }
 };
 </script>

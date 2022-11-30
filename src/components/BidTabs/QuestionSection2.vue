@@ -441,6 +441,7 @@ export default {
       isQues: [false],
       isLbl: [false],
       multiOptions: [],
+      questionStatus: false,
     };
   },
   watch: {
@@ -467,6 +468,7 @@ export default {
       };
       this.categories.push(data);
       this.$store.commit('setQuestions',this.categories);
+      this.questionStatus = true;
     },
     createQuestion(type) {
       const qusData = {
@@ -480,18 +482,22 @@ export default {
       };
       this.categories.push(qusData);
       this.$store.commit('setQuestions',this.categories);
+      this.questionStatus = true;
     },
     editCatTitle(index) {
       this.editCat = index;
       this.isCate[index] = true;
+      this.questionStatus = true;
     },
     editQusTitle(index) {
       this.editQues = index;
       this.isQues[index] = true;
+      this.questionStatus = true;
     },
     editSaveTitle(index) {
       this.editQues = -1;
       this.isQues[index] = false;
+      this.questionStatus = true;
     },
     questionMoved(event, categoryId, questions) {
       this.categories
@@ -503,11 +509,13 @@ export default {
           ].order = questionIndex;
         });
         this.$store.commit('setQuestions',this.categories);
+        this.questionStatus = true;
     },
     saveTitle(index) {
       this.editCat = -1;
       this.isCate[index] = false;
       this.$store.commit('setQuestions',this.categories);
+      this.questionStatus = true;
     },
     addOptions(index) {
       this.categories[index].options.push({
@@ -517,15 +525,18 @@ export default {
         quesIndex: index,
       });
       this.$store.commit('setQuestions',this.categories);
+      this.questionStatus = true;
     },
     editLabel(index) {
       this.editLbl = index;
       this.isLbl[index] = true;
+      this.questionStatus = true;
     },
     saveLabel(index) {
       this.editLbl = -1;
       this.isLbl[index] = false;
       this.$store.commit('setQuestions',this.categories);
+      this.questionStatus = true;
     },
     updateQuestion() {
       this.updateDraftBid({ questions: this.categories });
@@ -533,16 +544,34 @@ export default {
     deleteQuestion(index) {
       this.categories.splice(index, 1);
       this.$store.commit('setQuestions',this.categories);
+      this.questionStatus = true;
     },
     deleteOption(index, optIndex) {
       this.categories[index].options.splice(optIndex, 1);
       this.$store.commit('setQuestions',this.categories);
+      this.questionStatus = true;
     },
     deleteCat(index) {
       this.categories.splice(index, 1);
       this.$store.commit('setQuestions',this.categories);
+      this.questionStatus = true;
+    },
+    savedraftOnInterval(){
+      const timer = setInterval(() => {
+        if(this.questionStatus == true){
+          this.updateDraftBid({ questions: this.categories });
+          this.questionStatus == false;
+        }
+      }, 60000);
+
+      this.$once("hook:beforeDestroy", () => {
+        clearInterval(timer);
+      });
     },
   },
+  mounted(){
+    this.savedraftOnInterval();
+  }
 };
 </script>
 
