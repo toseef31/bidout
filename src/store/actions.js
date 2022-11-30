@@ -32,6 +32,7 @@ const actions = {
           const token =  await user.getIdToken(true);
           commit('setToken',token);
           localStorage.setItem("token",JSON.stringify(token));
+          window.location.reload();
           resolve(token);
         } catch(error) {
             dispatch('signOutAction')

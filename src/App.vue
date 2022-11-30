@@ -29,7 +29,7 @@ export default {
   mounted() {
     this.timer = setInterval(() => {
       this.$store.dispatch('refreshToken');
-    }, 300000);
+    }, 3480000);
   },
   beforeDestroy() {
     clearInterval(this.timer);
