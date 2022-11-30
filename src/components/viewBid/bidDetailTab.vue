@@ -48,7 +48,7 @@
 
  <div   v-if="
           bidDetail.bidData &&
-          Array.isArray(bidDetail.bidData.invitedSuppliers)
+          Array.isArray(bidDetail.bidData.invitedSuppliers) && bidDetail.bidData.invitedSuppliers.length
         ">
       <div
         class="d-flex bid-section-2"

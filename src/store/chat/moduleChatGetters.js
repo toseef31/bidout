@@ -44,4 +44,7 @@ export default {
   bidMessageUnreadCount(state) {
     return state.bidMessageUnreadCount;
   },
+  showSupplierBroadcastError(state) {
+    return state.supplierBroadcastError;
+  },
 };

@@ -7,6 +7,10 @@
     <v-alert type="error"  v-show="showErrorBroadCast" class="mx-5">
       Broadcasting a message was failed. Please Try again!
     </v-alert>
+
+    <v-alert type="error"  v-show="showSupplierBroadcastError" class="mx-5">
+      There are currently no suppliers to broadcast a message to.
+    </v-alert>
     <div class="px-5">
       <div class="title-detail mb-2">Bid Broadcast</div>
       <div class="broadcast-desc">
@@ -66,6 +70,9 @@ export default {
     },
     showErrorBroadCast() {
       return this.$store.getters.showErrorBroadcast;
+    },
+    showSupplierBroadcastError() {
+      return this.$store.getters.showSupplierBroadcastError;
     },
     showLoading() {
       return this.loading;

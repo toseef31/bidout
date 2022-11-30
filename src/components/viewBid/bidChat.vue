@@ -10,7 +10,7 @@
   </v-row>
   <v-row class="bid-chat-row mt-4" fill-height no-gutters v-else>
 
-    <div v-if="conversationsList.length ===0" class="text-center c-title-detail">There are currently no suppliers included on this bid, please edit this bid to add suppliers to begin chat conversations. </div>
+    <div v-if="conversationsList.length ===0" class="text-center c-title-detail">There are currently no suppliers included on this bid, please <router-link to="#" class="text-decoration-underline">edit this bid </router-link> to add suppliers to begin chat conversations. </div>
     <v-col v-else cols="12" sm="4" md="4" class="available-data pt-6" >
       <v-list two-line class="pb-0">
       <v-list-item-group v-model="selectedUser" active-class="grey--text">
@@ -252,7 +252,7 @@ export default {
       const bidConvo = this.$store.getters.bidConversations;
 
       const name = [];
-      
+
       for (let i = 0; i < bidConvo.length; i++) {
         name[i] = bidConvo[i].name && bidConvo[i].name.split('|||').find((el) => el.trim() !== this.user.company.company);
 

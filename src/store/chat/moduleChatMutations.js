@@ -44,7 +44,7 @@ export default {
       state.alertBroadcast = false;
     }, 5000);
   },
-  showErrorBroadcast(state) {
+  setErrorBroadcast(state) {
     state.errorBroadcast = true;
     setTimeout(() => {
       state.errorBroadcast = false;
@@ -52,5 +52,11 @@ export default {
   },
   setBidMessageUnreadCount(state, payload) {
     state.bidMessageUnreadCount = payload;
+  },
+  setSupplierBroadcastError(state) {
+    state.supplierBroadcastError = true;
+    setTimeout(() => {
+      state.supplierBroadcastError = false;
+    }, 5000);
   },
 };

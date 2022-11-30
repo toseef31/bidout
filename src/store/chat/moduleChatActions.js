@@ -190,8 +190,11 @@ export default {
         commit('showBroadcastAlert');
       })
       .catch((err) => {
-        console.log(err);
-        commit('showErrorBroadcast');
+        if (err.response.status === 404 && err.response.data.message === 'No suppliers found with current bid id') {
+          commit('setSupplierBroadcastError');
+        } else {
+          commit('setErrorBroadcast');
+        }
       });
   },
   bidMessageUnreadCount({ commit }, payload) {
