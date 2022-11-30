@@ -55,7 +55,7 @@
               :key="item.value"
               :href="'#tab-' + item.value"
               class="text-capitalize black--text font-weight-bold"
-              :disabled="enableTabs"
+              :disabled="enableTabs" @click="updateDraft"
             >
               {{ item.text }} {{ item.index }}
 
@@ -139,7 +139,7 @@
   </v-col>
 </template>
 <script>
-import { mapGetters } from 'vuex';
+import { mapGetters, mapActions,mapState } from 'vuex';
 import SupplierSection from '../../components/BidTabs/SupplierSection.vue';
 import TeamMembers from '../../components/BidTabs/TeamMembers.vue';
 import BidLines from '../../components/BidTabs/BidLines.vue';
@@ -221,6 +221,8 @@ export default {
     },
   },
   methods: {
+    ...mapActions(["updateDraftBid"]),
+    ...mapState(["invitedSuppliers"]),
     ChangeT(tab) {
       this.currentItem = tab;
     },
@@ -251,12 +253,15 @@ export default {
       try {
         const serial = await this.$store.dispatch('publishBid');
         console.log(serial);
-        this.$router.push(`/view-bids/${serial}`);
+        this.$router.push(`/view-bids/${serial}?new=true`);
         this.$store.commit('setDraftBidsList', null);
       } catch (error) {
         console.log(error);
       }
     },
+    async updateDraft(){
+      await this.updateDraftBid({'supplier': this.$store.state.bid.invitedSuppliers});
+    }
   },
   mounted() {
     document.title = 'Create Bid - BidOut';

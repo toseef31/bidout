@@ -38,6 +38,15 @@ export default {
   setBidDetailsComplete(state, payload) {
     state.bidDetailsComplete = payload;
   },
+  setBidViewData(state, payload) {
+    state.bidViewData = payload;
+  },
+  setViewBidError(state, payload) {
+    state.viewBidError = payload;
+  },
+  setSubmittedBids(state, payload) {
+    state.submittedBids = payload;
+  },
   setSuccessDeleteBid(state) {
     state.alertDeleteBidSuccess = true;
     setTimeout(() => {
@@ -49,5 +58,23 @@ export default {
     setTimeout(() => {
       state.alertDeleteBidError = false;
     }, 5000);
+  },
+  setBidSerial(state, payload) {
+    state.bidSerial = payload;
+  },
+  setInvitedSuppliersData(state, payload) {
+    state.invitedSuppliers = payload;
+  },
+  setInvitedTeamMembers(state, payload) {
+    state.invitedTeamMembers = payload;
+  },
+  setBidlines(state, payload) {
+    state.bidlines = payload;
+  },
+  setAttachement(state, payload) {
+    state.attachement = payload;
+  },
+  setQuestions(state, payload) {
+    state.questions = payload;
   },
 };
