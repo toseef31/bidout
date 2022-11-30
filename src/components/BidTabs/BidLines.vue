@@ -206,7 +206,7 @@ export default {
       const timer = setInterval(() => {
         if(this.bidLinesStatus == true){
           this.updateDraftBid({ bidlines: this.bidLines });
-          this.bidLinesStatus == false;
+          this.bidLinesStatus = false;
         }
       }, 60000);
 

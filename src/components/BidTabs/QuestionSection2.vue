@@ -560,7 +560,7 @@ export default {
       const timer = setInterval(() => {
         if(this.questionStatus == true){
           this.updateDraftBid({ questions: this.categories });
-          this.questionStatus == false;
+          this.questionStatus = false;
         }
       }, 60000);
 
