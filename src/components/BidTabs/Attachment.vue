@@ -114,13 +114,11 @@ export default {
       return `${this.$store.getters.userInfo.firstName} ${this.$store.getters.userInfo.lastName}`;
     },
     docsList() {
+      this.$store.commit('setDocuments',this.$store.getters.attachData);
       return this.$store.getters.attachData;
     },
     isAttachingDoc() {
       return this.isAttaching;
-    },
-    docsList(){
-    	return this.$store.getters.attachData;
     },
     validat(){
       if(this.$store.getters.attachData){
@@ -175,13 +173,13 @@ export default {
     deleteAttach(index) {
       this.documents.splice(index, 1);
       this.$store.getters.attachData.splice(index, 1);
+      this.$store.commit('setDocuments',this.documents);
     },
     openComment(index) {
       this.edit = index;
       this.isEdit = true;
     },
     saveComment(doc) {
-      console.log(this.docsList, "dpc");
       this.isEdit = false;
       this.updateDraftBid({ attachement: this.docsList });
     },

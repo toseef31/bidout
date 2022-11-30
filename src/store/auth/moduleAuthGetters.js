@@ -71,4 +71,7 @@ export default {
     companyAdmins (state){
        return state.companyAdmins
     },
+    sameAsData (state){
+       return state.sameAsData
+    },
 }

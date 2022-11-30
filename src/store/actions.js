@@ -30,7 +30,6 @@ const actions = {
       return new Promise(async (resolve, reject) => {
         try{
           const token =  await user.getIdToken(true);
-          console.log(token);
           commit('setToken',token);
           localStorage.setItem("token",JSON.stringify(token));
           resolve(token);
@@ -40,8 +39,6 @@ const actions = {
         }
       })
           
-    }else{
-      dispatch('signOutAction')
     }
     
   },

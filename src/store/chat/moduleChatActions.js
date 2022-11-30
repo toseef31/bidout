@@ -190,8 +190,21 @@ export default {
         commit('showBroadcastAlert');
       })
       .catch((err) => {
+        if (err.response.status === 404 && err.response.data.message === 'No suppliers found with current bid id') {
+          commit('setSupplierBroadcastError');
+        } else {
+          commit('setErrorBroadcast');
+        }
+      });
+  },
+  bidMessageUnreadCount({ commit }, payload) {
+    axios
+      .post('/chat/countUnreadMessagesInBid', { userId: payload.userId, bidId: payload.bidId })
+      .then((responce) => {
+        commit('setBidMessageUnreadCount', responce.data.totalUnreadMessages);
+      })
+      .catch((err) => {
         console.log(err);
-        commit('showErrorBroadcast');
       });
   },
 };

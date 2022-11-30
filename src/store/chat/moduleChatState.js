@@ -14,4 +14,6 @@ export default {
   createMsg: null,
   alertBroadcast: false,
   errorBroadcast: false,
+  bidMessageUnreadCount: 0,
+  supplierBroadcastError: false,
 };

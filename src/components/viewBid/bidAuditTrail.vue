@@ -41,7 +41,7 @@
         </template>
       </v-list-item-group>
     </v-list> -->
-    <div class="text-center title-detail my-auto mt-16">Audit Trail Data is Currently Being Collected</div>
+    <div class="text-center a-title-detail">Audit Trail Data is Currently Being Collected</div>
   </v-col>
 </template>
 
