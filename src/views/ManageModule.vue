@@ -28,13 +28,15 @@
                             <div class="panel">
                               <div class="d-flex justify-space-between panel-header">
                                 <h6 v-if="modules.contractType == 'ofs-premium'">OFS Directory - Premium</h6>
-                                <h6 v-else>BidOut Procurement Platform</h6>
+                                <h6 v-if="modules.contractType == 'ofs'">OFS Directory - Standard Edition</h6>
+                                <h6 v-if="modules.contractType == 'rfx'">RFx Platform - Standard Edition</h6>
                                 <div class="btn-section">
-                                  <a href="" class="text-decoration-none text-right toggle-btn" max-width="150px" v-if="modules.contractType != 'ofs-premium'"><v-icon>mdi-bookmark-outline</v-icon>Upgrade to Premium</a>
+                                  <a href="mailto:hello@bidout.app" class="text-decoration-none text-right toggle-btn" max-width="150px" v-if="modules.contractType == 'ofs'"><v-icon>mdi-bookmark-outline</v-icon>Upgrade to Premium</a>
+                                  <a href="mailto:hello@bidout.app" class="text-decoration-none text-right toggle-btn" max-width="150px" v-if="modules.contractType == 'rfx'"><v-icon>mdi-bookmark-outline</v-icon>Upgrade to Enterprise Edition</a>
                                   <a :href="modules.filePath" target="_blank" class="text-decoration-none text-right contract-btn" max-width="150px"><v-icon>mdi-file-outline</v-icon>View Contract</a>
                                 </div>
                               </div>
-                              <div class="panel-content">
+                              <div class="panel-content" v-if="modules.contractType != 'rfx'">
                                 <p class="mb-1 black--text">Renewal Date: {{new Date(modules.renewsOn._seconds * 1000).toLocaleDateString()}} </p>
                                 <p class="black--text mb-0">Annual Fee: ${{modules.annualFee}}</p>
                               </div>
