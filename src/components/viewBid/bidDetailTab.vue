@@ -6,17 +6,17 @@
         <br />
 
         <div class="title-desc">
-          <p><span>Bid Title:</span> {{ bidDetail.bidData.title }}</p>
-          <p><span>Bid Type:</span> {{ bidDetail.bidData.type }}</p>
-          <p>
+          <div><span>Bid Title:</span> {{ bidDetail.bidData.title }}</div>
+          <div><span>Bid Type:</span> {{ bidDetail.bidData.type }}</div>
+          <div>
             <span>Due Date/Time:</span> {{ bidDetail.bidData.dueDate | moment('MM/DD/YYYY') }} @
             {{ bidDetail.bidData.dueTime }}
-          </p>
-          <p><span>Region:</span> {{ bidDetail.bidData.regions }}</p>
-          <p>
+          </div>
+          <div><span>Region:</span> {{ bidDetail.bidData.regions }}</div>
+          <div>
             <span>Q&A:</span>
             {{ bidDetail.bidData.qAndAEnabled ? "Yes" : "No" }}
-          </p>
+          </div>
         </div>
         <br />
 
@@ -201,11 +201,11 @@
                 <td class="text-left">
                   <img :src="require('@/assets/images/bids/FilePdf.png')" />
                 </td>
-                <td class="text-left">{{ doc.fileName }}</td>
+                <td class="text-left"><a :href="doc.url" target="_blank" class="text-decoration-none">{{ doc.fileName }}</a></td>
                 <td class="text-left">
                   <span>{{ doc.comment }}</span>
                 </td>
-                <td class="text-left">{{ doc.fileSize }}</td>
+                <td class="text-left">{{ size(doc.fileSize) }}</td>
                 <td class="text-left">{{ doc.uploadedBy }}</td>
                 <td class="text-left">
                   {{ doc.uploadedAt | moment("MM/DD/YYYY") }}
@@ -264,6 +264,10 @@ export default {
   },
   methods: {
     ...mapActions(['getBidBySerial']),
+    size(size) {
+      const sizeInMB = (size / (1024 * 1024)).toFixed(2);
+      return `${sizeInMB}mb`;
+    },
   },
   computed: {
     bidDetail() {
