@@ -241,6 +241,7 @@ export default {
     }
   },
   async updateDraftBid({ commit, state }, payload) {
+    console.log(payload);
     const config = {
       headers: {
         'Content-Type': 'multipart/form-data',
@@ -248,22 +249,58 @@ export default {
       },
     };
     const formData = new FormData();
-    formData.append('title', state.bidData.title);
-    formData.append('type', state.bidData.type);
-    formData.append('dueDate', state.bidData.dueDate);
-    formData.append('dueTime', state.bidData.dueTime);
-    formData.append('regions', state.bidData.regions);
-    formData.append('qAndAEnabled', state.bidData.qAndAEnabled);
-    formData.append('userId', state.bidData.userId);
-    formData.append('companyId', state.bidData.companyId);
-    formData.append('bidDescriptions[0][body]', state.bidData.bidDescriptions);
-    formData.append('serial', state.bidSerial);
-    if (state.bidData.description) {
-      for (let d = 0; d < state.bidData.description.length; d++) {
-        formData.append(`bidDescriptions[${d + 1}][name]`, state.bidData.description[d].name);
-        formData.append(`bidDescriptions[${d + 1}][body]`, state.bidData.description[d].body);
+    if(payload.bidDetails){
+      state.draftBidsList = payload.bidDetails.bidId;
+      const bidData = {
+        title: payload.bidDetails.title,
+        type: payload.bidDetails.type,
+        dueDate: payload.bidDetails.dueDate,
+        dueTime: payload.bidDetails.dueTime,
+        regions: payload.bidDetails.regions,
+        qAndAEnabled: payload.bidDetails.qAndAEnabled,
+        bidDescriptions: payload.bidDetails.bidDescriptions,
+        userId: payload.bidDetails.userId,
+        companyId: payload.bidDetails.companyId,
+        description: payload.bidDetails.description,
+        serial: payload.bidDetails.serial,
+      };
+      commit('setBidData', bidData);
+
+      formData.append('title', payload.bidDetails.title);
+      formData.append('type', payload.bidDetails.type);
+      formData.append('dueDate', payload.bidDetails.dueDate);
+      formData.append('dueTime', payload.bidDetails.dueTime);
+      formData.append('regions', payload.bidDetails.regions);
+      formData.append('qAndAEnabled', payload.bidDetails.qAndAEnabled);
+      formData.append('userId', payload.bidDetails.userId);
+      formData.append('companyId', payload.bidDetails.companyId);
+      formData.append('bidDescriptions[0][body]', payload.bidDetails.bidDescriptions);
+      formData.append('serial', payload.bidDetails.serial);
+      if (payload.bidDetails.description) {
+        for (let d = 0; d < payload.bidDetails.description.length; d++) {
+          formData.append(`bidDescriptions[${d + 1}][name]`, payload.bidDetails.description[d].name);
+          formData.append(`bidDescriptions[${d + 1}][body]`, payload.bidDetails.description[d].body);
+        }
+      }
+    }else{
+      formData.append('title', state.bidData.title);
+      formData.append('type', state.bidData.type);
+      formData.append('dueDate', state.bidData.dueDate);
+      formData.append('dueTime', state.bidData.dueTime);
+      formData.append('regions', state.bidData.regions);
+      formData.append('qAndAEnabled', state.bidData.qAndAEnabled);
+      formData.append('userId', state.bidData.userId);
+      formData.append('companyId', state.bidData.companyId);
+      formData.append('bidDescriptions[0][body]', state.bidData.bidDescriptions);
+      formData.append('serial', state.bidSerial);
+      if (state.bidData.description) {
+        for (let d = 0; d < state.bidData.description.length; d++) {
+          formData.append(`bidDescriptions[${d + 1}][name]`, state.bidData.description[d].name);
+          formData.append(`bidDescriptions[${d + 1}][body]`, state.bidData.description[d].body);
+        }
       }
     }
+    
     if (payload.invitedSuppliers) {
       state.invitedSuppliers = payload.invitedSuppliers;
       for (let i = 0; i < payload.invitedSuppliers.length; i++) {
@@ -485,4 +522,23 @@ export default {
       }
     }
   },
+  async getDraftBySerial({commit,state},payload){
+    try {
+      const res = await axios.get(
+        `bid/draft/getDraftBySerial/${payload}`,
+      );
+
+      if (res.status === 200) {
+        commit('setDraftBidData', res.data);
+      }
+    } catch (err) {
+      if (state.apiCounter == 2) {
+        dispatch('apiSignOutAction');
+      } else if (err.response.status === 403) {
+        await dispatch('refreshToken');
+        state.apiCounter = 2;
+        dispatch('getBidBySerial', payload);
+      }
+    }
+  }
 };

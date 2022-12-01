@@ -25,4 +25,5 @@ export default {
   questions: null,
   bidSerial: null,
   invitedSuppliersData: null,
+  draftBidData: null,
 };

@@ -88,49 +88,49 @@
           </v-tabs>
           <v-tabs-items v-model="currentItem">
             <v-tab-item value="tab-1">
-              <bid-details
+              <bid-details-edit
                 @changetab="ChangeT($event)"
                 @validation="validateValue($event)"
-              ></bid-details>
+              ></bid-details-edit>
             </v-tab-item>
             <v-tab-item value="tab-2">
-              <SupplierSection
+              <SupplierSectionEdit
                 @changetab="ChangeT($event)"
                 @validation="validateSupplier($event)"
-              ></SupplierSection>
+              ></SupplierSectionEdit>
             </v-tab-item>
             <v-tab-item value="tab-3">
-              <team-members
+              <team-members-edit
                 @changetab="ChangeT($event)"
                 @validation="validateTeam($event)"
-              ></team-members>
+              ></team-members-edit>
             </v-tab-item>
             <v-tab-item
 
               value="tab-4"
               class="bidline-tab"
             >
-              <bid-lines
+              <bid-lines-edit
                 @changetab="ChangeT($event)"
                 @validation="validateItems($event)"
-              ></bid-lines>
+              ></bid-lines-edit>
             </v-tab-item>
             <v-tab-item
 
               value="tab-5"
               class="attachment-tab mt-5"
             >
-              <attachment
+              <attachment-edit
                 @changetab="ChangeT($event)"
                 @validation="validateAttachment($event)"
-              ></attachment>
+              ></attachment-edit>
             </v-tab-item>
             <v-tab-item
 
               value="tab-6"
               class="question-tab mt-5"
             >
-              <question-section2></question-section2>
+              <question-section2-edit></question-section2-edit>
             </v-tab-item>
           </v-tabs-items>
         </div>
@@ -139,23 +139,23 @@
   </v-col>
 </template>
 <script>
-import { mapGetters } from 'vuex';
-import SupplierSection from '../../components/EditBid/SupplierSection.vue';
-import TeamMembers from '../../components/EditBid/TeamMembers.vue';
-import BidLines from '../../components/EditBid/BidLines.vue';
-import Attachment from '../../components/EditBid/Attachment.vue';
-import BidDetails from '../../components/EditBid/BidDetails.vue';
-import QuestionSection2 from '../../components/EditBid/QuestionSection2.vue';
+import { mapGetters, mapActions } from 'vuex';
+import SupplierSectionEdit from '../../components/EditBid/EditBidSupplierSection.vue';
+import TeamMembersEdit from '../../components/EditBid/EditBidTeamMembers.vue';
+import BidLinesEdit from '../../components/EditBid/EditsBidLines.vue';
+import AttachmentEdit from '../../components/EditBid/EditBidAttachment.vue';
+import BidDetailsEdit from '../../components/EditBid/EditsBidDetails.vue';
+import QuestionSection2Edit from '../../components/EditBid/EditBidQuestionSection2.vue';
 
 export default {
   name: 'EditBid',
   components: {
-    SupplierSection,
-    TeamMembers,
-    BidLines,
-    Attachment,
-    BidDetails,
-    QuestionSection2,
+    SupplierSectionEdit,
+    TeamMembersEdit,
+    BidLinesEdit,
+    AttachmentEdit,
+    BidDetailsEdit,
+    QuestionSection2Edit,
   },
 
   data() {
@@ -221,6 +221,7 @@ export default {
     },
   },
   methods: {
+    ...mapActions(["getDraftBySerial"]),
     ChangeT(tab) {
       this.currentItem = tab;
     },
@@ -256,11 +257,15 @@ export default {
       } catch (error) {
         console.log(error);
       }
-    },
+    }, 
+  },
+  async created(){
+    await this.getDraftBySerial(this.$route.params.serial);
   },
   mounted() {
     document.title = 'Create Bid - BidOut';
     this.users = JSON.parse(localStorage.getItem('userData')).user;
+    
   },
 };
 </script>

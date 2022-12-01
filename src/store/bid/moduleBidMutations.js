@@ -77,4 +77,7 @@ export default {
   setQuestions(state, payload) {
     state.questions = payload;
   },
+  setDraftBidData(state, payload) {
+    state.draftBidData = payload;
+  },
 };

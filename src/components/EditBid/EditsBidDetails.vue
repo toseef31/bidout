@@ -108,37 +108,37 @@
   </v-row>
 </template>
 <script>
-import { mapActions } from 'vuex';
+import { mapActions,mapGetters } from 'vuex';
 
 export default {
   data() {
     return {
       valid: true,
-      title: '',
+      title: this.$store.getters.draftBidData.title,
       titleRules: [
         (v) => !!v || 'Title is required',
       ],
-      bidType: '',
+      bidType: this.$store.getters.draftBidData.type,
       bidTypeRules: [
         (v) => !!v || 'Please select bid type',
       ],
-      dueDate: '',
+      dueDate: this.$store.getters.draftBidData.dueDate,
       dueDateRules: [
         (v) => !!v || 'Due date is required',
       ],
-      dueTime: '',
+      dueTime: this.$store.getters.draftBidData.dueTime,
       dueTimeRules: [
         (v) => !!v || 'Please select due time',
       ],
-      bidRegions: '',
+      bidRegions: this.$store.getters.draftBidData.regions,
       bidRegionsRules: [
         (v) => !!v || 'Please select region',
       ],
-      bidDescriptions: '',
+      bidDescriptions: this.$store.getters.draftBidData.bidDescriptions[0]['body'],
       descRules: [
         (v) => !!v || 'Description is required',
       ],
-      qAndAEnabled: 'yes',
+      qAndAEnabled: this.$store.getters.draftBidData.qAndAEnabled,
       showAdditional: false,
       type: ['RFP', 'RFI', 'BidOut Process'],
       time: [
@@ -148,18 +148,21 @@ export default {
         { label: '4pm CST', value: '4pm' },
       ],
       region: ['Gulf Coast', 'Northwest', 'Rockies', 'Mid-Con', 'Permian', 'Arklatex', 'Offshore', 'Other'],
-      textFields: [],
+      textFields: '',
       interval: '',
 
     };
   },
   computed: {
+    ...mapGetters(["draftBidData"]),
     validate() {
       this.$emit('validation', { valid: this.valid, value: '1', bidTitle: this.title });
       this.$store.commit('setBidDetailsComplete', this.valid);
       return this.valid;
     },
-
+    draftBidData(){
+      return this.$store.getters.draftBidData;
+    }
   },
   watch: {
     date() {
@@ -167,7 +170,7 @@ export default {
     },
   },
   methods: {
-    ...mapActions(['saveDraftBid']),
+    ...mapActions(['updateDraftBid']),
     changeTab() {
       const bidDetails = {
         title: this.title,
@@ -180,9 +183,11 @@ export default {
         userId: this.$store.getters.userInfo.id,
         description: this.textFields,
         companyId: this.$store.getters.userInfo.company.id,
+        bidId: this.draftBidData.id,
+        serial: this.$route.params.serial
       };
       if (this.$refs.form.validate()) {
-        this.saveDraftBid(bidDetails);
+        this.updateDraftBid({bidDetails: bidDetails});
         this.$emit('changetab', 'tab-2');
       }
     },
@@ -198,9 +203,11 @@ export default {
         qAndAEnabled: this.qAndAEnabled,
         userId: this.$store.getters.userInfo.id,
         companyId: this.$store.getters.userInfo.company.id,
+        bidId: this.draftBidData.id,
+        serial: this.$route.params.serial
       };
       if (this.$refs.form.validate()) {
-        this.saveDraftBid(bidDetails);
+        this.updateDraftBid({bidDetails: bidDetails});
       }
     },
     add() {
@@ -215,5 +222,14 @@ export default {
     },
 
   },
+  async created(){
+    await this.getDraftBySerial(this.$route.params.serial);
+  },
+  mounted(){
+    if(this.$store.getters.bidDescriptions.length > 1){
+      this.showAdditional = true;
+      this.textFields = this.$store.getters.draftBidData.bidDescriptions.splice(0,1);
+    }
+  }
 };
 </script>

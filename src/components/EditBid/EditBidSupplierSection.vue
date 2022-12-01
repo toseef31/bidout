@@ -342,6 +342,9 @@ export default {
       console.log(this.$store.getters.itemBidData);
       return this.$store.getters.itemBidData;
     },
+    draftBidData(){
+      return this.$store.getters.draftBidData;
+    },
     companiesList() {
     	return this.$store.getters.companiesList;
     },
