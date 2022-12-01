@@ -417,11 +417,13 @@ export default {
     	};
     	this.repsInvited.push(data);
     	this.$store.getters.salesRepsList.splice(index, 1);
+    	this.$store.commit('setInvitedSuppliersData', this.repsInvited);
       this.savedraftOnchange();
     },
     removeReps(list, index) {
     	this.$store.getters.salesRepsList.push(list.item);
     	this.repsInvited.splice(index, 1);
+    	this.$store.commit('setInvitedSuppliersData', this.repsInvited);
       this.savedraftOnchange();
     },
     getCompanies() {
@@ -442,6 +444,7 @@ export default {
     	};
     	this.repsInvited.push(data);
     	this.$store.getters.companiesList.splice(index, 1);
+    	this.$store.commit('setInvitedSuppliersData', this.repsInvited);
       this.savedraftOnchange();
     },
     addServiceCompany(company, index) {
@@ -451,11 +454,13 @@ export default {
     	};
     	this.repsInvited.push(data);
     	this.$store.getters.companiesList.splice(index, 1);
+    	this.$store.commit('setInvitedSuppliersData', this.repsInvited);
       this.savedraftOnchange();
     },
     removeCompany(company, index) {
     	this.repsInvited.splice(index, 1);
     	this.$store.getters.companiesList.push(company.item);
+    	this.$store.commit('setInvitedSuppliersData', this.repsInvited);
       this.savedraftOnchange();
     },
     savedraftOnchange() {

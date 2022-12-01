@@ -1,8 +1,39 @@
 <template>
-  <v-col class="pl-0 pr-3 pb-0 pt-3 bid-detail-module">
+    <v-row fill-height align="center" class="bid-alert" v-if="getPageLoading || getViewBidError">
+    <v-col cols="12">
+      <v-progress-circular v-if="getPageLoading" :width="3" color="green" indeterminate ></v-progress-circular>
+      <div class="alert-section" v-if="getViewBidError && !getPageLoading" >
+             <div class="error-title mb-5">
+              <h1 class="font-weight-bold">Opps!</h1>
+              <h1 class="font-weight-medium">This page is not available.</h1>
+             </div>
+
+             <div class="btn-section mt-8 mb-16 pb-16">
+              <a class="text-decoration-none" href="https://bidout.app"><v-btn
+              large
+              outlined
+              color="#0D9647"
+              height="52"
+              class="mr-5 font-weight-bold text-capitalize"
+              >Access Homepage</v-btn></a>
+              <router-link to="/dashboard" class="text-decoration-none"><v-btn
+              large
+              outlined
+              color="#0D9647"
+              class="font-weight-bold text-capitalize"
+              height="52"
+              >Access Dashboard</v-btn></router-link>
+             </div>
+           </div>
+
+    </v-col>
+  </v-row>
+
+  <v-col v-else  class="pl-0 pr-3 pb-0 pt-3 bid-detail-module  ">
     <v-alert type="error"  v-show="showErrorDeleteAlert" class="mx-5">
       Deleting this bid was failed. Please Try again!
     </v-alert>
+
     <v-card
       class="fill-height main-card"
       :elevation="0"
@@ -23,7 +54,7 @@
                 Bid: <span class="serial">#{{ bidDetail.bidData.serial }}</span>
               </div>
               <div>
-                Due Date/Time: {{ bidDetail.bidData.dueDate }} @
+                Due Date/Time: {{ bidDetail.bidData.dueDate | moment('MM/DD/YYYY') }} @
                 {{ bidDetail.bidData.dueTime }}
               </div>
               <div>
@@ -59,14 +90,13 @@
             </div>
 
             <v-divider color="#0D9648"></v-divider>
-
             <div
               class="bid-number"
             >
-              3 Bids Received
+              {{noOfBidSubmitted}} Bids Received
             </div>
           </v-sheet>
-        <v-sheet  class="py-2 px-5 text-left award-status-card"
+          <v-sheet  class="py-2 px-5 text-left award-status-card"
             rounded="lg"
             height="85"
             width="290"
@@ -83,14 +113,13 @@
             <div
              class="award-bid-number"
             >
-              3 Bids Received
+              {{noOfBidSubmitted}} Bids Received
             </div>
           </v-sheet>
         </v-col>
 
         <v-col cols="auto">
-      <div class="toggle-setting" v-if="!isAfterDueDate">
-
+          <div class="toggle-setting" v-if="!isAfterDueDate">
             <v-btn
               class="py-2 setting"
               plain
@@ -100,108 +129,108 @@
             >
             <div v-show="isSetting">
               <v-card
-                tile
-                outlined
-                class="mx-auto setting-card"
-                min-width="312"
+              tile
+              outlined
+              class="mx-auto setting-card"
+              min-width="312"
               >
-                <v-list class="pa-0">
-                  <v-list-item-group color="success">
-                    <v-list-item class="edit-item">
-                      <router-link to="#" class="text-decoration-none">
-                        <v-list-item-icon
-                          class="mr-2 my-2"
-                          @click="isSetting = !isSetting"
-                        >
-                          <v-icon size="24" color="#0D9648"
-                            >mdi-note-edit-outline</v-icon
-                          >
-                        </v-list-item-icon>
-                      </router-link>
-                      <v-list-item-content
-                        align-start
-                        color="#0D9648"
-                        class="pa-0"
+              <v-list class="pa-0">
+                <v-list-item-group color="success">
+                  <v-list-item class="edit-item">
+                    <router-link to="#" class="text-decoration-none">
+                      <v-list-item-icon
+                      class="mr-2 my-2"
+                      @click="isSetting = !isSetting"
                       >
-                        <router-link to="#" class="text-decoration-none">
-                          <v-list-item-title
-                            color="#0D9648"
-                            @click="isSetting = !isSetting"
-                            class="py-3"
-                            >Edit Bid</v-list-item-title
-                          >
-                        </router-link>
-                      </v-list-item-content>
-                    </v-list-item>
-                    <v-list-item class="delete-item">
-                      <router-link to="#" class="text-decoration-none">
-                        <v-list-item-icon
-                          class="mr-2 my-2"
-                          @click="isSetting = !isSetting"
-                        >
-                          <v-icon size="24" color="#F32349"
-                            >mdi-trash-can-outline</v-icon
-                          >
-                        </v-list-item-icon>
-                      </router-link>
-                      <v-list-item-content
-                        align-start
-                        color="#0D9648"
-                        class="pa-0"
+                      <v-icon size="24" color="#0D9648"
+                      >mdi-note-edit-outline</v-icon
                       >
-                      <v-dialog
-                        class="dialog-class"
-                        v-model="dialog"
-                        width="300"
+                    </v-list-item-icon>
+                  </router-link>
+                  <v-list-item-content
+                  align-start
+                  color="#0D9648"
+                  class="pa-0"
+                  >
+                    <router-link to="#" class="text-decoration-none">
+                      <v-list-item-title
+                      color="#0D9648"
+                      @click="isSetting = !isSetting"
+                      class="py-3"
+                      >Edit Bid</v-list-item-title
                       >
+                    </router-link>
+                  </v-list-item-content>
+                </v-list-item>
+                <v-list-item class="delete-item">
+                  <router-link to="#" class="text-decoration-none">
+                    <v-list-item-icon
+                    class="mr-2 my-2"
+                    @click="isSetting = !isSetting"
+                    >
+                    <v-icon size="24" color="#F32349"
+                    >mdi-trash-can-outline</v-icon
+                    >
+                  </v-list-item-icon>
+                </router-link>
+                <v-list-item-content
+                  align-start
+                  color="#0D9648"
+                  class="pa-0"
+                  >
+                  <v-dialog
+                  class="dialog-class"
+                  v-model="dialog"
+                  width="300"
+                  >
 
-                      <template v-slot:activator="{ on, attrs }">
-                          <v-btn
-                            color="#F32349"
-                            block
-                            plain
-                            :ripple="false"
-                            class="delete-button"
-                            v-bind="attrs"
-                            @click="isSetting = !isSetting"
-                            v-on="on"
-                          >
-                            Delete Bid
-                          </v-btn>
-                         </template>
-
-                                    <v-card >
-                    <v-card-title  class="text-h5 justify-center grey lighten-2">
-                      Delete Bid
-                    </v-card-title>
-                    <v-card-text class="pt-3 mb-n2">Are you sure you really want to delete this bid?</v-card-text>
-                    <v-divider></v-divider>
-                    <v-card-actions>
-                      <v-spacer></v-spacer>
-
+                    <template v-slot:activator="{ on, attrs }">
                       <v-btn
+                      color="#F32349"
+                      block
+                      plain
+                      :ripple="false"
+                      class="delete-button"
+                      v-bind="attrs"
+                      @click="isSetting = !isSetting"
+                      v-on="on"
+                      >
+                      Delete Bid
+                      </v-btn>
+                    </template>
+
+                    <v-card >
+                      <v-card-title  class="text-h5 justify-center grey lighten-2">
+                        Delete Bid
+                      </v-card-title>
+                      <v-card-text class="pt-3 mb-n2">Are you sure you really want to delete this bid?</v-card-text>
+                      <v-divider></v-divider>
+                      <v-card-actions>
+                        <v-spacer></v-spacer>
+
+                        <v-btn
                         color="#0d9648"
                         outlined
                         @click="dialog = false"
-                      >
+                        >
                         Cancel
-                      </v-btn>
-                      <v-btn
+                        </v-btn>
+                        <v-btn
                         color="#F32349"
                         outlined
                         @click="dialog = false;deleteB()"
-                      >
+                        >
                         Agree
-                          </v-btn>
-                            </v-card-actions>
-                                    </v-card>
+                        </v-btn>
+                      </v-card-actions>
+                    </v-card>
 
-                                  </v-dialog>
-                                  </v-list-item-content>
-                                </v-list-item>
-                              </v-list-item-group>
-                            </v-list>
-                          </v-card>
+                  </v-dialog>
+                </v-list-item-content>
+              </v-list-item>
+            </v-list-item-group>
+            </v-list>
+          </v-card>
             </div>
           </div>
           <v-btn v-else  color="#F03F20" depressed @click="ChangeT('tab-2')">
@@ -223,16 +252,26 @@
             :href="'#tab-' + item.value"
             class="text-capitalize black--text font-weight-bold"
           >
+          {{ item.text }}
             <v-badge
-              v-if="item.value === 3 || item.value === 5"
+              v-if="item.value === 3 && showBidMessageC !== 0"
               color="#0D9648"
-              content="6"
+              :content="showBidMessageC"
               inline
               tile
             >
-              {{ item.text }}
+
             </v-badge>
-            <div v-else>{{ item.text }}</div>
+            <v-badge
+              v-if=" item.value === 5"
+              color="#0D9648"
+              :content="6"
+              inline
+              tile
+            >
+
+            </v-badge>
+
           </v-tab>
         </v-tabs>
         <v-tabs-items v-model="currentItem">
@@ -258,15 +297,15 @@
       </div>
     </v-card>
   </v-col>
+
 </template>
 
 <script>
 import BidDetailTab from '@/components/viewBid/bidDetailTab.vue';
 import BidBroadcast from '@/components/viewBid/bidBroadcast.vue';
-import TeamMembers from '@/components/BidTabs/TeamMembers.vue';
 import BidQandA from '@/components/viewBid/bidQandA.vue';
 import BidChat from '@/components/viewBid/bidChat.vue';
-import BidSubmission from '@/components/viewBid/bidDetailTab.vue';
+import BidSubmission from '@/components/viewBid/bidSubmission.vue';
 import BidAuditTrail from '@/components/viewBid/bidAuditTrail.vue';
 import moment from 'moment-timezone';
 import { mapActions } from 'vuex';
@@ -276,7 +315,6 @@ export default {
   components: {
     BidDetailTab,
     BidBroadcast,
-    TeamMembers,
     BidQandA,
     BidChat,
     BidSubmission,
@@ -327,12 +365,12 @@ export default {
     };
   },
   methods: {
-    ...mapActions(['getBidBySerial', 'deleteBid']),
+    ...mapActions(['getBidBySerial', 'deleteBid', 'getSubmittedBid', 'bidMessageUnreadCount']),
     ChangeT(tab) {
       this.currentItem = tab;
     },
     deleteB() {
-      this.deleteBid({ bidId: this.bidDetail.bidData.id });
+      this.deleteBid({ bidId: this.bidDetail.bidData.id ,userid: this.users.id});
     },
     addOneSecondToActualTimeEverySecond() {
       const component = this;
@@ -362,7 +400,7 @@ export default {
   },
   computed: {
     bidDetail() {
-      return this.$store.getters.bidData;
+      return this.$store.getters.bidViewData;
     },
     showErrorDeleteAlert() {
       return this.$store.getters.showErrorDeleteBid;
@@ -377,13 +415,50 @@ export default {
 
       return moment(currentDate).isAfter(momentDueDate);
     },
+    noOfBidSubmitted() {
+      return this.$store.getters.submittedBid.length;
+    },
+    getPageLoading() {
+      return this.$store.getters.pageLoader;
+    },
+    getViewBidError() {
+      return this.$store.getters.showViewBidError;
+    },
+    showBidMessageC() {
+      return this.$store.getters.bidMessageUnreadCount;
+    },
+  },
+  beforeMount() {
+
   },
   mounted() {
     document.title = 'Bid Detail - BidOut';
+    // console.log(this.users);
+    // this.getSubmittedBid({
+    //   userId: this.users.id,
+    //   bidId: this.bidDetail.bidData.id,
+    // });
+    // await this.getSubmittedBid({
+    //   userId: 'nSJ4rgmgUTBbiyeJoHIE',
+    //   bidId: 'N3x4CzqfrYqpsLWYrX0k',
+    // });
+  },
+  async created() {
     this.users = this.$store.getters.userInfo;
-    this.getBidBySerial({
+
+    await this.getBidBySerial({
       serial: this.$route.params.serial,
       id: this.users.id,
+    });
+
+    await this.getSubmittedBid({
+      userId: this.users.id,
+      bidId: this.bidDetail.bidData.id,
+    });
+
+    await this.bidMessageUnreadCount({
+      userId: this.users.id,
+      bidId: this.bidDetail.bidData.id,
     });
     if (this.$route.query.new) {
       this.$toasted.show(`Success! Bid #${this.$route.params.serial} has been created and all invitations have been sent to the suppliers`, {
@@ -392,8 +467,7 @@ export default {
         position: 'top-center',
       });
     }
-  },
-  created() {
+
     this.compute();
     this.addOneSecondToActualTimeEverySecond();
   },

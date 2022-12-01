@@ -38,6 +38,12 @@ export default {
   lineItemsComplete(state) {
     return state.lineItemsComplete;
   },
+  bidViewData(state) {
+    return state.bidViewData;
+  },
+  submittedBid(state) {
+    return state.submittedBids;
+  },
   bidDetailsComplete(state) {
     return state.bidDetailsComplete;
   },
@@ -50,10 +56,16 @@ export default {
   showErrorDeleteBid(state) {
     return state.alertDeleteBidError;
   },
+  showViewBidError(state) {
+    return state.viewBidError;
+  },
   bidSerial(state) {
     return state.bidSerial;
   },
   singleTemplate(state) {
     return state.singleTemplate;
+   }
+  invitedSuppliersData(state) {
+    return state.invitedSuppliersData;
   },
 };

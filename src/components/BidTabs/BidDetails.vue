@@ -28,7 +28,7 @@
             </v-col>
             <v-col cols="12" sm="6" text="left">
               <label class="d-block text-left input-label mb-2 font-weight-bold">Due Date </label>
-              <v-text-field placeholder="Due Date" single-line outlined type="date" v-model="dueDate" :rules="dueDateRules" :min="new Date().toISOString().substr(0, 10)">
+              <v-text-field placeholder="Due Date" single-line outlined type="date" v-model="dueDate" :rules="dueDateRules" :min="new Date().toISOString().substr(0, 10)" append-icon="mdi-calendar">
               </v-text-field>
 
             </v-col>

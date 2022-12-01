@@ -40,6 +40,15 @@ export default {
   },
   setBidTemplates(state, payload){
     state.bidTemplates = payload
+  }
+  setBidViewData(state, payload) {
+    state.bidViewData = payload;
+  },
+  setViewBidError(state, payload) {
+    state.viewBidError = payload;
+  },
+  setSubmittedBids(state, payload) {
+    state.submittedBids = payload;
   },
   setSuccessDeleteBid(state) {
     state.alertDeleteBidSuccess = true;
@@ -58,5 +67,20 @@ export default {
   },
   getSingleTemplate(state, payload) {
     state.singleTemplate = payload;
+  }
+  setInvitedSuppliersData(state, payload) {
+    state.invitedSuppliers = payload;
+  },
+  setInvitedTeamMembers(state, payload) {
+    state.invitedTeamMembers = payload;
+  },
+  setBidlines(state, payload) {
+    state.bidlines = payload;
+  },
+  setAttachement(state, payload) {
+    state.attachement = payload;
+  },
+  setQuestions(state, payload) {
+    state.questions = payload;
   },
 };

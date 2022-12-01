@@ -117,11 +117,13 @@ export default {
     addMember(member,index){
     	this.membersAdded.push(member);
   		this.$store.getters.teamMembers.splice(index,1);
+  		this.$store.commit('setInvitedTeamMembers',this.membersAdded);
   		this.savedraftOnchange();
     },
     remove(member,index){
 	  	this.$store.getters.teamMembers.push(member);
 			this.membersAdded.splice(index,1);
+  		this.$store.commit('setInvitedTeamMembers',this.membersAdded);
 			this.savedraftOnchange();
     },
     savedraftOnchange(){

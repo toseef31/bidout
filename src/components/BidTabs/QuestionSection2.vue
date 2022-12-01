@@ -466,6 +466,7 @@ export default {
         options: [],
       };
       this.categories.push(data);
+      this.$store.commit('setQuestions',this.categories);
     },
     createQuestion(type) {
       const qusData = {
@@ -478,6 +479,7 @@ export default {
         options: [],
       };
       this.categories.push(qusData);
+      this.$store.commit('setQuestions',this.categories);
     },
     editCatTitle(index) {
       this.editCat = index;
@@ -500,10 +502,12 @@ export default {
             index
           ].order = questionIndex;
         });
+        this.$store.commit('setQuestions',this.categories);
     },
     saveTitle(index) {
       this.editCat = -1;
       this.isCate[index] = false;
+      this.$store.commit('setQuestions',this.categories);
     },
     addOptions(index) {
       this.categories[index].options.push({
@@ -512,6 +516,7 @@ export default {
         label: 'add label here',
         quesIndex: index,
       });
+      this.$store.commit('setQuestions',this.categories);
     },
     editLabel(index) {
       this.editLbl = index;
@@ -520,18 +525,22 @@ export default {
     saveLabel(index) {
       this.editLbl = -1;
       this.isLbl[index] = false;
+      this.$store.commit('setQuestions',this.categories);
     },
     updateQuestion() {
       this.updateDraftBid({ questions: this.categories });
     },
     deleteQuestion(index) {
       this.categories.splice(index, 1);
+      this.$store.commit('setQuestions',this.categories);
     },
     deleteOption(index, optIndex) {
       this.categories[index].options.splice(optIndex, 1);
+      this.$store.commit('setQuestions',this.categories);
     },
     deleteCat(index) {
       this.categories.splice(index, 1);
+      this.$store.commit('setQuestions',this.categories);
     },
   },
 };

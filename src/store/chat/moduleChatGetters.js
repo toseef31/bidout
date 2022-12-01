@@ -39,6 +39,12 @@ export default {
     return state.alertBroadcast;
   },
   showErrorBroadcast(state) {
-    return state.errorBroadcast
-  }
+    return state.errorBroadcast;
+  },
+  bidMessageUnreadCount(state) {
+    return state.bidMessageUnreadCount;
+  },
+  showSupplierBroadcastError(state) {
+    return state.supplierBroadcastError;
+  },
 };
