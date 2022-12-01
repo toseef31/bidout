@@ -148,7 +148,7 @@ export default {
         { label: '4pm CST', value: '4pm' },
       ],
       region: ['Gulf Coast', 'Northwest', 'Rockies', 'Mid-Con', 'Permian', 'Arklatex', 'Offshore', 'Other'],
-      textFields: '',
+      textFields: [],
       interval: '',
 
     };
@@ -226,9 +226,13 @@ export default {
     await this.getDraftBySerial(this.$route.params.serial);
   },
   mounted(){
-    if(this.$store.getters.bidDescriptions.length > 1){
+    console.log(this.$store.getters.draftBidData.title);
+    if(this.$store.getters.draftBidData.bidDescriptions.length > 1){
+      this.textFields = this.$store.getters.draftBidData.bidDescriptions.slice();
+      this.textFields.splice(0,1);
       this.showAdditional = true;
-      this.textFields = this.$store.getters.draftBidData.bidDescriptions.splice(0,1);
+    }else{
+      this.textFields =  [];
     }
   }
 };
