@@ -24,7 +24,7 @@
                    :rules="emailRules"
                    required
                    outlined
-                   placeholder="admin@bidoutapp.com"
+                   placeholder="example@bidout.app"
                    class="rounded-lg mt-2"
                    type="email"
                    color="#0D1139"
