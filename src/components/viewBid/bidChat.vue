@@ -45,7 +45,7 @@
             </v-list-item-content>
 
             <v-list-item-action>
-                    <v-list-item-action-text>dssdfsdf</v-list-item-action-text>
+                    <v-list-item-action-text>{{list.latestMessage ? istoday(list.latestMessage) : istoday(list.updatedAt)}}</v-list-item-action-text>
                   </v-list-item-action>
           </template>
         </v-list-item>
@@ -53,7 +53,7 @@
     </v-list>
     </v-col>
 
-    <v-col cols="12" sm="7" md="7" v-if="conversationsList.length !==0">
+    <v-col cols="12" sm="7" md="7" v-if="conversationsList.length !==0" class="d-sm-block">
       <div class="message-area">
         <div class="msg-header px-5 pb-5">
           <v-row align="center">

@@ -573,6 +573,7 @@
       }
       .messages-section {
         height: calc(100vh - 540px);
+        overflow: auto;
         .dropzone {
           box-sizing: border-box;
           display: none;
