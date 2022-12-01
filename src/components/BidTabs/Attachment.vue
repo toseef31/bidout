@@ -114,7 +114,7 @@ export default {
       return `${this.$store.getters.userInfo.firstName} ${this.$store.getters.userInfo.lastName}`;
     },
     docsList() {
-      this.$store.commit('setDocuments',this.$store.getters.attachData);
+      this.$store.commit('setAttachement',this.$store.getters.attachData);
       return this.$store.getters.attachData;
     },
     isAttachingDoc() {
@@ -173,7 +173,7 @@ export default {
     deleteAttach(index) {
       this.documents.splice(index, 1);
       this.$store.getters.attachData.splice(index, 1);
-      this.$store.commit('setDocuments',this.documents);
+      this.$store.commit('setAttachement',this.documents);
     },
     openComment(index) {
       this.edit = index;
