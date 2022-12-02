@@ -71,16 +71,49 @@
             >
           </div>
         </div>
+
         <div class="invitedS-sec">
           <v-row>
             <v-col class="mr-2">
-              <v-badge color="#0D9648" dot overlap>
-                <v-icon>mdi-domain</v-icon>
+            <v-tooltip top>
+            <template v-slot:activator="{ on, attrs }">
+              <v-badge color="#0D9648" dot overlap  >
+                <v-icon v-bind="attrs"
+          v-on="on">mdi-domain</v-icon>
               </v-badge>
+            </template>
+            <span>Active</span>
+            </v-tooltip>
             </v-col>
-            <v-col class="mr-2"> <v-icon>mdi-eye-outline</v-icon></v-col>
-            <v-col class="mr-2"> <v-icon>mdi-circle-outline</v-icon> </v-col>
-            <v-col> <v-icon>mdi-circle-outline</v-icon> </v-col>
+            <v-col class="mr-2">
+              <v-tooltip top>
+            <template v-slot:activator="{ on, attrs }">
+              <v-icon v-bind="attrs"
+          v-on="on">mdi-eye-outline</v-icon>
+            </template>
+            <span>View 0 Times</span>
+            </v-tooltip>
+             </v-col>
+            <v-col class="mr-2">
+
+            <v-tooltip top>
+            <template v-slot:activator="{ on, attrs }">
+              <v-icon v-bind="attrs"
+          v-on="on">mdi-circle-outline</v-icon>
+            </template>
+            <span>No intent to bid</span>
+            </v-tooltip>
+
+            </v-col>
+            <v-col>
+            <v-tooltip top>
+            <template v-slot:activator="{ on, attrs }">
+              <v-icon v-bind="attrs"
+          v-on="on">mdi-circle-outline</v-icon>
+            </template>
+            <span>Bid Submissions</span>
+            </v-tooltip>
+             </v-col>
           </v-row>
         </div>
       </div>
@@ -102,12 +135,13 @@
         <div
           v-for="(item, index) in bidDetail.bidData.invitedTeamMembers"
           :key="index"
-          class="d-flex align-center"
+          class="d-flex align-center flex-child"
         >
           <v-img
             v-if="item.image"
             width="48px"
             height="48px"
+            :aspect-ratio="3/2"
             :src="item.image"
           ></v-img>
           <v-avatar v-else color="#0d96481a" size="62">
