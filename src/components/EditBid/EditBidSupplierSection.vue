@@ -148,23 +148,26 @@
 		    </div>
 		    <div>
 		      <div class="companies-list">
-  	        <template  v-for="(company,index) in filteredEntries">
-  	        	<div class="d-flex align-center justify-space-between list-company pa-4">
-  	        	  <div class="comapny-data d-flex align-center">
-  	        	    <div class="company-img">
-  	        	      <img v-if="!company.image" :src="require('@/assets/images/bids/company.png')">
-  	        	      <img v-else :src="company.image" width="56.25px" height="15px">
-  	        	    </div>
-  	        	    <div class="company-title text-left pl-4">
-  	        	      <h4>{{company.company}} </h4>
-  									<router-link :to="`/company/${company.slug}`" target="_blank" class="mb-0">View Profile</router-link>
-  	        	    </div>
-  	        	  </div>
-  	        	  <div class="add-company">
-  	        	    <v-btn color="rgba(243, 35, 73, 0.1)" tile min-width="32px" height="32" class="pa-0" elevation="0" @click="removeCompany(company,index)"> <v-icon color="#F32349">mdi-minus</v-icon></v-btn>
-  	        	  </div>
-  	        	</div>
+  	        <template  v-if="filterData.length > 0">
+    	        <template v-for="(company,index) in filterData" >
+    	        	<div class="d-flex align-center justify-space-between list-company pa-4">
+    	        	  <div class="comapny-data d-flex align-center">
+    	        	    <div class="company-img">
+    	        	      <img v-if="!company.image" :src="require('@/assets/images/bids/company.png')">
+    	        	      <img v-else :src="company.image" width="56.25px" height="15px">
+    	        	    </div>
+    	        	    <div class="company-title text-left pl-4">
+    	        	      <h4>{{company.company}} </h4>
+    									<router-link :to="`/company/${company.slug}`" target="_blank" class="mb-0">View Profile</router-link>
+    	        	    </div>
+    	        	  </div>
+    	        	  <div class="add-company">
+    	        	    <v-btn color="rgba(243, 35, 73, 0.1)" tile min-width="32px" height="32" class="pa-0" elevation="0" @click="removeCompany(company,index)"> <v-icon color="#F32349">mdi-minus</v-icon></v-btn>
+    	        	  </div>
+    	        	</div>
+    	        </template>
   	        </template>
+  	        
 		        <template  v-for="(company,index) in repsInvited">
 		        	
 		        	<div class="d-flex align-center justify-space-between list-company pa-4" v-if="company.type == 'company'">
@@ -355,9 +358,12 @@ export default {
       setTimeout(() => this.loading = false, 500);
       return _.orderBy(this.$store.getters.categories, 'orderNumber', 'asc');
     },
+    draftBidData(){
+      return this.$store.getters.draftBidData;
+    },
     salesRepsList() {
-    	if(this.draftBidData.invitedSuppliers != '' || this.draftBidData.invitedSuppliers.length != 0){
-    		return this.$store.getters.salesRepsList.filter((el) => { return !this.draftBidData.invitedSuppliers.includes(el.companyId); })
+    	if(this.$store.getters.draftBidData.invitedSuppliers != '' || this.$store.getters.draftBidData.invitedSuppliers.length != 0){
+    		return this.$store.getters.salesRepsList.filter((el) => { return !this.$store.getters.draftBidData.invitedSuppliers.includes(el.companyId); })
     	}else{
 				return this.$store.getters.salesRepsList ? this.$store.getters.salesRepsList.filter((rep) => rep.company !== this.userInfo.company.company) : [];
     	}
@@ -366,25 +372,18 @@ export default {
       console.log(this.$store.getters.itemBidData);
       return this.$store.getters.itemBidData;
     },
-    draftBidData(){
-      return this.$store.getters.draftBidData;
-    },
     companiesList() {
-    	if(this.draftBidData.invitedSuppliers != '' || this.draftBidData.invitedSuppliers.length != 0){
-    		return this.$store.getters.companiesList.filter((el) => { return !this.draftBidData.invitedSuppliers.includes(el.objectID); })
+    	if(this.$store.getters.draftBidData.invitedSuppliers != '' || this.$store.getters.draftBidData.invitedSuppliers.length != 0){
+    		return this.$store.getters.companiesList.filter((el) => { return !this.$store.getters.draftBidData.invitedSuppliers.includes(el.objectID); })
     	}else{
     		return this.$store.getters.companiesList;
     	}
     	
     },
-    // filteredEntries() {
-    //   this.repsInvited = this.$store.getters.companiesList.filter((el) => { return this.draftBidData.invitedSuppliers.includes(el.objectID); }).slice();
-    //   return this.repsInvited; 
-    // },
     filteredEntries() {
     	console.log(this.draftBidData.invitedSuppliers.length);
-    	if(this.draftBidData.invitedSuppliers || this.draftBidData.invitedSuppliers.length > 0){
-      	return this.$store.getters.companiesList.filter((el) => { return this.draftBidData.invitedSuppliers.includes(el.objectID); }).slice();
+    	if(this.$store.getters.draftBidData.invitedSuppliers || this.$store.getters.draftBidData.invitedSuppliers.length > 0){
+      	return this.$store.getters.companiesList.filter((el) => { return this.$store.getters.draftBidData.invitedSuppliers.includes(el.objectID); }).slice();
       	
     	}
     },
@@ -511,17 +510,16 @@ export default {
       // });
     },
   },
-  async created() {
-  	await this.getDraftBySerial(this.$route.params.serial);
-    // this.interval = setInterval(() => this.updateDraftBid({'invitedSuppliers':this.repsInvited}));
-  },
   mounted() {
   	this.user = this.$store.getters.userInfo;
     this.getCategories();
     this.getSales();
     this.getCompanies();
-    this.repsInvited = this.filteredEntries;
-    console.log(this.repsInvited,'dsda');
+    	if(this.$store.getters.draftBidData.invitedSuppliers || this.$store.getters.draftBidData.invitedSuppliers.length > 0){
+    		console.log(this.$store.getters.draftBidData.invitedSuppliers);
+      	this.filterData = this.$store.getters.companiesList.filter((el) => { return this.$store.getters.draftBidData.invitedSuppliers.includes(el.objectID); }).slice();
+      	
+    	}
   },
 };
 </script>

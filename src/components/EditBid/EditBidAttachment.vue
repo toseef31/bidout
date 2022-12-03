@@ -113,14 +113,18 @@ export default {
     uploadedBy() {
       return `${this.$store.getters.userInfo.firstName} ${this.$store.getters.userInfo.lastName}`;
     },
-    docsList() {
-      return this.$store.getters.attachData;
-    },
     isAttachingDoc() {
       return this.isAttaching;
     },
+    draftBidData(){
+      return this.$store.getters.draftBidData;
+    },
     docsList(){
-    	return this.$store.getters.attachData;
+      if(this.draftBidData.attachments || this.draftBidData.attachments.length > 0){
+        return this.draftBidData.attachments;
+      }else{
+      	return this.$store.getters.attachData;
+      }
     },
     validat(){
       if(this.$store.getters.attachData){

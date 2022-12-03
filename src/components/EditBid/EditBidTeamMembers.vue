@@ -47,6 +47,7 @@
 		        <h4 class="mb-0 black--text font-weight-bold">Added</h4>
 		      </div>
 		    </div>
+		    {{filterTeam}}
 		    <div class="companies-list">
 		      <div class="d-flex align-center justify-space-between list-company pa-4" v-for="(team,index) in membersAdded">
 		        <div class="comapny-data d-flex align-center">
@@ -86,14 +87,24 @@ export default {
     };
   },
   computed:{
+  	draftBidData(){
+  	  return this.$store.getters.draftBidData;
+  	},
     teamMembers(){
     	if(this.searchMember){
 				return this.$store.getters.teamMembers.filter((item)=>{
   			  return (this.searchMember.toLowerCase().split(' ').every(v => item.firstName.toLowerCase().includes(v)) || this.searchMember.toLowerCase().split(' ').every(v => item.lastName.toLowerCase().includes(v)))
   			})
+    	}else if(this.$store.getters.draftBidData.invitedTeamMembers || this.$store.getters.draftBidData.invitedTeamMembers.length > 0){
+    		return this.$store.getters.teamMembers.filter((el) => { return !this.$store.getters.draftBidData.invitedTeamMembers.includes(el.id); })
     	}else{
   			return this.$store.getters.teamMembers;
     	}
+    },
+    filterTeam(){
+    	if(this.$store.getters.draftBidData.invitedTeamMembers || this.$store.getters.draftBidData.invitedTeamMembers.length > 0){
+      	this.membersAdded = this.$store.getters.teamMembers.filter((el) => { return this.$store.getters.draftBidData.invitedTeamMembers.includes(el.id); })
+    	} 
     },
     validat(){
     	if(this.membersAdded.length > 0){

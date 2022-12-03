@@ -241,7 +241,7 @@ export default {
     }
   },
   async updateDraftBid({ commit, state }, payload) {
-    console.log(payload);
+    // console.log(payload.bidDetails.bidId);
     const config = {
       headers: {
         'Content-Type': 'multipart/form-data',
@@ -413,6 +413,7 @@ export default {
         }
       }
     }
+    console.log(state.draftBidsList);
     try {
       const res = await axios.post(`bid/draft/updateDraft/${state.draftBidsList}`, formData, config);
       if (res.status == 200) {
@@ -523,6 +524,8 @@ export default {
     }
   },
   async getDraftBySerial({commit,state},payload){
+    console.log(payload,'payload');
+    commit('setPageLoader', true);
     try {
       const res = await axios.get(
         `bid/draft/getDraftBySerial/${payload}`,
@@ -530,6 +533,8 @@ export default {
 
       if (res.status === 200) {
         commit('setDraftBidData', res.data);
+        commit('setPageLoader', false);
+        router.replace('/create-bid');
       }
     } catch (err) {
       if (state.apiCounter == 2) {

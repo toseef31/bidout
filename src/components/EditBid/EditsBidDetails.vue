@@ -1,5 +1,8 @@
 <template>
-  <v-row class="my-8" justify="center">
+  <div class="content-section fill-height d-flex justify-center align-center" v-if="loading">
+    <v-progress-circular :width="3" color="green" indeterminate ></v-progress-circular>
+  </div>
+  <v-row class="my-8" justify="center" v-else>
     <v-col cols="12" sm="9">
       <v-form @submit.prevent="bidForm" ref="form" v-model="valid">
         <v-container>
@@ -114,31 +117,31 @@ export default {
   data() {
     return {
       valid: true,
-      title: this.$store.getters.draftBidData.title,
+      title: '',
       titleRules: [
         (v) => !!v || 'Title is required',
       ],
-      bidType: this.$store.getters.draftBidData.type,
+      bidType: '',
       bidTypeRules: [
         (v) => !!v || 'Please select bid type',
       ],
-      dueDate: this.$store.getters.draftBidData.dueDate,
+      dueDate: '',
       dueDateRules: [
         (v) => !!v || 'Due date is required',
       ],
-      dueTime: this.$store.getters.draftBidData.dueTime,
+      dueTime: '',
       dueTimeRules: [
         (v) => !!v || 'Please select due time',
       ],
-      bidRegions: this.$store.getters.draftBidData.regions,
+      bidRegions: '',
       bidRegionsRules: [
         (v) => !!v || 'Please select region',
       ],
-      bidDescriptions: this.$store.getters.draftBidData.bidDescriptions[0]['body'],
+      bidDescriptions: '',
       descRules: [
         (v) => !!v || 'Description is required',
       ],
-      qAndAEnabled: this.$store.getters.draftBidData.qAndAEnabled,
+      qAndAEnabled: '',
       showAdditional: false,
       type: ['RFP', 'RFI', 'BidOut Process'],
       time: [
@@ -160,9 +163,9 @@ export default {
       this.$store.commit('setBidDetailsComplete', this.valid);
       return this.valid;
     },
-    draftBidData(){
-      return this.$store.getters.draftBidData;
-    }
+    loading(){
+     return this.$store.getters.pageLoader;
+    },
   },
   watch: {
     date() {
@@ -220,13 +223,29 @@ export default {
     remove(index) {
       this.textFields.splice(index, 1);
     },
+    fillData(){
+      this.title = this.$store.getters.draftBidData.title;
+      this.bidType = this.$store.getters.draftBidData.type;
+      this.dueDate = this.$store.getters.draftBidData.dueDate;
+      this.dueTime = this.$store.getters.draftBidData.dueTime;
+      this.bidRegions = this.$store.getters.draftBidData.regions;
+      this.bidDescriptions = this.$store.getters.draftBidData.bidDescriptions[0]['body'];
+      this.qAndAEnabled = this.$store.getters.draftBidData.qAndAEnabled;
+    }
+  },
+  // async created(){
+  //   console.log(this.$route.params.serial);
+  //   await this.getDraftBySerial(this.$route.params.serial);
+  //   console.log('create',this.title);
+    
 
-  },
-  async created(){
-    await this.getDraftBySerial(this.$route.params.serial);
-  },
+  // },
+  // async beforeMount(){
+  //   console.log('before mount',this.$route.params.serial);
+    
+  // },
   mounted(){
-    console.log(this.$store.getters.draftBidData.title);
+    console.log(this.title,'mounted',this.draftBidData);
     if(this.$store.getters.draftBidData.bidDescriptions.length > 1){
       this.textFields = this.$store.getters.draftBidData.bidDescriptions.slice();
       this.textFields.splice(0,1);
@@ -234,6 +253,7 @@ export default {
     }else{
       this.textFields =  [];
     }
+    this.fillData();
   }
 };
 </script>

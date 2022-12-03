@@ -155,6 +155,9 @@ export default {
       this.$store.commit('setLineItemsComplete', false);
       return this.valid;
     },
+    draftBidData(){
+      return this.$store.getters.draftBidData;
+    },
   },
   watch: {
     bidLines: {
@@ -199,5 +202,13 @@ export default {
       this.bidLines.splice(index, 1);
     },
   },
+  
+  mounted(){
+    if(this.$store.getters.draftBidData.lineItems != '' || this.$store.getters.draftBidData.lineItems.length > 0){
+      this.bidLines = this.$store.getters.draftBidData.lineItems;
+      this.$emit('validation', { valid: true, items: '4' });
+      this.$store.commit('setLineItemsComplete', true);
+    }
+  }
 };
 </script>

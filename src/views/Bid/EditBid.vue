@@ -7,8 +7,12 @@
     ]"
     v-show="!activityPanel"
   >
-    <div class="mid-content">
+  <div class="content-section fill-height d-flex justify-center align-center"  v-if="loading">
+    <v-progress-circular :width="3" color="green" indeterminate ></v-progress-circular>
+  </div>
+    <div class="mid-content" v-else>
       <div class="content-section fill-height pa-0">
+        
         <v-row
           align="center"
           justify="space-between"
@@ -218,6 +222,12 @@ export default {
         return true;
       }
       return false;
+    },
+    loading(){
+     return this.$store.getters.pageLoader;
+    },
+    draftData(){
+     return this.$store.getters.draftBidData;
     },
   },
   methods: {

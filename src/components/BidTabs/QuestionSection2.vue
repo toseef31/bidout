@@ -543,6 +543,12 @@ export default {
       this.$store.commit('setQuestions',this.categories);
     },
   },
+  mounted(){
+    if(this.$store.getters.draftBidData.questions || this.$store.getters.draftBidData.questions.length > 0)
+    {
+      this.categories = this.$store.getters.draftBidData.questions;
+    }
+  }
 };
 </script>
 

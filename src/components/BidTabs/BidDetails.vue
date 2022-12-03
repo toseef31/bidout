@@ -213,7 +213,26 @@ export default {
     remove(index) {
       this.textFields.splice(index, 1);
     },
-
+    fillData(){
+      this.title = this.$store.getters.draftBidData.title;
+      this.bidType = this.$store.getters.draftBidData.type;
+      this.dueDate = this.$store.getters.draftBidData.dueDate;
+      this.dueTime = this.$store.getters.draftBidData.dueTime;
+      this.bidRegions = this.$store.getters.draftBidData.regions;
+      this.bidDescriptions = this.$store.getters.draftBidData.bidDescriptions[0]['body'];
+      this.qAndAEnabled = this.$store.getters.draftBidData.qAndAEnabled;
+    }
   },
+  mounted(){
+    console.log(this.title,'mounted',this.draftBidData);
+    if(this.$store.getters.draftBidData.bidDescriptions.length > 1){
+      this.textFields = this.$store.getters.draftBidData.bidDescriptions.slice();
+      this.textFields.splice(0,1);
+      this.showAdditional = true;
+    }else{
+      this.textFields =  [];
+    }
+    this.fillData();
+  }
 };
 </script>

@@ -200,5 +200,10 @@ export default {
       this.bidLines.splice(index, 1);
     },
   },
+  mounted(){
+    if(this.$store.getters.draftBidData.lineItems != '' || this.$store.getters.draftBidData.lineItems.length > 0){
+      this.bidLines = this.$store.getters.draftBidData.lineItems;
+    }
+  }
 };
 </script>
