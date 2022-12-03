@@ -168,40 +168,90 @@ export default {
     },
   },
   methods: {
-    ...mapActions(['saveDraftBid']),
+    ...mapActions(['saveDraftBid',"updateDraftBid"]),
     changeTab() {
-      const bidDetails = {
-        title: this.title,
-        type: this.bidType,
-        dueDate: this.dueDate,
-        dueTime: this.dueTime,
-        regions: this.bidRegions,
-        bidDescriptions: this.bidDescriptions,
-        qAndAEnabled: this.qAndAEnabled,
-        userId: this.$store.getters.userInfo.id,
-        description: this.textFields,
-        companyId: this.$store.getters.userInfo.company.id,
-      };
-      if (this.$refs.form.validate()) {
-        this.saveDraftBid(bidDetails);
-        this.$emit('changetab', 'tab-2');
+      if(this.$store.getters.draftBidData != null){
+        console.log('iff');
+        const bidDetails = {
+          title: this.title,
+          type: this.bidType,
+          dueDate: this.dueDate,
+          dueTime: this.dueTime,
+          regions: this.bidRegions,
+          bidDescriptions: this.bidDescriptions,
+          qAndAEnabled: this.qAndAEnabled,
+          userId: this.$store.getters.userInfo.id,
+          description: this.textFields,
+          companyId: this.$store.getters.userInfo.company.id,
+          bidId: this.$store.getters.draftBidData.id,
+          serial: this.$store.getters.draftBidData.serial,
+          status: 'edit',
+        };
+        // console.log(bidDetails);
+        if (this.$refs.form.validate()) {
+          this.updateDraftBid({bidDetails: bidDetails});
+          this.$emit('changetab', 'tab-2');
+        }
+      }else{
+        console.log('ekseee');
+        const bidDetails = {
+          title: this.title,
+          type: this.bidType,
+          dueDate: this.dueDate,
+          dueTime: this.dueTime,
+          regions: this.bidRegions,
+          bidDescriptions: this.bidDescriptions,
+          qAndAEnabled: this.qAndAEnabled,
+          userId: this.$store.getters.userInfo.id,
+          description: this.textFields,
+          companyId: this.$store.getters.userInfo.company.id,
+          status: 'create',
+        };
+        if (this.$refs.form.validate()) {
+          this.saveDraftBid(bidDetails);
+          this.$emit('changetab', 'tab-2');
+        }
       }
+      
     },
     savedraft() {
-      const bidDetails = {
-        title: this.title,
-        type: this.bidType,
-        dueDate: this.dueDate,
-        dueTime: this.dueTime,
-        regions: this.bidRegions,
-        bidDescriptions: this.bidDescriptions,
-        description: this.textFields,
-        qAndAEnabled: this.qAndAEnabled,
-        userId: this.$store.getters.userInfo.id,
-        companyId: this.$store.getters.userInfo.company.id,
-      };
-      if (this.$refs.form.validate()) {
-        this.saveDraftBid(bidDetails);
+      if(this.$store.getters.draftBidData != null){
+        const bidDetails = {
+          title: this.title,
+          type: this.bidType,
+          dueDate: this.dueDate,
+          dueTime: this.dueTime,
+          regions: this.bidRegions,
+          bidDescriptions: this.bidDescriptions,
+          qAndAEnabled: this.qAndAEnabled,
+          userId: this.$store.getters.userInfo.id,
+          description: this.textFields,
+          companyId: this.$store.getters.userInfo.company.id,
+          bidId: this.$store.getters.draftBidData.id,
+          serial: this.$store.getters.draftBidData.serial,
+          status: 'edit',
+        };
+        if (this.$refs.form.validate()) {
+          this.updateDraftBid({bidDetails: bidDetails});
+          this.$emit('changetab', 'tab-2');
+        }
+      }else{  
+          const bidDetails = {
+          title: this.title,
+          type: this.bidType,
+          dueDate: this.dueDate,
+          dueTime: this.dueTime,
+          regions: this.bidRegions,
+          bidDescriptions: this.bidDescriptions,
+          description: this.textFields,
+          qAndAEnabled: this.qAndAEnabled,
+          userId: this.$store.getters.userInfo.id,
+          companyId: this.$store.getters.userInfo.company.id,
+          status: 'create',
+        };
+        if (this.$refs.form.validate()) {
+          this.saveDraftBid(bidDetails);
+        }
       }
     },
     add() {
@@ -222,7 +272,39 @@ export default {
       this.bidRegions = this.$store.getters.draftBidData.regions;
       this.bidDescriptions = this.$store.getters.draftBidData.bidDescriptions[0]['body'];
       this.qAndAEnabled = this.$store.getters.draftBidData.qAndAEnabled;
-    }
+
+      if(this.$store.getters.draftBidData != null){
+        if(this.$store.getters.draftBidData.bidDescriptions.length > 1){
+          this.textFields = this.$store.getters.draftBidData.bidDescriptions.slice();
+          this.textFields.splice(0,1);
+          this.showAdditional = true;
+        }else{
+          this.textFields =  [];
+        }
+        const bidDetails = {
+          title: this.$store.getters.draftBidData.title,
+          type: this.$store.getters.draftBidData.type,
+          dueDate: this.$store.getters.draftBidData.dueDate,
+          dueTime: this.$store.getters.draftBidData.dueTime,
+          regions: this.$store.getters.draftBidData.regions,
+          bidDescriptions: this.$store.getters.draftBidData.bidDescriptions[0]['body'],
+          qAndAEnabled: this.$store.getters.draftBidData.qAndAEnabled,
+          userId: this.$store.getters.userInfo.id,
+          description: this.textFields,
+          companyId: this.$store.getters.userInfo.company.id,
+          bidId: this.$store.getters.draftBidData.id,
+          serial: this.$store.getters.draftBidData.serial,
+          status: 'edit',
+        };
+        this.$store.commit('setBidData', bidDetails);
+        this.$store.commit('setInvitedSuppliersData',this.$store.getters.draftBidData.invitedSuppliers);
+        this.$store.commit('setInvitedTeamMembers',this.$store.getters.draftBidData.invitedTeamMembers);
+        this.$store.commit('setBidlines',this.$store.getters.draftBidData.lineItems);
+        this.$store.commit('setAttachement',this.$store.getters.draftBidData.attachments);
+        this.$store.commit('setQuestions',this.$store.getters.draftBidData.questions);
+      }
+      
+    },
     fieldUpdate() {
       this.formStatus = true;
     },
@@ -240,7 +322,7 @@ export default {
     },
   },
   mounted(){
-    console.log(this.title,'mounted',this.draftBidData);
+    console.log('mounted',this.$store.getters.draftBidData);
     if(this.$store.getters.draftBidData.bidDescriptions.length > 1){
       this.textFields = this.$store.getters.draftBidData.bidDescriptions.slice();
       this.textFields.splice(0,1);

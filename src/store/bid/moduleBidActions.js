@@ -242,6 +242,7 @@ export default {
   },
   async updateDraftBid({ commit, state }, payload) {
     // console.log(payload.bidDetails.bidId);
+     console.log(state.draftBidsList,'tdt');
     const config = {
       headers: {
         'Content-Type': 'multipart/form-data',
@@ -250,7 +251,10 @@ export default {
     };
     const formData = new FormData();
     if(payload.bidDetails){
-      state.draftBidsList = payload.bidDetails.bidId;
+      if(state.bidData.status == 'edit'){
+        state.draftBidsList = state.bidData.bidId;
+        state.bidSerial = state.bidData.serial
+      }
       const bidData = {
         title: payload.bidDetails.title,
         type: payload.bidDetails.type,
@@ -283,6 +287,10 @@ export default {
         }
       }
     }else{
+      if(state.bidData.status == 'edit'){
+        state.draftBidsList = state.bidData.bidId;
+        state.bidSerial = state.bidData.serial
+      }
       formData.append('title', state.bidData.title);
       formData.append('type', state.bidData.type);
       formData.append('dueDate', state.bidData.dueDate);
@@ -313,11 +321,15 @@ export default {
     }else{
       if(state.invitedSuppliers != null){
         for (let i = 0; i < state.invitedSuppliers.length; i++) {
-          if (state.invitedSuppliers[i].type == 'user') {
-            formData.append(`invitedSuppliers[${i}]`, state.invitedSuppliers[i].item.companyId);
-          } else {
-            formData.append(`invitedSuppliers[${i}]`, state.invitedSuppliers[i].item.objectID);
-          }
+          if(!state.invitedSuppliers[i].type){
+            formData.append(`invitedSuppliers[${i}]`, state.invitedSuppliers[i]);
+          }else{
+           if (state.invitedSuppliers[i].type == 'user') {
+             formData.append(`invitedSuppliers[${i}]`, state.invitedSuppliers[i].item.companyId);
+           } else {
+             formData.append(`invitedSuppliers[${i}]`, state.invitedSuppliers[i].item.objectID);
+           } 
+         }
         }
       }
     }
@@ -329,7 +341,11 @@ export default {
     }else{
       if(state.invitedTeamMembers != null){
         for (let t = 0; t < state.invitedTeamMembers.length; t++) {
-          formData.append(`invitedTeamMembers[${t}]`, state.invitedTeamMembers[t].id);
+          if(!state.invitedTeamMembers[t].id){
+            formData.append(`invitedTeamMembers[${t}]`, state.invitedTeamMembers[t]);
+          }else{
+            formData.append(`invitedTeamMembers[${t}]`, state.invitedTeamMembers[t].id);
+          }
         }
       }
     }
@@ -413,7 +429,7 @@ export default {
         }
       }
     }
-    console.log(state.draftBidsList);
+    console.log(state.draftBidsList,'ffff');
     try {
       const res = await axios.post(`bid/draft/updateDraft/${state.draftBidsList}`, formData, config);
       if (res.status == 200) {
