@@ -327,6 +327,8 @@ export default {
       user: '',
       parsedSelectedBasin: 'all',
       parsedSelectedCompanyBasin: 'all',
+      oldCount: '',
+      newCount: '',
     };
   },
   computed: {
@@ -415,14 +417,18 @@ export default {
     		type: 'user',
     		item: list,
     	};
+    	this.oldCount = this.repsInvited.length; 
     	this.repsInvited.push(data);
+    	this.newCount = this.repsInvited.length;
     	this.$store.getters.salesRepsList.splice(index, 1);
     	this.$store.commit('setInvitedSuppliersData', this.repsInvited);
       this.savedraftOnchange();
     },
     removeReps(list, index) {
     	this.$store.getters.salesRepsList.push(list.item);
+    	this.oldCount = this.repsInvited.length;
     	this.repsInvited.splice(index, 1);
+    	this.newCount = this.repsInvited.length;
     	this.$store.commit('setInvitedSuppliersData', this.repsInvited);
       this.savedraftOnchange();
     },
@@ -442,7 +448,9 @@ export default {
     		type: 'company',
     		item: company,
     	};
+    	this.oldCount = this.repsInvited.length;
     	this.repsInvited.push(data);
+    	this.newCount = this.repsInvited.length;
     	this.$store.getters.companiesList.splice(index, 1);
     	this.$store.commit('setInvitedSuppliersData', this.repsInvited);
       this.savedraftOnchange();
@@ -452,25 +460,32 @@ export default {
     		type: 'company',
     		item: company,
     	};
+    	this.oldCount = this.repsInvited.length;
     	this.repsInvited.push(data);
+    	this.newCount = this.repsInvited.length;
     	this.$store.getters.companiesList.splice(index, 1);
     	this.$store.commit('setInvitedSuppliersData', this.repsInvited);
       this.savedraftOnchange();
     },
     removeCompany(company, index) {
+    	this.oldCount = this.repsInvited.length;
     	this.repsInvited.splice(index, 1);
+    	this.newCount = this.repsInvited.length;
     	this.$store.getters.companiesList.push(company.item);
     	this.$store.commit('setInvitedSuppliersData', this.repsInvited);
       this.savedraftOnchange();
     },
-    savedraftOnchange() {
-      // const timer = setInterval(() => {
-      //   this.updateDraftBid({'invitedSuppliers':this.repsInvited});
-      // }, 60000);
+    savedraftOnInterval() {
+  		const timer = setInterval(() => {
+  			if(this.oldCount != this.newCount){
+  		  	this.updateDraftBid({'invitedSuppliers':this.repsInvited});
+  		  	this.oldCount = this.newCount;
+  		  }
+  		}, 60000);
 
-      // this.$once("hook:beforeDestroy", () => {
-      //   clearInterval(timer);
-      // });
+  		this.$once("hook:beforeDestroy", () => {
+  		  clearInterval(timer);
+  		}); 
     },
   },
   created() {
@@ -481,6 +496,7 @@ export default {
     this.getCategories();
     this.getSales();
     this.getCompanies();
+    this.savedraftOnInterval();
   },
 };
 </script>

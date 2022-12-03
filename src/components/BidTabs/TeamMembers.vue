@@ -83,6 +83,8 @@ export default {
       membersAdded: [],
       valid: false,
       user: '',
+      oldCount: 0,
+      newCount: 0,
     };
   },
   computed:{
@@ -115,25 +117,32 @@ export default {
       this.getCompanyInfo({'id':id,'name':name});
     },
     addMember(member,index){
+    	this.oldCount = this.membersAdded.length;
     	this.membersAdded.push(member);
+    	this.newCount = this.membersAdded.length;
   		this.$store.getters.teamMembers.splice(index,1);
   		this.$store.commit('setInvitedTeamMembers',this.membersAdded);
   		this.savedraftOnchange();
     },
     remove(member,index){
+    	this.oldCount = this.membersAdded.length;
 	  	this.$store.getters.teamMembers.push(member);
+	  	this.newCount = this.membersAdded.length;
 			this.membersAdded.splice(index,1);
   		this.$store.commit('setInvitedTeamMembers',this.membersAdded);
 			this.savedraftOnchange();
     },
-    savedraftOnchange(){
-      // const timer = setInterval(() => {
-      //   this.updateDraftBid({'invitedTeamMembers':this.membersAdded});
-      // }, 60000);
+    savedraftOnInterval(){
+      const timer = setInterval(() => {
+      	if(this.oldCount != this.newCount){
+        	this.updateDraftBid({'invitedTeamMembers':this.membersAdded});
+        	this.oldCount = this.newCount;
+      	}
+      }, 60000);
 
-      // this.$once("hook:beforeDestroy", () => {
-      //   clearInterval(timer);
-      // });
+      this.$once("hook:beforeDestroy", () => {
+        clearInterval(timer);
+      });
     },
   },
   created() {
@@ -142,6 +151,7 @@ export default {
   mounted() {
   	this.user = this.$store.getters.userInfo
     this.getTeamMembers(this.$store.getters.userInfo.company.company);
+    this.savedraftOnInterval();
 	}	
 };
 </script>

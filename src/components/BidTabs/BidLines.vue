@@ -132,6 +132,7 @@ export default {
           buyerComment: '',
           valid: false,
           required: true,
+          bidLinesStatus: false,
         },
       ],
       descRules: [
@@ -149,7 +150,8 @@ export default {
       if (this.bidLines.length > 0 && this.bidLines.filter((item) => item.required === true && item.description && item.quantity).length > 0) {
         this.$emit('validation', { valid: true, items: '4' });
         this.$store.commit('setLineItemsComplete', true);
-        this.$store.commit('setBidlines',this.bidLines)
+        this.$store.commit('setBidlines',this.bidLines);
+        this.bidLinesStatus = true;
         return this.valid;
       }
       this.$emit('validation', { valid: false, items: '4' });
@@ -198,12 +200,26 @@ export default {
     },
     removeBidLine(index) {
       this.bidLines.splice(index, 1);
+      this.bidLinesStatus = true;
+    },
+    savedraftOnInterval(){
+      const timer = setInterval(() => {
+        if(this.bidLinesStatus == true){
+          this.updateDraftBid({ bidlines: this.bidLines });
+          this.bidLinesStatus = false;
+        }
+      }, 60000);
+
+      this.$once("hook:beforeDestroy", () => {
+        clearInterval(timer);
+      });
     },
   },
   mounted(){
     if(this.$store.getters.draftBidData.lineItems != '' || this.$store.getters.draftBidData.lineItems.length > 0){
       this.bidLines = this.$store.getters.draftBidData.lineItems;
     }
+    this.savedraftOnInterval();
   }
 };
 </script>

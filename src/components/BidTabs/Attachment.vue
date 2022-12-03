@@ -107,6 +107,7 @@ export default {
       documents: [],
       isAttaching: false,
       valid: false,
+      attachStatus: false,
     };
   },
   computed: {
@@ -170,6 +171,7 @@ export default {
       // this.documents.push(this.file);
       await this.uploadBidAttach(data);
       this.isAttaching = false;
+      this.attachStatus = true;
     },
     size(size) {
       const sizeInMB = (size / (1024 * 1024)).toFixed(2);
@@ -179,6 +181,7 @@ export default {
       this.documents.splice(index, 1);
       this.$store.getters.attachData.splice(index, 1);
       this.$store.commit('setDocuments',this.documents);
+      this.attachStatus = true;
     },
     openComment(index) {
       this.edit = index;
@@ -188,12 +191,24 @@ export default {
       this.isEdit = false;
       this.updateDraftBid({ attachement: this.docsList });
     },
-    
+    savedraftOnInterval(){
+      const timer = setInterval(() => {
+        if(this.attachStatus == true){
+          this.updateDraftBid({ attachement: this.docsList });
+          this.attachStatus = false;
+        }
+      }, 60000);
+
+      this.$once("hook:beforeDestroy", () => {
+        clearInterval(timer);
+      });
+    },
   },
   mounted() {
     if (this.$store.getters.attachData) {
       this.documents = this.$store.getters.attachData;
     }
+    this.savedraftOnInterval();
   },
 };
 </script>
