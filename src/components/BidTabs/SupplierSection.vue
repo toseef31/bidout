@@ -360,10 +360,14 @@ export default {
     },
   },
   methods: {
-  	...mapActions(['getCategories', 'getSalesReps', 'getCompanyInfo', 'searchByCompany', 'getCompanyByServices', 'saveDraftBid', 'inviteNewSupplier', 'updateDraftBid']),
+  	...mapActions(['getCategories', 'getSalesReps', 'getCompanyInfo', 'searchByCompany', 'getCompanyByServices', 'saveDraftBid', 'inviteNewSupplier', 'updateDraftBid','updateTemplate']),
   	...mapGetters(['newSupplier']),
     changeTab() {
-    	this.updateDraftBid({ invitedSuppliers: this.repsInvited });
+    	if(this.$route.name == 'EditTemplate'){
+    	  this.updateTemplate({ invitedSuppliers: this.repsInvited });
+    	}else{
+    		this.updateDraftBid({ invitedSuppliers: this.repsInvited });
+    	}
       this.$emit('changetab', 'tab-3');
     },
     onUpdate(payload) {
@@ -384,7 +388,6 @@ export default {
     	};
 			try {
 				await this.inviteNewSupplier(supplier);
-				this.savedraftOnchange();
 				this.supplierDialog = false;
 				const data = {
 					type: 'user',
@@ -422,7 +425,6 @@ export default {
     	this.newCount = this.repsInvited.length;
     	this.$store.getters.salesRepsList.splice(index, 1);
     	this.$store.commit('setInvitedSuppliersData', this.repsInvited);
-      this.savedraftOnchange();
     },
     removeReps(list, index) {
     	this.$store.getters.salesRepsList.push(list.item);
@@ -430,7 +432,6 @@ export default {
     	this.repsInvited.splice(index, 1);
     	this.newCount = this.repsInvited.length;
     	this.$store.commit('setInvitedSuppliersData', this.repsInvited);
-      this.savedraftOnchange();
     },
     getCompanies() {
       if (this.companyBasin === 'All') {
@@ -453,7 +454,6 @@ export default {
     	this.newCount = this.repsInvited.length;
     	this.$store.getters.companiesList.splice(index, 1);
     	this.$store.commit('setInvitedSuppliersData', this.repsInvited);
-      this.savedraftOnchange();
     },
     addServiceCompany(company, index) {
     	const data = {
@@ -465,7 +465,6 @@ export default {
     	this.newCount = this.repsInvited.length;
     	this.$store.getters.companiesList.splice(index, 1);
     	this.$store.commit('setInvitedSuppliersData', this.repsInvited);
-      this.savedraftOnchange();
     },
     removeCompany(company, index) {
     	this.oldCount = this.repsInvited.length;
@@ -473,12 +472,15 @@ export default {
     	this.newCount = this.repsInvited.length;
     	this.$store.getters.companiesList.push(company.item);
     	this.$store.commit('setInvitedSuppliersData', this.repsInvited);
-      this.savedraftOnchange();
     },
     savedraftOnInterval() {
   		const timer = setInterval(() => {
   			if(this.oldCount != this.newCount){
-  		  	this.updateDraftBid({'invitedSuppliers':this.repsInvited});
+  				if(this.$route.name == 'EditTemplate'){
+  				  this.updateTemplate({'invitedSuppliers':this.repsInvited});
+  				}else{
+  				  this.updateDraftBid({'invitedSuppliers':this.repsInvited});
+  				}
   		  	this.oldCount = this.newCount;
   		  }
   		}, 60000);

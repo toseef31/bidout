@@ -593,13 +593,18 @@ export default {
     }
     formData.append('userId', payload.userId);
     formData.append('companyId', payload.companyId);
+    formData.append('company', payload.company);
+    formData.append('lineItems', []);
+    formData.append('invitedSuppliers', []);
+    formData.append('invitedNewSuppliers', []);
+    formData.append('invitedTeamMembers', []);
+    formData.append('questions', []);
+    formData.append('attachement', []);
 
     try {
       const res = await axios.post('bid/createTemplateBid', formData, config);
       if (res.status == 200) {
-        console.log(res);
-        commit('setDraftBidsList', res.data.id);
-        commit('setBidSerial', res.data.serial);
+        commit('setDraftBidsList', res.data);
         commit('setDraftTime', new Date().toLocaleString());
       } else {
         commit('setDraftBidsList', null);
@@ -624,7 +629,7 @@ export default {
     const formData = new FormData();
     
     if(state.bidData != null){
-      formData.append('templateId', state.bidData.templateId);
+      formData.append('templateId', state.draftBidsList);
       formData.append('title', state.bidData.title);
       formData.append('type', state.bidData.type);
       formData.append('dueDate', state.bidData.dueDate);
@@ -633,13 +638,14 @@ export default {
       formData.append('qAndAEnabled', state.bidData.qAndAEnabled);
       formData.append('userId', state.bidData.userId);
       formData.append('companyId', state.bidData.companyId);
+      formData.append('company', state.bidData.company);
       formData.append('bidDescriptions[0][body]', state.bidData.bidDescriptions);
       for (let d = 0; d < state.bidData.description.length; d++) {
         formData.append(`bidDescriptions[${d + 1}][name]`, state.bidData.description[d].name);
         formData.append(`bidDescriptions[${d + 1}][body]`, state.bidData.description[d].body);
       }
     }else{
-      formData.append('templateId', payload.templateId);
+      formData.append('templateId', state.draftBidsList);
       formData.append('title', payload.title);
       formData.append('type', payload.type);
       formData.append('dueDate', payload.dueDate);
@@ -648,6 +654,7 @@ export default {
       formData.append('qAndAEnabled', payload.qAndAEnabled);
       formData.append('userId', payload.userId);
       formData.append('companyId', payload.companyId);
+      formData.append('company', payload.company);
       formData.append('bidDescriptions[0][body]', payload.bidDescriptions);
       if (payload.description) {
         for (let d = 0; d < payload.description.length; d++) {
@@ -675,6 +682,8 @@ export default {
             formData.append(`invitedSuppliers[${i}]`, state.invitedSuppliers[i].item.objectID);
           }
         }
+      }else{
+        formData.append(`invitedSuppliers`, []);
       }
     }
     if (payload.invitedTeamMembers) {
@@ -687,6 +696,8 @@ export default {
         for (let t = 0; t < state.invitedTeamMembers.length; t++) {
           formData.append(`invitedTeamMembers[${t}]`, state.invitedTeamMembers[t].id);
         }
+      }else{
+        formData.append(`invitedTeamMembers`, []);
       }
     }
     if (payload.bidlines) {
@@ -709,6 +720,8 @@ export default {
           formData.append(`lineItems[${i}][buyerComment]`, state.bidlines[i].buyerComment);
           formData.append(`lineItems[${i}][required]`, state.bidlines[i].required);
         }
+      }else{
+        formData.append(`lineItems`, []);
       }
     }
     if (payload.attachement) {
@@ -733,6 +746,8 @@ export default {
           formData.append(`attachment[${i}][comment]`, state.attachement[i].comment);
           formData.append(`attachment[${i}][id]`, state.attachement[i].id);
         }
+      }else{
+        formData.append(`attachment`, []);
       }
     }
     if (payload.questions) {
@@ -767,6 +782,8 @@ export default {
             }
           }
         }
+      }else{
+        formData.append(`questions`, []);
       }
     }
     try {

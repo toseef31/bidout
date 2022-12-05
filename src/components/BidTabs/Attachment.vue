@@ -132,7 +132,7 @@ export default {
     },
   },
   methods: {
-    ...mapActions(["uploadBidAttach", "updateDraftBid"]),
+    ...mapActions(["uploadBidAttach", "updateDraftBid","updateTemplate"]),
     changeTab() {
       this.$emit("changetab", "tab-6");
     },
@@ -184,12 +184,20 @@ export default {
     },
     saveComment(doc) {
       this.isEdit = false;
-      this.updateDraftBid({ attachement: this.docsList });
+      if(this.$route.name == 'EditTemplate'){
+        this.updateTemplate({ attachement: this.docsList });
+      }else{
+        this.updateDraftBid({ attachement: this.docsList });
+      }
     },
     savedraftOnInterval(){
       const timer = setInterval(() => {
         if(this.attachStatus == true){
-          this.updateDraftBid({ attachement: this.docsList });
+          if(this.$route.name == 'EditTemplate'){
+            this.updateTemplate({ attachement: this.docsList });
+          }else{
+            this.updateDraftBid({ attachement: this.docsList });
+          }
           this.attachStatus = false;
         }
       }, 60000);

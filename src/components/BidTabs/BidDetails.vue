@@ -171,7 +171,7 @@ export default {
     },
   },
   methods: {
-    ...mapActions(['saveDraftBid','saveTemplateBid']),
+    ...mapActions(['saveDraftBid','saveTemplateBid','updateTemplate']),
     changeTab() {
       const bidDetails = {
         title: this.title,
@@ -184,6 +184,7 @@ export default {
         userId: this.$store.getters.userInfo.id,
         description: this.textFields,
         companyId: this.$store.getters.userInfo.company.id,
+        company: this.$store.getters.userInfo.company.company,
       };
       if (this.$refs.form.validate()) {
         if(this.$route.name == 'EditTemplate'){
@@ -206,6 +207,7 @@ export default {
         qAndAEnabled: this.qAndAEnabled,
         userId: this.$store.getters.userInfo.id,
         companyId: this.$store.getters.userInfo.company.id,
+        company: this.$store.getters.userInfo.company.company,
       };
       if (this.$refs.form.validate()) {
         if(this.$route.name == 'EditTemplate'){

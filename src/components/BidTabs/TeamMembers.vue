@@ -108,9 +108,13 @@ export default {
     },
   },
   methods: {
-  	...mapActions(["getTeamMembers","getCompanyInfo","updateDraftBid"]),
+  	...mapActions(["getTeamMembers","getCompanyInfo","updateDraftBid","updateTemplate"]),
     changeTab(){
-    	this.updateDraftBid({'invitedTeamMembers':this.membersAdded});
+    	if(this.$route.name == 'EditTemplate'){
+    	  this.updateTemplate({'invitedTeamMembers':this.membersAdded});
+    	}else{
+    		this.updateDraftBid({'invitedTeamMembers':this.membersAdded});
+    	}
       this.$emit('changetab', 'tab-4');
     },
     viewCompany(id,name){
@@ -122,7 +126,6 @@ export default {
     	this.newCount = this.membersAdded.length;
   		this.$store.getters.teamMembers.splice(index,1);
   		this.$store.commit('setInvitedTeamMembers',this.membersAdded);
-  		this.savedraftOnchange();
     },
     remove(member,index){
     	this.oldCount = this.membersAdded.length;
@@ -130,12 +133,15 @@ export default {
 	  	this.newCount = this.membersAdded.length;
 			this.membersAdded.splice(index,1);
   		this.$store.commit('setInvitedTeamMembers',this.membersAdded);
-			this.savedraftOnchange();
     },
     savedraftOnInterval(){
       const timer = setInterval(() => {
       	if(this.oldCount != this.newCount){
-        	this.updateDraftBid({'invitedTeamMembers':this.membersAdded});
+        	if(this.$route.name == 'EditTemplate'){
+  	    	  this.updateTemplate({'invitedTeamMembers':this.membersAdded});
+  	    	}else{
+  	    		this.updateDraftBid({'invitedTeamMembers':this.membersAdded});
+  	    	}
         	this.oldCount = this.newCount;
       	}
       }, 60000);

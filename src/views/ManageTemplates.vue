@@ -37,7 +37,7 @@
             
             <tbody>
               <tr v-for="(template, index) in bidTemplates" class="py-4 px-6">
-                <td class="text-left pl-6">{{template.bidTitle}}</td>
+                <td class="text-left pl-6">{{template.title}}</td>
                 <td class="text-left">{{template.type}}</td>
                 <td class="text-left">{{template.createdDate}}</td>
                 <td class="text-left">{{template.creator}}</td>
