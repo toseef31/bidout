@@ -115,9 +115,11 @@ export default {
       return `${this.$store.getters.userInfo.firstName} ${this.$store.getters.userInfo.lastName}`;
     },
     docsList() {
-      if(this.$store.getters.draftBidData.attachments != "" || this.$store.getters.draftBidData.attachments.length > 0){
-        this.$store.commit('setAttachement',this.$store.getters.draftBidData.attachments);
-        return this.$store.getters.draftBidData.attachments;
+      if(this.$store.getters.draftBidData != null){
+        if(this.$store.getters.draftBidData.attachments != ""){
+          this.$store.commit('setAttachement',this.$store.getters.draftBidData.attachments);
+          return this.$store.getters.draftBidData.attachments;
+        }
       }else{
         this.$store.commit('setAttachement',this.$store.getters.attachData);
         return this.$store.getters.attachData;

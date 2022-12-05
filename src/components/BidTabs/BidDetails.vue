@@ -171,7 +171,6 @@ export default {
     ...mapActions(['saveDraftBid',"updateDraftBid"]),
     changeTab() {
       if(this.$store.getters.draftBidData != null){
-        console.log('iff');
         const bidDetails = {
           title: this.title,
           type: this.bidType,
@@ -187,13 +186,11 @@ export default {
           serial: this.$store.getters.draftBidData.serial,
           status: 'edit',
         };
-        // console.log(bidDetails);
         if (this.$refs.form.validate()) {
           this.updateDraftBid({bidDetails: bidDetails});
           this.$emit('changetab', 'tab-2');
         }
       }else{
-        console.log('ekseee');
         const bidDetails = {
           title: this.title,
           type: this.bidType,

@@ -5,10 +5,12 @@ import store from '..';
 
 export default {
   async getTeamMembers({ commit, dispatch, state }, payload) {
+    commit('setPageLoader', true);
     try {
       const res = await axios.get(`company/getTeamMembers/${payload}`);
       if (res.status == 200) {
        	commit('setTeamMembers', res.data);
+        commit('setPageLoader', false);
       } else {
        	commit('setTeamMembers', null);
       }

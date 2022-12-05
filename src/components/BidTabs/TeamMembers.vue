@@ -90,20 +90,27 @@ export default {
   },
   computed:{
     teamMembers(){
-    	if(this.searchMember){
-				return this.$store.getters.teamMembers.filter((item)=>{
-  			  return (this.searchMember.toLowerCase().split(' ').every(v => item.firstName.toLowerCase().includes(v)) || this.searchMember.toLowerCase().split(' ').every(v => item.lastName.toLowerCase().includes(v)))
-  			})
-    	}else if(this.$store.getters.draftBidData.invitedTeamMembers || this.$store.getters.draftBidData.invitedTeamMembers.length > 0){
-    		return this.$store.getters.teamMembers.filter((el) => { return !this.$store.getters.draftBidData.invitedTeamMembers.includes(el.id); })
-    	}else{
-  			return this.$store.getters.teamMembers;
-    	}
+    	// if(this.$store.getters.draftBidData != null){
+    	// 	if(this.$store.getters.draftBidData.invitedTeamMembers != ''){ 
+    	// 		return this.$store.getters.teamMembers.filter((el) => { return !this.$store.getters.draftBidData.invitedTeamMembers.includes(el.id); })
+    	// 	}
+    	// }else{
+	    	if(this.searchMember){
+					return this.$store.getters.teamMembers.filter((item)=>{
+	  			  return (this.searchMember.toLowerCase().split(' ').every(v => item.firstName.toLowerCase().includes(v)) || this.searchMember.toLowerCase().split(' ').every(v => item.lastName.toLowerCase().includes(v)))
+	  			})
+	    	}else{
+	  			return this.$store.getters.teamMembers;
+	    	}
+    	// }
+    	
     },
     filterTeam(){
-    	if(this.$store.getters.draftBidData.invitedTeamMembers || this.$store.getters.draftBidData.invitedTeamMembers.length > 0){
-      	this.membersAdded = this.$store.getters.teamMembers.filter((el) => { return this.$store.getters.draftBidData.invitedTeamMembers.includes(el.id); })
-    	} 
+    	if(this.$store.getters.draftBidData != null){
+  			if(this.$store.getters.draftBidData.invitedTeamMembers != ''){
+  		  	this.membersAdded = this.$store.getters.teamMembers.filter((el) => { return this.$store.getters.draftBidData.invitedTeamMembers.includes(el.id); })
+  			}
+  		} 
     },
     validat(){
     	if(this.membersAdded.length > 0){
@@ -153,12 +160,13 @@ export default {
       });
     },
   },
-  created() {
-    // this.interval = setInterval(() => this.updateDraftBid({'invitedTeamMembers':this.membersAdded}));
+  async beforeCreate() {
+    await this.getTeamMembers(this.$store.getters.userInfo.company.company);
   },
   mounted() {
+  	console.log('tem',this.$store.getters.teamMembers);
+  	console.log('efa',this.$store.getters.draftBidData);
   	this.user = this.$store.getters.userInfo
-    this.getTeamMembers(this.$store.getters.userInfo.company.company);
     this.savedraftOnInterval();
 	}	
 };

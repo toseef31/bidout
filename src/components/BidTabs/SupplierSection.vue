@@ -147,8 +147,8 @@
 		    </div>
 		    <div>
 		      <div class="companies-list">
-		        <template  v-if="filterData.length > 0">
-	  	        <template v-for="(company,index) in filterData" >
+		        <template  v-if="filteredEntries.length">
+	  	        <template v-for="(company,index) in filteredEntries" >
 	  	        	<div class="d-flex align-center justify-space-between list-company pa-4">
 	  	        	  <div class="comapny-data d-flex align-center">
 	  	        	    <div class="company-img">
@@ -358,31 +358,41 @@ export default {
       return _.orderBy(this.$store.getters.categories, 'orderNumber', 'asc');
     },
     salesRepsList() {
-    	if(this.$store.getters.draftBidData.invitedSuppliers != '' || this.$store.getters.draftBidData.invitedSuppliers.length != 0){
-    		return this.$store.getters.salesRepsList.filter((el) => { return !this.$store.getters.draftBidData.invitedSuppliers.includes(el.companyId); })
-    	}else{
+    	// if(this.$store.getters.draftBidData != null){
+    	// 	if(this.$store.getters.draftBidData.invitedSuppliers != ""){
+    	// 		return this.$store.getters.salesRepsList.filter((el) => { return !this.$store.getters.draftBidData.invitedSuppliers.includes(el.companyId); })
+    	// 	}
+    	// }else{
 				return this.$store.getters.salesRepsList ? this.$store.getters.salesRepsList.filter((rep) => rep.company !== this.userInfo.company.company) : [];
-			}
+			// }
     },
     itemBidId() {
       console.log(this.$store.getters.itemBidData);
       return this.$store.getters.itemBidData;
     },
     companiesList() {
-    	if(this.$store.getters.draftBidData.invitedSuppliers != '' || this.$store.getters.draftBidData.invitedSuppliers.length != 0){
-    		return this.$store.getters.companiesList.filter((el) => { return !this.$store.getters.draftBidData.invitedSuppliers.includes(el.objectID); })
-    	}else{
+    	// if(this.$store.getters.draftBidData != null){
+    	// 	if(this.$store.getters.draftBidData.invitedSuppliers != ""){
+    	// 		return this.$store.getters.companiesList.filter((el) => { return !this.$store.getters.draftBidData.invitedSuppliers.includes(el.objectID); })
+    	// 	}
+    	// }else{
     		return this.$store.getters.companiesList;
-    	}
+    	// }
     },
     serviceCompanies() {
     	return this.$store.getters.serviceCompaniesList;
     },
     filteredEntries() {
-    	if(this.$store.getters.draftBidData.invitedSuppliers || this.$store.getters.draftBidData.invitedSuppliers.length > 0){
-      	return this.$store.getters.companiesList.filter((el) => { return this.$store.getters.draftBidData.invitedSuppliers.includes(el.objectID); }).slice();
-      	
+    	if(this.$store.getters.draftBidData != null){
+    		if(!this.$store.getters.draftBidData.invitedSuppliers){
+    			return 0;
+    		}else{
+    			return this.$store.getters.companiesList.filter((el) => { return this.$store.getters.draftBidData.invitedSuppliers.includes(el.objectID); }).slice();
+    		}
+    	}else{
+    		return [];
     	}
+    	
     },
     validat() {
     	if (this.repsInvited.length > 0) {
@@ -522,18 +532,20 @@ export default {
   		}); 
     },
   },
-  created() {
-    // this.interval = setInterval(() => this.updateDraftBid({'invitedSuppliers':this.repsInvited}));
+  async created() {
+    await this.getCategories();
+    await this.getSales();
+    await this.getCompanies();
   },
   mounted() {
   	this.user = this.$store.getters.userInfo;
-    this.getCategories();
-    this.getSales();
-    this.getCompanies();
-  	if(this.$store.getters.draftBidData.invitedSuppliers || this.$store.getters.draftBidData.invitedSuppliers.length > 0){
-  		console.log(this.$store.getters.draftBidData.invitedSuppliers);
-    	this.filterData = this.$store.getters.companiesList.filter((el) => { return this.$store.getters.draftBidData.invitedSuppliers.includes(el.objectID); }).slice();
-    	
+  	if(this.$store.getters.draftBidData != null){
+	  	if(!this.$store.getters.draftBidData.invitedSuppliers){
+	  		this.filterData = [];
+	  	}else{
+				console.log('ddddd',this.$store.getters.draftBidData.invitedSuppliers);
+		  	this.filterData = this.$store.getters.companiesList.filter((el) => { return this.$store.getters.draftBidData.invitedSuppliers.includes(el.objectID); }).slice();
+	  	}
   	}
     this.savedraftOnInterval();
 
