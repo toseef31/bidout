@@ -80,4 +80,7 @@ export default {
   setDraftBidData(state, payload) {
     state.draftBidData = payload;
   },
+  setDraftBidsListId(state, payload) {
+    state.draftBidsListId = payload;
+  },
 };

@@ -65,4 +65,7 @@ export default {
   draftBidData(state) {
     return state.draftBidData;
   },
+  draftBidsListId(state) {
+    return state.draftBidsListId;
+  },
 };

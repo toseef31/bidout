@@ -90,10 +90,10 @@ export default {
   },
   computed:{
     teamMembers(){
-    	if(this.$store.getters.draftBidData != null){
-    		if(this.$store.getters.draftBidData.invitedTeamMembers != ''){ 
-    			return this.$store.getters.teamMembers.filter((el) => { return !this.$store.getters.draftBidData.invitedTeamMembers.includes(el.id); })
-    		}
+    	if(this.$store.state.bid.invitedTeamMembers != null){
+    		// if(this.$store.getters.bidData.invitedTeamMembers != ''){ 
+    			return this.$store.getters.teamMembers.filter((el) => { return !this.$store.getters.bidData.invitedTeamMembers.includes(el.id); })
+    		// }
     	}else{
 	    	if(this.searchMember){
 					return this.$store.getters.teamMembers.filter((item)=>{
@@ -106,10 +106,10 @@ export default {
     	
     },
     filterTeam(){
-    	if(this.$store.getters.draftBidData != null){
-  			if(this.$store.getters.draftBidData.invitedTeamMembers != ''){
-  		  	this.membersAdded = this.$store.getters.teamMembers.filter((el) => { return this.$store.getters.draftBidData.invitedTeamMembers.includes(el.id); })
-  			}
+    	if(this.$store.state.bid.invitedTeamMembers != null){
+  			// if(this.$store.getters.bidData.invitedTeamMembers != ''){
+  		  	this.membersAdded = this.$store.getters.teamMembers.filter((el) => { return this.$store.state.bid.invitedTeamMembers.includes(el.id); })
+  			// }
   		} 
     },
     validat(){
@@ -166,6 +166,7 @@ export default {
   mounted() {
   	this.user = this.$store.getters.userInfo
     this.getTeamMembers(this.$store.getters.userInfo.company.company);
+    console.log(this.$store.state.bid.invitedTeamMembers);
     this.savedraftOnInterval();
 	}	
 };

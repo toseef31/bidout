@@ -26,4 +26,5 @@ export default {
   bidSerial: null,
   invitedSuppliersData: null,
   draftBidData: null,
+  draftBidsListId: null,
 };

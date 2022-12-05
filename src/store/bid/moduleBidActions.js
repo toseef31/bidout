@@ -202,6 +202,7 @@ export default {
       bidDescriptions: payload.bidDescriptions,
       userId: payload.userId,
       companyId: payload.companyId,
+      company: payload.company,
       description: payload.description,
     };
     commit('setBidData', bidData);
@@ -221,6 +222,7 @@ export default {
     }
     formData.append('userId', payload.userId);
     formData.append('companyId', payload.companyId);
+    formData.append('company', payload.company);
 
     try {
       const res = await axios.post('bid/draft/createDraft', formData, config);
@@ -243,8 +245,6 @@ export default {
     }
   },
   async updateDraftBid({ commit, state }, payload) {
-    // console.log(payload.bidDetails.bidId);
-     console.log(state.draftBidsList,'tdt');
     const config = {
       headers: {
         'Content-Type': 'multipart/form-data',
@@ -254,7 +254,7 @@ export default {
     const formData = new FormData();
     if(payload.bidDetails){
       if(state.bidData.status == 'edit'){
-        state.draftBidsList = state.bidData.bidId;
+        state.draftBidsList = state.bidData.id;
         state.bidSerial = state.bidData.serial
       }
       const bidData = {
@@ -267,6 +267,7 @@ export default {
         bidDescriptions: payload.bidDetails.bidDescriptions,
         userId: payload.bidDetails.userId,
         companyId: payload.bidDetails.companyId,
+        company: payload.bidDetails.company,
         description: payload.bidDetails.description,
         serial: payload.bidDetails.serial,
       };
@@ -280,6 +281,7 @@ export default {
       formData.append('qAndAEnabled', payload.bidDetails.qAndAEnabled);
       formData.append('userId', payload.bidDetails.userId);
       formData.append('companyId', payload.bidDetails.companyId);
+      formData.append('company', payload.bidDetails.company);
       formData.append('bidDescriptions[0][body]', payload.bidDetails.bidDescriptions);
       formData.append('serial', payload.bidDetails.serial);
       if (payload.bidDetails.description) {
@@ -290,7 +292,7 @@ export default {
       }
     }else{
       if(state.bidData.status == 'edit'){
-        state.draftBidsList = state.bidData.bidId;
+        state.draftBidsList = state.bidData.id;
         state.bidSerial = state.bidData.serial
       }
       formData.append('title', state.bidData.title);
@@ -301,6 +303,7 @@ export default {
       formData.append('qAndAEnabled', state.bidData.qAndAEnabled);
       formData.append('userId', state.bidData.userId);
       formData.append('companyId', state.bidData.companyId);
+      formData.append('company', state.bidData.company);
       formData.append('bidDescriptions[0][body]', state.bidData.bidDescriptions);
       formData.append('serial', state.bidSerial);
       if (state.bidData.description) {
@@ -431,11 +434,10 @@ export default {
         }
       }
     }
-    console.log(state.draftBidsList,'ffff');
+    console.log(state.draftBidsList);
     try {
       const res = await axios.post(`bid/draft/updateDraft/${state.draftBidsList}`, formData, config);
       if (res.status == 200) {
-        console.log(res);
         // commit('setDraftBidsList',null);
         commit('setDraftTime', new Date().toLocaleString());
       } else {
@@ -554,6 +556,7 @@ export default {
         dispatch('getCategories');
         dispatch('searchByCompany',{query: '',basin:'all'});
         commit('setDraftBidData', res.data);
+        commit('setBidData', res.data);
         commit('setPageLoader', false);
         router.replace('/create-bid');
       }

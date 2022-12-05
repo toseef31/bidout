@@ -358,10 +358,10 @@ export default {
       return _.orderBy(this.$store.getters.categories, 'orderNumber', 'asc');
     },
     salesRepsList() {
-    	if(this.$store.getters.draftBidData != null){
-    		if(this.$store.getters.draftBidData.invitedSuppliers != ""){
-    			return this.$store.getters.salesRepsList.filter((el) => { return !this.$store.getters.draftBidData.invitedSuppliers.includes(el.companyId); })
-    		}
+    	if(this.$store.state.bid.invitedSuppliers != null){
+    		// if(this.$store.state.bid.invitedSuppliers != ""){
+    			return this.$store.getters.salesRepsList.filter((el) => { return !this.$store.state.bid.invitedSuppliers.includes(el.companyId); })
+    		// }
     	}else{
 				return this.$store.getters.salesRepsList ? this.$store.getters.salesRepsList.filter((rep) => rep.company !== this.userInfo.company.company) : [];
 			}
@@ -370,10 +370,10 @@ export default {
       return this.$store.getters.itemBidData;
     },
     companiesList() {
-    	if(this.$store.getters.draftBidData != null){
-    		if(this.$store.getters.draftBidData.invitedSuppliers != ""){
-    			return this.$store.getters.companiesList.filter((el) => { return !this.$store.getters.draftBidData.invitedSuppliers.includes(el.objectID); })
-    		}
+    	if(this.$store.getters.bidData != null){
+    		// if(this.$store.state.bid.invitedSuppliers != ""){
+    			return this.$store.getters.companiesList.filter((el) => { return !this.$store.state.bid.invitedSuppliers.includes(el.objectID); })
+    		// }
     	}else{
     		return this.$store.getters.companiesList;
     	}
@@ -382,11 +382,11 @@ export default {
     	return this.$store.getters.serviceCompaniesList;
     },
     filteredEntries() {
-    	if(this.$store.getters.draftBidData != null){
-    		if(!this.$store.getters.draftBidData.invitedSuppliers){
+    	if(this.$store.getters.bidData != null){
+    		if(!this.$store.state.bid.invitedSuppliers){
     			return 0;
     		}else{
-    			return this.$store.getters.companiesList.filter((el) => { return this.$store.getters.draftBidData.invitedSuppliers.includes(el.objectID); }).slice();
+    			return this.$store.getters.companiesList.filter((el) => { return this.$store.state.bid.invitedSuppliers.includes(el.objectID); }).slice();
     		}
     	}else{
     		return [];
@@ -540,12 +540,12 @@ export default {
     this.getSales();
     this.getCompanies();
     
-  	if(this.$store.getters.draftBidData != null){
-  		  	if(!this.$store.getters.draftBidData.invitedSuppliers){
+  	if(this.$store.getters.bidData != null){
+  		  	if(!this.$store.getters.bidData.invitedSuppliers){
   		  		this.filterData = [];
   		  	}else{
-  					console.log('ddddd',this.$store.getters.draftBidData.invitedSuppliers);
-  			  	this.filterData = this.$store.getters.companiesList.filter((el) => { return this.$store.getters.draftBidData.invitedSuppliers.includes(el.objectID); }).slice();
+  					console.log('ddddd',this.$store.getters.bidData.invitedSuppliers);
+  			  	this.filterData = this.$store.getters.companiesList.filter((el) => { return this.$store.getters.bidData.invitedSuppliers.includes(el.objectID); }).slice();
   		  	}
   	}
     this.savedraftOnInterval();
