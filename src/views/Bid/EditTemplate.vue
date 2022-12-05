@@ -88,49 +88,49 @@
           </v-tabs>
           <v-tabs-items v-model="currentItem">
             <v-tab-item value="tab-1">
-              <edit-bid-details
+              <template-edit-bid-details
                 @changetab="ChangeT($event)"
                 @validation="validateValue($event)"
-              ></edit-bid-details>
+              ></template-edit-bid-details>
             </v-tab-item>
             <v-tab-item value="tab-2">
-              <SupplierSection
+              <TemplateSupplierSection
                 @changetab="ChangeT($event)"
                 @validation="validateSupplier($event)"
-              ></SupplierSection>
+              ></TemplateSupplierSection>
             </v-tab-item>
             <v-tab-item value="tab-3">
-              <team-members
+              <template-team-members
                 @changetab="ChangeT($event)"
                 @validation="validateTeam($event)"
-              ></team-members>
+              ></template-team-members>
             </v-tab-item>
             <v-tab-item
 
               value="tab-4"
               class="bidline-tab"
             >
-              <bid-lines
+              <template-bid-lines
                 @changetab="ChangeT($event)"
                 @validation="validateItems($event)"
-              ></bid-lines>
+              ></template-bid-lines>
             </v-tab-item>
             <v-tab-item
 
               value="tab-5"
               class="attachment-tab mt-5"
             >
-              <attachment
+              <template-attachment
                 @changetab="ChangeT($event)"
                 @validation="validateAttachment($event)"
-              ></attachment>
+              ></template-attachment>
             </v-tab-item>
             <v-tab-item
 
               value="tab-6"
               class="question-tab mt-5"
             >
-              <question-section2></question-section2>
+              <template-question-section2></template-question-section2>
             </v-tab-item>
           </v-tabs-items>
         </div>
@@ -140,22 +140,22 @@
 </template>
 <script>
 import { mapGetters } from 'vuex';
-import SupplierSection from '../../components/EditTemplateBid/EditSupplierSection.vue';
-import TeamMembers from '../../components/EditTemplateBid/EditTeamMembers.vue';
-import BidLines from '../../components/EditTemplateBid/EditBidLines.vue';
-import Attachment from '../../components/EditTemplateBid/EditAttachment.vue';
-import EditBidDetails from '../../components/EditTemplateBid/EditBidDetails.vue';
-import QuestionSection2 from '../../components/EditTemplateBid/EditQuestionSection2.vue';
+import TemplateSupplierSection from '../../components/BidTabs/SupplierSection.vue';
+import TemplateTeamMembers from '../../components/BidTabs/TeamMembers.vue';
+import TemplateBidLines from '../../components/BidTabs/BidLines.vue';
+import TemplateAttachment from '../../components/BidTabs/Attachment.vue';
+import TemplateEditBidDetails from '../../components/BidTabs/BidDetails.vue';
+import TemplateQuestionSection2 from '../../components/BidTabs/QuestionSection2.vue';
 
 export default {
   name: 'EditTemplate',
   components: {
-    SupplierSection,
-    TeamMembers,
-    BidLines,
-    Attachment,
-    EditBidDetails,
-    QuestionSection2,
+    TemplateSupplierSection,
+    TemplateTeamMembers,
+    TemplateBidLines,
+    TemplateAttachment,
+    TemplateEditBidDetails,
+    TemplateQuestionSection2,
   },
 
   data() {
@@ -256,8 +256,12 @@ export default {
       }
     },
   },
+  async created(){
+
+  },
   mounted() {
     document.title = 'Create Bid - BidOut';
+    console.log(this.$route.name);
     this.users = JSON.parse(localStorage.getItem('userData')).user;
   },
 };

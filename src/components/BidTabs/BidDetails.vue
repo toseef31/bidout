@@ -155,6 +155,9 @@ export default {
     };
   },
   computed: {
+    singleTemplate(){
+      return this.$store.getters.singleTemplate;
+    },
     validate() {
       this.$emit('validation', { valid: this.valid, value: '1', bidTitle: this.title });
       this.$store.commit('setBidDetailsComplete', this.valid);
@@ -168,7 +171,7 @@ export default {
     },
   },
   methods: {
-    ...mapActions(['saveDraftBid']),
+    ...mapActions(['saveDraftBid','saveTemplateBid']),
     changeTab() {
       const bidDetails = {
         title: this.title,
@@ -183,7 +186,11 @@ export default {
         companyId: this.$store.getters.userInfo.company.id,
       };
       if (this.$refs.form.validate()) {
-        this.saveDraftBid(bidDetails);
+        if(this.$route.name == 'EditTemplate'){
+          this.saveTemplateBid(bidDetails);
+        }else{
+          this.saveDraftBid(bidDetails);
+        }
         this.$emit('changetab', 'tab-2');
       }
     },
@@ -201,7 +208,11 @@ export default {
         companyId: this.$store.getters.userInfo.company.id,
       };
       if (this.$refs.form.validate()) {
-        this.saveDraftBid(bidDetails);
+        if(this.$route.name == 'EditTemplate'){
+          this.saveTemplateBid(bidDetails);
+        }else{
+          this.saveDraftBid(bidDetails);
+        }
       }
     },
     add() {
@@ -231,6 +242,7 @@ export default {
     },
   },
   mounted(){
+    console.log(this.$route.name, 'dsada');
     this.savedraftOnInterval();
   }
 };

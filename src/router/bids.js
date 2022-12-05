@@ -68,7 +68,7 @@ const routes = [
       },
 
       {
-        path: "/edit-template/:id",
+        path: "/create-template/",
         name: "EditTemplate",
         component: () => import("@/views/Bid/EditTemplate.vue"),
         beforeEnter: (to, from, next) => {

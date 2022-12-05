@@ -557,6 +557,63 @@ export default {
       }
     }
   },
+  async saveTemplateBid({ commit, dispatch, state }, payload) {
+    const config = {
+      headers: {
+        'Content-Type': 'multipart/form-data',
+        Authorization: `Bearer ${JSON.parse(localStorage.getItem('token'))}`,
+      },
+    };
+    const bidData = {
+      title: payload.title,
+      type: payload.type,
+      dueDate: payload.dueDate,
+      dueTime: payload.dueTime,
+      regions: payload.regions,
+      qAndAEnabled: payload.qAndAEnabled,
+      bidDescriptions: payload.bidDescriptions,
+      userId: payload.userId,
+      companyId: payload.companyId,
+      description: payload.description,
+    };
+    commit('setBidData', bidData);
+    const formData = new FormData();
+    formData.append('title', payload.title);
+    formData.append('type', payload.type);
+    formData.append('dueDate', payload.dueDate);
+    formData.append('dueTime', payload.dueTime);
+    formData.append('regions', payload.regions);
+    formData.append('qAndAEnabled', payload.qAndAEnabled);
+    formData.append('bidDescriptions[0][body]', payload.bidDescriptions);
+    if (payload.description) {
+      for (let d = 0; d < payload.description.length; d++) {
+        formData.append(`bidDescriptions[${d + 1}][name]`, payload.description[d].name);
+        formData.append(`bidDescriptions[${d + 1}][body]`, payload.description[d].body);
+      }
+    }
+    formData.append('userId', payload.userId);
+    formData.append('companyId', payload.companyId);
+
+    try {
+      const res = await axios.post('bid/createTemplateBid', formData, config);
+      if (res.status == 200) {
+        console.log(res);
+        commit('setDraftBidsList', res.data.id);
+        commit('setBidSerial', res.data.serial);
+        commit('setDraftTime', new Date().toLocaleString());
+      } else {
+        commit('setDraftBidsList', null);
+      }
+    } catch (err) {
+      if (state.apiCounter == 2) {
+        dispatch('apiSignOutAction');
+      } else if (err.response.status === 403) {
+        await dispatch('refreshToken');
+        state.apiCounter = 2;
+        dispatch('saveDraftBid', payload);
+      }
+    }
+  },
   async updateTemplate({ commit, state }, payload) {
     const config = {
       headers: {

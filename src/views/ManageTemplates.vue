@@ -7,7 +7,7 @@
             <h4>Bid Templates </h4>
           </v-col>
           <v-col cols="6" class="text-right pr-0">
-            <v-btn large elevation="0" color="#0D9648" height="56px" class="text-capitalize white--text font-weight-bold py-6">Create New Template</v-btn>
+            <v-btn large elevation="0" color="#0D9648" height="56px" to="/create-template" class="text-capitalize white--text font-weight-bold py-6">Create New Template</v-btn>
           </v-col>
         </v-row>
         <v-simple-table class="template-table">
