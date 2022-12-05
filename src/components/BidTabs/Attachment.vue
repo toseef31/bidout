@@ -115,15 +115,15 @@ export default {
       return `${this.$store.getters.userInfo.firstName} ${this.$store.getters.userInfo.lastName}`;
     },
     docsList() {
-      // if(this.$store.state.bid.attachments != null){
-      //   // if(this.$store.state.bid.attachments != ""){
-      //     this.$store.commit('setAttachement',this.$store.getters.bidData.attachments);
-      //     return this.$store.getters.bidData.attachments;
-      //   // }
-      // }else{
+      if(this.$store.state.bid.attachments != null){
+        // if(this.$store.state.bid.attachments != ""){
+          this.$store.commit('setAttachement',this.$store.state.bid.attachments);
+          return this.$store.state.bid.attachments;
+        // }
+      }else{
         this.$store.commit('setAttachement',this.$store.getters.attachData);
         return this.$store.getters.attachData;
-      // }
+      }
     },
     isAttachingDoc() {
       return this.isAttaching;
