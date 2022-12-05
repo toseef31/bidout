@@ -77,4 +77,10 @@ export default {
   setQuestions(state, payload) {
     state.questions = payload;
   },
+  setBidIntent(state, payload) {
+    state.bidIntent = payload;
+  },
+  setSupplierAttachment(state, payload) {
+    state.supplierAttachment = payload;
+  },
 };

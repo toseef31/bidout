@@ -152,7 +152,7 @@ export default {
       if (res.status === 200) {
         localStorage.removeItem('bidData');
         commit('setBidData', null);
-        router.replace({ name: "ViewBids" });
+        router.replace({ name: 'ViewBids' });
         commit('setSuccessDeleteBid');
       }
     } catch (err) {
@@ -179,7 +179,56 @@ export default {
       } else if (err.response.status === 403) {
         await dispatch('refreshToken');
         state.apiCounter = 2;
-        dispatch('setSubmittedBids', payload);
+        dispatch('getSubmittedBid', payload);
+      }
+    }
+  },
+
+  async makeIntent({ commit, state, dispatch }, payload) {
+    try {
+      const res = await axios.post('intend/createIntend/', {
+        bidId: payload.bidId,
+        owner: payload.owner,
+        ownerCompany: payload.ownerCompany,
+        companyId: payload.companyId,
+        answer: payload.answer,
+      });
+
+      if (res.status === 200) {
+        commit('setBidIntent', payload.answer);
+      }
+    } catch (err) {
+      if (state.apiCounter == 2) {
+        dispatch('apiSignOutAction');
+      } else if (err.response.status === 403) {
+        await dispatch('refreshToken');
+        state.apiCounter = 2;
+        dispatch('makeIntent', payload);
+      }
+    }
+  },
+  async submitBid({ commit, state, dispatch }, payload) {
+    try {
+      const res = await axios.post('bidSubmission/submitBid/', {
+        userId: payload.userId,
+        companyId: payload.companyId,
+        bidId: payload.bidId,
+        supplierNote: payload.supplierNote,
+        supplierAttachments: payload.supplierAttachments,
+        lineItems: payload.lineItems,
+        answers: payload.answers,
+      });
+
+      if (res.status === 200) {
+        console.log(res.data);
+      }
+    } catch (err) {
+      if (state.apiCounter == 2) {
+        dispatch('apiSignOutAction');
+      } else if (err.response.status === 403) {
+        await dispatch('refreshToken');
+        state.apiCounter = 2;
+        dispatch('makeIntent', payload);
       }
     }
   },
@@ -273,14 +322,12 @@ export default {
           formData.append(`invitedSuppliers[${i}]`, payload.invitedSuppliers[i].item.objectID);
         }
       }
-    }else{
-      if(state.invitedSuppliers != null){
-        for (let i = 0; i < state.invitedSuppliers.length; i++) {
-          if (state.invitedSuppliers[i].type == 'user') {
-            formData.append(`invitedSuppliers[${i}]`, state.invitedSuppliers[i].item.companyId);
-          } else {
-            formData.append(`invitedSuppliers[${i}]`, state.invitedSuppliers[i].item.objectID);
-          }
+    } else if (state.invitedSuppliers != null) {
+      for (let i = 0; i < state.invitedSuppliers.length; i++) {
+        if (state.invitedSuppliers[i].type == 'user') {
+          formData.append(`invitedSuppliers[${i}]`, state.invitedSuppliers[i].item.companyId);
+        } else {
+          formData.append(`invitedSuppliers[${i}]`, state.invitedSuppliers[i].item.objectID);
         }
       }
     }
@@ -289,11 +336,9 @@ export default {
       for (let t = 0; t < payload.invitedTeamMembers.length; t++) {
         formData.append(`invitedTeamMembers[${t}]`, payload.invitedTeamMembers[t].id);
       }
-    }else{
-      if(state.invitedTeamMembers != null){
-        for (let t = 0; t < state.invitedTeamMembers.length; t++) {
-          formData.append(`invitedTeamMembers[${t}]`, state.invitedTeamMembers[t].id);
-        }
+    } else if (state.invitedTeamMembers != null) {
+      for (let t = 0; t < state.invitedTeamMembers.length; t++) {
+        formData.append(`invitedTeamMembers[${t}]`, state.invitedTeamMembers[t].id);
       }
     }
     if (payload.bidlines) {
@@ -306,16 +351,14 @@ export default {
         formData.append(`lineItems[${i}][buyerComment]`, payload.bidlines[i].buyerComment);
         formData.append(`lineItems[${i}][required]`, payload.bidlines[i].required);
       }
-    }else{
-      if(state.bidlines != null){
-        for (let i = 0; i < state.bidlines.length; i++) {
-          formData.append(`lineItems[${i}][description]`, state.bidlines[i].description);
-          formData.append(`lineItems[${i}][unit]`, state.bidlines[i].unit);
-          formData.append(`lineItems[${i}][inputType]`, state.bidlines[i].type);
-          formData.append(`lineItems[${i}][quantity]`, state.bidlines[i].quantity);
-          formData.append(`lineItems[${i}][buyerComment]`, state.bidlines[i].buyerComment);
-          formData.append(`lineItems[${i}][required]`, state.bidlines[i].required);
-        }
+    } else if (state.bidlines != null) {
+      for (let i = 0; i < state.bidlines.length; i++) {
+        formData.append(`lineItems[${i}][description]`, state.bidlines[i].description);
+        formData.append(`lineItems[${i}][unit]`, state.bidlines[i].unit);
+        formData.append(`lineItems[${i}][inputType]`, state.bidlines[i].type);
+        formData.append(`lineItems[${i}][quantity]`, state.bidlines[i].quantity);
+        formData.append(`lineItems[${i}][buyerComment]`, state.bidlines[i].buyerComment);
+        formData.append(`lineItems[${i}][required]`, state.bidlines[i].required);
       }
     }
     if (payload.attachement) {
@@ -329,17 +372,15 @@ export default {
         formData.append(`attachment[${i}][comment]`, payload.attachement[i].comment);
         formData.append(`attachment[${i}][id]`, payload.attachement[i].id);
       }
-    }else{
-      if(state.attachement != null){
-        for (let i = 0; i < state.attachement.length; i++) {
-          formData.append(`attachment[${i}][fileName]`, state.attachement[i].fileName);
-          formData.append(`attachment[${i}][fileSize]`, state.attachement[i].fileSize);
-          formData.append(`attachment[${i}][uploadedBy]`, state.attachement[i].uploadedBy);
-          formData.append(`attachment[${i}][url]`, state.attachement[i].url);
-          formData.append(`attachment[${i}][uploadedAt]`, state.attachement[i].uploadedAt);
-          formData.append(`attachment[${i}][comment]`, state.attachement[i].comment);
-          formData.append(`attachment[${i}][id]`, state.attachement[i].id);
-        }
+    } else if (state.attachement != null) {
+      for (let i = 0; i < state.attachement.length; i++) {
+        formData.append(`attachment[${i}][fileName]`, state.attachement[i].fileName);
+        formData.append(`attachment[${i}][fileSize]`, state.attachement[i].fileSize);
+        formData.append(`attachment[${i}][uploadedBy]`, state.attachement[i].uploadedBy);
+        formData.append(`attachment[${i}][url]`, state.attachement[i].url);
+        formData.append(`attachment[${i}][uploadedAt]`, state.attachement[i].uploadedAt);
+        formData.append(`attachment[${i}][comment]`, state.attachement[i].comment);
+        formData.append(`attachment[${i}][id]`, state.attachement[i].id);
       }
     }
     if (payload.questions) {
@@ -358,20 +399,18 @@ export default {
           }
         }
       }
-    }else{
-      if(state.questions != null){
-        for (let i = 0; i < state.questions.length; i++) {
-          formData.append(`questions[${i}][id]`, state.questions[i].id);
-          formData.append(`questions[${i}][order]`, state.questions[i].order);
-          formData.append(`questions[${i}][title]`, state.questions[i].title);
-          formData.append(`questions[${i}][type]`, state.questions[i].type);
-          formData.append(`questions[${i}][questionType]`, state.questions[i].questionType);
-          if (state.questions[i].options) {
-            for (let j = 0; j < state.questions[i].options.length; j++) {
-              formData.append(`questions[${i}][options][${j}][id]`, state.questions[i].options[j].id);
-              formData.append(`questions[${i}][options][${j}][label]`, state.questions[i].options[j].label);
-              formData.append(`questions[${i}][options][${j}][title]`, state.questions[i].options[j].title);
-            }
+    } else if (state.questions != null) {
+      for (let i = 0; i < state.questions.length; i++) {
+        formData.append(`questions[${i}][id]`, state.questions[i].id);
+        formData.append(`questions[${i}][order]`, state.questions[i].order);
+        formData.append(`questions[${i}][title]`, state.questions[i].title);
+        formData.append(`questions[${i}][type]`, state.questions[i].type);
+        formData.append(`questions[${i}][questionType]`, state.questions[i].questionType);
+        if (state.questions[i].options) {
+          for (let j = 0; j < state.questions[i].options.length; j++) {
+            formData.append(`questions[${i}][options][${j}][id]`, state.questions[i].options[j].id);
+            formData.append(`questions[${i}][options][${j}][label]`, state.questions[i].options[j].label);
+            formData.append(`questions[${i}][options][${j}][title]`, state.questions[i].options[j].title);
           }
         }
       }
@@ -434,8 +473,8 @@ export default {
         state.questions = null;
         const bidDetail = await axios.get(`bid/getBid/${res.data._path.segments[1]}`);
         return bidDetail.data.serial;
-      } else {
       }
+
       return;
     } catch (err) {
       console.log(err);
@@ -471,7 +510,7 @@ export default {
 
       if (res.status == 200) {
         commit('setAttachData', res.data);
-        commit('setAttachement',res.data);
+        commit('setAttachement', res.data);
       } else {
         commit('setAttachData', null);
       }
@@ -482,6 +521,39 @@ export default {
         await dispatch('refreshToken');
         state.apiCounter = 2;
         dispatch('uploadBidAttach', payload);
+      }
+    }
+  },
+
+  async uploadBidSupplier({ commit, state, dispatch }, payload) {
+    const config = {
+      headers: {
+        'Content-Type': 'multipart/form-data',
+        Authorization: `Bearer ${JSON.parse(localStorage.getItem('token'))}`,
+      },
+    };
+    const formData = new FormData();
+    if (payload.attachement) {
+      formData.append('uploadedBy', payload.uploadedBy);
+      for (let i = 0; i < payload.attachement.length; i++) {
+        formData.append(`attachement[${i}]`, payload.attachement[i]);
+      }
+    }
+    try {
+      const res = await axios.post('bid/uploadBidAttachment/', formData, config);
+
+      if (res.status == 200) {
+        commit('setSupplierAttachment', res.data);
+      } else {
+        commit('setSupplierAttachment', null);
+      }
+    } catch (err) {
+      if (state.apiCounter == 2) {
+        dispatch('apiSignOutAction');
+      } else if (err.response.status === 403) {
+        await dispatch('refreshToken');
+        state.apiCounter = 2;
+        dispatch('uploadBidSupplier', payload);
       }
     }
   },

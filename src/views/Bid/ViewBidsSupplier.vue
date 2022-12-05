@@ -29,7 +29,40 @@
     </v-col>
   </v-row>
 
-  <v-col v-else  class="pl-0 pr-3 pb-0 pt-3 bid-detail-module  ">
+  <!-- <v-col v-else class="bid-supplier-module mt-2 fill-height pl-0"> -->
+          <!-- <v-col class="pl-0 fill-height">
+          <v-card class="fill-height bid-submitted-card" :elevation="0">
+            <div class="d-flex align-center">
+                  <img
+
+                    :src="require('@/assets/images/bids/awarded.png')"
+                  />
+
+                  <div class="ml-5 text-left">
+                    <div class="company-title">Annual Chemical Bid</div>
+                    <div class="company-submitted">You have already submitted this Bid</div>
+                  </div>
+                </div>
+          </v-card>
+
+          </v-col> -->
+  <v-col v-else   class="pl-0 pr-3 pb-0 pt-3  bid-supplier-module">
+      <!-- <v-col class="pl-0 pr-0">
+          <v-card class=" bid-submitted-card" :elevation="0">
+            <div class="d-flex align-center">
+                  <img
+
+                    :src="require('@/assets/images/bids/awarded.png')"
+                  />
+
+                  <div class="ml-5 text-left">
+                    <div class="company-title">Annual Chemical Bid</div>
+                    <div class="company-submitted">You have already submitted this Bid</div>
+                  </div>
+                </div>
+          </v-card>
+
+          </v-col> -->
     <v-card
       class="fill-height main-card"
       :elevation="0"
@@ -62,12 +95,34 @@
           </div>
         </v-col>
 
-        <v-col class="status-sec mx-auto">
+        <v-col class="status-sec mr-6 text-left mt-2" cols="auto" v-if="!isAfterDueDate">
+
+          <label class="intent-title">Intent to bid? </label>
+                  <v-radio-group
+              v-model="answer"
+              @change="makeIntentBid"
+              row
+            >
+              <v-radio
+                label="Yes"
+                value="true"
+                color="#0d9648"
+                checked
+              ></v-radio>
+              <v-radio
+                label="No"
+                value="false"
+                color="#F32349"
+              ></v-radio>
+            </v-radio-group>
+        </v-col>
+
+        <v-col cols="auto">
           <v-sheet
             class="py-2 px-4 bid-status-card text-left"
             rounded="lg"
             height="119"
-            width="290"
+            width="300"
             v-if="!isAfterDueDate"
           >
             <div class="status" v-if="bidDetail.receivingBids">
@@ -89,7 +144,7 @@
             <div
               class="bid-number"
             >
-              {{noOfBidSubmitted}} Bids Received
+              Submit bid
             </div>
           </v-sheet>
           <v-sheet  class="py-2 px-5 text-left award-status-card"
@@ -109,26 +164,9 @@
             <div
              class="award-bid-number"
             >
-              {{noOfBidSubmitted}} Bids Received
+              Submit bid
             </div>
           </v-sheet>
-        </v-col>
-
-        <v-col cols="auto">
-
-                  <v-radio-group
-              v-model="radios"
-              mandatory
-            >
-              <v-radio
-                label="Radio 1"
-                value="radio-1"
-              ></v-radio>
-              <v-radio
-                label="Radio 2"
-                value="radio-2"
-              ></v-radio>
-            </v-radio-group>
         </v-col>
       </v-row>
       <div class="bidDetail-tabs-section mt-7">
@@ -169,10 +207,10 @@
         </v-tabs>
         <v-tabs-items v-model="currentItem">
           <v-tab-item value="tab-1">
-            <BidDetailTab @changetab="ChangeT($event)"></BidDetailTab>
+            <SupplierBidDetail @changetab="ChangeT($event)"></SupplierBidDetail>
           </v-tab-item>
           <v-tab-item value="tab-2">
-            <BidSubmission @changetab="ChangeT($event)"></BidSubmission>
+            <SupplierBidSubmission @changetab="ChangeT($event)"></SupplierBidSubmission>
           </v-tab-item>
           <v-tab-item value="tab-3">
             <BidChat @changetab="ChangeT($event)"></BidChat>
@@ -184,24 +222,24 @@
       </div>
     </v-card>
   </v-col>
-
+<!-- </v-col> -->
 </template>
 
 <script>
-import BidDetailTab from '@/components/viewBid/bidDetailTab.vue';
+import SupplierBidDetail from '@/components/viewBid/supplierBidDetail.vue';
 import BidQandA from '@/components/viewBid/bidQandA.vue';
 import BidChat from '@/components/viewBid/bidChat.vue';
-import BidSubmission from '@/components/viewBid/bidSubmission.vue';
+import SupplierBidSubmission from '@/components/viewBid/supplierBidSubmission.vue';
 import moment from 'moment-timezone';
 import { mapActions } from 'vuex';
 
 export default {
   name: 'BidDetail',
   components: {
-    BidDetailTab,
+    SupplierBidDetail,
     BidQandA,
     BidChat,
-    BidSubmission,
+    SupplierBidSubmission,
   },
   data() {
     return {
@@ -217,7 +255,7 @@ export default {
       minutes: 0,
       seconds: 0,
       alert: false,
-      radios: null,
+      answer: null,
       tabs: [
         {
           text: 'Bid Detail',
@@ -239,9 +277,19 @@ export default {
     };
   },
   methods: {
-    ...mapActions(['getBidBySerial', 'getSubmittedBid', 'bidMessageUnreadCount']),
+    ...mapActions(['getBidBySerial', 'getSubmittedBid', 'bidMessageUnreadCount', 'makeIntent']),
     ChangeT(tab) {
       this.currentItem = tab;
+    },
+    makeIntentBid() {
+      console.log('Answer - ', this.answer);
+      this.makeIntent({
+        bidId: this.bidDetail.bidData.id,
+        owner: this.users.id,
+        ownerCompany: this.users.company.company,
+        companyId: this.users.company.id,
+        answer: this.answer,
+      });
     },
     addOneSecondToActualTimeEverySecond() {
       const component = this;
@@ -283,9 +331,6 @@ export default {
 
       return moment(currentDate).isAfter(momentDueDate);
     },
-    noOfBidSubmitted() {
-      return this.$store.getters.submittedBid.length;
-    },
     getPageLoading() {
       return this.$store.getters.pageLoader;
     },
@@ -301,15 +346,6 @@ export default {
   },
   mounted() {
     document.title = 'View Bid - BidOut';
-    // console.log(this.users);
-    // this.getSubmittedBid({
-    //   userId: this.users.id,
-    //   bidId: this.bidDetail.bidData.id,
-    // });
-    // await this.getSubmittedBid({
-    //   userId: 'nSJ4rgmgUTBbiyeJoHIE',
-    //   bidId: 'N3x4CzqfrYqpsLWYrX0k',
-    // });
   },
   async created() {
     this.users = this.$store.getters.userInfo;
@@ -328,13 +364,6 @@ export default {
       userId: this.users.id,
       bidId: this.bidDetail.bidData.id,
     });
-    if (this.$route.query.new) {
-      this.$toasted.show(`Success! Bid #${this.$route.params.serial} has been created and all invitations have been sent to the suppliers`, {
-        class: 'success-toast',
-        duration: 5000,
-        position: 'top-center',
-      });
-    }
 
     this.compute();
     this.addOneSecondToActualTimeEverySecond();

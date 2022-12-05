@@ -32,8 +32,8 @@ const routes = [
       },
       {
         path: '/view-bids-supplier/:serial',
-        name: 'BidDetail',
-        component: () => import('@/views/Bid/ViewBidssupplier.vue'),
+        name: 'ViewBidSupplier',
+        component: () => import('@/views/Bid/ViewBidsSupplier.vue'),
         beforeEnter: (to, from, next) => {
           if (localStorage.getItem('userData') == null) {
             next('/login');

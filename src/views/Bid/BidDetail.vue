@@ -71,7 +71,7 @@
             class="py-2 px-4 bid-status-card text-left"
             rounded="lg"
             height="119"
-            width="290"
+            width="300"
             v-if="!isAfterDueDate"
           >
             <div class="status" v-if="bidDetail.receivingBids">
@@ -370,7 +370,7 @@ export default {
       this.currentItem = tab;
     },
     deleteB() {
-      this.deleteBid({ bidId: this.bidDetail.bidData.id ,userid: this.users.id});
+      this.deleteBid({ bidId: this.bidDetail.bidData.id, userid: this.users.id });
     },
     addOneSecondToActualTimeEverySecond() {
       const component = this;

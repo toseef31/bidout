@@ -217,21 +217,21 @@ export default {
     fieldUpdate() {
       this.formStatus = true;
     },
-    savedraftOnInterval(){
+    savedraftOnInterval() {
       const timer = setInterval(() => {
-        if(this.formStatus == true){
+        if (this.formStatus == true) {
           this.savedraft();
           this.formStatus = false;
         }
       }, 60000);
 
-      this.$once("hook:beforeDestroy", () => {
+      this.$once('hook:beforeDestroy', () => {
         clearInterval(timer);
       });
     },
   },
-  mounted(){
+  mounted() {
     this.savedraftOnInterval();
-  }
+  },
 };
 </script>
