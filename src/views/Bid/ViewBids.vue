@@ -235,7 +235,7 @@ export default {
   methods: {
     ...mapActions(['getDraftBids', 'getBidsLists','getDraftBySerial']),
     editDraft(serial){
-      this.getDraftBySerial(serial);
+      this.getDraftBySerial({serial,company:this.$store.getters.userInfo.company.company});
     }
   },
   mounted() {

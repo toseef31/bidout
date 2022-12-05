@@ -90,11 +90,11 @@ export default {
   },
   computed:{
     teamMembers(){
-    	// if(this.$store.getters.draftBidData != null){
-    	// 	if(this.$store.getters.draftBidData.invitedTeamMembers != ''){ 
-    	// 		return this.$store.getters.teamMembers.filter((el) => { return !this.$store.getters.draftBidData.invitedTeamMembers.includes(el.id); })
-    	// 	}
-    	// }else{
+    	if(this.$store.getters.draftBidData != null){
+    		if(this.$store.getters.draftBidData.invitedTeamMembers != ''){ 
+    			return this.$store.getters.teamMembers.filter((el) => { return !this.$store.getters.draftBidData.invitedTeamMembers.includes(el.id); })
+    		}
+    	}else{
 	    	if(this.searchMember){
 					return this.$store.getters.teamMembers.filter((item)=>{
 	  			  return (this.searchMember.toLowerCase().split(' ').every(v => item.firstName.toLowerCase().includes(v)) || this.searchMember.toLowerCase().split(' ').every(v => item.lastName.toLowerCase().includes(v)))
@@ -102,7 +102,7 @@ export default {
 	    	}else{
 	  			return this.$store.getters.teamMembers;
 	    	}
-    	// }
+    	}
     	
     },
     filterTeam(){
@@ -160,13 +160,12 @@ export default {
       });
     },
   },
-  async beforeCreate() {
-    await this.getTeamMembers(this.$store.getters.userInfo.company.company);
+  created() {
+    // this.interval = setInterval(() => this.updateDraftBid({'invitedTeamMembers':this.membersAdded}));
   },
   mounted() {
-  	console.log('tem',this.$store.getters.teamMembers);
-  	console.log('efa',this.$store.getters.draftBidData);
   	this.user = this.$store.getters.userInfo
+    this.getTeamMembers(this.$store.getters.userInfo.company.company);
     this.savedraftOnInterval();
 	}	
 };

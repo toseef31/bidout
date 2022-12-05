@@ -358,26 +358,25 @@ export default {
       return _.orderBy(this.$store.getters.categories, 'orderNumber', 'asc');
     },
     salesRepsList() {
-    	// if(this.$store.getters.draftBidData != null){
-    	// 	if(this.$store.getters.draftBidData.invitedSuppliers != ""){
-    	// 		return this.$store.getters.salesRepsList.filter((el) => { return !this.$store.getters.draftBidData.invitedSuppliers.includes(el.companyId); })
-    	// 	}
-    	// }else{
+    	if(this.$store.getters.draftBidData != null){
+    		if(this.$store.getters.draftBidData.invitedSuppliers != ""){
+    			return this.$store.getters.salesRepsList.filter((el) => { return !this.$store.getters.draftBidData.invitedSuppliers.includes(el.companyId); })
+    		}
+    	}else{
 				return this.$store.getters.salesRepsList ? this.$store.getters.salesRepsList.filter((rep) => rep.company !== this.userInfo.company.company) : [];
-			// }
+			}
     },
     itemBidId() {
-      console.log(this.$store.getters.itemBidData);
       return this.$store.getters.itemBidData;
     },
     companiesList() {
-    	// if(this.$store.getters.draftBidData != null){
-    	// 	if(this.$store.getters.draftBidData.invitedSuppliers != ""){
-    	// 		return this.$store.getters.companiesList.filter((el) => { return !this.$store.getters.draftBidData.invitedSuppliers.includes(el.objectID); })
-    	// 	}
-    	// }else{
+    	if(this.$store.getters.draftBidData != null){
+    		if(this.$store.getters.draftBidData.invitedSuppliers != ""){
+    			return this.$store.getters.companiesList.filter((el) => { return !this.$store.getters.draftBidData.invitedSuppliers.includes(el.objectID); })
+    		}
+    	}else{
     		return this.$store.getters.companiesList;
-    	// }
+    	}
     },
     serviceCompanies() {
     	return this.$store.getters.serviceCompaniesList;
@@ -532,20 +531,22 @@ export default {
   		}); 
     },
   },
-  async created() {
-    await this.getCategories();
-    await this.getSales();
-    await this.getCompanies();
+  created() {
+    // this.interval = setInterval(() => this.updateDraftBid({'invitedSuppliers':this.repsInvited}));
   },
   mounted() {
   	this.user = this.$store.getters.userInfo;
+    this.getCategories();
+    this.getSales();
+    this.getCompanies();
+    
   	if(this.$store.getters.draftBidData != null){
-	  	if(!this.$store.getters.draftBidData.invitedSuppliers){
-	  		this.filterData = [];
-	  	}else{
-				console.log('ddddd',this.$store.getters.draftBidData.invitedSuppliers);
-		  	this.filterData = this.$store.getters.companiesList.filter((el) => { return this.$store.getters.draftBidData.invitedSuppliers.includes(el.objectID); }).slice();
-	  	}
+  		  	if(!this.$store.getters.draftBidData.invitedSuppliers){
+  		  		this.filterData = [];
+  		  	}else{
+  					console.log('ddddd',this.$store.getters.draftBidData.invitedSuppliers);
+  			  	this.filterData = this.$store.getters.companiesList.filter((el) => { return this.$store.getters.draftBidData.invitedSuppliers.includes(el.objectID); }).slice();
+  		  	}
   	}
     this.savedraftOnInterval();
 

@@ -541,15 +541,18 @@ export default {
       }
     }
   },
-  async getDraftBySerial({commit,state},payload){
-    console.log(payload,'payload');
+  async getDraftBySerial({commit,state,dispatch},payload){
     commit('setPageLoader', true);
     try {
       const res = await axios.get(
-        `bid/draft/getDraftBySerial/${payload}`,
+        `bid/draft/getDraftBySerial/${payload.serial}`,
       );
 
       if (res.status === 200) {
+        dispatch('getTeamMembers',payload.company);
+        dispatch('getSalesReps',{query: '',basin: 'all'});
+        dispatch('getCategories');
+        dispatch('searchByCompany',{query: '',basin:'all'});
         commit('setDraftBidData', res.data);
         commit('setPageLoader', false);
         router.replace('/create-bid');
