@@ -475,8 +475,9 @@ export default {
       }
     }
   },
-  async publishBid({ commit, state }, payload) {
+  async publishBid({ commit, state,dispatch }, payload) {
     try {
+      await dispatch('updateDraftBid', 'update');
       const res = await axios.post('bid/publishBid', {
         draftBidId: state.draftBidsList,
       });
