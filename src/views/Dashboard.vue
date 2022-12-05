@@ -188,6 +188,9 @@ export default {
     },
   },
   async created(){
+    let mapScript = document.createElement('script')
+    await mapScript.setAttribute('src', 'https://maps.googleapis.com/maps/api/js?key='+import.meta.env.VITE_GOOGLE_MAP+'&libraries=places')
+    document.head.appendChild(mapScript);
     this.users = JSON.parse(localStorage.getItem("userData")).user;
     await this.getAllLocations();
     await this.getLocation();
@@ -199,6 +202,7 @@ export default {
   },
   mounted() {
     document.title = "Dashboard - BidOut";
+    
     this.pendingUserCount(this.$store.getters.userInfo.company.id)
     this.users = JSON.parse(localStorage.getItem("userData")).user;
     this.getBidDashboard(this.userDatas.id);

@@ -8,10 +8,11 @@
       ></v-progress-circular>
     </v-col>
   </v-row>
-  <v-row class="bid-chat-row mt-4" fill-height no-gutters v-else>
+  <v-row class="bid-chat-row mt-2" fill-height no-gutters v-else>
 
     <div v-if="conversationsList.length ===0" class="text-center c-title-detail">There are currently no suppliers included on this bid, please <router-link to="#" class="text-decoration-underline">edit this bid </router-link> to add suppliers to begin chat conversations. </div>
-    <v-col v-else cols="12" sm="4" md="4" class="available-data pt-6" >
+
+    <v-col v-else cols="12" sm="5" md="5" class="available-data" >
       <v-list two-line class="pb-0">
       <v-list-item-group v-model="selectedUser" active-class="grey--text">
         <v-list-item
@@ -25,38 +26,43 @@
         >
           <template>
             <img
-              v-if="list.image != null"
+              v-if="list.company && list.company.image"
               width="88"
               height="auto"
               class="img-class"
-              :src="list.image"
+              :src=" list.company.image"
             />
             <v-list-item-icon v-else align-center>
               <v-icon size="40">mdi-domain</v-icon>
             </v-list-item-icon>
             <v-list-item-content align-center>
-              <v-list-item-title v-text="list.name || list.company"></v-list-item-title>
+              <v-list-item-title v-text="(list.name || list.company.company.split('|||')[0])"></v-list-item-title>
               <v-list-item-subtitle>
-                <a href="#" class="text-decoration-underline"
-                  >View Profile</a
+                <router-link :to="list.company && list.company.slug ? '/company/'+list.company.slug: ''" class="text-decoration-underline"
+                  >View Profile</router-link
                 ></v-list-item-subtitle
               >
             </v-list-item-content>
+
+            <v-list-item-action>
+                    <v-list-item-action-text>{{list.latestMessage ? istoday(list.latestMessage) : istoday(list.updatedAt)}}</v-list-item-action-text>
+                  </v-list-item-action>
           </template>
         </v-list-item>
       </v-list-item-group>
     </v-list>
     </v-col>
-    <v-col cols="12" sm="8" md="8" v-if="conversationsList.length !==0">
+
+    <v-col cols="12" sm="7" md="7" v-if="conversationsList.length !==0" class="d-sm-block">
       <div class="message-area">
         <div class="msg-header px-5 pb-5">
           <v-row align="center">
             <v-col cols="12" md="6">
               <div class="company-title text-left" v-if="chatData">
-                <h4>{{ chatData.conversation.company }}</h4>
+                <h4>{{ chatData.conversation.name ||chatData.conversation.company.company.split('|||')[0] }}</h4>
 
                 <p class="mb-0">
-                  <a href="#" class="text-decoration-underline">View Profile</a>
+                  <router-link :to="(chatData.conversation.company && chatData.conversation.company.slug ? '/company/'+ chatData.conversation.company.slug: '')" class="text-decoration-underline">View Profile</router-link>
                 </p>
               </div>
             </v-col>
