@@ -64,7 +64,7 @@ export default {
   },
   singleTemplate(state) {
     return state.singleTemplate;
-   }
+   },
   invitedSuppliersData(state) {
     return state.invitedSuppliersData;
   },

@@ -40,7 +40,7 @@ export default {
   },
   setBidTemplates(state, payload){
     state.bidTemplates = payload
-  }
+  },
   setBidViewData(state, payload) {
     state.bidViewData = payload;
   },
@@ -67,7 +67,7 @@ export default {
   },
   getSingleTemplate(state, payload) {
     state.singleTemplate = payload;
-  }
+  },
   setInvitedSuppliersData(state, payload) {
     state.invitedSuppliers = payload;
   },
