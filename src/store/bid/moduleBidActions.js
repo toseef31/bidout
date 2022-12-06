@@ -245,6 +245,7 @@ export default {
     }
   },
   async updateDraftBid({ commit, state }, payload) {
+    console.log(state.bidData,'adfasdfas  ');
     const config = {
       headers: {
         'Content-Type': 'multipart/form-data',
@@ -304,12 +305,23 @@ export default {
       formData.append('userId', state.bidData.userId);
       formData.append('companyId', state.bidData.companyId);
       formData.append('company', state.bidData.company);
-      formData.append('bidDescriptions[0][body]', state.bidData.bidDescriptions);
       formData.append('serial', state.bidSerial);
-      if (state.bidData.description) {
-        for (let d = 0; d < state.bidData.description.length; d++) {
-          formData.append(`bidDescriptions[${d + 1}][name]`, state.bidData.description[d].name);
-          formData.append(`bidDescriptions[${d + 1}][body]`, state.bidData.description[d].body);
+      if(state.bidData.status == 'edit'){
+        console.log(state.bidData,'adfasdfas  ');
+        formData.append('bidDescriptions[0][body]', state.bidData.bidDescriptions[0].body);
+        if (state.bidData.description) {
+          for (let d = 0; d < state.bidData.description.length; d++) {
+            formData.append(`bidDescriptions[${d + 1}][name]`, state.bidData.description[d].name);
+            formData.append(`bidDescriptions[${d + 1}][body]`, state.bidData.description[d].body);
+          }
+        }
+      }else{
+        formData.append('bidDescriptions[0][body]', state.bidData.bidDescriptions);
+        if (state.bidData.description) {
+          for (let d = 0; d < state.bidData.description.length; d++) {
+            formData.append(`bidDescriptions[${d + 1}][name]`, state.bidData.description[d].name);
+            formData.append(`bidDescriptions[${d + 1}][body]`, state.bidData.description[d].body);
+          }
         }
       }
     }
@@ -434,7 +446,6 @@ export default {
         }
       }
     }
-    console.log(state.draftBidsList);
     try {
       const res = await axios.post(`bid/draft/updateDraft/${state.draftBidsList}`, formData, config);
       if (res.status == 200) {
@@ -487,11 +498,12 @@ export default {
         commit('setDraftTime', null);
         commit('setAttachData', null);
         commit('setBidData', null);
-        state.invitedTeamMembers = null;
-        state.invitedSuppliers = null;
-        state.bidlines = null;
-        state.attachement = null;
-        state.questions = null;
+        commit('setInvitedSuppliersData', null);
+        commit('setInvitedTeamMembers', null);
+        commit('setBidlines', null);
+        commit('setAttachement', null);
+        commit('setQuestions', null);
+        commit('setDraftBidData', null);
         const bidDetail = await axios.get(`bid/getBid/${res.data._path.segments[1]}`);
         return bidDetail.data.serial;
       } else {
