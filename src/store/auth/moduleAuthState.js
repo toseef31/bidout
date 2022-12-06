@@ -2,7 +2,7 @@ import axios from 'axios';
 import store from "../../store";
 
 export default {
-    userInfo: JSON.parse(localStorage.getItem('userData')),
+    userInfo: '',
     userToken: JSON.parse(localStorage.getItem('token')),
     userId: '',
     companyId: '',

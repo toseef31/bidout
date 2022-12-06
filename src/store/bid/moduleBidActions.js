@@ -486,6 +486,7 @@ export default {
         commit('setDraftTime', null);
         commit('setDraftTime', null);
         commit('setAttachData', null);
+        commit('setBidData', null);
         state.invitedTeamMembers = null;
         state.invitedSuppliers = null;
         state.bidlines = null;
