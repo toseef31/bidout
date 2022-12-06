@@ -358,8 +358,8 @@ export default {
       return _.orderBy(this.$store.getters.categories, 'orderNumber', 'asc');
     },
     salesRepsList() {
-    	if(this.$store.state.bid.invitedSuppliers != null){
-    		// if(this.$store.state.bid.invitedSuppliers != ""){
+    	// if(this.$store.getters.bidData != null){
+    		if(this.$store.state.bid.invitedSuppliers != null){
     			return this.$store.getters.salesRepsList.filter((el) => { return !this.$store.state.bid.invitedSuppliers.includes(el.companyId); })
     		// }
     	}else{
@@ -370,8 +370,8 @@ export default {
       return this.$store.getters.itemBidData;
     },
     companiesList() {
-    	if(this.$store.getters.bidData != null){
-    		// if(this.$store.state.bid.invitedSuppliers != ""){
+    	// if(this.$store.getters.bidData != null){
+    		if(this.$store.state.bid.invitedSuppliers != null){
     			return this.$store.getters.companiesList.filter((el) => { return !this.$store.state.bid.invitedSuppliers.includes(el.objectID); })
     		// }
     	}else{

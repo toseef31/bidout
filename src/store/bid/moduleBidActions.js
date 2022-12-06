@@ -359,7 +359,7 @@ export default {
       for (let i = 0; i < payload.bidlines.length; i++) {
         formData.append(`lineItems[${i}][description]`, payload.bidlines[i].description);
         formData.append(`lineItems[${i}][unit]`, payload.bidlines[i].unit);
-        formData.append(`lineItems[${i}][inputType]`, payload.bidlines[i].type);
+        formData.append(`lineItems[${i}][inputType]`, payload.bidlines[i].inputType);
         formData.append(`lineItems[${i}][quantity]`, payload.bidlines[i].quantity);
         formData.append(`lineItems[${i}][buyerComment]`, payload.bidlines[i].buyerComment);
         formData.append(`lineItems[${i}][required]`, payload.bidlines[i].required);
@@ -369,7 +369,7 @@ export default {
         for (let i = 0; i < state.bidlines.length; i++) {
           formData.append(`lineItems[${i}][description]`, state.bidlines[i].description);
           formData.append(`lineItems[${i}][unit]`, state.bidlines[i].unit);
-          formData.append(`lineItems[${i}][inputType]`, state.bidlines[i].type);
+          formData.append(`lineItems[${i}][inputType]`, state.bidlines[i].inputType);
           formData.append(`lineItems[${i}][quantity]`, state.bidlines[i].quantity);
           formData.append(`lineItems[${i}][buyerComment]`, state.bidlines[i].buyerComment);
           formData.append(`lineItems[${i}][required]`, state.bidlines[i].required);
@@ -530,7 +530,7 @@ export default {
 
       if (res.status == 200) {
         commit('setAttachData', res.data);
-        commit('setAttachement',res.data);
+        // commit('setAttachement',res.data);
       } else {
         commit('setAttachData', null);
       }
