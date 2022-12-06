@@ -1,5 +1,5 @@
 <template>
-    <v-col class="mt-7 bid-detail-tab pa-0 mb-5" align="start">
+    <v-col class="mt-7 bid-detail-supplier pa-0 mb-5" align="start">
       <div class="bid-row pb-5">
         <div class="px-5">
           <div class="title-detail">Bid Details</div>
@@ -235,9 +235,7 @@ any question.</span>
         <div
           class="attachment-list-style"
           v-if="
-            bidDetail.bidData &&
-            bidDetail.bidData.attachments &&
-            bidDetail.bidData.attachments.length
+          bidDetail.supplierSubmissions && bidDetail.supplierSubmissions.supplierAttachments.length
           "
         >
           <v-simple-table fixed-header>
@@ -246,28 +244,24 @@ any question.</span>
                 <tr>
                   <th class="text-left"></th>
                   <th class="text-left">File Name</th>
-                  <th class="text-left">Comment</th>
                   <th class="text-left">File Size</th>
-                  <th class="text-left">Uploaded By</th>
                   <th class="text-left">Uploaded Date</th>
                 </tr>
               </thead>
               <tbody>
                 <tr
-                  v-for="(doc, index) in bidDetail.bidData.attachments"
+                  v-for="(doc, index) in bidDetail.supplierSubmissions.supplierAttachments"
                   :key="index"
                 >
                   <td class="text-left">
                     <img :src="require('@/assets/images/bids/FilePdf.png')" />
                   </td>
-                  <td class="text-left"><a :href="doc.url" target="_blank" class="text-decoration-none">{{ doc.fileName }}</a></td>
+                  <td class="text-left"><a :href="doc.url" target="_blank" class="text-decoration-none">{{ doc.name }}</a></td>
+
+                  <td class="text-left">{{ size(doc.size) }}</td>
+
                   <td class="text-left">
-                    <span>{{ doc.comment }}</span>
-                  </td>
-                  <td class="text-left">{{ size(doc.fileSize) }}</td>
-                  <td class="text-left">{{ doc.uploadedBy }}</td>
-                  <td class="text-left">
-                    {{ doc.uploadedAt | moment("MM/DD/YYYY") }}
+                    {{ doc.lastModified | moment("MM/DD/YYYY") }}
                   </td>
                 </tr>
               </tbody>
@@ -280,13 +274,13 @@ any question.</span>
 
       <div class="pt-8">
         <div class="title-detail px-6">Supplier Notes</div>
-        <div class="supplier-note mx-6">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Etiam eu turpis molestie, dictum est a, mattis tellus. Sed dignissim, metus nec fringilla accumsan, risus sem sollicitudin lacus, ut interdum tellus elit sed risus. Maecenas eget condimentum velit, sit amet feugiat lectus. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos. </div>
+        <div class="supplier-note mx-6">{{ bidDetail.supplierSubmissions.supplierNote}}
+        </div>
       </div>
     </v-col>
-  </template>
+</template>
 
 <script>
-import { mapActions } from 'vuex';
 
 export default {
   data() {
@@ -295,7 +289,6 @@ export default {
     };
   },
   methods: {
-    ...mapActions(['getBidBySerial']),
     size(size) {
       const sizeInMB = (size / (1024 * 1024)).toFixed(2);
       return `${sizeInMB}mb`;
@@ -304,6 +297,9 @@ export default {
   computed: {
     bidDetail() {
       return this.$store.getters.bidViewData;
+    },
+    supplierDocList() {
+      return this.$store.getters.supplierAttachment;
     },
   },
   mounted() {},

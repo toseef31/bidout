@@ -1,6 +1,7 @@
 <template>
   <v-col class="my-7 pa-0 bid-submission-tab" align="start">
-  <!-- {{bidsSubmitted}}
+  {{bidsSubmitted}}
+  <!--
     <v-simple-table class="template-table-style mt-2">
       <template v-slot:default>
         <thead>
@@ -409,23 +410,24 @@ export default {
     bidDetail() {
       return this.$store.getters.bidViewData;
     },
-    // bidsSubmitted() {
-    //   const sBid = this.$store.getters.submittedBid;
-    //   console.log(sBid);
 
-    //   for (let i = 0; i < sBid.length; i++) {
-    //     this.listItem[i] = {
-    //       ...JSON.parse(sBid[i].lineItems),
-    //       name: sBid[i].company.company,
-    //       companyId: sBid[i].companyId,
-    //     };
-    //     this.header[i + 1] = sBid[i].company.company;
-    //   }
+    bidsSubmitted() {
+      const sBid = this.$store.getters.submittedBid;
+      console.log(sBid);
 
-    //   console.log(this.header);
+      // for (let i = 0; i < sBid.length; i++) {
+      //   this.listItem[i] = {
+      //     ...JSON.parse(sBid[i].lineItems),
+      //     name: sBid[i].company.company,
+      //     companyId: sBid[i].companyId,
+      //   };
+      //   this.header[i + 1] = sBid[i].company.company;
+      // }
 
-    //   return this.$store.getters.submittedBid;
-    // },
+      // console.log(this.header);
+
+      return this.$store.getters.submittedBid;
+    },
     isAfterDueDate() {
       const bidDueDate = this.bidDetail.bidData.dueDate;
       const bidDueTime = this.bidDetail.bidData.dueTime;

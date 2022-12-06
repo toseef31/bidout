@@ -68,4 +68,16 @@ export default {
   supplierAttachment(state) {
     return state.supplierAttachment;
   },
+  questionAttachment(state) {
+    return state.questionAttachment;
+  },
+  userType(state) {
+    return state.userType;
+  },
+  intentId(state) {
+    return state.intentId;
+  },
+  isBidSubmitted(state) {
+    return state.isBidSubmitted;
+  },
 };

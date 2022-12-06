@@ -31,18 +31,6 @@ const routes = [
         },
       },
       {
-        path: '/view-bids-supplier/:serial',
-        name: 'ViewBidSupplier',
-        component: () => import('@/views/Bid/ViewBidsSupplier.vue'),
-        beforeEnter: (to, from, next) => {
-          if (localStorage.getItem('userData') == null) {
-            next('/login');
-          } else {
-            next();
-          }
-        },
-      },
-      {
         path: '/create',
         name: 'CreateBid',
         component: () => import('@/views/Bid/CreateBid.vue'),

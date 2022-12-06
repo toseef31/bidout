@@ -121,11 +121,16 @@ export default {
       const res = await axios.get(
         `bid/getBidBySerial/${payload.serial}/${payload.id}`,
       );
-
+      console.log(res.data);
       if (res.status === 200) {
         commit('setBidViewData', res.data);
         commit('setPageLoader', false);
         commit('setViewBidError', false);
+        commit('setUserType', res.data.user_type);
+        commit('setSubmittedBids', res.data.supplierSubmissions);
+        if (res.data.user_type === 'supplier' && res.data.supplierSubmissions) {
+          commit('setIsBidSubmitted', true);
+        }
       } else {
         commit('setPageLoader', false);
         commit('setViewBidError', false);
@@ -166,12 +171,16 @@ export default {
       }
     }
   },
-  async getSubmittedBid({ commit, dispatch, state }, payload) {
+  async getIntent({ commit, dispatch, state }, payload) {
     try {
-      const res = await axios.get(`bidSubmission/getSubmittedBids/${payload.userId}/${payload.bidId}`);
-
+      const res = await axios.get(`intend/getIntends/${payload.companyId}/${payload.bidId}/${payload.companyName}`);
       if (res.status === 200) {
-        commit('setSubmittedBids', res.data);
+        if (res.data && res.data.answer) {
+          commit('setBidIntent', res.data.answer);
+          commit('setIntentId', res.data.id);
+        } else {
+          commit('setBidIntent', null);
+        }
       }
     } catch (err) {
       if (state.apiCounter == 2) {
@@ -179,19 +188,15 @@ export default {
       } else if (err.response.status === 403) {
         await dispatch('refreshToken');
         state.apiCounter = 2;
-        dispatch('getSubmittedBid', payload);
+        dispatch('getIntent', payload);
       }
     }
   },
-
-  async makeIntent({ commit, state, dispatch }, payload) {
+  async updateIntent({ commit, state, dispatch }, payload) {
     try {
-      const res = await axios.post('intend/createIntend/', {
-        bidId: payload.bidId,
-        owner: payload.owner,
-        ownerCompany: payload.ownerCompany,
-        companyId: payload.companyId,
+      const res = await axios.post('intend/editIntend/', {
         answer: payload.answer,
+        intendId: payload.intendId,
       });
 
       if (res.status === 200) {
@@ -207,20 +212,77 @@ export default {
       }
     }
   },
-  async submitBid({ commit, state, dispatch }, payload) {
+  async makeIntent({ commit, state, dispatch }, payload) {
     try {
-      const res = await axios.post('bidSubmission/submitBid/', {
-        userId: payload.userId,
-        companyId: payload.companyId,
+      const res = await axios.post('intend/createIntend/', {
         bidId: payload.bidId,
-        supplierNote: payload.supplierNote,
-        supplierAttachments: payload.supplierAttachments,
-        lineItems: payload.lineItems,
-        answers: payload.answers,
+        owner: payload.owner,
+        ownerCompany: payload.ownerCompany,
+        companyId: payload.companyId,
+        answer: payload.answer,
       });
 
       if (res.status === 200) {
-        console.log(res.data);
+        commit('setBidIntent', payload.answer);
+        commit('setIntentId', res.data.id);
+      }
+    } catch (err) {
+      if (state.apiCounter == 2) {
+        dispatch('apiSignOutAction');
+      } else if (err.response.status === 403) {
+        await dispatch('refreshToken');
+        state.apiCounter = 2;
+        dispatch('makeIntent', payload);
+      }
+    }
+  },
+  async submitBid({ commit, state, dispatch }, payload) {
+    const config = {
+      headers: {
+        'Content-Type': 'multipart/form-data',
+        Authorization: `Bearer ${JSON.parse(localStorage.getItem('token'))}`,
+      },
+    };
+
+    // const submittedData = {
+    //   userId: payload.userId,
+    //   bidId: payload.bidId,
+    //   supplierNote: payload.supplierNote,
+    //   supplierAttachments: payload.supplierAttachments,
+    //   lineItems: payload.lineItems,
+    //   answers: payload.answers,
+    //   companyId: payload.companyId,
+    // };
+    const formData = new FormData();
+
+    formData.append('userId', payload.userId);
+    formData.append('companyId', payload.companyId);
+    formData.append('bidId', payload.bidId);
+    formData.append('supplierNote', payload.supplierNote);
+
+    if (payload.supplierAttachments) {
+      for (let i = 0; i < payload.supplierAttachments.length; i++) {
+        formData.append(`supplierAttachments[${i}]`, payload.supplierAttachments[i]);
+      }
+    }
+
+    if (payload.lineItems) {
+      for (let i = 0; i < payload.lineItems.length; i++) {
+        formData.append(`lineItems[${i}][price]`, payload.lineItems[i].price);
+      }
+    }
+
+    if (payload.answers) {
+      for (let i = 0; i < payload.answers.length; i++) {
+        formData.append(`answers[${i}][questionId]`, payload.answers[i].questionId);
+        formData.append(`answers[${i}][answer]`, payload.answers[i].answer);
+      }
+    }
+    try {
+      const res = await axios.post('bidSubmission/submitBid/', formData, config);
+
+      if (res.status === 200) {
+        commit('setIsBidSubmitted', true);
       }
     } catch (err) {
       if (state.apiCounter == 2) {
@@ -521,39 +583,6 @@ export default {
         await dispatch('refreshToken');
         state.apiCounter = 2;
         dispatch('uploadBidAttach', payload);
-      }
-    }
-  },
-
-  async uploadBidSupplier({ commit, state, dispatch }, payload) {
-    const config = {
-      headers: {
-        'Content-Type': 'multipart/form-data',
-        Authorization: `Bearer ${JSON.parse(localStorage.getItem('token'))}`,
-      },
-    };
-    const formData = new FormData();
-    if (payload.attachement) {
-      formData.append('uploadedBy', payload.uploadedBy);
-      for (let i = 0; i < payload.attachement.length; i++) {
-        formData.append(`attachement[${i}]`, payload.attachement[i]);
-      }
-    }
-    try {
-      const res = await axios.post('bid/uploadBidAttachment/', formData, config);
-
-      if (res.status == 200) {
-        commit('setSupplierAttachment', res.data);
-      } else {
-        commit('setSupplierAttachment', null);
-      }
-    } catch (err) {
-      if (state.apiCounter == 2) {
-        dispatch('apiSignOutAction');
-      } else if (err.response.status === 403) {
-        await dispatch('refreshToken');
-        state.apiCounter = 2;
-        dispatch('uploadBidSupplier', payload);
       }
     }
   },

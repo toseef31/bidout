@@ -1,6 +1,6 @@
 <template>
   <v-col class="my-7 pa-0 bid-submission-tab" align="start">
-{{getLineItems}}
+
     <div class="title-line" v-if="
             bidDetail.bidData &&
             bidDetail.bidData.lineItems &&
@@ -31,25 +31,27 @@
             <div class="d-flex align-center unit-class">
              <div class="mr-1 unit">{{ item.unit}}</div>
              <div class="mr-2">
-             <v-text-field
-                single-line
-                outlined
-                dense
-                prefix="$"
-                hideDetails
-                type="number"
-                v-if="lineItems[index]['bid']"
-                v-model="lineItems[index]['price']"
+                <v-text-field
+                    single-line
+                    outlined
+                    dense
+                    prefix="$"
+                    hideDetails
+                    type="number"
+                    v-if="lineItems[index]['bid']"
+                    v-model="lineItems[index]['price']"
 
-          ></v-text-field>
-          <div v-else  class="no-bid d-flex align-center">No bids</div>
-          </div>
-          <div>
-          <v-btn @click="noBidUpdate(index)" icon v-if="lineItems[index]['bid']">
-          <v-icon size="20" color="#F03F20" >mdi-close</v-icon>
-          </v-btn>
-          <v-btn v-else icon @click="yesBidUpdate(index)">
-          <v-icon size="20"  color="#201B1B">mdi-reply-outline</v-icon></v-btn>
+                ></v-text-field>
+                <div v-else  class="no-bid d-flex align-center">No bids
+                </div>
+             </div>
+
+          <div v-if="item.required === 'false'">
+              <v-btn @click="noBidUpdate(index)" icon v-if="lineItems[index]['bid']">
+              <v-icon size="20" color="#F03F20" >mdi-close</v-icon>
+              </v-btn>
+              <v-btn v-else icon @click="yesBidUpdate(index)">
+              <v-icon size="20"  color="#201B1B">mdi-reply-outline</v-icon></v-btn>
           </div>
         </div>
 
@@ -96,14 +98,15 @@
                     item.title
                   }}</v-col>
                   <v-col class="second-child text-right"  >
+
                     <v-checkbox
                        v-if="(item.questionType === 'checkbox'  && !item.options)"
-                        v-model="checkbox"
+                       v-model="answers[index]['answer']"
                         hideDetails
                     ></v-checkbox>
 
                     <v-radio-group
-                       v-model="intent"
+                    v-model="answers[index]['answer']"
                        row
                        v-if="(item.questionType === 'checkbox' && item.options)"
                        >
@@ -124,7 +127,9 @@
                         v-if="item.questionType === 'textfield'"
                         hideDetails
                         outlined
+                        v-model="answers[index]['answer']"
                     ></v-text-field>
+
                     <v-textarea
                         v-if="item.questionType === 'textarea'"
                         hideDetails
@@ -132,11 +137,22 @@
                         auto-grow
                         rows="3"
                         row-height="25"
+                        v-model="answers[index]['answer']"
                     ></v-textarea>
 
                     <div class="upload-attach" v-if="item.questionType === 'uploadFile'">
+                    <div class="d-flex justify-space-between align-center" v-if="questionDocList">
+                    <div class="doc-list">{{questionDocList.name}}</div>
+
+                    <v-btn @click="removeQuesDoc" icon>
+                        <v-icon size="20" color="#F03F20" >mdi-close</v-icon>
+                     </v-btn>
+
+                    </div>
+
                     <label
-                      for="uploadFile"
+                      for="uploadFileQ"
+                      v-else
                       class="
                         upload-file
                        pa-4
@@ -145,13 +161,16 @@
                         text-center
                       "
                     >
-                      <v-file-input
-                        label="File input"
-                        filled
-                        color="#fff"
-                        id="uploadFile"
-                      ></v-file-input>
+                      <input
+                        class="d-none"
+                        type="file"
+                        id="uploadFileQ"
+                        @change="handleDocument($event,'questionUpload',index)"
+                      />
+
+                    <div>
                       <v-icon class="mr-4">mdi-cloud-upload-outline</v-icon>Upload here
+                    </div>
                     </label>
                   </div>
                 </v-col>
@@ -165,15 +184,8 @@
 
           <v-row no-gutters align="center" class="px-4 mt-7">
                 <v-col cols="12" sm="12" md="12">
-                    <div class="upload-attach">
-                    <v-progress-circular
-                        v-if="isAttachingDoc"
-                        :width="3"
-                        color="green"
-                        indeterminate
-                    ></v-progress-circular>
+                    <div class="upload-attach text-center">
                     <label
-                        v-else
                         for="uploadFile"
                         class="upload-file pa-6 d-block font-weight-medium text-center"
                     >
@@ -182,7 +194,7 @@
                         ref="documentUploader"
                         class="d-none"
                         id="uploadFile"
-                        @change="handleDocumentUpload($event)"
+                        @change="handleDocument($event)"
                         />
 
                         <span class="text-decoration-underline">Upload Attachments Here</span>
@@ -194,9 +206,7 @@
            <div
           class="attachment-list-style pt-6"
           v-if="
-            bidDetail.bidData &&
-            bidDetail.bidData.attachments &&
-            bidDetail.bidData.attachments.length
+          supplierDocList && supplierDocList.length
           "
         >
           <v-simple-table fixed-header>
@@ -204,20 +214,18 @@
 
               <tbody>
                 <tr
-                  v-for="(doc, index) in bidDetail.bidData.attachments"
+                  v-for="(doc, index) in supplierDocList"
                   :key="index"
                 >
                   <td class="text-left">
                     <img :src="require('@/assets/images/bids/FilePdf.png')" />
                   </td>
-                  <td class="text-left"><a :href="doc.url" target="_blank" class="text-decoration-none">{{ doc.fileName }}</a></td>
+                  <td class="text-left"><a :href="doc.url" target="_blank" class="text-decoration-none">{{ doc.name }}</a></td>
+                  <td class="text-left">{{ size(doc.size) }} </td>
+
                   <td class="text-left">
-                    <span>{{ doc.comment }}</span>
-                  </td>
-                  <td class="text-left">{{ size(doc.fileSize) }} </td>
-                  <td class="text-left">{{ doc.uploadedBy }}</td>
-                  <td class="text-left">
-                    {{ doc.uploadedAt | moment("MM/DD/YYYY") }}
+                    {{ doc.lastModified
+ | moment("MM/DD/YYYY") }}
                   </td>
                   <td class="text-left delete-class text-decoration-underline" @click="deleteAttach(index)">
                     <div>Delete</div>
@@ -244,7 +252,7 @@
 
       </div>
 
-      <div class="text-center mt-3">
+      <div class="text-center mt-3" v-if="(getIntent !== null && getIntent === 'true' && !isAfterDueDate)">
         <v-btn
           color="#0D9648"
           height="56"
@@ -274,29 +282,28 @@ export default {
   data() {
     return {
       lineItems: [],
-      checkbox: false,
-      bid: true,
       intent: 'true',
-      isAttaching: false,
       loading: false,
       supplierNote: '',
       file: '',
-      fileName: '',
-      fileExt: '',
-      fileSize: '',
       supplierAttachment: [],
+      questionAttachment: [],
+      answers: [],
+      user: '',
     };
   },
   computed: {
     bidDetail() {
       return this.$store.getters.bidViewData;
     },
-    getLineItems() {
-      console.log(this.lineItems);
-      return this.lineItems;
+    supplierDocList() {
+      return this.$store.getters.supplierAttachment;
     },
-    isAttachingDoc() {
-      return this.isAttaching;
+    getIntent() {
+      return this.$store.getters.bidIntent;
+    },
+    questionDocList() {
+      return this.$store.getters.questionAttachment;
     },
     // bidsSubmitted() {
     //   const sBid = this.$store.getters.submittedBid;
@@ -330,43 +337,54 @@ export default {
     },
   },
   methods: {
-    ...mapActions(['submitBid', 'uploadBidSupplier']),
+    ...mapActions(['submitBid']),
     size(size) {
       const sizeInMB = (size / (1024 * 1024)).toFixed(2);
       return `${sizeInMB}mb`;
     },
-    priceUpdate($event, index) {
-      console.log(index);
-      console.log($event);
-      this.$set(this.lineItem, this.lineItem[index].price, $event);
-      // this.lineItem[index] = {
-      //     price: $event,
-      //   };
-    },
     async submit() {
+      this.loading = true;
 
+      const lineItemsA = this.lineItems;
+      let answersA = this.answers;
+
+      lineItemsA.forEach((el) => delete el.bid);
+
+      answersA = answersA.filter((el) => el.category !== 'category');
+
+      answersA.forEach((el) => delete el.category);
+
+      await this.submitBid({
+        userId: this.user.id,
+        companyId: this.user.company.id,
+        bidId: this.bidDetail.bidData.id,
+        supplierNote: this.supplierNote,
+        supplierAttachments: this.supplierDocList,
+        lineItems: lineItemsA,
+        answers: answersA,
+      });
+
+      this.loading = false;
+
+      this.$emit('changetab', 'tab-1');
     },
-    async handleDocumentUpload(event) {
-      this.isAttaching = true;
+    handleDocument(event, slug, index) {
       this.file = event.target.files[0];
-      this.fileName = this.file.name;
-      this.fileExt = this.fileName.split('.').pop();
-      this.fileSize = (this.file.size / (1024 * 1024)).toFixed(2);
 
-      this.supplierAttachment.push(this.file);
+      if (slug) {
+        this.$store.commit('setQuestionAttachment', this.file);
 
-      const data = {
-        uploadedBy: `${this.$store.getters.userInfo.firstName} ${this.$store.getters.userInfo.lastName}`,
-        attachment: this.supplierAttachment,
-      };
-
-      await this.uploadBidSupplier(data);
-      this.isAttaching = false;
+        this.answers[index].answer = this.file;
+      } else {
+        this.$store.commit('setSupplierAttachment', this.file);
+      }
     },
+
     deleteAttach(index) {
-      console.log(index);
-      this.supplierAttachment.splice(index, 1);
       this.$store.getters.supplierAttachment.splice(index, 1);
+    },
+    removeQuesDoc() {
+      this.$store.commit('setQuestionAttachment', null);
     },
     noBidUpdate(index) {
       this.lineItems[index].price = 'NO_BID';
@@ -377,10 +395,19 @@ export default {
       this.lineItems[index].bid = true;
     },
     initializeD() {
-      for (let i = 0; i < this.bidDetail.bidData.lineItems.length; i++) {
+      const { bidData } = this.bidDetail;
+      for (let i = 0; i < bidData.lineItems.length; i++) {
         this.lineItems.push({
           price: 0,
           bid: true,
+        });
+      }
+
+      for (let i = 0; i < bidData.questions.length; i++) {
+        this.answers.push({
+          questionId: bidData.questions[i].id,
+          answer: null,
+          category: bidData.questions[i].type,
         });
       }
     },
@@ -392,6 +419,7 @@ export default {
   },
   created() {
     this.initializeD();
+    this.user = this.$store.getters.userInfo;
   },
 };
 </script>

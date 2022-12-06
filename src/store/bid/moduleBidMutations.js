@@ -81,6 +81,19 @@ export default {
     state.bidIntent = payload;
   },
   setSupplierAttachment(state, payload) {
-    state.supplierAttachment = payload;
+    console.log(payload);
+    state.supplierAttachment.push(payload);
+  },
+  setQuestionAttachment(state, payload) {
+    state.questionAttachment = payload;
+  },
+  setUserType(state, payload) {
+    state.userType = payload;
+  },
+  setIntentId(state, payload) {
+    state.intentId = payload;
+  },
+  setIsBidSubmitted(state, payload) {
+    state.isBidSubmitted = payload;
   },
 };
