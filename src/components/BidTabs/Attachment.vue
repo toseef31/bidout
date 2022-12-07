@@ -117,16 +117,14 @@ export default {
       return `${this.$store.getters.userInfo.firstName} ${this.$store.getters.userInfo.lastName}`;
     },
     docsList() {
-      if(this.$store.getters.draftBidData != null){
-        if(this.$store.getters.draftBidData.attachments != ""){
+      if(this.$store.getters.bidData != null){
+        if(this.$store.getters.bidData.attachments != ""){
           if(this.$store.getters.attachData){
-            var totalDay = this.$store.getters.draftBidData.attachments.concat(this.$store.getters.attachData);
+            var totalDay = this.$store.getters.bidData.attachments.concat(this.$store.getters.attachData);
             this.documents = totalDay;
-            console.log(this.$store.getters.attachData,'if',this.documents);
           }else{
-            this.documents = this.$store.getters.draftBidData.attachments;
+            this.documents = this.$store.getters.bidData.attachments;
           }
-          console.log('attachData',this.documents);
           this.$store.commit('setAttachement',this.documents);
           return this.documents;
         }else{
@@ -174,7 +172,6 @@ export default {
       this.fileName = this.file.name;
       this.fileExt = this.fileName.split(".").pop();
       this.fileSize = (this.file.size / (1024 * 1024)).toFixed(2);
-      console.log(this.fileSize);
       // this.previewDoc();
       const uploadDoc = [];
       uploadDoc.push(this.file);
@@ -184,7 +181,6 @@ export default {
         uploadedBy: `${this.$store.getters.userInfo.firstName} ${this.$store.getters.userInfo.lastName}`,
         attachement: uploadDoc,
       };
-      // this.documents.push(this.file);
       await this.uploadBidAttach(data);
       this.isAttaching = false;
       this.attachStatus = true;
@@ -194,10 +190,9 @@ export default {
       return `${sizeInMB}mb`;
     },
     deleteAttach(index) {
-      console.log('deeeea',this.documents);
       this.documents.splice(index, 1);
       this.$store.getters.attachData.splice(index, 1);
-      // this.$store.commit('setDocuments',this.documents);
+      this.$store.commit('setAttachement',this.documents);
       this.attachStatus = true;
     },
     openComment(index) {
@@ -227,10 +222,10 @@ export default {
     if (this.$store.getters.attachData) {
       this.documents = this.$store.getters.attachData;
     }
-    if(this.$store.getters.draftBidData != null){
-      if(this.$store.getters.draftBidData.attachments != ""){
-        // this.$store.commit('setAttachement',this.$store.getters.draftBidData.attachments);
-        this.documents = this.$store.getters.draftBidData.attachments;
+    if(this.$store.getters.bidData != null){
+      if(this.$store.getters.bidData.attachments != ""){
+        this.$store.commit('setAttachement',this.$store.getters.bidData.attachments);
+        this.documents = this.$store.getters.bidData.attachments;
       }
     }
     this.savedraftOnInterval();

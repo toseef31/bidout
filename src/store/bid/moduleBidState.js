@@ -14,7 +14,7 @@ export default {
    dueDate: '',
    dueTime: '',
    qAndAEnabled: '',
-   bidDescriptions: '',
+   bidDescriptions: [{ body: ""}]
   },
   attachData: null,
   draftTime: null,

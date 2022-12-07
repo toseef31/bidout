@@ -358,35 +358,33 @@ export default {
       return _.orderBy(this.$store.getters.categories, 'orderNumber', 'asc');
     },
     salesRepsList() {
-    	// if(this.$store.getters.bidData != null){
-    		if(this.$store.state.bid.invitedSuppliers != null){
-    			return this.$store.getters.salesRepsList.filter((el) => { return !this.$store.state.bid.invitedSuppliers.includes(el.companyId); })
-    		// }
-    	}else{
-				return this.$store.getters.salesRepsList ? this.$store.getters.salesRepsList.filter((rep) => rep.company !== this.userInfo.company.company) : [];
-			}
+  		if(this.$store.getters.bidData.invitedSuppliers != ""){
+  			return this.$store.getters.salesRepsList.filter((el) => { return !this.$store.getters.bidData.invitedSuppliers.includes(el.companyId); })
+  		}else{
+  			return this.$store.getters.salesRepsList ? this.$store.getters.salesRepsList.filter((rep) => rep.company !== this.userInfo.company.company) : [];
+  		}
+    	
     },
     itemBidId() {
       return this.$store.getters.itemBidData;
     },
     companiesList() {
-    	// if(this.$store.getters.bidData != null){
-    		if(this.$store.state.bid.invitedSuppliers != null){
-    			return this.$store.getters.companiesList.filter((el) => { return !this.$store.state.bid.invitedSuppliers.includes(el.objectID); })
-    		// }
-    	}else{
-    		return this.$store.getters.companiesList;
-    	}
+  		if(this.$store.getters.bidData.invitedSuppliers != ""){
+  			return this.$store.getters.companiesList.filter((el) => { return !this.$store.getters.bidData.invitedSuppliers.includes(el.objectID); })
+  		}else{
+  			return this.$store.getters.companiesList;
+  		}
+    	
     },
     serviceCompanies() {
     	return this.$store.getters.serviceCompaniesList;
     },
     filteredEntries() {
-    	if(this.$store.getters.bidData != null){
-    		if(!this.$store.state.bid.invitedSuppliers){
-    			return 0;
+    	if(this.$store.getters.bidData){
+    		if(this.$store.getters.bidData.invitedSuppliers != ""){
+    			return this.$store.getters.companiesList.filter((el) => { return this.$store.getters.bidData.invitedSuppliers.includes(el.objectID); }).slice();
     		}else{
-    			return this.$store.getters.companiesList.filter((el) => { return this.$store.state.bid.invitedSuppliers.includes(el.objectID); }).slice();
+    			return 0;
     		}
     	}else{
     		return [];
@@ -420,10 +418,10 @@ export default {
     		company: this.company,
     		phone: this.results,
     		email: this.email,
-    		bidTitle: JSON.parse(localStorage.getItem('bidData')).title,
-    		bidType: JSON.parse(localStorage.getItem('bidData')).type,
-    		bidDueDate: JSON.parse(localStorage.getItem('bidData')).dueDate,
-    		bidDueTime: JSON.parse(localStorage.getItem('bidData')).dueTime,
+    		bidTitle: this.$store.state.bidData.title,
+    		bidType: this.$store.state.bidData.type,
+    		bidDueDate: this.$store.state.bidData.dueDate,
+    		bidDueTime: this.$store.state.bidData.dueTime,
     	};
 			try {
 				await this.inviteNewSupplier(supplier);
@@ -496,7 +494,6 @@ export default {
     	this.newCount = this.repsInvited.length;
     	this.$store.getters.companiesList.splice(index, 1);
     	this.$store.commit('setInvitedSuppliersData', this.repsInvited);
-      this.savedraftOnchange();
     },
     addServiceCompany(company, index) {
     	const data = {
@@ -508,7 +505,7 @@ export default {
     	this.newCount = this.repsInvited.length;
     	this.$store.getters.companiesList.splice(index, 1);
     	this.$store.commit('setInvitedSuppliersData', this.repsInvited);
-      this.savedraftOnchange();
+    
     },
     removeCompany(company, index) {
     	this.oldCount = this.repsInvited.length;
@@ -516,7 +513,7 @@ export default {
     	this.newCount = this.repsInvited.length;
     	this.$store.getters.companiesList.push(company.item);
     	this.$store.commit('setInvitedSuppliersData', this.repsInvited);
-      this.savedraftOnchange();
+      
     },
     savedraftOnInterval() {
   		const timer = setInterval(() => {
@@ -531,23 +528,13 @@ export default {
   		}); 
     },
   },
-  created() {
-    // this.interval = setInterval(() => this.updateDraftBid({'invitedSuppliers':this.repsInvited}));
+  beforeMount(){
+  	this.getCategories();
+  	this.getSales();
+  	this.getCompanies();
   },
   mounted() {
   	this.user = this.$store.getters.userInfo;
-    this.getCategories();
-    this.getSales();
-    this.getCompanies();
-    
-  	if(this.$store.getters.bidData != null){
-  		  	if(!this.$store.getters.bidData.invitedSuppliers){
-  		  		this.filterData = [];
-  		  	}else{
-  					console.log('ddddd',this.$store.getters.bidData.invitedSuppliers);
-  			  	this.filterData = this.$store.getters.companiesList.filter((el) => { return this.$store.getters.bidData.invitedSuppliers.includes(el.objectID); }).slice();
-  		  	}
-  	}
     this.savedraftOnInterval();
 
   },

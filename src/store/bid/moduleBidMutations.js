@@ -85,6 +85,23 @@ export default {
   },
   setBidTitle(state, payload) {
     state.bidData.title = payload;
-    console.log(state.bidData.title,'dasda');
+  },
+  setBidType(state, payload) {
+    state.bidData.type = payload;
+  },
+  setBidDueDate(state, payload) {
+    state.bidData.dueDate = payload;
+  },
+  setBidDueTime(state, payload) {
+    state.bidData.dueTime = payload;
+  },
+  setBidRegions(state, payload) {
+    state.bidData.regions = payload;
+  },
+  setBidEnabled(state, payload) {
+    state.bidData.qAndAEnabled = payload;
+  },
+  setBidDescription(state, payload) {
+    state.bidData.bidDescriptions = payload;
   },
 };

@@ -90,9 +90,11 @@ export default {
   },
   computed:{
     teamMembers(){
-    	if(this.$store.getters.draftBidData != null){
-    		if(this.$store.getters.draftBidData.invitedTeamMembers != ''){ 
-    			return this.$store.getters.teamMembers.filter((el) => { return !this.$store.getters.draftBidData.invitedTeamMembers.includes(el.id); })
+    	if(this.$store.getters.bidData != null){
+    		if(this.$store.getters.bidData.invitedTeamMembers != ''){ 
+    			return this.$store.getters.teamMembers.filter((el) => { return !this.$store.getters.bidData.invitedTeamMembers.includes(el.id); })
+    		}else{
+    			return this.$store.getters.teamMembers;
     		}
     	}else{
 	    	if(this.searchMember){
@@ -103,14 +105,11 @@ export default {
 	  			return this.$store.getters.teamMembers;
 	    	}
     	}
-    	
     },
     filterTeam(){
-    	if(this.$store.getters.draftBidData != null){
-  			if(this.$store.getters.draftBidData.invitedTeamMembers != ''){
-  		  	this.membersAdded = this.$store.getters.teamMembers.filter((el) => { return this.$store.getters.draftBidData.invitedTeamMembers.includes(el.id); })
-  			}
-  		} 
+			if(this.$store.getters.bidData.invitedTeamMembers != ''){
+		  	this.membersAdded = this.$store.getters.teamMembers.filter((el) => { return this.$store.getters.bidData.invitedTeamMembers.includes(el.id); })
+			}
     },
     validat(){
     	if(this.membersAdded.length > 0){

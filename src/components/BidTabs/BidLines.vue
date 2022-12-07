@@ -148,26 +148,38 @@ export default {
       return this.dragging ? 'under drag' : '';
     },
     validate() {
-      if(this.$store.getters.draftBidData != null){
-        if(this.$store.getters.draftBidData.lineItems != ""){
+      // if(this.$store.getters.bidData != null){
+        if(this.$store.getters.bidData.lineItems != ""){
           this.$emit('validation', { valid: true, items: '4' });
           this.$store.commit('setLineItemsComplete', true);
           this.$store.commit('setBidlines',this.bidLines);
+        }else if (this.bidLines.length > 0 && this.bidLines.filter((item) => item.required === true && item.description && item.quantity).length > 0) {
+          console.log('fsfsd');
+          this.$emit('validation', { valid: true, items: '4' });
+          this.$store.commit('setLineItemsComplete', true);
+          this.$store.commit('setBidlines',this.bidLines);
+          this.bidLinesStatus = true;
+          return this.valid;
+        }else{
+          console.log('dgd');
+          this.$emit('validation', { valid: false, items: '4' });
+          this.$store.commit('setLineItemsComplete', false);
+          return this.valid;
         }
         
-      }else if (this.bidLines.length > 0 && this.bidLines.filter((item) => item.required === true && item.description && item.quantity).length > 0) {
-        console.log('fsfsd');
-        this.$emit('validation', { valid: true, items: '4' });
-        this.$store.commit('setLineItemsComplete', true);
-        this.$store.commit('setBidlines',this.bidLines);
-        this.bidLinesStatus = true;
-        return this.valid;
-      }else{
-        console.log('dgd');
-        this.$emit('validation', { valid: false, items: '4' });
-        this.$store.commit('setLineItemsComplete', false);
-        return this.valid;
-      }
+      // }else if (this.bidLines.length > 0 && this.bidLines.filter((item) => item.required === true && item.description && item.quantity).length > 0) {
+      //   console.log('fsfsd');
+      //   this.$emit('validation', { valid: true, items: '4' });
+      //   this.$store.commit('setLineItemsComplete', true);
+      //   this.$store.commit('setBidlines',this.bidLines);
+      //   this.bidLinesStatus = true;
+      //   return this.valid;
+      // }else{
+      //   console.log('dgd');
+      //   this.$emit('validation', { valid: false, items: '4' });
+      //   this.$store.commit('setLineItemsComplete', false);
+      //   return this.valid;
+      // }
       
     },
   },
@@ -228,10 +240,11 @@ export default {
     },
   },
   mounted(){
-    if(this.$store.getters.draftBidData.lineItems){
-      this.bidLines = this.$store.getters.draftBidData.lineItems;
+    if(this.$store.getters.bidData.lineItems != ""){
+      this.bidLines = this.$store.getters.bidData.lineItems;
       this.$emit('validation', { valid: true, items: '4' });
       this.$store.commit('setLineItemsComplete', true);
+      this.$store.commit('setBidlines',this.bidLines);
     }
     this.savedraftOnInterval();
   }
