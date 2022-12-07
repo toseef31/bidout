@@ -83,4 +83,8 @@ export default {
   setDraftBidsListId(state, payload) {
     state.draftBidsListId = payload;
   },
+  setBidTitle(state, payload) {
+    state.bidData.title = payload;
+    console.log(state.bidData.title,'dasda');
+  },
 };

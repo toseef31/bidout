@@ -99,7 +99,7 @@
 
           <v-row justify="center">
             <v-col cols="12">
-              <v-btn color="#0D9648" height="56" class="text-capitalize white--text font-weight-bold save-btn px-9" :disabled="!valid" @click="changeTab" large>Save Changes</v-btn>
+              <v-btn color="#0D9648" height="56" class="text-capitalize white--text font-weight-bold save-btn px-9" @click="changeTab" large>Save Changes</v-btn>
             </v-col>
           </v-row>
         </v-container>
@@ -114,31 +114,25 @@ export default {
   data() {
     return {
       valid: true,
-      title: '',
       titleRules: [
         (v) => !!v || 'Title is required',
       ],
-      bidType: '',
       bidTypeRules: [
         (v) => !!v || 'Please select bid type',
       ],
-      dueDate: '',
       dueDateRules: [
         (v) => !!v || 'Due date is required',
       ],
-      dueTime: '',
       dueTimeRules: [
         (v) => !!v || 'Please select due time',
       ],
-      bidRegions: '',
       bidRegionsRules: [
         (v) => !!v || 'Please select region',
       ],
-      bidDescriptions: '',
       descRules: [
         (v) => !!v || 'Description is required',
       ],
-      qAndAEnabled: 'yes',
+      // qAndAEnabled: 'yes',
       showAdditional: false,
       type: ['RFP', 'RFI', 'BidOut Process'],
       time: [
@@ -155,12 +149,97 @@ export default {
     };
   },
   computed: {
+    
+    title: {
+      get () {
+        if(this.$store.getters.bidData != null){
+          return this.$store.getters.bidData.title
+        }else{
+          return '';
+        }
+      },
+      set (value) {
+        console.log(value);
+        this.$store.commit('setBidTitle', value)
+      },
+    },
+    bidType: {
+      get () {
+        if(this.$store.getters.bidData != null){
+          return this.$store.getters.bidData.type
+        }else{
+          return '';
+        }
+      },
+      set (value) {
+        this.$store.state.bidData.type = value
+      },
+    },
+    dueDate: {
+      get () {
+        if(this.$store.getters.bidData != null){
+          return this.$store.getters.bidData.dueDate
+        }else{
+          return '';
+        }
+      },
+      set (value) {
+        this.$store.state.bidData.dueDate = value
+      },
+    },
+    dueTime: {
+      get () {
+        if(this.$store.getters.bidData != null){
+          return this.$store.getters.bidData.dueTime
+        }else{
+          return '';
+        }
+      },
+      set (value) {
+        this.$store.state.bidData.dueTime =  value
+      },
+    },
+    bidRegions: {
+      get () {
+        if(this.$store.getters.bidData != null){
+          return this.$store.getters.bidData.regions
+        }else{
+          return '';
+        }
+      },
+      set (value) {
+        this.$store.state.bidData.regions =  value
+      },
+    },
+    bidDescriptions: {
+      get () {
+        if(this.$store.getters.bidData != null){
+          return this.$store.getters.bidData.bidDescriptions[0]['body']
+        }else{
+          return '';
+        }
+      },
+      set (value) {
+        this.$store.state.bidData.bidDescriptions[0]['body'] = value
+      },
+    },
+    qAndAEnabled: {
+      get () {
+        if(this.$store.getters.bidData != null){
+          return this.$store.getters.bidData.qAndAEnabled
+        }else{
+          return 'yes';
+        }
+      },
+      set (value) {
+        this.$store.state.bidData.qAndAEnabled = value
+      },
+    },
     validate() {
       this.$emit('validation', { valid: this.valid, value: '1', bidTitle: this.title });
       this.$store.commit('setBidDetailsComplete', this.valid);
       return this.valid;
     },
-
   },
   watch: {
     date() {
@@ -170,6 +249,7 @@ export default {
   methods: {
     ...mapActions(['saveDraftBid',"updateDraftBid"]),
     changeTab() {
+      console.log('dada',this.title);
       if(this.$store.getters.bidData != null){
         const bidDetails = {
           title: this.title,
@@ -206,8 +286,9 @@ export default {
           company: this.$store.getters.userInfo.company.company,
           status: 'create',
         };
+        console.log(bidDetails);
         if (this.$refs.form.validate()) {
-          this.saveDraftBid(bidDetails);
+          // this.saveDraftBid(bidDetails);
           this.$emit('changetab', 'tab-2');
         }
       }
@@ -266,14 +347,14 @@ export default {
       this.textFields.splice(index, 1);
     },
     fillData(){
-      this.title = this.$store.getters.bidData.title;
-      this.bidType = this.$store.getters.bidData.type;
-      this.dueDate = this.$store.getters.bidData.dueDate;
-      this.dueTime = this.$store.getters.bidData.dueTime;
-      this.bidRegions = this.$store.getters.bidData.regions;
-      this.bidDescriptions = this.$store.getters.bidData.bidDescriptions[0]['body'];
+      // this.title = this.$store.getters.bidData.title;
+      // this.bidType = this.$store.getters.bidData.type;
+      // this.dueDate = this.$store.getters.bidData.dueDate;
+      // this.dueTime = this.$store.getters.bidData.dueTime;
+      // this.bidRegions = this.$store.getters.bidData.regions;
+      // this.bidDescriptions = this.$store.getters.bidData.bidDescriptions[0]['body'];
       this.qAndAEnabled = this.$store.getters.bidData.qAndAEnabled;
-
+      const status = edit;
       if(this.$store.getters.bidData != null){
         if(this.$store.getters.bidData.bidDescriptions.length > 1){
           this.textFields = this.$store.getters.bidData.bidDescriptions.slice();
@@ -299,11 +380,11 @@ export default {
           status: 'edit',
         };
         this.$store.state.bid.bidData.status = bidDetails.status;
-        this.$store.commit('setInvitedSuppliersData',this.$store.getters.bidData.invitedSuppliers);
-        this.$store.commit('setInvitedTeamMembers',this.$store.getters.bidData.invitedTeamMembers);
-        this.$store.commit('setBidlines',this.$store.getters.bidData.lineItems);
-        this.$store.commit('setAttachement',this.$store.getters.bidData.attachments);
-        this.$store.commit('setQuestions',this.$store.getters.bidData.questions);
+        // this.$store.commit('setInvitedSuppliersData',this.$store.getters.bidData.invitedSuppliers);
+        // this.$store.commit('setInvitedTeamMembers',this.$store.getters.bidData.invitedTeamMembers);
+        // this.$store.commit('setBidlines',this.$store.getters.bidData.lineItems);
+        // this.$store.commit('setAttachement',this.$store.getters.bidData.attachments);
+        // this.$store.commit('setQuestions',this.$store.getters.bidData.questions);
       }
       
     },

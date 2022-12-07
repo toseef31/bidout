@@ -205,6 +205,7 @@ export default {
       company: payload.company,
       description: payload.description,
     };
+    console.log(state.bidData,'dasfaf');
     commit('setBidData', bidData);
     const formData = new FormData();
     formData.append('title', payload.title);
@@ -224,28 +225,27 @@ export default {
     formData.append('companyId', payload.companyId);
     formData.append('company', payload.company);
 
-    try {
-      const res = await axios.post('bid/draft/createDraft', formData, config);
-      if (res.status == 200) {
-        console.log(res);
-        commit('setDraftBidsList', res.data.id);
-        commit('setBidSerial', res.data.serial);
-        commit('setDraftTime', new Date().toLocaleString());
-      } else {
-        commit('setDraftBidsList', null);
-      }
-    } catch (err) {
-      if (state.apiCounter == 2) {
-        dispatch('apiSignOutAction');
-      } else if (err.response.status === 403) {
-        await dispatch('refreshToken');
-        state.apiCounter = 2;
-        dispatch('saveDraftBid', payload);
-      }
-    }
+    // try {
+    //   const res = await axios.post('bid/draft/createDraft', formData, config);
+    //   if (res.status == 200) {
+    //     console.log(res);
+    //     commit('setDraftBidsList', res.data.id);
+    //     commit('setBidSerial', res.data.serial);
+    //     commit('setDraftTime', new Date().toLocaleString());
+    //   } else {
+    //     commit('setDraftBidsList', null);
+    //   }
+    // } catch (err) {
+    //   if (state.apiCounter == 2) {
+    //     dispatch('apiSignOutAction');
+    //   } else if (err.response.status === 403) {
+    //     await dispatch('refreshToken');
+    //     state.apiCounter = 2;
+    //     dispatch('saveDraftBid', payload);
+    //   }
+    // }
   },
   async updateDraftBid({ commit, state }, payload) {
-    console.log(state.bidData,'adfasdfas  ');
     const config = {
       headers: {
         'Content-Type': 'multipart/form-data',
@@ -569,7 +569,7 @@ export default {
         dispatch('getSalesReps',{query: '',basin: 'all'});
         dispatch('getCategories');
         dispatch('searchByCompany',{query: '',basin:'all'});
-        commit('setDraftBidData', res.data);
+        // commit('setDraftBidData', res.data);
         commit('setBidData', res.data);
         commit('setPageLoader', false);
         router.replace('/create-bid');
