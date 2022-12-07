@@ -208,7 +208,7 @@ export default {
       } else if (err.response.status === 403) {
         await dispatch('refreshToken');
         state.apiCounter = 2;
-        dispatch('makeIntent', payload);
+        dispatch('updateIntent', payload);
       }
     }
   },
@@ -233,6 +233,49 @@ export default {
         await dispatch('refreshToken');
         state.apiCounter = 2;
         dispatch('makeIntent', payload);
+      }
+    }
+  },
+
+  async awardCompany({ commit, dispatch, state }, payload) {
+    try {
+      const res = await axios.post('bid/bidAwardees/', {
+        companyId: payload.companyId,
+        bidId: payload.bidId,
+        userId: payload.userId,
+      });
+
+      if (res.status === 200) {
+        console.log(res);
+      }
+    } catch (err) {
+      if (state.apiCounter == 2) {
+        dispatch('apiSignOutAction');
+      } else if (err.response.status === 403) {
+        await dispatch('refreshToken');
+        state.apiCounter = 2;
+        dispatch('awardCompany', payload);
+      }
+    }
+  },
+  async rejectCompany({ commit, dispatch, state }, payload) {
+    try {
+      const res = await axios.post('bid/bidRejectees/', {
+        companyId: payload.companyId,
+        bidId: payload.bidId,
+        userId: payload.userId,
+      });
+
+      if (res.status === 200) {
+        console.log(res);
+      }
+    } catch (err) {
+      if (state.apiCounter == 2) {
+        dispatch('apiSignOutAction');
+      } else if (err.response.status === 403) {
+        await dispatch('refreshToken');
+        state.apiCounter = 2;
+        dispatch('rejectCompany', payload);
       }
     }
   },
@@ -290,10 +333,11 @@ export default {
       } else if (err.response.status === 403) {
         await dispatch('refreshToken');
         state.apiCounter = 2;
-        dispatch('makeIntent', payload);
+        dispatch('submitBid', payload);
       }
     }
   },
+
   async saveDraftBid({ commit, dispatch, state }, payload) {
     const config = {
       headers: {

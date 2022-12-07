@@ -274,8 +274,9 @@ any question.</span>
 
       <div class="pt-8">
         <div class="title-detail px-6">Supplier Notes</div>
-        <div class="supplier-note mx-6">{{ bidDetail.supplierSubmissions.supplierNote}}
+        <div class="supplier-note mx-6" v-if="(bidDetail.supplierSubmissions && bidDetail.supplierSubmissions.supplierNote)">{{  bidDetail.supplierSubmissions.supplierNote}}
         </div>
+        <div v-else class="text-center pt-2 pb-5 none-class">None</div>
       </div>
     </v-col>
 </template>

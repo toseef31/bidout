@@ -472,6 +472,12 @@
            color: #5C5C5C
 
         }
+
+        .none-class {
+
+            color: #959595;
+
+        }
         .bid-row-2 {
           border-bottom: 1px solid #f1f1f1;
           .team-member {
@@ -1109,7 +1115,7 @@
           }
         }
         .none-class {
-          color: #b8b8b8;
+          color: #959595;
         }
   
         .subscript {
@@ -1129,7 +1135,7 @@
     }
     
         .bid-submission-tab {
-        overflow-x: auto;
+        overflow-x: scroll;
         .save-button {
             font-size: 16px;
             border-radius: 8px;
@@ -1159,6 +1165,7 @@
         }
 
         .template-table-style {
+          overflow-x: scroll;
             .v-input {
                 &__slot {
                  min-height: 29px !important;
@@ -1187,6 +1194,7 @@
                 height: 29px;
             }
           table {
+            overflow-x: scroll;
             thead {
               tr {
                 padding-right: 17px;
