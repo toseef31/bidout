@@ -15,7 +15,9 @@
             </tr>
           </thead>
           <tbody>
+            
             <tr v-for="(doc, index) in docsList">
+                  <input type="hidden" :value="validat">
               <td class="text-left">
                 <img :src="require('@/assets/images/bids/FilePdf.png')" />
               </td>
@@ -25,7 +27,6 @@
                   v-if="edit === index && isEdit"
                   class="d-flex edit-comment align-center"
                 >
-                  <input type="hidden" :value="validat">
                   <v-text-field
                     outlined
                     height="30px"
@@ -108,6 +109,7 @@ export default {
       isAttaching: false,
       valid: false,
       attachStatus: false,
+      docs: '',
     };
   },
   computed: {
@@ -115,8 +117,24 @@ export default {
       return `${this.$store.getters.userInfo.firstName} ${this.$store.getters.userInfo.lastName}`;
     },
     docsList() {
-      this.$store.commit('setDocuments',this.$store.getters.attachData);
-      return this.$store.getters.attachData;
+      if(this.$store.getters.bidData != null){
+        if(this.$store.getters.bidData.attachments != ""){
+          if(this.$store.getters.attachData){
+            var totalDay = this.$store.getters.bidData.attachments.concat(this.$store.getters.attachData);
+            this.documents = totalDay;
+          }else{
+            this.documents = this.$store.getters.bidData.attachments;
+          }
+          this.$store.commit('setAttachement',this.documents);
+          return this.documents;
+        }else{
+          this.$store.commit('setAttachement',this.$store.getters.attachData);
+          return this.$store.getters.attachData;
+        }
+      }else{
+        this.$store.commit('setAttachement',this.$store.getters.attachData);
+        return this.$store.getters.attachData;
+      }
     },
     isAttachingDoc() {
       return this.isAttaching;
@@ -154,16 +172,15 @@ export default {
       this.fileName = this.file.name;
       this.fileExt = this.fileName.split(".").pop();
       this.fileSize = (this.file.size / (1024 * 1024)).toFixed(2);
-      console.log(this.fileSize);
       // this.previewDoc();
-      this.documents.push(this.file);
+      const uploadDoc = [];
+      uploadDoc.push(this.file);
       const head = Date.now().toString();
       const tail = Math.random().toString().substr(2);
       const data = {
         uploadedBy: `${this.$store.getters.userInfo.firstName} ${this.$store.getters.userInfo.lastName}`,
-        attachement: this.documents,
+        attachement: uploadDoc,
       };
-      // this.documents.push(this.file);
       await this.uploadBidAttach(data);
       this.isAttaching = false;
       this.attachStatus = true;
@@ -175,11 +192,13 @@ export default {
     deleteAttach(index) {
       this.documents.splice(index, 1);
       this.$store.getters.attachData.splice(index, 1);
-      this.$store.commit('setDocuments',this.documents);
+      this.$store.commit('setAttachement',this.documents);
       this.attachStatus = true;
     },
     openComment(index) {
+      alert(index);
       this.edit = index;
+      console.log(this.edit);
       this.isEdit = true;
     },
     saveComment(doc) {
@@ -210,6 +229,12 @@ export default {
   mounted() {
     if (this.$store.getters.attachData) {
       this.documents = this.$store.getters.attachData;
+    }
+    if(this.$store.getters.bidData != null){
+      if(this.$store.getters.bidData.attachments != ""){
+        this.$store.commit('setAttachement',this.$store.getters.bidData.attachments);
+        this.documents = this.$store.getters.bidData.attachments;
+      }
     }
     this.savedraftOnInterval();
   },

@@ -4,6 +4,7 @@
       <h4 class="text-left pl-4 font-weight-bold black--text my-4">Bid Line Items</h4>
 
         <input type="hidden" name="" :value="validate">
+        {{validate}}
       <draggable
         :list="bidLines"
         :disabled="!enabled"
@@ -40,7 +41,7 @@
           <v-col md="2" class="px-0">
             <div class="mr-2 bid-item">
               <label class="d-block input-label text-left" v-if="index === 0">Input Type</label>
-              <v-select outlined hide-details v-model="bidLines[index]['type']" :items="inputType"></v-select>
+              <v-select outlined hide-details v-model="bidLines[index]['inputType']" :items="inputType"></v-select>
             </div>
           </v-col>
           <v-col md="2" class="px-0">
@@ -100,6 +101,7 @@
 </template>
 <script>
 import draggable from 'vuedraggable';
+import { v4 as uuidv4 } from 'uuid';
 import { mapActions } from 'vuex';
 
 export default {
@@ -124,10 +126,11 @@ export default {
       },
       bidLines: [
         {
+          id: uuidv4(),
           switch1: false,
           description: null,
           unit: 'Feet',
-          type: 'USD',
+          inputType: 'USD',
           quantity: null,
           buyerComment: '',
           valid: false,
@@ -147,16 +150,39 @@ export default {
       return this.dragging ? 'under drag' : '';
     },
     validate() {
-      if (this.bidLines.length > 0 && this.bidLines.filter((item) => item.required === true && item.description && item.quantity).length > 0) {
-        this.$emit('validation', { valid: true, items: '4' });
-        this.$store.commit('setLineItemsComplete', true);
-        this.$store.commit('setBidlines',this.bidLines);
-        this.bidLinesStatus = true;
-        return this.valid;
-      }
-      this.$emit('validation', { valid: false, items: '4' });
-      this.$store.commit('setLineItemsComplete', false);
-      return this.valid;
+      // if(this.$store.getters.bidData != null){
+        if(this.$store.getters.bidData.lineItems != ""){
+          this.$emit('validation', { valid: true, items: '4' });
+          this.$store.commit('setLineItemsComplete', true);
+          this.$store.commit('setBidlines',this.bidLines);
+        }else if (this.bidLines.length > 0 && this.bidLines.filter((item) => item.required === true && item.description && item.quantity).length > 0) {
+          console.log('fsfsd');
+          this.$emit('validation', { valid: true, items: '4' });
+          this.$store.commit('setLineItemsComplete', true);
+          this.$store.commit('setBidlines',this.bidLines);
+          this.bidLinesStatus = true;
+          return this.valid;
+        }else{
+          console.log('dgd');
+          this.$emit('validation', { valid: false, items: '4' });
+          this.$store.commit('setLineItemsComplete', false);
+          return this.valid;
+        }
+        
+      // }else if (this.bidLines.length > 0 && this.bidLines.filter((item) => item.required === true && item.description && item.quantity).length > 0) {
+      //   console.log('fsfsd');
+      //   this.$emit('validation', { valid: true, items: '4' });
+      //   this.$store.commit('setLineItemsComplete', true);
+      //   this.$store.commit('setBidlines',this.bidLines);
+      //   this.bidLinesStatus = true;
+      //   return this.valid;
+      // }else{
+      //   console.log('dgd');
+      //   this.$emit('validation', { valid: false, items: '4' });
+      //   this.$store.commit('setLineItemsComplete', false);
+      //   return this.valid;
+      // }
+      
     },
   },
   watch: {
@@ -182,7 +208,7 @@ export default {
       for (let i = 0; i < 5; i++) {
         this.bidLines.push({
           type: 'USD',
-          inputType: ['USD', 'EUR'],
+          inputType: 'USD',
           units: ['Gallon', 'Liter'],
           description: '',
           unit: 'Feet',
@@ -224,6 +250,12 @@ export default {
     },
   },
   mounted(){
+    if(this.$store.getters.bidData.lineItems != ""){
+      this.bidLines = this.$store.getters.bidData.lineItems;
+      this.$emit('validation', { valid: true, items: '4' });
+      this.$store.commit('setLineItemsComplete', true);
+      this.$store.commit('setBidlines',this.bidLines);
+    }
     this.savedraftOnInterval();
   }
 };

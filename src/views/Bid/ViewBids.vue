@@ -109,7 +109,7 @@
                       <td class="text-left">{{ userDatas.firstName }} {{ userDatas.lastName }}</td>
                       <td class="text-left">{{ bid.entries ? bid.entries.length : 0 }}</td>
                       <td class="text-left">{{ bid.dueDate | moment('MM/DD/YYYY') }} {{bid.dueTime}}</td>
-                      <td class="text-left d-none d-sm-block pt-3"><a href="">Edit Draft</a></td>
+                      <td class="text-left d-none d-sm-block pt-3" @click="editDraft(bid.serial)"><router-link to="">Edit Draft</router-link></td>
                     </tr>
                     </template>
                   </tbody>
@@ -233,7 +233,10 @@ export default {
     },
   },
   methods: {
-    ...mapActions(['getDraftBids', 'getBidsLists']),
+    ...mapActions(['getDraftBids', 'getBidsLists','getDraftBySerial']),
+    editDraft(serial){
+      this.getDraftBySerial({serial,company:this.$store.getters.userInfo.company.company});
+    }
   },
   mounted() {
     document.title = 'Bids - BidOut';
