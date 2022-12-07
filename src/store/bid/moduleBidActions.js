@@ -291,8 +291,10 @@ export default {
           }
         }
       }
+
       if(state.bidlines != null){
         for (let i = 0; i < state.bidlines.length; i++) {
+          formData.append(`lineItems[${i}][id]`, state.bidlines[i].id);
           formData.append(`lineItems[${i}][description]`, state.bidlines[i].description);
           formData.append(`lineItems[${i}][unit]`, state.bidlines[i].unit);
           formData.append(`lineItems[${i}][inputType]`, state.bidlines[i].inputType);
