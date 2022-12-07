@@ -62,4 +62,10 @@ export default {
   invitedSuppliersData(state) {
     return state.invitedSuppliersData;
   },
+  draftBidData(state) {
+    return state.draftBidData;
+  },
+  draftBidsListId(state) {
+    return state.draftBidsListId;
+  },
 };

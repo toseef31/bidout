@@ -570,6 +570,10 @@ export default {
     },
   },
   mounted(){
+    if(this.$store.getters.bidData.questions || this.$store.getters.bidData.questions.length > 0)
+    {
+      this.categories = this.$store.getters.bidData.questions;
+    }
     this.savedraftOnInterval();
   }
 };

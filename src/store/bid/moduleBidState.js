@@ -7,7 +7,15 @@ export default {
   draftBidsList: null,
   bidsLists: [],
   itemBidData: null,
-  bidData: null,
+  bidData: {
+   title: '',
+   type: '',
+   regions: '',
+   dueDate: '',
+   dueTime: '',
+   qAndAEnabled: '',
+   bidDescriptions: [{ body: ""}]
+  },
   attachData: null,
   draftTime: null,
   newSupplier: [],
@@ -25,4 +33,6 @@ export default {
   questions: null,
   bidSerial: null,
   invitedSuppliersData: null,
+  draftBidData: null,
+  draftBidsListId: null,
 };
