@@ -299,6 +299,7 @@ export default {
     if (payload.bidlines) {
       state.bidlines = payload.bidlines;
       for (let i = 0; i < payload.bidlines.length; i++) {
+        formData.append(`lineItems[${i}][id]`, payload.bidlines[i].id);
         formData.append(`lineItems[${i}][description]`, payload.bidlines[i].description);
         formData.append(`lineItems[${i}][unit]`, payload.bidlines[i].unit);
         formData.append(`lineItems[${i}][inputType]`, payload.bidlines[i].type);
@@ -309,6 +310,7 @@ export default {
     }else{
       if(state.bidlines != null){
         for (let i = 0; i < state.bidlines.length; i++) {
+          formData.append(`lineItems[${i}][id]`, state.bidlines[i].id);
           formData.append(`lineItems[${i}][description]`, state.bidlines[i].description);
           formData.append(`lineItems[${i}][unit]`, state.bidlines[i].unit);
           formData.append(`lineItems[${i}][inputType]`, state.bidlines[i].type);

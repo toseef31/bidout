@@ -100,6 +100,7 @@
 </template>
 <script>
 import draggable from 'vuedraggable';
+import { v4 as uuidv4 } from 'uuid';
 import { mapActions } from 'vuex';
 
 export default {
@@ -124,6 +125,7 @@ export default {
       },
       bidLines: [
         {
+          id: uuidv4(),
           switch1: false,
           description: null,
           unit: 'Feet',
