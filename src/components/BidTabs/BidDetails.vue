@@ -140,7 +140,6 @@ export default {
         { label: '4pm CST', value: '4pm' },
       ],
       region: ['Gulf Coast', 'Northwest', 'Rockies', 'Mid-Con', 'Permian', 'Arklatex', 'Offshore', 'Other'],
-      textFields: [],
       interval: '',
       bidFormData: '',
       formStatus: false,
@@ -149,7 +148,7 @@ export default {
   computed: {
     singleTemplate(){
       return this.$store.getters.singleTemplate;
-    }
+    },
     title: {
       get () {
         if(this.$store.getters.bidData != null){
@@ -256,7 +255,11 @@ export default {
         };
         if (this.$refs.form.validate()) {
           if(this.$route.name == 'EditTemplate'){
-            await this.saveTemplateBid(bidDetails);
+            if(!this.$store.getters.bidData.id){
+              await this.saveTemplateBid(bidDetails);
+            }else{
+              await this.updateTemplate(bidDetails);
+            }
           }else{
             if(!this.$store.getters.bidData.id){
               await this.saveDraftBid(bidDetails);
@@ -273,12 +276,15 @@ export default {
           companyId: this.$store.getters.userInfo.company.id,
           company: this.$store.getters.userInfo.company.company,
         };
-        await this.saveDraftBid(bidDetails);
+        if(this.$route.name == 'EditTemplate'){
+          await this.saveTemplateBid(bidDetails);
+        }else{
+          await this.saveDraftBid(bidDetails);
+        }
       }
-      // }
       
     },
-    savedraft() {
+    async savedraft() {
       if(this.$store.getters.bidData != null){
         const bidDetails = {
           userId: this.$store.getters.userInfo.id,
@@ -286,10 +292,18 @@ export default {
           company: this.$store.getters.userInfo.company.company,
         };
         if (this.$refs.form.validate()) {
-          if(!this.$store.getters.bidData.id){
-            this.saveDraftBid(bidDetails);
+          if(this.$route.name == 'EditTemplate'){
+            if(!this.$store.getters.bidData.id){
+              await this.saveTemplateBid(bidDetails);
+            }else{
+              await this.updateTemplate(bidDetails);
+            }
           }else{
-            this.updateDraftBid(bidDetails);
+            if(!this.$store.getters.bidData.id){
+              await this.saveDraftBid(bidDetails);
+            }else{
+              await this.updateDraftBid(bidDetails);
+            }
           }
           this.$emit('changetab', 'tab-2');
         }
@@ -299,7 +313,11 @@ export default {
           companyId: this.$store.getters.userInfo.company.id,
           company: this.$store.getters.userInfo.company.company,
         };
-        this.saveDraftBid(bidDetails);
+        if(this.$route.name == 'EditTemplate'){
+          await this.saveTemplateBid(bidDetails);
+        }else{
+          await this.saveDraftBid(bidDetails);
+        }
       }
     },
     add() {
@@ -326,6 +344,7 @@ export default {
     },
   },
   mounted(){
+    console.log(this.$route,'store',this.$store.getters.bidData);
     this.$store.commit('setInvitedSuppliersData',this.$store.getters.bidData.invitedSuppliers);
     this.$store.commit('setInvitedTeamMembers',this.$store.getters.bidData.invitedTeamMembers);
     this.$store.commit('setBidlines',this.$store.getters.bidData.lineItems);

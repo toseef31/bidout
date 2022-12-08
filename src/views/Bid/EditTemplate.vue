@@ -55,7 +55,7 @@
               :key="item.value"
               :href="'#tab-' + item.value"
               class="text-capitalize black--text font-weight-bold"
-              :disabled="enableTabs"
+              :disabled="enableTabs"  @click="updateTemplateBid"
             >
               {{ item.text }} {{ item.index }}
 
@@ -139,7 +139,7 @@
   </v-col>
 </template>
 <script>
-import { mapGetters } from 'vuex';
+import { mapGetters,mapActions,mapState } from 'vuex';
 import TemplateSupplierSection from '../../components/BidTabs/SupplierSection.vue';
 import TemplateTeamMembers from '../../components/BidTabs/TeamMembers.vue';
 import TemplateBidLines from '../../components/BidTabs/BidLines.vue';
@@ -221,6 +221,8 @@ export default {
     },
   },
   methods: {
+    ...mapActions(["updateTemplate"]),
+    ...mapState(["invitedSuppliers"]),
     ChangeT(tab) {
       this.currentItem = tab;
     },
@@ -255,6 +257,9 @@ export default {
         console.log(error);
       }
     },
+    async updateTemplateBid(){
+      await this.updateTemplate({'supplier': this.$store.state.bid.invitedSuppliers});
+    }
   },
   async created(){
 

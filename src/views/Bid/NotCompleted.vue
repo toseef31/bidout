@@ -264,7 +264,7 @@ export default {
     }
   },
   mounted() {
-    document.title = 'Create Bid - BidOut';
+    document.title = 'Create Template - BidOut';
     this.users = JSON.parse(localStorage.getItem('userData')).user;
   },
 };

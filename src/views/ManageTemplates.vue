@@ -71,7 +71,7 @@
                   </div>
                 </td>
                 <td class="text-left pr-6">
-                  <router-link :to="'/edit-template/'+template.id"><v-icon color="#0D9648" class="mr-4">mdi-pencil-outline</v-icon></router-link>
+                  <v-icon color="#0D9648" class="mr-4"  @click="editDraft(template.id)">mdi-pencil-outline</v-icon>
                   <v-icon color="#F32349" @click="openConfirm(template.id,index)">mdi-trash-can-outline</v-icon>
                 </td>
               </tr>
@@ -150,7 +150,7 @@ export default {
     },
   },
   methods: {
-    ...mapActions(["getBidTemplates","deleteTemplate","updateTemplateNote"]),
+    ...mapActions(["getBidTemplates","deleteTemplate","updateTemplateNote","getEditTemplate"]),
     openConfirm(id,index){
       this.dialog = true;
       this.templateId = id;
@@ -170,6 +170,9 @@ export default {
       this.editIcon[index] = true;
       this.updateTemplateNote({ templateId: template.id, note: template.note });
     },
+    editDraft(id){
+      this.getEditTemplate({id,company:this.$store.getters.userInfo.company.company});
+    }
   },
   async created(){
     await this.getBidTemplates();

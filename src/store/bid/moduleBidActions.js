@@ -186,7 +186,6 @@ export default {
     }
   },
   async saveDraftBid({ commit, dispatch, state }, payload) {
-    console.log(state.bidData.bidDescriptions[0].body);
     const config = {
       headers: {
         'Content-Type': 'multipart/form-data',
@@ -214,7 +213,7 @@ export default {
     try {
       const res = await axios.post('bid/draft/createDraft', formData, config);
       if (res.status == 200) {
-        console.log(res);
+        
         commit('setBidData', res.data);
         dispatch('getTeamMembers',payload.company);
         dispatch('getSalesReps',{query: '',basin: 'all'});
@@ -498,10 +497,20 @@ export default {
     }
   },
   async getEditTemplate({commit,state,dispatch},payload){
+    commit('setPageLoader', true);
     try{
-      const res = await axios.get(`bid/getBidDetailsById/${payload}`);
+      const res = await axios.get(`bid/getBidDetailsById/${payload.id}`);
        if(res.status == 200){
         commit('getSingleTemplate',res.data)
+        commit('setBidData', res.data);
+        dispatch('getTeamMembers',payload.company);
+        dispatch('getSalesReps',{query: '',basin: 'all'});
+        dispatch('getCategories');
+        dispatch('searchByCompany',{query: '',basin:'all'});
+        // commit('setDraftBidData', res.data);
+        state.bidData.status = 'templateUpdate';
+        commit('setPageLoader', false);
+        router.replace('/create-template');
        }
     }catch(err){
       if(state.apiCounter == 2){
@@ -522,31 +531,18 @@ export default {
         Authorization: `Bearer ${JSON.parse(localStorage.getItem('token'))}`,
       },
     };
-    const bidData = {
-      title: payload.title,
-      type: payload.type,
-      dueDate: payload.dueDate,
-      dueTime: payload.dueTime,
-      regions: payload.regions,
-      qAndAEnabled: payload.qAndAEnabled,
-      bidDescriptions: payload.bidDescriptions,
-      userId: payload.userId,
-      companyId: payload.companyId,
-      description: payload.description,
-    };
-    commit('setBidData', bidData);
     const formData = new FormData();
-    formData.append('title', payload.title);
-    formData.append('type', payload.type);
-    formData.append('dueDate', payload.dueDate);
-    formData.append('dueTime', payload.dueTime);
-    formData.append('regions', payload.regions);
-    formData.append('qAndAEnabled', payload.qAndAEnabled);
-    formData.append('bidDescriptions[0][body]', payload.bidDescriptions);
-    if (payload.description) {
-      for (let d = 0; d < payload.description.length; d++) {
-        formData.append(`bidDescriptions[${d + 1}][name]`, payload.description[d].name);
-        formData.append(`bidDescriptions[${d + 1}][body]`, payload.description[d].body);
+    formData.append('title', state.bidData.title);
+    formData.append('type', state.bidData.type);
+    formData.append('dueDate', state.bidData.dueDate);
+    formData.append('dueTime', state.bidData.dueTime);
+    formData.append('regions', state.bidData.regions);
+    formData.append('qAndAEnabled', state.bidData.qAndAEnabled);
+    formData.append('bidDescriptions[0][body]', state.bidData.bidDescriptions[0].body);
+    if (state.bidData.bidDescriptions.length > 1) {
+      for (let d = 1; d < state.bidData.bidDescriptions.length; d++) {
+        formData.append(`bidDescriptions[${d}][name]`, state.bidData.bidDescriptions[d].name);
+        formData.append(`bidDescriptions[${d}][body]`, state.bidData.bidDescriptions[d].body);
       }
     }
     formData.append('userId', payload.userId);
@@ -562,7 +558,13 @@ export default {
     try {
       const res = await axios.post('bid/createTemplateBid', formData, config);
       if (res.status == 200) {
-        commit('setDraftBidsList', res.data);
+        commit('setBidData', res.data);
+        dispatch('getTeamMembers',payload.company);
+        dispatch('getSalesReps',{query: '',basin: 'all'});
+        dispatch('getCategories');
+        dispatch('searchByCompany',{query: '',basin:'all'});
+        commit('setDraftBidsList', res.data.id);
+        state.bidData.status = 'templateCreate';
         commit('setDraftTime', new Date().toLocaleString());
       } else {
         commit('setDraftBidsList', null);
@@ -613,94 +615,93 @@ export default {
       };
       const formData = new FormData();
       
-      if(state.bidData != null){
-        formData.append('templateId', state.draftBidsList);
-        formData.append('title', state.bidData.title);
-        formData.append('type', state.bidData.type);
-        formData.append('dueDate', state.bidData.dueDate);
-        formData.append('dueTime', state.bidData.dueTime);
-        formData.append('regions', state.bidData.regions);
-        formData.append('qAndAEnabled', state.bidData.qAndAEnabled);
-        formData.append('userId', state.bidData.userId);
-        formData.append('companyId', state.bidData.companyId);
-        formData.append('company', state.bidData.company);
-        formData.append('bidDescriptions[0][body]', state.bidData.bidDescriptions);
-        for (let d = 0; d < state.bidData.description.length; d++) {
-          formData.append(`bidDescriptions[${d + 1}][name]`, state.bidData.description[d].name);
-          formData.append(`bidDescriptions[${d + 1}][body]`, state.bidData.description[d].body);
-        }
-      }else{
-        formData.append('templateId', state.draftBidsList);
-        formData.append('title', payload.title);
-        formData.append('type', payload.type);
-        formData.append('dueDate', payload.dueDate);
-        formData.append('dueTime', payload.dueTime);
-        formData.append('regions', payload.regions);
-        formData.append('qAndAEnabled', payload.qAndAEnabled);
-        formData.append('userId', payload.userId);
-        formData.append('companyId', payload.companyId);
-        formData.append('company', payload.company);
-        formData.append('bidDescriptions[0][body]', payload.bidDescriptions);
-        if (payload.description) {
-          for (let d = 0; d < payload.description.length; d++) {
-            formData.append(`bidDescriptions[${d + 1}][name]`, payload.description[d].name);
-            formData.append(`bidDescriptions[${d + 1}][body]`, payload.description[d].body);
-          }
+      if(state.bidData.id){
+        state.draftBidsList = state.bidData.id;
+      }
+      formData.append('templateId', state.draftBidsList);
+      formData.append('title', state.bidData.title);
+      formData.append('type', state.bidData.type);
+      formData.append('dueDate', state.bidData.dueDate);
+      formData.append('dueTime', state.bidData.dueTime);
+      formData.append('regions', state.bidData.regions);
+      formData.append('qAndAEnabled', state.bidData.qAndAEnabled);
+      formData.append('userId', state.bidData.userId);
+      formData.append('companyId', state.bidData.companyId);
+      formData.append('company', state.bidData.company);
+      
+      formData.append('bidDescriptions[0][body]', state.bidData.bidDescriptions[0].body);
+      if (state.bidData.bidDescriptions.length > 1) {
+        for (let d = 1; d < state.bidData.bidDescriptions.length; d++) {
+          formData.append(`bidDescriptions[${d}][name]`, state.bidData.bidDescriptions[d].name);
+          formData.append(`bidDescriptions[${d}][body]`, state.bidData.bidDescriptions[d].body);
         }
       }
-      
-      if (payload.invitedSuppliers) {
-        state.invitedSuppliers = payload.invitedSuppliers;
-        for (let i = 0; i < payload.invitedSuppliers.length; i++) {
-          if (payload.invitedSuppliers[i].type == 'user') {
-            formData.append(`invitedSuppliers[${i}]`, payload.invitedSuppliers[i].item.companyId);
-          } else {
-            formData.append(`invitedSuppliers[${i}]`, payload.invitedSuppliers[i].item.objectID);
-          }
+
+      if(state.invitedSuppliers != ''){
+        for (let i = 0; i < state.invitedSuppliers.length; i++) {
+          if(!state.invitedSuppliers[i].type){
+            formData.append(`invitedSuppliers[${i}]`, state.invitedSuppliers[i]);
+          }else{
+           if (state.invitedSuppliers[i].type == 'user') {
+             formData.append(`invitedSuppliers[${i}]`, state.invitedSuppliers[i].item.companyId);
+           } else {
+             formData.append(`invitedSuppliers[${i}]`, state.invitedSuppliers[i].item.objectID);
+           } 
+         }
         }
       }else{
-        if(state.invitedSuppliers != null){
-          for (let i = 0; i < state.invitedSuppliers.length; i++) {
-            if (state.invitedSuppliers[i].type == 'user') {
-              formData.append(`invitedSuppliers[${i}]`, state.invitedSuppliers[i].item.companyId);
-            } else {
-              formData.append(`invitedSuppliers[${i}]`, state.invitedSuppliers[i].item.objectID);
+        formData.append(`invitedSuppliers`, []);
+      }
+      if(state.bidData.status == 'templateCreate'){
+        if(state.invitedTeamMembers){
+          console.log('if invitedTeamMembers');
+          for (let t = 0; t < state.invitedTeamMembers.length; t++) {
+            if(!state.invitedTeamMembers[t].id){
+              formData.append(`invitedTeamMembers[${t}]`, state.invitedTeamMembers[t]);
+            }else{
+              formData.append(`invitedTeamMembers[${t}]`, state.invitedTeamMembers[t].id);
             }
           }
         }else{
-          formData.append(`invitedSuppliers`, []);
-        }
-      }
-      if (payload.invitedTeamMembers) {
-        state.invitedTeamMembers = payload.invitedTeamMembers;
-        for (let t = 0; t < payload.invitedTeamMembers.length; t++) {
-          formData.append(`invitedTeamMembers[${t}]`, payload.invitedTeamMembers[t].id);
+          formData.append(`invitedTeamMembers`, []);
         }
       }else{
-        if(state.invitedTeamMembers != null){
+        if(state.invitedTeamMembers != ''){
+          console.log('if invitedTeamMembers');
           for (let t = 0; t < state.invitedTeamMembers.length; t++) {
-            formData.append(`invitedTeamMembers[${t}]`, state.invitedTeamMembers[t].id);
+            if(!state.invitedTeamMembers[t].id){
+              formData.append(`invitedTeamMembers[${t}]`, state.invitedTeamMembers[t]);
+            }else{
+              formData.append(`invitedTeamMembers[${t}]`, state.invitedTeamMembers[t].id);
+            }
           }
         }else{
           formData.append(`invitedTeamMembers`, []);
         }
       }
-      if (payload.bidlines) {
-        state.bidlines = payload.bidlines;
-        for (let i = 0; i < payload.bidlines.length; i++) {
-          formData.append(`lineItems[${i}][description]`, payload.bidlines[i].description);
-          formData.append(`lineItems[${i}][unit]`, payload.bidlines[i].unit);
-          formData.append(`lineItems[${i}][inputType]`, payload.bidlines[i].type);
-          formData.append(`lineItems[${i}][quantity]`, payload.bidlines[i].quantity);
-          formData.append(`lineItems[${i}][buyerComment]`, payload.bidlines[i].buyerComment);
-          formData.append(`lineItems[${i}][required]`, payload.bidlines[i].required);
-        }
-      }else{
-        if(state.bidlines != null){
+      
+      if(state.bidData.status == 'templateCreate'){
+        if(state.bidlines){
           for (let i = 0; i < state.bidlines.length; i++) {
+            formData.append(`lineItems[${i}][id]`, state.bidlines[i].id);
             formData.append(`lineItems[${i}][description]`, state.bidlines[i].description);
             formData.append(`lineItems[${i}][unit]`, state.bidlines[i].unit);
-            formData.append(`lineItems[${i}][inputType]`, state.bidlines[i].type);
+            formData.append(`lineItems[${i}][inputType]`, state.bidlines[i].inputType);
+            formData.append(`lineItems[${i}][quantity]`, state.bidlines[i].quantity);
+            formData.append(`lineItems[${i}][buyerComment]`, state.bidlines[i].buyerComment);
+            formData.append(`lineItems[${i}][required]`, state.bidlines[i].required);
+          }
+        }else{
+          formData.append(`lineItems`, []);
+        }
+      }else{
+        if(state.bidlines != ''){
+          console.log('if bidlines');
+          for (let i = 0; i < state.bidlines.length; i++) {
+            formData.append(`lineItems[${i}][id]`, state.bidlines[i].id);
+            formData.append(`lineItems[${i}][description]`, state.bidlines[i].description);
+            formData.append(`lineItems[${i}][unit]`, state.bidlines[i].unit);
+            formData.append(`lineItems[${i}][inputType]`, state.bidlines[i].inputType);
             formData.append(`lineItems[${i}][quantity]`, state.bidlines[i].quantity);
             formData.append(`lineItems[${i}][buyerComment]`, state.bidlines[i].buyerComment);
             formData.append(`lineItems[${i}][required]`, state.bidlines[i].required);
@@ -709,19 +710,9 @@ export default {
           formData.append(`lineItems`, []);
         }
       }
-      if (payload.attachement) {
-        state.attachement = payload.attachement;
-        for (let i = 0; i < payload.attachement.length; i++) {
-          formData.append(`attachment[${i}][fileName]`, payload.attachement[i].fileName);
-          formData.append(`attachment[${i}][fileSize]`, payload.attachement[i].fileSize);
-          formData.append(`attachment[${i}][uploadedBy]`, payload.attachement[i].uploadedBy);
-          formData.append(`attachment[${i}][url]`, payload.attachement[i].url);
-          formData.append(`attachment[${i}][uploadedAt]`, payload.attachement[i].uploadedAt);
-          formData.append(`attachment[${i}][comment]`, payload.attachement[i].comment);
-          formData.append(`attachment[${i}][id]`, payload.attachement[i].id);
-        }
-      }else{
-        if(state.attachement != null){
+      
+      if(state.bidData.status == 'templateCreate'){
+        if(state.attachement){
           for (let i = 0; i < state.attachement.length; i++) {
             formData.append(`attachment[${i}][fileName]`, state.attachement[i].fileName);
             formData.append(`attachment[${i}][fileSize]`, state.attachement[i].fileSize);
@@ -734,25 +725,42 @@ export default {
         }else{
           formData.append(`attachment`, []);
         }
-      }
-      if (payload.questions) {
-        state.questions = payload.questions;
-        for (let i = 0; i < payload.questions.length; i++) {
-          formData.append(`questions[${i}][id]`, payload.questions[i].id);
-          formData.append(`questions[${i}][order]`, payload.questions[i].order);
-          formData.append(`questions[${i}][title]`, payload.questions[i].title);
-          formData.append(`questions[${i}][type]`, payload.questions[i].type);
-          formData.append(`questions[${i}][questionType]`, payload.questions[i].questionType);
-          if (payload.questions[i].options) {
-            for (let j = 0; j < payload.questions[i].options.length; j++) {
-              formData.append(`questions[${i}][options][${j}][id]`, payload.questions[i].options[j].id);
-              formData.append(`questions[${i}][options][${j}][label]`, payload.questions[i].options[j].label);
-              formData.append(`questions[${i}][options][${j}][title]`, payload.questions[i].options[j].title);
-            }
+      }else{
+        if(state.attachement != null){
+          for (let i = 0; i < state.attachement.length; i++) {
+            formData.append(`attachment[${i}][fileName]`, state.attachement[i].fileName);
+            formData.append(`attachment[${i}][fileSize]`, state.attachement[i].fileSize);
+            formData.append(`attachment[${i}][uploadedBy]`, state.attachement[i].uploadedBy);
+            formData.append(`attachment[${i}][url]`, state.attachement[i].url);
+            formData.append(`attachment[${i}][uploadedAt]`, state.attachement[i].uploadedAt);
+            formData.append(`attachment[${i}][comment]`, state.attachement[i].comment);
+            formData.append(`attachment[${i}][id]`, state.attachement[i].id);
           }
         }
+      }
+      
+      if(state.bidData.status == 'templateCreate'){
+        if(state.questions){
+          for (let i = 0; i < state.questions.length; i++) {
+            formData.append(`questions[${i}][id]`, state.questions[i].id);
+            formData.append(`questions[${i}][order]`, state.questions[i].order);
+            formData.append(`questions[${i}][title]`, state.questions[i].title);
+            formData.append(`questions[${i}][type]`, state.questions[i].type);
+            formData.append(`questions[${i}][questionType]`, state.questions[i].questionType);
+            formData.append(`questions[${i}][required]`, state.questions[i].required);
+            if (state.questions[i].options) {
+              for (let j = 0; j < state.questions[i].options.length; j++) {
+                formData.append(`questions[${i}][options][${j}][id]`, state.questions[i].options[j].id);
+                formData.append(`questions[${i}][options][${j}][label]`, state.questions[i].options[j].label);
+                formData.append(`questions[${i}][options][${j}][title]`, state.questions[i].options[j].title);
+              }
+            }
+          }
+        }else{
+          formData.append(`questions`, []);
+        }
       }else{
-        if(state.questions != null){
+        if(state.questions != ''){
           for (let i = 0; i < state.questions.length; i++) {
             formData.append(`questions[${i}][id]`, state.questions[i].id);
             formData.append(`questions[${i}][order]`, state.questions[i].order);
@@ -771,12 +779,14 @@ export default {
           formData.append(`questions`, []);
         }
       }
+      
+      formData.append('invitedNewSuppliers', []);
       try {
         const res = await axios.post(`bid/editTemplateBid/`, formData, config);
         if (res.status == 200) {
           console.log(res);
           // commit('setDraftBidsList',null);
-          // commit('setDraftTime', new Date().toLocaleString());
+          commit('setDraftTime', new Date().toLocaleString());
         } else {
           // commit('setDraftBidsList',null);
         }
