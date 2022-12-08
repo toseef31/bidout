@@ -642,9 +642,6 @@ export default {
       return this.$store.getters.bidMessageUnreadCount;
     },
   },
-  beforeMount() {
-
-  },
   mounted() {
     document.title = 'View Bid - BidOut';
   },
@@ -672,7 +669,7 @@ export default {
       });
     }
 
-    if (this.getUserType !== 'buyer') {
+    if (this.getUserType === 'supplier') {
       await this.getIntent({
         companyId: this.users.company.id,
         bidId: this.bidDetail.bidData.id,
@@ -681,6 +678,7 @@ export default {
 
       this.answer = this.$store.getters.bidIntent;
     }
+    console.log('Intent - ', this.$store.getters.bidIntent);
   },
   watch: {
     actualTime(val, oldVal) {

@@ -12,6 +12,7 @@ export default {
   draftTime: null,
   newSupplier: [],
   submittedBids: [],
+  supplierBid: null,
   lineItemsComplete: false,
   bidDetailsComplete: false,
   alertDeleteBidSuccess: false,

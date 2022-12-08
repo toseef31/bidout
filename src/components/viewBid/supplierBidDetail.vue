@@ -256,12 +256,12 @@ any question.</span>
                   <td class="text-left">
                     <img :src="require('@/assets/images/bids/FilePdf.png')" />
                   </td>
-                  <td class="text-left"><a :href="doc.url" target="_blank" class="text-decoration-none">{{ doc.name }}</a></td>
+                  <td class="text-left"><a :href="doc.attachment" target="_blank" class="text-decoration-none">{{ doc.fileName }}</a></td>
 
-                  <td class="text-left">{{ size(doc.size) }}</td>
+                  <td class="text-left">{{ size(doc.fileSize) }}</td>
 
                   <td class="text-left">
-                    {{ doc.lastModified | moment("MM/DD/YYYY") }}
+                    {{ doc.uploadedAt._seconds | moment("MM/DD/YYYY") }}
                   </td>
                 </tr>
               </tbody>
@@ -303,6 +303,8 @@ export default {
       return this.$store.getters.supplierAttachment;
     },
   },
-  mounted() {},
+  mounted() {
+    this.users = this.$store.getters.userInfo;
+  },
 };
 </script>

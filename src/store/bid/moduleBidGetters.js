@@ -80,4 +80,7 @@ export default {
   isBidSubmitted(state) {
     return state.isBidSubmitted;
   },
+  supplierBid(state) {
+    return state.supplierBid;
+  },
 };

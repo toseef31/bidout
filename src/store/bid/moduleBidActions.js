@@ -127,9 +127,14 @@ export default {
         commit('setPageLoader', false);
         commit('setViewBidError', false);
         commit('setUserType', res.data.user_type);
-        commit('setSubmittedBids', res.data.supplierSubmissions);
+
         if (res.data.user_type === 'supplier' && res.data.supplierSubmissions) {
+          commit('setSupplierBid', res.data.supplierSubmissions);
           commit('setIsBidSubmitted', true);
+        }
+
+        if (res.data.user_type === 'buyer') {
+          commit('setSubmittedBids', res.data.supplierSubmissions);
         }
       } else {
         commit('setPageLoader', false);
@@ -287,20 +292,63 @@ export default {
       },
     };
 
-    // const submittedData = {
-    //   userId: payload.userId,
-    //   bidId: payload.bidId,
-    //   supplierNote: payload.supplierNote,
-    //   supplierAttachments: payload.supplierAttachments,
-    //   lineItems: payload.lineItems,
-    //   answers: payload.answers,
-    //   companyId: payload.companyId,
-    // };
     const formData = new FormData();
 
     formData.append('userId', payload.userId);
     formData.append('companyId', payload.companyId);
     formData.append('bidId', payload.bidId);
+    formData.append('supplierNote', payload.supplierNote);
+
+    if (payload.supplierAttachments) {
+      for (let i = 0; i < payload.supplierAttachments.length; i++) {
+        formData.append(`supplierAttachments[${i}]`, payload.supplierAttachments[i].attachment);
+      }
+    }
+
+    if (payload.lineItems) {
+      for (let i = 0; i < payload.lineItems.length; i++) {
+        formData.append(`lineItems[${i}][price]`, payload.lineItems[i].price);
+      }
+    }
+
+    if (payload.answers) {
+      for (let i = 0; i < payload.answers.length; i++) {
+        formData.append(`answers[${i}][questionId]`, payload.answers[i].questionId);
+        formData.append(`answers[${i}][answer]`, payload.answers[i].answer);
+      }
+    }
+    try {
+      const res = await axios.post('bidSubmission/submitBid/', formData, config);
+
+      if (res.status === 200) {
+        commit('setIsBidSubmitted', true);
+        dispatch('getBidBySerial', { serial: payload.serial, id: payload.userId });
+      }
+    } catch (err) {
+      if (state.apiCounter == 2) {
+        dispatch('apiSignOutAction');
+      } else if (err.response.status === 403) {
+        await dispatch('refreshToken');
+        state.apiCounter = 2;
+        dispatch('submitBid', payload);
+      }
+    }
+  },
+
+  async editSubmitBid({ commit, dispatch, state }, payload) {
+    const config = {
+      headers: {
+        'Content-Type': 'multipart/form-data',
+        Authorization: `Bearer ${JSON.parse(localStorage.getItem('token'))}`,
+      },
+    };
+
+    const formData = new FormData();
+
+    formData.append('userId', payload.userId);
+    formData.append('companyId', payload.companyId);
+    formData.append('bidId', payload.bidId);
+    formData.append('submitBidId', payload.submitBidId);
     formData.append('supplierNote', payload.supplierNote);
 
     if (payload.supplierAttachments) {
@@ -322,10 +370,10 @@ export default {
       }
     }
     try {
-      const res = await axios.post('bidSubmission/submitBid/', formData, config);
+      const res = await axios.post('bidSubmission/editSubmitBid/', formData, config);
 
       if (res.status === 200) {
-        commit('setIsBidSubmitted', true);
+        dispatch('getBidBySerial', { serial: payload.serial, id: payload.userId });
       }
     } catch (err) {
       if (state.apiCounter == 2) {
@@ -333,11 +381,10 @@ export default {
       } else if (err.response.status === 403) {
         await dispatch('refreshToken');
         state.apiCounter = 2;
-        dispatch('submitBid', payload);
+        dispatch('editSubmitBid', payload);
       }
     }
   },
-
   async saveDraftBid({ commit, dispatch, state }, payload) {
     const config = {
       headers: {

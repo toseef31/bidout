@@ -81,7 +81,6 @@ export default {
     state.bidIntent = payload;
   },
   setSupplierAttachment(state, payload) {
-    console.log(payload);
     state.supplierAttachment.push(payload);
   },
   setQuestionAttachment(state, payload) {
@@ -95,5 +94,8 @@ export default {
   },
   setIsBidSubmitted(state, payload) {
     state.isBidSubmitted = payload;
+  },
+  setSupplierBid(state, payload) {
+    state.supplierBid = payload;
   },
 };

@@ -1,24 +1,24 @@
 <template>
   <v-col class="my-7 pa-0 bid-submission-tab" align="start">
   {{bidsSubmitted}}
-  <!--
+
     <v-simple-table class="template-table-style mt-2">
       <template v-slot:default>
         <thead>
           <tr>
-
-            <th class="text-left" v-for="(item,index) in header" :key="index">{{item}}</th>
-
+            <th class="text-left">Line Item</th>
+            <th class="text-left">Company 1</th>
+            <th class="text-left">Company 2</th>
           </tr>
         </thead>
         <tbody>
-          <tr v-for="(item,index) in listItem" :key="index">
-            <td class="text-left">Water Transfer Pump Rentals</td>
+          <tr v-for="(item,index) in bidsSubmitted" :key="index">
+            <td class="text-left">{{item.description}}</td>
             <td class="text-left">
               <span v-if="false"
                 ><v-icon color="#F32349">mdi-close</v-icon> No Bid</span
               >
-              <span v-else>$ 170.92 month</span>
+              <span v-else>$ {{item.price}} {{item.unit}}</span>
             </td>
             <td class="text-left ">
               <span v-if="true" class="justify-start"
@@ -42,7 +42,7 @@
         </tbody>
       </template>
     </v-simple-table>
-
+ <!--
 <div class="submission-section">
     <v-simple-table class="submission-table-style">
       <template v-slot:default>
@@ -322,70 +322,70 @@
             <td class="text-left">
               <div
               class=" action d-flex align-center"
-  color="white"
-  height="56"
-  rounded
-  width="190"
->  <img  :src="require('@/assets/images/bids/disqualified.png')"/> Disqualified Bid</div>
-<div
+              color="white"
+              height="56"
+              rounded
+              width="190"
+            >  <img  :src="require('@/assets/images/bids/disqualified.png')"/> Disqualified Bid</div>
+            <div
               class=" action d-flex align-center"
-  color="white"
-  height="56"
-  rounded
-  width="190"
->  <img  :src="require('@/assets/images/bids/awarded.png')"/> Awarded Bid</div>
-          </div>
+              color="white"
+              height="56"
+              rounded
+              width="190"
+            >  <img  :src="require('@/assets/images/bids/awarded.png')"/> Awarded Bid</div>
+                      </div>
 
             </td>
             <td class="text-left ">
               <div
+            class=" action d-flex align-center"
+          color="white"
+          height="56"
+          rounded
+          width="190"
+        >  <img  :src="require('@/assets/images/bids/disqualified.png')"/> Disqualified Bid</div>
+            <div
               class=" action d-flex align-center"
-  color="white"
-  height="56"
-  rounded
-  width="190"
->  <img  :src="require('@/assets/images/bids/disqualified.png')"/> Disqualified Bid</div>
-<div
-              class=" action d-flex align-center"
-  color="white"
-  height="56"
-  rounded
-  width="190"
->  <img  :src="require('@/assets/images/bids/awarded.png')"/> Awarded Bid</div>
+              color="white"
+              height="56"
+              rounded
+              width="190"
+            >  <img  :src="require('@/assets/images/bids/awarded.png')"/> Awarded Bid</div>
           </div>
             </td>
             <td class="text-left ">
-              <div
+                          <div
               class=" action d-flex align-center"
-  color="white"
-  height="56"
-  rounded
-  width="190"
->  <img  :src="require('@/assets/images/bids/disqualified.png')"/> Disqualified Bid</div>
-<div
+              color="white"
+              height="56"
+              rounded
+              width="190"
+            >  <img  :src="require('@/assets/images/bids/disqualified.png')"/> Disqualified Bid</div>
+            <div
               class=" action d-flex align-center"
-  color="white"
-  height="56"
-  rounded
-  width="190"
->  <img  :src="require('@/assets/images/bids/awarded.png')"/> Awarded Bid</div>
+              color="white"
+              height="56"
+              rounded
+              width="190"
+            >  <img  :src="require('@/assets/images/bids/awarded.png')"/> Awarded Bid</div>
           </div>
             </td>
             <td class="text-left ">
-              <div
-              class=" action d-flex align-center"
-  color="white"
-  height="56"
-  rounded
-  width="190"
->  <img  :src="require('@/assets/images/bids/disqualified.png')"/> Disqualified Bid</div>
-<div
-              class=" action d-flex align-center"
-  color="white"
-  height="56"
-  rounded
-  width="190"
->  <img  :src="require('@/assets/images/bids/awarded.png')"/> Awarded Bid</div>
+            <div
+                class=" action d-flex align-center"
+            color="white"
+            height="56"
+            rounded
+            width="190"
+          >  <img  :src="require('@/assets/images/bids/disqualified.png')"/> Disqualified Bid</div>
+          <div
+                        class=" action d-flex align-center"
+            color="white"
+            height="56"
+            rounded
+            width="190"
+          >  <img  :src="require('@/assets/images/bids/awarded.png')"/> Awarded Bid</div>
           </div>
             </td>
           </tr>
@@ -398,11 +398,16 @@
 
 <script>
 import moment from 'moment-timezone';
+import { mapActions } from 'vuex';
 
 export default {
   data() {
     return {
-      listItem: [],
+      lineItem: [{
+        price: [],
+        description: '',
+        unit: '',
+      }],
       header: ['Line items'],
     };
   },
@@ -415,6 +420,31 @@ export default {
       const sBid = this.$store.getters.submittedBid;
       console.log(sBid);
 
+      // for (let i = 0; i < this.bidDetail.bidData.lineItems.length; i++) {
+      //   this.lineItem.push({
+      //     description: this.bidDetail.bidData.lineItems[i].description,
+      //     unit: this.bidDetail.bidData.lineItems[i].unit,
+      //   });
+      //   // sBid[i].lineItems.forEach((el, index) => {
+      //   //   // this.lineItem[i] = {
+      //   //   //   item:
+      //   //   // }
+      //   //   console.log(`${index} - Bid`);
+      //   //   console.log(this.bidDetail.bidData.lineItems[index].description);
+      //   //   console.log(el.price);
+      //   // });
+      // }
+
+      for (let i = 0; i < sBid.length; i++) {
+        sBid[i].lineItems.forEach((el, index) => {
+          this.lineItem[index] = {
+            price: el.price,
+            description: this.bidDetail.bidData.lineItems[index].description,
+            unit: this.bidDetail.bidData.lineItems[index].unit,
+          };
+        });
+      }
+
       // for (let i = 0; i < sBid.length; i++) {
       //   this.listItem[i] = {
       //     ...JSON.parse(sBid[i].lineItems),
@@ -426,7 +456,9 @@ export default {
 
       // console.log(this.header);
 
-      return this.$store.getters.submittedBid;
+      console.log('Line Item - ', this.lineItem);
+
+      return this.lineItem;
     },
     isAfterDueDate() {
       const bidDueDate = this.bidDetail.bidData.dueDate;
@@ -438,6 +470,9 @@ export default {
 
       return moment(currentDate).isAfter(momentDueDate);
     },
+  },
+  methods: {
+    ...mapActions(['awardCompany', 'rejectCompany']),
   },
 };
 </script>

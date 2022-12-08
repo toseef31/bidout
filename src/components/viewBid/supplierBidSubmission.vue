@@ -1,6 +1,8 @@
 <template>
   <v-col class="my-7 pa-0 bid-submission-tab" align="start">
-
+{{supplierDocList}}
+<br></br>
+{{questionDocList}}
     <div class="title-line" v-if="
             bidDetail.bidData &&
             bidDetail.bidData.lineItems &&
@@ -142,7 +144,7 @@
 
                     <div class="upload-attach" v-if="item.questionType === 'uploadFile'">
                     <div class="d-flex justify-space-between align-center" v-if="questionDocList">
-                    <div class="doc-list">{{questionDocList.name}}</div>
+                    <div class="doc-list">{{questionDocList.fileName}}</div>
 
                     <v-btn @click="removeQuesDoc" icon>
                         <v-icon size="20" color="#F03F20" >mdi-close</v-icon>
@@ -165,7 +167,7 @@
                         class="d-none"
                         type="file"
                         id="uploadFileQ"
-                        @change="handleDocument($event,'questionUpload',index)"
+                        @change="handleDocument($event,'questionUpload',index,item.questionId)"
                       />
 
                     <div>
@@ -220,11 +222,11 @@
                   <td class="text-left">
                     <img :src="require('@/assets/images/bids/FilePdf.png')" />
                   </td>
-                  <td class="text-left"><a :href="doc.url" target="_blank" class="text-decoration-none">{{ doc.name }}</a></td>
-                  <td class="text-left">{{ size(doc.size) }} </td>
+                  <td class="text-left">{{ doc.fileName }}</td>
+                  <td class="text-left">{{ size(doc.fileSize) }} </td>
 
                   <td class="text-left">
-                    {{ doc.lastModified
+                    {{ doc.uploadedAt
  | moment("MM/DD/YYYY") }}
                   </td>
                   <td class="text-left delete-class text-decoration-underline" @click="deleteAttach(index)">
@@ -252,7 +254,7 @@
 
       </div>
 
-      <div class="text-center mt-3" v-if="(getIntent !== null && getIntent === 'true' && !isAfterDueDate)">
+      <div class="text-center mt-3" v-if="(getIntent !== null && getIntent === 'true' && !isAfterDueDate && !isBidSubmitted)">
         <v-btn
           color="#0D9648"
           height="56"
@@ -267,8 +269,27 @@
           v-if="showLoading"
       indeterminate
       color="#0D9648"
-    ></v-progress-circular>
+           ></v-progress-circular>
           <div v-else>Submit bid</div></v-btn
+        >
+      </div>
+      <div class="text-center mt-3" v-if="(getIntent !== null && getIntent === 'true' && !isAfterDueDate && isBidSubmitted)">
+        <v-btn
+          color="#0D9648"
+          height="56"
+          width="220"
+          class="text-capitalize white--text font-weight-bold save-button px-9"
+          @click="editSubmit"
+          :disabled="showLoading"
+          large
+
+          >
+          <v-progress-circular
+          v-if="showLoading"
+      indeterminate
+      color="#0D9648"
+           ></v-progress-circular>
+          <div v-else>Edit bid</div></v-btn
         >
       </div>
   </v-col>
@@ -305,23 +326,9 @@ export default {
     questionDocList() {
       return this.$store.getters.questionAttachment;
     },
-    // bidsSubmitted() {
-    //   const sBid = this.$store.getters.submittedBid;
-    //   console.log(sBid);
-
-    //   for (let i = 0; i < sBid.length; i++) {
-    //     this.listItem[i] = {
-    //       ...JSON.parse(sBid[i].lineItems),
-    //       name: sBid[i].company.company,
-    //       companyId: sBid[i].companyId,
-    //     };
-    //     this.header[i + 1] = sBid[i].company.company;
-    //   }
-
-    //   console.log(this.header);
-
-    //   return this.$store.getters.submittedBid;
-    // },
+    getSupplierBid() {
+      return this.$store.getters.supplierBid;
+    },
     showLoading() {
       return this.loading;
     },
@@ -335,9 +342,12 @@ export default {
 
       return moment(currentDate).isAfter(momentDueDate);
     },
+    isBidSubmitted() {
+      return this.$store.getters.isBidSubmitted;
+    },
   },
   methods: {
-    ...mapActions(['submitBid']),
+    ...mapActions(['submitBid', 'editSubmitBid']),
     size(size) {
       const sizeInMB = (size / (1024 * 1024)).toFixed(2);
       return `${sizeInMB}mb`;
@@ -362,6 +372,33 @@ export default {
         supplierAttachments: this.supplierDocList,
         lineItems: lineItemsA,
         answers: answersA,
+        serial: this.$route.params.serial,
+      });
+
+      this.loading = false;
+
+      this.$emit('changetab', 'tab-1');
+    },
+    async editSubmit() {
+      this.loading = true;
+
+      const lineItemsA = this.lineItems;
+      const supplierAttachmentA = this.supplierDocList.map((el) => el.attachment);
+      let answersA = this.answers;
+
+      lineItemsA.forEach((el) => delete el.bid);
+      answersA = answersA.filter((el) => el.category !== 'category');
+
+      await this.editSubmitBid({
+        userId: this.user.id,
+        companyId: this.user.company.id,
+        bidId: this.bidDetail.bidData.id,
+        supplierNote: this.supplierNote,
+        supplierAttachments: supplierAttachmentA,
+        lineItems: lineItemsA,
+        answers: answersA,
+        submitBidId: this.getSupplierBid.id,
+        serial: this.$route.params.serial,
       });
 
       this.loading = false;
@@ -372,11 +409,21 @@ export default {
       this.file = event.target.files[0];
 
       if (slug) {
-        this.$store.commit('setQuestionAttachment', this.file);
+        this.$store.commit('setQuestionAttachment', {
+          fileName: this.file.name,
+          fileSize: this.file.size,
+          attachment: this.file,
+          uploadedAt: Date.now(),
+        });
 
         this.answers[index].answer = this.file;
       } else {
-        this.$store.commit('setSupplierAttachment', this.file);
+        this.$store.commit('setSupplierAttachment', {
+          fileName: this.file.name,
+          fileSize: this.file.size,
+          attachment: this.file,
+          uploadedAt: Date.now(),
+        });
       }
     },
 
@@ -394,7 +441,7 @@ export default {
       this.lineItems[index].price = '';
       this.lineItems[index].bid = true;
     },
-    initializeD() {
+    initializeForNew() {
       const { bidData } = this.bidDetail;
       for (let i = 0; i < bidData.lineItems.length; i++) {
         this.lineItems.push({
@@ -411,6 +458,55 @@ export default {
         });
       }
     },
+    initializeForEdit() {
+      const { bidData } = this.bidDetail;
+
+      for (let i = 0; i < bidData.lineItems.length; i++) {
+        this.lineItems.push({
+          price: this.getSupplierBid.lineItems[i].price,
+          bid: true,
+        });
+      }
+
+      for (let i = 0; i < this.getSupplierBid.supplierAttachments.length; i++) {
+        this.$store.commit('setSupplierAttachment', {
+          fileName: this.getSupplierBid.supplierAttachments[i].fileName,
+          fileSize: this.getSupplierBid.supplierAttachments[i].fileSize,
+          attachment: this.getSupplierBid.supplierAttachments[i].attachment,
+          uploadedAt: this.getSupplierBid.supplierAttachments[i].uploadedAt._seconds,
+        });
+      }
+
+      this.supplierNote = this.getSupplierBid.supplierNote;
+
+      for (let i = 0; i < bidData.questions.length; i++) {
+        for (let j = 0; j < this.getSupplierBid.answers.length; j++) {
+          if (bidData.questions[i].id === this.getSupplierBid.answers[j] && this.getSupplierBid.answers[j].questionId) {
+            this.answers.push({
+              questionId: this.getSupplierBid.answers[j].questionId,
+              answer: this.getSupplierBid.answers[j].answer,
+            });
+          } else {
+            this.answers.push({
+              questionId: bidData.questions[i].id,
+              answer: null,
+              category: bidData.questions[i].type,
+            });
+          }
+        }
+      }
+
+      this.getSupplierBid.answers.forEach((el) => {
+        if (typeof el === 'object' && el.answer) {
+          this.$store.commit('setQuestionAttachment', {
+            fileName: el.fileName,
+            fileSize: el.fileSize,
+            attachment: el.answer,
+            uploadedAt: el.uploadedAt._seconds,
+          });
+        }
+      });
+    },
   },
   mounted() {
     if (this.$store.getters.supplierAttachment) {
@@ -418,8 +514,12 @@ export default {
     }
   },
   created() {
-    this.initializeD();
+    if (this.isBidSubmitted) {
+      this.initializeForEdit();
+    } else { this.initializeForNew(); }
+
     this.user = this.$store.getters.userInfo;
+    console.log(this.$store.getters.userInfo);
   },
 };
 </script>
