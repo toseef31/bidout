@@ -101,11 +101,14 @@
               <v-btn color="#0D9648" height="56" class="text-capitalize white--text font-weight-bold save-btn px-9" :disabled="!valid" @click="changeTab" large>Save Changes</v-btn>
             </v-col>
           </v-row>
-          <v-row justify="center" v-if="serial != ''">
-            <v-col cols="12">
-              <v-btn text class="text-capitalize font-weight-bold" @click="dialog = true" large>Delete Draft Bid #{{serial}}</v-btn>
-            </v-col>
-          </v-row>
+          <template v-if="route != 'EditTemplate'">
+            <v-row justify="center" v-if="serial != ''">
+              <v-col cols="12">
+                <v-btn text class="text-capitalize font-weight-bold" @click="dialog = true" large>Delete Draft Bid #{{serial}}</v-btn>
+              </v-col>
+            </v-row>
+          </template>
+          
           <v-dialog
               v-model="dialog"
               width="500"
@@ -180,6 +183,7 @@ export default {
       bidFormData: '',
       formStatus: false,
       dialog: false,
+      route: '',
     };
   },
   computed: {
@@ -396,6 +400,7 @@ export default {
     }
   },
   mounted(){
+    this.route = this.$route.name;
     console.log(this.$route,'store',this.$store.getters.bidData);
     this.$store.commit('setInvitedSuppliersData',this.$store.getters.bidData.invitedSuppliers);
     this.$store.commit('setInvitedTeamMembers',this.$store.getters.bidData.invitedTeamMembers);

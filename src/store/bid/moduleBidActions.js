@@ -656,10 +656,10 @@ export default {
            }
           }
         }else{
-          formData.append(`invitedSuppliers`, []);
+          formData.append(`invitedSuppliers`, "");
         }
       }else{
-        if(state.invitedSuppliers != ''){
+        if(state.invitedSuppliers != null){
           for (let i = 0; i < state.invitedSuppliers.length; i++) {
             if(!state.invitedSuppliers[i].type){
               formData.append(`invitedSuppliers[${i}]`, state.invitedSuppliers[i]);
@@ -672,7 +672,7 @@ export default {
            }
           }
         }else{
-          formData.append(`invitedSuppliers`, []);
+          formData.append(`invitedSuppliers`, "");
         }
       }
       if(state.bidData.status == 'templateCreate'){
@@ -686,7 +686,7 @@ export default {
             }
           }
         }else{
-          formData.append(`invitedTeamMembers`, []);
+          formData.append(`invitedTeamMembers`, "");
         }
       }else{
         if(state.invitedTeamMembers != null){
@@ -699,7 +699,7 @@ export default {
             }
           }
         }else{
-          formData.append(`invitedTeamMembers`, []);
+          formData.append(`invitedTeamMembers`, "");
         }
       }
       
@@ -715,7 +715,7 @@ export default {
             formData.append(`lineItems[${i}][required]`, state.bidlines[i].required);
           }
         }else{
-          formData.append(`lineItems`, []);
+          formData.append(`lineItems`, "");
         }
       }else{
         if(state.bidlines != null){
@@ -730,7 +730,7 @@ export default {
             formData.append(`lineItems[${i}][required]`, state.bidlines[i].required);
           }
         }else{
-          formData.append(`lineItems`, []);
+          formData.append(`lineItems`, "");
         }
       }
       
@@ -746,7 +746,7 @@ export default {
             formData.append(`attachment[${i}][id]`, state.attachement[i].id);
           }
         }else{
-          formData.append(`attachment`, []);
+          formData.append(`attachment`, "");
         }
       }else{
         if(state.attachement != null){
@@ -759,6 +759,8 @@ export default {
             formData.append(`attachment[${i}][comment]`, state.attachement[i].comment);
             formData.append(`attachment[${i}][id]`, state.attachement[i].id);
           }
+        }else{
+          formData.append(`attachment`, "");
         }
       }
       
@@ -780,10 +782,10 @@ export default {
             }
           }
         }else{
-          formData.append(`questions`, []);
+          formData.append(`questions`, "");
         }
       }else{
-        if(state.questions != ''){
+        if(state.questions != null){
           for (let i = 0; i < state.questions.length; i++) {
             formData.append(`questions[${i}][id]`, state.questions[i].id);
             formData.append(`questions[${i}][order]`, state.questions[i].order);
@@ -799,7 +801,7 @@ export default {
             }
           }
         }else{
-          formData.append(`questions`, []);
+          formData.append(`questions`, "");
         }
       }
       

@@ -213,9 +213,7 @@ export default {
       this.attachStatus = true;
     },
     openComment(index) {
-      alert(index);
       this.edit = index;
-      console.log(this.edit);
       this.isEdit = true;
     },
     saveComment(doc) {
