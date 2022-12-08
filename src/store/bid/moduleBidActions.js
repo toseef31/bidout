@@ -501,6 +501,7 @@ export default {
     try{
       const res = await axios.get(`bid/getBidDetailsById/${payload.id}`);
        if(res.status == 200){
+        console.log(res.data);
         commit('getSingleTemplate',res.data)
         commit('setBidData', res.data);
         dispatch('getTeamMembers',payload.company);
@@ -637,20 +638,38 @@ export default {
         }
       }
 
-      if(state.invitedSuppliers != ''){
-        for (let i = 0; i < state.invitedSuppliers.length; i++) {
-          if(!state.invitedSuppliers[i].type){
-            formData.append(`invitedSuppliers[${i}]`, state.invitedSuppliers[i]);
-          }else{
-           if (state.invitedSuppliers[i].type == 'user') {
-             formData.append(`invitedSuppliers[${i}]`, state.invitedSuppliers[i].item.companyId);
-           } else {
-             formData.append(`invitedSuppliers[${i}]`, state.invitedSuppliers[i].item.objectID);
-           } 
-         }
+      if(state.bidData.status == 'templateCreate'){
+        if(state.invitedSuppliers){
+          for (let i = 0; i < state.invitedSuppliers.length; i++) {
+            if(!state.invitedSuppliers[i].type){
+              formData.append(`invitedSuppliers[${i}]`, state.invitedSuppliers[i]);
+            }else{
+             if (state.invitedSuppliers[i].type == 'user') {
+               formData.append(`invitedSuppliers[${i}]`, state.invitedSuppliers[i].item.companyId);
+             } else {
+               formData.append(`invitedSuppliers[${i}]`, state.invitedSuppliers[i].item.objectID);
+             } 
+           }
+          }
+        }else{
+          formData.append(`invitedSuppliers`, []);
         }
       }else{
-        formData.append(`invitedSuppliers`, []);
+        if(state.invitedSuppliers != ''){
+          for (let i = 0; i < state.invitedSuppliers.length; i++) {
+            if(!state.invitedSuppliers[i].type){
+              formData.append(`invitedSuppliers[${i}]`, state.invitedSuppliers[i]);
+            }else{
+             if (state.invitedSuppliers[i].type == 'user') {
+               formData.append(`invitedSuppliers[${i}]`, state.invitedSuppliers[i].item.companyId);
+             } else {
+               formData.append(`invitedSuppliers[${i}]`, state.invitedSuppliers[i].item.objectID);
+             } 
+           }
+          }
+        }else{
+          formData.append(`invitedSuppliers`, []);
+        }
       }
       if(state.bidData.status == 'templateCreate'){
         if(state.invitedTeamMembers){
@@ -666,8 +685,8 @@ export default {
           formData.append(`invitedTeamMembers`, []);
         }
       }else{
-        if(state.invitedTeamMembers != ''){
-          console.log('if invitedTeamMembers');
+        if(state.invitedTeamMembers != null){
+          console.log('if invitedTeamMembers else');
           for (let t = 0; t < state.invitedTeamMembers.length; t++) {
             if(!state.invitedTeamMembers[t].id){
               formData.append(`invitedTeamMembers[${t}]`, state.invitedTeamMembers[t]);
@@ -695,7 +714,7 @@ export default {
           formData.append(`lineItems`, []);
         }
       }else{
-        if(state.bidlines != ''){
+        if(state.bidlines != null || state.bidlines.length > 0){
           console.log('if bidlines');
           for (let i = 0; i < state.bidlines.length; i++) {
             formData.append(`lineItems[${i}][id]`, state.bidlines[i].id);
@@ -780,7 +799,6 @@ export default {
         }
       }
       
-      formData.append('invitedNewSuppliers', []);
       try {
         const res = await axios.post(`bid/editTemplateBid/`, formData, config);
         if (res.status == 200) {
@@ -798,6 +816,28 @@ export default {
           state.apiCounter = 2;
           dispatch('updateTemplate', payload);
         }
+      }
+    },
+
+    async publishTemplate({ commit, state,dispatch }, payload) {
+      try {
+        // await dispatch('updateTemplate', 'update');
+          commit('setDraftBidsList', null);
+          commit('setDraftTime', null);
+          commit('setDraftTime', null);
+          commit('setAttachData', null);
+          commit('setBidData', null);
+          commit('setInvitedSuppliersData', null);
+          commit('setInvitedTeamMembers', null);
+          commit('setBidlines', null);
+          commit('setAttachement', null);
+          commit('setQuestions', null);
+          commit('setDraftBidData', null);
+          
+        
+        return;
+      } catch (err) {
+        console.log(err);
       }
     },
 };

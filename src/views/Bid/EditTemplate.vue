@@ -37,7 +37,7 @@
                 large
                 @click="publishBid"
               >
-                Publish Bid
+                Update Template
               </v-btn>
             </div>
           </v-col>
@@ -251,8 +251,8 @@ export default {
     },
     async publishBid() {
       try {
-        await this.$store.dispatch('publishBid');
-        this.$router.push('/view-bids');
+        await this.$store.dispatch('publishTemplate');
+        this.$router.push('/manage-templates');
       } catch (error) {
         console.log(error);
       }
