@@ -844,4 +844,22 @@ export default {
         console.log(err);
       }
     },
+  async deleteDraftBid({commit,state,dispatch}, payload){
+      try{
+        const res = await axios.post('bid/draft/deleteDraft/',{'draftId':payload.draftId});
+         if(res.status == 200){
+          router.replace('/view-bids');
+         }
+      }catch(err){
+        if(state.apiCounter == 2){
+          dispatch('apiSignOutAction');
+        }else{
+          if(err.response.status === 403){
+           await dispatch('refreshToken');
+           state.apiCounter = 2;
+           dispatch('deleteDraftBid',payload);
+          }
+        }
+      }
+    },
 };
