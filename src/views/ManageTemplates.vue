@@ -39,8 +39,8 @@
               <tr v-for="(template, index) in bidTemplates" class="py-4 px-6">
                 <td class="text-left pl-6">{{template.title}}</td>
                 <td class="text-left">{{template.type}}</td>
-                <td class="text-left">{{template.createdDate}}</td>
-                <td class="text-left">{{template.creator}}</td>
+                <td class="text-left">{{template.createdAt | moment('MM/DD/YYYY')}}</td>
+                <td class="text-left">{{template.creator ? template.creator : 'No name'}}</td>
                 <td class="text-left">
                   <div class="">
                     <div
@@ -80,24 +80,26 @@
                 width="500"
               >
                 <v-card>
-                  <v-card-title class="text-h5 grey">
+                  <v-card-title class="text-h5 grey lighten-2">
                     Confirm
                   </v-card-title>
-                  <v-card-text>
+                  <v-card-text class="pt-5">
                     Are you sure you want to delete?
                   </v-card-text>
                   <v-divider></v-divider>
                   <v-card-actions>
                     <v-spacer></v-spacer>
                     <v-btn
-                      color="primary"
+                      color="#F32349"
+                      outlined
                       @click="dialog = false"
                     >
                       Cancel
                     </v-btn>
                     <v-btn
-                      color="rgb(243, 35, 73)"
-                      @click="deleteTemp()"
+                      color="#0d9648"
+                      outlined
+                      @click="deleteTemp(); dialog = false"
                     >
                       Confirm
                     </v-btn>
