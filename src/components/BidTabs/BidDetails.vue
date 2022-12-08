@@ -348,7 +348,12 @@ export default {
     this.$store.commit('setInvitedSuppliersData',this.$store.getters.bidData.invitedSuppliers);
     this.$store.commit('setInvitedTeamMembers',this.$store.getters.bidData.invitedTeamMembers);
     this.$store.commit('setBidlines',this.$store.getters.bidData.lineItems);
-    this.$store.commit('setAttachement',this.$store.getters.bidData.attachments);
+    if(this.$store.getters.bidData.statusType == 'draftBid'){
+      this.$store.commit('setAttachement',this.$store.getters.bidData.attachments);
+    }else{
+      console.log(this.$store.getters.bidData.statusType,'dsda',this.$store.getters.bidData.attachment)
+      this.$store.commit('setAttachement',this.$store.getters.bidData.attachment);
+    }
     this.$store.commit('setQuestions',this.$store.getters.bidData.questions);
     this.savedraftOnInterval();
   }

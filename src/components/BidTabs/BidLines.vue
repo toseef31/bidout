@@ -207,6 +207,7 @@ export default {
       // eslint-disable-next-line no-plusplus
       for (let i = 0; i < 5; i++) {
         this.bidLines.push({
+          id: uuidv4(),
           type: 'USD',
           inputType: 'USD',
           units: ['Gallon', 'Liter'],

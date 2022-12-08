@@ -221,6 +221,7 @@ export default {
         dispatch('searchByCompany',{query: '',basin:'all'});
         commit('setDraftBidsList', res.data.id);
         commit('setBidSerial', res.data.serial);
+        state.bidData.statusType = 'draftBid';
         commit('setDraftTime', new Date().toLocaleString());
 
       } else {
@@ -510,6 +511,7 @@ export default {
         dispatch('searchByCompany',{query: '',basin:'all'});
         // commit('setDraftBidData', res.data);
         state.bidData.status = 'templateUpdate';
+        state.bidData.statusType = 'template';
         commit('setPageLoader', false);
         router.replace('/create-template');
        }
@@ -554,7 +556,7 @@ export default {
     formData.append('invitedNewSuppliers', []);
     formData.append('invitedTeamMembers', []);
     formData.append('questions', []);
-    formData.append('attachement', []);
+    formData.append('attachment', []);
 
     try {
       const res = await axios.post('bid/createTemplateBid', formData, config);
@@ -566,6 +568,7 @@ export default {
         dispatch('searchByCompany',{query: '',basin:'all'});
         commit('setDraftBidsList', res.data.id);
         state.bidData.status = 'templateCreate';
+        state.bidData.statusType = 'template';
         commit('setDraftTime', new Date().toLocaleString());
       } else {
         commit('setDraftBidsList', null);
@@ -595,6 +598,7 @@ export default {
           // commit('setDraftBidData', res.data);
           commit('setBidData', res.data);
           commit('setPageLoader', false);
+          state.bidData.statusType = 'draftBid';
           router.replace('/create-bid');
         }
       } catch (err) {
@@ -714,7 +718,7 @@ export default {
           formData.append(`lineItems`, []);
         }
       }else{
-        if(state.bidlines != null || state.bidlines.length > 0){
+        if(state.bidlines != null){
           console.log('if bidlines');
           for (let i = 0; i < state.bidlines.length; i++) {
             formData.append(`lineItems[${i}][id]`, state.bidlines[i].id);

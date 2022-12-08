@@ -118,19 +118,36 @@ export default {
     },
     docsList() {
       if(this.$store.getters.bidData != null){
-        if(this.$store.getters.bidData.attachments != ""){
-          if(this.$store.getters.attachData){
-            var totalDay = this.$store.getters.bidData.attachments.concat(this.$store.getters.attachData);
-            this.documents = totalDay;
+        if(this.$store.getters.bidData.statusType == 'draftBid'){
+          if(this.$store.getters.bidData.attachments != ""){
+            if(this.$store.getters.attachData){
+              var totalDay = this.$store.getters.bidData.attachments.concat(this.$store.getters.attachData);
+              this.documents = totalDay;
+            }else{
+              this.documents = this.$store.getters.bidData.attachments;
+            }
+            this.$store.commit('setAttachement',this.documents);
+            return this.documents;
           }else{
-            this.documents = this.$store.getters.bidData.attachments;
+            this.$store.commit('setAttachement',this.$store.getters.attachData);
+            return this.$store.getters.attachData;
           }
-          this.$store.commit('setAttachement',this.documents);
-          return this.documents;
         }else{
-          this.$store.commit('setAttachement',this.$store.getters.attachData);
-          return this.$store.getters.attachData;
+          if(this.$store.getters.bidData.attachment != ""){
+            if(this.$store.getters.attachData){
+              var totalDay = this.$store.getters.bidData.attachment.concat(this.$store.getters.attachData);
+              this.documents = totalDay;
+            }else{
+              this.documents = this.$store.getters.bidData.attachment;
+            }
+            this.$store.commit('setAttachement',this.documents);
+            return this.documents;
+          }else{
+            this.$store.commit('setAttachement',this.$store.getters.attachData);
+            return this.$store.getters.attachData;
+          }
         }
+        
       }else{
         this.$store.commit('setAttachement',this.$store.getters.attachData);
         return this.$store.getters.attachData;
