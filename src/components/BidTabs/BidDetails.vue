@@ -101,6 +101,40 @@
               <v-btn color="#0D9648" height="56" class="text-capitalize white--text font-weight-bold save-btn px-9" :disabled="!valid" @click="changeTab" large>Save Changes</v-btn>
             </v-col>
           </v-row>
+          <v-row justify="center" v-if="serial != ''">
+            <v-col cols="12">
+              <v-btn text class="text-capitalize font-weight-bold" @click="dialog = true" large>Delete Draft Bid #{{serial}}</v-btn>
+            </v-col>
+          </v-row>
+          <v-dialog
+              v-model="dialog"
+              width="500"
+            >
+              <v-card>
+                <v-card-title class="text-h5 grey">
+                  Confirm
+                </v-card-title>
+                <v-card-text>
+                  Are you sure you want to delete?
+                </v-card-text>
+                <v-divider></v-divider>
+                <v-card-actions>
+                  <v-spacer></v-spacer>
+                  <v-btn
+                    color="primary"
+                    @click="dialog = false"
+                  >
+                    Cancel
+                  </v-btn>
+                  <v-btn
+                    color="rgb(243, 35, 73)"
+                    @click="deleteDraft(); dialog = false"
+                  >
+                    Confirm
+                  </v-btn>
+                </v-card-actions>
+              </v-card>
+            </v-dialog>
         </v-container>
       </v-form>
     </v-col>
@@ -144,6 +178,7 @@ export default {
       interval: '',
       bidFormData: '',
       formStatus: false,
+      dialog: false,
     };
   },
   computed: {
@@ -232,6 +267,18 @@ export default {
         this.$store.commit('setBidEnabled', value)
       },
     },
+    serial: {
+      get () {
+        if(!this.$store.getters.bidData.id){
+          return '';
+        }else{
+          return this.$store.getters.bidData.serial
+        }
+      },
+      set (value) {
+        // this.$store.commit('setBidEnabled', value)
+      },
+    },
     validate() {
       this.$emit('validation', { valid: this.valid, value: '1', bidTitle: this.title });
       this.$store.commit('setBidDetailsComplete', this.valid);
@@ -244,7 +291,7 @@ export default {
     },
   },
   methods: {
-    ...mapActions(['saveDraftBid',"updateDraftBid"]),
+    ...mapActions(['saveDraftBid',"updateDraftBid","deleteDraftBid"]),
     async changeTab() {
       if(this.$store.getters.bidData != null){
         const bidDetails = {
@@ -317,6 +364,9 @@ export default {
         clearInterval(timer);
       });
     },
+    deleteDraft(){
+      this.deleteDraftBid({draftId: this.$store.getters.bidData.id});
+    }
   },
   mounted(){
     this.$store.commit('setInvitedSuppliersData',this.$store.getters.bidData.invitedSuppliers);
