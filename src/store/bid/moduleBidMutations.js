@@ -84,6 +84,30 @@ export default {
   setQuestions(state, payload) {
     state.questions = payload;
   },
+  setBidIntent(state, payload) {
+    state.bidIntent = payload;
+  },
+  setSupplierAttachment(state, payload) {
+    state.supplierAttachment.push(payload);
+    state.supplierAttachment = state.supplierAttachment.filter((value, index, self) => index === self.findIndex((t) => (
+      t.fileName === value.fileName
+    )));
+  },
+  setUserType(state, payload) {
+    state.userType = payload;
+  },
+  setIntentId(state, payload) {
+    state.intentId = payload;
+  },
+  setIsBidSubmitted(state, payload) {
+    state.isBidSubmitted = payload;
+  },
+  setSupplierBid(state, payload) {
+    state.supplierBid = payload;
+  },
+  setQAndA(state, payload) {
+    state.qAndA = payload;
+  },
   setDraftBidData(state, payload) {
     state.draftBidData = payload;
   },
@@ -110,5 +134,8 @@ export default {
   },
   setBidDescription(state, payload) {
     state.bidData.bidDescriptions = payload;
+  },
+  setUnansweredQuestionCount(state, payload) {
+    state.unansweredQuestionCount = payload;
   },
 };
