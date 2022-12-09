@@ -63,6 +63,7 @@ export default {
     state.bidSerial = payload;
   },
   setInvitedSuppliersData(state, payload) {
+    console.log(payload);
     state.invitedSuppliers = payload;
   },
   setInvitedTeamMembers(state, payload) {

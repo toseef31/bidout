@@ -293,7 +293,7 @@ export default {
     },
   },
   methods: {
-    ...mapActions(['saveDraftBid',"updateDraftBid","deleteDraftBid"]),
+    ...mapActions(['saveDraftBid',"updateDraftBid","deleteDraftBid","updateBid"]),
     async changeTab() {
       if(this.$store.getters.bidData != null){
         const bidDetails = {
@@ -305,7 +305,11 @@ export default {
           if(!this.$store.getters.bidData.id){
             await this.saveDraftBid(bidDetails);
           }else{
-            await this.updateDraftBid(bidDetails);
+            if(this.$route.name == 'EditBid'){
+              await this.updateBid(bidDetails);
+            }else{
+              await this.updateDraftBid(bidDetails);
+            }
           }
           this.$emit('changetab', 'tab-2');
         }
@@ -331,7 +335,11 @@ export default {
           if(!this.$store.getters.bidData.id){
             this.saveDraftBid(bidDetails);
           }else{
-            this.updateDraftBid(bidDetails);
+            if(this.$route.name == 'EditBid'){
+              this.updateBid(bidDetails);
+            }else{
+              this.updateDraftBid(bidDetails);
+            }
           }
           this.$emit('changetab', 'tab-2');
         }

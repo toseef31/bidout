@@ -68,8 +68,9 @@ const routes = [
       },
       {
         path: "/edit-bid/:serial",
-        name: "NotCompleted",
+        name: "EditBid",
         component: () => import("@/views/Bid/EditBid.vue"),
+        props: true,
         beforeEnter: (to, from, next) => {
           if (localStorage.getItem("userData") == null) {
             next("/login");

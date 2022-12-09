@@ -194,9 +194,13 @@ export default {
     },
   },
   methods: {
-    ...mapActions(['updateDraftBid']),
+    ...mapActions(['updateDraftBid','updateBid']),
     changeTab() {
-      this.updateDraftBid({ bidlines: this.bidLines });
+      if(this.$route.name == 'EditBid'){
+        this.updateBid({ bidlines: this.bidLines });
+      }else{
+        this.updateDraftBid({ bidlines: this.bidLines });
+      }
       this.$emit('changetab', 'tab-5');
     },
     addItem() {
@@ -231,7 +235,11 @@ export default {
     savedraftOnInterval(){
       const timer = setInterval(() => {
         if(this.bidLinesStatus == true){
-          this.updateDraftBid({ bidlines: this.bidLines });
+          if(this.$route.name == 'EditBid'){
+            this.updateBid({ bidlines: this.bidLines });
+          }else{
+            this.updateDraftBid({ bidlines: this.bidLines });
+          }
           this.bidLinesStatus = false;
         }
       }, 60000);

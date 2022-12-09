@@ -1,11 +1,14 @@
 <template>
+  <div class="createBid-module content-section fill-height d-flex justify-center align-center"  v-if="loading">
+    <v-progress-circular :width="3" color="green" indeterminate ></v-progress-circular>
+  </div>
   <v-col
     class="createBid-module pa-0 pa-sm-3 pl-sm-0"
     :class="[
       showSideBar ? 'col-md-9 col-12 col-sm-7' : 'mid-content-collapse',
       activityPanel ? 'd-sm-block' : 'd-md-block',
     ]"
-    v-show="!activityPanel"
+    v-show="!activityPanel" v-else
   >
     <div class="mid-content">
       <div class="content-section fill-height pa-0">
@@ -48,7 +51,7 @@
             class="bids-tabs"
             fixed-tabs
             hide-slider
-            mobile-breakpoint="767px"
+           
           >
             <v-tab
               v-for="(item, index) in tabs"
@@ -219,9 +222,12 @@ export default {
       }
       return false;
     },
+    loading(){
+     return this.$store.getters.pageLoader;
+    }, 
   },
   methods: {
-    ...mapActions(["updateDraftBid"]),
+    ...mapActions(["updateBid","getUpdateBid","publishUpdateBid"]),
     ...mapState(["invitedSuppliers"]),
     ChangeT(tab) {
       this.currentItem = tab;
@@ -251,21 +257,26 @@ export default {
     },
     async publishBid() {
       try {
-        const serial = await this.$store.dispatch('publishBid');
-        console.log(serial);
-        this.$router.push(`/view-bids/${serial}?new=true`);
+        await this.publishUpdateBid({serial:this.$route.params.serial});
+        this.$router.push(`/view-bids/${this.$route.params.serial}`);
         this.$store.commit('setDraftBidsList', null);
+        this.$store.commit('setBidData', null);
       } catch (error) {
         console.log(error);
       }
     },
     async updateDraft(){
-      await this.updateDraftBid({'supplier': this.$store.state.bid.invitedSuppliers});
+      await this.updateBid({'supplier': this.$store.state.bid.invitedSuppliers});
     }
+  },
+  async created(){
+    await this.getUpdateBid({id: this.$store.getters.userInfo.id, serial:this.$route.params.serial, company: this.$store.getters.userInfo.company.company})
   },
   mounted() {
     document.title = 'Create Bid - BidOut';
-    this.users = JSON.parse(localStorage.getItem('userData')).user;
+    this.users = this.userDatas;
+    console.log(this.$route.params.serial,'ddd',this.userDatas.id)
+    
   },
 };
 </script>

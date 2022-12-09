@@ -456,7 +456,7 @@ export default {
     },
   },
   methods: {
-    ...mapActions(['updateDraftBid']),
+    ...mapActions(['updateDraftBid','updateBid']),
     createCategory() {
       const title = 'add your category title here';
       const data = {
@@ -539,7 +539,11 @@ export default {
       this.questionStatus = true;
     },
     updateQuestion() {
-      this.updateDraftBid({ questions: this.categories });
+      if(this.$route.name == 'EditBid'){
+        this.updateBid({ questions: this.categories });
+      }else{
+        this.updateDraftBid({ questions: this.categories });
+      }
     },
     deleteQuestion(index) {
       this.categories.splice(index, 1);
@@ -559,7 +563,11 @@ export default {
     savedraftOnInterval(){
       const timer = setInterval(() => {
         if(this.questionStatus == true){
-          this.updateDraftBid({ questions: this.categories });
+          if(this.$route.name == 'EditBid'){
+            this.updateBid({ questions: this.categories });
+          }else{
+            this.updateDraftBid({ questions: this.categories });
+          }
           this.questionStatus = false;
         }
       }, 60000);
