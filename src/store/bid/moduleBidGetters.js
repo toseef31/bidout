@@ -68,9 +68,6 @@ export default {
   supplierAttachment(state) {
     return state.supplierAttachment;
   },
-  questionAttachment(state) {
-    return state.questionAttachment;
-  },
   userType(state) {
     return state.userType;
   },
@@ -82,5 +79,8 @@ export default {
   },
   supplierBid(state) {
     return state.supplierBid;
+  },
+  qAndA(state) {
+    return state.qAndA;
   },
 };

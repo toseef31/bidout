@@ -293,7 +293,6 @@ export default {
     };
 
     const formData = new FormData();
-
     formData.append('userId', payload.userId);
     formData.append('companyId', payload.companyId);
     formData.append('bidId', payload.bidId);
@@ -322,7 +321,10 @@ export default {
 
       if (res.status === 200) {
         commit('setIsBidSubmitted', true);
-        dispatch('getBidBySerial', { serial: payload.serial, id: payload.userId });
+        dispatch('getBidBySerial', {
+          id: payload.userId,
+          serial: payload.serial,
+        });
       }
     } catch (err) {
       if (state.apiCounter == 2) {
@@ -373,7 +375,10 @@ export default {
       const res = await axios.post('bidSubmission/editSubmitBid/', formData, config);
 
       if (res.status === 200) {
-        dispatch('getBidBySerial', { serial: payload.serial, id: payload.userId });
+        dispatch('getBidBySerial', {
+          id: payload.userId,
+          serial: payload.serial,
+        });
       }
     } catch (err) {
       if (state.apiCounter == 2) {
@@ -382,6 +387,50 @@ export default {
         await dispatch('refreshToken');
         state.apiCounter = 2;
         dispatch('editSubmitBid', payload);
+      }
+    }
+  },
+
+  async getQA({ commit, dispatch, state }, payload) {
+    try {
+      const res = await axios.get(`bidSubmission/getQA/${payload.bidId}/${payload.userId}`);
+
+      if (res.status === 200) {
+        console.log('Q And A - ', res.data);
+        commit('setQAndA', res.data);
+      }
+    } catch (err) {
+      if (state.apiCounter === 2) {
+        console.log(state.apiCounter, 'counter');
+        dispatch('apiSignOutAction');
+      } else if (err.response.status === 403) {
+        await dispatch('refreshToken');
+        state.apiCounter = 2;
+        dispatch('getTeamMembers', payload);
+      }
+    }
+  },
+
+  async askQuestion({ commit, dispatch, state }, payload) {
+    try {
+      const res = await axios.post('bidSubmission/questionAsked/', {
+        question: payload.question,
+        userId: payload.userId,
+        companyId: payload.companyId,
+        bidId: payload.bidId,
+      });
+
+      if (res.status === 200) {
+        console.log(res.data);
+        dispatch('setQAndA', { id: payload.bidId });
+      }
+    } catch (err) {
+      if (state.apiCounter == 2) {
+        dispatch('apiSignOutAction');
+      } else if (err.response.status === 403) {
+        await dispatch('refreshToken');
+        state.apiCounter = 2;
+        dispatch('askQuestion', payload);
       }
     }
   },

@@ -1,8 +1,8 @@
 <template>
   <v-col class="my-7 pa-0 bid-submission-tab" align="start">
-{{supplierDocList}}
-<br></br>
-{{questionDocList}}
+{{getDDDD}}
+
+<v-form @submit.prevent="submissionForm" ref="form" v-model="valid" @input="fieldUpdate">
     <div class="title-line" v-if="
             bidDetail.bidData &&
             bidDetail.bidData.lineItems &&
@@ -38,7 +38,6 @@
                     outlined
                     dense
                     prefix="$"
-                    hideDetails
                     type="number"
                     v-if="lineItems[index]['bid']"
                     v-model="lineItems[index]['price']"
@@ -142,18 +141,18 @@
                         v-model="answers[index]['answer']"
                     ></v-textarea>
 
-                    <div class="upload-attach" v-if="item.questionType === 'uploadFile'">
-                    <div class="d-flex justify-space-between align-center" v-if="questionDocList">
-                    <div class="doc-list">{{questionDocList.fileName}}</div>
+                <div class="upload-attach" v-if="item.questionType === 'uploadFile'">
+                    <div class="d-flex justify-space-between align-center" v-if="((answers[index].answer && answers[index].answer.name || answers[index].name) )">
+                <div class="doc-list">{{(answers[index].answer.name || answers[index].name)}}</div>
+                    <v-btn @click="removeQuesDoc(index)" icon>
+                        <v-icon size="20" color="#F03F20" >mdi-close
+                        </v-icon>
+                   </v-btn>
 
-                    <v-btn @click="removeQuesDoc" icon>
-                        <v-icon size="20" color="#F03F20" >mdi-close</v-icon>
-                     </v-btn>
-
-                    </div>
+                </div>
 
                     <label
-                      for="uploadFileQ"
+                      :for="`uploadFileQ${index}`"
                       v-else
                       class="
                         upload-file
@@ -166,8 +165,8 @@
                       <input
                         class="d-none"
                         type="file"
-                        id="uploadFileQ"
-                        @change="handleDocument($event,'questionUpload',index,item.questionId)"
+                        :id="`uploadFileQ${index}`"
+                        @change="handleDocument($event,'questionUpload',index,item.id)"
                       />
 
                     <div>
@@ -292,7 +291,9 @@
           <div v-else>Edit bid</div></v-btn
         >
       </div>
+    </v-form>
   </v-col>
+
 </template>
 
 <script>
@@ -307,10 +308,11 @@ export default {
       loading: false,
       supplierNote: '',
       file: '',
-      supplierAttachment: [],
-      questionAttachment: [],
       answers: [],
       user: '',
+      rules: {
+        required: (value) => !!value || 'Required.',
+      },
     };
   },
   computed: {
@@ -323,8 +325,8 @@ export default {
     getIntent() {
       return this.$store.getters.bidIntent;
     },
-    questionDocList() {
-      return this.$store.getters.questionAttachment;
+    getDDDD() {
+      return this.answers;
     },
     getSupplierBid() {
       return this.$store.getters.supplierBid;
@@ -356,13 +358,17 @@ export default {
       this.loading = true;
 
       const lineItemsA = this.lineItems;
-      let answersA = this.answers;
+      const answersA = this.answers;
 
       lineItemsA.forEach((el) => delete el.bid);
 
-      answersA = answersA.filter((el) => el.category !== 'category');
+      // answersA = answersA.filter((el) => el.category !== 'category');
 
       answersA.forEach((el) => delete el.category);
+
+      // console.log('Answers - ', answersA);
+      // console.log('LineItems - ', lineItemsA);
+      // console.log('supplierAttachment', this.supplierDocList);
 
       await this.submitBid({
         userId: this.user.id,
@@ -377,17 +383,17 @@ export default {
 
       this.loading = false;
 
-      this.$emit('changetab', 'tab-1');
+      this.$store.getters.supplierAttachment = [];
     },
     async editSubmit() {
       this.loading = true;
 
       const lineItemsA = this.lineItems;
       const supplierAttachmentA = this.supplierDocList.map((el) => el.attachment);
-      let answersA = this.answers;
+      const answersA = this.answers;
 
       lineItemsA.forEach((el) => delete el.bid);
-      answersA = answersA.filter((el) => el.category !== 'category');
+      // answersA = answersA.filter((el) => el.category !== 'category');
 
       await this.editSubmitBid({
         userId: this.user.id,
@@ -402,20 +408,11 @@ export default {
       });
 
       this.loading = false;
-
-      this.$emit('changetab', 'tab-1');
     },
-    handleDocument(event, slug, index) {
+    handleDocument(event, slug, index, questionId) {
       this.file = event.target.files[0];
 
       if (slug) {
-        this.$store.commit('setQuestionAttachment', {
-          fileName: this.file.name,
-          fileSize: this.file.size,
-          attachment: this.file,
-          uploadedAt: Date.now(),
-        });
-
         this.answers[index].answer = this.file;
       } else {
         this.$store.commit('setSupplierAttachment', {
@@ -430,8 +427,11 @@ export default {
     deleteAttach(index) {
       this.$store.getters.supplierAttachment.splice(index, 1);
     },
-    removeQuesDoc() {
-      this.$store.commit('setQuestionAttachment', null);
+    removeQuesDoc(index) {
+      this.answers[index].answer = null;
+      this.answers.forEach((el, i) => {
+        if (index === i && el.name) delete el.name;
+      });
     },
     noBidUpdate(index) {
       this.lineItems[index].price = 'NO_BID';
@@ -447,6 +447,7 @@ export default {
         this.lineItems.push({
           price: 0,
           bid: true,
+          id: bidData.lineItems[i].id,
         });
       }
 
@@ -465,6 +466,7 @@ export default {
         this.lineItems.push({
           price: this.getSupplierBid.lineItems[i].price,
           bid: true,
+          id: this.getSupplierBid.lineItems[i].id,
         });
       }
 
@@ -477,41 +479,34 @@ export default {
         });
       }
 
+      console.log(this.getSupplierBid.answers);
       this.supplierNote = this.getSupplierBid.supplierNote;
 
       for (let i = 0; i < bidData.questions.length; i++) {
-        for (let j = 0; j < this.getSupplierBid.answers.length; j++) {
-          if (bidData.questions[i].id === this.getSupplierBid.answers[j] && this.getSupplierBid.answers[j].questionId) {
+        if (this.getSupplierBid.answers[i].questionId === bidData.questions[i].id) {
+          if (bidData.questions[i].questionType === 'uploadFile') {
             this.answers.push({
-              questionId: this.getSupplierBid.answers[j].questionId,
-              answer: this.getSupplierBid.answers[j].answer,
+              questionId: this.getSupplierBid.answers[i].questionId,
+              answer: this.getSupplierBid.answers[i].answer,
+              name: this.getSupplierBid.answers[i].fileName,
             });
           } else {
             this.answers.push({
-              questionId: bidData.questions[i].id,
-              answer: null,
-              category: bidData.questions[i].type,
+              questionId: this.getSupplierBid.answers[i].questionId,
+              answer: this.getSupplierBid.answers[i].answer,
             });
           }
+        } else {
+          this.answers.push({
+            questionId: bidData.questions[i].id,
+            answer: null,
+            category: bidData.questions[i].type,
+          });
         }
       }
 
-      this.getSupplierBid.answers.forEach((el) => {
-        if (typeof el === 'object' && el.answer) {
-          this.$store.commit('setQuestionAttachment', {
-            fileName: el.fileName,
-            fileSize: el.fileSize,
-            attachment: el.answer,
-            uploadedAt: el.uploadedAt._seconds,
-          });
-        }
-      });
+      console.log('Answers - ', this.answers);
     },
-  },
-  mounted() {
-    if (this.$store.getters.supplierAttachment) {
-      this.supplierAttachment = this.$store.getters.supplierAttachment;
-    }
   },
   created() {
     if (this.isBidSubmitted) {
@@ -519,7 +514,6 @@ export default {
     } else { this.initializeForNew(); }
 
     this.user = this.$store.getters.userInfo;
-    console.log(this.$store.getters.userInfo);
   },
 };
 </script>

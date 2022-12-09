@@ -82,9 +82,9 @@ export default {
   },
   setSupplierAttachment(state, payload) {
     state.supplierAttachment.push(payload);
-  },
-  setQuestionAttachment(state, payload) {
-    state.questionAttachment = payload;
+    state.supplierAttachment = state.supplierAttachment.filter((value, index, self) => index === self.findIndex((t) => (
+      t.fileName === value.fileName
+    )));
   },
   setUserType(state, payload) {
     state.userType = payload;
@@ -97,5 +97,8 @@ export default {
   },
   setSupplierBid(state, payload) {
     state.supplierBid = payload;
+  },
+  setQAndA(state, payload) {
+    state.qAndA = payload;
   },
 };

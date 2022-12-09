@@ -28,8 +28,8 @@ export default {
   invitedSuppliersData: null,
   bidIntent: null,
   supplierAttachment: [],
-  questionAttachment: null,
   userType: null,
   intentId: null,
-  isBidSubmitted: false
+  isBidSubmitted: false,
+  qAndA: [],
 };

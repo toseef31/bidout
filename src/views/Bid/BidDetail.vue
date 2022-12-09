@@ -554,7 +554,7 @@ export default {
     };
   },
   methods: {
-    ...mapActions(['getBidBySerial', 'deleteBid', 'bidMessageUnreadCount', 'makeIntent', 'getIntent', 'updateIntent']),
+    ...mapActions(['getBidBySerial', 'deleteBid', 'bidMessageUnreadCount', 'makeIntent', 'getIntent', 'updateIntent', 'getQA']),
     ChangeT(tab) {
       this.currentItem = tab;
     },
@@ -678,6 +678,12 @@ export default {
 
       this.answer = this.$store.getters.bidIntent;
     }
+
+    await this.getQA({
+      bidId: this.bidDetail.bidData.id,
+      userId: this.users.id,
+    });
+
     console.log('Intent - ', this.$store.getters.bidIntent);
   },
   watch: {
