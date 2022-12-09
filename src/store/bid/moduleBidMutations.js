@@ -38,6 +38,9 @@ export default {
   setBidDetailsComplete(state, payload) {
     state.bidDetailsComplete = payload;
   },
+  setBidTemplates(state, payload){
+    state.bidTemplates = payload
+  },
   setBidViewData(state, payload) {
     state.bidViewData = payload;
   },
@@ -61,6 +64,9 @@ export default {
   },
   setBidSerial(state, payload) {
     state.bidSerial = payload;
+  },
+  getSingleTemplate(state, payload) {
+    state.singleTemplate = payload;
   },
   setInvitedSuppliersData(state, payload) {
     state.invitedSuppliers = payload;

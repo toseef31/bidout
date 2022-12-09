@@ -25,9 +25,7 @@
           </v-col>
           <v-col cols="12" md="7" class="text-right">
             <div class="d-flex align-center justify-end">
-              <p class="mb-0 mr-4 auto-text" v-if="draftTime">
-                <strong>Autosaved Draft:</strong> {{ draftTime }}
-              </p>
+              
               <v-btn
                 color="#0D9648"
                 :disabled="!bidDetailsComplete || !lineItemsComplete ? true : false"
@@ -37,7 +35,7 @@
                 large
                 @click="publishBid"
               >
-                Publish Bid
+                Create Template
               </v-btn>
             </div>
           </v-col>
@@ -55,7 +53,7 @@
               :key="item.value"
               :href="'#tab-' + item.value"
               class="text-capitalize black--text font-weight-bold"
-              :disabled="enableTabs" @click="updateDraft"
+              :disabled="enableTabs"  @click="updateTemplateBid"
             >
               {{ item.text }} {{ item.index }}
 
@@ -88,49 +86,49 @@
           </v-tabs>
           <v-tabs-items v-model="currentItem">
             <v-tab-item value="tab-1">
-              <bid-details
+              <template-edit-bid-details
                 @changetab="ChangeT($event)"
                 @validation="validateValue($event)"
-              ></bid-details>
+              ></template-edit-bid-details>
             </v-tab-item>
             <v-tab-item value="tab-2">
-              <SupplierSection
+              <TemplateSupplierSection
                 @changetab="ChangeT($event)"
                 @validation="validateSupplier($event)"
-              ></SupplierSection>
+              ></TemplateSupplierSection>
             </v-tab-item>
             <v-tab-item value="tab-3">
-              <team-members
+              <template-team-members
                 @changetab="ChangeT($event)"
                 @validation="validateTeam($event)"
-              ></team-members>
+              ></template-team-members>
             </v-tab-item>
             <v-tab-item
 
               value="tab-4"
               class="bidline-tab"
             >
-              <bid-lines
+              <template-bid-lines
                 @changetab="ChangeT($event)"
                 @validation="validateItems($event)"
-              ></bid-lines>
+              ></template-bid-lines>
             </v-tab-item>
             <v-tab-item
 
               value="tab-5"
               class="attachment-tab mt-5"
             >
-              <attachment
+              <template-attachment
                 @changetab="ChangeT($event)"
                 @validation="validateAttachment($event)"
-              ></attachment>
+              ></template-attachment>
             </v-tab-item>
             <v-tab-item
 
               value="tab-6"
               class="question-tab mt-5"
             >
-              <question-section2></question-section2>
+              <template-question-section2></template-question-section2>
             </v-tab-item>
           </v-tabs-items>
         </div>
@@ -139,23 +137,23 @@
   </v-col>
 </template>
 <script>
-import { mapGetters, mapActions,mapState } from 'vuex';
-import SupplierSection from '../../components/BidTabs/SupplierSection.vue';
-import TeamMembers from '../../components/BidTabs/TeamMembers.vue';
-import BidLines from '../../components/BidTabs/BidLines.vue';
-import Attachment from '../../components/BidTabs/Attachment.vue';
-import BidDetails from '../../components/BidTabs/BidDetails.vue';
-import QuestionSection2 from '../../components/BidTabs/QuestionSection2.vue';
+import { mapGetters,mapActions,mapState } from 'vuex';
+import TemplateSupplierSection from '../../components/BidTabs/SupplierSection.vue';
+import TemplateTeamMembers from '../../components/BidTabs/TeamMembers.vue';
+import TemplateBidLines from '../../components/BidTabs/BidLines.vue';
+import TemplateAttachment from '../../components/BidTabs/Attachment.vue';
+import TemplateEditBidDetails from '../../components/BidTabs/BidDetails.vue';
+import TemplateQuestionSection2 from '../../components/BidTabs/QuestionSection2.vue';
 
 export default {
-  name: 'NotCompleted',
+  name: 'EditTemplate',
   components: {
-    SupplierSection,
-    TeamMembers,
-    BidLines,
-    Attachment,
-    BidDetails,
-    QuestionSection2,
+    TemplateSupplierSection,
+    TemplateTeamMembers,
+    TemplateBidLines,
+    TemplateAttachment,
+    TemplateEditBidDetails,
+    TemplateQuestionSection2,
   },
 
   data() {
@@ -221,7 +219,7 @@ export default {
     },
   },
   methods: {
-    ...mapActions(["updateDraftBid"]),
+    ...mapActions(["updateTemplate"]),
     ...mapState(["invitedSuppliers"]),
     ChangeT(tab) {
       this.currentItem = tab;
@@ -251,20 +249,22 @@ export default {
     },
     async publishBid() {
       try {
-        const serial = await this.$store.dispatch('publishBid');
-        console.log(serial);
-        this.$router.push(`/view-bids/${serial}?new=true`);
-        this.$store.commit('setDraftBidsList', null);
+        await this.$store.dispatch('publishTemplate');
+        this.$router.push('/manage-templates');
       } catch (error) {
         console.log(error);
       }
     },
-    async updateDraft(){
-      await this.updateDraftBid({'supplier': this.$store.state.bid.invitedSuppliers});
+    async updateTemplateBid(){
+      await this.updateTemplate({'supplier': this.$store.state.bid.invitedSuppliers});
     }
   },
+  async created(){
+
+  },
   mounted() {
-    document.title = 'Create Template - BidOut';
+    document.title = 'Create Bid - BidOut';
+    console.log(this.$route.name);
     this.users = JSON.parse(localStorage.getItem('userData')).user;
   },
 };

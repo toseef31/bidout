@@ -107,12 +107,12 @@
                         min-height="32px"
                         width="150px"
                         hide-details
-                        v-model="cat['title']"
+                        v-model="cat['questionTitle']"
                       ></v-text-field
                     ></template>
                     <template v-else
                       ><p class="mb-0 black--text subtitle">
-                        {{ cat.title }}
+                        {{ cat.questionTitle }}
                       </p></template
                     >
 
@@ -146,7 +146,7 @@
                   v-for="(option, optIndex) in cat.options"
                   :key="`opt-${optIndex}`"
                 >
-                  <div class="d-flex align-center ml-10 mt-5">
+                  <div v-if="option.quesIndex == index" class="d-flex align-center ml-10 mt-5">
                     <div class="option-box">
                       <v-checkbox
                         v-model="option['choice']"
@@ -209,12 +209,12 @@
                           min-height="32px"
                           width="150px"
                           hide-details
-                          v-model="cat['title']"
+                          v-model="cat['questionTitle']"
                         ></v-text-field
                       ></template>
                       <template v-else
                         ><label class="mb-0 black--text subtitle">{{
-                          cat.title
+                          cat.questionTitle
                         }}</label></template
                       >
                       <a
@@ -277,12 +277,12 @@
                           min-height="32px"
                           width="150px"
                           hide-details
-                          v-model="cat['title']"
+                          v-model="cat['questionTitle']"
                         ></v-text-field
                       ></template>
                       <template v-else
                         ><label class="mb-0 black--text subtitle">{{
-                          cat.title
+                          cat.questionTitle
                         }}</label></template
                       >
 
@@ -356,12 +356,12 @@
                           min-height="32px"
                           width="150px"
                           hide-details
-                          v-model="cat['title']"
+                          v-model="cat['questionTitle']"
                         ></v-text-field>
                       </template>
                       <template v-else>
                         <label class="mb-0 black--text subtitle">{{
-                          cat.title
+                          cat.questionTitle
                         }}</label>
                       </template>
 
@@ -441,7 +441,6 @@ export default {
       isQues: [false],
       isLbl: [false],
       multiOptions: [],
-      questionStatus: false,
     };
   },
   watch: {
@@ -456,7 +455,7 @@ export default {
     },
   },
   methods: {
-    ...mapActions(['updateDraftBid','updateTemplate']),
+    ...mapActions(['updateDraftBid']),
     createCategory() {
       const title = 'add your category title here';
       const data = {
@@ -467,12 +466,10 @@ export default {
         options: [],
       };
       this.categories.push(data);
-      this.$store.commit('setQuestions',this.categories);
-      this.questionStatus = true;
     },
     createQuestion(type) {
       const qusData = {
-        title: 'add question title here',
+        questionTitle: 'add question title here',
         questionType: type,
         id: uuidv4(),
         order: this.categories ? this.categories.length : 0,
@@ -481,23 +478,18 @@ export default {
         options: [],
       };
       this.categories.push(qusData);
-      this.$store.commit('setQuestions',this.categories);
-      this.questionStatus = true;
     },
     editCatTitle(index) {
       this.editCat = index;
       this.isCate[index] = true;
-      this.questionStatus = true;
     },
     editQusTitle(index) {
       this.editQues = index;
       this.isQues[index] = true;
-      this.questionStatus = true;
     },
     editSaveTitle(index) {
       this.editQues = -1;
       this.isQues[index] = false;
-      this.questionStatus = true;
     },
     questionMoved(event, categoryId, questions) {
       this.categories
@@ -508,14 +500,10 @@ export default {
             index
           ].order = questionIndex;
         });
-        this.$store.commit('setQuestions',this.categories);
-        this.questionStatus = true;
     },
     saveTitle(index) {
       this.editCat = -1;
       this.isCate[index] = false;
-      this.$store.commit('setQuestions',this.categories);
-      this.questionStatus = true;
     },
     addOptions(index) {
       this.categories[index].options.push({
@@ -524,66 +512,22 @@ export default {
         label: 'add label here',
         quesIndex: index,
       });
-      this.$store.commit('setQuestions',this.categories);
-      this.questionStatus = true;
     },
     editLabel(index) {
       this.editLbl = index;
       this.isLbl[index] = true;
-      this.questionStatus = true;
     },
     saveLabel(index) {
       this.editLbl = -1;
       this.isLbl[index] = false;
-      this.$store.commit('setQuestions',this.categories);
-      this.questionStatus = true;
     },
     updateQuestion() {
-      if(this.$route.name == 'EditTemplate'){
-        this.updateTemplate({ questions: this.categories });
-      }else{
-        this.updateDraftBid({ questions: this.categories });
-      }
-    },
-    deleteQuestion(index) {
-      this.categories.splice(index, 1);
-      this.$store.commit('setQuestions',this.categories);
-      this.questionStatus = true;
+      this.updateDraftBid({ questions: this.categories });
     },
     deleteOption(index, optIndex) {
       this.categories[index].options.splice(optIndex, 1);
-      this.$store.commit('setQuestions',this.categories);
-      this.questionStatus = true;
-    },
-    deleteCat(index) {
-      this.categories.splice(index, 1);
-      this.$store.commit('setQuestions',this.categories);
-      this.questionStatus = true;
-    },
-    savedraftOnInterval(){
-      const timer = setInterval(() => {
-        if(this.questionStatus == true){
-          if(this.$route.name == 'EditTemplate'){
-            this.updateTemplate({ questions: this.categories });
-          }else{
-            this.updateDraftBid({ questions: this.categories });
-          }
-          this.questionStatus = false;
-        }
-      }, 60000);
-
-      this.$once("hook:beforeDestroy", () => {
-        clearInterval(timer);
-      });
     },
   },
-  mounted(){
-    if(this.$store.getters.bidData.questions || this.$store.getters.bidData.questions.length > 0)
-    {
-      this.categories = this.$store.getters.bidData.questions;
-    }
-    this.savedraftOnInterval();
-  }
 };
 </script>
 
