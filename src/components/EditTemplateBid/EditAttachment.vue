@@ -15,9 +15,7 @@
             </tr>
           </thead>
           <tbody>
-            
             <tr v-for="(doc, index) in docsList">
-                  <input type="hidden" :value="validat">
               <td class="text-left">
                 <img :src="require('@/assets/images/bids/FilePdf.png')" />
               </td>
@@ -27,6 +25,7 @@
                   v-if="edit === index && isEdit"
                   class="d-flex edit-comment align-center"
                 >
+                  <input type="hidden" :value="validat">
                   <v-text-field
                     outlined
                     height="30px"
@@ -108,8 +107,6 @@ export default {
       documents: [],
       isAttaching: false,
       valid: false,
-      attachStatus: false,
-      docs: '',
     };
   },
   computed: {
@@ -117,44 +114,13 @@ export default {
       return `${this.$store.getters.userInfo.firstName} ${this.$store.getters.userInfo.lastName}`;
     },
     docsList() {
-      if(this.$store.getters.bidData != null){
-        if(this.$store.getters.bidData.statusType == 'draftBid'){
-          if(this.$store.getters.bidData.attachments != ""){
-            if(this.$store.getters.attachData){
-              var totalDay = this.$store.getters.bidData.attachments.concat(this.$store.getters.attachData);
-              this.documents = totalDay;
-            }else{
-              this.documents = this.$store.getters.bidData.attachments;
-            }
-            this.$store.commit('setAttachement',this.documents);
-            return this.documents;
-          }else{
-            this.$store.commit('setAttachement',this.$store.getters.attachData);
-            return this.$store.getters.attachData;
-          }
-        }else{
-          if(this.$store.getters.bidData.attachment != ""){
-            if(this.$store.getters.attachData){
-              var totalDay = this.$store.getters.bidData.attachment.concat(this.$store.getters.attachData);
-              this.documents = totalDay;
-            }else{
-              this.documents = this.$store.getters.bidData.attachment;
-            }
-            this.$store.commit('setAttachement',this.documents);
-            return this.documents;
-          }else{
-            this.$store.commit('setAttachement',this.$store.getters.attachData);
-            return this.$store.getters.attachData;
-          }
-        }
-        
-      }else{
-        this.$store.commit('setAttachement',this.$store.getters.attachData);
-        return this.$store.getters.attachData;
-      }
+      return this.$store.getters.attachData;
     },
     isAttachingDoc() {
       return this.isAttaching;
+    },
+    docsList(){
+    	return this.$store.getters.attachData;
     },
     validat(){
       if(this.$store.getters.attachData){
@@ -167,7 +133,7 @@ export default {
     },
   },
   methods: {
-    ...mapActions(["uploadBidAttach", "updateDraftBid","updateTemplate"]),
+    ...mapActions(["uploadBidAttach", "updateDraftBid"]),
     changeTab() {
       this.$emit("changetab", "tab-6");
     },
@@ -189,18 +155,18 @@ export default {
       this.fileName = this.file.name;
       this.fileExt = this.fileName.split(".").pop();
       this.fileSize = (this.file.size / (1024 * 1024)).toFixed(2);
+      console.log(this.fileSize);
       // this.previewDoc();
-      const uploadDoc = [];
-      uploadDoc.push(this.file);
+      this.documents.push(this.file);
       const head = Date.now().toString();
       const tail = Math.random().toString().substr(2);
       const data = {
         uploadedBy: `${this.$store.getters.userInfo.firstName} ${this.$store.getters.userInfo.lastName}`,
-        attachement: uploadDoc,
+        attachement: this.documents,
       };
+      // this.documents.push(this.file);
       await this.uploadBidAttach(data);
       this.isAttaching = false;
-      this.attachStatus = true;
     },
     size(size) {
       const sizeInMB = (size / (1024 * 1024)).toFixed(2);
@@ -209,49 +175,22 @@ export default {
     deleteAttach(index) {
       this.documents.splice(index, 1);
       this.$store.getters.attachData.splice(index, 1);
-      this.$store.commit('setAttachement',this.documents);
-      this.attachStatus = true;
     },
     openComment(index) {
       this.edit = index;
       this.isEdit = true;
     },
     saveComment(doc) {
+      console.log(this.docsList, "dpc");
       this.isEdit = false;
-      if(this.$route.name == 'EditTemplate'){
-        this.updateTemplate({ attachement: this.docsList });
-      }else{
-        this.updateDraftBid({ attachement: this.docsList });
-      }
+      this.updateDraftBid({ attachement: this.docsList });
     },
-    savedraftOnInterval(){
-      const timer = setInterval(() => {
-        if(this.attachStatus == true){
-          if(this.$route.name == 'EditTemplate'){
-            this.updateTemplate({ attachement: this.docsList });
-          }else{
-            this.updateDraftBid({ attachement: this.docsList });
-          }
-          this.attachStatus = false;
-        }
-      }, 60000);
-
-      this.$once("hook:beforeDestroy", () => {
-        clearInterval(timer);
-      });
-    },
+    
   },
   mounted() {
     if (this.$store.getters.attachData) {
       this.documents = this.$store.getters.attachData;
     }
-    if(this.$store.getters.bidData != null){
-      if(this.$store.getters.bidData.attachments != ""){
-        this.$store.commit('setAttachement',this.$store.getters.bidData.attachments);
-        this.documents = this.$store.getters.bidData.attachments;
-      }
-    }
-    this.savedraftOnInterval();
   },
 };
 </script>
