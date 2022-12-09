@@ -406,11 +406,16 @@ export default {
     this.$store.commit('setInvitedSuppliersData', this.$store.getters.bidData.invitedSuppliers);
     this.$store.commit('setInvitedTeamMembers', this.$store.getters.bidData.invitedTeamMembers);
     this.$store.commit('setBidlines', this.$store.getters.bidData.lineItems);
-    if (this.$store.getters.bidData.statusType == 'draftBid') {
+    if(this.$route.name == 'EditBid'){
       this.$store.commit('setAttachement', this.$store.getters.bidData.attachments);
-    } else {
-      this.$store.commit('setAttachement', this.$store.getters.bidData.attachment);
+    }else{
+      if (this.$store.getters.bidData.statusType == 'draftBid') {
+        this.$store.commit('setAttachement', this.$store.getters.bidData.attachments);
+      } else {
+        this.$store.commit('setAttachement', this.$store.getters.bidData.attachment);
+      }
     }
+    
     this.$store.commit('setQuestions', this.$store.getters.bidData.questions);
     this.savedraftOnInterval();
   },
