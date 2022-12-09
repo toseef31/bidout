@@ -147,6 +147,25 @@
 		    </div>
 		    <div>
 		      <div class="companies-list">
+		        <template  v-if="filteredEntries.length">
+	  	        <template v-for="(company,index) in filteredEntries" >
+	  	        	<div class="d-flex align-center justify-space-between list-company pa-4">
+	  	        	  <div class="comapny-data d-flex align-center">
+	  	        	    <div class="company-img">
+	  	        	      <img v-if="!company.image" :src="require('@/assets/images/bids/company.png')">
+	  	        	      <img v-else :src="company.image" width="56.25px" height="15px">
+	  	        	    </div>
+	  	        	    <div class="company-title text-left pl-4">
+	  	        	      <h4>{{company.company}} </h4>
+	  									<router-link :to="`/company/${company.slug}`" target="_blank" class="mb-0">View Profile</router-link>
+	  	        	    </div>
+	  	        	  </div>
+	  	        	  <div class="add-company">
+	  	        	    <v-btn color="rgba(243, 35, 73, 0.1)" tile min-width="32px" height="32" class="pa-0" elevation="0" @click="removeCompany(company,index)"> <v-icon color="#F32349">mdi-minus</v-icon></v-btn>
+	  	        	  </div>
+	  	        	</div>
+	  	        </template>
+		        </template>
 		        <template  v-for="(company,index) in repsInvited">
 		        	<div class="d-flex align-center justify-space-between list-company pa-4" v-if="company.type == 'company'">
 		        	  <div class="comapny-data d-flex align-center">
@@ -329,6 +348,7 @@ export default {
       parsedSelectedCompanyBasin: 'all',
       oldCount: '',
       newCount: '',
+      filterData: [],
     };
   },
   computed: {
@@ -338,17 +358,38 @@ export default {
       return _.orderBy(this.$store.getters.categories, 'orderNumber', 'asc');
     },
     salesRepsList() {
-			return this.$store.getters.salesRepsList ? this.$store.getters.salesRepsList.filter((rep) => rep.company !== this.userInfo.company.company) : [];
+  		if(this.$store.getters.bidData.invitedSuppliers != ""){
+  			return this.$store.getters.salesRepsList.filter((el) => { return !this.$store.getters.bidData.invitedSuppliers.includes(el.companyId); })
+  		}else{
+  			return this.$store.getters.salesRepsList ? this.$store.getters.salesRepsList.filter((rep) => rep.company !== this.userInfo.company.company) : [];
+  		}
+    	
     },
     itemBidId() {
-      console.log(this.$store.getters.itemBidData);
       return this.$store.getters.itemBidData;
     },
     companiesList() {
-    	return this.$store.getters.companiesList;
+  		if(this.$store.getters.bidData.invitedSuppliers != ""){
+  			return this.$store.getters.companiesList.filter((el) => { return !this.$store.getters.bidData.invitedSuppliers.includes(el.objectID); })
+  		}else{
+  			return this.$store.getters.companiesList;
+  		}
+    	
     },
     serviceCompanies() {
     	return this.$store.getters.serviceCompaniesList;
+    },
+    filteredEntries() {
+    	if(this.$store.getters.bidData){
+    		if(this.$store.getters.bidData.invitedSuppliers != ""){
+    			return this.$store.getters.companiesList.filter((el) => { return this.$store.getters.bidData.invitedSuppliers.includes(el.objectID); }).slice();
+    		}else{
+    			return 0;
+    		}
+    	}else{
+    		return [];
+    	}
+    	
     },
     validat() {
     	if (this.repsInvited.length > 0) {
@@ -377,10 +418,10 @@ export default {
     		company: this.company,
     		phone: this.results,
     		email: this.email,
-    		bidTitle: JSON.parse(localStorage.getItem('bidData')).title,
-    		bidType: JSON.parse(localStorage.getItem('bidData')).type,
-    		bidDueDate: JSON.parse(localStorage.getItem('bidData')).dueDate,
-    		bidDueTime: JSON.parse(localStorage.getItem('bidData')).dueTime,
+    		bidTitle: this.$store.state.bidData.title,
+    		bidType: this.$store.state.bidData.type,
+    		bidDueDate: this.$store.state.bidData.dueDate,
+    		bidDueTime: this.$store.state.bidData.dueTime,
     	};
 			try {
 				await this.inviteNewSupplier(supplier);
@@ -453,7 +494,6 @@ export default {
     	this.newCount = this.repsInvited.length;
     	this.$store.getters.companiesList.splice(index, 1);
     	this.$store.commit('setInvitedSuppliersData', this.repsInvited);
-      this.savedraftOnchange();
     },
     addServiceCompany(company, index) {
     	const data = {
@@ -465,7 +505,7 @@ export default {
     	this.newCount = this.repsInvited.length;
     	this.$store.getters.companiesList.splice(index, 1);
     	this.$store.commit('setInvitedSuppliersData', this.repsInvited);
-      this.savedraftOnchange();
+    
     },
     removeCompany(company, index) {
     	this.oldCount = this.repsInvited.length;
@@ -473,7 +513,7 @@ export default {
     	this.newCount = this.repsInvited.length;
     	this.$store.getters.companiesList.push(company.item);
     	this.$store.commit('setInvitedSuppliersData', this.repsInvited);
-      this.savedraftOnchange();
+      
     },
     savedraftOnInterval() {
   		const timer = setInterval(() => {
@@ -488,15 +528,15 @@ export default {
   		}); 
     },
   },
-  created() {
-    // this.interval = setInterval(() => this.updateDraftBid({'invitedSuppliers':this.repsInvited}));
+  beforeMount(){
+  	this.getCategories();
+  	this.getSales();
+  	this.getCompanies();
   },
   mounted() {
   	this.user = this.$store.getters.userInfo;
-    this.getCategories();
-    this.getSales();
-    this.getCompanies();
     this.savedraftOnInterval();
+
   },
 };
 </script>

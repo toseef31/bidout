@@ -101,4 +101,31 @@ export default {
   setQAndA(state, payload) {
     state.qAndA = payload;
   },
+  setDraftBidData(state, payload) {
+    state.draftBidData = payload;
+  },
+  setDraftBidsListId(state, payload) {
+    state.draftBidsListId = payload;
+  },
+  setBidTitle(state, payload) {
+    state.bidData.title = payload;
+  },
+  setBidType(state, payload) {
+    state.bidData.type = payload;
+  },
+  setBidDueDate(state, payload) {
+    state.bidData.dueDate = payload;
+  },
+  setBidDueTime(state, payload) {
+    state.bidData.dueTime = payload;
+  },
+  setBidRegions(state, payload) {
+    state.bidData.regions = payload;
+  },
+  setBidEnabled(state, payload) {
+    state.bidData.qAndAEnabled = payload;
+  },
+  setBidDescription(state, payload) {
+    state.bidData.bidDescriptions = payload;
+  },
 };

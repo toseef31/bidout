@@ -83,4 +83,10 @@ export default {
   qAndA(state) {
     return state.qAndA;
   },
+  draftBidData(state) {
+    return state.draftBidData;
+  },
+  draftBidsListId(state) {
+    return state.draftBidsListId;
+  },
 };
