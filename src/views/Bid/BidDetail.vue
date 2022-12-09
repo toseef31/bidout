@@ -94,7 +94,6 @@
             <div class="status" v-if="bidDetail.bidout">
               Status: BidOut Phase
             </div>
-            <div class="status">Status: Receiving Bids</div>
             <div
               class="time pt-2 align-center"
             >
@@ -316,7 +315,6 @@
             <div class="status" v-if="bidDetail.bidout">
               Status: BidOut Phase
             </div>
-            <div class="status">Status: Receiving Bids</div>
             <div
               class="time pt-2 align-center"
             >
@@ -338,9 +336,10 @@
             width="290"
             v-else>
 
-              <div  class="award-status" v-if="bidDetail.user_status === 'waiting'">Status: Not Awarded</div>
+              <div  class="award-status" v-if="bidDetail.user_status === 'waiting'">Status: Awarding Phase</div>
 
-              <div class="award-status" v-if="bidDetail.user_status === 'awarded' ||bidDetail.user_status === 'rejected'">Status: Awarded</div>
+              <div class="award-status" v-if="bidDetail.user_status === 'awarded'">Status: Awarded, Congrats!</div>
+              <div class="award-status" v-if="bidDetail.user_status === 'rejected'">Status: Not Awarded</div>
               <v-divider
 
               class="mt-3"
@@ -380,9 +379,9 @@
 
             </v-badge>
             <v-badge
-              v-if=" item.value === 5"
+              v-if=" item.value === 5 && getUnansweredQuestionCount !== 0"
               color="#0D9648"
-              :content="6"
+              :content="getUnansweredQuestionCount"
               inline
               tile
             >
@@ -404,7 +403,7 @@
           <v-tab-item value="tab-4">
             <BidBroadcast @changetab="ChangeT($event)"></BidBroadcast>
           </v-tab-item>
-          <v-tab-item value="tab-5" class="mt-5">
+          <v-tab-item value="tab-5">
             <BidQandA @changetab="ChangeT($event)"></BidQandA>
           </v-tab-item>
           <v-tab-item value="tab-6" class="mt-5"
@@ -437,9 +436,9 @@
 
             </v-badge>
             <v-badge
-              v-if=" item.value === 5"
+              v-if=" item.value === 4 &&getUnansweredQuestionCount !== 0"
               color="#0D9648"
-              :content="6"
+              :content="getUnansweredQuestionCount"
               inline
               tile
             >
@@ -458,7 +457,7 @@
           <v-tab-item value="tab-3">
             <BidChat @changetab="ChangeT($event)"></BidChat>
           </v-tab-item>
-          <v-tab-item value="tab-4" class="mt-5">
+          <v-tab-item value="tab-4">
             <BidQandA @changetab="ChangeT($event)"></BidQandA>
           </v-tab-item>
         </v-tabs-items>
@@ -619,6 +618,9 @@ export default {
     isBidSubmitted() {
       return this.$store.getters.isBidSubmitted;
     },
+    getUnansweredQuestionCount() {
+      return this.$store.getters.unansweredQuestionCount;
+    },
     isAfterDueDate() {
       const bidDueDate = this.bidDetail.bidData.dueDate;
       const bidDueTime = this.bidDetail.bidData.dueTime;
@@ -683,8 +685,6 @@ export default {
       bidId: this.bidDetail.bidData.id,
       userId: this.users.id,
     });
-
-    console.log('Intent - ', this.$store.getters.bidIntent);
   },
   watch: {
     actualTime(val, oldVal) {

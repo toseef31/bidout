@@ -1,8 +1,6 @@
 <template>
   <v-col class="my-7 pa-0 bid-submission-tab" align="start">
-{{getDDDD}}
-
-<v-form @submit.prevent="submissionForm" ref="form" v-model="valid" @input="fieldUpdate">
+<v-form @submit.prevent="submit"  ref="form" v-model="valid" lazy-validation>
     <div class="title-line" v-if="
             bidDetail.bidData &&
             bidDetail.bidData.lineItems &&
@@ -31,10 +29,12 @@
             <td class="text-left">{{ item.description}}</td>
             <td class="text-left">
             <div class="d-flex align-center unit-class">
-             <div class="mr-1 unit">{{ item.unit}}</div>
+             <div class=" unit">{{ item.unit}}</div>
              <div class="mr-2">
                 <v-text-field
                     single-line
+                    class="mt-7"
+                    :rules="item.required === 'true' ?lineItemsRule : []"
                     outlined
                     dense
                     prefix="$"
@@ -86,7 +86,7 @@
               <div v-for="(item, index) in bidDetail.bidData.questions"
                   :key="index">
                   <v-divider color="#F1F1F1" v-if="item.type === 'category'"></v-divider>
-                   <div class="sub-section-title px-4 " v-if="item.type === 'category'">{{item.title}}</div>
+                   <div class="sub-section-title px-4 " v-if="item.type === 'category'">{{item.title}} </div>
 
                 <v-row
                   class="ml-10 mr-6 px-3 operational-ques py-1 my-2 "
@@ -97,18 +97,19 @@
 
                   <v-col md="8"  class="first-child" v-if="item.type=== 'question'">{{
                     item.title
-                  }}</v-col>
+                  }} <sup class="sub-title">{{item.required=== 'true' ? '(Required)' : '' }}</sup></v-col>
                   <v-col class="second-child text-right"  >
 
                     <v-checkbox
                        v-if="(item.questionType === 'checkbox'  && !item.options)"
+                       :rules="item.required === 'true' ?answerRule : []"
                        v-model="answers[index]['answer']"
-                        hideDetails
                     ></v-checkbox>
 
                     <v-radio-group
                     v-model="answers[index]['answer']"
                        row
+                       :rules="item.required === 'true' ?answerRule : []"
                        v-if="(item.questionType === 'checkbox' && item.options)"
                        >
                         <v-radio
@@ -126,24 +127,24 @@
 
                     <v-text-field
                         v-if="item.questionType === 'textfield'"
-                        hideDetails
+                        :rules="item.required === 'true' ?answerRule : []"
                         outlined
                         v-model="answers[index]['answer']"
                     ></v-text-field>
 
                     <v-textarea
                         v-if="item.questionType === 'textarea'"
-                        hideDetails
                         outlined
                         auto-grow
                         rows="3"
                         row-height="25"
+                        :rules="item.required === 'true' ?answerRule : []"
                         v-model="answers[index]['answer']"
                     ></v-textarea>
 
                 <div class="upload-attach" v-if="item.questionType === 'uploadFile'">
-                    <div class="d-flex justify-space-between align-center" v-if="((answers[index].answer && answers[index].answer.name || answers[index].name) )">
-                <div class="doc-list">{{(answers[index].answer.name || answers[index].name)}}</div>
+                    <div class="d-flex justify-space-between align-center" v-if="((answers[index].answer && answers[index].answer.name || answers[index].fileName) )">
+                <div class="doc-list">{{(answers[index].answer.name || answers[index].fileName)}}</div>
                     <v-btn @click="removeQuesDoc(index)" icon>
                         <v-icon size="20" color="#F03F20" >mdi-close
                         </v-icon>
@@ -259,7 +260,7 @@
           height="56"
           width="220"
           class="text-capitalize white--text font-weight-bold save-button px-9"
-          @click="submit"
+          @click="submit('submit')"
           :disabled="showLoading"
           large
 
@@ -278,7 +279,7 @@
           height="56"
           width="220"
           class="text-capitalize white--text font-weight-bold save-button px-9"
-          @click="editSubmit"
+          @click="submit('edit')"
           :disabled="showLoading"
           large
 
@@ -306,13 +307,20 @@ export default {
       lineItems: [],
       intent: 'true',
       loading: false,
+      valid: true,
       supplierNote: '',
       file: '',
       answers: [],
       user: '',
-      rules: {
-        required: (value) => !!value || 'Required.',
-      },
+      lineItemsRule: [
+        (value) => !!value || 'Line item is required!',
+      ],
+      answerRule: [
+        (value) => !!value || 'Answer is required!',
+      ],
+      fileRule: [
+        (value) => !!value || 'File attachment is required!',
+      ],
     };
   },
   computed: {
@@ -324,9 +332,6 @@ export default {
     },
     getIntent() {
       return this.$store.getters.bidIntent;
-    },
-    getDDDD() {
-      return this.answers;
     },
     getSupplierBid() {
       return this.$store.getters.supplierBid;
@@ -354,64 +359,58 @@ export default {
       const sizeInMB = (size / (1024 * 1024)).toFixed(2);
       return `${sizeInMB}mb`;
     },
-    async submit() {
-      this.loading = true;
+    async submit(action) {
+      if (this.$refs.form.validate()) {
+        if (action === 'submit') {
+          this.loading = true;
 
-      const lineItemsA = this.lineItems;
-      const answersA = this.answers;
+          const lineItemsA = this.lineItems;
+          const answersA = this.answers;
 
-      lineItemsA.forEach((el) => delete el.bid);
+          lineItemsA.forEach((el) => delete el.bid);
 
-      // answersA = answersA.filter((el) => el.category !== 'category');
+          answersA.forEach((el) => delete el.category);
 
-      answersA.forEach((el) => delete el.category);
+          await this.submitBid({
+            userId: this.user.id,
+            companyId: this.user.company.id,
+            bidId: this.bidDetail.bidData.id,
+            supplierNote: this.supplierNote,
+            supplierAttachments: this.supplierDocList,
+            lineItems: lineItemsA,
+            answers: answersA,
+            serial: this.$route.params.serial,
+          });
 
-      // console.log('Answers - ', answersA);
-      // console.log('LineItems - ', lineItemsA);
-      // console.log('supplierAttachment', this.supplierDocList);
+          this.loading = false;
 
-      await this.submitBid({
-        userId: this.user.id,
-        companyId: this.user.company.id,
-        bidId: this.bidDetail.bidData.id,
-        supplierNote: this.supplierNote,
-        supplierAttachments: this.supplierDocList,
-        lineItems: lineItemsA,
-        answers: answersA,
-        serial: this.$route.params.serial,
-      });
+          this.$store.getters.supplierAttachment = [];
+        } else {
+          this.loading = true;
 
-      this.loading = false;
+          const lineItemsA = this.lineItems;
+          const supplierAttachmentA = this.supplierDocList.map((el) => el.attachment);
 
-      this.$store.getters.supplierAttachment = [];
+          lineItemsA.forEach((el) => delete el.bid);
+
+          await this.editSubmitBid({
+            userId: this.user.id,
+            companyId: this.user.company.id,
+            bidId: this.bidDetail.bidData.id,
+            supplierNote: this.supplierNote,
+            supplierAttachments: supplierAttachmentA,
+            lineItems: lineItemsA,
+            answers: this.answers,
+            submitBidId: this.getSupplierBid.id,
+            serial: this.$route.params.serial,
+          });
+
+          this.loading = false;
+        }
+      }
     },
-    async editSubmit() {
-      this.loading = true;
-
-      const lineItemsA = this.lineItems;
-      const supplierAttachmentA = this.supplierDocList.map((el) => el.attachment);
-      const answersA = this.answers;
-
-      lineItemsA.forEach((el) => delete el.bid);
-      // answersA = answersA.filter((el) => el.category !== 'category');
-
-      await this.editSubmitBid({
-        userId: this.user.id,
-        companyId: this.user.company.id,
-        bidId: this.bidDetail.bidData.id,
-        supplierNote: this.supplierNote,
-        supplierAttachments: supplierAttachmentA,
-        lineItems: lineItemsA,
-        answers: answersA,
-        submitBidId: this.getSupplierBid.id,
-        serial: this.$route.params.serial,
-      });
-
-      this.loading = false;
-    },
-    handleDocument(event, slug, index, questionId) {
+    handleDocument(event, slug, index) {
       this.file = event.target.files[0];
-
       if (slug) {
         this.answers[index].answer = this.file;
       } else {
@@ -430,7 +429,10 @@ export default {
     removeQuesDoc(index) {
       this.answers[index].answer = null;
       this.answers.forEach((el, i) => {
-        if (index === i && el.name) delete el.name;
+        if (index === i && el.fileName) {
+          delete el.fileName;
+          delete el.fileSize;
+        }
       });
     },
     noBidUpdate(index) {
@@ -445,7 +447,7 @@ export default {
       const { bidData } = this.bidDetail;
       for (let i = 0; i < bidData.lineItems.length; i++) {
         this.lineItems.push({
-          price: 0,
+          price: null,
           bid: true,
           id: bidData.lineItems[i].id,
         });
@@ -479,7 +481,6 @@ export default {
         });
       }
 
-      console.log(this.getSupplierBid.answers);
       this.supplierNote = this.getSupplierBid.supplierNote;
 
       for (let i = 0; i < bidData.questions.length; i++) {
@@ -488,7 +489,8 @@ export default {
             this.answers.push({
               questionId: this.getSupplierBid.answers[i].questionId,
               answer: this.getSupplierBid.answers[i].answer,
-              name: this.getSupplierBid.answers[i].fileName,
+              fileName: this.getSupplierBid.answers[i].fileName,
+              fileSize: this.getSupplierBid.answers[i].fileSize,
             });
           } else {
             this.answers.push({
@@ -504,8 +506,6 @@ export default {
           });
         }
       }
-
-      console.log('Answers - ', this.answers);
     },
   },
   created() {

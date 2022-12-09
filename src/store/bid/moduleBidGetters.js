@@ -89,4 +89,7 @@ export default {
   draftBidsListId(state) {
     return state.draftBidsListId;
   },
+  unansweredQuestionCount(state) {
+    return state.unansweredQuestionCount;
+  },
 };

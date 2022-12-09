@@ -42,4 +42,5 @@ export default {
   qAndA: [],
   draftBidData: null,
   draftBidsListId: null,
+  unansweredQuestionCount: 0,
 };

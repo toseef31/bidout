@@ -128,4 +128,7 @@ export default {
   setBidDescription(state, payload) {
     state.bidData.bidDescriptions = payload;
   },
+  setUnansweredQuestionCount(state, payload) {
+    state.unansweredQuestionCount = payload;
+  },
 };

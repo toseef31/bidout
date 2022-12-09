@@ -1193,14 +1193,14 @@
         }
 
         .template-table-style {
-          overflow-x: scroll;
+          .v-text-field__details {
+            padding-left: 0px;
+          }
             .v-input {
                 &__slot {
                  min-height: 29px !important;
-                 width: 100px;
-                 fieldset {
-                     border-color: #EAE9E9;
-                   }
+                 width: 120px;
+
                 }
                
                }
@@ -1222,7 +1222,6 @@
                 height: 29px;
             }
           table {
-            overflow-x: scroll;
             thead {
               tr {
                 padding-right: 17px;
@@ -1247,16 +1246,16 @@
                   color: #5C5C5C;
                   font-size: 15px;
                   font-weight: 400;
-                  padding-top: 15px;
-                  padding-bottom: 15px;
+                  padding-top: 0px;
+                  padding-bottom: 0px;
                   padding-left: 17px;
                 }
                 td:first-child {
-                  width: 31%;
+                  width: 29%;
                   padding-left: 19px;
                 }
                 td:nth-child(2) {
-                    width: 19%;
+                    width: 22%;
                 }
                 td:nth-child(3) {
                     width: 9%;
@@ -1333,18 +1332,16 @@
                   font-size: 14px;
                   color: black;
                   padding-left: 40px;
+                  .sub-title {
+                    font-weight: 500;
+                    font-size: 12px;
+                    color: #B8B8B8;
+                  }
                   
                 }
        
                 .second-child {
-                    .v-input {
-                        &__slot {
-                         fieldset {
-                             border-color: #EAE9E9;
-                           }
-                        }
-                       
-                       }
+               
                     .v-input__slot {
                         width: 100%;
                     }

@@ -123,7 +123,7 @@ export default {
       const res = await axios.get(
         `bid/getBidBySerial/${payload.serial}/${payload.id}`,
       );
-      console.log(res.data);
+
       if (res.status === 200) {
         commit('setBidViewData', res.data);
         commit('setPageLoader', false);
@@ -371,6 +371,13 @@ export default {
       for (let i = 0; i < payload.answers.length; i++) {
         formData.append(`answers[${i}][questionId]`, payload.answers[i].questionId);
         formData.append(`answers[${i}][answer]`, payload.answers[i].answer);
+        if (payload.answers[i].fileName) {
+          formData.append(`answers[${i}][fileName]`, payload.answers[i].fileName);
+        }
+
+        if (payload.answers[i].fileSize) {
+          formData.append(`answers[${i}][fileSize]`, payload.answers[i].fileSize);
+        }
       }
     }
     try {
@@ -398,8 +405,14 @@ export default {
       const res = await axios.get(`bidSubmission/getQA/${payload.bidId}/${payload.userId}`);
 
       if (res.status === 200) {
-        console.log('Q And A - ', res.data);
         commit('setQAndA', res.data);
+
+        let count = 0;
+        res.data.forEach((el) => {
+          if (!el.answer) count++;
+        });
+
+        commit('setUnansweredQuestionCount', count);
       }
     } catch (err) {
       if (state.apiCounter === 2) {
@@ -408,7 +421,7 @@ export default {
       } else if (err.response.status === 403) {
         await dispatch('refreshToken');
         state.apiCounter = 2;
-        dispatch('getTeamMembers', payload);
+        dispatch('getQA', payload);
       }
     }
   },
@@ -423,8 +436,7 @@ export default {
       });
 
       if (res.status === 200) {
-        console.log(res.data);
-        dispatch('setQAndA', { id: payload.bidId });
+        dispatch('getQA', { bidId: payload.bidId, userId: payload.userId });
       }
     } catch (err) {
       if (state.apiCounter == 2) {
@@ -433,6 +445,29 @@ export default {
         await dispatch('refreshToken');
         state.apiCounter = 2;
         dispatch('askQuestion', payload);
+      }
+    }
+  },
+
+  async answerQuestion({ commit, dispatch, state }, payload) {
+    try {
+      const res = await axios.post('bidSubmission/questionAnswer/', {
+        answer: payload.answer,
+        userId: payload.userId,
+        questionId: payload.questionId,
+        bidId: payload.bidId,
+      });
+
+      if (res.status === 200) {
+        dispatch('getQA', { bidId: payload.bidId, userId: payload.userId });
+      }
+    } catch (err) {
+      if (state.apiCounter == 2) {
+        dispatch('apiSignOutAction');
+      } else if (err.response.status === 403) {
+        await dispatch('refreshToken');
+        state.apiCounter = 2;
+        dispatch('answerQuestion', payload);
       }
     }
   },
