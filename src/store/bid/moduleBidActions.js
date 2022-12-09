@@ -465,6 +465,25 @@ export default {
     try{
       const res = await axios.post('bid/deleteTemplateBid/',{'templateId':payload.id});
        if(res.status == 200){
+        commit('setDraftBidsList', null);
+        commit('setDraftTime', null);
+        commit('setDraftTime', null);
+        commit('setAttachData', null);
+        commit('setBidTitle', '');
+        commit('setBidType', '');
+        commit('setBidDueDate', '');
+        commit('setBidDueTime', '');
+        commit('setBidRegions', '');
+        commit('setBidEnabled', '');
+        state.bidData.id = '';
+        state.bidData.status = '';
+        state.bidData.statusType = '';
+        commit('setInvitedSuppliersData', null);
+        commit('setInvitedTeamMembers', null);
+        commit('setBidlines', null);
+        commit('setAttachement', null);
+        commit('setQuestions', null);
+        commit('setDraftBidData', null);
         dispatch('getBidTemplates')
        }
     }catch(err){
@@ -502,7 +521,6 @@ export default {
     try{
       const res = await axios.get(`bid/getBidDetailsById/${payload.id}`);
        if(res.status == 200){
-        console.log(res.data);
         commit('getSingleTemplate',res.data)
         commit('setBidData', res.data);
         dispatch('getTeamMembers',payload.company);
@@ -549,6 +567,7 @@ export default {
       }
     }
     formData.append('userId', payload.userId);
+    formData.append('userName', payload.userName);
     formData.append('companyId', payload.companyId);
     formData.append('company', payload.company);
     formData.append('lineItems', []);
@@ -631,6 +650,7 @@ export default {
       formData.append('regions', state.bidData.regions);
       formData.append('qAndAEnabled', state.bidData.qAndAEnabled);
       formData.append('userId', state.bidData.userId);
+      formData.append('userName', state.bidData.userName);
       formData.append('companyId', state.bidData.companyId);
       formData.append('company', state.bidData.company);
       
@@ -677,7 +697,6 @@ export default {
       }
       if(state.bidData.status == 'templateCreate'){
         if(state.invitedTeamMembers){
-          console.log('if invitedTeamMembers');
           for (let t = 0; t < state.invitedTeamMembers.length; t++) {
             if(!state.invitedTeamMembers[t].id){
               formData.append(`invitedTeamMembers[${t}]`, state.invitedTeamMembers[t]);
@@ -690,7 +709,6 @@ export default {
         }
       }else{
         if(state.invitedTeamMembers != null){
-          console.log('if invitedTeamMembers else');
           for (let t = 0; t < state.invitedTeamMembers.length; t++) {
             if(!state.invitedTeamMembers[t].id){
               formData.append(`invitedTeamMembers[${t}]`, state.invitedTeamMembers[t]);
@@ -719,7 +737,6 @@ export default {
         }
       }else{
         if(state.bidlines != null){
-          console.log('if bidlines');
           for (let i = 0; i < state.bidlines.length; i++) {
             formData.append(`lineItems[${i}][id]`, state.bidlines[i].id);
             formData.append(`lineItems[${i}][description]`, state.bidlines[i].description);
@@ -827,19 +844,29 @@ export default {
 
     async publishTemplate({ commit, state,dispatch }, payload) {
       try {
-        // await dispatch('updateTemplate', 'update');
+        await dispatch('updateTemplate', 'update');
           commit('setDraftBidsList', null);
           commit('setDraftTime', null);
           commit('setDraftTime', null);
           commit('setAttachData', null);
-          commit('setBidData', null);
+          // commit('setBidData', null);
+          
           commit('setInvitedSuppliersData', null);
           commit('setInvitedTeamMembers', null);
           commit('setBidlines', null);
           commit('setAttachement', null);
           commit('setQuestions', null);
           commit('setDraftBidData', null);
-          
+          commit('setBidTitle', '');
+          commit('setBidType', '');
+          commit('setBidDueDate', '');
+          commit('setBidDueTime', '');
+          commit('setBidRegions', '');
+          commit('setBidEnabled', '');
+          state.bidData.id = '';
+          state.bidData.status = '';
+          state.bidData.statusType = '';
+          commit('setBidDescription', [{ body: ""}]);
         
         return;
       } catch (err) {
@@ -850,6 +877,7 @@ export default {
       try{
         const res = await axios.post('bid/draft/deleteDraft/',{'draftId':payload.draftId});
          if(res.status == 200){
+          
           router.replace('/view-bids');
          }
       }catch(err){

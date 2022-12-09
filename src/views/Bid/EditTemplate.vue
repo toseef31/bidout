@@ -25,9 +25,7 @@
           </v-col>
           <v-col cols="12" md="7" class="text-right">
             <div class="d-flex align-center justify-end">
-              <p class="mb-0 mr-4 auto-text" v-if="draftTime">
-                <strong>Autosaved Draft:</strong> {{ draftTime }}
-              </p>
+              
               <v-btn
                 color="#0D9648"
                 :disabled="!bidDetailsComplete || !lineItemsComplete ? true : false"
@@ -37,7 +35,7 @@
                 large
                 @click="publishBid"
               >
-                Update Template
+                Create Template
               </v-btn>
             </div>
           </v-col>

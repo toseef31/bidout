@@ -146,7 +146,7 @@
   </v-row>
 </template>
 <script>
-import { mapActions } from 'vuex';
+import { mapActions,mapGetters } from 'vuex';
 
 export default {
   data() {
@@ -187,6 +187,7 @@ export default {
     };
   },
   computed: {
+    ...mapGetters(["userInfo"]),
     singleTemplate(){
       return this.$store.getters.singleTemplate;
     },
@@ -302,9 +303,10 @@ export default {
     async changeTab() {
       if(this.$store.getters.bidData != null){
         const bidDetails = {
-          userId: this.$store.getters.userInfo.id,
-          companyId: this.$store.getters.userInfo.company.id,
-          company: this.$store.getters.userInfo.company.company,
+          userId: this.userInfo.id,
+          userName: this.userInfo.firstName+' '+this.userInfo.lastName,
+          companyId: this.userInfo.company.id,
+          company: this.userInfo.company.company,
         };
         if (this.$refs.form.validate()) {
           if(this.$route.name == 'EditTemplate'){
@@ -325,9 +327,10 @@ export default {
         }
       }else{
         const bidDetails = {
-          userId: this.$store.getters.userInfo.id,
-          companyId: this.$store.getters.userInfo.company.id,
-          company: this.$store.getters.userInfo.company.company,
+          userId: this.userInfo.id,
+          userName: this.userInfo.firstName+' '+this.userInfo.lastName,
+          companyId: this.userInfo.company.id,
+          company: this.userInfo.company.company,
         };
         if(this.$route.name == 'EditTemplate'){
           await this.saveTemplateBid(bidDetails);
@@ -340,9 +343,10 @@ export default {
     async savedraft() {
       if(this.$store.getters.bidData != null){
         const bidDetails = {
-          userId: this.$store.getters.userInfo.id,
-          companyId: this.$store.getters.userInfo.company.id,
-          company: this.$store.getters.userInfo.company.company,
+          userId: this.userInfo.id,
+          userName: this.userInfo.firstName+' '+this.userInfo.lastName,
+          companyId: this.userInfo.company.id,
+          company: this.userInfo.company.company,
         };
         if (this.$refs.form.validate()) {
           if(this.$route.name == 'EditTemplate'){
@@ -362,9 +366,10 @@ export default {
         }
       }else{
         const bidDetails = {
-          userId: this.$store.getters.userInfo.id,
-          companyId: this.$store.getters.userInfo.company.id,
-          company: this.$store.getters.userInfo.company.company,
+          userId: this.userInfo.id,
+          userName: this.userInfo.firstName+' '+this.userInfo.lastName,
+          companyId: this.userInfo.company.id,
+          company: this.userInfo.company.company,
         };
         if(this.$route.name == 'EditTemplate'){
           await this.saveTemplateBid(bidDetails);
@@ -401,7 +406,6 @@ export default {
   },
   mounted(){
     this.route = this.$route.name;
-    console.log(this.$route,'store',this.$store.getters.bidData);
     this.$store.commit('setInvitedSuppliersData',this.$store.getters.bidData.invitedSuppliers);
     this.$store.commit('setInvitedTeamMembers',this.$store.getters.bidData.invitedTeamMembers);
     this.$store.commit('setBidlines',this.$store.getters.bidData.lineItems);

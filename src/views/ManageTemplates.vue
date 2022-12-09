@@ -36,11 +36,11 @@
             </thead>
             
             <tbody>
-              <tr v-for="(template, index) in bidTemplates" class="py-4 px-6">
+              <tr v-for="(template, index) in bidTemplates" class="py-4 px-6" v-if="template.companyId == userDatas.company.id">
                 <td class="text-left pl-6">{{template.title}}</td>
                 <td class="text-left">{{template.type}}</td>
                 <td class="text-left">{{template.createdAt | moment('MM/DD/YYYY')}}</td>
-                <td class="text-left">{{template.creator ? template.creator : 'No name'}}</td>
+                <td class="text-left">{{template.userName ? template.userName : 'No name'}}</td>
                 <td class="text-left">
                   <div class="">
                     <div
@@ -54,10 +54,11 @@
                         hide-details
                         v-model="bidTemplates[index]['note']"
                       ></v-text-field
-                      ><v-checkbox
-                        color="#0D9648"
-                        @change="saveNote(template,index)"
-                      ></v-checkbox>
+                      >
+                      <v-btn icon><v-icon color="#0D9648" @click="saveNote(template,index)">
+                        mdi-content-save
+                      </v-icon></v-btn>
+                      
                     </div>
                     <div v-else class="d-flex justify-space-between">
                       {{template.note}}
