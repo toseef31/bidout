@@ -150,39 +150,21 @@ export default {
       return this.dragging ? 'under drag' : '';
     },
     validate() {
-      // if(this.$store.getters.bidData != null){
-        if(this.$store.getters.bidData.lineItems != ""){
-          this.$emit('validation', { valid: true, items: '4' });
-          this.$store.commit('setLineItemsComplete', true);
-          this.$store.commit('setBidlines',this.bidLines);
-        }else if (this.bidLines.length > 0 && this.bidLines.filter((item) => item.required === true && item.description && item.quantity).length > 0) {
-          console.log('fsfsd');
-          this.$emit('validation', { valid: true, items: '4' });
-          this.$store.commit('setLineItemsComplete', true);
-          this.$store.commit('setBidlines',this.bidLines);
-          this.bidLinesStatus = true;
-          return this.valid;
-        }else{
-          console.log('dgd');
-          this.$emit('validation', { valid: false, items: '4' });
-          this.$store.commit('setLineItemsComplete', false);
-          return this.valid;
-        }
-        
-      // }else if (this.bidLines.length > 0 && this.bidLines.filter((item) => item.required === true && item.description && item.quantity).length > 0) {
-      //   console.log('fsfsd');
-      //   this.$emit('validation', { valid: true, items: '4' });
-      //   this.$store.commit('setLineItemsComplete', true);
-      //   this.$store.commit('setBidlines',this.bidLines);
-      //   this.bidLinesStatus = true;
-      //   return this.valid;
-      // }else{
-      //   console.log('dgd');
-      //   this.$emit('validation', { valid: false, items: '4' });
-      //   this.$store.commit('setLineItemsComplete', false);
-      //   return this.valid;
-      // }
-      
+      if(this.$store.getters.bidData.lineItems != ""){
+        this.$emit('validation', { valid: true, items: '4' });
+        this.$store.commit('setLineItemsComplete', true);
+        this.$store.commit('setBidlines',this.bidLines);
+      }else if (this.bidLines.length > 0 && this.bidLines.filter((item) => item.required === true && item.description && item.quantity).length > 0) {
+        this.$emit('validation', { valid: true, items: '4' });
+        this.$store.commit('setLineItemsComplete', true);
+        this.$store.commit('setBidlines',this.bidLines);
+        this.bidLinesStatus = true;
+        return this.valid;
+      }else{
+        this.$emit('validation', { valid: false, items: '4' });
+        this.$store.commit('setLineItemsComplete', false);
+        return this.valid;
+      }
     },
   },
   watch: {
@@ -194,10 +176,12 @@ export default {
     },
   },
   methods: {
-    ...mapActions(['updateDraftBid','updateBid']),
+    ...mapActions(['updateDraftBid','updateTemplate','updateBid']),
     changeTab() {
       if(this.$route.name == 'EditBid'){
         this.updateBid({ bidlines: this.bidLines });
+      }else if(this.$route.name == 'EditTemplate'){
+        this.updateTemplate({ bidlines: this.bidLines });
       }else{
         this.updateDraftBid({ bidlines: this.bidLines });
       }
@@ -207,6 +191,7 @@ export default {
       // eslint-disable-next-line no-plusplus
       for (let i = 0; i < 5; i++) {
         this.bidLines.push({
+          id: uuidv4(),
           type: 'USD',
           inputType: 'USD',
           units: ['Gallon', 'Liter'],
@@ -237,6 +222,8 @@ export default {
         if(this.bidLinesStatus == true){
           if(this.$route.name == 'EditBid'){
             this.updateBid({ bidlines: this.bidLines });
+          }else if(this.$route.name == 'EditTemplate'){
+            this.updateTemplate({ bidlines: this.bidLines });
           }else{
             this.updateDraftBid({ bidlines: this.bidLines });
           }
