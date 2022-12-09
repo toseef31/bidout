@@ -397,7 +397,11 @@ export default {
     filteredEntries() {
     	if(this.$store.getters.bidData){
     		if(this.$store.getters.bidData.invitedSuppliers != ""){
-    			return this.$store.getters.companiesList.filter((el) => { return this.$store.getters.bidData.invitedSuppliers.find((supplier) => supplier.id === el.objectID); }).slice();
+    			if(this.$route.name == 'EditBid'){
+    				return this.$store.getters.companiesList.filter((el) => { return this.$store.getters.bidData.invitedSuppliers.find((supplier) => supplier.id === el.objectID); }).slice();
+    			}else{
+    				return this.$store.getters.companiesList.filter((el) => { return this.$store.getters.bidData.invitedSuppliers.includes(el.objectID); }).slice();
+    			}
     		}else{
     			return 0;
     		}

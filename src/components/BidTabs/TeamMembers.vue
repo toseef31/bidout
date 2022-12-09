@@ -116,7 +116,11 @@ export default {
     },
     filterTeam(){
 			if(this.$store.getters.bidData.invitedTeamMembers != ''){
-		  	this.membersAdded = this.$store.getters.teamMembers.filter((el) => { return this.$store.getters.bidData.invitedTeamMembers.find((team) => team.id === el.id); })
+				if(this.$route.name == 'EditBid'){
+		  		this.membersAdded = this.$store.getters.teamMembers.filter((el) => { return this.$store.getters.bidData.invitedTeamMembers.find((team) => team.id === el.id); })
+				}else{
+					this.membersAdded = this.$store.getters.teamMembers.filter((el) => { return this.$store.getters.bidData.invitedTeamMembers.includes(el.id); })
+				}
 			}
     },
     validat(){
