@@ -342,7 +342,6 @@ export default {
       itembidData: [],
       interval: '',
       valid: false,
-      newsupplier: [],
       user: '',
       parsedSelectedBasin: 'all',
       parsedSelectedCompanyBasin: 'all',
@@ -421,7 +420,6 @@ export default {
   },
   methods: {
   	...mapActions(['getCategories', 'getSalesReps', 'getCompanyInfo', 'searchByCompany', 'getCompanyByServices', 'saveDraftBid', 'inviteNewSupplier', 'updateDraftBid','updateTemplate','updateBid']),
-  	...mapGetters(['newSupplier']),
     changeTab() {
     	if(this.$route.name == 'EditBid'){
     		this.updateBid({ invitedSuppliers: this.repsInvited });
@@ -436,29 +434,33 @@ export default {
       this.results = payload.formattedNumber;
     },
     async validate() {
-      this.$refs.form.validate();
       const supplier = {
         firstName: this.firstName,
     		lastName: this.lastName,
     		company: this.company,
     		phone: this.results,
     		email: this.email,
-    		bidTitle: this.$store.state.bidData.title,
-    		bidType: this.$store.state.bidData.type,
-    		bidDueDate: this.$store.state.bidData.dueDate,
-    		bidDueTime: this.$store.state.bidData.dueTime,
+    		bidTitle: this.$store.getters.bidData.title,
+    		bidType: this.$store.getters.bidData.type,
+    		bidDueDate: this.$store.getters.bidData.dueDate,
+    		bidDueTime: this.$store.getters.bidData.dueTime,
     	};
-			try {
-				await this.inviteNewSupplier(supplier);
-				this.supplierDialog = false;
-				const data = {
-					type: 'user',
-					item: supplier,
-				};
-				this.repsInvited.push(data);
-			} catch(error) {
-				console.log(error)
-			}
+    	if(this.$refs.form.validate()){
+    		try {
+    			const user = await this.inviteNewSupplier(supplier);
+    			this.supplierDialog = false;
+    			console.log('dddddaa',user);
+    			const data = {
+    				type: 'user',
+    				item: user,
+    			};
+    			console.log('consoll',data);
+    			this.repsInvited.push(data);
+    			this.$refs.form.reset();
+    		} catch(error) {
+    			console.log(error)
+    		}
+    	}
     },
     hideCategories() {
     	this.categories = false;
