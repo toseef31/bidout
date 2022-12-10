@@ -456,7 +456,7 @@ export default {
     },
   },
   methods: {
-    ...mapActions(['updateDraftBid','updateTemplate']),
+    ...mapActions(['updateDraftBid','updateTemplate','updateBid']),
     createCategory() {
       const title = 'add your category title here';
       const data = {
@@ -539,7 +539,9 @@ export default {
       this.questionStatus = true;
     },
     updateQuestion() {
-      if(this.$route.name == 'EditTemplate'){
+      if(this.$route.name == 'EditBid'){
+        this.updateBid({ questions: this.categories });
+      }else if(this.$route.name == 'EditTemplate'){
         this.updateTemplate({ questions: this.categories });
       }else{
         this.updateDraftBid({ questions: this.categories });
@@ -563,7 +565,9 @@ export default {
     savedraftOnInterval(){
       const timer = setInterval(() => {
         if(this.questionStatus == true){
-          if(this.$route.name == 'EditTemplate'){
+          if(this.$route.name == 'EditBid'){
+            this.updateBid({ questions: this.categories });
+          }else if(this.$route.name == 'EditTemplate'){
             this.updateTemplate({ questions: this.categories });
           }else{
             this.updateDraftBid({ questions: this.categories });

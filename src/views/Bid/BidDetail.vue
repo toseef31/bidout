@@ -165,7 +165,7 @@
                   color="#0D9648"
                   class="pa-0"
                   >
-                    <router-link to="#" class="text-decoration-none">
+                    <router-link :to="'/edit-bid/'+bidDetail.bidData.serial" class="text-decoration-none">
                       <v-list-item-title
                       color="#0D9648"
                       @click="isSetting = !isSetting"

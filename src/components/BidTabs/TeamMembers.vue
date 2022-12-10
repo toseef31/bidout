@@ -91,11 +91,19 @@ export default {
   computed:{
     teamMembers(){
     	if(this.$store.getters.bidData != null){
-    		if(this.$store.getters.bidData.invitedTeamMembers != ''){ 
-    			return this.$store.getters.teamMembers.filter((el) => { return !this.$store.getters.bidData.invitedTeamMembers.includes(el.id); })
+    		if(this.$route.name == 'EditBid'){
+    			if(this.$store.getters.bidData.invitedTeamMembers != ""){
+    				return this.$store.getters.teamMembers.filter((el) => { return !this.$store.getters.bidData.invitedTeamMembers.find((team) => team.id === el.id); })
+    			}else{
+    				return this.$store.getters.teamMembers;
+    			}
     		}else{
-    			return this.$store.getters.teamMembers;
-    		}
+	    		if(this.$store.getters.bidData.invitedTeamMembers != ''){ 
+	    			return this.$store.getters.teamMembers.filter((el) => { return !this.$store.getters.bidData.invitedTeamMembers.includes(el.id); })
+	    		}else{
+	    			return this.$store.getters.teamMembers;
+	    		}
+	    	}
     	}else{
 	    	if(this.searchMember){
 					return this.$store.getters.teamMembers.filter((item)=>{
@@ -108,7 +116,11 @@ export default {
     },
     filterTeam(){
 			if(this.$store.getters.bidData.invitedTeamMembers != ''){
-		  	this.membersAdded = this.$store.getters.teamMembers.filter((el) => { return this.$store.getters.bidData.invitedTeamMembers.includes(el.id); })
+				if(this.$route.name == 'EditBid'){
+		  		this.membersAdded = this.$store.getters.teamMembers.filter((el) => { return this.$store.getters.bidData.invitedTeamMembers.find((team) => team.id === el.id); })
+				}else{
+					this.membersAdded = this.$store.getters.teamMembers.filter((el) => { return this.$store.getters.bidData.invitedTeamMembers.includes(el.id); })
+				}
 			}
     },
     validat(){
@@ -122,9 +134,11 @@ export default {
     },
   },
   methods: {
-  	...mapActions(["getTeamMembers","getCompanyInfo","updateDraftBid","updateTemplate"]),
+  	...mapActions(["getTeamMembers","getCompanyInfo","updateDraftBid","updateTemplate","updateBid"]),
     changeTab(){
-    	if(this.$route.name == 'EditTemplate'){
+    	if(this.$route.name == 'EditBid'){
+    		this.updateBid({'invitedTeamMembers':this.membersAdded});
+    	}else if(this.$route.name == 'EditTemplate'){
     	  this.updateTemplate({'invitedTeamMembers':this.membersAdded});
     	}else{
     		this.updateDraftBid({'invitedTeamMembers':this.membersAdded});
@@ -151,7 +165,9 @@ export default {
     savedraftOnInterval(){
       const timer = setInterval(() => {
       	if(this.oldCount != this.newCount){
-        	if(this.$route.name == 'EditTemplate'){
+      		if(this.$route.name == 'EditBid'){
+      			this.updateBid({'invitedTeamMembers':this.membersAdded});
+      		}else if(this.$route.name == 'EditTemplate'){
   	    	  this.updateTemplate({'invitedTeamMembers':this.membersAdded});
   	    	}else{
   	    		this.updateDraftBid({'invitedTeamMembers':this.membersAdded});

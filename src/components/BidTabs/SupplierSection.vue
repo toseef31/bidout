@@ -358,22 +358,37 @@ export default {
       return _.orderBy(this.$store.getters.categories, 'orderNumber', 'asc');
     },
     salesRepsList() {
-  		if(this.$store.getters.bidData.invitedSuppliers != ""){
-  			return this.$store.getters.salesRepsList.filter((el) => { return !this.$store.getters.bidData.invitedSuppliers.includes(el.companyId); })
-  		}else{
-  			return this.$store.getters.salesRepsList ? this.$store.getters.salesRepsList.filter((rep) => rep.company !== this.userInfo.company.company) : [];
-  		}
-    	
+    	if(this.$route.name == 'EditBid'){
+    		if(this.$store.getters.bidData.invitedSuppliers != ""){
+    			return this.$store.getters.salesRepsList.filter((el) => { return !this.$store.getters.bidData.invitedSuppliers.find((supplier) => supplier.id === el.companyId); })
+    		}else{
+    			return this.$store.getters.salesRepsList ? this.$store.getters.salesRepsList.filter((rep) => rep.company !== this.userInfo.company.company) : [];
+    		}
+    	}else{
+    		if(this.$store.getters.bidData.invitedSuppliers != ""){
+    			return this.$store.getters.salesRepsList.filter((el) => { return !this.$store.getters.bidData.invitedSuppliers.includes(el.companyId); })
+    		}else{
+    			return this.$store.getters.salesRepsList ? this.$store.getters.salesRepsList.filter((rep) => rep.company !== this.userInfo.company.company) : [];
+    		}
+    	}
     },
     itemBidId() {
       return this.$store.getters.itemBidData;
     },
     companiesList() {
-  		if(this.$store.getters.bidData.invitedSuppliers != ""){
-  			return this.$store.getters.companiesList.filter((el) => { return !this.$store.getters.bidData.invitedSuppliers.includes(el.objectID); })
-  		}else{
-  			return this.$store.getters.companiesList;
-  		}
+    	if(this.$route.name == 'EditBid'){
+    		if(this.$store.getters.bidData.invitedSuppliers != ""){
+    			return this.$store.getters.companiesList.filter((el) => { return !this.$store.getters.bidData.invitedSuppliers.find((supplier) => supplier.id === el.objectID); })
+    		}else{
+    			return this.$store.getters.companiesList ? this.$store.getters.companiesList.filter((rep) => rep.company !== this.userInfo.company.company) : [];
+    		}
+    	}else{
+	  		if(this.$store.getters.bidData.invitedSuppliers != ""){
+	  			return this.$store.getters.companiesList.filter((el) => { return !this.$store.getters.bidData.invitedSuppliers.includes(el.objectID); })
+	  		}else{
+	  			return this.$store.getters.companiesList;
+	  		}
+	  	}
     	
     },
     serviceCompanies() {
@@ -382,7 +397,11 @@ export default {
     filteredEntries() {
     	if(this.$store.getters.bidData){
     		if(this.$store.getters.bidData.invitedSuppliers != ""){
-    			return this.$store.getters.companiesList.filter((el) => { return this.$store.getters.bidData.invitedSuppliers.includes(el.objectID); }).slice();
+    			if(this.$route.name == 'EditBid'){
+    				return this.$store.getters.companiesList.filter((el) => { return this.$store.getters.bidData.invitedSuppliers.find((supplier) => supplier.id === el.objectID); }).slice();
+    			}else{
+    				return this.$store.getters.companiesList.filter((el) => { return this.$store.getters.bidData.invitedSuppliers.includes(el.objectID); }).slice();
+    			}
     		}else{
     			return 0;
     		}
@@ -401,10 +420,12 @@ export default {
     },
   },
   methods: {
-  	...mapActions(['getCategories', 'getSalesReps', 'getCompanyInfo', 'searchByCompany', 'getCompanyByServices', 'saveDraftBid', 'inviteNewSupplier', 'updateDraftBid','updateTemplate']),
+  	...mapActions(['getCategories', 'getSalesReps', 'getCompanyInfo', 'searchByCompany', 'getCompanyByServices', 'saveDraftBid', 'inviteNewSupplier', 'updateDraftBid','updateTemplate','updateBid']),
   	...mapGetters(['newSupplier']),
     changeTab() {
-    	if(this.$route.name == 'EditTemplate'){
+    	if(this.$route.name == 'EditBid'){
+    		this.updateBid({ invitedSuppliers: this.repsInvited });
+			}else if(this.$route.name == 'EditTemplate'){
     	  this.updateTemplate({ invitedSuppliers: this.repsInvited });
     	}else{
     		this.updateDraftBid({ invitedSuppliers: this.repsInvited });
@@ -517,7 +538,9 @@ export default {
     savedraftOnInterval() {
   		const timer = setInterval(() => {
   			if(this.oldCount != this.newCount){
-  				if(this.$route.name == 'EditTemplate'){
+  				if(this.$route.name == 'EditBid'){
+  					this.updateBid({ invitedSuppliers: this.repsInvited });
+  				}else if(this.$route.name == 'EditTemplate'){
   				  this.updateTemplate({'invitedSuppliers':this.repsInvited});
   				}else{
   				  this.updateDraftBid({'invitedSuppliers':this.repsInvited});

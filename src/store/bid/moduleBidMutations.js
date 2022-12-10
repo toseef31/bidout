@@ -69,6 +69,7 @@ export default {
     state.singleTemplate = payload;
   },
   setInvitedSuppliersData(state, payload) {
+    console.log(payload);
     state.invitedSuppliers = payload;
   },
   setInvitedTeamMembers(state, payload) {

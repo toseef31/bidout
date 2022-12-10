@@ -118,13 +118,13 @@ export default {
     },
     docsList() {
       if(this.$store.getters.bidData != null){
-        if(this.$store.getters.bidData.statusType == 'draftBid'){
-          if(this.$store.getters.bidData.attachments != ""){
+        if(this.$store.getters.bidData.statusType == 'template'){
+          if(this.$store.getters.bidData.attachment != ""){
             if(this.$store.getters.attachData){
-              var totalDay = this.$store.getters.bidData.attachments.concat(this.$store.getters.attachData);
+              var totalDay = this.$store.getters.bidData.attachment.concat(this.$store.getters.attachData);
               this.documents = totalDay;
             }else{
-              this.documents = this.$store.getters.bidData.attachments;
+              this.documents = this.$store.getters.bidData.attachment;
             }
             this.$store.commit('setAttachement',this.documents);
             return this.documents;
@@ -133,12 +133,12 @@ export default {
             return this.$store.getters.attachData;
           }
         }else{
-          if(this.$store.getters.bidData.attachment != ""){
+          if(this.$store.getters.bidData.attachments != ""){
             if(this.$store.getters.attachData){
-              var totalDay = this.$store.getters.bidData.attachment.concat(this.$store.getters.attachData);
+              var totalDay = this.$store.getters.bidData.attachments.concat(this.$store.getters.attachData);
               this.documents = totalDay;
             }else{
-              this.documents = this.$store.getters.bidData.attachment;
+              this.documents = this.$store.getters.bidData.attachments;
             }
             this.$store.commit('setAttachement',this.documents);
             return this.documents;
@@ -167,7 +167,7 @@ export default {
     },
   },
   methods: {
-    ...mapActions(["uploadBidAttach", "updateDraftBid","updateTemplate"]),
+    ...mapActions(["uploadBidAttach", "updateDraftBid","updateTemplate","updateBid"]),
     changeTab() {
       this.$emit("changetab", "tab-6");
     },
@@ -218,7 +218,9 @@ export default {
     },
     saveComment(doc) {
       this.isEdit = false;
-      if(this.$route.name == 'EditTemplate'){
+      if(this.$route.name == 'EditBid'){
+        this.updateBid({ attachement: this.docsList });
+      }else if(this.$route.name == 'EditTemplate'){
         this.updateTemplate({ attachement: this.docsList });
       }else{
         this.updateDraftBid({ attachement: this.docsList });
@@ -227,7 +229,9 @@ export default {
     savedraftOnInterval(){
       const timer = setInterval(() => {
         if(this.attachStatus == true){
-          if(this.$route.name == 'EditTemplate'){
+          if(this.$route.name == 'EditBid'){
+            this.updateBid({ attachement: this.docsList });
+          }else if(this.$route.name == 'EditTemplate'){
             this.updateTemplate({ attachement: this.docsList });
           }else{
             this.updateDraftBid({ attachement: this.docsList });
