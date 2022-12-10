@@ -44,5 +44,6 @@ export default {
   qAndA: [],
   draftBidData: null,
   draftBidsListId: null,
+  invitedNewSuppliers: null,
   unansweredQuestionCount: 0,
 };

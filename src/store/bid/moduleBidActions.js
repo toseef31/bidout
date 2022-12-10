@@ -584,6 +584,12 @@ export default {
         }
       }
     }
+    if (state.invitedNewSuppliers != null) {
+      console.log('new',state.invitedNewSuppliers);
+      for (let i = 0; i < state.invitedNewSuppliers.length; i++) {
+        formData.append(`invitedNewSuppliers[${i}]`, state.invitedNewSuppliers[i].id);
+      }
+    }
     if (state.invitedTeamMembers != null) {
       for (let t = 0; t < state.invitedTeamMembers.length; t++) {
         if (!state.invitedTeamMembers[t].id) {

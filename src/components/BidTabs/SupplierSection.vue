@@ -166,6 +166,24 @@
 	  	        	</div>
 	  	        </template>
 		        </template>
+		        <template  v-for="(company,index) in newRepsInvited">
+		        	<div class="d-flex align-center justify-space-between list-company pa-4">
+		        	  <div class="comapny-data d-flex align-center">
+		        	    <div class="company-img">
+		        	      <img v-if="!company.image" :src="require('@/assets/images/bids/company.png')">
+		        	      <img v-else :src="company.image" width="56.25px" height="15px">
+		        	    </div>
+		        	    <div class="company-title text-left pl-4">
+		        	      <h4>{{company.firstName}} {{company.lastName}} </h4>
+										<p>{{company.company}}</p>
+										<!-- <router-link :to="`/company/${company.slug}`" target="_blank" class="mb-0">View Profile</router-link> -->
+		        	    </div>
+		        	  </div>
+		        	  <div class="add-company">
+		        	    <v-btn color="rgba(243, 35, 73, 0.1)" tile min-width="32px" height="32" class="pa-0" elevation="0" @click="removeNewSup(company,index)"> <v-icon color="#F32349">mdi-minus</v-icon></v-btn>
+		        	  </div>
+		        	</div>
+		        </template>
 		        <template  v-for="(company,index) in repsInvited">
 		        	<div class="d-flex align-center justify-space-between list-company pa-4" v-if="company.type == 'company'">
 		        	  <div class="comapny-data d-flex align-center">
@@ -348,6 +366,7 @@ export default {
       oldCount: '',
       newCount: '',
       filterData: [],
+      newRepsInvited: [],
     };
   },
   computed: {
@@ -449,13 +468,10 @@ export default {
     		try {
     			const user = await this.inviteNewSupplier(supplier);
     			this.supplierDialog = false;
-    			console.log('dddddaa',user);
-    			const data = {
-    				type: 'user',
-    				item: user,
-    			};
-    			console.log('consoll',data);
-    			this.repsInvited.push(data);
+    			this.oldCount = this.newRepsInvited.length; 
+    			this.newRepsInvited.push(user);
+    			this.newCount = this.newRepsInvited.length;
+    			this.$store.commit('setInvitedNewSuppliers', this.newRepsInvited);
     			this.$refs.form.reset();
     		} catch(error) {
     			console.log(error)
@@ -536,6 +552,12 @@ export default {
     	this.newCount = this.repsInvited.length;
     	this.$store.getters.companiesList.push(company.item);
     	this.$store.commit('setInvitedSuppliersData', this.repsInvited);
+    },
+    removeNewSup(company, index) {
+    	this.oldCount = this.newRepsInvited.length;
+    	this.newRepsInvited.splice(index, 1);
+    	this.newCount = this.newRepsInvited.length;
+    	this.$store.commit('setInvitedNewSuppliers', this.newRepsInvited);
     },
     savedraftOnInterval() {
   		const timer = setInterval(() => {
