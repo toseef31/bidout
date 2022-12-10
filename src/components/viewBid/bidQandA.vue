@@ -44,7 +44,7 @@
                 color="#0D9648"
                 height="32"
                 class="text-capitalize white--text font-weight-bold save-button px-12"
-                @click="replay(item.id)"
+                @click="reply(item.id)"
                 large
                 :disabled="showLoading"
                 >
@@ -56,7 +56,7 @@
                     color="#0D9648"
                     ></v-progress-circular>
 
-                <div v-else>Replay</div>
+                <div v-else>Reply</div>
                 </v-btn
 
               >
@@ -85,10 +85,57 @@
       <div class="header d-flex flex-column pt-4" >
         <span>Answer:</span>
 
-        <span class=" mt-1" v-if="item.answer"
-          >{{item.answer}}</span
-        >
+        <div class=" mt-1" v-if="item.answer"
+          >{{item.answer}}
+          <v-tooltip right>
+            <template v-slot:activator="{ on, attrs }">
+                <v-btn
+                class="mx-2"
+                icon
+                v-bind="attrs"
+                v-on="on"
+                @click="editAction(index,item.answer)"
+                >
+                  <v-icon color="#0D9648">
+                    mdi-square-edit-outline
+                  </v-icon>
+              </v-btn>
+           </template>
+            <span>Edit answer</span>
+          </v-tooltip>
+        </div>
 
+        <div v-if="editable[index].isEdit" class="edit-section">
+        <v-textarea
+              single-line
+              outlined
+              type="text"
+              v-model="editedAnswer"
+              class="mt-4"
+            >
+            </v-textarea>
+
+            <div class="text-right">
+              <v-btn
+                color="#0D9648"
+                height="40"
+                class="text-capitalize font-weight-bold save-button px-8"
+                @click="editA(item.id,index)"
+                large
+                depressed
+                :disabled="showLoading"
+                >
+                    <v-progress-circular
+                    v-if="showLoading"
+                    indeterminate
+                    :width="3"
+                    size="25"
+                    color="#0D9648"
+                    ></v-progress-circular>
+                    <div v-else>Edit</div>
+              </v-btn>
+            </div>
+          </div>
         <span class="sub-title mt-4" v-if="item.answer">By {{user.firstName + " " + user.lastName}} (Patterson-UTI) </span>
         <span class="sub-title mt-1" v-if="item.answer">{{ item.answeredOn._seconds | moment('MM/DD/YYYY')}} - {{ item.answeredOn._seconds | moment('hh:mma')}}</span>
         <span class="mt-2 sub-title" v-if="!item.answer">Not answered yet</span>
@@ -179,6 +226,9 @@ export default {
       user: '',
       loading: false,
       answer: '',
+      editedAnswer: '',
+      isEdit: false,
+      editable: [],
     };
   },
   computed: {
@@ -186,6 +236,13 @@ export default {
       return this.$store.getters.userType;
     },
     getQAndA() {
+      if (this.getUserType === 'buyer') {
+        for (let i = 0; i < this.$store.getters.qAndA.length; i++) {
+          this.editable.push({
+            isEdit: false,
+          });
+        }
+      }
       return this.$store.getters.qAndA;
     },
     getQAndForAnswer() {
@@ -207,7 +264,7 @@ export default {
     },
   },
   methods: {
-    ...mapActions(['askQuestion', 'answerQuestion']),
+    ...mapActions(['askQuestion', 'answerQuestion', 'editAnswer']),
     async sendQuestion() {
       this.loading = true;
 
@@ -221,7 +278,7 @@ export default {
       this.loading = false;
       this.question = '';
     },
-    async replay(questionId) {
+    async reply(questionId) {
       this.loading = true;
 
       await this.answerQuestion({
@@ -233,6 +290,25 @@ export default {
 
       this.loading = false;
       this.answer = '';
+    },
+    editAction(index, answer) {
+      this.editable[index].isEdit = !this.editable[index].isEdit;
+      this.editedAnswer = answer;
+    },
+    async editA(questionId, index) {
+      this.loading = true;
+
+      await this.editAnswer({
+        answer: this.editedAnswer,
+        userId: this.user.id,
+        bidId: this.bidDetail.bidData.id,
+        questionId,
+
+      });
+
+      this.loading = false;
+      this.editable[index].isEdit = false;
+      this.editedAnswer = '';
     },
   },
   mounted() {

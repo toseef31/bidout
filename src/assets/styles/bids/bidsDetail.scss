@@ -633,7 +633,17 @@
         font-weight: 700;
         font-size: 16px;
       }
+      
+      .edit-section {
+        .save-button {
+          font-size: 14px;
+          border-radius: 6px;
+          font-weight: 700;
+          color: white;
 
+          
+        }
+      }
       .main-section {
         .save-button {
           font-size: 14px;
