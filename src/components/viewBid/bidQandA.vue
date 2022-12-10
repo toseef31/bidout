@@ -44,7 +44,7 @@
                 color="#0D9648"
                 height="32"
                 class="text-capitalize white--text font-weight-bold save-button px-12"
-                @click="replay(item.id)"
+                @click="reply(item.id)"
                 large
                 :disabled="showLoading"
                 >
@@ -56,7 +56,7 @@
                     color="#0D9648"
                     ></v-progress-circular>
 
-                <div v-else>Replay</div>
+                <div v-else>Reply</div>
                 </v-btn
 
               >
@@ -278,7 +278,7 @@ export default {
       this.loading = false;
       this.question = '';
     },
-    async replay(questionId) {
+    async reply(questionId) {
       this.loading = true;
 
       await this.answerQuestion({
