@@ -101,7 +101,7 @@
           <h6>{{contact.phoneNo}}</h6>
         </div>
         <div class="profile-list text-right">
-          <v-btn default color="transparent" class="text-capitalize dele-btn" @click="deleteContact(contact.index)"><v-icon>mdi-close</v-icon>Delete</v-btn>
+          <v-btn default color="transparent" class="text-capitalize dele-btn" @click="deleteContact(index)"><v-icon>mdi-close</v-icon>Delete</v-btn>
         </div>
       </div>
     </v-container>
