@@ -404,6 +404,7 @@ export default {
   mounted() {
     this.route = this.$route.name;
     this.$store.commit('setInvitedSuppliersData', this.$store.getters.bidData.invitedSuppliers);
+    this.$store.commit('setInvitedNewSuppliers', this.$store.getters.bidData.invitedNewSuppliers);
     this.$store.commit('setInvitedTeamMembers', this.$store.getters.bidData.invitedTeamMembers);
     this.$store.commit('setBidlines', this.$store.getters.bidData.lineItems);
     if(this.$route.name == 'EditBid'){
