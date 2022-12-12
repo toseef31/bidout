@@ -156,6 +156,7 @@ export default {
       });
   }, 
   getActivities({commit,dispatch,state},payload){
+    
     axios.get('/activity/getActivities/'+payload)
       .then(responce => {
         
@@ -186,7 +187,7 @@ export default {
       console.log(err);
     }  
   }, 
-  async getBidDashboard({commit}, payload){
+  async getBidDashboard({commit,dispatch}, payload){
     var config = {
       headers: {
         "Authorization": `Bearer ${JSON.parse(localStorage.getItem('token'))}`
@@ -196,7 +197,8 @@ export default {
     try{
       const res = await axios.get('bid/getBidList/'+payload,config);
         commit('setBidsList',res.data);
-        commit('setPageLoader',false)
+        await dispatch('getActivities',payload);
+        // commit('setPageLoader',false);
     }catch(err){
       console.log(err);
     }

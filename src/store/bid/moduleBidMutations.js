@@ -38,6 +38,9 @@ export default {
   setBidDetailsComplete(state, payload) {
     state.bidDetailsComplete = payload;
   },
+  setBidTemplates(state, payload){
+    state.bidTemplates = payload
+  },
   setBidViewData(state, payload) {
     state.bidViewData = payload;
   },
@@ -62,7 +65,11 @@ export default {
   setBidSerial(state, payload) {
     state.bidSerial = payload;
   },
+  getSingleTemplate(state, payload) {
+    state.singleTemplate = payload;
+  },
   setInvitedSuppliersData(state, payload) {
+    console.log(payload);
     state.invitedSuppliers = payload;
   },
   setInvitedTeamMembers(state, payload) {
@@ -76,5 +83,62 @@ export default {
   },
   setQuestions(state, payload) {
     state.questions = payload;
+  },
+  setBidIntent(state, payload) {
+    state.bidIntent = payload;
+  },
+  setSupplierAttachment(state, payload) {
+    state.supplierAttachment.push(payload);
+    state.supplierAttachment = state.supplierAttachment.filter((value, index, self) => index === self.findIndex((t) => (
+      t.fileName === value.fileName
+    )));
+  },
+  setUserType(state, payload) {
+    state.userType = payload;
+  },
+  setIntentId(state, payload) {
+    state.intentId = payload;
+  },
+  setIsBidSubmitted(state, payload) {
+    state.isBidSubmitted = payload;
+  },
+  setSupplierBid(state, payload) {
+    state.supplierBid = payload;
+  },
+  setQAndA(state, payload) {
+    state.qAndA = payload;
+  },
+  setDraftBidData(state, payload) {
+    state.draftBidData = payload;
+  },
+  setDraftBidsListId(state, payload) {
+    state.draftBidsListId = payload;
+  },
+  setBidTitle(state, payload) {
+    state.bidData.title = payload;
+  },
+  setBidType(state, payload) {
+    state.bidData.type = payload;
+  },
+  setBidDueDate(state, payload) {
+    state.bidData.dueDate = payload;
+  },
+  setBidDueTime(state, payload) {
+    state.bidData.dueTime = payload;
+  },
+  setBidRegions(state, payload) {
+    state.bidData.regions = payload;
+  },
+  setBidEnabled(state, payload) {
+    state.bidData.qAndAEnabled = payload;
+  },
+  setBidDescription(state, payload) {
+    state.bidData.bidDescriptions = payload;
+  },
+  setInvitedNewSuppliers(state, payload) {
+    state.invitedNewSuppliers = payload;
+  },
+  setUnansweredQuestionCount(state, payload) {
+    state.unansweredQuestionCount = payload;
   },
 };

@@ -48,6 +48,7 @@
 		      </div>
 		    </div>
 		    <div class="companies-list">
+		    	{{filterTeam}}
 		      <div class="d-flex align-center justify-space-between list-company pa-4" v-for="(team,index) in membersAdded">
 		        <div class="comapny-data d-flex align-center">
 		          <div class="company-img">
@@ -89,13 +90,38 @@ export default {
   },
   computed:{
     teamMembers(){
-    	if(this.searchMember){
-				return this.$store.getters.teamMembers.filter((item)=>{
-  			  return (this.searchMember.toLowerCase().split(' ').every(v => item.firstName.toLowerCase().includes(v)) || this.searchMember.toLowerCase().split(' ').every(v => item.lastName.toLowerCase().includes(v)))
-  			})
+    	if(this.$store.getters.bidData != null){
+    		if(this.$route.name == 'EditBid'){
+    			if(this.$store.getters.bidData.invitedTeamMembers != ""){
+    				return this.$store.getters.teamMembers.filter((el) => { return !this.$store.getters.bidData.invitedTeamMembers.find((team) => team.id === el.id); })
+    			}else{
+    				return this.$store.getters.teamMembers;
+    			}
+    		}else{
+	    		if(this.$store.getters.bidData.invitedTeamMembers != ''){ 
+	    			return this.$store.getters.teamMembers.filter((el) => { return !this.$store.getters.bidData.invitedTeamMembers.includes(el.id); })
+	    		}else{
+	    			return this.$store.getters.teamMembers;
+	    		}
+	    	}
     	}else{
-  			return this.$store.getters.teamMembers;
+	    	if(this.searchMember){
+					return this.$store.getters.teamMembers.filter((item)=>{
+	  			  return (this.searchMember.toLowerCase().split(' ').every(v => item.firstName.toLowerCase().includes(v)) || this.searchMember.toLowerCase().split(' ').every(v => item.lastName.toLowerCase().includes(v)))
+	  			})
+	    	}else{
+	  			return this.$store.getters.teamMembers;
+	    	}
     	}
+    },
+    filterTeam(){
+			if(this.$store.getters.bidData.invitedTeamMembers != ''){
+				if(this.$route.name == 'EditBid'){
+		  		this.membersAdded = this.$store.getters.teamMembers.filter((el) => { return this.$store.getters.bidData.invitedTeamMembers.find((team) => team.id === el.id); })
+				}else{
+					this.membersAdded = this.$store.getters.teamMembers.filter((el) => { return this.$store.getters.bidData.invitedTeamMembers.includes(el.id); })
+				}
+			}
     },
     validat(){
     	if(this.membersAdded.length > 0){
@@ -108,9 +134,15 @@ export default {
     },
   },
   methods: {
-  	...mapActions(["getTeamMembers","getCompanyInfo","updateDraftBid"]),
+  	...mapActions(["getTeamMembers","getCompanyInfo","updateDraftBid","updateTemplate","updateBid"]),
     changeTab(){
-    	this.updateDraftBid({'invitedTeamMembers':this.membersAdded});
+    	if(this.$route.name == 'EditBid'){
+    		this.updateBid({'invitedTeamMembers':this.membersAdded});
+    	}else if(this.$route.name == 'EditTemplate'){
+    	  this.updateTemplate({'invitedTeamMembers':this.membersAdded});
+    	}else{
+    		this.updateDraftBid({'invitedTeamMembers':this.membersAdded});
+    	}
       this.$emit('changetab', 'tab-4');
     },
     viewCompany(id,name){
@@ -122,7 +154,6 @@ export default {
     	this.newCount = this.membersAdded.length;
   		this.$store.getters.teamMembers.splice(index,1);
   		this.$store.commit('setInvitedTeamMembers',this.membersAdded);
-  		this.savedraftOnchange();
     },
     remove(member,index){
     	this.oldCount = this.membersAdded.length;
@@ -130,12 +161,17 @@ export default {
 	  	this.newCount = this.membersAdded.length;
 			this.membersAdded.splice(index,1);
   		this.$store.commit('setInvitedTeamMembers',this.membersAdded);
-			this.savedraftOnchange();
     },
     savedraftOnInterval(){
       const timer = setInterval(() => {
       	if(this.oldCount != this.newCount){
-        	this.updateDraftBid({'invitedTeamMembers':this.membersAdded});
+      		if(this.$route.name == 'EditBid'){
+      			this.updateBid({'invitedTeamMembers':this.membersAdded});
+      		}else if(this.$route.name == 'EditTemplate'){
+  	    	  this.updateTemplate({'invitedTeamMembers':this.membersAdded});
+  	    	}else{
+  	    		this.updateDraftBid({'invitedTeamMembers':this.membersAdded});
+  	    	}
         	this.oldCount = this.newCount;
       	}
       }, 60000);

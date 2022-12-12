@@ -22,7 +22,6 @@ const router = new VueRouter({
   base: import.meta.env.Base,
   routes,
   mode: 'history',
-  
 });
 
 

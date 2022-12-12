@@ -30,16 +30,30 @@
   </v-row>
 
   <v-col v-else  class="pl-0 pr-3 pb-0 pt-3 bid-detail-module  ">
-    <v-alert type="error"  v-show="showErrorDeleteAlert" class="mx-5">
+    <v-alert type="error"  v-show="showErrorDeleteAlert" class="mx-5" v-if="getUserType === 'buyer'">
       Deleting this bid was failed. Please Try again!
     </v-alert>
+
+    <v-card class=" bid-submitted-card" :elevation="0" v-if="isBidSubmitted && getUserType === 'supplier'">
+            <div class="d-flex align-center">
+                  <img
+
+                    :src="require('@/assets/images/bids/awarded.png')"
+                  />
+
+                  <div class="ml-5 text-left">
+                    <div class="company-title">{{users.company.company}}</div>
+                    <div class="company-submitted">You have already submitted this Bid</div>
+                  </div>
+                </div>
+          </v-card>
 
     <v-card
       class="fill-height main-card"
       :elevation="0"
     >
 
-      <v-row class="px-5 my-5 row-title" no-gutters>
+      <v-row class="px-5 my-5 row-title" no-gutters v-if="getUserType === 'buyer'">
         <v-col>
           <div class="pa-1 text-left text--primary">
             <div
@@ -71,7 +85,7 @@
             class="py-2 px-4 bid-status-card text-left"
             rounded="lg"
             height="119"
-            width="290"
+            width="300"
             v-if="!isAfterDueDate"
           >
             <div class="status" v-if="bidDetail.receivingBids">
@@ -80,7 +94,6 @@
             <div class="status" v-if="bidDetail.bidout">
               Status: BidOut Phase
             </div>
-            <div class="status">Status: Receiving Bids</div>
             <div
               class="time pt-2 align-center"
             >
@@ -152,7 +165,7 @@
                   color="#0D9648"
                   class="pa-0"
                   >
-                    <router-link to="#" class="text-decoration-none">
+                    <router-link :to="'/edit-bid/'+bidDetail.bidData.serial" class="text-decoration-none">
                       <v-list-item-title
                       color="#0D9648"
                       @click="isSetting = !isSetting"
@@ -238,7 +251,110 @@
           </v-btn>
         </v-col>
       </v-row>
-      <div class="bidDetail-tabs-section mt-7">
+
+      <v-row class="px-5 my-5 row-title align-center" no-gutters v-else>
+        <v-col>
+          <div class="pa-1 text-left text--primary">
+            <div
+              class="font-weight-bold text--primary bid-title"
+
+            >
+              {{ bidDetail.bidData.title }}
+            </div>
+
+            <div class="detail">
+              <div>
+                Bid: <span class="serial">#{{ bidDetail.bidData.serial }}</span>
+              </div>
+              <div>
+                Due Date/Time: {{ bidDetail.bidData.dueDate | moment('MM/DD/YYYY') }} @
+                {{ bidDetail.bidData.dueTime }}
+              </div>
+              <div>
+                Created by: {{ bidDetail.bidData.userId.firstName }}
+                {{ bidDetail.bidData.userId.lastName }}
+              </div>
+              <div>Bid Type: {{ bidDetail.bidData.type }}</div>
+            </div>
+          </div>
+        </v-col>
+
+        <v-col class="status-sec mr-6 text-left mt-2" cols="auto" v-if="!isAfterDueDate">
+
+          <label class="intent-title">Intent to bid? </label>
+                  <v-radio-group
+              v-model="answer"
+              @change="makeIntentBid"
+              row
+            >
+              <v-radio
+                label="Yes"
+                value="true"
+                color="#0d9648"
+                checked
+              ></v-radio>
+              <v-radio
+                label="No"
+                value="false"
+                color="#F32349"
+              ></v-radio>
+            </v-radio-group>
+        </v-col>
+
+        <v-col cols="auto">
+          <v-sheet
+            class="py-2 px-4 bid-status-card text-left"
+            rounded="lg"
+            height="119"
+            width="300"
+            v-if="!isAfterDueDate"
+          >
+            <div class="status" v-if="bidDetail.receivingBids">
+              Status: Receiving Bids
+            </div>
+            <div class="status" v-if="bidDetail.bidout">
+              Status: BidOut Phase
+            </div>
+            <div
+              class="time pt-2 align-center"
+            >
+              <v-icon small color="#0D9648"> mdi-timer-outline</v-icon>
+              {{ days }} days, {{ hours }} hours, {{ minutes }} min,
+              {{ seconds }} sec remaining
+            </div>
+
+            <v-divider color="#0D9648"></v-divider>
+            <div
+              class="bid-number"
+            >
+              {{isBidSubmitted ? 'Bid Submitted': 'Submit Bid'}}
+            </div>
+          </v-sheet>
+          <v-sheet  class="py-2 px-5 text-left award-status-card"
+            rounded="lg"
+            height="85"
+            width="290"
+            v-else>
+
+              <div  class="award-status" v-if="bidDetail.user_status === 'waiting'">Status: Awarding Phase</div>
+
+              <div class="award-status" v-if="bidDetail.user_status === 'awarded'">Status: Awarded, Congrats!</div>
+              <div class="award-status" v-if="bidDetail.user_status === 'rejected'">Status: Not Awarded</div>
+              <v-divider
+
+              class="mt-3"
+              color="#b489251c"
+            ></v-divider>
+            <div
+             class="award-bid-number"
+            >
+            {{isBidSubmitted ? 'Bid Submitted': 'Bid is not Submitted'}}
+            </div>
+          </v-sheet>
+        </v-col>
+      </v-row>
+
+      <div class="bidDetail-tabs-section mt-7" v-if="getUserType === 'buyer'">
         <v-tabs
           v-model="currentItem"
           class="bids-tabs"
@@ -263,9 +379,9 @@
 
             </v-badge>
             <v-badge
-              v-if=" item.value === 5"
+              v-if=" item.value === 5 && getUnansweredQuestionCount !== 0"
               color="#0D9648"
-              :content="6"
+              :content="getUnansweredQuestionCount"
               inline
               tile
             >
@@ -287,11 +403,62 @@
           <v-tab-item value="tab-4">
             <BidBroadcast @changetab="ChangeT($event)"></BidBroadcast>
           </v-tab-item>
-          <v-tab-item value="tab-5" class="mt-5">
+          <v-tab-item value="tab-5">
             <BidQandA @changetab="ChangeT($event)"></BidQandA>
           </v-tab-item>
           <v-tab-item value="tab-6" class="mt-5"
             ><BidAuditTrail @changetab="ChangeT($event)"></BidAuditTrail>
+          </v-tab-item>
+        </v-tabs-items>
+      </div>
+      <div v-else class="bidDetail-tabs-section mt-7">
+        <v-tabs
+          v-model="currentItem"
+          class="bids-tabs"
+          fixed-tabs
+          hide-slider
+          :mobile-breakpoint="767"
+        >
+          <v-tab
+            v-for="item in tabsSupplier"
+            :key="item.value"
+            :href="'#tab-' + item.value"
+            class="text-capitalize black--text font-weight-bold"
+          >
+          {{ item.text }}
+            <v-badge
+              v-if="item.value === 3 && showBidMessageC !== 0"
+              color="#0D9648"
+              :content="showBidMessageC"
+              inline
+              tile
+            >
+
+            </v-badge>
+            <v-badge
+              v-if=" item.value === 4 &&getUnansweredQuestionCount !== 0"
+              color="#0D9648"
+              :content="getUnansweredQuestionCount"
+              inline
+              tile
+            >
+
+            </v-badge>
+
+          </v-tab>
+        </v-tabs>
+        <v-tabs-items v-model="currentItem">
+          <v-tab-item value="tab-1">
+            <SupplierBidDetail @changetab="ChangeT($event)"></SupplierBidDetail>
+          </v-tab-item>
+          <v-tab-item value="tab-2">
+            <SupplierBidSubmission @changetab="ChangeT($event)"></SupplierBidSubmission>
+          </v-tab-item>
+          <v-tab-item value="tab-3">
+            <BidChat @changetab="ChangeT($event)"></BidChat>
+          </v-tab-item>
+          <v-tab-item value="tab-4">
+            <BidQandA @changetab="ChangeT($event)"></BidQandA>
           </v-tab-item>
         </v-tabs-items>
       </div>
@@ -307,6 +474,8 @@ import BidQandA from '@/components/viewBid/bidQandA.vue';
 import BidChat from '@/components/viewBid/bidChat.vue';
 import BidSubmission from '@/components/viewBid/bidSubmission.vue';
 import BidAuditTrail from '@/components/viewBid/bidAuditTrail.vue';
+import SupplierBidDetail from '@/components/viewBid/supplierBidDetail.vue';
+import SupplierBidSubmission from '@/components/viewBid/supplierBidSubmission.vue';
 import moment from 'moment-timezone';
 import { mapActions } from 'vuex';
 
@@ -319,13 +488,13 @@ export default {
     BidChat,
     BidSubmission,
     BidAuditTrail,
+    SupplierBidDetail,
+    SupplierBidSubmission,
   },
   data() {
     return {
       currentItem: 'tab-1',
-      validate: '',
       isSetting: false,
-      value: '',
       users: '',
       actualTime: moment().format('X'),
       years: 0,
@@ -336,6 +505,7 @@ export default {
       seconds: 0,
       dialog: false,
       alert: false,
+      answer: null,
       tabs: [
         {
           text: 'Bid Detail',
@@ -362,15 +532,49 @@ export default {
           value: 6,
         },
       ],
+      tabsSupplier: [
+        {
+          text: 'Bid Detail',
+          value: 1,
+        },
+        {
+          text: 'Bid Submissions',
+          value: 2,
+        },
+        {
+          text: 'Bid Chat',
+          value: 3,
+        },
+        {
+          text: 'Q&A',
+          value: 4,
+        },
+      ],
     };
   },
   methods: {
-    ...mapActions(['getBidBySerial', 'deleteBid', 'getSubmittedBid', 'bidMessageUnreadCount']),
+    ...mapActions(['getBidBySerial', 'deleteBid', 'bidMessageUnreadCount', 'makeIntent', 'getIntent', 'updateIntent', 'getQA']),
     ChangeT(tab) {
       this.currentItem = tab;
     },
+    makeIntentBid() {
+      if (this.getIntentId && this.$store.getters.bidIntent !== null) {
+        this.updateIntent({
+          answer: this.answer,
+          intendId: this.getIntentId,
+        });
+      } else {
+        this.makeIntent({
+          bidId: this.bidDetail.bidData.id,
+          owner: this.users.id,
+          ownerCompany: this.users.company.company,
+          companyId: this.users.company.id,
+          answer: this.answer,
+        });
+      }
+    },
     deleteB() {
-      this.deleteBid({ bidId: this.bidDetail.bidData.id ,userid: this.users.id});
+      this.deleteBid({ bidId: this.bidDetail.bidData.id, userid: this.users.id });
     },
     addOneSecondToActualTimeEverySecond() {
       const component = this;
@@ -402,8 +606,20 @@ export default {
     bidDetail() {
       return this.$store.getters.bidViewData;
     },
+    getUserType() {
+      return this.$store.getters.userType;
+    },
     showErrorDeleteAlert() {
       return this.$store.getters.showErrorDeleteBid;
+    },
+    getIntentId() {
+      return this.$store.getters.intentId;
+    },
+    isBidSubmitted() {
+      return this.$store.getters.isBidSubmitted;
+    },
+    getUnansweredQuestionCount() {
+      return this.$store.getters.unansweredQuestionCount;
     },
     isAfterDueDate() {
       const bidDueDate = this.bidDetail.bidData.dueDate;
@@ -416,7 +632,7 @@ export default {
       return moment(currentDate).isAfter(momentDueDate);
     },
     noOfBidSubmitted() {
-      return this.$store.getters.submittedBid.length;
+      return this.bidDetail.supplierSubmissions.length;
     },
     getPageLoading() {
       return this.$store.getters.pageLoader;
@@ -428,20 +644,8 @@ export default {
       return this.$store.getters.bidMessageUnreadCount;
     },
   },
-  beforeMount() {
-
-  },
   mounted() {
-    document.title = 'Bid Detail - BidOut';
-    // console.log(this.users);
-    // this.getSubmittedBid({
-    //   userId: this.users.id,
-    //   bidId: this.bidDetail.bidData.id,
-    // });
-    // await this.getSubmittedBid({
-    //   userId: 'nSJ4rgmgUTBbiyeJoHIE',
-    //   bidId: 'N3x4CzqfrYqpsLWYrX0k',
-    // });
+    document.title = 'View Bid - BidOut';
   },
   async created() {
     this.users = this.$store.getters.userInfo;
@@ -451,16 +655,15 @@ export default {
       id: this.users.id,
     });
 
-    await this.getSubmittedBid({
-      userId: this.users.id,
-      bidId: this.bidDetail.bidData.id,
-    });
+    this.compute();
+    this.addOneSecondToActualTimeEverySecond();
 
     await this.bidMessageUnreadCount({
       userId: this.users.id,
       bidId: this.bidDetail.bidData.id,
     });
-    if (this.$route.query.new) {
+
+    if (this.$route.query.new && this.getUserType === 'buyer') {
       this.$toasted.show(`Success! Bid #${this.$route.params.serial} has been created and all invitations have been sent to the suppliers`, {
         class: 'success-toast',
         duration: 5000,
@@ -468,8 +671,20 @@ export default {
       });
     }
 
-    this.compute();
-    this.addOneSecondToActualTimeEverySecond();
+    if (this.getUserType === 'supplier') {
+      await this.getIntent({
+        companyId: this.users.company.id,
+        bidId: this.bidDetail.bidData.id,
+        companyName: this.users.company.company,
+      });
+
+      this.answer = this.$store.getters.bidIntent;
+    }
+
+    await this.getQA({
+      bidId: this.bidDetail.bidData.id,
+      userId: this.users.id,
+    });
   },
   watch: {
     actualTime(val, oldVal) {

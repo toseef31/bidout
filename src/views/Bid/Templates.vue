@@ -1,7 +1,10 @@
 <template>
    <v-col class="createBid-module pa-0 pa-sm-3 pl-sm-0 pb-sm-0" :class="[ showSideBar ? 'col-md-9 col-12 col-sm-7' : 'mid-content-collapse', activityPanel ? 'd-sm-block' : 'd-md-block']" v-show="!activityPanel">
       <div class="mid-content">
-        <div class="content-section fill-height">
+        <div class="content-section fill-height d-flex justify-center align-center"  v-if="loading">
+          <v-progress-circular :width="3" color="green" indeterminate ></v-progress-circular>
+        </div>
+        <div class="content-section fill-height" v-else>
           <v-row align="center" justify="space-between" class="px-6 mb-4 mt-2 mx-0">
             <v-col cols="6" class="text-left pl-0">
               <h4>Templates</h4>
@@ -35,13 +38,13 @@
                 </tr>
               </thead>
               <tbody>
-                <tr v-for="(template, index) in templates" class="py-4 px-6">
-                  <td class="text-left pl-6">{{template.name}}</td>
+                <tr v-for="(template, index) in bidTemplates" class="py-4 px-6" v-if="template.companyId == userDatas.company.id">
+                  <td class="text-left pl-6">{{template.title}}</td>
                   <td class="text-left">{{template.type}}</td>
-                  <td class="text-left">{{template.createdDate}}</td>
-                  <td class="text-left">{{template.creator}}</td>
-                  <td class="text-left">{{template.notes}}</td>
-                  <td class="text-left pr-6"><v-btn color="#0D9648" elevation="0" class="white--text text-capitalize">Use Template</v-btn></td>
+                  <td class="text-left">{{template.createdAt | moment('MM/DD/YYYY')}}</td>
+                  <td class="text-left">{{template.userName ? template.userName : 'No name'}}</td>
+                  <td class="text-left">{{template.note ? template.note : 'Note not added yet.'}}</td>
+                  <td class="text-left pr-6"><v-btn color="#0D9648" elevation="0" class="white--text text-capitalize" @click="useTemplate(template)">Use Template</v-btn></td>
                 </tr>
               </tbody>
             </template>
@@ -54,7 +57,7 @@
   import Navbar from '../../components/Layout/Navbar.vue'
   import LeftSidebar from '../../components/Layout/Dashboard/LeftSidebar.vue'
   import RightSidebar from '../../components/Layout/Dashboard/RightSidebar.vue'
-  import { mapActions } from "vuex";
+  import { mapActions,mapGetters } from "vuex";
 export default {
   name : "Template",
   components: {
@@ -66,25 +69,10 @@ export default {
   data() {
     return {
       users: '',
-      templates: [
-        {
-          name: 'Water Transfer Bid - Egle Ford',
-          type: 'RFI',
-          createdDate: '06/01/2022',
-          creator: 'Jennifer Hazelton',
-          notes: 'This is Lewis’ primary water template used in the Eagle Ford, please only update mileage and date requested.',
-        },
-        {
-          name: 'Wireline Services - Annual',
-          type: 'RFP',
-          createdDate: '03/10/2022',
-          creator: 'John Jones',
-          notes: '-',
-        },
-      ],
     };
   },
   computed:{
+    ...mapGetters(["bidTemplates"]),
     showSideBar(){
         return this.$store.getters.g_sideBarOpen;
     },
@@ -94,9 +82,24 @@ export default {
     userDatas(){
         return this.$store.getters.userInfo;
     },
+    loading(){
+        return this.$store.getters.pageLoader;
+    },
   },
   methods: {
-    
+    ...mapActions(["getBidTemplates"]),
+    async useTemplate(template){
+      this.$store.commit('setBidData',template);
+      this.$store.state.bid.bidData.statusType = 'templateBid';
+      await this.$store.dispatch('getTeamMembers', this.userDatas.company.company);
+      await this.$store.dispatch('getSalesReps', { query: '', basin: 'all' });
+      await this.$store.dispatch('getCategories');
+      await this.$store.dispatch('searchByCompany', { query: '', basin: 'all' });
+      this.$router.push('/create-bid/');
+    }
+  },
+  async created(){
+    await this.getBidTemplates();
   },
   mounted() {
     document.title = "Create Bid - BidOut";

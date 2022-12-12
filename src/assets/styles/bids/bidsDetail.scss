@@ -17,6 +17,27 @@
 }
 
 .bid-detail-module { 
+  .bid-submitted-card {
+    border: 1px solid #F1F1F1;
+    border-radius: 8px;
+    padding: 19px 21px;
+    margin-bottom: 10px;
+    img {
+        width: 40px;
+        height: 40px;
+        object-fit: contain;
+    }
+    .company-title {
+        font-size: 16px;
+        font-weight: 700;
+        color: #0D1139;
+    }
+    .company-submitted {
+        font-size: 15px;
+        font-weight: 500;
+        color: #7A7979;
+    }
+}
   .main-card {
     border-radius: 8px;
   }
@@ -180,6 +201,27 @@
   }
   
   .row-title {
+
+    .status-sec {
+        .intent-title {
+            font-size: 16px;
+            font-weight: 700;
+            color: #201B1B;
+        }
+        .v-input--selection-controls {
+            margin-top: 15px;
+            padding-top: 4px;
+        }
+        .v-input--radio-group__input {
+            column-gap: 10px;
+        }
+        .v-label {
+            font-size: 15px;
+            font-weight: 500;
+            color: #201B1B;
+            
+        }
+    }
     .bid-title {
       font-family: 'Mulish',sans-serif;
       font-size: 20px;
@@ -389,7 +431,185 @@
         }
       }
     }
-  
+    
+    .bid-detail-supplier {
+        .no-data {
+          text-align: center;
+          color: #959595;
+        }
+        .bid-row {
+          border-bottom: 1px solid #f1f1f1;
+         .row {
+            margin-bottom: -18px;
+            margin-top: -18px;
+         }
+          .title-desc {
+            font-size: 15px;
+            font-weight: 700;
+            color: #201B1B;
+          }
+
+          .title-brief {
+            font-size: 15px;
+            font-weight: 400;
+            color: #7A7979;
+          }
+          .bid-desc {
+           line-height: 28px;
+          }
+     
+          }
+        .supplier-attachment {
+            border-top: 1px solid #f1f1f1;
+        }
+
+        .supplier-note {
+            background-color: #FBFBFB;
+           border-radius: 3px;
+           padding: 16px;
+           margin-top: 20px;
+           font-size: 16px;
+           color: #5C5C5C
+
+        }
+
+        .none-class {
+
+            color: #959595;
+
+        }
+        .bid-row-2 {
+          border-bottom: 1px solid #f1f1f1;
+          .team-member {
+            row-gap: 35px;
+            column-gap: 128px;
+            .flex-child {
+              width: 25%;
+            }
+          }
+          .template-table-style {
+            table {
+              thead {
+                tr {
+                  padding-left: 24px;
+                  padding-right: 24px;
+                  th {
+                    color: #000000;
+                    font-size: 16px;
+                    font-weight: 700;
+                    &:first-child {
+                      padding-left: 26px;
+                    }
+                  }
+                }
+              }
+              tbody {
+                tr {
+                  padding-left: 24px;
+                  padding-right: 24px;
+                  td {
+                    color: #5C5C5C;
+                    font-size: 15px;
+                    font-weight: 400;
+                    padding-top: 16px;
+                    padding-bottom: 16px;
+                    padding-left: 26px;
+                  }
+                }
+                tr:nth-of-type(even) {
+                  background-color: #f1f1f1;
+                }
+              }
+            }
+          }
+          .attachment-list-style {
+            margin-top: 16px;
+            table {
+              thead {
+                tr {
+                  th {
+                    color: #000;
+                    font-weight: 700;
+                    font-size: 16px;
+                  }
+                }
+              }
+              tbody {
+                tr {
+                  td {
+                    border-bottom: 0;
+                    color: #0d1139;
+                    font-size: 16px;
+                    font-weight: 600;
+                    height: 56px;
+                    padding-left: 24px;
+                  }
+                }
+              }
+            }
+          }
+    
+      
+        }
+        .bid-row-3 {
+            .attachment-list-style {
+                margin-top: 20px;
+                table {
+                  thead {
+                    tr {
+                      th {
+                        color: #000;
+                        font-weight: 700;
+                        font-size: 16px;
+                      }
+                    }
+                  }
+                  tbody {
+                    tr {
+                      td {
+                        border-bottom: 0;
+                        color: #0d1139;
+                        font-size: 16px;
+                        font-weight: 600;
+                        height: 56px;
+                        padding-left: 24px;
+                      }
+                    }
+                  }
+                }
+              }
+          .question-sub-section {
+            border-bottom: 1px solid #f1f1f1;
+            padding-bottom: 16px;
+            padding-top: 23px;
+            .sub-section-title {
+              font-weight: 700;
+              font-size: 16px;
+              color: #201B1B;
+              margin-top: 10px;
+            }
+            .operational-ques {
+              .first-child {
+                font-weight: 600;
+                font-size: 14px;
+                color: black;
+                padding-left: 40px;
+                
+              }
+              .second-child {
+                font-weight: 600;
+                font-size: 14px;
+                color: #959595;
+              }
+            }
+          }
+        }
+
+       
+      }
+
+
+
     .broadcast-tab {
       .broadcast-desc {
         margin-top: 7px;
@@ -404,11 +624,47 @@
     }
   
     .qanda-section {
+      .q-title-detail {
+        margin: 60px 293px 0 293px;
+        font-weight: 600;
+        font-size: 16px;
+      }
       .badge {
         font-weight: 700;
         font-size: 16px;
       }
-  
+      
+      .edit-section {
+        .save-button {
+          font-size: 14px;
+          border-radius: 6px;
+          font-weight: 700;
+          color: white;
+
+          
+        }
+      }
+      .main-section {
+        .save-button {
+          font-size: 14px;
+          border-radius: 3px;
+          font-weight: 700;
+          color: #201B1B;
+          background-color: white !important;
+          border: 1px solid;
+          border-color: #EAE9E9 !important;
+          
+        }
+        .v-input {
+          &__slot {
+           fieldset {
+               border-color: #EAE9E9;
+             }
+          }
+         
+         }
+      }
+
       .v-expansion-panels {
         margin-top: 20px;
         .v-expansion-panel {
@@ -443,6 +699,8 @@
         font-weight: 700;
         .sub-title {
           font-weight: 500;
+          font-size: 14px;
+          color: #B8B8B8;
         }
       }
     }
@@ -895,7 +1153,7 @@
           }
         }
         .none-class {
-          color: #b8b8b8;
+          color: #959595;
         }
   
         .subscript {
@@ -913,7 +1171,221 @@
         margin-left: 26px;
       }
     }
-  
+    
+        .bid-submission-tab {
+        overflow-x: scroll;
+        .save-button {
+            font-size: 16px;
+            border-radius: 8px;
+          }
+        .title-line {
+            font-size: 18px;
+            padding-left: 19px;
+            font-weight: 700;
+        }
+        .v-text-field__prefix {
+            color: #5C5C5C;
+            font-weight: 700;
+            font-size: 14px;
+        }
+
+        
+        .supplier-note-add {
+            border-top: 1px solid #f1f1f1;
+            .v-input {
+                &__slot {
+                 fieldset {
+                     border-color: #EAE9E9;
+                   }
+                }
+               
+               }
+        }
+
+        .template-table-style {
+          .v-text-field__details {
+            padding-left: 0px;
+          }
+            .v-input {
+                &__slot {
+                 min-height: 29px !important;
+                 width: 120px;
+
+                }
+               
+               }
+            .unit-class {
+                .unit {
+                    width: 30%
+                }
+            }
+
+            .no-bid {
+                background-color: #F03F20;
+                border: 1px solid #DB2100;
+                color:white;
+                border-radius: 2px;
+                padding: 11px 6px;
+                width: 100px;
+                font-size: 14px;
+                font-weight: 600;
+                height: 29px;
+            }
+          table {
+            thead {
+              tr {
+                padding-right: 17px;
+                th {
+                  color: #000000;
+                  font-size: 15px;
+                  font-weight: 700;
+                  &:first-child {
+                    padding-left: 19px;
+                  }
+                }
+              }
+            }
+            tbody {
+                tr:hover {
+                    background-color: transparent !important;
+                 }
+              tr {
+                padding-left: 17px;
+                padding-right: 17px;
+                td {
+                  color: #5C5C5C;
+                  font-size: 15px;
+                  font-weight: 400;
+                  padding-top: 0px;
+                  padding-bottom: 0px;
+                  padding-left: 17px;
+                }
+                td:first-child {
+                  width: 29%;
+                  padding-left: 19px;
+                }
+                td:nth-child(2) {
+                    width: 22%;
+                }
+                td:nth-child(3) {
+                    width: 9%;
+                }
+                td:nth-child(4) {
+                    width: 8%;
+                }
+                td:nth-child(5) {
+                    width: 7%;
+                }
+              }
+              tr:nth-of-type(even) {
+                background-color: #fbfbfb;
+              }
+            }
+          }
+        }
+    
+        .title-detail-supplier {
+          font-size: 16px;
+          font-weight: 700;
+          line-height: 25px;
+          margin-left: 26px;
+        }
+        
+        .attachment-list-style {
+            margin-top: 20px;
+            .delete-class {
+                cursor: pointer;
+            }
+            table {
+              tbody {
+                tr {
+                  td {
+                    border-bottom: 0;
+                    color: #5C5C5C;
+                    font-size: 15px;
+                    font-weight: 400;
+                    height: 45px;
+                    padding-left: 24px;
+                  }
+                }
+              }
+            }
+          }
+
+
+        .bid-row-3 {
+            .upload-file{
+                border: 1px solid #F1F1F1;
+                border-radius: 8px;
+                font-size: 16px;
+                .v-input{
+                    display: none;
+                }
+            }
+            .question-section-title{
+                border-top: 1px solid #f1f1f1;
+                padding-top: 30px;
+            } 
+            .question-sub-section {
+              border-bottom: 1px solid #f1f1f1;
+              padding-bottom: 16px;
+              padding-top: 23px;
+              .sub-section-title {
+                font-weight: 700;
+                font-size: 16px;
+                color: #201B1B;
+                margin-top: 10px;
+              }
+              .operational-ques {
+                .first-child {
+                  font-weight: 600;
+                  font-size: 14px;
+                  color: black;
+                  padding-left: 40px;
+                  .sub-title {
+                    font-weight: 500;
+                    font-size: 12px;
+                    color: #B8B8B8;
+                  }
+                  
+                }
+       
+                .second-child {
+               
+                    .v-input__slot {
+                        width: 100%;
+                    }
+                    .v-input--selection-controls {
+                        margin-top: 0;
+                        padding-top: 0;
+                    }
+                    .v-text-field {
+                        padding-top: 0;
+                        margin-top: 0;
+                    }
+                  font-weight: 600;
+                  font-size: 14px;
+                  color: #959595;
+                  .v-input--radio-group__input {
+                    column-gap: 10px;
+                }
+
+                .upload-attach {
+                  .doc-list {
+                    width: 300px;
+                    white-space: nowrap;
+                    overflow: hidden;
+                    text-overflow: ellipsis;
+                    text-align: left;
+                  }
+                }
+                }
+              }
+            }
+          }
+      }
+
+
     .audit-tab {
       .a-title-detail {
         margin: 60px 293px 0 293px;
@@ -959,14 +1431,6 @@
           left: 10px;
           top: 29px;
         }
-      }
-    }
-
-    .qanda-section {
-      .q-title-detail {
-        margin: 60px 293px 0 293px;
-        font-weight: 600;
-        font-size: 16px;
       }
     }
   }

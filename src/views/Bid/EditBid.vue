@@ -1,11 +1,14 @@
 <template>
+  <div class="createBid-module content-section fill-height d-flex justify-center align-center"  v-if="loading">
+    <v-progress-circular :width="3" color="green" indeterminate ></v-progress-circular>
+  </div>
   <v-col
     class="createBid-module pa-0 pa-sm-3 pl-sm-0"
     :class="[
       showSideBar ? 'col-md-9 col-12 col-sm-7' : 'mid-content-collapse',
       activityPanel ? 'd-sm-block' : 'd-md-block',
     ]"
-    v-show="!activityPanel"
+    v-show="!activityPanel" v-else
   >
     <div class="mid-content">
       <div class="content-section fill-height pa-0">
@@ -25,9 +28,9 @@
           </v-col>
           <v-col cols="12" md="7" class="text-right">
             <div class="d-flex align-center justify-end">
-              <p class="mb-0 mr-4 auto-text" v-if="draftTime">
+              <!-- <p class="mb-0 mr-4 auto-text" v-if="draftTime">
                 <strong>Autosaved Draft:</strong> {{ draftTime }}
-              </p>
+              </p> -->
               <v-btn
                 color="#0D9648"
                 :disabled="!bidDetailsComplete || !lineItemsComplete ? true : false"
@@ -37,7 +40,7 @@
                 large
                 @click="publishBid"
               >
-                Publish Bid
+                Save Bid
               </v-btn>
             </div>
           </v-col>
@@ -48,7 +51,7 @@
             class="bids-tabs"
             fixed-tabs
             hide-slider
-            
+           
           >
             <v-tab
               v-for="(item, index) in tabs"
@@ -88,49 +91,49 @@
           </v-tabs>
           <v-tabs-items v-model="currentItem">
             <v-tab-item value="tab-1">
-              <bid-details
+              <edit-bid-details
                 @changetab="ChangeT($event)"
                 @validation="validateValue($event)"
-              ></bid-details>
+              ></edit-bid-details>
             </v-tab-item>
             <v-tab-item value="tab-2">
-              <SupplierSection
+              <EditSupplierSection
                 @changetab="ChangeT($event)"
                 @validation="validateSupplier($event)"
-              ></SupplierSection>
+              ></EditSupplierSection>
             </v-tab-item>
             <v-tab-item value="tab-3">
-              <team-members
+              <edit-team-members
                 @changetab="ChangeT($event)"
                 @validation="validateTeam($event)"
-              ></team-members>
+              ></edit-team-members>
             </v-tab-item>
             <v-tab-item
 
               value="tab-4"
               class="bidline-tab"
             >
-              <bid-lines
+              <edit-bid-lines
                 @changetab="ChangeT($event)"
                 @validation="validateItems($event)"
-              ></bid-lines>
+              ></edit-bid-lines>
             </v-tab-item>
             <v-tab-item
 
               value="tab-5"
               class="attachment-tab mt-5"
             >
-              <attachment
+              <edit-attachment
                 @changetab="ChangeT($event)"
                 @validation="validateAttachment($event)"
-              ></attachment>
+              ></edit-attachment>
             </v-tab-item>
             <v-tab-item
 
               value="tab-6"
               class="question-tab mt-5"
             >
-              <question-section2></question-section2>
+              <edit-question-section2></edit-question-section2>
             </v-tab-item>
           </v-tabs-items>
         </div>
@@ -140,22 +143,22 @@
 </template>
 <script>
 import { mapGetters, mapActions,mapState } from 'vuex';
-import SupplierSection from '../../components/BidTabs/SupplierSection.vue';
-import TeamMembers from '../../components/BidTabs/TeamMembers.vue';
-import BidLines from '../../components/BidTabs/BidLines.vue';
-import Attachment from '../../components/BidTabs/Attachment.vue';
-import BidDetails from '../../components/BidTabs/BidDetails.vue';
-import QuestionSection2 from '../../components/BidTabs/QuestionSection2.vue';
+import EditSupplierSection from '../../components/BidTabs/SupplierSection.vue';
+import EditTeamMembers from '../../components/BidTabs/TeamMembers.vue';
+import EditBidLines from '../../components/BidTabs/BidLines.vue';
+import EditAttachment from '../../components/BidTabs/Attachment.vue';
+import EditBidDetails from '../../components/BidTabs/BidDetails.vue';
+import EditQuestionSection2 from '../../components/BidTabs/QuestionSection2.vue';
 
 export default {
   name: 'NotCompleted',
   components: {
-    SupplierSection,
-    TeamMembers,
-    BidLines,
-    Attachment,
-    BidDetails,
-    QuestionSection2,
+    EditSupplierSection,
+    EditTeamMembers,
+    EditBidLines,
+    EditAttachment,
+    EditBidDetails,
+    EditQuestionSection2,
   },
 
   data() {
@@ -219,9 +222,12 @@ export default {
       }
       return false;
     },
+    loading(){
+     return this.$store.getters.pageLoader;
+    }, 
   },
   methods: {
-    ...mapActions(["updateDraftBid"]),
+    ...mapActions(["updateBid","getUpdateBid","publishUpdateBid"]),
     ...mapState(["invitedSuppliers"]),
     ChangeT(tab) {
       this.currentItem = tab;
@@ -251,21 +257,26 @@ export default {
     },
     async publishBid() {
       try {
-        const serial = await this.$store.dispatch('publishBid');
-        console.log(serial);
-        this.$router.push(`/view-bids/${serial}?new=true`);
+        await this.publishUpdateBid({serial:this.$route.params.serial});
+        this.$router.push(`/view-bids/${this.$route.params.serial}`);
         this.$store.commit('setDraftBidsList', null);
+        this.$store.commit('setBidData', null);
       } catch (error) {
         console.log(error);
       }
     },
     async updateDraft(){
-      await this.updateDraftBid({'supplier': this.$store.state.bid.invitedSuppliers});
+      await this.updateBid({'supplier': this.$store.state.bid.invitedSuppliers});
     }
   },
+  async created(){
+    await this.getUpdateBid({id: this.$store.getters.userInfo.id, serial:this.$route.params.serial, company: this.$store.getters.userInfo.company.company})
+  },
   mounted() {
-    document.title = 'Create Template - BidOut';
-    this.users = JSON.parse(localStorage.getItem('userData')).user;
+    document.title = 'Create Bid - BidOut';
+    this.users = this.userDatas;
+    console.log(this.$route.params.serial,'ddd',this.userDatas.id)
+    
   },
 };
 </script>

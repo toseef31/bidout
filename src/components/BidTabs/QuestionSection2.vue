@@ -138,6 +138,7 @@
                       inset
                       class="mr-4 mt-0"
                       hide-details
+                      @change="updateRequired"
                     ></v-switch>
                     <span class="text-muted">Required Question </span>
                   </div>
@@ -239,6 +240,7 @@
                         inset
                         class="mr-4 mt-0"
                         hide-details
+                        @change="updateRequired"
                       ></v-switch>
                       <span class="text-muted">Required Question </span>
                     </div>
@@ -308,6 +310,7 @@
                         inset
                         class="mr-4 mt-0"
                         hide-details
+                        @change="updateRequired"
                       ></v-switch>
                       <span class="text-muted">Required Question </span>
                     </div>
@@ -387,6 +390,7 @@
                         inset
                         class="mr-4 mt-0"
                         hide-details
+                        @change="updateRequired"
                       ></v-switch>
                       <span class="text-muted">Required Question </span>
                     </div>
@@ -456,7 +460,7 @@ export default {
     },
   },
   methods: {
-    ...mapActions(['updateDraftBid']),
+    ...mapActions(['updateDraftBid','updateTemplate','updateBid']),
     createCategory() {
       const title = 'add your category title here';
       const data = {
@@ -539,7 +543,13 @@ export default {
       this.questionStatus = true;
     },
     updateQuestion() {
-      this.updateDraftBid({ questions: this.categories });
+      if(this.$route.name == 'EditBid'){
+        this.updateBid({ questions: this.categories });
+      }else if(this.$route.name == 'EditTemplate'){
+        this.updateTemplate({ questions: this.categories });
+      }else{
+        this.updateDraftBid({ questions: this.categories });
+      }
     },
     deleteQuestion(index) {
       this.categories.splice(index, 1);
@@ -556,10 +566,19 @@ export default {
       this.$store.commit('setQuestions',this.categories);
       this.questionStatus = true;
     },
+    updateRequired(){
+      this.$store.commit('setQuestions',this.categories);
+    },
     savedraftOnInterval(){
       const timer = setInterval(() => {
         if(this.questionStatus == true){
-          this.updateDraftBid({ questions: this.categories });
+          if(this.$route.name == 'EditBid'){
+            this.updateBid({ questions: this.categories });
+          }else if(this.$route.name == 'EditTemplate'){
+            this.updateTemplate({ questions: this.categories });
+          }else{
+            this.updateDraftBid({ questions: this.categories });
+          }
           this.questionStatus = false;
         }
       }, 60000);
@@ -570,6 +589,10 @@ export default {
     },
   },
   mounted(){
+    if(this.$store.getters.bidData.questions || this.$store.getters.bidData.questions.length > 0)
+    {
+      this.categories = this.$store.getters.bidData.questions;
+    }
     this.savedraftOnInterval();
   }
 };

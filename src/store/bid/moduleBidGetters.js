@@ -47,6 +47,9 @@ export default {
   bidDetailsComplete(state) {
     return state.bidDetailsComplete;
   },
+  bidTemplates(state){
+     return state.bidTemplates;
+   },
   showSuccessDeleteBid(state) {
     return state.alertDeleteBidSuccess;
   },
@@ -59,7 +62,43 @@ export default {
   bidSerial(state) {
     return state.bidSerial;
   },
+  singleTemplate(state) {
+    return state.singleTemplate;
+   },
   invitedSuppliersData(state) {
     return state.invitedSuppliersData;
+  },
+  bidIntent(state) {
+    return state.bidIntent;
+  },
+  supplierAttachment(state) {
+    return state.supplierAttachment;
+  },
+  userType(state) {
+    return state.userType;
+  },
+  intentId(state) {
+    return state.intentId;
+  },
+  isBidSubmitted(state) {
+    return state.isBidSubmitted;
+  },
+  supplierBid(state) {
+    return state.supplierBid;
+  },
+  qAndA(state) {
+    return state.qAndA;
+  },
+  draftBidData(state) {
+    return state.draftBidData;
+  },
+  draftBidsListId(state) {
+    return state.draftBidsListId;
+  },
+  unansweredQuestionCount(state) {
+    return state.unansweredQuestionCount;
+  },
+  invitedNewSuppliers(state) {
+    return state.invitedNewSuppliers;
   },
 };
