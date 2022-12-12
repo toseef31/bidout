@@ -188,17 +188,19 @@ export default {
     },
   },
   async created(){
+   let scriptId = "map-api-script";
+   let mapAlreadyAttached = !!document.getElementById(scriptId);
+   if(!mapAlreadyAttached){
     let mapScript = document.createElement('script')
-    await mapScript.setAttribute('src', 'https://maps.googleapis.com/maps/api/js?key='+import.meta.env.VITE_GOOGLE_MAP+'&libraries=places')
+    mapScript.id = scriptId;
+    mapScript.src = 'https://maps.googleapis.com/maps/api/js?key='+import.meta.env.VITE_GOOGLE_MAP+'&libraries=places';
     document.head.appendChild(mapScript);
     this.users = JSON.parse(localStorage.getItem("userData")).user;
+   }
+  },
+  async updated(){
     await this.getAllLocations();
     await this.getLocation();
-    
-    
-  },
-  updated(){
-    
   },
   mounted() {
     document.title = "Dashboard - BidOut";
