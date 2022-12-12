@@ -17,6 +17,7 @@
 }
 
 .bid-detail-module { 
+  overflow-x: auto;
   .bid-submitted-card {
     border: 1px solid #F1F1F1;
     border-radius: 8px;
@@ -934,12 +935,15 @@
         font-weight: 600;
         font-size: 16px;
       }
-      overflow-x: auto;
-      .template-table-style {
+   
+      .template-table-style-sub {
         table {
+          overflow-x: auto;
+          white-space: nowrap;
+         
+       
           thead {
             tr {
-     
               padding-right: 20px;
               th {
                 color: #000000;
@@ -947,6 +951,7 @@
                 font-weight: 700;
                 &:first-child {
                   padding-left: 26px;
+                
                 }
               }
             }
@@ -977,6 +982,10 @@
   
       .template-table-style-odd {
         table {
+          display: block;
+          overflow-x: auto;
+          white-space: nowrap;
+          table-layout: fixed;
           thead {
             tr {
               padding-left: 20px;
@@ -1027,6 +1036,9 @@
          }
         table {
           table-layout: fixed;
+          display: block;
+          overflow-x: auto;
+          white-space: nowrap;
           tbody {
             tr:hover {
               background-color: transparent !important;
@@ -1062,6 +1074,9 @@
         }
         table {
           table-layout: fixed;
+          display: block;
+          overflow-x: auto;
+          white-space: nowrap;
           tbody {
             tr:hover {
               background-color: transparent !important;
@@ -1091,6 +1106,9 @@
         .submission-table-style {
           table {
             table-layout: fixed;
+            display: block;
+            overflow-x: auto;
+            white-space: nowrap;
             tbody {
               tr:hover {
                 background-color: transparent !important;
@@ -1124,6 +1142,9 @@
         .supplier-answer-table-style {
           table {
             table-layout: fixed;
+            display: block;
+            overflow-x: auto;
+            white-space: nowrap;
             tbody {
               tr {
                 padding-left: 24px;
@@ -1173,7 +1194,6 @@
     }
     
         .bid-submission-tab {
-        overflow-x: scroll;
         .save-button {
             font-size: 16px;
             border-radius: 8px;
