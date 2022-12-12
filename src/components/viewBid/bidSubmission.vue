@@ -13,7 +13,7 @@
         <tbody>
           <tr v-for="(item,index) in bidDetail.bidData.lineItems" :key="index">
             <td>{{item.description}}</td>
-           
+
           </tr>
           <!-- <tr v>
             <td class="text-left" v-for="(el,index) in submittedBid[1].lineItems" :key="index">
@@ -23,7 +23,7 @@
               <span v-else>$ {{el.price}} {{item.unit}}</span>
             </td>
           </tr> -->
-          
+
         </tbody>
       </template>
     </v-simple-table>
@@ -421,21 +421,21 @@ export default {
       // for (let i = 0; i < sBid.length; i++) {
       //   this.lineItem.push({
       //     company: sBid[i].company,
-      //     price: 
+      //     price:
       //     data: sBid[i].lineItems.map((el, index) => ({
       //       price: el.price,
       //       description: this.bidDetail.bidData.lineItems[index].description,
       //       unit: this.bidDetail.bidData.lineItems[index].unit,
       //     })),
       //   });
-        // sBid[i].lineItems.forEach((el, index) => {
-        //   this.lineItem[index] = {
-        //     price: el.price,
-        //     description: this.bidDetail.bidData.lineItems[index].description,
-        //     unit: this.bidDetail.bidData.lineItems[index].unit,
-        //   };
-        // });
-      }
+      // sBid[i].lineItems.forEach((el, index) => {
+      //   this.lineItem[index] = {
+      //     price: el.price,
+      //     description: this.bidDetail.bidData.lineItems[index].description,
+      //     unit: this.bidDetail.bidData.lineItems[index].unit,
+      //   };
+      // });
+      // }
 
       console.log('Line Item - ', this.lineItem);
 
