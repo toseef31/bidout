@@ -1,7 +1,10 @@
 <template>
    <v-col class="createBid-module pa-0 pa-sm-3 pl-sm-0 pb-sm-0" :class="[ showSideBar ? 'col-md-9 col-12 col-sm-7' : 'mid-content-collapse', activityPanel ? 'd-sm-block' : 'd-md-block']" v-show="!activityPanel">
       <div class="mid-content">
-        <div class="content-section fill-height">
+        <div class="content-section fill-height d-flex justify-center align-center"  v-if="loading">
+          <v-progress-circular :width="3" color="green" indeterminate ></v-progress-circular>
+        </div>
+        <div class="content-section fill-height" v-else>
           <v-row align="center" justify="space-between" class="px-6 mb-4 mt-2 mx-0">
             <v-col cols="6" class="text-left pl-0">
               <h4>Templates</h4>
@@ -41,7 +44,7 @@
                   <td class="text-left">{{template.createdAt | moment('MM/DD/YYYY')}}</td>
                   <td class="text-left">{{template.userName ? template.userName : 'No name'}}</td>
                   <td class="text-left">{{template.note ? template.note : 'Note not added yet.'}}</td>
-                  <td class="text-left pr-6"><v-btn color="#0D9648" elevation="0" class="white--text text-capitalize">Use Template</v-btn></td>
+                  <td class="text-left pr-6"><v-btn color="#0D9648" elevation="0" class="white--text text-capitalize" @click="useTemplate(template)">Use Template</v-btn></td>
                 </tr>
               </tbody>
             </template>
@@ -79,9 +82,21 @@ export default {
     userDatas(){
         return this.$store.getters.userInfo;
     },
+    loading(){
+        return this.$store.getters.pageLoader;
+    },
   },
   methods: {
     ...mapActions(["getBidTemplates"]),
+    async useTemplate(template){
+      this.$store.commit('setBidData',template);
+      this.$store.state.bid.bidData.statusType = 'templateBid';
+      await this.$store.dispatch('getTeamMembers', this.userDatas.company.company);
+      await this.$store.dispatch('getSalesReps', { query: '', basin: 'all' });
+      await this.$store.dispatch('getCategories');
+      await this.$store.dispatch('searchByCompany', { query: '', basin: 'all' });
+      this.$router.push('/create-bid/');
+    }
   },
   async created(){
     await this.getBidTemplates();
