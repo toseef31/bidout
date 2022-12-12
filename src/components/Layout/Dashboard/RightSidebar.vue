@@ -120,14 +120,14 @@ export default {
       return moment(date).startOf('hour').fromNow();
     },
   },
-  // async created(){
-  //   await this.getActivities(this.$store.getters.userInfo.id);
-  // },
-  updated(){
-
+  async created(){
+    await this.getActivities(this.$store.getters.userInfo.id);
+  },
+  async updated(){
+    // await this.getActivities(this.userDatas.id);
   },
   async mounted() {
-    await this.getActivities(this.userDatas.id);
+    // await this.getActivities(this.userDatas.id);
   }
 };
 </script>
