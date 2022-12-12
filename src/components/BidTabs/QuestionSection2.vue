@@ -138,6 +138,7 @@
                       inset
                       class="mr-4 mt-0"
                       hide-details
+                      @change="updateRequired"
                     ></v-switch>
                     <span class="text-muted">Required Question </span>
                   </div>
@@ -239,6 +240,7 @@
                         inset
                         class="mr-4 mt-0"
                         hide-details
+                        @change="updateRequired"
                       ></v-switch>
                       <span class="text-muted">Required Question </span>
                     </div>
@@ -308,6 +310,7 @@
                         inset
                         class="mr-4 mt-0"
                         hide-details
+                        @change="updateRequired"
                       ></v-switch>
                       <span class="text-muted">Required Question </span>
                     </div>
@@ -387,6 +390,7 @@
                         inset
                         class="mr-4 mt-0"
                         hide-details
+                        @change="updateRequired"
                       ></v-switch>
                       <span class="text-muted">Required Question </span>
                     </div>
@@ -561,6 +565,9 @@ export default {
       this.categories.splice(index, 1);
       this.$store.commit('setQuestions',this.categories);
       this.questionStatus = true;
+    },
+    updateRequired(){
+      this.$store.commit('setQuestions',this.categories);
     },
     savedraftOnInterval(){
       const timer = setInterval(() => {
