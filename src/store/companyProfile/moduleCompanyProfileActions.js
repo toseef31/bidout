@@ -331,26 +331,25 @@ export default {
           console.log(err);
       });
   },
-  addCompanyContacts({commit,dispatch,state}, payload){
-    
-    axios.post('/company/addCompanyContact/',{'companyId':payload.companyId,'accountContacts':payload.accountContacts})
-     .then(responce => {
-      
-      if(responce.status === 200){
-        dispatch("getCompany",payload.companyId)
+  async addCompanyContacts({commit,dispatch,state}, payload){
+    try{
+      commit('setBasinLoading',true)
+    const res = await axios.post('/company/addCompanyContact/',{'companyId':payload.companyId,'accountContacts':payload.accountContacts});
+     
+      if(res.status === 200){
+        await dispatch("getCompany",payload.companyId)
       }
-    }).catch(async(err) => {
+    } catch (err) {
       if(state.apiCounter === 2){
         dispatch('apiSignOutAction')
       }else{
         if(err.response.status === 403){
          await dispatch('refreshToken');
          state.apiCounter = 2;
-         dispatch('addCompanyContacts',payload);
+         await dispatch('addCompanyContacts',payload);
         }
       }
-          console.log(err);
-      });
+    } 
   },
   addCompanyExcutive({commit,dispatch,state}, payload){
     var config = {
