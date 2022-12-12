@@ -123,11 +123,11 @@ export default {
   async created(){
     await this.getActivities(this.$store.getters.userInfo.id);
   },
-  async updated(){
-    // await this.getActivities(this.userDatas.id);
+  updated(){
+    
   },
-  async mounted() {
-    // await this.getActivities(this.userDatas.id);
+  mounted() {
+    
   }
 };
 </script>
