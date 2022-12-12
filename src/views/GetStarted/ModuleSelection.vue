@@ -212,13 +212,6 @@
                 </template>
                 <v-row justify="center mt-10">
                   <v-col cols="12" md="3">
-                    <!-- <template v-if="rfxContractData.length != 0">
-                      <v-btn color="#0D9647" large dense width="100%" height="56" class="font-weight-bold white--text text-capitalize" :disabled="buttonStatus" to="confirmation">Next <v-icon class="pl-2" color="#fff">mdi-arrow-right-circle</v-icon></v-btn>
-                    </template>
-                    <template v-else-if="ofsStandrdContractData != 0 && rfxContractData.length != 0">
-                      
-                      <v-btn color="#0D9647" large dense width="100%" height="56" class="font-weight-bold white--text text-capitalize" :disabled="buttonStatus" to="confirmation">Next <v-icon class="pl-2" color="#fff">mdi-arrow-right-circle</v-icon></v-btn>
-                    </template> -->
 
                     <template v-if="ofsContractData && ofsContractData.length > 0">
                       <template v-if="ofsContractData[0].contractType == 'ofs-premium'">
