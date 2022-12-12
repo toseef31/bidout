@@ -13,7 +13,14 @@
         <tbody>
           <tr v-for="(item,index) in bidDetail.bidData.lineItems" :key="index">
             <td>{{item.description}}</td>
-
+            <template v-for="(submission, submissionIndex) in bidDetail.supplierSubmissions">
+              <td v-if="submission.lineItems[index].price === 'NO_BID'">
+                <v-icon color="#F32349">mdi-close</v-icon> No Bid
+              </td>
+              <td v-else>
+                $ {{submission.lineItems[index].price}} {{bidDetail.bidData.lineItems[index].unit}}
+              </td>
+            </template>
           </tr>
           <!-- <tr v>
             <td class="text-left" v-for="(el,index) in submittedBid[1].lineItems" :key="index">
