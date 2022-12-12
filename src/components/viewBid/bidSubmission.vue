@@ -418,16 +418,16 @@ export default {
       //   // });
       // }
 
-      for (let i = 0; i < sBid.length; i++) {
-        this.lineItem.push({
-          company: sBid[i].company,
-          price: 
-          data: sBid[i].lineItems.map((el, index) => ({
-            price: el.price,
-            description: this.bidDetail.bidData.lineItems[index].description,
-            unit: this.bidDetail.bidData.lineItems[index].unit,
-          })),
-        });
+      // for (let i = 0; i < sBid.length; i++) {
+      //   this.lineItem.push({
+      //     company: sBid[i].company,
+      //     price: 
+      //     data: sBid[i].lineItems.map((el, index) => ({
+      //       price: el.price,
+      //       description: this.bidDetail.bidData.lineItems[index].description,
+      //       unit: this.bidDetail.bidData.lineItems[index].unit,
+      //     })),
+      //   });
         // sBid[i].lineItems.forEach((el, index) => {
         //   this.lineItem[index] = {
         //     price: el.price,
