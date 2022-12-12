@@ -15,7 +15,6 @@ export default {
       }
     } catch (err) {
       if (state.apiCounter === 2) {
-        console.log(state.apiCounter, 'counter');
         dispatch('apiSignOutAction');
       } else if (err.response.status === 403) {
         await dispatch('refreshToken');
@@ -415,7 +414,6 @@ export default {
       }
     } catch (err) {
       if (state.apiCounter === 2) {
-        console.log(state.apiCounter, 'counter');
         dispatch('apiSignOutAction');
       } else if (err.response.status === 403) {
         await dispatch('refreshToken');
@@ -708,17 +706,6 @@ export default {
       console.log(err);
     }
   },
-  // async inviteNewSupplier({ commit, state }, payload) {
-  //   const res = await axios.post('bid/inviteSupplier/', {
-  //     firstName: payload.firstName, lastName: payload.lastName, company: payload.company, phone: payload.phone, email: payload.email, bidTitle: payload.bidTitle, bidType: payload.bidType, bidDueDate: payload.bidDueDate, bidDueTime: payload.bidDueTime,
-  //   });
-  //   if (res.status == 200) {
-  //     commit('setNewSupplier', res.data);
-  //     // localStorage.removeItem('bidData');
-  //     console.log(res.data);
-  //     commit('setItemBidData', res.data);
-  //   }
-  // },
   async uploadBidAttach({ commit, state, dispatch }, payload) {
     const config = {
       headers: {
@@ -1112,7 +1099,7 @@ export default {
     try {
       const res = await axios.post('bid/editTemplateBid/', formData, config);
       if (res.status == 200) {
-        console.log(res);
+        
         // commit('setDraftBidsList',null);
         commit('setDraftTime', new Date().toLocaleString());
       } else {
@@ -1186,7 +1173,6 @@ export default {
       );
 
       if (res.status === 200) {
-        console.log(res.data, 'dd');
         dispatch('getTeamMembers', payload.company);
         dispatch('getSalesReps', { query: '', basin: 'all' });
         dispatch('getCategories');
@@ -1317,7 +1303,7 @@ export default {
     try {
       const res = await axios.post('bid/editBid/', formData, config);
       if (res.status == 200) {
-        console.log(res);
+        
         // commit('setDraftBidsList',null);
         commit('setDraftTime', new Date().toLocaleString());
       } else {
