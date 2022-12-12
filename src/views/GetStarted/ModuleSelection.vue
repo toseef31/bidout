@@ -212,21 +212,24 @@
                 </template>
                 <v-row justify="center mt-10">
                   <v-col cols="12" md="3">
-                    <template v-if="rfxContractData.length != 0">
+                    <!-- <template v-if="rfxContractData.length != 0">
                       <v-btn color="#0D9647" large dense width="100%" height="56" class="font-weight-bold white--text text-capitalize" :disabled="buttonStatus" to="confirmation">Next <v-icon class="pl-2" color="#fff">mdi-arrow-right-circle</v-icon></v-btn>
                     </template>
                     <template v-else-if="ofsStandrdContractData != 0 && rfxContractData.length != 0">
                       
                       <v-btn color="#0D9647" large dense width="100%" height="56" class="font-weight-bold white--text text-capitalize" :disabled="buttonStatus" to="confirmation">Next <v-icon class="pl-2" color="#fff">mdi-arrow-right-circle</v-icon></v-btn>
-                    </template>
+                    </template> -->
 
-                    <template v-else-if="ofsContractData && ofsContractData.length > 0">
+                    <template v-if="ofsContractData && ofsContractData.length > 0">
                       <template v-if="ofsContractData[0].contractType == 'ofs-premium'">
                         <v-btn color="#0D9647" large dense width="100%" height="56" class="font-weight-bold white--text text-capitalize" :disabled="buttonStatus" to="payment">Next <v-icon class="pl-2" color="#fff">mdi-arrow-right-circle</v-icon></v-btn>
                       </template>
                       <template v-else>
                         <v-btn color="#0D9647" large dense width="100%" height="56" class="font-weight-bold white--text text-capitalize" :disabled="buttonStatus" to="confirmation">Next <v-icon class="pl-2" color="#fff">mdi-arrow-right-circle</v-icon></v-btn>
                       </template>
+                    </template>
+                    <template v-else>
+                      <v-btn color="#0D9647" large dense width="100%" height="56" class="font-weight-bold white--text text-capitalize" :disabled="buttonStatus" to="confirmation">Next <v-icon class="pl-2" color="#fff">mdi-arrow-right-circle</v-icon></v-btn>
                     </template>
                     
                   </v-col>
@@ -317,7 +320,7 @@
                   </v-row>
                   <v-row v-else>
                     <v-col cols="12" sm="4" text="left">
-                      <v-btn color="#0D9647" large dense width="260px" height="56" class="font-weight-bold white--text text-capitalize pa-4" :loading="loading" @click="createStandard('ofs')">Confirm Account <v-icon class="pl-2" color="#fff">mdi-arrow-right-circle</v-icon></v-btn>
+                      <v-btn color="#0D9647" large dense width="260px" height="56" class="font-weight-bold white--text text-capitalize pa-4" :disabled="ofsBtn == true ?  false : true" :loading="loading" @click="createStandard('ofs')">Confirm Account <v-icon class="pl-2" color="#fff">mdi-arrow-right-circle</v-icon></v-btn>
                     </v-col>
                   </v-row>
                 </div>
