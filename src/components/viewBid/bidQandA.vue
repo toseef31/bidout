@@ -136,7 +136,7 @@
               </v-btn>
             </div>
           </div>
-        <span class="sub-title mt-4" v-if="item.answer">By {{user.firstName + " " + user.lastName}} (Patterson-UTI) </span>
+        <span class="sub-title mt-4" v-if="item.answer">By {{user.firstName + " " + user.lastName}} ({{user.company.company}}) </span>
         <span class="sub-title mt-1" v-if="item.answer">{{ item.answeredOn._seconds | moment('MM/DD/YYYY')}} - {{ item.answeredOn._seconds | moment('hh:mma')}}</span>
         <span class="mt-2 sub-title" v-if="!item.answer">Not answered yet</span>
       </div>
