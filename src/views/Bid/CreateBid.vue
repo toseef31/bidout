@@ -64,14 +64,6 @@ export default {
       this.$store.state.bid.bidData.id = '';
       this.$store.state.bid.bidData.status = '';
       this.$store.state.bid.bidData.statusType = '';
-      this.$store.state.bid.bidData.attachments = '';
-      this.$store.state.bid.bidData.invitedSuppliers = '';
-      this.$store.state.bid.bidData.invitedTeamMembers = '';
-      this.$store.state.bid.bidData.lineItems = '';
-      this.$store.state.bid.bidData.questions = '';
-      this.$store.state.bid.bidData.supplierViews = '';
-      this.$store.state.bid.bidData.userId = '';
-      this.$store.state.bid.bidData.updatedAt = '';
       this.$store.commit('setBidTitle', '');
       this.$store.commit('setBidType', '');
       this.$store.commit('setBidDueDate', '');
