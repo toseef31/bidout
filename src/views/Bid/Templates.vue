@@ -10,7 +10,7 @@
               <h4>Templates</h4>
             </v-col>
             <v-col cols="6" class="text-right pr-0">
-              <p class="mb-0"><router-link to="/manage-templates">View all</router-link></p>
+              <p class="mb-0"><router-link to="/manage-templates">Manage Template</router-link></p>
             </v-col>
           </v-row>
           <v-simple-table class="template-table">

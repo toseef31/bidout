@@ -178,7 +178,7 @@ export default {
         { label: '3pm CST', value: '3pm' },
         { label: '4pm CST', value: '4pm' },
       ],
-      region: ['Gulf Coast', 'Northwest', 'Rockies', 'Mid-Con', 'Permian', 'Arklatex', 'Offshore', 'Other'],
+      region: ['Gulf Coast', 'Northeast', 'Rockies', 'Mid-Con', 'Permian', 'Arklatex', 'Offshore', 'Other'],
       interval: '',
       bidFormData: '',
       formStatus: false,

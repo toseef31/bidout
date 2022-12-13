@@ -70,7 +70,7 @@ export default {
       this.$store.commit('setBidDueTime', '');
       this.$store.commit('setBidRegions', '');
       this.$store.commit('setBidEnabled', '');
-      this.$store.commit('setBidDescription', '');
+      this.$store.commit('setBidDescription', [{ body: '' }]);
       this.$store.commit('setInvitedTeamMembers', null);
       this.$store.commit('setInvitedSuppliersData', null);
       this.$store.commit('setBidlines', null);
