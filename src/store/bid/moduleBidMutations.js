@@ -38,8 +38,8 @@ export default {
   setBidDetailsComplete(state, payload) {
     state.bidDetailsComplete = payload;
   },
-  setBidTemplates(state, payload){
-    state.bidTemplates = payload
+  setBidTemplates(state, payload) {
+    state.bidTemplates = payload;
   },
   setBidViewData(state, payload) {
     state.bidViewData = payload;
@@ -140,5 +140,8 @@ export default {
   },
   setUnansweredQuestionCount(state, payload) {
     state.unansweredQuestionCount = payload;
+  },
+  setAllIntend(state, payload) {
+    state.bidAllIntend = payload;
   },
 };
