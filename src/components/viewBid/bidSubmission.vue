@@ -65,10 +65,12 @@
           <tr>
             <td class="text-left">Supplier Attachments</td>
             <template v-for="(item,index) in bidDetail.supplierSubmissions">
-              <td class="text-left d-flex flex-column" v-if="item.supplierAttachments && item.supplierAttachments.length">
-              <div class="pb-4 d-inline-flex" v-for="(doc,attIndex) in bidDetail.supplierSubmissions[index].supplierAttachments" :key="attIndex">
+              <td class="text-left d-flex flex-column attach flex-wrap" v-if="item.supplierAttachments && item.supplierAttachments.length">
+              <div class="pb-4 attach-group d-inline-flex" v-for="(doc,attIndex) in bidDetail.supplierSubmissions[index].supplierAttachments" :key="attIndex">
             <img
               :src="require('@/assets/images/bids/FilePdf.png')"
+              width="32"
+              height="24"
               class="pr-2"
             />
 
@@ -92,7 +94,7 @@
       <template v-slot:default>
         <tbody>
           <tr v-for="(item,index) in question" :key="index">
-            <td class="text-left"> {{item.title}}</td>
+            <td class="text-left" v-if="item.type !== 'category'"> {{item.title}}</td>
             <template v-for="(ans) in answers">
               <td class="text-left" v-if="ans.answers[index].answer !== 'null' && item.questionType === 'checkbox'">
                {{ans.answers[index].answer === 'true' ? "Yes" : 'No' }}
@@ -113,7 +115,7 @@
             <div class="pl-2">{{ans.answers[index].fileName}}</div>
               </div>
             </td>
-            <td class="text-left " v-if="ans.answers[index].answer === 'null'">
+            <td class="text-left " v-if="ans.answers[index].answer === 'null' && item.type !== 'category'">
               None
             </td>
             </template>
@@ -124,43 +126,26 @@
     </v-simple-table>
   </div>
 
-    <v-simple-table class="button-table-style mt-8" v-if="isAfterDueDate && bidDetail.user_status === 'waiting'">
+    <!-- <v-simple-table class="button-table-style mt-8" v-if="isAfterDueDate && bidDetail.user_status === 'waiting'"> -->
+        <v-simple-table class="button-table-style mt-8" >
       <template v-slot:default>
         <tbody>
           <tr>
             <td class="text-left"></td>
-            <td class="text-left">
-              <v-btn   color="#0d9648" depressed >
+            <template v-for="(item,index) in bidDetail.supplierSubmissions">
+              <td class="text-left">
+              <div class="d-flex flex-column">
+                <v-btn @click="award(item.companyId)"   color="#0d9648" depressed >
             Award Bid
-          </v-btn>
-          <v-btn   color="#F03F20" depressed  class="mt-2">
+              </v-btn>
+              <v-btn @click="disqualify(item.companyId)"   color="#F03F20" depressed  class="mt-2">
             Disqualify Bid
-          </v-btn>
+              </v-btn>
+              </div>
+
             </td>
-            <td class="text-left ">
-              <v-btn   color="#0d9648" depressed >
-            Award Bid
-          </v-btn>
-          <v-btn   color="#F03F20" depressed class="mt-2" >
-            Disqualify Bid
-          </v-btn>
-            </td>
-            <td class="text-left ">
-              <v-btn   color="#0d9648" depressed >
-            Award Bid
-          </v-btn>
-          <v-btn   color="#F03F20" depressed class="mt-2" >
-            Disqualify Bid
-          </v-btn>
-            </td>
-            <td class="text-left ">
-              <v-btn   color="#0d9648" depressed >
-            Award Bid
-          </v-btn>
-          <v-btn   color="#F03F20" depressed class="mt-2" >
-            Disqualify Bid
-          </v-btn>
-            </td>
+            </template>
+
           </tr>
         </tbody>
       </template>
@@ -256,6 +241,8 @@ export default {
   data() {
     return {
       answers: [],
+      user: '',
+      loading: false,
     };
   },
   computed: {
@@ -291,9 +278,39 @@ export default {
 
       return moment(currentDate).isAfter(momentDueDate);
     },
+    showLoading() {
+      return this.loading;
+    },
   },
   methods: {
     ...mapActions(['awardCompany', 'rejectCompany']),
+    async award(id) {
+      this.loading = true;
+      console.log('Award -', id);
+      await this.awardCompany({
+        companyId: id,
+        userId: this.user.id,
+        bidId: this.bidDetail.bidData.id,
+        serial: this.$route.params.serial,
+      });
+
+      this.loading = false;
+    },
+    async disqualify(id) {
+      console.log('Disqualify - ', id);
+      this.loading = true;
+      await this.rejectCompany({
+        companyId: id,
+        userId: this.user.id,
+        bidId: this.bidDetail.bidData.id,
+        serial: this.$route.params.serial,
+      });
+
+      this.loading = false;
+    },
+  },
+  mounted() {
+    this.user = this.$store.getters.userInfo;
   },
 };
 </script>

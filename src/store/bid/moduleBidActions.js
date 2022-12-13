@@ -157,8 +157,7 @@ export default {
       });
 
       if (res.status === 200) {
-        localStorage.removeItem('bidData');
-        commit('setBidData', null);
+        commit('setBidViewData', null);
         router.replace({ name: 'ViewBids' });
         commit('setSuccessDeleteBid');
       }
@@ -248,7 +247,10 @@ export default {
       });
 
       if (res.status === 200) {
-        console.log(res);
+        dispatch('getBidBySerial', {
+          id: payload.userId,
+          serial: payload.serial,
+        });
       }
     } catch (err) {
       if (state.apiCounter == 2) {
@@ -269,7 +271,10 @@ export default {
       });
 
       if (res.status === 200) {
-        console.log(res);
+        dispatch('getBidBySerial', {
+          id: payload.userId,
+          serial: payload.serial,
+        });
       }
     } catch (err) {
       if (state.apiCounter == 2) {
