@@ -133,10 +133,6 @@ export default {
           commit('setSupplierBid', res.data.supplierSubmissions);
           commit('setIsBidSubmitted', true);
         }
-
-        if (res.data.user_type === 'buyer') {
-          commit('setSubmittedBids', res.data.supplierSubmissions);
-        }
       } else {
         commit('setPageLoader', false);
         commit('setViewBidError', false);

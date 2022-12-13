@@ -41,15 +41,12 @@ export default {
   bidViewData(state) {
     return state.bidViewData;
   },
-  submittedBid(state) {
-    return state.submittedBids;
-  },
   bidDetailsComplete(state) {
     return state.bidDetailsComplete;
   },
-  bidTemplates(state){
-     return state.bidTemplates;
-   },
+  bidTemplates(state) {
+    return state.bidTemplates;
+  },
   showSuccessDeleteBid(state) {
     return state.alertDeleteBidSuccess;
   },
@@ -64,7 +61,7 @@ export default {
   },
   singleTemplate(state) {
     return state.singleTemplate;
-   },
+  },
   invitedSuppliersData(state) {
     return state.invitedSuppliersData;
   },

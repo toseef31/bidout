@@ -940,8 +940,6 @@
         table {
           overflow-x: auto;
           white-space: nowrap;
-         
-       
           thead {
             tr {
               padding-right: 20px;
@@ -972,6 +970,9 @@
                 width: 30%;
                 padding-left: 26px;
               }
+              td:nth-child(2) {
+                width: 30%
+              }
             }
             tr:nth-of-type(even) {
               background-color: #fbfbfb;
@@ -982,7 +983,6 @@
   
       .template-table-style-odd {
         table {
-          display: block;
           overflow-x: auto;
           white-space: nowrap;
           table-layout: fixed;
@@ -1036,7 +1036,6 @@
          }
         table {
           table-layout: fixed;
-          display: block;
           overflow-x: auto;
           white-space: nowrap;
           tbody {
@@ -1074,7 +1073,6 @@
         }
         table {
           table-layout: fixed;
-          display: block;
           overflow-x: auto;
           white-space: nowrap;
           tbody {
@@ -1106,9 +1104,8 @@
         .submission-table-style {
           table {
             table-layout: fixed;
-            display: block;
             overflow-x: auto;
-            white-space: nowrap;
+      
             tbody {
               tr:hover {
                 background-color: transparent !important;
@@ -1132,7 +1129,7 @@
                   font-weight: 700;
                 }
                 td:nth-child(2) {
-                  width: 18.27%
+                  width: 30%
                 }
               }
             }
@@ -1142,9 +1139,8 @@
         .supplier-answer-table-style {
           table {
             table-layout: fixed;
-            display: block;
             overflow-x: auto;
-            white-space: nowrap;
+           
             tbody {
               tr {
                 padding-left: 24px;
@@ -1164,7 +1160,7 @@
                   padding-left: 26px;
                 }
                 td:nth-child(2) {
-                  width: 18.27%
+                  width: 30%
                 }
               }
               tr:nth-of-type(odd) {

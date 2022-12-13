@@ -1,19 +1,18 @@
 <template>
   <v-col class="my-7 pa-0 bid-submission-tab" align="start">
-  {{bidsSubmitted}}
 
     <v-simple-table class="template-table-style-sub mt-2">
       <template v-slot:default>
         <thead>
           <tr  >
             <th class="text-left">Line Items</th>
-            <th class="text-left" v-for="(item,index) in submittedBid" :key="index">{{ item.company}}</th>
+            <th class="text-left" v-for="(item,index) in bidDetail.supplierSubmissions" :key="index">{{ item.company}}</th>
           </tr>
         </thead>
         <tbody>
           <tr v-for="(item,index) in bidDetail.bidData.lineItems" :key="index">
             <td>{{item.description}}</td>
-            <template v-for="(submission, submissionIndex) in bidDetail.supplierSubmissions">
+            <template v-for="(submission) in bidDetail.supplierSubmissions">
               <td v-if="submission.lineItems[index].price === 'NO_BID'">
                 <v-icon color="#F32349">mdi-close</v-icon> No Bid
               </td>
@@ -22,61 +21,24 @@
               </td>
             </template>
           </tr>
-          <!-- <tr v>
-            <td class="text-left" v-for="(el,index) in submittedBid[1].lineItems" :key="index">
-              <span v-if="el.price === 'NO_BID'"
-                ><v-icon color="#F32349">mdi-close</v-icon> No Bid</span
-              >
-              <span v-else>$ {{el.price}} {{item.unit}}</span>
-            </td>
-          </tr> -->
-
         </tbody>
       </template>
     </v-simple-table>
- <!--
+
 <div class="submission-section">
     <v-simple-table class="submission-table-style">
       <template v-slot:default>
         <tbody>
-          <tr>
-            <td class="text-left">Bid Example Pre-BidOut Period</td>
-            <td class="text-left">
-              $ 22,170.20
-            </td>
-            <td class="text-left ">
-              $ 22,170.20
-            </td>
-            <td class="text-left ">
-              $ 22,170.20
-            </td>
-            <td class="text-left ">
-              $ 22,170.20
-            </td>
-          </tr>
-          <tr>
-            <td class="text-left">Bid Example Post-BidOut Period</td>
-            <td class="text-left">
-              <v-icon color="#0D9648">mdi-arrow-down-thin-circle-outline</v-icon>
-          <span class="ml-1">$ 22,170.20</span>
-
-          <div class="subscript">Saving 22.5%</div>
-            </td>
-            <td class="text-left ">
-              $ 22,170.20
-            </td>
-            <td class="text-left ">
-              <v-icon color="#0D9648">mdi-arrow-down-thin-circle-outline</v-icon>
-          <span class="ml-1">$ 22,170.20</span>
-
-          <div class="subscript">Saving 22.5%</div>
-            </td>
-            <td class="text-left ">
-              <v-icon color="#0D9648">mdi-arrow-down-thin-circle-outline</v-icon>
-          <span class="ml-1">$ 22,170.20</span>
-
-          <div class="subscript">Saving 22.5%</div>
-            </td>
+          <tr v-for="(item,index) in bidDetail.bidData.lineItems" :key="index">
+            <td class="text-left" v-if="item.required"> {{item.description}}</td>
+            <template v-if="item.required" v-for="(submission) in bidDetail.supplierSubmissions">
+              <td v-if="submission.lineItems[index].price === 'NO_BID'">
+                <v-icon color="#F32349">mdi-close</v-icon> No Bid
+              </td>
+              <td v-else>
+                $ {{submission.lineItems[index].price}} {{bidDetail.bidData.lineItems[index].unit}}
+              </td>
+            </template>
           </tr>
         </tbody>
       </template>
@@ -88,77 +50,36 @@
       <template v-slot:default>
         <tbody>
           <tr>
-            <td class="text-left">Supplier comment</td>
-            <td class="text-left">
-              Thanks for letting us have this opportunity, we can provide you 2Net10
-          on this as well.
+            <td class="text-left">Supplier Note</td>
+            <template v-for="(item) in bidDetail.supplierSubmissions">
+              <td class="text-left" v-if="item.supplierNote && item.supplierNote !== ''">
+              {{item.supplierNote}}
             </td>
-            <td class="text-left ">
+
+            <td class="text-left " v-else>
               <span class="none-class">None provided.</span>
             </td>
-            <td class="text-left ">
-              We can start this project until 10/01/2022.
-            </td>
-            <td class="text-left ">
-              <span class="none-class">None provided.</span>
-            </td>
+            </template>
+
           </tr>
           <tr>
-            <td class="text-left">Supplier attachments</td>
-            <td class="text-left">
-              <div class="pb-4 d-inline-flex">
+            <td class="text-left">Supplier Attachments</td>
+            <template v-for="(item,index) in bidDetail.supplierSubmissions">
+              <td class="text-left d-flex flex-column" v-if="item.supplierAttachments && item.supplierAttachments.length">
+              <div class="pb-4 d-inline-flex" v-for="(doc,attIndex) in bidDetail.supplierSubmissions[index].supplierAttachments" :key="attIndex">
             <img
               :src="require('@/assets/images/bids/FilePdf.png')"
               class="pr-2"
             />
 
-            <div>BHI-COI.pdf</div>
-          </div>
-          <div class="pb-4 d-inline-flex">
-            <img
-              :src="require('@/assets/images/bids/FilePdf.png')"
-              class="pr-2"
-            />
-            <span>BHI-COI.pdf</span>
-          </div>
-          <div class="d-inline-flex">
-            <img
-              :src="require('@/assets/images/bids/FilePdf.png')"
-              class="pr-2"
-            />
-            <span>BHI-COI.pdf</span>
+            <div>{{doc.fileName}}</div>
           </div>
             </td>
-            <td class="text-left ">
+            <td class="text-left " v-else>
               <span class="none-class">None provided.</span>
             </td>
-            <td class="text-left ">
-              <span class="none-class">None provided.</span>
-            </td>
-            <td class="text-left ">
-              <div class="pb-4 d-inline-flex">
-            <img
-              :src="require('@/assets/images/bids/FilePdf.png')"
-              class="pr-2"
-            />
+            </template>
 
-            <div>BHI-COI.pdf</div>
-          </div>
-          <div class="pb-4 d-inline-flex">
-            <img
-              :src="require('@/assets/images/bids/FilePdf.png')"
-              class="pr-2"
-            />
-            <span>BHI-COI.pdf</span>
-          </div>
-          <div class="d-inline-flex">
-            <img
-              :src="require('@/assets/images/bids/FilePdf.png')"
-              class="pr-2"
-            />
-            <span>BHI-COI.pdf</span>
-          </div>
-            </td>
           </tr>
         </tbody>
       </template>
@@ -170,99 +91,38 @@
       <v-simple-table class="supplier-answer-table-style mt-3">
       <template v-slot:default>
         <tbody>
-          <tr>
-            <td class="text-left"> Are you able to start this work on 9/1/2022 and end by 9/10/2022?</td>
-            <td class="text-left">
-              Yes
+          <tr v-for="(item,index) in question" :key="index">
+            <td class="text-left"> {{item.title}}</td>
+            <template v-for="(ans) in answers">
+              <td class="text-left" v-if="ans.answers[index].answer !== 'null' && item.questionType === 'checkbox'">
+               {{ans.answers[index].answer === 'true' ? "Yes" : 'No' }}
             </td>
-            <td class="text-left ">
-              Yes
+            <td class="text-left" v-if="ans.answers[index].answer !== 'null' && item.questionType === 'textfield' ||item.questionType === 'textarea'">
+              {{ans.answers[index].answer}}
             </td>
-            <td class="text-left ">
-              Yes
-            </td>
-            <td class="text-left ">
-            No
-            </td>
-          </tr>
-          <tr>
-            <td class="text-left">Please upload your COI</td>
-            <td class="text-left">
+            <td class="text-left" v-if="ans.answers[index].answer !== 'null' && item.questionType === 'uploadFile'">
               <div class="pb-4 d-inline-flex">
-            <img
+            <v-img
               :src="require('@/assets/images/bids/FilePdf.png')"
-              class="pr-2"
+              contain
+              width="32"
+              height="24"
+
             />
 
-            <div>BHI-COI.pdf</div>
-          </div>
+            <div class="pl-2">{{ans.answers[index].fileName}}</div>
+              </div>
             </td>
-            <td class="text-left ">
-              <div class="pb-4 d-inline-flex">
-            <img
-              :src="require('@/assets/images/bids/FilePdf.png')"
-              class="pr-2"
-            />
-
-            <div>BHI-COI.pdf</div>
-          </div>
-            </td>
-            <td class="text-left ">
-              <div class="pb-4 d-inline-flex">
-            <img
-              :src="require('@/assets/images/bids/FilePdf.png')"
-              class="pr-2"
-            />
-
-            <div>BHI-COI.pdf</div>
-          </div>
-            </td>
-            <td class="text-left ">
-              <div class="pb-4 d-inline-flex">
-            <img
-              :src="require('@/assets/images/bids/FilePdf.png')"
-              class="pr-2"
-            />
-
-            <div>BHI-COI.pdf</div>
-          </div>
-            </td>
-          </tr>
-          <tr>
-            <td class="text-left">  Please list any safety incidents in the last 24 months</td>
-            <td class="text-left">
+            <td class="text-left " v-if="ans.answers[index].answer === 'null'">
               None
             </td>
-            <td class="text-left ">
-              None
-            </td>
-            <td class="text-left ">
-              None
-            </td>
-            <td class="text-left ">
-              2 accidents evolving failed equipments, more detail are uploaded
-          here.
-            </td>
-          </tr>
-          <tr>
-            <td class="text-left">   Please provide us your INSet World Number</td>
-            <td class="text-left">
-              54645665
-            </td>
-            <td class="text-left ">
-              56756778
-            </td>
-            <td class="text-left ">
-              8978978
-            </td>
-            <td class="text-left ">
-              89789778
-            </td>
+            </template>
+
           </tr>
         </tbody>
       </template>
     </v-simple-table>
-    </div>
+  </div>
 
     <v-simple-table class="button-table-style mt-8" v-if="isAfterDueDate && bidDetail.user_status === 'waiting'">
       <template v-slot:default>
@@ -305,7 +165,7 @@
         </tbody>
       </template>
     </v-simple-table>
-
+ <!--
     <v-simple-table class="award-table-style mt-8" v-if="isAfterDueDate && bidDetail.user_status !== 'waiting'">
       <template v-slot:default>
         <tbody>
@@ -384,7 +244,7 @@
         </tbody>
       </template>
     </v-simple-table> -->
-    <div class="text-center b-title-detail " v-if="submittedBid.length === 0">There are currently no bid submissions by service providers. </div>
+    <div class="text-center b-title-detail " v-if="bidDetail.supplierSubmissions.length === 0">There are currently no bid submissions by service providers. </div>
   </v-col>
 </template>
 
@@ -395,58 +255,31 @@ import { mapActions } from 'vuex';
 export default {
   data() {
     return {
-      lineItem: [
-      ],
+      answers: [],
     };
   },
   computed: {
     bidDetail() {
       return this.$store.getters.bidViewData;
     },
-    submittedBid() {
-      return this.$store.getters.submittedBid;
-    },
-    bidsSubmitted() {
-      const sBid = this.$store.getters.submittedBid;
-      console.log(sBid);
+    question() {
+      const ques = this.bidDetail.bidData.questions;
+      this.answers = this.bidDetail.supplierSubmissions;
+      const keys = [];
 
-      // for (let i = 0; i < this.bidDetail.bidData.lineItems.length; i++) {
-      //   this.lineItem.push({
-      //     description: this.bidDetail.bidData.lineItems[i].description,
-      //     unit: this.bidDetail.bidData.lineItems[i].unit,
-      //   });
-      //   // sBid[i].lineItems.forEach((el, index) => {
-      //   //   // this.lineItem[i] = {
-      //   //   //   item:
-      //   //   // }
-      //   //   console.log(`${index} - Bid`);
-      //   //   console.log(this.bidDetail.bidData.lineItems[index].description);
-      //   //   console.log(el.price);
-      //   // });
-      // }
+      ques.forEach((el, index) => {
+        if (el.type === 'category') {
+          keys.push(index);
+        }
+      });
 
-      // for (let i = 0; i < sBid.length; i++) {
-      //   this.lineItem.push({
-      //     company: sBid[i].company,
-      //     price:
-      //     data: sBid[i].lineItems.map((el, index) => ({
-      //       price: el.price,
-      //       description: this.bidDetail.bidData.lineItems[index].description,
-      //       unit: this.bidDetail.bidData.lineItems[index].unit,
-      //     })),
-      //   });
-      // sBid[i].lineItems.forEach((el, index) => {
-      //   this.lineItem[index] = {
-      //     price: el.price,
-      //     description: this.bidDetail.bidData.lineItems[index].description,
-      //     unit: this.bidDetail.bidData.lineItems[index].unit,
-      //   };
-      // });
-      // }
+      keys.forEach((el) => ques.splice(el, 1));
 
-      console.log('Line Item - ', this.lineItem);
+      this.answers.forEach((el, index, self) => {
+        keys.forEach((item) => self[index].answers.splice(item, 1));
+      });
 
-      return this.lineItem;
+      return ques;
     },
     isAfterDueDate() {
       const bidDueDate = this.bidDetail.bidData.dueDate;
