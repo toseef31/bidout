@@ -197,6 +197,24 @@ export default {
       }
     }
   },
+
+  async getAllIntent({ commit, dispatch, state }, payload) {
+    try {
+      const res = await axios.get(`intend/getAllIntends/${payload.bidId}`);
+
+      if (res.status === 200) {
+        commit('setAllIntend', res.data);
+      }
+    } catch (err) {
+      if (state.apiCounter == 2) {
+        dispatch('apiSignOutAction');
+      } else if (err.response.status === 403) {
+        await dispatch('refreshToken');
+        state.apiCounter = 2;
+        dispatch('getIntent', payload);
+      }
+    }
+  },
   async updateIntent({ commit, state, dispatch }, payload) {
     try {
       const res = await axios.post('intend/editIntend/', {
@@ -489,6 +507,7 @@ export default {
       }
     }
   },
+
   async saveDraftBid({ commit, dispatch, state }, payload) {
     const config = {
       headers: {
@@ -651,7 +670,7 @@ export default {
       }
     }
     if (state.invitedNewSuppliers != null) {
-      console.log('new',state.invitedNewSuppliers);
+      console.log('new', state.invitedNewSuppliers);
       for (let i = 0; i < state.invitedNewSuppliers.length; i++) {
         formData.append(`invitedNewSuppliers[${i}]`, state.invitedNewSuppliers[i].id);
       }
@@ -735,8 +754,6 @@ export default {
         const userData = res.data;
         return userData;
         // commit('setBidData', null);
-      } else {
-        
       }
     } catch (err) {
       if (state.apiCounter == 2) {
@@ -1169,7 +1186,6 @@ export default {
     try {
       const res = await axios.post('bid/editTemplateBid/', formData, config);
       if (res.status == 200) {
-        
         // commit('setDraftBidsList',null);
         commit('setDraftTime', new Date().toLocaleString());
       } else {
@@ -1374,7 +1390,6 @@ export default {
     try {
       const res = await axios.post('bid/editBid/', formData, config);
       if (res.status == 200) {
-        
         // commit('setDraftBidsList',null);
         commit('setDraftTime', new Date().toLocaleString());
       } else {

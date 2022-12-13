@@ -1,6 +1,6 @@
 <template>
   <v-col class="my-7 pa-0 bid-submission-tab" align="start">
-<v-form @submit.prevent="submit"  ref="form" v-model="valid" lazy-validation>
+<v-form @submit.prevent="submit"  ref="form" v-model="valid">
     <div class="title-line" v-if="
             bidDetail.bidData &&
             bidDetail.bidData.lineItems &&
@@ -467,7 +467,7 @@ export default {
       for (let i = 0; i < bidData.lineItems.length; i++) {
         this.lineItems.push({
           price: this.getSupplierBid.lineItems[i].price,
-          bid: true,
+          bid: this.getSupplierBid.lineItems[i].price !== 'NO_BID',
           id: this.getSupplierBid.lineItems[i].id,
         });
       }

@@ -72,7 +72,7 @@
           </div>
         </div>
 
-        <div class="invitedS-sec">
+        <div class="invitedS-sec" v-if="getBidAllIntend &&getBidAllIntend.length">
           <v-row>
             <v-col class="mr-2">
             <v-tooltip top>
@@ -91,17 +91,25 @@
               <v-icon v-bind="attrs"
           v-on="on">mdi-eye-outline</v-icon>
             </template>
-            <span>Viewed {{ item.id === bidViewNumber[i].id ? bidViewNumber[i].view: 0}} Times</span>
+            <span>Viewed {{ getBidViewNumber(item.id)}} Times</span>
             </v-tooltip>
              </v-col>
             <v-col class="mr-2">
 
             <v-tooltip top>
             <template v-slot:activator="{ on, attrs }">
+                  <v-icon v-bind="attrs"
+              v-on="on" v-if="getCompanyIntend(item.id) === 'not-intended'" color="#F32349">mdi-close-circle-outline</v-icon>
               <v-icon v-bind="attrs"
-          v-on="on">mdi-circle-outline</v-icon>
+              v-on="on" v-if="getCompanyIntend(item.id) === 'intended'" color="#0D9648">mdi-check-circle-outline</v-icon>
+              <v-icon v-bind="attrs"
+              v-on="on" v-if="getCompanyIntend(item.id) === 'neither'">mdi-circle-outline</v-icon>
             </template>
-            <span>No intent to bid</span>
+
+                <span v-if="getCompanyIntend(item.id) === 'not-intended'">{{item && item.company}} does not intend to submit a bid</span>
+                <span v-if="getCompanyIntend(item.id) === 'intended'">{{item && item.company}} does intend to submit a bid</span>
+                <span v-if="getCompanyIntend(item.id) === 'neither'">{{item && item.company}} has not indicated if they intend to submit a bid</span>
+
             </v-tooltip>
 
             </v-col>
@@ -109,9 +117,15 @@
             <v-tooltip top>
             <template v-slot:activator="{ on, attrs }">
               <v-icon v-bind="attrs"
-          v-on="on">mdi-circle-outline</v-icon>
+          v-on="on" v-if="getSubmissionStatus(item.id) === 'not-sent' && getCompanyIntend(item.id) !== 'not-intended'">mdi-circle-outline</v-icon>
+              <img :src="require('@/assets/images/bids/bidSubmitted.svg')" v-if="getSubmissionStatus(item.id) === 'sent' && getCompanyIntend(item.id) !== 'not-intended'" width="60" height="24" v-bind="attrs"
+          v-on="on"/>
+              <v-icon v-bind="attrs"
+              v-on="on" v-if="getCompanyIntend(item.id) === 'not-intended'" color="#F32349">mdi-close-circle-outline</v-icon>
             </template>
-            <span>Bid Submissions</span>
+            <span v-if="getSubmissionStatus(item.id) === 'sent' && getCompanyIntend(item.id) !== 'not-intended'">{{item && item.company}} has sent Bid Submissions</span>
+            <span v-if="getSubmissionStatus(item.id) === 'not-sent' && getCompanyIntend(item.id) !== 'not-intended'">{{item && item.company}} has not sent Bid Submissions yet</span>
+            <span v-if="getCompanyIntend(item.id) === 'not-intended'">{{item && item.company}} doesn't want to sent Bid Submissions</span>
             </v-tooltip>
              </v-col>
           </v-row>
@@ -284,7 +298,6 @@
       </div>
        <div v-else class="no-data py-5">None</div>
     </div>
-    {{bidViewNumber}}
   </v-col>
 </template>
 
@@ -301,35 +314,57 @@ export default {
       const sizeInMB = (size / (1024 * 1024)).toFixed(2);
       return `${sizeInMB}mb`;
     },
+    getBidViewNumber(id) {
+      const { supplierViews } = this.bidDetail.bidData;
+      let number = 0;
+
+      if (supplierViews && id) {
+        supplierViews.forEach((el) => {
+          if (el.id === id) {
+            number = el.views;
+          }
+        });
+      }
+      return number;
+    },
+    getCompanyIntend(id) {
+      let result = 'neither';
+      const intent = this.getBidAllIntend;
+      if (intent && id) {
+        intent.forEach((el) => {
+          if (el.companyId === id && el.answer === 'true') {
+            result = 'intended';
+          }
+          if (el.companyId === id && el.answer === 'false') {
+            result = 'not-intended';
+          }
+        });
+      }
+      return result;
+    },
+    getSubmissionStatus(id) {
+      let result = 'not-sent';
+
+      const { supplierSubmissions } = this.bidDetail;
+
+      if (supplierSubmissions.length) {
+        supplierSubmissions.forEach((el) => {
+          if (el.companyId === id) {
+            result = 'sent';
+          }
+        });
+      }
+
+      return result;
+    },
   },
   computed: {
     bidDetail() {
       return this.$store.getters.bidViewData;
     },
-    bidViewNumber() {
-      const number = [];
-      if (this.bidDetail.bidData.supplierViews) {
-        for (let i = 0; i < this.bidDetail.bidData.invitedSuppliers.length; i++) {
-          this.bidDetail.bidData.supplierViews.forEach((el) => {
-            if (el.id === this.bidDetail.bidData.invitedSuppliers[i].id) {
-              number.push({ id: el.id, view: el.views });
-            } else {
-              number.push({ id: this.bidDetail.bidData.invitedSuppliers[i].id, view: 0 });
-            }
-          });
-        }
-      } else {
-        this.bidDetail.bidData.invitedSuppliers.forEach((el) => {
-          number.push({
-            id: el.id,
-            view: 0,
-          });
-        });
-      }
-
-      return number;
+    getBidAllIntend() {
+      return this.$store.getters.bidAllIntend;
     },
   },
-  mounted() {},
 };
 </script>

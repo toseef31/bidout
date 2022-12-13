@@ -37,6 +37,7 @@ export default {
   singleTemplate: null,
   invitedSuppliersData: null,
   bidIntent: null,
+  bidAllIntend: null,
   supplierAttachment: [],
   userType: null,
   intentId: null,
