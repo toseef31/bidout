@@ -1,6 +1,7 @@
 <template>
   <div class="chat-search d-flex">
     <div class="search-box">
+      
     <v-text-field
       v-model="searchUsers"
       clearable
@@ -185,6 +186,7 @@
   import _ from 'lodash';
   import { mapActions } from "vuex";
 export default {
+  
   data() {
     return {
       isAddUser : false,
@@ -231,6 +233,9 @@ export default {
         this.hideMemberList = true;
       }
     },500),
+    searchUsers(){
+      this.$store.commit('setsearchConv', this.searchUsers);
+    }
   },
   methods: {
     ...mapActions(["supplierList","supplierUserList","createConversation","getArchiveChats","unArchiveConversation"]),

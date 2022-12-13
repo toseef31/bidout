@@ -59,4 +59,7 @@ export default {
       state.supplierBroadcastError = false;
     }, 5000);
   },
+  setsearchConv(state,payload){
+    state.searchConv = payload;
+  }
 };
