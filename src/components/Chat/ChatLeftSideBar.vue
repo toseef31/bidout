@@ -234,7 +234,7 @@ export default {
       }
     },500),
     searchUsers(){
-      this.$emit('searchConv', this.searchUsers);
+      this.$store.commit('setsearchConv', this.searchUsers);
     }
   },
   methods: {

@@ -16,4 +16,5 @@ export default {
   errorBroadcast: false,
   bidMessageUnreadCount: 0,
   supplierBroadcastError: false,
+  searchConv: '',
 };

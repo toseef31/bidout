@@ -169,9 +169,9 @@ export default {
   },
   computed:{
     conversationsList(){
-      if(this.searchUser){
+      if(this.$store.state.chat.searchConv != null){
         return _.orderBy(this.$store.getters.conversations.filter((item)=>{
-          return this.searchUser.toLowerCase().split(' ').every(v => item.company.toLowerCase().includes(v))
+          return this.$store.state.chat.searchConv.toLowerCase().split(' ').every(v => item.company.toLowerCase().includes(v))
         }), 'updatedAt', 'desc')
       }else{
         return _.orderBy(this.$store.getters.conversations, 'updatedAt', 'desc');
@@ -246,7 +246,7 @@ export default {
     if(convo){ 
       await this.openChat(convo,grpName);
     }
-    
+    console.log('ddsda',this.$store.state.chat.searchConv);
   } 
 };
 </script>

@@ -42,11 +42,11 @@
             v-if="userList"
           >
             <div class="userlist-col">
-              <chat-leftsidebar @searchConv="searchMem($event)"></chat-leftsidebar>
+              <chat-leftsidebar></chat-leftsidebar>
               <conversations-section
                 @ChatDatas="ChangeT($event)"
                 @callTest="openChat"
-                @membersData="memberT($event)"  :searchUser="searching"
+                @membersData="memberT($event)"
               ></conversations-section>
             </div>
           </v-col>
@@ -482,9 +482,6 @@ export default {
     },
     memberT(data) {
       this.allMembers = data;
-    },
-    searchMem(data){
-      this.searching = data;
     },
     closeChat() {
       if (screen.width < 767) {
