@@ -117,9 +117,13 @@ export default {
     filterTeam(){
 			if(this.$store.getters.bidData.invitedTeamMembers != ''){
 				if(this.$route.name == 'EditBid'){
-		  		this.membersAdded = this.$store.getters.teamMembers.filter((el) => { return this.$store.getters.bidData.invitedTeamMembers.find((team) => team.id === el.id); })
+		  		this.membersAdded = this.$store.getters.teamMembers.filter((el) => { return this.$store.state.bid.invitedTeamMembers.find((team) => team.id === el.id); })
 				}else{
-					this.membersAdded = this.$store.getters.teamMembers.filter((el) => { return this.$store.getters.bidData.invitedTeamMembers.includes(el.id); })
+					if(!this.$store.state.bid.invitedTeamMembers[0].id){
+						this.membersAdded = this.$store.getters.teamMembers.filter((el) => { return this.$store.state.bid.invitedTeamMembers.includes(el.id); })
+					}else{
+						this.membersAdded = this.$store.state.bid.invitedTeamMembers;
+					}
 				}
 			}
     },
@@ -151,6 +155,7 @@ export default {
     addMember(member,index){
     	this.oldCount = this.membersAdded.length;
     	this.membersAdded.push(member);
+    	console.log('add member',this.membersAdded);
     	this.newCount = this.membersAdded.length;
   		this.$store.getters.teamMembers.splice(index,1);
   		this.$store.commit('setInvitedTeamMembers',this.membersAdded);

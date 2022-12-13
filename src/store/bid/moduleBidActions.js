@@ -1408,14 +1408,7 @@ export default {
       commit('setDraftBidData', null);
       return;
     } catch (err) {
-      if (state.apiCounter == 2) {
-        dispatch('apiSignOutAction');
-      } else if (err.response.status === 403) {
-        await dispatch('refreshToken');
-        state.apiCounter = 2;
-
-        dispatch('publishUpdateBid', payload);
-      }
+      console.log(err);
     }
   },
 
