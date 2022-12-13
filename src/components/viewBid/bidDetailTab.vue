@@ -91,7 +91,7 @@
               <v-icon v-bind="attrs"
           v-on="on">mdi-eye-outline</v-icon>
             </template>
-            <span>View 0 Times</span>
+            <span>Viewed {{ item.id === bidViewNumber[i].id ? bidViewNumber[i].view: 0}} Times</span>
             </v-tooltip>
              </v-col>
             <v-col class="mr-2">
@@ -284,11 +284,11 @@
       </div>
        <div v-else class="no-data py-5">None</div>
     </div>
+    {{bidViewNumber}}
   </v-col>
 </template>
 
 <script>
-import { mapActions } from 'vuex';
 
 export default {
   data() {
@@ -297,7 +297,6 @@ export default {
     };
   },
   methods: {
-    ...mapActions(['getBidBySerial']),
     size(size) {
       const sizeInMB = (size / (1024 * 1024)).toFixed(2);
       return `${sizeInMB}mb`;
@@ -306,6 +305,29 @@ export default {
   computed: {
     bidDetail() {
       return this.$store.getters.bidViewData;
+    },
+    bidViewNumber() {
+      const number = [];
+      if (this.bidDetail.bidData.supplierViews) {
+        for (let i = 0; i < this.bidDetail.bidData.invitedSuppliers.length; i++) {
+          this.bidDetail.bidData.supplierViews.forEach((el) => {
+            if (el.id === this.bidDetail.bidData.invitedSuppliers[i].id) {
+              number.push({ id: el.id, view: el.views });
+            } else {
+              number.push({ id: this.bidDetail.bidData.invitedSuppliers[i].id, view: 0 });
+            }
+          });
+        }
+      } else {
+        this.bidDetail.bidData.invitedSuppliers.forEach((el) => {
+          number.push({
+            id: el.id,
+            view: 0,
+          });
+        });
+      }
+
+      return number;
     },
   },
   mounted() {},
