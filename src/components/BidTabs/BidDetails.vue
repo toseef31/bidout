@@ -420,6 +420,7 @@ export default {
   },
   mounted() {
     this.route = this.$route.name;
+    console.log(this.$store.getters.bidData);
     this.$store.commit('setInvitedSuppliersData', this.$store.getters.bidData.invitedSuppliers);
     this.$store.commit('setInvitedNewSuppliers', this.$store.getters.bidData.invitedNewSuppliers);
     this.$store.commit('setInvitedTeamMembers', this.$store.getters.bidData.invitedTeamMembers);
