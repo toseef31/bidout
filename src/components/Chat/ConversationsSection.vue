@@ -14,7 +14,7 @@
     <v-tabs-items v-model="convTab">
       <v-tab-item> 
         <v-list two-line  class="py-0">
-
+          {{searchUsers}}
           <v-list-item-group
             v-model="selectedUser"
             active-class="grey--text">
@@ -28,16 +28,16 @@
                     <v-list-item-title v-if="conversation.company == ''" v-text="conversation.company"></v-list-item-title>
                     <v-list-item-title v-else v-text="conversation.groupName"></v-list-item-title>
 
-                    <v-list-item-subtitle
+                    <v-list-item-subtitle v-if="conversation.isBid == true"
                       class="text--primary"
-                      v-text="conversation.headline"
+                      v-text="conversation.bidTitle"
                     ></v-list-item-subtitle>
 
-                    <v-list-item-subtitle v-text="conversation.subtitle"></v-list-item-subtitle>
+                    <v-list-item-subtitle v-if="conversation.isBid == true">Bid #{{conversation.bidSerial}}</v-list-item-subtitle>
                   </v-list-item-content>
 
                   <v-list-item-action class="mt-n5">
-                    <v-list-item-action-text>{{ istoday(conversation.latestMessage)}}</v-list-item-action-text>
+                    <v-list-item-action-text>{{ istoday(conversation.updatedAt) }}</v-list-item-action-text>
                   </v-list-item-action>
                   <!-- <v-badge
                       color="#0D9648"
@@ -59,7 +59,7 @@
                     </v-list-item-content>
 
                   <v-list-item-action>
-                    <v-list-item-action-text>{{ istoday(conversation.latestMessage) }}</v-list-item-action-text>
+                    <v-list-item-action-text>{{ istoday(conversation.updatedAt) }}</v-list-item-action-text>
                   </v-list-item-action>
                 </template>
               </v-list-item>
@@ -149,6 +149,7 @@
   import moment from 'moment-timezone';
   import { mapActions } from "vuex";
 export default {
+  props: ["searchUser"],
   data() {
     return {
       selectedUser: null,
@@ -159,7 +160,7 @@ export default {
       userList : true,
       selected: null,
       chatData: '',
-      searchUsers: '',
+      searchUsers: this.searchUser,
       user:'',
       conversationId : '',
       backArrow : false,
@@ -168,20 +169,17 @@ export default {
   },
   computed:{
     conversationsList(){
-      if(this.searchUsers){
+      if(this.searchUser){
         return _.orderBy(this.$store.getters.conversations.filter((item)=>{
-          return this.searchUsers.toLowerCase().split(' ').every(v => item.groupName.toLowerCase().includes(v))
-        }), 'latestMessage', 'desc')
+          return this.searchUser.toLowerCase().split(' ').every(v => item.company.toLowerCase().includes(v))
+        }), 'updatedAt', 'desc')
       }else{
-        return _.orderBy(this.$store.getters.conversations, 'latestMessage', 'desc');
+        return _.orderBy(this.$store.getters.conversations, 'updatedAt', 'desc');
       }
     },
     archiveList(){
       return this.$store.getters.archiveList;
     },
-  },
-  watch:{
-    
   },
   methods: {
     ...mapActions(["getAllConversations","getAllMessages","lastMessageRead","getArchiveChats","unArchiveConversation"]),
@@ -227,6 +225,9 @@ export default {
   beforeMount() {
     this.user = this.$store.getters.userInfo;
   },
+  updated(){
+    console.log('dddds',this.searchUser);
+  },
   mounted: async function() { 
     await this.getAllConversations(this.user.id);
     this.archiveConversations(this.user.id);
@@ -245,6 +246,7 @@ export default {
     if(convo){ 
       await this.openChat(convo,grpName);
     }
+    
   } 
 };
 </script>
