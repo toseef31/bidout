@@ -178,7 +178,7 @@ export default {
         { label: '3pm CST', value: '3pm' },
         { label: '4pm CST', value: '4pm' },
       ],
-      region: ['Gulf Coast', 'Northwest', 'Rockies', 'Mid-Con', 'Permian', 'Arklatex', 'Offshore', 'Other'],
+      region: ['Gulf Coast', 'Northeast', 'Rockies', 'Mid-Con', 'Permian', 'Arklatex', 'Offshore', 'Other'],
       interval: '',
       bidFormData: '',
       formStatus: false,
@@ -420,7 +420,6 @@ export default {
   },
   mounted() {
     this.route = this.$route.name;
-    console.log(this.$store.getters.bidData);
     this.$store.commit('setInvitedSuppliersData', this.$store.getters.bidData.invitedSuppliers);
     this.$store.commit('setInvitedNewSuppliers', this.$store.getters.bidData.invitedNewSuppliers);
     this.$store.commit('setInvitedTeamMembers', this.$store.getters.bidData.invitedTeamMembers);
