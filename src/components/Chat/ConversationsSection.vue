@@ -37,7 +37,8 @@
                   </v-list-item-content>
 
                   <v-list-item-action class="mt-n5">
-                    <v-list-item-action-text>{{ istoday(conversation.updatedAt) }}</v-list-item-action-text>
+                    <v-list-item-action-text v-if="!conversation.latestMessage">{{ istoday(conversation.updatedAt) }}</v-list-item-action-text>
+                      <v-list-item-action-text v-else>{{ istoday(conversation.latestMessage) }}</v-list-item-action-text>
                   </v-list-item-action>
                   <!-- <v-badge
                       color="#0D9648"
@@ -59,7 +60,8 @@
                     </v-list-item-content>
 
                   <v-list-item-action>
-                    <v-list-item-action-text>{{ istoday(conversation.updatedAt) }}</v-list-item-action-text>
+                    <v-list-item-action-text v-if="!conversation.latestMessage">{{ istoday(conversation.updatedAt) }}</v-list-item-action-text>
+                    <v-list-item-action-text v-else>{{ istoday(conversation.latestMessage) }}</v-list-item-action-text>
                   </v-list-item-action>
                 </template>
               </v-list-item>
