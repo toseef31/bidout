@@ -47,4 +47,5 @@ export default {
   draftBidsListId: null,
   invitedNewSuppliers: null,
   unansweredQuestionCount: 0,
+  bidApiCounter: 0,
 };
