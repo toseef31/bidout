@@ -54,7 +54,7 @@ jobs:
         name: 'Deploy to App Engine'
         with:
           credentials: ${{ secrets.gcp_credentials }}
-          deliverables: 'dev.yaml'
+          deliverables: 'staging.yaml'
   cleanup:
     name: Artifact Cleanup
     needs: deploy
