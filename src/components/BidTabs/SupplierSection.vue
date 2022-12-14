@@ -185,7 +185,7 @@
 		        	</div>
 		        </template>
 		        <template  v-for="(company,index) in repsInvited">
-		        	<div class="d-flex align-center justify-space-between list-company pa-4" v-if="company.type == 'company'">
+		        	<div class="d-flex align-center justify-space-between list-company pa-4" v-if="!company.item.companyId">
 		        	  <div class="comapny-data d-flex align-center">
 		        	    <div class="company-img">
 		        	      <img v-if="!company.item.image" :src="require('@/assets/images/bids/company.png')">
@@ -200,7 +200,7 @@
 		        	    <v-btn color="rgba(243, 35, 73, 0.1)" tile min-width="32px" height="32" class="pa-0" elevation="0" @click="removeCompany(company,index)"> <v-icon color="#F32349">mdi-minus</v-icon></v-btn>
 		        	  </div>
 		        	</div>
-		        	<div class="d-flex align-center justify-space-between list-company pa-4" v-if="company.type == 'user'">
+		        	<div class="d-flex align-center justify-space-between list-company pa-4" v-if="company.item.companyId">
 		        	  <div class="comapny-data d-flex align-center">
 		        	    <div class="company-img">
 		        	      <img v-if="!company.item.image" :src="require('@/assets/images/chat/chatUser.png')">
@@ -416,6 +416,7 @@ export default {
     	if(this.$store.getters.bidData){
     		if(this.$store.getters.bidData.invitedSuppliers != ""){
     			if(this.$route.name == 'EditBid'){
+    				console.log('supplier',this.$store.getters.bidData.invitedSuppliers);
     				return this.$store.getters.companiesList.filter((el) => { return this.$store.getters.bidData.invitedSuppliers.find((supplier) => supplier.id === el.objectID); }).slice();
     			}else{
     				return this.$store.getters.companiesList.filter((el) => { return this.$store.getters.bidData.invitedSuppliers.includes(el.objectID); }).slice();

@@ -136,20 +136,22 @@ export default {
         if (res.data.user_type === 'buyer') {
           commit('setSubmittedBids', res.data.supplierSubmissions);
         }
-      } else {
+      } 
+      else {
         commit('setPageLoader', false);
         commit('setViewBidError', false);
       }
     } catch (err) {
+      console.log(err);
       commit('setPageLoader', false);
       commit('setViewBidError', true);
-      if (state.apiCounter == 2) {
-        dispatch('apiSignOutAction');
-      } else if (err.response.status === 403) {
-        await dispatch('refreshToken');
-        state.apiCounter = 2;
-        dispatch('getBidBySerial', payload);
-      }
+      // if (state.apiCounter == 2) {
+      //   dispatch('apiSignOutAction');
+      // } else if (err.response.status === 403) {
+      //   await dispatch('refreshToken');
+      //   state.apiCounter = 2;
+      //   dispatch('getBidBySerial', payload);
+      // }
     }
   },
 
