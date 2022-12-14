@@ -1,5 +1,6 @@
 <template>
   <v-col class="my-7 pa-0 bid-submission-tab" align="start">
+
 <v-form @submit.prevent="submit"  ref="form" v-model="valid">
     <div class="title-line" v-if="
             bidDetail.bidData &&
@@ -254,7 +255,7 @@
 
       </div>
 
-      <div class="text-center mt-3" v-if="(getIntent !== null && getIntent === 'true' && !isAfterDueDate && !isBidSubmitted)">
+      <div class="text-center mt-3" v-if="(getIntent !== null && getIntent === 'true' && bidDetail.receivingBids && !isBidSubmitted)">
         <v-btn
           color="#0D9648"
           height="56"
@@ -273,7 +274,7 @@
           <div v-else>Submit bid</div></v-btn
         >
       </div>
-      <div class="text-center mt-3" v-if="(getIntent !== null && getIntent === 'true' && !isAfterDueDate && isBidSubmitted)">
+      <div class="text-center mt-3" v-if="(getIntent !== null && getIntent === 'true' && bidDetail.receivingBids && isBidSubmitted)">
         <v-btn
           color="#0D9648"
           height="56"
@@ -298,7 +299,6 @@
 </template>
 
 <script>
-import moment from 'moment-timezone';
 import { mapActions } from 'vuex';
 
 export default {
@@ -338,16 +338,6 @@ export default {
     },
     showLoading() {
       return this.loading;
-    },
-    isAfterDueDate() {
-      const bidDueDate = this.bidDetail.bidData.dueDate;
-      const bidDueTime = this.bidDetail.bidData.dueTime;
-      const currentDate = moment();
-      const Time = moment(bidDueTime, ['h:mm:ss A']).format('HH:mm:ss');
-      const stringDate = `${bidDueDate}T${Time}`;
-      const momentDueDate = moment(stringDate);
-
-      return moment(currentDate).isAfter(momentDueDate);
     },
     isBidSubmitted() {
       return this.$store.getters.isBidSubmitted;
@@ -507,6 +497,9 @@ export default {
         }
       }
     },
+  },
+  mounted() {
+    window.scrollTo({ top: 0, behavior: 'smooth' });
   },
   created() {
     if (this.isBidSubmitted) {

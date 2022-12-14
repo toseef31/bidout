@@ -457,6 +457,7 @@ export default {
           id: payload.userId,
           serial: payload.serial,
         });
+        commit('setAlertEditBidSubmissionSuccess');
       }
     } catch (err) {
       if (state.apiCounter == 2) {

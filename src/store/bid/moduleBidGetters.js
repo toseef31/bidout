@@ -101,4 +101,7 @@ export default {
   bidAllIntend(state) {
     return state.bidAllIntend;
   },
+  alertEditBidSubmissionSuccess(state) {
+    return state.alertEditBidSubmissionSuccess;
+  },
 };
