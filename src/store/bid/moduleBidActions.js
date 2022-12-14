@@ -142,16 +142,15 @@ export default {
         commit('setViewBidError', false);
       }
     } catch (err) {
-      console.log(err);
       commit('setPageLoader', false);
       commit('setViewBidError', true);
-      // if (state.apiCounter == 2) {
-      //   dispatch('apiSignOutAction');
-      // } else if (err.response.status === 403) {
-      //   await dispatch('refreshToken');
-      //   state.apiCounter = 2;
-      //   dispatch('getBidBySerial', payload);
-      // }
+      if (state.bidApiCounter == 2) {
+        dispatch('apiSignOutAction');
+      } else if (err.response.status === 403) {
+        await dispatch('refreshToken');
+        state.bidApiCounter = 2;
+        dispatch('getBidBySerial', payload);
+      }
     }
   },
 
