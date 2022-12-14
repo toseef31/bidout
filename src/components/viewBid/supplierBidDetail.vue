@@ -230,65 +230,12 @@ any question.</span>
          <div v-else class="no-data py-4">None</div>
       </div>
 
-      <div class="py-8 bid-row-2 ">
-        <div class="title-detail px-6">Supplier Attachment</div>
-        <div
-          class="attachment-list-style"
-          v-if="
-          bidDetail.supplierSubmissions && bidDetail.supplierSubmissions.supplierAttachments.length
-          "
-        >
-          <v-simple-table fixed-header>
-            <template v-slot:default>
-              <thead>
-                <tr>
-                  <th class="text-left"></th>
-                  <th class="text-left">File Name</th>
-                  <th class="text-left">File Size</th>
-                  <th class="text-left">Uploaded Date</th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr
-                  v-for="(doc, index) in bidDetail.supplierSubmissions.supplierAttachments"
-                  :key="index"
-                >
-                  <td class="text-left">
-                    <img :src="require('@/assets/images/bids/FilePdf.png')" />
-                  </td>
-                  <td class="text-left"><a :href="doc.attachment" target="_blank" class="text-decoration-none">{{ doc.fileName }}</a></td>
-
-                  <td class="text-left">{{ size(doc.fileSize) }}</td>
-
-                  <td class="text-left">
-                    {{ doc.uploadedAt._seconds | moment("MM/DD/YYYY") }}
-                  </td>
-                </tr>
-              </tbody>
-            </template>
-          </v-simple-table>
-        </div>
-
-        <div v-else class="no-data">None</div>
-      </div>
-
-      <div class="pt-8">
-        <div class="title-detail px-6">Supplier Notes</div>
-        <div class="supplier-note mx-6" v-if="(bidDetail.supplierSubmissions && bidDetail.supplierSubmissions.supplierNote)">{{  bidDetail.supplierSubmissions.supplierNote}}
-        </div>
-        <div v-else class="text-center pt-2 pb-5 none-class">None</div>
-      </div>
     </v-col>
 </template>
 
 <script>
 
 export default {
-  data() {
-    return {
-      users: '',
-    };
-  },
   methods: {
     size(size) {
       const sizeInMB = (size / (1024 * 1024)).toFixed(2);
@@ -299,12 +246,9 @@ export default {
     bidDetail() {
       return this.$store.getters.bidViewData;
     },
-    supplierDocList() {
-      return this.$store.getters.supplierAttachment;
-    },
   },
   mounted() {
-    this.users = this.$store.getters.userInfo;
+    window.scrollTo({ top: 0, behavior: 'smooth' });
   },
 };
 </script>

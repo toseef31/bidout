@@ -43,7 +43,7 @@
 
                   <div class="ml-5 text-left">
                     <div class="company-title">{{users.company.company}}</div>
-                    <div class="company-submitted">You have already submitted this Bid</div>
+                    <div class="company-submitted">Your bid submission has been received. </div>
                   </div>
                 </div>
           </v-card>
@@ -52,6 +52,9 @@
       class="fill-height main-card"
       :elevation="0"
     >
+    <v-alert type="success"  v-show="showAlertEditBidSubmissionSuccess" class="mx-5 mt-5">
+      This bid has been updated successfully!
+    </v-alert>
 
       <v-row class="px-5 my-5 row-title" no-gutters v-if="getUserType === 'buyer'">
         <v-col>
@@ -279,7 +282,7 @@
           </div>
         </v-col>
 
-        <v-col class="status-sec mr-6 text-left mt-2" cols="auto" v-if="bidDetail.receivingBids">
+        <v-col class="status-sec mr-6 text-left mt-2" cols="auto" v-if="bidDetail.receivingBids && !isBidSubmitted">
 
           <label class="intent-title">Intent to bid? </label>
                   <v-radio-group
@@ -326,8 +329,18 @@
             <v-divider color="#0D9648"></v-divider>
             <div
               class="bid-number"
+
             >
-              {{isBidSubmitted ? 'Bid Submitted': 'Submit Bid'}}
+
+              {{showIntent === null || showIntent === 'false' ? 'Please specify your intend to bid' : ''}}
+              <div
+                v-if="showIntent !== null && showIntent === 'true' && !isBidSubmitted"
+                @click="ChangeT('tab-2')"
+              >Submit Bid</div>
+              <div
+                @click="ChangeT('tab-2')"
+                v-if="isBidSubmitted"
+              >Bid Submitted</div>
             </div>
           </v-sheet>
           <v-sheet  class="py-2 px-5 text-left award-status-card"
@@ -633,9 +646,16 @@ export default {
     showBidMessageC() {
       return this.$store.getters.bidMessageUnreadCount;
     },
+    showAlertEditBidSubmissionSuccess() {
+      return this.$store.getters.alertEditBidSubmissionSuccess;
+    },
+    showIntent() {
+      return this.$store.getters.bidIntent;
+    },
   },
   mounted() {
     document.title = 'View Bid - BidOut';
+    window.scrollTo({ top: 0, behavior: 'smooth' });
   },
   async created() {
     this.users = this.$store.getters.userInfo;

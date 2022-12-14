@@ -25,6 +25,7 @@ export default {
   bidTemplates: null,
   alertDeleteBidSuccess: false,
   alertDeleteBidError: false,
+  alertEditBidSubmissionSuccess: false,
   bidViewData: null,
   viewBidError: false,
   invitedSuppliers: null,

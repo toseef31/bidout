@@ -51,13 +51,19 @@ export default {
     state.alertDeleteBidSuccess = true;
     setTimeout(() => {
       state.alertDeleteBidSuccess = false;
-    }, 5000);
+    }, 8000);
   },
   setErrorDeleteBid(state) {
     state.alertDeleteBidError = true;
     setTimeout(() => {
       state.alertDeleteBidError = false;
-    }, 5000);
+    }, 8000);
+  },
+  setAlertEditBidSubmissionSuccess(state) {
+    state.alertEditBidSubmissionSuccess = true;
+    setTimeout(() => {
+      state.alertEditBidSubmissionSuccess = false;
+    }, 8000);
   },
   setBidSerial(state, payload) {
     state.bidSerial = payload;
