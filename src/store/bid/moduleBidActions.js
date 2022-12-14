@@ -1030,6 +1030,8 @@ export default {
     }
   },
   async getDraftBySerial({ commit, state, dispatch }, payload) {
+    console.log('state',state.bidData);
+    console.log('attachement',state.attachement);
     commit('setPageLoader', true);
     try {
       const res = await axios.get(

@@ -21,7 +21,7 @@
               <td class="text-left">
                 <img :src="require('@/assets/images/bids/FilePdf.png')" />
               </td>
-              <td class="text-left">{{ doc.fileName }}</td>
+              <td class="text-left d-block text-truncate pt-4" style="width:200px">{{ doc.fileName }}</td>
               <td class="text-left">
                 <div
                   v-if="edit === index && isEdit"
@@ -126,6 +126,7 @@ export default {
             }else{
               this.documents = this.$store.getters.bidData.attachment;
             }
+            this.$store.commit('setAttachement',null);
             this.$store.commit('setAttachement',this.documents);
             return this.documents;
           }else{
@@ -140,6 +141,7 @@ export default {
             }else{
               this.documents = this.$store.getters.bidData.attachments;
             }
+            this.$store.commit('setAttachement',null);
             this.$store.commit('setAttachement',this.documents);
             return this.documents;
           }else{
@@ -251,8 +253,15 @@ export default {
     }
     if(this.$store.getters.bidData != null){
       if(this.$store.getters.bidData.attachments != ""){
-        this.$store.commit('setAttachement',this.$store.getters.bidData.attachments);
-        this.documents = this.$store.getters.bidData.attachments;
+        if(this.$store.getters.bidData.statusType == 'draftBid'){
+          console
+          this.$store.commit('setAttachement',null);
+          this.$store.commit('setAttachement',this.$store.getters.bidData.attachments);
+          this.documents = this.$store.getters.bidData.attachments;
+        }else{
+          this.$store.commit('setAttachement',this.$store.getters.bidData.attachments);
+          this.documents = this.$store.getters.bidData.attachments;
+        }
       }
     }
     this.savedraftOnInterval();
