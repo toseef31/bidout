@@ -67,14 +67,17 @@
                   <v-col cols="12" md="6">
                     <div class="title-section text-left">
                       <h4 class="mb-0 font-weight-bold">{{ chatData.name }}</h4>
-                      <template v-if="chatData.isBid == true">
-                        <p class="sub-title mb-0 font-weight-regular">
-                          {{ chatData.bidTitle }}
-                        </p>
-                        <p class="sub-title mb-0">
-                          Bid #{{ chatData.bidSerial }}
-                        </p>
+                      <template v-if="chatData.group">
+                        <template v-if="chatData.group.isBid == true">
+                          <p class="sub-title mb-0 font-weight-regular">
+                            {{ chatData.group.bidTitle }}
+                          </p>
+                          <p class="sub-title mb-0">
+                            Bid #{{ chatData.group.bidSerial }}
+                          </p>
+                        </template>
                       </template>
+                      
                     </div>
                   </v-col>
                   <v-col cols="12" md="6">
@@ -396,6 +399,7 @@ export default {
       snackbar: false,
       timeout: 2000,
       convDec: "",
+      searching: '',
     };
   },
   computed: {
@@ -442,6 +446,7 @@ export default {
       "removeConvUser",
     ]),
     openChat(group, name, id) {
+      console.log(group,'na',name,'ddd',id);
       if (screen.width < 767) {
         this.userList = false;
         this.showMsgBlock = true;

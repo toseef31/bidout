@@ -36,6 +36,7 @@ export default {
   singleTemplate: null,
   invitedSuppliersData: null,
   bidIntent: null,
+  bidAllIntend: null,
   supplierAttachment: [],
   userType: null,
   intentId: null,
@@ -43,5 +44,7 @@ export default {
   qAndA: [],
   draftBidData: null,
   draftBidsListId: null,
+  invitedNewSuppliers: null,
   unansweredQuestionCount: 0,
+  bidApiCounter: 0,
 };

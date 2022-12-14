@@ -553,7 +553,7 @@ export default {
     };
   },
   methods: {
-    ...mapActions(['getBidBySerial', 'deleteBid', 'bidMessageUnreadCount', 'makeIntent', 'getIntent', 'updateIntent', 'getQA']),
+    ...mapActions(['getBidBySerial', 'deleteBid', 'bidMessageUnreadCount', 'makeIntent', 'getIntent', 'updateIntent', 'getQA', 'getAllIntent']),
     ChangeT(tab) {
       this.currentItem = tab;
     },
@@ -674,6 +674,10 @@ export default {
     await this.getQA({
       bidId: this.bidDetail.bidData.id,
       userId: this.users.id,
+    });
+
+    await this.getAllIntent({
+      bidId: this.bidDetail.bidData.id,
     });
   },
   watch: {

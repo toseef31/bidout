@@ -45,7 +45,9 @@
           </v-col>
         </v-row>
       </v-container>
+    </v-form>
       <hr>
+    <v-form ref="contactForm">
       <v-container class="pa-sm-10 pa-4">
         <v-row>
           <v-col cols="12" sm="12">
@@ -65,9 +67,9 @@
         <v-row>
           <v-col cols="12" sm="6" text="left">
             <label class="d-block text-left input-label mb-2">Email</label>
-            <v-text-field placeholder="Enter Email ..." v-model="contactEmail" single-line outlined hide-details type="email"></v-text-field>
+            <v-text-field placeholder="Enter Email ..." v-model="contactEmail" single-line outlined  type="email" :rules="contactEmailRule"></v-text-field>
           </v-col>
-          <v-col cols="12" sm="6" text="left">
+          <v-col cols="12" sm="6" text="left" class="mt-n9">
             <label class="d-block text-left input-label mb-1">Phone Number</label>
             <!-- <v-text-field placeholder="Phone Number ..." v-model="contactPhoneNo" single-line outlined></v-text-field> -->
             <VuePhoneNumberInput :border-radius="8" size="lg" v-model="contactPhoneNo"
@@ -81,7 +83,9 @@
         </v-row>
         <v-row>
           <v-col  cols="12" sm="12">
-            <v-btn color="#0D9648" large class="text-capitalize white--text" width="176px" height="54px" @click="addContacts">Add</v-btn>
+            <v-btn color="#0D9648" large class="text-capitalize white--text" width="176px" height="54px" 
+            :loading="loading" :disabled="!valid"
+            @click="addContacts">Add</v-btn>
           </v-col>
         </v-row>
       </v-container>
@@ -101,7 +105,7 @@
           <h6>{{contact.phoneNo}}</h6>
         </div>
         <div class="profile-list text-right">
-          <v-btn default color="transparent" class="text-capitalize dele-btn" @click="deleteContact(contact.index)"><v-icon>mdi-close</v-icon>Delete</v-btn>
+          <v-btn default color="transparent" class="text-capitalize dele-btn" @click="deleteContact(index)" :disabled="loadingBasin"><v-icon>mdi-close</v-icon>Delete</v-btn>
         </div>
       </div>
     </v-container>
@@ -125,6 +129,10 @@ export default {
       careers: this.$store.getters.companyData.companyData.careers,
       contactName: '',
       contactEmail: '',
+      contactEmailRule: [
+        v => !!v || 'E-mail is required',
+        v => /.+@.+/.test(v) || 'E-mail must be valid',
+      ],
       contactRole: '',
       contactPhoneNo: '',
       accountContacts: [],
@@ -135,12 +143,43 @@ export default {
       mapOption: {},
       markerOption: {},
       maps: '',
+      loader: null,
+      contctLoading: false,
+      valid: false,
+      loading : false,
+      deleteAccount: false,
     };
+  },
+  watch:{
+    contactName(){
+      if(this.contactName.length > 0 && this.contactEmail.length > 0 && this.contactRole.length > 0){
+        this.valid = true;
+      }else{
+        this.valid = false;
+      }
+    },
+    contactEmail(){
+      if(this.contactName.length > 0 && this.contactEmail.length > 0 && this.contactRole.length > 0){
+        this.valid = true;
+      }else{
+        this.valid = false;
+      }
+    },
+    contactRole(){
+      if(this.contactName.length > 0 && this.contactEmail.length > 0 && this.contactRole.length > 0){
+        this.valid = true;
+      }else{
+        this.valid = false;
+      }
+    },
   },
   computed:{
     companyData(){
       return this.$store.getters.companyData.companyData;
-    }
+    },
+    loadingBasin(){
+      return this.$store.getters.loadingBasin;
+    },
   },
   methods: {
     ...mapActions(["addCompanyFacts","addCompanyContacts"]),
@@ -240,6 +279,7 @@ export default {
       this.addCompanyFacts(data);
     },
     addContacts(){
+      this.$refs.contactForm.validate();
       if(this.$store.getters.companyData.companyData.accountContacts){
         this.accountContacts = this.$store.getters.companyData.companyData.accountContacts;
       }
@@ -251,13 +291,24 @@ export default {
       }
       this.accountContacts.push(data);
       this.addCompanyContacts({companyId: this.$store.getters.userInfo.company.id,accountContacts: this.accountContacts});
+      
+      this.contactName = '';
+      this.contactEmail = '';
+      this.contactRole = '';
+      this.contactPhoneNo = '';
+      this.results = '';
     },
     deleteContact(index){
       if(this.$store.getters.companyData.companyData.accountContacts){
         this.accountContacts = this.$store.getters.companyData.companyData.accountContacts;
       }
+      this.deleteAccount = true;
       this.accountContacts.splice(index,1);
       this.addCompanyContacts({companyId: this.$store.getters.userInfo.company.id,accountContacts: this.accountContacts});
+       this.deleteAccount = false;
+     
+
+
     }
   },
   mounted() {

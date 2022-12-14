@@ -132,7 +132,13 @@ export default {
   setBidDescription(state, payload) {
     state.bidData.bidDescriptions = payload;
   },
+  setInvitedNewSuppliers(state, payload) {
+    state.invitedNewSuppliers = payload;
+  },
   setUnansweredQuestionCount(state, payload) {
     state.unansweredQuestionCount = payload;
+  },
+  setAllIntend(state, payload) {
+    state.bidAllIntend = payload;
   },
 };

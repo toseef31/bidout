@@ -347,9 +347,17 @@ export default {
     },
   },
   async created(){
-    let mapScript = document.createElement('script')
-    await mapScript.setAttribute('src', 'https://maps.googleapis.com/maps/api/js?key='+import.meta.env.VITE_GOOGLE_MAP+'&libraries=places')
-    document.head.appendChild(mapScript);
+    let mapScp = "map-api-script";
+    let mapAlreadyAttached = !!document.getElementById(mapScp);
+    if(!mapAlreadyAttached){
+     let mapScript = document.createElement('script')
+      mapScript.id = mapScp;
+     await mapScript.setAttribute('src', 'https://maps.googleapis.com/maps/api/js?key='+import.meta.env.VITE_GOOGLE_MAP+'&libraries=places')
+     document.head.appendChild(mapScript);
+    }
+    // let mapScript = document.createElement('script')
+    // await mapScript.setAttribute('src', 'https://maps.googleapis.com/maps/api/js?key='+import.meta.env.VITE_GOOGLE_MAP+'&libraries=places')
+    // document.head.appendChild(mapScript);
     await this.viewPublicCompany();
   },
   updated(){

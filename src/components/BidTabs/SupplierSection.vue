@@ -166,8 +166,26 @@
 	  	        	</div>
 	  	        </template>
 		        </template>
+		        <template  v-for="(company,index) in newRepsInvited">
+		        	<div class="d-flex align-center justify-space-between list-company pa-4">
+		        	  <div class="comapny-data d-flex align-center">
+		        	    <div class="company-img">
+		        	      <img v-if="!company.image" :src="require('@/assets/images/bids/company.png')">
+		        	      <img v-else :src="company.image" width="56.25px" height="15px">
+		        	    </div>
+		        	    <div class="company-title text-left pl-4">
+		        	      <h4>{{company.firstName}} {{company.lastName}} </h4>
+										<p>{{company.company}}</p>
+										<!-- <router-link :to="`/company/${company.slug}`" target="_blank" class="mb-0">View Profile</router-link> -->
+		        	    </div>
+		        	  </div>
+		        	  <div class="add-company">
+		        	    <v-btn color="rgba(243, 35, 73, 0.1)" tile min-width="32px" height="32" class="pa-0" elevation="0" @click="removeNewSup(company,index)"> <v-icon color="#F32349">mdi-minus</v-icon></v-btn>
+		        	  </div>
+		        	</div>
+		        </template>
 		        <template  v-for="(company,index) in repsInvited">
-		        	<div class="d-flex align-center justify-space-between list-company pa-4" v-if="company.type == 'company'">
+		        	<div class="d-flex align-center justify-space-between list-company pa-4" v-if="!company.item.companyId">
 		        	  <div class="comapny-data d-flex align-center">
 		        	    <div class="company-img">
 		        	      <img v-if="!company.item.image" :src="require('@/assets/images/bids/company.png')">
@@ -182,7 +200,7 @@
 		        	    <v-btn color="rgba(243, 35, 73, 0.1)" tile min-width="32px" height="32" class="pa-0" elevation="0" @click="removeCompany(company,index)"> <v-icon color="#F32349">mdi-minus</v-icon></v-btn>
 		        	  </div>
 		        	</div>
-		        	<div class="d-flex align-center justify-space-between list-company pa-4" v-if="company.type == 'user'">
+		        	<div class="d-flex align-center justify-space-between list-company pa-4" v-if="company.item.companyId">
 		        	  <div class="comapny-data d-flex align-center">
 		        	    <div class="company-img">
 		        	      <img v-if="!company.item.image" :src="require('@/assets/images/chat/chatUser.png')">
@@ -342,13 +360,13 @@ export default {
       itembidData: [],
       interval: '',
       valid: false,
-      newsupplier: [],
       user: '',
       parsedSelectedBasin: 'all',
       parsedSelectedCompanyBasin: 'all',
       oldCount: '',
       newCount: '',
       filterData: [],
+      newRepsInvited: [],
     };
   },
   computed: {
@@ -421,7 +439,6 @@ export default {
   },
   methods: {
   	...mapActions(['getCategories', 'getSalesReps', 'getCompanyInfo', 'searchByCompany', 'getCompanyByServices', 'saveDraftBid', 'inviteNewSupplier', 'updateDraftBid','updateTemplate','updateBid']),
-  	...mapGetters(['newSupplier']),
     changeTab() {
     	if(this.$route.name == 'EditBid'){
     		this.updateBid({ invitedSuppliers: this.repsInvited });
@@ -436,29 +453,30 @@ export default {
       this.results = payload.formattedNumber;
     },
     async validate() {
-      this.$refs.form.validate();
       const supplier = {
         firstName: this.firstName,
     		lastName: this.lastName,
     		company: this.company,
     		phone: this.results,
     		email: this.email,
-    		bidTitle: this.$store.state.bidData.title,
-    		bidType: this.$store.state.bidData.type,
-    		bidDueDate: this.$store.state.bidData.dueDate,
-    		bidDueTime: this.$store.state.bidData.dueTime,
+    		bidTitle: this.$store.getters.bidData.title,
+    		bidType: this.$store.getters.bidData.type,
+    		bidDueDate: this.$store.getters.bidData.dueDate,
+    		bidDueTime: this.$store.getters.bidData.dueTime,
     	};
-			try {
-				await this.inviteNewSupplier(supplier);
-				this.supplierDialog = false;
-				const data = {
-					type: 'user',
-					item: supplier,
-				};
-				this.repsInvited.push(data);
-			} catch(error) {
-				console.log(error)
-			}
+    	if(this.$refs.form.validate()){
+    		try {
+    			const user = await this.inviteNewSupplier(supplier);
+    			this.supplierDialog = false;
+    			this.oldCount = this.newRepsInvited.length; 
+    			this.newRepsInvited.push(user);
+    			this.newCount = this.newRepsInvited.length;
+    			this.$store.commit('setInvitedNewSuppliers', this.newRepsInvited);
+    			this.$refs.form.reset();
+    		} catch(error) {
+    			console.log(error)
+    		}
+    	}
     },
     hideCategories() {
     	this.categories = false;
@@ -534,6 +552,12 @@ export default {
     	this.newCount = this.repsInvited.length;
     	this.$store.getters.companiesList.push(company.item);
     	this.$store.commit('setInvitedSuppliersData', this.repsInvited);
+    },
+    removeNewSup(company, index) {
+    	this.oldCount = this.newRepsInvited.length;
+    	this.newRepsInvited.splice(index, 1);
+    	this.newCount = this.newRepsInvited.length;
+    	this.$store.commit('setInvitedNewSuppliers', this.newRepsInvited);
     },
     savedraftOnInterval() {
   		const timer = setInterval(() => {

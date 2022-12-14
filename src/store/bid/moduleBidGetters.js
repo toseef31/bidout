@@ -95,4 +95,10 @@ export default {
   unansweredQuestionCount(state) {
     return state.unansweredQuestionCount;
   },
+  invitedNewSuppliers(state) {
+    return state.invitedNewSuppliers;
+  },
+  bidAllIntend(state) {
+    return state.bidAllIntend;
+  },
 };

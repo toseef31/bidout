@@ -38,7 +38,7 @@
 </template>
 <script>
 export default {
-  name: 'Create Bid',
+  name: 'CreateBid',
   components: {
   },
 
@@ -61,6 +61,21 @@ export default {
   },
   methods: {
     createBid() {
+      this.$store.state.bid.bidData.id = '';
+      this.$store.state.bid.bidData.status = '';
+      this.$store.state.bid.bidData.statusType = '';
+      this.$store.commit('setBidTitle', '');
+      this.$store.commit('setBidType', '');
+      this.$store.commit('setBidDueDate', '');
+      this.$store.commit('setBidDueTime', '');
+      this.$store.commit('setBidRegions', '');
+      this.$store.commit('setBidEnabled', '');
+      this.$store.commit('setBidDescription', [{ body: '' }]);
+      this.$store.commit('setInvitedTeamMembers', null);
+      this.$store.commit('setInvitedSuppliersData', null);
+      this.$store.commit('setBidlines', null);
+      this.$store.commit('setAttachement', null);
+      this.$store.commit('setQuestions', null);
       this.$store.commit('setDraftBidsList', null);
       this.$store.commit('setDraftTime', null);
       this.$router.push('/create-bid');
