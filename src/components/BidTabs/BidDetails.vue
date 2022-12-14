@@ -420,6 +420,7 @@ export default {
   },
   mounted() {
     this.route = this.$route.name;
+    console.log(this.$store.getters.bidData);
     this.$store.commit('setInvitedSuppliersData', this.$store.getters.bidData.invitedSuppliers);
     this.$store.commit('setInvitedNewSuppliers', this.$store.getters.bidData.invitedNewSuppliers);
     this.$store.commit('setInvitedTeamMembers', this.$store.getters.bidData.invitedTeamMembers);
@@ -428,6 +429,8 @@ export default {
       this.$store.commit('setAttachement', this.$store.getters.bidData.attachments);
     }else{
       if (this.$store.getters.bidData.statusType == 'draftBid') {
+        this.$store.commit('setAttachData',null);
+        this.$store.commit('setAttachement', null);
         this.$store.commit('setAttachement', this.$store.getters.bidData.attachments);
       }else if(this.$store.getters.bidData.statusType == 'templateBid') {
         this.$store.commit('setAttachement', this.$store.getters.bidData.attachment);
