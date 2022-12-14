@@ -11,10 +11,13 @@ export default {
         console.log(err);
       });
   },
-  async getAllConversations({ commit }, payload) {
-    await axios
+  getAllConversations({ commit }, payload) {
+    console.log(payload);
+    commit('setPageLoader', true);
+    axios
       .get(`/chat/getConversations/${payload}`)
       .then((responce) => {
+        console.log('hhyyy',responce.data);
         commit('setConverstaionList', responce.data.conversations);
         commit('setPageLoader', false);
       })

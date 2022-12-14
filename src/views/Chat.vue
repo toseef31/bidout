@@ -1,5 +1,5 @@
 <template>
-  <v-row fill-height align="center" v-if="loading">
+  <v-row fill-height align="center" v-if="loader">
     <v-col cols="12">
       <v-progress-circular
         :width="3"
@@ -444,9 +444,9 @@ export default {
       "lastMessageRead",
       "archiveChat",
       "removeConvUser",
+      "getAllConversations"
     ]),
     openChat(group, name, id) {
-      console.log(group,'na',name,'ddd',id);
       if (screen.width < 767) {
         this.userList = false;
         this.showMsgBlock = true;
@@ -592,17 +592,13 @@ export default {
     istoday(date) {
       return moment(date).calendar();
     },
-    msgShow() {
-      setTimeout(() => {
-        this.loading = false;
-      }, 2000);
-    },
   },
   beforeMount() {
     this.user = this.$store.getters.userInfo;
   },
-  mounted() {
-    this.msgShow();
+  async mounted() {
+    console.log(this.user.id);
+    await this.getAllConversations(this.user.id);
     document.title = "Messages - BidOut";
     if (screen.width < 767) {
       this.userList = true;
