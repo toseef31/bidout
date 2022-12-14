@@ -56,13 +56,49 @@
         <div class="title-detail">Buyer Team member</div>
         <div
           class="mt-10 d-flex flex-row flex-wrap team-member"
+        >
+        <div
+            class="d-flex align-center flex-child"
+          >
+            <v-img
+              v-if="bidDetail.bidData.userId.image"
+              width="48px"
+              height="48px"
+              :aspect-ratio="3/2"
+              :src="bidDetail.bidData.userId.image"
+            ></v-img>
+            <v-avatar v-else color="#0d96481a" size="62">
+              <v-icon color="#0d9648" large>mdi-account-outline </v-icon>
+            </v-avatar>
+
+            <div class="d-flex flex-column">
+            <div>
+              <span class="text--black pl-6 bid-creator"
+              >{{ bidDetail.bidData.userId.firstName }} {{ bidDetail.bidData.userId.lastName }}</span
+              >
+              <v-tooltip top>
+                <template v-slot:activator="{ on, attrs }">
+                  <v-icon size="20" v-bind="attrs"
+                  v-on="on" class="ml-2">mdi-help-circle-outline
+                  </v-icon>
+                </template>
+                <span>Please use the Q&A tab for
+                  any question.</span>
+              </v-tooltip>
+            </div>
+             <span
+              class="bid-creator-title pl-6 mt-1"
+              >Bid Creator</span
+              >
+          </div>
+        </div>
+
+          <div
           v-if="
             bidDetail.bidData &&
             bidDetail.bidData.invitedTeamMembers &&
             bidDetail.bidData.invitedTeamMembers.length > 0
           "
-        >
-          <div
             v-for="(item, index) in bidDetail.bidData.invitedTeamMembers"
             :key="index"
             class="d-flex align-center flex-child"
@@ -80,33 +116,24 @@
 
             <div class="d-flex flex-column">
             <div>
-                <span class="text--black pl-6 bid-creator"
+              <span class="text--black pl-6 bid-creator"
               >{{ item && item.firstName }} {{ item && item.lastName }}</span
-            >
-            <v-tooltip top>
-            <template v-slot:activator="{ on, attrs }">
-            <v-icon size="20" v-bind="attrs"
-          v-on="on" class="ml-2">mdi-help-circle-outline
-                </v-icon>
-           </template>
-            <span>Please use the Q&A tab for
-any question.</span>
-            </v-tooltip>
+              >
+              <v-tooltip top>
+                <template v-slot:activator="{ on, attrs }">
+                  <v-icon size="20" v-bind="attrs"
+                  v-on="on" class="ml-2">mdi-help-circle-outline
+                  </v-icon>
+                </template>
+                <span>Please use the Q&A tab for
+                  any question.</span>
+              </v-tooltip>
             </div>
-             <span
-              class="bid-creator-title pl-6 mt-1"
-              v-if="
-                bidDetail.bidData.userId.firstName === item.firstName &&
-                bidDetail.bidData.userId.lastName === item.lastName
-              "
-              >Bid Creator</span
-            >
-            </div>
-
           </div>
-        </div>
 
-        <div v-else class="no-data">None</div>
+        </div>
+      </div>
+
       </div>
 
       <div class="pt-8 pb-10 bid-row-2">
