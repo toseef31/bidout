@@ -14,7 +14,6 @@
     <v-tabs-items v-model="convTab">
       <v-tab-item> 
         <v-list two-line  class="py-0">
-          {{searchUsers}}
           <v-list-item-group
             v-model="selectedUser"
             active-class="grey--text">
@@ -37,7 +36,7 @@
                   </v-list-item-content>
 
                   <v-list-item-action class="mt-n5">
-                    <v-list-item-action-text v-if="!conversation.latestMessage">{{ istoday(conversation.updatedAt) }}</v-list-item-action-text>
+                    <v-list-item-action-text v-if="!conversation.latestMessage || conversation.latestMessage == null">{{ istoday(conversation.updatedAt) }}</v-list-item-action-text>
                       <v-list-item-action-text v-else>{{ istoday(conversation.latestMessage) }}</v-list-item-action-text>
                   </v-list-item-action>
                   <!-- <v-badge
@@ -60,7 +59,7 @@
                     </v-list-item-content>
 
                   <v-list-item-action>
-                    <v-list-item-action-text v-if="!conversation.latestMessage">{{ istoday(conversation.updatedAt) }}</v-list-item-action-text>
+                    <v-list-item-action-text v-if="!conversation.latestMessage || conversation.latestMessage == null">{{ istoday(conversation.updatedAt) }}</v-list-item-action-text>
                     <v-list-item-action-text v-else>{{ istoday(conversation.latestMessage) }}</v-list-item-action-text>
                   </v-list-item-action>
                 </template>
@@ -231,7 +230,7 @@ export default {
     console.log('dddds',this.searchUser);
   },
   mounted: async function() { 
-    await this.getAllConversations(this.user.id);
+    
     this.archiveConversations(this.user.id);
     var convo = await _.orderBy(this.$store.getters.conversations, 'latestMessage', 'desc')[0];
     console.log(convo,'dada');
