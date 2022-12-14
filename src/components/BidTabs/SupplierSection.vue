@@ -416,7 +416,6 @@ export default {
     	if(this.$store.getters.bidData){
     		if(this.$store.getters.bidData.invitedSuppliers != ""){
     			if(this.$route.name == 'EditBid'){
-    				console.log('supplier',this.$store.getters.bidData.invitedSuppliers);
     				return this.$store.getters.companiesList.filter((el) => { return this.$store.getters.bidData.invitedSuppliers.find((supplier) => supplier.id === el.objectID); }).slice();
     			}else{
     				return this.$store.getters.companiesList.filter((el) => { return this.$store.getters.bidData.invitedSuppliers.includes(el.objectID); }).slice();
