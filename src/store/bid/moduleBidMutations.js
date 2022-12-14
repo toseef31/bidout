@@ -47,9 +47,6 @@ export default {
   setViewBidError(state, payload) {
     state.viewBidError = payload;
   },
-  setSubmittedBids(state, payload) {
-    state.submittedBids = payload;
-  },
   setSuccessDeleteBid(state) {
     state.alertDeleteBidSuccess = true;
     setTimeout(() => {

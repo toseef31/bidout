@@ -41,9 +41,6 @@ export default {
   bidViewData(state) {
     return state.bidViewData;
   },
-  submittedBid(state) {
-    return state.submittedBids;
-  },
   bidDetailsComplete(state) {
     return state.bidDetailsComplete;
   },

@@ -136,8 +136,7 @@ export default {
         if (res.data.user_type === 'buyer') {
           commit('setSubmittedBids', res.data.supplierSubmissions);
         }
-      } 
-      else {
+      } else {
         commit('setPageLoader', false);
         commit('setViewBidError', false);
       }
@@ -161,8 +160,7 @@ export default {
       });
 
       if (res.status === 200) {
-        localStorage.removeItem('bidData');
-        commit('setBidData', null);
+        commit('setBidViewData', null);
         router.replace({ name: 'ViewBids' });
         commit('setSuccessDeleteBid');
       }
@@ -212,7 +210,7 @@ export default {
       } else if (err.response.status === 403) {
         await dispatch('refreshToken');
         state.apiCounter = 2;
-        dispatch('getIntent', payload);
+        dispatch('getAllIntent', payload);
       }
     }
   },
@@ -270,7 +268,10 @@ export default {
       });
 
       if (res.status === 200) {
-        console.log(res);
+        dispatch('getBidBySerial', {
+          id: payload.userId,
+          serial: payload.serial,
+        });
       }
     } catch (err) {
       if (state.apiCounter == 2) {
@@ -291,7 +292,10 @@ export default {
       });
 
       if (res.status === 200) {
-        console.log(res);
+        dispatch('getBidBySerial', {
+          id: payload.userId,
+          serial: payload.serial,
+        });
       }
     } catch (err) {
       if (state.apiCounter == 2) {
@@ -303,6 +307,54 @@ export default {
       }
     }
   },
+
+  async UnAwardCompany({ commit, dispatch, state }, payload) {
+    try {
+      const res = await axios.post('bid/bidUnaward/', {
+        companyId: payload.companyId,
+        bidId: payload.bidId,
+      });
+
+      if (res.status === 200) {
+        dispatch('getBidBySerial', {
+          id: payload.userId,
+          serial: payload.serial,
+        });
+      }
+    } catch (err) {
+      if (state.apiCounter == 2) {
+        dispatch('apiSignOutAction');
+      } else if (err.response.status === 403) {
+        await dispatch('refreshToken');
+        state.apiCounter = 2;
+        dispatch('UnAwardCompany', payload);
+      }
+    }
+  },
+  async UnDisqualifyCompany({ commit, dispatch, state }, payload) {
+    try {
+      const res = await axios.post('bid/bidUndisqualify/', {
+        companyId: payload.companyId,
+        bidId: payload.bidId,
+      });
+
+      if (res.status === 200) {
+        dispatch('getBidBySerial', {
+          id: payload.userId,
+          serial: payload.serial,
+        });
+      }
+    } catch (err) {
+      if (state.apiCounter == 2) {
+        dispatch('apiSignOutAction');
+      } else if (err.response.status === 403) {
+        await dispatch('refreshToken');
+        state.apiCounter = 2;
+        dispatch('UnDisqualifyCompany', payload);
+      }
+    }
+  },
+
   async submitBid({ commit, state, dispatch }, payload) {
     const config = {
       headers: {

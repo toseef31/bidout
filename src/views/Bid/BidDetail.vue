@@ -86,7 +86,7 @@
             rounded="lg"
             height="119"
             width="300"
-            v-if="!isAfterDueDate"
+            v-if="bidDetail.receivingBids"
           >
             <div class="status" v-if="bidDetail.receivingBids">
               Status: Receiving Bids
@@ -132,7 +132,7 @@
         </v-col>
 
         <v-col cols="auto">
-          <div class="toggle-setting" v-if="!isAfterDueDate">
+          <div class="toggle-setting" v-if="bidDetail.receivingBids">
             <v-btn
               class="py-2 setting"
               plain
@@ -279,7 +279,7 @@
           </div>
         </v-col>
 
-        <v-col class="status-sec mr-6 text-left mt-2" cols="auto" v-if="!isAfterDueDate">
+        <v-col class="status-sec mr-6 text-left mt-2" cols="auto" v-if="bidDetail.receivingBids">
 
           <label class="intent-title">Intent to bid? </label>
                   <v-radio-group
@@ -307,7 +307,7 @@
             rounded="lg"
             height="119"
             width="300"
-            v-if="!isAfterDueDate"
+            v-if="bidDetail.receivingBids"
           >
             <div class="status" v-if="bidDetail.receivingBids">
               Status: Receiving Bids
@@ -496,7 +496,7 @@ export default {
       currentItem: 'tab-1',
       isSetting: false,
       users: '',
-      actualTime: moment().format('X'),
+      actualTime: moment.utc().format('X'),
       years: 0,
       months: 0,
       days: 0,
@@ -578,7 +578,7 @@ export default {
     },
     addOneSecondToActualTimeEverySecond() {
       const component = this;
-      component.actualTime = moment().format('X');
+      component.actualTime = moment.utc().format('X');
       setTimeout(() => {
         component.addOneSecondToActualTimeEverySecond();
       }, 1000);
@@ -586,11 +586,11 @@ export default {
     getDiffInSeconds() {
       const bidDueDate = this.bidDetail.bidData.dueDate;
       const bidDueTime = this.bidDetail.bidData.dueTime;
-      const momentTime = moment(bidDueTime, ['h:mm:ss A']).format('HH:mm:ss');
+      const momentTime = moment.utc(bidDueTime, ['h:mm:ss A']).format('HH:mm:ss');
 
       const stringDate = `${bidDueDate}T${momentTime}`;
-      const momentDueDate = moment(stringDate);
-      return moment(momentDueDate).format('X') - this.actualTime;
+      const momentDueDate = moment.utc(stringDate);
+      return moment.utc(momentDueDate).format('X') - this.actualTime;
     },
     compute() {
       const duration = moment.duration(this.getDiffInSeconds(), 'seconds');
@@ -620,16 +620,6 @@ export default {
     },
     getUnansweredQuestionCount() {
       return this.$store.getters.unansweredQuestionCount;
-    },
-    isAfterDueDate() {
-      const bidDueDate = this.bidDetail.bidData.dueDate;
-      const bidDueTime = this.bidDetail.bidData.dueTime;
-      const currentDate = moment();
-      const Time = moment(bidDueTime, ['h:mm:ss A']).format('HH:mm:ss');
-      const stringDate = `${bidDueDate}T${Time}`;
-      const momentDueDate = moment(stringDate);
-
-      return moment(currentDate).isAfter(momentDueDate);
     },
     noOfBidSubmitted() {
       return this.bidDetail.supplierSubmissions.length;
