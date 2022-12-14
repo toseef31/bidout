@@ -29,7 +29,7 @@
     <v-simple-table class="submission-table-style">
       <template v-slot:default>
         <tbody>
-          <tr v-for="(item,index) in bidDetail.bidData.lineItems" :key="index">
+          <tr v-for="(item,index) in bidDetail.bidData.lineItems.filter((el) => el.required === 'true')" :key="index">
             <td class="text-left" v-if="item.required"> {{item.description}}</td>
             <template v-if="item.required" v-for="(submission) in bidDetail.supplierSubmissions">
               <td v-if="submission.lineItems[index].price === 'NO_BID'">
@@ -65,8 +65,8 @@
           <tr>
             <td class="text-left">Supplier Attachments</td>
             <template v-for="(item,index) in bidDetail.supplierSubmissions">
-              <td class="text-left d-flex flex-column attach flex-wrap" v-if="item.supplierAttachments && item.supplierAttachments.length">
-              <div class="pb-4 attach-group d-inline-flex" v-for="(doc,attIndex) in bidDetail.supplierSubmissions[index].supplierAttachments" :key="attIndex">
+              <td class="text-left " v-if="item.supplierAttachments && item.supplierAttachments.length">
+              <div class="pb-4  d-inline-flex pr-10" v-for="(doc,attIndex) in bidDetail.supplierSubmissions[index].supplierAttachments" :key="attIndex">
             <img
               :src="require('@/assets/images/bids/FilePdf.png')"
               width="32"
@@ -88,13 +88,14 @@
     </v-simple-table>
   </div>
 
-    <div class="submission-section">
+    <div class="submission-section" v-if="question.length">
       <div class="title-detail-supplier mt-10">Supplier Answers</div>
       <v-simple-table class="supplier-answer-table-style mt-3">
       <template v-slot:default>
         <tbody>
           <tr v-for="(item,index) in question" :key="index">
             <td class="text-left" v-if="item.type !== 'category'"> {{item.title}}</td>
+
             <template v-for="(ans) in answers">
               <td class="text-left" v-if="ans.answers[index].answer !== 'null' && item.questionType === 'checkbox'">
                {{ans.answers[index].answer === 'true' ? "Yes" : 'No' }}
@@ -121,26 +122,79 @@
             </template>
 
           </tr>
+
         </tbody>
       </template>
     </v-simple-table>
+
   </div>
 
-    <!-- <v-simple-table class="button-table-style mt-8" v-if="isAfterDueDate && bidDetail.user_status === 'waiting'"> -->
-        <v-simple-table class="button-table-style mt-8" >
+        <v-simple-table class="button-table-style mt-8" v-if="checkTime">
       <template v-slot:default>
         <tbody>
           <tr>
             <td class="text-left"></td>
             <template v-for="(item,index) in bidDetail.supplierSubmissions">
               <td class="text-left">
-              <div class="d-flex flex-column">
-                <v-btn @click="award(item.companyId)"   color="#0d9648" depressed >
-            Award Bid
-              </v-btn>
-              <v-btn @click="disqualify(item.companyId)"   color="#F03F20" depressed  class="mt-2">
-            Disqualify Bid
-              </v-btn>
+              <div class="d-flex flex-column" v-if="!checkAwardee(item.companyId) && !checkRejectee(item.companyId)">
+                <v-btn
+                  @click="award(item.companyId,index,'award')"
+                  color="#0d9648" depressed :disabled="showLoading[index].load && showLoading[index].action === 'award'" >
+                  <v-progress-circular
+                    v-if="showLoading[index].load && showLoading[index].action === 'award'"
+                    indeterminate
+                    :width="3"
+                    size="25"
+                    color="#0D9648"
+                    ></v-progress-circular>
+                    <div v-else>Award Bid</div>
+
+                </v-btn>
+                <v-btn
+                  @click="disqualify(item.companyId,index,'disqualify')"   color="#F03F20" depressed  class="mt-2" :disabled="showLoading[index].load && showLoading[index].action === 'disqualify'"
+
+                >
+
+                 <v-progress-circular
+                    v-if="showLoading[index].load && showLoading[index].action === 'disqualify'"
+                    indeterminate
+                    :width="3"
+                    size="25"
+                    color="#F03F20"
+                    ></v-progress-circular>
+                    <div v-else> Disqualify Bid</div>
+                </v-btn>
+              </div>
+              <div v-else class="d-flex flex-column">
+                <v-btn
+                  @click="unAward(item.companyId,index,'award')"
+                  color="#0d9648" depressed :disabled="showLoading[index].load && showLoading[index].action === 'award'"
+                  v-if="checkAwardee(item.companyId) && !checkRejectee(item.companyId)">
+                  <v-progress-circular
+                    v-if="showLoading[index].load && showLoading[index].action === 'award'"
+                    indeterminate
+                    :width="3"
+                    size="25"
+                    color="#0D9648"
+                    ></v-progress-circular>
+                    <div v-else>Un-Award</div>
+
+                </v-btn>
+                <v-btn
+                  @click="unDisqualify(item.companyId,index,'disqualify')"   color="#F03F20" depressed   :disabled="showLoading[index].load && showLoading[index].action === 'disqualify'"
+                  v-if="!checkAwardee(item.companyId) && checkRejectee(item.companyId)"
+                >
+
+                 <v-progress-circular
+                    v-if="showLoading[index].load && showLoading[index].action === 'disqualify'"
+                    indeterminate
+                    :width="3"
+                    size="25"
+                    color="#F03F20"
+                    ></v-progress-circular>
+                    <div v-else>Un-Disqualify</div>
+                </v-btn>
+
               </div>
 
             </td>
@@ -150,12 +204,14 @@
         </tbody>
       </template>
     </v-simple-table>
- <!--
-    <v-simple-table class="award-table-style mt-8" v-if="isAfterDueDate && bidDetail.user_status !== 'waiting'">
+
+  <div v-if="checkTime">
+    <v-simple-table class="award-table-style mt-8" v-if="bidDetail.bidData.awardees.length || bidDetail.bidData.rejectees.length">
       <template v-slot:default>
         <tbody>
           <tr>
             <td class="text-left"></td>
+            <template v-for="(item,index) in bidDetail.supplierSubmissions">
             <td class="text-left">
               <div
               class=" action d-flex align-center"
@@ -163,78 +219,36 @@
               height="56"
               rounded
               width="190"
-            >  <img  :src="require('@/assets/images/bids/disqualified.png')"/> Disqualified Bid</div>
-            <div
+              v-if="checkRejectee(item.companyId)"
+              >
+                <img  :src="require('@/assets/images/bids/disqualified.png')"/>
+                Disqualified Bid
+              </div>
+
+              <div
               class=" action d-flex align-center"
               color="white"
               height="56"
               rounded
               width="190"
-            >  <img  :src="require('@/assets/images/bids/awarded.png')"/> Awarded Bid</div>
-                      </div>
+              v-if="checkAwardee(item.companyId)"
+              >
+                <img  :src="require('@/assets/images/bids/awarded.png')"/>
+                Awarded Bid
+              </div>
 
             </td>
-            <td class="text-left ">
-              <div
-            class=" action d-flex align-center"
-          color="white"
-          height="56"
-          rounded
-          width="190"
-        >  <img  :src="require('@/assets/images/bids/disqualified.png')"/> Disqualified Bid</div>
-            <div
-              class=" action d-flex align-center"
-              color="white"
-              height="56"
-              rounded
-              width="190"
-            >  <img  :src="require('@/assets/images/bids/awarded.png')"/> Awarded Bid</div>
-          </div>
-            </td>
-            <td class="text-left ">
-                          <div
-              class=" action d-flex align-center"
-              color="white"
-              height="56"
-              rounded
-              width="190"
-            >  <img  :src="require('@/assets/images/bids/disqualified.png')"/> Disqualified Bid</div>
-            <div
-              class=" action d-flex align-center"
-              color="white"
-              height="56"
-              rounded
-              width="190"
-            >  <img  :src="require('@/assets/images/bids/awarded.png')"/> Awarded Bid</div>
-          </div>
-            </td>
-            <td class="text-left ">
-            <div
-                class=" action d-flex align-center"
-            color="white"
-            height="56"
-            rounded
-            width="190"
-          >  <img  :src="require('@/assets/images/bids/disqualified.png')"/> Disqualified Bid</div>
-          <div
-                        class=" action d-flex align-center"
-            color="white"
-            height="56"
-            rounded
-            width="190"
-          >  <img  :src="require('@/assets/images/bids/awarded.png')"/> Awarded Bid</div>
-          </div>
-            </td>
+          </template>
           </tr>
         </tbody>
       </template>
-    </v-simple-table> -->
+    </v-simple-table>
+  </div>
     <div class="text-center b-title-detail " v-if="bidDetail.supplierSubmissions.length === 0">There are currently no bid submissions by service providers. </div>
   </v-col>
 </template>
 
 <script>
-import moment from 'moment-timezone';
 import { mapActions } from 'vuex';
 
 export default {
@@ -242,15 +256,21 @@ export default {
     return {
       answers: [],
       user: '',
-      loading: false,
+      loadings: [],
     };
   },
   computed: {
     bidDetail() {
+      for (let i = 0; i < this.$store.getters.bidViewData.supplierSubmissions.length; i++) {
+        this.loadings.push({
+          load: false,
+          action: 'neither',
+        });
+      }
       return this.$store.getters.bidViewData;
     },
     question() {
-      const ques = this.bidDetail.bidData.questions;
+      const ques = Array.isArray(this.bidDetail.bidData.questions) ? this.bidDetail.bidData.questions : [];
       this.answers = this.bidDetail.supplierSubmissions;
       const keys = [];
 
@@ -268,25 +288,50 @@ export default {
 
       return ques;
     },
-    isAfterDueDate() {
-      const bidDueDate = this.bidDetail.bidData.dueDate;
-      const bidDueTime = this.bidDetail.bidData.dueTime;
-      const currentDate = moment();
-      const Time = moment(bidDueTime, ['h:mm:ss A']).format('HH:mm:ss');
-      const stringDate = `${bidDueDate}T${Time}`;
-      const momentDueDate = moment(stringDate);
-
-      return moment(currentDate).isAfter(momentDueDate);
-    },
     showLoading() {
-      return this.loading;
+      return this.loadings;
+    },
+    checkTime() {
+      if (this.bidDetail.bidData.type !== 'bidout') {
+        if (this.bidDetail.receivingBids) return false;
+      } else if (this.bidDetail.bidout) {
+        return false;
+      }
+      return true;
     },
   },
   methods: {
-    ...mapActions(['awardCompany', 'rejectCompany']),
-    async award(id) {
-      this.loading = true;
-      console.log('Award -', id);
+    ...mapActions(['awardCompany', 'rejectCompany', 'UnAwardCompany', 'UnDisqualifyCompany']),
+    checkAwardee(id) {
+      const { awardees } = this.bidDetail.bidData;
+
+      let result = false;
+      if (awardees && awardees.length) {
+        awardees.forEach((el) => {
+          if (el === id) {
+            result = true;
+          }
+        });
+      }
+      return result;
+    },
+    checkRejectee(id) {
+      const { rejectees } = this.bidDetail.bidData;
+
+      let result = false;
+      if (rejectees && rejectees.length) {
+        rejectees.forEach((el) => {
+          if (el === id) {
+            result = true;
+          }
+        });
+      }
+      return result;
+    },
+    async award(id, index, action) {
+      this.loadings[index].action = action;
+      this.loadings[index].load = true;
+
       await this.awardCompany({
         companyId: id,
         userId: this.user.id,
@@ -294,11 +339,13 @@ export default {
         serial: this.$route.params.serial,
       });
 
-      this.loading = false;
+      this.loadings[index].load = false;
+      this.loadings[index].action = 'neither';
     },
-    async disqualify(id) {
-      console.log('Disqualify - ', id);
-      this.loading = true;
+    async disqualify(id, index, action) {
+      this.loadings[index].action = action;
+      this.loadings[index].load = true;
+
       await this.rejectCompany({
         companyId: id,
         userId: this.user.id,
@@ -306,10 +353,40 @@ export default {
         serial: this.$route.params.serial,
       });
 
-      this.loading = false;
+      this.loadings[index].load = false;
+      this.loadings[index].action = 'neither';
+    },
+    async unAward(id, index, action) {
+      this.loadings[index].action = action;
+      this.loadings[index].load = true;
+
+      await this.UnAwardCompany({
+        companyId: id,
+        userId: this.user.id,
+        bidId: this.bidDetail.bidData.id,
+        serial: this.$route.params.serial,
+      });
+
+      this.loadings[index].load = false;
+      this.loadings[index].action = 'neither';
+    },
+    async unDisqualify(id, index, action) {
+      this.loadings[index].action = action;
+      this.loadings[index].load = true;
+
+      await this.UnDisqualifyCompany({
+        companyId: id,
+        userId: this.user.id,
+        bidId: this.bidDetail.bidData.id,
+        serial: this.$route.params.serial,
+      });
+
+      this.loadings[index].load = false;
+      this.loadings[index].action = 'neither';
     },
   },
   mounted() {
+    window.scrollTo({ top: 0, behavior: 'smooth' });
     this.user = this.$store.getters.userInfo;
   },
 };

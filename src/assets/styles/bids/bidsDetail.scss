@@ -1022,8 +1022,9 @@
   
       .button-table-style {
         margin-bottom: 10px;
+        border-top: 1px solid #f1f1f1;
         .v-btn:not(.v-btn--round).v-size--default {
-          width: 137px;
+          width: 190px;
           height: 43px;
           .v-btn__content {
            color: white;
@@ -1045,8 +1046,7 @@
               padding-left: 24px;
               padding-right: 24px;
               td {
-                padding-top: 16px;
-                padding-bottom: 16px;
+                padding-top: 30px;
                 padding-left: 17px;
               }
               td:first-child {
@@ -1063,7 +1063,7 @@
       }
 
       .award-table-style {
-        margin-bottom: 10px;
+        border-top: 1px solid #f1f1f1;
         .action {
           border: 1px solid #f1f1f1;
           border-radius: 8px;
@@ -1071,12 +1071,13 @@
           font-size: 14px;
           font-weight: 700;
           color: #0D1139;
-          padding: 8px 12px
+          padding: 8px 12px;
+          width: 190px;
+          height: 56px;
         }
         table {
           table-layout: fixed;
           overflow-x: auto;
-          white-space: nowrap;
           tbody {
             tr:hover {
               background-color: transparent !important;
@@ -1085,12 +1086,15 @@
               padding-left: 24px;
               padding-right: 24px;
               td {
-                padding-top: 16px;
-                padding-bottom: 16px;
+                padding-top: 30px;
                 padding-left: 17px;
               }
               td:first-child {
                 width: 20%;
+                padding-left: 26px;
+              }
+              td:nth-child(2) {
+                width: 30%
               }
               
             }
@@ -1107,13 +1111,6 @@
           table {
             table-layout: fixed;
             overflow-x: auto;
-            .attach {
-              column-gap: 20px;
-              .attach-group {
-                flex: 1 1 0%;
-              }
-
-            }
             tbody {
               tr:hover {
                 background-color: transparent !important;

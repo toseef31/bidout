@@ -286,6 +286,54 @@ export default {
       }
     }
   },
+
+  async UnAwardCompany({ commit, dispatch, state }, payload) {
+    try {
+      const res = await axios.post('bid/bidUnaward/', {
+        companyId: payload.companyId,
+        bidId: payload.bidId,
+      });
+
+      if (res.status === 200) {
+        dispatch('getBidBySerial', {
+          id: payload.userId,
+          serial: payload.serial,
+        });
+      }
+    } catch (err) {
+      if (state.apiCounter == 2) {
+        dispatch('apiSignOutAction');
+      } else if (err.response.status === 403) {
+        await dispatch('refreshToken');
+        state.apiCounter = 2;
+        dispatch('UnAwardCompany', payload);
+      }
+    }
+  },
+  async UnDisqualifyCompany({ commit, dispatch, state }, payload) {
+    try {
+      const res = await axios.post('bid/bidUndisqualify/', {
+        companyId: payload.companyId,
+        bidId: payload.bidId,
+      });
+
+      if (res.status === 200) {
+        dispatch('getBidBySerial', {
+          id: payload.userId,
+          serial: payload.serial,
+        });
+      }
+    } catch (err) {
+      if (state.apiCounter == 2) {
+        dispatch('apiSignOutAction');
+      } else if (err.response.status === 403) {
+        await dispatch('refreshToken');
+        state.apiCounter = 2;
+        dispatch('UnDisqualifyCompany', payload);
+      }
+    }
+  },
+
   async submitBid({ commit, state, dispatch }, payload) {
     const config = {
       headers: {
