@@ -17,4 +17,5 @@ export default {
   bidMessageUnreadCount: 0,
   supplierBroadcastError: false,
   searchConv: '',
+  chatRefreshToken: 0,
 };
