@@ -24,7 +24,7 @@
                     <v-icon>mdi-account-group-outline</v-icon>
                   </v-list-item-avatar>
                   <v-list-item-content>
-                    <v-list-item-title v-if="conversation.company == ''" v-text="conversation.company"></v-list-item-title>
+                    <v-list-item-title v-if="conversation.company == ''" v-text=" (conversation.name || list.company.company.split('|||')[0])"></v-list-item-title>
                     <v-list-item-title v-else v-text="conversation.groupName"></v-list-item-title>
 
                     <v-list-item-subtitle v-if="conversation.isBid == true"

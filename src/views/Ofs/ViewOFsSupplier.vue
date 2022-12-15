@@ -197,13 +197,13 @@ export default {
     };
   },
   watch:{
-    searchCompany: _.debounce(function(){
+    searchCompany(){
       if(this.searchCompany < 1){
         this.hideList = false;
       }else{
         this.hideList = true;
       }
-    },500),
+    },
   },
   computed:{
     showSideBar(){
@@ -234,9 +234,9 @@ export default {
      return _.orderBy(subCats, 'orderNumber', 'asc');
     },
     getSupplierList(){
-      if(this.searchCompany.length > 1){
+      // if(this.searchCompany.length > 1){
         this.searchSupplier(this.searchCompany);
-      }
+      // }
     },
     viewCompany(slug,name){
       this.getCompanyInfo({'slug':slug,'name':name});
