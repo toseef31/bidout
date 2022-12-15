@@ -140,13 +140,37 @@
       <div class="title-detail">Team member</div>
       <div
         class="mt-10 d-flex flex-row flex-wrap team-member"
+
+      >
+
+      <div
+          class="d-flex align-center flex-child"
+        >
+          <v-img
+            v-if="bidDetail.bidData.userId.image"
+            width="48px"
+            height="48px"
+            :aspect-ratio="3/2"
+            :src="bidDetail.bidData.userId.image"
+          ></v-img>
+          <v-avatar v-else color="#0d96481a" size="62">
+            <v-icon color="#0d9648" large>mdi-account-outline </v-icon>
+          </v-avatar>
+          <span class="text--black px-4 bid-creator"
+            >{{ bidDetail.bidData.userId.firstName }} {{ bidDetail.bidData.userId.lastName }}</span
+          >
+          <span
+            class="bid-creator-title"
+            >Bid Creator</span
+          >
+        </div>
+
+        <div
         v-if="
           bidDetail.bidData &&
           bidDetail.bidData.invitedTeamMembers &&
           bidDetail.bidData.invitedTeamMembers.length > 0
         "
-      >
-        <div
           v-for="(item, index) in bidDetail.bidData.invitedTeamMembers"
           :key="index"
           class="d-flex align-center flex-child"
@@ -164,18 +188,8 @@
           <span class="text--black px-4 bid-creator"
             >{{ item && item.firstName }} {{ item && item.lastName }}</span
           >
-          <span
-            class="bid-creator-title"
-            v-if="
-              bidDetail.bidData.userId.firstName === item.firstName &&
-              bidDetail.bidData.userId.lastName === item.lastName
-            "
-            >Bid Creator</span
-          >
         </div>
       </div>
-
-      <div v-else class="no-data">None</div>
     </div>
 
     <div class="pt-8 pb-10 bid-row-2">
