@@ -11,14 +11,18 @@ export default {
         console.log(err);
       });
   },
-  getAllConversations({ commit }, payload) {
-    commit('setPageLoader', true);
+  getAllConversations({ commit,state }, payload) {
+    if(state.chatRefreshToken != 1){
+      commit('setPageLoader', true);
+    }
     axios
       .get(`/chat/getConversations/${payload}`)
       .then((responce) => {
         console.log('hhyyy',responce.data);
         commit('setConverstaionList', responce.data.conversations);
-        commit('setPageLoader', false);
+        if(state.chatRefreshToken != 1){
+          commit('setPageLoader', false);
+        }
       })
       .catch((err) => {
         console.log(err);
@@ -62,6 +66,7 @@ export default {
     axios
       .post('chat/sendMessage', formData, config)
       .then((responce) => {
+        state.chatRefreshToken = 1;
         dispatch('getAllConversations', rootState.auth.userInfo.id);
         commit('setNewMessages', responce.data.message);
       })
@@ -102,8 +107,9 @@ export default {
       })
       .then((responce) => {
         commit('setMessagesList', null);
+        state.chatRefreshToken = 1;
         dispatch('getAllConversations', rootState.auth.userInfo.id);
-        dispatch('getArchiveChats', state.userInfo.id);
+        dispatch('getArchiveChats', rootState.auth.userInfo.id);
       })
       .catch((err) => {
         console.log(err);
@@ -136,6 +142,7 @@ export default {
     axios
       .post('/chat/createConversation/', payload)
       .then((responce) => {
+        state.chatRefreshToken = 1;
         dispatch('getAllConversations', rootState.auth.userInfo.id);
         commit('setCreateMsg', responce.data.message);
         setTimeout(() => {
@@ -151,6 +158,7 @@ export default {
     axios
       .post('/chat/removeParticipantsFromConversation/', payload)
       .then((responce) => {
+        state.chatRefreshToken = 1;
         dispatch('getAllConversations', rootState.auth.userInfo.id);
       })
       .catch((err) => {
@@ -175,6 +183,7 @@ export default {
         userId: payload.userId,
       })
       .then((responce) => {
+        state.chatRefreshToken = 1;
         dispatch('getAllConversations', rootState.auth.userInfo.id);
         dispatch('getArchiveChats', payload.userId);
       })
