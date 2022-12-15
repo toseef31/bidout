@@ -597,7 +597,6 @@ export default {
     this.user = this.$store.getters.userInfo;
   },
   async mounted() {
-    console.log(this.user.id);
     await this.getAllConversations(this.user.id);
     document.title = "Messages - BidOut";
     if (screen.width < 767) {
