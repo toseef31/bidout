@@ -104,4 +104,7 @@ export default {
   alertEditBidSubmissionSuccess(state) {
     return state.alertEditBidSubmissionSuccess;
   },
+  bidSubmissionAlert(state) {
+    return state.bidSubmissionAlert;
+  },
 };

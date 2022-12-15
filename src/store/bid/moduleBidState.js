@@ -48,4 +48,10 @@ export default {
   invitedNewSuppliers: null,
   unansweredQuestionCount: 0,
   bidApiCounter: 0,
+  bidSubmissionAlert: {
+    award: false,
+    disqualify: false,
+    unAward: false,
+    unDisqualify: false,
+  },
 };

@@ -147,4 +147,28 @@ export default {
   setAllIntend(state, payload) {
     state.bidAllIntend = payload;
   },
+  setAwardAlert(state) {
+    state.bidSubmissionAlert.award = true;
+    setTimeout(() => {
+      state.bidSubmissionAlert.award = false;
+    }, 8000);
+  },
+  setDisqualifyAlert(state) {
+    state.bidSubmissionAlert.disqualify = true;
+    setTimeout(() => {
+      state.bidSubmissionAlert.disqualify = false;
+    }, 8000);
+  },
+  setUnAwardAlert(state) {
+    state.bidSubmissionAlert.unAward = true;
+    setTimeout(() => {
+      state.bidSubmissionAlert.unAward = false;
+    }, 8000);
+  },
+  setUnDisqualifyAlert(state) {
+    state.bidSubmissionAlert.unDisqualify = true;
+    setTimeout(() => {
+      state.bidSubmissionAlert.unDisqualify = false;
+    }, 8000);
+  },
 };

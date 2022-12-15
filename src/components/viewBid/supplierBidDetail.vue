@@ -18,7 +18,7 @@
           <v-row>
           <v-col md="2" class="text-right mr-1 title-desc">Due Date/Time:</v-col>
            <v-col class="title-brief">{{ bidDetail.bidData.dueDate | moment('MM/DD/YYYY') }} @
-              {{ bidDetail.bidData.dueTime }}</v-col>
+              {{ bidDetail.bidData.dueTime }} CST</v-col>
           </v-row>
 
           <v-row>

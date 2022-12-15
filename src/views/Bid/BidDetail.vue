@@ -56,6 +56,20 @@
       This bid has been updated successfully!
     </v-alert>
 
+    <v-alert type="success"  v-show="showBidSubmissionAlert.award" class="mx-5 mt-5">
+      You have been awarded a company successfully!
+    </v-alert>
+
+    <v-alert type="success"  v-show="showBidSubmissionAlert.disqualify" class="mx-5 mt-5">
+      You have been disqualified a company successfully!
+    </v-alert>
+    <v-alert type="success"  v-show="showBidSubmissionAlert.unAward" class="mx-5 mt-5">
+      You have been Un-awarded a company successfully!
+    </v-alert>
+    <v-alert type="success"  v-show="showBidSubmissionAlert.unDisqualify" class="mx-5 mt-5">
+      You have been Un-disqualified a company successfully!
+    </v-alert>
+
       <v-row class="px-5 my-5 row-title" no-gutters v-if="getUserType === 'buyer'">
         <v-col>
           <div class="pa-1 text-left text--primary">
@@ -72,7 +86,7 @@
               </div>
               <div>
                 Due Date/Time: {{ bidDetail.bidData.dueDate | moment('MM/DD/YYYY') }} @
-                {{ bidDetail.bidData.dueTime }}
+                {{ bidDetail.bidData.dueTime }} CST
               </div>
               <div>
                 Created by: {{ bidDetail.bidData.userId.firstName }}
@@ -118,9 +132,9 @@
             width="290"
             v-else>
 
-              <div  class="award-status" v-if="bidDetail.user_status === 'waiting'">Status: Not Awarded</div>
+              <div  class="award-status" v-if="(bidDetail.bidData.rejectees && bidDetail.bidData.rejectees.length === 0 && bidDetail.bidData.awardees && bidDetail.bidData.awardees.length === 0) || !bidDetail.bidData.rejectees &&  !bidDetail.bidData.awardees">Status: Not Awarded</div>
 
-              <div class="award-status" v-if="bidDetail.user_status === 'awarded' ||bidDetail.user_status === 'rejected'">Status: Awarded</div>
+              <div class="award-status" v-if="bidDetail.bidData.rejectees && bidDetail.bidData.rejectees.length || bidDetail.bidData.awardees && bidDetail.bidData.awardees.length">Status: Awarding Phase</div>
               <v-divider
 
               class="mt-3"
@@ -271,7 +285,7 @@
               </div>
               <div>
                 Due Date/Time: {{ bidDetail.bidData.dueDate | moment('MM/DD/YYYY') }} @
-                {{ bidDetail.bidData.dueTime }}
+                {{ bidDetail.bidData.dueTime }} CST
               </div>
               <div>
                 Created by: {{ bidDetail.bidData.userId.firstName }}
@@ -347,12 +361,11 @@
             rounded="lg"
             height="85"
             width="290"
-            v-else>
+            v-if="!bidDetail.receivingBids && bidDetail.user_status !== 'awarded'">
 
               <div  class="award-status" v-if="bidDetail.user_status === 'waiting'">Status: Awarding Phase</div>
 
-              <div class="award-status" v-if="bidDetail.user_status === 'awarded'">Status: Awarded, Congrats!</div>
-              <div class="award-status" v-if="bidDetail.user_status === 'rejected'">Status: Not Awarded</div>
+              <div class="award-status"  v-if="bidDetail.user_status === 'rejected'">Status: Not Awarded</div>
               <v-divider
 
               class="mt-3"
@@ -361,7 +374,27 @@
             <div
              class="award-bid-number"
             >
-            {{isBidSubmitted ? 'Bid Submitted': 'Bid is not Submitted'}}
+            <div @click="ChangeT('tab-2')">{{isBidSubmitted ? 'Bid Submitted': 'Bid is not Submitted'}} </div>
+            </div>
+          </v-sheet>
+          <v-sheet  class="py-2 px-5 text-left bid-status-card"
+            rounded="lg"
+            height="85"
+            width="290"
+            v-if="bidDetail.user_status === 'awarded' && isBidSubmitted && !bidDetail.receivingBids">
+
+              <div class="status">Status: Awarded, Congrats!</div>
+
+              <v-divider
+
+              class="mt-3"
+              color="#0D9648"
+            ></v-divider>
+            <div
+             class="bid-number"
+
+            >
+            <div @click="ChangeT('tab-2')">Bid Submitted</div>
             </div>
           </v-sheet>
         </v-col>
@@ -509,7 +542,7 @@ export default {
       currentItem: 'tab-1',
       isSetting: false,
       users: '',
-      actualTime: moment.utc().format('X'),
+      actualTime: moment().format('X'),
       years: 0,
       months: 0,
       days: 0,
@@ -591,7 +624,7 @@ export default {
     },
     addOneSecondToActualTimeEverySecond() {
       const component = this;
-      component.actualTime = moment.utc().format('X');
+      component.actualTime = moment().format('X');
       setTimeout(() => {
         component.addOneSecondToActualTimeEverySecond();
       }, 1000);
@@ -599,11 +632,11 @@ export default {
     getDiffInSeconds() {
       const bidDueDate = this.bidDetail.bidData.dueDate;
       const bidDueTime = this.bidDetail.bidData.dueTime;
-      const momentTime = moment.utc(bidDueTime, ['h:mm:ss A']).format('HH:mm:ss');
+      const momentTime = moment(bidDueTime, ['h:mm:ss A']).format('HH:mm:ss');
 
       const stringDate = `${bidDueDate}T${momentTime}`;
-      const momentDueDate = moment.utc(stringDate);
-      return moment.utc(momentDueDate).format('X') - this.actualTime;
+      const momentDueDate = moment(stringDate);
+      return moment(momentDueDate).format('X') - this.actualTime;
     },
     compute() {
       const duration = moment.duration(this.getDiffInSeconds(), 'seconds');
@@ -651,6 +684,9 @@ export default {
     },
     showIntent() {
       return this.$store.getters.bidIntent;
+    },
+    showBidSubmissionAlert() {
+      return this.$store.getters.bidSubmissionAlert;
     },
   },
   mounted() {

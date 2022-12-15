@@ -132,10 +132,6 @@ export default {
           commit('setSupplierBid', res.data.supplierSubmissions);
           commit('setIsBidSubmitted', true);
         }
-
-        if (res.data.user_type === 'buyer') {
-          commit('setSubmittedBids', res.data.supplierSubmissions);
-        }
       } else {
         commit('setPageLoader', false);
         commit('setViewBidError', false);
@@ -272,6 +268,7 @@ export default {
           id: payload.userId,
           serial: payload.serial,
         });
+        commit('setAwardAlert');
       }
     } catch (err) {
       if (state.apiCounter == 2) {
@@ -296,6 +293,7 @@ export default {
           id: payload.userId,
           serial: payload.serial,
         });
+        commit('setDisqualifyAlert');
       }
     } catch (err) {
       if (state.apiCounter == 2) {
@@ -320,6 +318,7 @@ export default {
           id: payload.userId,
           serial: payload.serial,
         });
+        commit('setUnAwardAlert');
       }
     } catch (err) {
       if (state.apiCounter == 2) {
@@ -343,6 +342,7 @@ export default {
           id: payload.userId,
           serial: payload.serial,
         });
+        commit('setUnDisqualifyAlert');
       }
     } catch (err) {
       if (state.apiCounter == 2) {
@@ -1031,8 +1031,8 @@ export default {
     }
   },
   async getDraftBySerial({ commit, state, dispatch }, payload) {
-    console.log('state',state.bidData);
-    console.log('attachement',state.attachement);
+    console.log('state', state.bidData);
+    console.log('attachement', state.attachement);
     commit('setPageLoader', true);
     try {
       const res = await axios.get(
