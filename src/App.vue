@@ -34,7 +34,7 @@ export default {
       localStorage.setItem('userData', JSON.stringify(this.$store.state.auth.userInfo)); 
     });
     window.addEventListener('load', (event) => {
-      this.$store.auth.userInfo = JSON.parse(localStorage.getItem('userData'));
+      this.$store.state.auth.userInfo = JSON.parse(localStorage.getItem('userData'));
       localStorage.removeItem('userData');
     });
   },
