@@ -47,6 +47,7 @@ export default {
   draftBidsListId: null,
   invitedNewSuppliers: null,
   unansweredQuestionCount: 0,
+  answeredCount: 0,
   bidApiCounter: 0,
   bidSubmissionAlert: {
     award: false,

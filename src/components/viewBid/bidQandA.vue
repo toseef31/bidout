@@ -66,9 +66,9 @@
       </v-expansion-panels>
 
       <div class="title-detail" v-if="!getQAndForAnswer.length">Answered questions</div>
-      <div v-else class="title-detail mt-6">Answer questions</div>
+      <div v-if="getQAndAAnswered.length && getQAndForAnswer.length" class="title-detail mt-6">Answered questions</div>
 
-   <div v-for="(item,index) in getQAndA" :key="index">
+   <div v-for="(item,index) in getQAndAAnswered" :key="index">
 
       <div class="header d-flex flex-column pt-4">
         <span>Question:</span>
@@ -85,7 +85,7 @@
       <div class="header d-flex flex-column pt-4" >
         <span>Answer:</span>
 
-        <div class=" mt-1" v-if="item.answer"
+        <div class=" mt-1"
           >{{item.answer}}
           <v-tooltip right>
             <template v-slot:activator="{ on, attrs }">
@@ -136,9 +136,8 @@
               </v-btn>
             </div>
           </div>
-        <span class="sub-title mt-4" v-if="item.answer">By {{user.firstName + " " + user.lastName}} ({{user.company.company}}) </span>
-        <span class="sub-title mt-1" v-if="item.answer">{{ item.answeredOn._seconds | moment('MM/DD/YYYY')}} - {{ item.answeredOn._seconds | moment('hh:mma')}}</span>
-        <span class="mt-2 sub-title" v-if="!item.answer">Not answered yet</span>
+        <span class="sub-title mt-4">By {{user.firstName + " " + user.lastName}} ({{user.company.company}}) </span>
+        <span class="sub-title mt-1">{{ item.answeredOn._seconds | moment('MM/DD/YYYY')}} - {{ item.answeredOn._seconds | moment('hh:mma')}}</span>
       </div>
       <v-divider class="mb-1 mt-4" color="#5C5C5C"/>
     </div>
@@ -147,7 +146,7 @@
     <div class="text-center q-title-detail " v-if="(getUserType === 'buyer' && getQAndA.length === 0)">There are currently not any questions, which have been asked by suppliers. Once suppliers as a question this tab will be populated.</div>
 
     <div class="px-6 main-section" v-if="getUserType === 'supplier'">
-        <span class="title-detail">Ask a question</span>
+        <span class="title-detail" v-if="bidDetail.receivingBids">Ask a question</span>
 
             <v-textarea
               placeholder="Question here..."
@@ -156,10 +155,11 @@
               type="text"
               v-model="question"
               class="mt-4"
+              v-if="bidDetail.receivingBids"
             >
             </v-textarea>
 
-            <div class="text-right">
+            <div class="text-right" v-if="bidDetail.receivingBids">
               <v-btn
                 color="#0D9648"
                 height="40"
@@ -180,37 +180,58 @@
               </v-btn>
             </div>
 
-      <div v-if="getQAndA.length" class="title-detail mt-6">Answered questions</div>
+      <div v-if="getQAndAAnswered.length" class="title-detail mt-6">Answered questions</div>
 
-    <div v-if="getQAndA.length">
-        <div v-for="(item,index) in getQAndA" :key="index">
+    <div v-if="getQAndAAnswered.length">
+        <div v-for="(item,index) in getQAndAAnswered" :key="index">
           <div class="header d-flex flex-column pt-4">
             <span>Question:</span>
 
             <span class=" mt-1"
               >{{item.question}}</span
             >
+            <span class="sub-title mt-4" v-if="user.id === item.questionBy">By {{(user.firstName + " " + user.lastName)}} ({{user.company.company}})</span>
 
-            <span class="sub-title mt-4">By {{(user.firstName + " " + user.lastName)}} ({{user.company.company}})</span>
+            <span class="sub-title mt-4" v-else>By Supplier</span>
             <span class="sub-title mt-1">{{ item.askedOn._seconds | moment('MM/DD/YYYY')}} - {{ item.askedOn._seconds | moment('hh:mma')}}</span>
           </div>
 
            <div class="header d-flex flex-column pt-4">
               <span>Answer:</span>
 
-              <span class=" mt-1" v-if="item.answer"
+              <span class=" mt-1"
                 >{{item.answer}}</span
               >
 
-              <span class="sub-title mt-4" v-if="item.answer">By {{item.answeredUserName
+              <span class="sub-title mt-4">By {{item.answeredUserName
 }} ({{item.answeredUserCompany}}) </span>
-              <span class="sub-title mt-1" v-if="item.answer">{{item.answeredOn._seconds | moment('MM/DD/YYYY')}} - {{ item.answeredOn._seconds | moment('hh:mma')}}</span>
-              <span class="mt-2 sub-title" v-if="!item.answer">Not answered yet</span>
+              <span class="sub-title mt-1">{{item.answeredOn._seconds | moment('MM/DD/YYYY')}} - {{ item.answeredOn._seconds | moment('hh:mma')}}</span>
+
            </div>
 
            <v-divider class="mb-1 mt-4" color="#5C5C5C"/>
         </div>
       </div>
+
+      <div v-if="getQAndAUnAnswered.length" class="title-detail mt-6">Un-answered questions</div>
+
+<div v-if="getQAndAUnAnswered.length">
+    <div v-for="(item,index) in getQAndAUnAnswered" :key="index">
+      <div class="header d-flex flex-column pt-4">
+        <span>Question:</span>
+
+        <span class=" mt-1"
+          >{{item.question}}</span
+        >
+        <span class="sub-title mt-4" v-if="user.id === item.questionBy">By {{(user.firstName + " " + user.lastName)}} ({{user.company.company}})</span>
+
+        <span class="sub-title mt-4" v-else>By Supplier</span>
+        <span class="sub-title mt-1">{{ item.askedOn._seconds | moment('MM/DD/YYYY')}} - {{ item.askedOn._seconds | moment('hh:mma')}}</span>
+      </div>
+
+       <v-divider class="mb-1 mt-4" color="#5C5C5C"/>
+    </div>
+  </div>
   </div>
 
   </v-col>
@@ -244,6 +265,12 @@ export default {
         }
       }
       return this.$store.getters.qAndA;
+    },
+    getQAndAAnswered() {
+      return this.$store.getters.qAndA.filter((el) => el.answer);
+    },
+    getQAndAUnAnswered() {
+      return this.$store.getters.qAndA.filter((el) => !el.answer);
     },
     getQAndForAnswer() {
       return this.getQAndA.filter((el) => !el.answer);

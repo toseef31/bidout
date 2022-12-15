@@ -477,12 +477,16 @@ export default {
       if (res.status === 200) {
         commit('setQAndA', res.data);
 
-        let count = 0;
+        let unAnsweredCount = 0;
+        let answeredCount = 0;
+
         res.data.forEach((el) => {
-          if (!el.answer) count++;
+          if (!el.answer) { unAnsweredCount++; } else { answeredCount++; }
         });
 
-        commit('setUnansweredQuestionCount', count);
+        commit('setUnansweredQuestionCount',
+          unAnsweredCount);
+        commit('setAnsweredQuestionCount', answeredCount);
       }
     } catch (err) {
       if (state.apiCounter === 2) {

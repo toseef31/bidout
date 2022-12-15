@@ -482,9 +482,9 @@
 
             </v-badge>
             <v-badge
-              v-if=" item.value === 4 &&getUnansweredQuestionCount !== 0"
+              v-if=" item.value === 4 &&getAnsweredQuestionCount !== 0"
               color="#0D9648"
-              :content="getUnansweredQuestionCount"
+              :content="getAnsweredQuestionCount"
               inline
               tile
             >
@@ -666,6 +666,9 @@ export default {
     },
     getUnansweredQuestionCount() {
       return this.$store.getters.unansweredQuestionCount;
+    },
+    getAnsweredQuestionCount() {
+      return this.$store.getters.answeredQuestionCount;
     },
     noOfBidSubmitted() {
       return this.bidDetail.supplierSubmissions.length;
