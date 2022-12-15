@@ -1,10 +1,13 @@
 export default {
-    userInfo (state){
-    	return state.userInfo
-    },
     userToken (state){
       return state.userToken
     },
+    userInfo (state){
+    	return state.userInfo
+    },
+    isAuthenticated(state){
+      return state.isAuthenticated;
+   }, 
     userId (state){
       return state.userId
     },
