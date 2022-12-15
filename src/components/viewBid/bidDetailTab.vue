@@ -10,7 +10,7 @@
           <div><span>Bid Type:</span> {{ bidDetail.bidData.type }}</div>
           <div>
             <span>Due Date/Time:</span> {{ bidDetail.bidData.dueDate | moment('MM/DD/YYYY') }} @
-            {{ bidDetail.bidData.dueTime }}
+            {{ bidDetail.bidData.dueTime }} CST
           </div>
           <div><span>Region:</span> {{ bidDetail.bidData.regions }}</div>
           <div>
