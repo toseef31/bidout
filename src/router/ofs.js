@@ -1,4 +1,5 @@
 import Base from '@/components/Layout/Base.vue';
+import store from '@/store';
 const routes = [
   {
     path: '',
@@ -9,7 +10,7 @@ const routes = [
         name: 'OFSHome',
         component: () => import('@/views/Ofs/OFSHome.vue'),
         beforeEnter: (to, from, next) => {
-          if(localStorage.getItem("userData") == null) {
+          if(store.state.auth.userInfo == null) {
               
               next();
           }else{
@@ -22,7 +23,7 @@ const routes = [
         name: 'CategoryName',
         component: () => import('@/views/Ofs/CategoryListing.vue'),
         beforeEnter: (to, from, next) => {
-          if(localStorage.getItem("userData") == null) {
+          if(store.state.auth.userInfo == null) {
               
               next();
           }else{
@@ -35,7 +36,7 @@ const routes = [
         name: 'CategoryListing',
         component: () => import('@/views/Ofs/CategoryListing.vue'),
         beforeEnter: (to, from, next) => {
-          if(localStorage.getItem("userData") == null) {
+          if(store.state.auth.userInfo == null) {
               
               next();
           }else{
@@ -48,7 +49,7 @@ const routes = [
         name: 'CompanyProfiles',
         component: () => import('@/views/Ofs/ViewCompany.vue'),
         beforeEnter: (to, from, next) => {
-          if(localStorage.getItem("userData") == null) {
+          if(store.state.auth.userInfo == null) {
               
               next();
           }else{
@@ -61,7 +62,7 @@ const routes = [
         name: 'SubCompanyProfile',
         component: () => import('@/views/Ofs/SubCompany.vue'),
         beforeEnter: (to, from, next) => {
-          if(localStorage.getItem("userData") == null) {
+          if(store.state.auth.userInfo == null) {
             next();
           }else{
             next('/dashboard');
