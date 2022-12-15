@@ -263,7 +263,7 @@
                 <td class="text-left">
                   <img :src="require('@/assets/images/bids/FilePdf.png')" />
                 </td>
-                <td class="text-left"><a :href="doc.url" target="_blank" class="text-decoration-none">{{ doc.fileName }}</a></td>
+                <td class="text-left d-block text-truncate pt-4" style="width:200px"><a :href="doc.url" target="_blank" class="text-decoration-none">{{ doc.fileName }}</a></td>
                 <td class="text-left">
                   <span>{{ doc.comment }}</span>
                 </td>
