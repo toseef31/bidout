@@ -240,6 +240,7 @@ export default {
   },
   mounted() {
     document.title = 'Bids - BidOut';
+    console.log('hjhjh');
     this.users = this.$store.getters.userInfo;
     this.getDraftBids(this.users.id);
     this.getBidsLists(this.users.id);

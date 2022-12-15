@@ -206,7 +206,7 @@ export default {
     document.title = "Dashboard - BidOut";
     
     this.pendingUserCount(this.$store.getters.userInfo.company.id)
-    this.users = JSON.parse(localStorage.getItem("userData")).user;
+    this.users = this.$store.getters.userInfo;
     this.getBidDashboard(this.userDatas.id);
     
     

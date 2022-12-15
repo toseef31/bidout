@@ -30,6 +30,13 @@ export default {
     this.timer = setInterval(() => {
       this.$store.dispatch('refreshToken');
     }, 3480000);
+    window.addEventListener('beforeunload', () => { 
+      localStorage.setItem('userData', JSON.stringify(this.$store.state.auth.userInfo)); 
+    });
+    window.addEventListener('load', (event) => {
+      this.$store.state.auth.userInfo = JSON.parse(localStorage.getItem('userData'))
+      localStorage.removeItem('userData');
+    });
   },
   beforeDestroy() {
     clearInterval(this.timer);
