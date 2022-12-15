@@ -13,7 +13,7 @@ const routes = [
         name: 'Messages',
         component: () => import('@/views/Chat.vue'),
         beforeEnter: (to, from, next) => {
-           if(localStorage.getItem("userData") == null) {
+           if(store.state.auth.userInfo == null) {
                next('/login');
            } else {
                next();

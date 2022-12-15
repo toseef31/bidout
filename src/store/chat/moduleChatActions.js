@@ -12,7 +12,6 @@ export default {
       });
   },
   getAllConversations({ commit,state }, payload) {
-    console.log(payload);
     if(state.chatRefreshToken != 1){
       commit('setPageLoader', true);
     }
@@ -50,7 +49,7 @@ export default {
         console.log(err);
       });
   },
-  sendMessage({ commit, state, dispatch }, payload) {
+  sendMessage({ commit, state, dispatch,rootState }, payload) {
     const config = {
       header: {
         'Content-Type': 'multipart/form-data',
@@ -68,7 +67,7 @@ export default {
       .post('chat/sendMessage', formData, config)
       .then((responce) => {
         state.chatRefreshToken = 1;
-        dispatch('getAllConversations', state.userId.id);
+        dispatch('getAllConversations', rootState.auth.userInfo.id);
         commit('setNewMessages', responce.data.message);
       })
       .catch((err) => {
@@ -100,7 +99,7 @@ export default {
       });
   },
   // Archive Chat
-  archiveChat({ commit, state, dispatch }, payload) {
+  archiveChat({ commit, state, dispatch,rootState }, payload) {
     axios
       .post('/chat/archiveConversation', {
         userId: payload.userId,
@@ -109,8 +108,8 @@ export default {
       .then((responce) => {
         commit('setMessagesList', null);
         state.chatRefreshToken = 1;
-        dispatch('getAllConversations', state.userId.id);
-        dispatch('getArchiveChats', state.userId.id);
+        dispatch('getAllConversations', rootState.auth.userInfo.id);
+        dispatch('getArchiveChats', rootState.auth.userInfo.id);
       })
       .catch((err) => {
         console.log(err);
@@ -139,12 +138,12 @@ export default {
       });
   },
   // Supplier Users List
-  createConversation({ commit, state, dispatch }, payload) {
+  createConversation({ commit, state, dispatch, rootState }, payload) {
     axios
       .post('/chat/createConversation/', payload)
       .then((responce) => {
         state.chatRefreshToken = 1;
-        dispatch('getAllConversations', state.userId.id);
+        dispatch('getAllConversations', rootState.auth.userInfo.id);
         commit('setCreateMsg', responce.data.message);
         setTimeout(() => {
           commit('setCreateMsg', null);
@@ -155,12 +154,12 @@ export default {
       });
   },
 
-  removeConvUser({ commit, state, dispatch }, payload) {
+  removeConvUser({ commit, state, dispatch, rootState }, payload) {
     axios
       .post('/chat/removeParticipantsFromConversation/', payload)
       .then((responce) => {
         state.chatRefreshToken = 1;
-        dispatch('getAllConversations', state.userId.id);
+        dispatch('getAllConversations', rootState.auth.userInfo.id);
       })
       .catch((err) => {
         console.log(err);
@@ -177,7 +176,7 @@ export default {
         console.log(err);
       });
   },
-  unArchiveConversation({ commit,state, dispatch }, payload) {
+  unArchiveConversation({ commit, dispatch, rootState }, payload) {
     axios
       .post('/chat/unarchiveConversation/', {
         conversationId: payload.conversationId,
@@ -185,7 +184,7 @@ export default {
       })
       .then((responce) => {
         state.chatRefreshToken = 1;
-        dispatch('getAllConversations', payload.userId);
+        dispatch('getAllConversations', rootState.auth.userInfo.id);
         dispatch('getArchiveChats', payload.userId);
       })
       .catch((err) => {

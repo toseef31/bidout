@@ -331,10 +331,10 @@
               class="bid-number"
 
             >
-
-              {{showIntent === null || showIntent === 'false' ? 'Please specify your intend to bid' : ''}}
+              {{showIntent === null ? 'Please specify your intend to bid' : ''}}
+              {{ showIntent === 'false' ? 'Bid Submission is not allowed' : ''}}
               <div
-                v-if="showIntent !== null && showIntent === 'true' && !isBidSubmitted"
+                v-if="showIntent === 'true' && !isBidSubmitted"
                 @click="ChangeT('tab-2')"
               >Submit Bid</div>
               <div

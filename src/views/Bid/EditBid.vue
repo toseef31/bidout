@@ -58,7 +58,7 @@
               :key="item.value"
               :href="'#tab-' + item.value"
               class="text-capitalize black--text font-weight-bold"
-              :disabled="enableTabs" @click="updateDraft"
+              @click="updateDraft"
             >
               {{ item.text }} {{ item.index }}
 

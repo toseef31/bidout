@@ -127,7 +127,7 @@ export default {
       items: [
         "all",
         "Gulf Coast",
-        "Northwest",
+        "Northeast",
         "Rockies",
         "Mid-Con",
         "Permian",
