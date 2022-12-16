@@ -110,6 +110,7 @@ export default {
       valid: false,
       attachStatus: false,
       docs: '',
+      uploadDoc: [],
     };
   },
   computed: {
@@ -191,14 +192,13 @@ export default {
       this.fileName = this.file.name;
       this.fileExt = this.fileName.split(".").pop();
       this.fileSize = (this.file.size / (1024 * 1024)).toFixed(2);
-      // this.previewDoc();
-      const uploadDoc = [];
-      uploadDoc.push(this.file);
+      
+      this.uploadDoc.push(this.file);
       const head = Date.now().toString();
       const tail = Math.random().toString().substr(2);
       const data = {
         uploadedBy: `${this.$store.getters.userInfo.firstName} ${this.$store.getters.userInfo.lastName}`,
-        attachement: uploadDoc,
+        attachement: this.uploadDoc,
       };
       await this.uploadBidAttach(data);
       this.isAttaching = false;

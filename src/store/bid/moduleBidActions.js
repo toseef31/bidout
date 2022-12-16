@@ -173,16 +173,20 @@ export default {
   },
   async getIntent({ commit, dispatch, state }, payload) {
     try {
+      commit('setPageLoader', true);
       const res = await axios.get(`intend/getIntends/${payload.companyId}/${payload.bidId}/${payload.companyName}`);
+
       if (res.status === 200) {
-        if (res.data && res.data.answer) {
+        if (res.data) {
           commit('setBidIntent', res.data.answer);
           commit('setIntentId', res.data.id);
         } else {
           commit('setBidIntent', null);
         }
+        commit('setPageLoader', false);
       }
     } catch (err) {
+      commit('setPageLoader', false);
       if (state.apiCounter == 2) {
         dispatch('apiSignOutAction');
       } else if (err.response.status === 403) {
@@ -195,12 +199,15 @@ export default {
 
   async getAllIntent({ commit, dispatch, state }, payload) {
     try {
+      commit('setPageLoader', true);
       const res = await axios.get(`intend/getAllIntends/${payload.bidId}`);
 
       if (res.status === 200) {
         commit('setAllIntend', res.data);
+        commit('setPageLoader', false);
       }
     } catch (err) {
+      commit('setPageLoader', false);
       if (state.apiCounter == 2) {
         dispatch('apiSignOutAction');
       } else if (err.response.status === 403) {
@@ -242,7 +249,7 @@ export default {
 
       if (res.status === 200) {
         commit('setBidIntent', payload.answer);
-        commit('setIntentId', res.data.id);
+        commit('setIntentId', res.data);
       }
     } catch (err) {
       if (state.apiCounter == 2) {
@@ -472,19 +479,27 @@ export default {
 
   async getQA({ commit, dispatch, state }, payload) {
     try {
+      commit('setPageLoader', true);
       const res = await axios.get(`bidSubmission/getQA/${payload.bidId}/${payload.userId}`);
 
       if (res.status === 200) {
         commit('setQAndA', res.data);
 
-        let count = 0;
+        let unAnsweredCount = 0;
+        let answeredCount = 0;
+
         res.data.forEach((el) => {
-          if (!el.answer) count++;
+          if (!el.answer) { unAnsweredCount++; } else { answeredCount++; }
         });
 
-        commit('setUnansweredQuestionCount', count);
+        commit('setUnansweredQuestionCount',
+          unAnsweredCount);
+        commit('setAnsweredQuestionCount', answeredCount);
+
+        commit('setPageLoader', false);
       }
     } catch (err) {
+      commit('setPageLoader', false);
       if (state.apiCounter === 2) {
         dispatch('apiSignOutAction');
       } else if (err.response.status === 403) {
@@ -881,6 +896,7 @@ export default {
       const res = await axios.post('bid/uploadBidAttachment/', formData, config);
 
       if (res.status == 200) {
+        console.log(res.data);
         commit('setAttachData', res.data);
         // commit('setAttachement',res.data);
       } else {
