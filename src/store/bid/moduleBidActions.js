@@ -589,12 +589,13 @@ export default {
 
     if (state.invitedSuppliers != null) {
       for (let i = 0; i < state.invitedSuppliers.length; i++) {
-        if (!state.invitedSuppliers[i].type) {
+        if(!state.invitedSuppliers[i].companyId && !state.invitedSuppliers[i].objectID){
           formData.append(`invitedSuppliers[${i}]`, state.invitedSuppliers[i]);
-        } else if (state.invitedSuppliers[i].type == 'user') {
-          formData.append(`invitedSuppliers[${i}]`, state.invitedSuppliers[i].item.companyId);
+        }
+        else if (state.invitedSuppliers[i].companyId) {
+          formData.append(`invitedSuppliers[${i}]`, state.invitedSuppliers[i].companyId);
         } else {
-          formData.append(`invitedSuppliers[${i}]`, state.invitedSuppliers[i].item.objectID);
+          formData.append(`invitedSuppliers[${i}]`, state.invitedSuppliers[i].objectID);
         }
       }
     }
@@ -714,17 +715,17 @@ export default {
 
     if (state.invitedSuppliers != null) {
       for (let i = 0; i < state.invitedSuppliers.length; i++) {
-        if (!state.invitedSuppliers[i].type) {
+        if(!state.invitedSuppliers[i].companyId && !state.invitedSuppliers[i].objectID){
           formData.append(`invitedSuppliers[${i}]`, state.invitedSuppliers[i]);
-        } else if (state.invitedSuppliers[i].type == 'user') {
-          formData.append(`invitedSuppliers[${i}]`, state.invitedSuppliers[i].item.companyId);
+        }
+        else if (state.invitedSuppliers[i].companyId) {
+          formData.append(`invitedSuppliers[${i}]`, state.invitedSuppliers[i].companyId);
         } else {
-          formData.append(`invitedSuppliers[${i}]`, state.invitedSuppliers[i].item.objectID);
+          formData.append(`invitedSuppliers[${i}]`, state.invitedSuppliers[i].objectID);
         }
       }
     }
     if (state.invitedNewSuppliers != null) {
-      console.log('new', state.invitedNewSuppliers);
       for (let i = 0; i < state.invitedNewSuppliers.length; i++) {
         formData.append(`invitedNewSuppliers[${i}]`, state.invitedNewSuppliers[i].id);
       }
@@ -830,13 +831,29 @@ export default {
         commit('setDraftTime', null);
         commit('setDraftTime', null);
         commit('setAttachData', null);
-        commit('setBidData', null);
+        // commit('setBidData', null);
         commit('setInvitedSuppliersData', null);
         commit('setInvitedTeamMembers', null);
         commit('setBidlines', null);
         commit('setAttachement', null);
         commit('setQuestions', null);
         commit('setDraftBidData', null);
+        commit('setBidTitle', '');
+        commit('setBidType', '');
+        commit('setBidDueDate', '');
+        commit('setBidDueTime', '');
+        commit('setBidRegions', '');
+        commit('setBidEnabled', '');
+        state.bidData.serial = '';
+        state.bidData.id = '';
+        state.bidData.status = '';
+        state.bidData.statusType = '';
+        commit('setBidDescription', [{ body: '' }]);
+        state.bidData.attachments = '';
+        state.bidData.invitedSuppliers = '';
+        state.bidData.invitedTeamMembers = '';
+        state.bidData.lineItems = '';
+        state.bidData.questions = '';
         const bidDetail = await axios.get(`bid/getBid/${res.data._path.segments[1]}`);
         return bidDetail.data.serial;
       }
@@ -909,9 +926,22 @@ export default {
         commit('setBidDueTime', '');
         commit('setBidRegions', '');
         commit('setBidEnabled', '');
+        commit('setBidTitle', '');
+        commit('setBidType', '');
+        commit('setBidDueDate', '');
+        commit('setBidDueTime', '');
+        commit('setBidRegions', '');
+        commit('setBidEnabled', '');
+        state.bidData.serial = '';
         state.bidData.id = '';
         state.bidData.status = '';
         state.bidData.statusType = '';
+        commit('setBidDescription', [{ body: '' }]);
+        state.bidData.attachments = '';
+        state.bidData.invitedSuppliers = '';
+        state.bidData.invitedTeamMembers = '';
+        state.bidData.lineItems = '';
+        state.bidData.questions = '';
         commit('setInvitedSuppliersData', null);
         commit('setInvitedTeamMembers', null);
         commit('setBidlines', null);
@@ -1031,8 +1061,6 @@ export default {
     }
   },
   async getDraftBySerial({ commit, state, dispatch }, payload) {
-    console.log('state', state.bidData);
-    console.log('attachement', state.attachement);
     commit('setPageLoader', true);
     try {
       const res = await axios.get(
@@ -1095,12 +1123,14 @@ export default {
     if (state.bidData.status == 'templateCreate') {
       if (state.invitedSuppliers) {
         for (let i = 0; i < state.invitedSuppliers.length; i++) {
-          if (!state.invitedSuppliers[i].type) {
+          if(!state.invitedSuppliers[i].companyId && !state.invitedSuppliers[i].objectID){
+           
             formData.append(`invitedSuppliers[${i}]`, state.invitedSuppliers[i]);
-          } else if (state.invitedSuppliers[i].type == 'user') {
-            formData.append(`invitedSuppliers[${i}]`, state.invitedSuppliers[i].item.companyId);
+          }
+          else if (state.invitedSuppliers[i].companyId) {
+            formData.append(`invitedSuppliers[${i}]`, state.invitedSuppliers[i].companyId);
           } else {
-            formData.append(`invitedSuppliers[${i}]`, state.invitedSuppliers[i].item.objectID);
+            formData.append(`invitedSuppliers[${i}]`, state.invitedSuppliers[i].objectID);
           }
         }
       } else {
@@ -1108,12 +1138,14 @@ export default {
       }
     } else if (state.invitedSuppliers != null) {
       for (let i = 0; i < state.invitedSuppliers.length; i++) {
-        if (!state.invitedSuppliers[i].type) {
+        if(!state.invitedSuppliers[i].companyId && !state.invitedSuppliers[i].objectID){
+         
           formData.append(`invitedSuppliers[${i}]`, state.invitedSuppliers[i]);
-        } else if (state.invitedSuppliers[i].type == 'user') {
-          formData.append(`invitedSuppliers[${i}]`, state.invitedSuppliers[i].item.companyId);
+        }
+        else if (state.invitedSuppliers[i].companyId) {
+          formData.append(`invitedSuppliers[${i}]`, state.invitedSuppliers[i].companyId);
         } else {
-          formData.append(`invitedSuppliers[${i}]`, state.invitedSuppliers[i].item.objectID);
+          formData.append(`invitedSuppliers[${i}]`, state.invitedSuppliers[i].objectID);
         }
       }
     } else {
@@ -1280,10 +1312,16 @@ export default {
       commit('setBidDueTime', '');
       commit('setBidRegions', '');
       commit('setBidEnabled', '');
+      state.bidData.serial = '';
       state.bidData.id = '';
       state.bidData.status = '';
       state.bidData.statusType = '';
       commit('setBidDescription', [{ body: '' }]);
+      state.bidData.attachments = '';
+      state.bidData.invitedSuppliers = '';
+      state.bidData.invitedTeamMembers = '';
+      state.bidData.lineItems = '';
+      state.bidData.questions = '';
 
       return;
     } catch (err) {
@@ -1373,12 +1411,12 @@ export default {
 
     if (state.invitedSuppliers != '') {
       for (let i = 0; i < state.invitedSuppliers.length; i++) {
-        if (!state.invitedSuppliers[i].type) {
+        if(state.invitedSuppliers[i].id){
           formData.append(`invitedSuppliers[${i}]`, state.invitedSuppliers[i].id);
-        } else if (state.invitedSuppliers[i].type == 'user') {
-          formData.append(`invitedSuppliers[${i}]`, state.invitedSuppliers[i].item.companyId);
+        }else if (state.invitedSuppliers[i].companyId) {
+          formData.append(`invitedSuppliers[${i}]`, state.invitedSuppliers[i].companyId);
         } else {
-          formData.append(`invitedSuppliers[${i}]`, state.invitedSuppliers[i].item.objectID);
+          formData.append(`invitedSuppliers[${i}]`, state.invitedSuppliers[i].objectID);
         }
       }
     } else {
@@ -1470,13 +1508,29 @@ export default {
       commit('setDraftTime', null);
       commit('setDraftTime', null);
       commit('setAttachData', null);
-      commit('setBidData', null);
+      // commit('setBidData', null);
       commit('setInvitedSuppliersData', null);
       commit('setInvitedTeamMembers', null);
       commit('setBidlines', null);
       commit('setAttachement', null);
       commit('setQuestions', null);
       commit('setDraftBidData', null);
+      commit('setBidTitle', '');
+      commit('setBidType', '');
+      commit('setBidDueDate', '');
+      commit('setBidDueTime', '');
+      commit('setBidRegions', '');
+      commit('setBidEnabled', '');
+      state.bidData.serial = '';
+      state.bidData.id = '';
+      state.bidData.status = '';
+      state.bidData.statusType = '';
+      commit('setBidDescription', [{ body: '' }]);
+      state.bidData.attachments = '';
+      state.bidData.invitedSuppliers = '';
+      state.bidData.invitedTeamMembers = '';
+      state.bidData.lineItems = '';
+      state.bidData.questions = '';
       return;
     } catch (err) {
       console.log(err);
