@@ -136,7 +136,6 @@ export default {
           }
         }else{
           if(this.$store.getters.bidData.attachments != ""){
-            console.log("npot null",this.$store.getters.bidData.attachments);
             if(this.$store.getters.attachData){
               var totalDay = this.$store.getters.bidData.attachments.concat(this.$store.getters.attachData);
               this.documents = totalDay;
@@ -147,9 +146,7 @@ export default {
             this.$store.commit('setAttachement',this.documents);
             return this.documents;
           }else{
-            console.log('else',this.$store.getters.attachData);
             this.$store.commit('setAttachement',this.$store.getters.attachData);
-            console.log('ddd',this.$store.state.bid.attachment);
             return this.$store.getters.attachData;
           }
         }
