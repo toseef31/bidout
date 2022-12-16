@@ -95,6 +95,9 @@ export default {
   unansweredQuestionCount(state) {
     return state.unansweredQuestionCount;
   },
+  answeredQuestionCount(state) {
+    return state.answeredCount;
+  },
   invitedNewSuppliers(state) {
     return state.invitedNewSuppliers;
   },
@@ -103,5 +106,8 @@ export default {
   },
   alertEditBidSubmissionSuccess(state) {
     return state.alertEditBidSubmissionSuccess;
+  },
+  bidSubmissionAlert(state) {
+    return state.bidSubmissionAlert;
   },
 };

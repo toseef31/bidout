@@ -1,6 +1,7 @@
 export default {
     setUser (state, payload){
-    	state.userInfo = payload
+    	state.userInfo = payload;
+      state.isAuthenticated = Boolean(payload);
     },
     setToken (state, payload){
       state.userToken = payload

@@ -19,7 +19,7 @@ export default {
          .then(responce => {
           if(responce.data.status == false){
             commit('setError', 'Disabled account! You cannot login with this account');
-            // router.replace({ name: "Login" });
+           
             commit('showErrorAlert')
           }else{
             axios.get('/auth/addUserLoginHistory/'+responce.data.id)
@@ -28,12 +28,11 @@ export default {
             axios.get('company/getCompanyById/'+responce.data.company.id)
              .then(responce => {
               commit('setCompany',responce.data)
-              localStorage.setItem('companyData', JSON.stringify(responce.data));
             })
             commit('setUser',responce.data)
-            localStorage.setItem("userData",JSON.stringify(responce.data));
-            // router.replace({ name: "Dashboard" });
-            window.location.href ="/dashboard";
+            localStorage.setItem('userData', JSON.stringify(responce.data)); 
+            router.push('/dashboard');
+            // window.location.href ="/dashboard";
           }
           
         })

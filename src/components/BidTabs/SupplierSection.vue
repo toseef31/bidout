@@ -321,7 +321,7 @@ export default {
   },
   data() {
     return {
-      availableSearch: ['All', 'Gulf Coast', 'Northwest', 'Rockies', 'Mid-Con', 'Permian', 'Arklatex', 'Offshore', 'Other'],
+      availableSearch: ['All', 'Gulf Coast', 'Northeast', 'Rockies', 'Mid-Con', 'Permian', 'Arklatex', 'Offshore', 'Other'],
       availableSuppl: null,
       supplierDialog: false,
       valid: true,

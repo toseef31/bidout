@@ -1,5 +1,6 @@
 // import Base from '@/components/Layout/Base.vue';
 import Settings from '@/components/Layout/Settings.vue';
+import store from '@/store';
 
 const routes = [
   {
@@ -11,7 +12,7 @@ const routes = [
         name: 'ViewBids',
         component: () => import('@/views/Bid/ViewBids.vue'),
         beforeEnter: (to, from, next) => {
-          if (localStorage.getItem('userData') == null) {
+          if (store.state.auth.userInfo == null) {
             next('/login');
           } else {
             next();
@@ -23,7 +24,7 @@ const routes = [
         name: 'BidDetail',
         component: () => import('@/views/Bid/BidDetail.vue'),
         beforeEnter: (to, from, next) => {
-          if (localStorage.getItem('userData') == null) {
+          if (store.state.auth.userInfo == null) {
             next('/login');
           } else {
             next();
@@ -35,7 +36,7 @@ const routes = [
         name: 'CreateBid',
         component: () => import('@/views/Bid/CreateBid.vue'),
         beforeEnter: (to, from, next) => {
-          if (localStorage.getItem('userData') == null) {
+          if (store.state.auth.userInfo == null) {
             next('/login');
           } else {
             next();
@@ -47,7 +48,7 @@ const routes = [
         name: 'Templates',
         component: () => import('@/views/Bid/Templates.vue'),
         beforeEnter: (to, from, next) => {
-          if (localStorage.getItem('userData') == null) {
+          if (store.state.auth.userInfo == null) {
             next('/login');
           } else {
             next();
@@ -59,7 +60,7 @@ const routes = [
         name: 'NotCompleted',
         component: () => import('@/views/Bid/NotCompleted.vue'),
         beforeEnter: (to, from, next) => {
-          if (localStorage.getItem('userData') == null) {
+          if (store.state.auth.userInfo == null) {
             next('/login');
           } else {
             next();
@@ -72,7 +73,7 @@ const routes = [
         name: "EditTemplate",
         component: () => import("@/views/Bid/EditTemplate.vue"),
         beforeEnter: (to, from, next) => {
-          if (localStorage.getItem("userData") == null) {
+          if (store.state.auth.userInfo == null) {
             next("/login");
           } else {
             next();
@@ -85,7 +86,7 @@ const routes = [
         component: () => import("@/views/Bid/EditBid.vue"),
         props: true,
         beforeEnter: (to, from, next) => {
-          if (localStorage.getItem("userData") == null) {
+          if (store.state.auth.userInfo == null) {
             next("/login");
           } else {
             next();
@@ -97,7 +98,7 @@ const routes = [
         name: "Completed",
         component: () => import("@/views/Bid/Completed.vue"),
         beforeEnter: (to, from, next) => {
-          if (localStorage.getItem('userData') == null) {
+          if (store.state.auth.userInfo == null) {
             next('/login');
           } else {
             next();

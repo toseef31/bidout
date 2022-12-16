@@ -1,7 +1,7 @@
 <template>
   <v-col class="my-7 pa-0 bid-submission-tab" align="start">
 
-    <v-simple-table class="template-table-style-sub mt-2">
+    <v-simple-table class="template-table-style-sub mt-2" v-if="bidDetail.supplierSubmissions.length">
       <template v-slot:default>
         <thead>
           <tr  >
@@ -25,7 +25,7 @@
       </template>
     </v-simple-table>
 
-<div class="submission-section">
+<div class="submission-section" v-if="bidDetail.supplierSubmissions.length && bidDetail.bidout">
     <v-simple-table class="submission-table-style">
       <template v-slot:default>
         <tbody>
@@ -45,7 +45,7 @@
     </v-simple-table>
   </div>
 
-  <div class=" submission-section">
+  <div class=" submission-section" v-if="bidDetail.supplierSubmissions.length">
     <v-simple-table class="submission-table-style">
       <template v-slot:default>
         <tbody>
@@ -74,7 +74,8 @@
               class="pr-2"
             />
 
-            <div>{{doc.fileName}}</div>
+            <a target="_blank" class="text-decoration-none" :href="doc.attachment
+          ">{{doc.fileName}}</a>
           </div>
             </td>
             <td class="text-left " v-else>
@@ -88,7 +89,7 @@
     </v-simple-table>
   </div>
 
-    <div class="submission-section" v-if="question.length">
+    <div class="submission-section" v-if="question.length && bidDetail.supplierSubmissions.length">
       <div class="title-detail-supplier mt-10">Supplier Answers</div>
       <v-simple-table class="supplier-answer-table-style mt-3">
       <template v-slot:default>
@@ -112,8 +113,10 @@
               height="24"
 
             />
+            <a target="_blank"
+            class="text-decoration-none pl-2" :href="ans.answers[index].answer
+          ">{{ans.answers[index].fileName}}</a>
 
-            <div class="pl-2">{{ans.answers[index].fileName}}</div>
               </div>
             </td>
             <td class="text-left " v-if="ans.answers[index].answer === 'null' && item.type !== 'category'">
@@ -129,7 +132,7 @@
 
   </div>
 
-        <v-simple-table class="button-table-style mt-8" v-if="checkTime">
+        <v-simple-table class="button-table-style mt-8" v-if="checkTime && bidDetail.supplierSubmissions.length">
       <template v-slot:default>
         <tbody>
           <tr>
@@ -205,7 +208,7 @@
       </template>
     </v-simple-table>
 
-  <div v-if="checkTime">
+  <div v-if="checkTime && bidDetail.supplierSubmissions.length">
     <v-simple-table class="award-table-style mt-8" v-if="bidDetail.bidData.awardees.length || bidDetail.bidData.rejectees.length">
       <template v-slot:default>
         <tbody>

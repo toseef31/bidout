@@ -1,5 +1,5 @@
 import Base from '@/components/Layout/Base.vue';
-
+import store from '@/store';
 const routes = [
   {
     path: '',
@@ -10,7 +10,7 @@ const routes = [
         name: 'GetStarted',
         component: () => import('@/views/GetStarted/GetStarted.vue'),
         beforeEnter: (to, from, next) => {
-            if(localStorage.getItem("userData") == null) {
+            if(store.state.auth.userInfo == null) {
                 
                 next();
             }else{
@@ -23,7 +23,7 @@ const routes = [
         name: 'ExistingAccount',
         component: () => import('@/views/GetStarted/ExistingAccount.vue'),
         beforeEnter: (to, from, next) => {
-            if(localStorage.getItem("userData") == null) {
+            if(store.state.auth.userInfo == null) {
                 
                 next();
             }else{
@@ -36,7 +36,7 @@ const routes = [
         name: 'ModuleSelection',
         component: () => import('@/views/GetStarted/ModuleSelection.vue'),
         beforeEnter: (to, from, next) => {
-            if(localStorage.getItem("userData") == null) {
+            if(store.state.auth.userInfo == null) {
                 
                 next();
             }else{
@@ -49,7 +49,7 @@ const routes = [
         name: 'Contract',
         component: () => import('@/views/GetStarted/Contract.vue'),
         beforeEnter: (to, from, next) => {
-            if(localStorage.getItem("userData") == null) {
+            if(store.state.auth.userInfo == null) {
                 
                 next();
             }else{
@@ -62,7 +62,7 @@ const routes = [
         name: 'Payment',
         component: () => import('@/views/GetStarted/Payment.vue'),
         beforeEnter: (to, from, next) => {
-          if(localStorage.getItem("userData") == null) {
+          if(store.state.auth.userInfo == null) {
               
               next();
           }else{
@@ -75,7 +75,7 @@ const routes = [
         name: 'Confirmation',
         component: () => import('@/views/GetStarted/Confirmation.vue'),
         beforeEnter: (to, from, next) => {
-            if(localStorage.getItem("userData") == null) {
+            if(store.state.auth.userInfo == null) {
                 
                 next();
             }else{

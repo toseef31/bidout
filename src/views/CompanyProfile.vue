@@ -186,7 +186,7 @@ export default {
   data() {
     return {
       loader: true,
-      region: ['Gulf Coast','Northwest','Rockies','Mid-Con','Permian','Arklatex','Offshore','Other'],
+      region: ['Gulf Coast','Northeast','Rockies','Mid-Con','Permian','Arklatex','Offshore','Other'],
       basins: [],
       basinsData: [],
       profileName: '',

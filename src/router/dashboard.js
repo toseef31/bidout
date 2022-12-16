@@ -13,7 +13,7 @@ const routes = [
         name: 'Dashboard',
         component: () => import('@/views/Dashboard.vue'),
         beforeEnter: (to, from, next) => {
-           if(localStorage.getItem("userData") == null) {
+           if(store.getters.userInfo == null) {
                next('/login');
            } else {
                next();

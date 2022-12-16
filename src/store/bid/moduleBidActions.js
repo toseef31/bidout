@@ -132,10 +132,6 @@ export default {
           commit('setSupplierBid', res.data.supplierSubmissions);
           commit('setIsBidSubmitted', true);
         }
-
-        if (res.data.user_type === 'buyer') {
-          commit('setSubmittedBids', res.data.supplierSubmissions);
-        }
       } else {
         commit('setPageLoader', false);
         commit('setViewBidError', false);
@@ -177,16 +173,20 @@ export default {
   },
   async getIntent({ commit, dispatch, state }, payload) {
     try {
+      commit('setPageLoader', true);
       const res = await axios.get(`intend/getIntends/${payload.companyId}/${payload.bidId}/${payload.companyName}`);
+
       if (res.status === 200) {
-        if (res.data && res.data.answer) {
+        if (res.data) {
           commit('setBidIntent', res.data.answer);
           commit('setIntentId', res.data.id);
         } else {
           commit('setBidIntent', null);
         }
+        commit('setPageLoader', false);
       }
     } catch (err) {
+      commit('setPageLoader', false);
       if (state.apiCounter == 2) {
         dispatch('apiSignOutAction');
       } else if (err.response.status === 403) {
@@ -199,12 +199,15 @@ export default {
 
   async getAllIntent({ commit, dispatch, state }, payload) {
     try {
+      commit('setPageLoader', true);
       const res = await axios.get(`intend/getAllIntends/${payload.bidId}`);
 
       if (res.status === 200) {
         commit('setAllIntend', res.data);
+        commit('setPageLoader', false);
       }
     } catch (err) {
+      commit('setPageLoader', false);
       if (state.apiCounter == 2) {
         dispatch('apiSignOutAction');
       } else if (err.response.status === 403) {
@@ -246,7 +249,7 @@ export default {
 
       if (res.status === 200) {
         commit('setBidIntent', payload.answer);
-        commit('setIntentId', res.data.id);
+        commit('setIntentId', res.data);
       }
     } catch (err) {
       if (state.apiCounter == 2) {
@@ -272,6 +275,7 @@ export default {
           id: payload.userId,
           serial: payload.serial,
         });
+        commit('setAwardAlert');
       }
     } catch (err) {
       if (state.apiCounter == 2) {
@@ -296,6 +300,7 @@ export default {
           id: payload.userId,
           serial: payload.serial,
         });
+        commit('setDisqualifyAlert');
       }
     } catch (err) {
       if (state.apiCounter == 2) {
@@ -320,6 +325,7 @@ export default {
           id: payload.userId,
           serial: payload.serial,
         });
+        commit('setUnAwardAlert');
       }
     } catch (err) {
       if (state.apiCounter == 2) {
@@ -343,6 +349,7 @@ export default {
           id: payload.userId,
           serial: payload.serial,
         });
+        commit('setUnDisqualifyAlert');
       }
     } catch (err) {
       if (state.apiCounter == 2) {
@@ -472,19 +479,27 @@ export default {
 
   async getQA({ commit, dispatch, state }, payload) {
     try {
+      commit('setPageLoader', true);
       const res = await axios.get(`bidSubmission/getQA/${payload.bidId}/${payload.userId}`);
 
       if (res.status === 200) {
         commit('setQAndA', res.data);
 
-        let count = 0;
+        let unAnsweredCount = 0;
+        let answeredCount = 0;
+
         res.data.forEach((el) => {
-          if (!el.answer) count++;
+          if (!el.answer) { unAnsweredCount++; } else { answeredCount++; }
         });
 
-        commit('setUnansweredQuestionCount', count);
+        commit('setUnansweredQuestionCount',
+          unAnsweredCount);
+        commit('setAnsweredQuestionCount', answeredCount);
+
+        commit('setPageLoader', false);
       }
     } catch (err) {
+      commit('setPageLoader', false);
       if (state.apiCounter === 2) {
         dispatch('apiSignOutAction');
       } else if (err.response.status === 403) {
@@ -864,6 +879,7 @@ export default {
       const res = await axios.post('bid/uploadBidAttachment/', formData, config);
 
       if (res.status == 200) {
+        console.log(res.data);
         commit('setAttachData', res.data);
         // commit('setAttachement',res.data);
       } else {
@@ -1031,8 +1047,8 @@ export default {
     }
   },
   async getDraftBySerial({ commit, state, dispatch }, payload) {
-    console.log('state',state.bidData);
-    console.log('attachement',state.attachement);
+    console.log('state', state.bidData);
+    console.log('attachement', state.attachement);
     commit('setPageLoader', true);
     try {
       const res = await axios.get(
@@ -1477,6 +1493,16 @@ export default {
       commit('setAttachement', null);
       commit('setQuestions', null);
       commit('setDraftBidData', null);
+      commit('setBidTitle', '');
+      commit('setBidType', '');
+      commit('setBidDueDate', '');
+      commit('setBidDueTime', '');
+      commit('setBidRegions', '');
+      commit('setBidEnabled', '');
+      state.bidData.id = '';
+      state.bidData.status = '';
+      state.bidData.statusType = '';
+      commit('setBidDescription', [{ body: '' }]);
       return;
     } catch (err) {
       console.log(err);

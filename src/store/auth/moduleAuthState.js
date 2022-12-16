@@ -4,6 +4,7 @@ import store from "../../store";
 export default {
     userInfo: JSON.parse(localStorage.getItem('userData')),
     userToken: JSON.parse(localStorage.getItem('token')),
+    isAuthenticated: false,
     userId: '',
     companyId: '',
     error: null,
