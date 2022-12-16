@@ -173,6 +173,7 @@ export default {
   },
   async getIntent({ commit, dispatch, state }, payload) {
     try {
+      commit('setPageLoader', true);
       const res = await axios.get(`intend/getIntends/${payload.companyId}/${payload.bidId}/${payload.companyName}`);
       if (res.status === 200) {
         if (res.data && res.data.answer) {
@@ -181,8 +182,10 @@ export default {
         } else {
           commit('setBidIntent', null);
         }
+        commit('setPageLoader', false);
       }
     } catch (err) {
+      commit('setPageLoader', false);
       if (state.apiCounter == 2) {
         dispatch('apiSignOutAction');
       } else if (err.response.status === 403) {
@@ -195,12 +198,15 @@ export default {
 
   async getAllIntent({ commit, dispatch, state }, payload) {
     try {
+      commit('setPageLoader', true);
       const res = await axios.get(`intend/getAllIntends/${payload.bidId}`);
 
       if (res.status === 200) {
         commit('setAllIntend', res.data);
+        commit('setPageLoader', false);
       }
     } catch (err) {
+      commit('setPageLoader', false);
       if (state.apiCounter == 2) {
         dispatch('apiSignOutAction');
       } else if (err.response.status === 403) {
@@ -472,6 +478,7 @@ export default {
 
   async getQA({ commit, dispatch, state }, payload) {
     try {
+      commit('setPageLoader', true);
       const res = await axios.get(`bidSubmission/getQA/${payload.bidId}/${payload.userId}`);
 
       if (res.status === 200) {
@@ -483,8 +490,11 @@ export default {
         });
 
         commit('setUnansweredQuestionCount', count);
+
+        commit('setPageLoader', false);
       }
     } catch (err) {
+      commit('setPageLoader', false);
       if (state.apiCounter === 2) {
         dispatch('apiSignOutAction');
       } else if (err.response.status === 403) {
