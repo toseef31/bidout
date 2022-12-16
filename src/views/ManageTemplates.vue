@@ -7,7 +7,7 @@
             <h4>Bid Templates </h4>
           </v-col>
           <v-col cols="6" class="text-right pr-0">
-            <v-btn large elevation="0" color="#0D9648" height="56px" to="/create-template" class="text-capitalize white--text font-weight-bold py-6">Create New Template</v-btn>
+            <v-btn large elevation="0" color="#0D9648" height="56px" @click="createTem" class="text-capitalize white--text font-weight-bold py-6">Create New Template</v-btn>
           </v-col>
         </v-row>
         <v-simple-table class="template-table">
@@ -175,7 +175,33 @@ export default {
     },
     editDraft(id){
       this.getEditTemplate({id,company:this.$store.getters.userInfo.company.company});
-    }
+    },
+    createTem() {
+      this.$store.state.bid.bidData.serial = '';
+      this.$store.state.bid.bidData.id = '';
+      this.$store.state.bid.bidData.status = '';
+      this.$store.state.bid.bidData.statusType = '';
+      this.$store.state.bid.bidData.attachments = '';
+      this.$store.state.bid.bidData.invitedSuppliers = '';
+      this.$store.state.bid.bidData.invitedTeamMembers = '';
+      this.$store.state.bid.bidData.lineItems = '';
+      this.$store.state.bid.bidData.questions = '';
+      this.$store.commit('setBidTitle', '');
+      this.$store.commit('setBidType', '');
+      this.$store.commit('setBidDueDate', '');
+      this.$store.commit('setBidDueTime', '');
+      this.$store.commit('setBidRegions', '');
+      this.$store.commit('setBidEnabled', '');
+      this.$store.commit('setBidDescription', [{ body: '' }]);
+      this.$store.commit('setInvitedTeamMembers', null);
+      this.$store.commit('setInvitedSuppliersData', null);
+      this.$store.commit('setBidlines', null);
+      this.$store.commit('setAttachement', null);
+      this.$store.commit('setQuestions', null);
+      this.$store.commit('setDraftBidsList', null);
+      this.$store.commit('setDraftTime', null);
+      this.$router.push('/create-template');
+    },
   },
   async created(){
     await this.getBidTemplates();
