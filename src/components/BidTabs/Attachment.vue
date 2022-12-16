@@ -225,6 +225,12 @@ export default {
       }else if(this.$route.name == 'EditTemplate'){
         this.updateTemplate({ attachement: this.docsList });
       }else{
+        const data = {
+          uploadedBy: `${this.$store.getters.userInfo.firstName} ${this.$store.getters.userInfo.lastName}`,
+          attachement: doc,
+        };
+        // this.uploadDoc.push(doc);
+        // this.$store.commit('setAttachData',doc);
         this.updateDraftBid({ attachement: this.docsList });
       }
     },

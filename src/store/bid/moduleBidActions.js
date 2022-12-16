@@ -861,6 +861,7 @@ export default {
       }
     }
     try {
+      console.log(payload.attachement);
       const res = await axios.post('bid/uploadBidAttachment/', formData, config);
 
       if (res.status == 200) {
