@@ -504,6 +504,8 @@ export default {
     	this.repsInvited.push(data);
     	this.newCount = this.repsInvited.length;
     	this.$store.getters.salesRepsList.splice(index, 1);
+    	this.repsInvited = [...new Map(this.repsInvited.map((m) => [m.item.company, m])).values()];
+    	console.log('respnss',this.repsInvited);
     	this.$store.commit('setInvitedSuppliersData', this.repsInvited);
     },
     removeReps(list, index) {
@@ -533,6 +535,8 @@ export default {
     	this.repsInvited.push(data);
     	this.newCount = this.repsInvited.length;
     	this.$store.getters.companiesList.splice(index, 1);
+    	const unique = [...new Map(this.repsInvited.map((m) => [m.item.company, m])).values()];
+    	console.log('comm',unique);
     	this.$store.commit('setInvitedSuppliersData', this.repsInvited);
     },
     addServiceCompany(company, index) {
