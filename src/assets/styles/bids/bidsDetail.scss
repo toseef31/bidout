@@ -1236,14 +1236,15 @@
             .v-input {
                 &__slot {
                  min-height: 29px !important;
-                 width: 120px;
+                 width: 150px;
 
                 }
                
                }
             .unit-class {
                 .unit {
-                    width: 30%
+                    width: 15%;
+                    margin-right: 10px
                 }
             }
 
@@ -1253,7 +1254,7 @@
                 color:white;
                 border-radius: 2px;
                 padding: 11px 6px;
-                width: 120px;
+                width: 150px;
                 font-size: 14px;
                 font-weight: 600;
                 height: 32px;
@@ -1288,11 +1289,11 @@
                   padding-left: 17px;
                 }
                 td:first-child {
-                  width: 29%;
+                  width: 24%;
                   padding-left: 19px;
                 }
                 td:nth-child(2) {
-                    width: 22%;
+                    width: 30%;
                 }
                 td:nth-child(3) {
                     width: 9%;
@@ -1518,4 +1519,3 @@
   }
 
 }
-

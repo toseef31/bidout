@@ -37,9 +37,12 @@
                     class="mt-7"
                     :rules="item.required === 'true' ?lineItemsRule : []"
                     outlined
+                    :disabled="!bidDetail.receivingBids"
                     dense
+                    min="0"
                     prefix="$"
                     type="number"
+                    @input="validatePrice(index)"
                     v-if="lineItems[index]['bid']"
                     v-model="lineItems[index]['price']"
 
@@ -48,7 +51,7 @@
                 </div>
              </div>
 
-          <div v-if="item.required === 'false'">
+          <div v-if="item.required === 'false' && bidDetail.receivingBids">
               <v-btn @click="noBidUpdate(index)" icon v-if="lineItems[index]['bid']">
               <v-icon size="20" color="#F03F20" >mdi-close</v-icon>
               </v-btn>
@@ -104,12 +107,14 @@
                     <v-checkbox
                        v-if="(item.questionType === 'checkbox'  && !item.options)"
                        :rules="item.required === 'true' ?answerRule : []"
+                       :disabled="!bidDetail.receivingBids || isBidOut"
                        v-model="answers[index]['answer']"
                     ></v-checkbox>
 
                     <v-radio-group
                     v-model="answers[index]['answer']"
                        row
+                       :disabled="!bidDetail.receivingBids || isBidOut"
                        :rules="item.required === 'true' ?answerRule : []"
                        v-if="(item.questionType === 'checkbox' && item.options)"
                        >
@@ -130,6 +135,7 @@
                         v-if="item.questionType === 'textfield'"
                         :rules="item.required === 'true' ?answerRule : []"
                         outlined
+                        :disabled="!bidDetail.receivingBids || isBidOut"
                         v-model="answers[index]['answer']"
                     ></v-text-field>
 
@@ -137,6 +143,7 @@
                         v-if="item.questionType === 'textarea'"
                         outlined
                         auto-grow
+                        :disabled="!bidDetail.receivingBids || isBidOut"
                         rows="3"
                         row-height="25"
                         :rules="item.required === 'true' ?answerRule : []"
@@ -164,11 +171,11 @@
                         text-center
                       "
                     >
-                      <input
-                        class="d-none"
-                        type="file"
+                      <v-file-input
                         :id="`uploadFileQ${index}`"
-                        @change="handleDocument($event,'questionUpload',index,item.id)"
+                        @change="handleDocumentForAnswer($event,index)"
+                        :rules="fileRule"
+                        :disabled="!bidDetail.receivingBids || isBidOut"
                       />
 
                     <div>
@@ -185,7 +192,7 @@
        <div class="bid-row-3 pt-8 pb-11">
           <div class="title-detail px-4">Supplier Attachments</div>
 
-          <v-row no-gutters align="center" class="px-4 mt-7">
+          <v-row no-gutters align="center" class="px-4 mt-7" v-if="bidDetail.receivingBids && !isBidOut">
                 <v-col cols="12" sm="12" md="12">
                     <div class="upload-attach text-center">
                     <label
@@ -230,7 +237,9 @@
                     {{ doc.uploadedAt
  | moment("MM/DD/YYYY") }}
                   </td>
-                  <td class="text-left delete-class text-decoration-underline" @click="deleteAttach(index)">
+                  <td class="text-left delete-class text-decoration-underline"
+                  @click="deleteAttach(index)"
+                  v-if="bidDetail.receivingBids">
                     <div>Delete</div>
                   </td>
                 </tr>
@@ -251,6 +260,7 @@
                     auto-grow
                     rows="6"
                     row-height="25"
+                    :disabled="!bidDetail.receivingBids || isBidOut"
                     ></v-textarea></div>
 
       </div>
@@ -312,8 +322,14 @@ export default {
       file: '',
       answers: [],
       user: '',
+      value: '',
       lineItemsRule: [
         (value) => !!value || 'Line item is required!',
+        (value) => {
+          if (this.isBidSubmitted && this.value !== '' && Number(this.value) < Number(value) && this.isBidOut) {
+            return 'Suppliers can only lower the prices during the BidOut Phase!';
+          } return true;
+        },
       ],
       answerRule: [
         (value) => !!value || 'Answer is required!',
@@ -342,6 +358,12 @@ export default {
     isBidSubmitted() {
       return this.$store.getters.isBidSubmitted;
     },
+    isBidOut() {
+      if (this.bidDetail.bidData.type === 'BidOut Process' && this.bidDetail.bidout) {
+        return true;
+      }
+      return true;
+    },
   },
   methods: {
     ...mapActions(['submitBid', 'editSubmitBid']),
@@ -349,7 +371,16 @@ export default {
       const sizeInMB = (size / (1024 * 1024)).toFixed(2);
       return `${sizeInMB}mb`;
     },
+    validatePrice(index) {
+      if (this.isBidSubmitted && this.isBidOut) {
+        this.value = this.getSupplierBid.lineItems[index].price;
+      }
+    },
     async submit(action) {
+      if (!this.$refs.form.validate()) {
+        this.$store.commit('setLoweringPriceAlert');
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      }
       if (this.$refs.form.validate()) {
         if (action === 'submit') {
           this.loading = true;
@@ -399,18 +430,18 @@ export default {
         }
       }
     },
-    handleDocument(event, slug, index) {
+    handleDocumentForAnswer(event, index) {
+      this.answers[index].answer = event;
+    },
+    handleDocument(event) {
       this.file = event.target.files[0];
-      if (slug) {
-        this.answers[index].answer = this.file;
-      } else {
-        this.$store.commit('setSupplierAttachment', {
-          fileName: this.file.name,
-          fileSize: this.file.size,
-          attachment: this.file,
-          uploadedAt: Date.now(),
-        });
-      }
+
+      this.$store.commit('setSupplierAttachment', {
+        fileName: this.file.name,
+        fileSize: this.file.size,
+        attachment: this.file,
+        uploadedAt: Date.now(),
+      });
     },
 
     deleteAttach(index) {
@@ -440,6 +471,8 @@ export default {
           price: null,
           bid: true,
           id: bidData.lineItems[i].id,
+          quantity: bidData.lineItems[i].quantity,
+          required: bidData.lineItems[i].required,
         });
       }
 
@@ -459,6 +492,8 @@ export default {
           price: this.getSupplierBid.lineItems[i].price,
           bid: this.getSupplierBid.lineItems[i].price !== 'NO_BID',
           id: this.getSupplierBid.lineItems[i].id,
+          quantity: this.getSupplierBid.lineItems[i].quantity,
+          required: this.getSupplierBid.lineItems[i].required,
         });
       }
 

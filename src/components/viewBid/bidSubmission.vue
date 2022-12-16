@@ -25,18 +25,18 @@
       </template>
     </v-simple-table>
 
-<div class="submission-section" v-if="bidDetail.supplierSubmissions.length && bidDetail.bidout">
+<div class="submission-section" v-if="bidDetail.supplierSubmissions.length && isBidOut">
     <v-simple-table class="submission-table-style">
       <template v-slot:default>
         <tbody>
-          <tr v-for="(item,index) in bidDetail.bidData.lineItems.filter((el) => el.required === 'true')" :key="index">
-            <td class="text-left" v-if="item.required"> {{item.description}}</td>
-            <template v-if="item.required" v-for="(submission) in bidDetail.supplierSubmissions">
-              <td v-if="submission.lineItems[index].price === 'NO_BID'">
-                <v-icon color="#F32349">mdi-close</v-icon> No Bid
+          <tr>
+             <td>Bid Example Pre-BidOut Period</td>
+            <template v-for="(submission) in bidDetail.supplierSubmissions">
+              <td v-if="submission.bidoutPricepre === null">
+                <v-icon color="#F32349">mdi-close</v-icon> None
               </td>
               <td v-else>
-                $ {{submission.lineItems[index].price}} {{bidDetail.bidData.lineItems[index].unit}}
+                $ {{submission.bidoutPricepre}}
               </td>
             </template>
           </tr>
@@ -132,7 +132,7 @@
 
   </div>
 
-        <v-simple-table class="button-table-style mt-8" v-if="checkTime && bidDetail.supplierSubmissions.length">
+        <v-simple-table class="button-table-style mt-8" v-if="!isBidOut && !bidDetail.receivingBids && bidDetail.supplierSubmissions.length">
       <template v-slot:default>
         <tbody>
           <tr>
@@ -208,7 +208,7 @@
       </template>
     </v-simple-table>
 
-  <div v-if="checkTime && bidDetail.supplierSubmissions.length">
+  <div v-if="!isBidOut && !bidDetail.receivingBids && bidDetail.supplierSubmissions.length">
     <v-simple-table class="award-table-style mt-8" v-if="bidDetail.bidData.awardees.length || bidDetail.bidData.rejectees.length">
       <template v-slot:default>
         <tbody>
@@ -294,11 +294,9 @@ export default {
     showLoading() {
       return this.loadings;
     },
-    checkTime() {
-      if (this.bidDetail.bidData.type !== 'bidout') {
-        if (this.bidDetail.receivingBids) return false;
-      } else if (this.bidDetail.bidout) {
-        return false;
+    isBidOut() {
+      if (this.bidDetail.bidData.type === 'BidOut Process' && this.bidDetail.bidout) {
+        return true;
       }
       return true;
     },

@@ -110,4 +110,7 @@ export default {
   bidSubmissionAlert(state) {
     return state.bidSubmissionAlert;
   },
+  loweringPriceAlert(state) {
+    return state.loweringPriceAlert;
+  },
 };

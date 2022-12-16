@@ -12,7 +12,7 @@
 
     <div v-if="conversationsList.length ===0 && getUserType === 'buyer'" class="text-center c-title-detail">There are currently no suppliers included on this bid, please <router-link to="#" class="text-decoration-underline">edit this bid </router-link> to add suppliers to begin chat conversations. </div>
 
-    <div v-if="conversationsList.length ===0 && getUserType === 'supplier'">
+    <div v-if="conversationsList.length ===0 && getUserType === 'supplier'" class="text-center c-title-detail">
       Only the buyer can initiate chat message, once initiated by the buyer,
 you will be able to see the message here.
     </div>
