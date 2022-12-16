@@ -95,6 +95,9 @@ export default {
   unansweredQuestionCount(state) {
     return state.unansweredQuestionCount;
   },
+  answeredQuestionCount(state) {
+    return state.answeredCount;
+  },
   invitedNewSuppliers(state) {
     return state.invitedNewSuppliers;
   },

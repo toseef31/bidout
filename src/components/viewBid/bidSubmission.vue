@@ -113,8 +113,10 @@
               height="24"
 
             />
+            <a target="_blank"
+            class="text-decoration-none pl-2" :href="ans.answers[index].answer
+          ">{{ans.answers[index].fileName}}</a>
 
-            <div class="pl-2">{{ans.answers[index].fileName}}</div>
               </div>
             </td>
             <td class="text-left " v-if="ans.answers[index].answer === 'null' && item.type !== 'category'">

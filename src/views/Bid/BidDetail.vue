@@ -345,10 +345,10 @@
               class="bid-number"
 
             >
-              {{showIntent === null ? 'Please specify your intend to bid' : ''}}
-              {{ showIntent === 'false' ? 'Bid Submission is not allowed' : ''}}
+              {{showIntent === null && !isBidSubmitted ? 'Please specify your intend to bid' : ''}}
+              {{ showIntent === false || showIntent === 'false' ? 'Bid Submission is not allowed' : ''}}
               <div
-                v-if="showIntent === 'true' && !isBidSubmitted"
+                v-if="showIntent === true ||showIntent === 'true' && !isBidSubmitted"
                 @click="ChangeT('tab-2')"
               >Submit Bid</div>
               <div
@@ -482,9 +482,9 @@
 
             </v-badge>
             <v-badge
-              v-if=" item.value === 4 &&getUnansweredQuestionCount !== 0"
+              v-if=" item.value === 4 &&getAnsweredQuestionCount !== 0"
               color="#0D9648"
-              :content="getUnansweredQuestionCount"
+              :content="getAnsweredQuestionCount"
               inline
               tile
             >
@@ -666,6 +666,9 @@ export default {
     },
     getUnansweredQuestionCount() {
       return this.$store.getters.unansweredQuestionCount;
+    },
+    getAnsweredQuestionCount() {
+      return this.$store.getters.answeredQuestionCount;
     },
     noOfBidSubmitted() {
       return this.bidDetail.supplierSubmissions.length;
