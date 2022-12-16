@@ -144,6 +144,9 @@ export default {
   setUnansweredQuestionCount(state, payload) {
     state.unansweredQuestionCount = payload;
   },
+  setAnsweredQuestionCount(state, payload) {
+    state.answeredCount = payload;
+  },
   setAllIntend(state, payload) {
     state.bidAllIntend = payload;
   },

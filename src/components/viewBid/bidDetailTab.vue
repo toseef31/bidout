@@ -72,7 +72,7 @@
           </div>
         </div>
 
-        <div class="invitedS-sec" v-if="getBidAllIntend &&getBidAllIntend.length">
+        <div class="invitedS-sec">
           <v-row>
             <v-col class="mr-2">
             <v-tooltip top>
@@ -148,15 +148,16 @@
         >
           <v-img
             v-if="bidDetail.bidData.userId.image"
-            width="48px"
-            height="48px"
-            :aspect-ratio="3/2"
+            max-width="100"
+            height="auto"
+            contain
+            :aspect-ratio="16/9"
             :src="bidDetail.bidData.userId.image"
           ></v-img>
           <v-avatar v-else color="#0d96481a" size="62">
             <v-icon color="#0d9648" large>mdi-account-outline </v-icon>
           </v-avatar>
-          <span class="text--black px-4 bid-creator"
+          <span class="text--black px-4  bid-creator"
             >{{ bidDetail.bidData.userId.firstName }} {{ bidDetail.bidData.userId.lastName }}</span
           >
           <span
@@ -177,9 +178,10 @@
         >
           <v-img
             v-if="item.image"
-            width="48px"
-            height="48px"
-            :aspect-ratio="3/2"
+            max-width="100"
+            height="auto"
+            contain
+            :aspect-ratio="16/9"
             :src="item.image"
           ></v-img>
           <v-avatar v-else color="#0d96481a" size="62">
@@ -305,8 +307,8 @@
                 <v-col md="6"  class="first-child" v-if="item.type=== 'question'">{{
                   item.title
                 }}</v-col>
-                  
-                <div class="second-child ml-auto" v-if="item.required"  >Required Question</div>
+
+                <div class="second-child ml-auto" v-if="item.required === 'true'"  >Required Question</div>
 
               </v-row>
             </div>
