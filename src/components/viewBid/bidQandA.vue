@@ -270,7 +270,7 @@ export default {
       return this.$store.getters.qAndA.filter((el) => el.answer);
     },
     getQAndAUnAnswered() {
-      return this.$store.getters.qAndA.filter((el) => !el.answer);
+      return this.$store.getters.qAndA.filter((el) => !el.answer && this.user.id === el.questionBy);
     },
     getQAndForAnswer() {
       return this.getQAndA.filter((el) => !el.answer);

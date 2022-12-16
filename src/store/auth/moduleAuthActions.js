@@ -30,6 +30,7 @@ export default {
               commit('setCompany',responce.data)
             })
             commit('setUser',responce.data)
+            localStorage.setItem('userData', JSON.stringify(responce.data)); 
             router.push('/dashboard');
             // window.location.href ="/dashboard";
           }
