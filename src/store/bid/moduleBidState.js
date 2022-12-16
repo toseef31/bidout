@@ -16,7 +16,7 @@ export default {
     qAndAEnabled: '',
     bidDescriptions: [{ body: '' }],
   },
-  attachData: null,
+  attachData: [],
   draftTime: null,
   newSupplier: [],
   supplierBid: null,

@@ -110,6 +110,7 @@ export default {
       valid: false,
       attachStatus: false,
       docs: '',
+      uploadDoc: [],
     };
   },
   computed: {
@@ -135,6 +136,7 @@ export default {
           }
         }else{
           if(this.$store.getters.bidData.attachments != ""){
+            console.log("npot null",this.$store.getters.bidData.attachments);
             if(this.$store.getters.attachData){
               var totalDay = this.$store.getters.bidData.attachments.concat(this.$store.getters.attachData);
               this.documents = totalDay;
@@ -145,7 +147,9 @@ export default {
             this.$store.commit('setAttachement',this.documents);
             return this.documents;
           }else{
+            console.log('else',this.$store.getters.attachData);
             this.$store.commit('setAttachement',this.$store.getters.attachData);
+            console.log('ddd',this.$store.state.bid.attachment);
             return this.$store.getters.attachData;
           }
         }
@@ -191,14 +195,13 @@ export default {
       this.fileName = this.file.name;
       this.fileExt = this.fileName.split(".").pop();
       this.fileSize = (this.file.size / (1024 * 1024)).toFixed(2);
-      // this.previewDoc();
-      const uploadDoc = [];
-      uploadDoc.push(this.file);
+      
+      this.uploadDoc.push(this.file);
       const head = Date.now().toString();
       const tail = Math.random().toString().substr(2);
       const data = {
         uploadedBy: `${this.$store.getters.userInfo.firstName} ${this.$store.getters.userInfo.lastName}`,
-        attachement: uploadDoc,
+        attachement: this.uploadDoc,
       };
       await this.uploadBidAttach(data);
       this.isAttaching = false;

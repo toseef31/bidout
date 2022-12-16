@@ -24,6 +24,7 @@ export default {
     state.itemBidData = payload;
   },
   setAttachData(state, payload) {
+    console.log('ddas',payload);
     state.attachData = payload;
   },
   setDraftTime(state, payload) {

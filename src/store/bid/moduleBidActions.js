@@ -864,6 +864,7 @@ export default {
       const res = await axios.post('bid/uploadBidAttachment/', formData, config);
 
       if (res.status == 200) {
+        console.log(res.data);
         commit('setAttachData', res.data);
         // commit('setAttachement',res.data);
       } else {
@@ -1477,6 +1478,16 @@ export default {
       commit('setAttachement', null);
       commit('setQuestions', null);
       commit('setDraftBidData', null);
+      commit('setBidTitle', '');
+      commit('setBidType', '');
+      commit('setBidDueDate', '');
+      commit('setBidDueTime', '');
+      commit('setBidRegions', '');
+      commit('setBidEnabled', '');
+      state.bidData.id = '';
+      state.bidData.status = '';
+      state.bidData.statusType = '';
+      commit('setBidDescription', [{ body: '' }]);
       return;
     } catch (err) {
       console.log(err);

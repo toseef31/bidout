@@ -305,6 +305,7 @@
                 <v-col md="6"  class="first-child" v-if="item.type=== 'question'">{{
                   item.title
                 }}</v-col>
+                  
                 <div class="second-child ml-auto" v-if="item.required"  >Required Question</div>
 
               </v-row>
