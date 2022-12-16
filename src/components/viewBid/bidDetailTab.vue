@@ -72,7 +72,7 @@
           </div>
         </div>
 
-        <div class="invitedS-sec" v-if="getBidAllIntend &&getBidAllIntend.length">
+        <div class="invitedS-sec">
           <v-row>
             <v-col class="mr-2">
             <v-tooltip top>
@@ -305,7 +305,7 @@
                 <v-col md="6"  class="first-child" v-if="item.type=== 'question'">{{
                   item.title
                 }}</v-col>
-                <div class="second-child ml-auto" v-if="item.required"  >Required Question</div>
+                <div class="second-child ml-auto" v-if="item.required === 'true'"  >Required Question</div>
 
               </v-row>
             </div>
