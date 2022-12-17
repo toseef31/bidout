@@ -945,18 +945,20 @@
       .template-table-style-sub {
         table {
           overflow-x: auto;
-          white-space: nowrap;
+           table-layout: fixed;
+          border-collapse: collapse;
           thead {
             tr {
-              padding-right: 20px;
               th {
+               
                 color: #000000;
                 font-size: 16px;
                 font-weight: 700;
                 &:first-child {
                   padding-left: 26px;
-                
+
                 }
+                
               }
             }
           }
@@ -973,53 +975,14 @@
                 padding-left: 17px;
               }
               td:first-child {
-                width: 20%;
+                width: 25%;
                 padding-left: 26px;
               }
               td:nth-child(2) {
-                width: 30%
+                width: auto
               }
             }
             tr:nth-of-type(even) {
-              background-color: #fbfbfb;
-            }
-          }
-        }
-      }
-  
-      .template-table-style-odd {
-        table {
-          overflow-x: auto;
-          white-space: nowrap;
-          table-layout: fixed;
-          thead {
-            tr {
-              padding-left: 20px;
-              padding-right: 20px;
-              th {
-                color: #000000;
-                font-size: 16px;
-                font-weight: 700;
-                &:first-child {
-                  padding-left: 32px;
-                }
-              }
-            }
-          }
-          tbody {
-            tr {
-              padding-left: 24px;
-              padding-right: 24px;
-              td {
-                color: #0d1139;
-                font-size: 16px;
-                font-weight: 500;
-                padding-top: 16px;
-                padding-bottom: 16px;
-                padding-left: 26px;
-              }
-            }
-            tr:nth-of-type(odd) {
               background-color: #fbfbfb;
             }
           }
@@ -1044,6 +1007,7 @@
         table {
           table-layout: fixed;
           overflow-x: auto;
+          border-collapse: collapse;
           tbody {
             tr:hover {
               background-color: transparent !important;
@@ -1056,10 +1020,10 @@
                 padding-left: 17px;
               }
               td:first-child {
-                width: 20%;
+                width: 25%;
               }
               td:nth-child(2) {
-                width: 30%
+                width: auto
               }
               
             }
@@ -1084,6 +1048,7 @@
         table {
           table-layout: fixed;
           overflow-x: auto;
+          border-collapse: collapse;
           tbody {
             tr:hover {
               background-color: transparent !important;
@@ -1096,11 +1061,11 @@
                 padding-left: 17px;
               }
               td:first-child {
-                width: 20%;
+                width: 25%;
                 padding-left: 26px;
               }
               td:nth-child(2) {
-                width: 30%
+                width: auto
               }
               
             }
@@ -1117,6 +1082,7 @@
           table {
             table-layout: fixed;
             overflow-x: auto;
+            border-collapse: collapse;
             tbody {
               tr:hover {
                 background-color: transparent !important;
@@ -1135,12 +1101,12 @@
                   vertical-align: top;
                 }
                 td:first-child {
-                  width: 20%;
+                  width: 25%;
                   padding-left: 26px;
                   font-weight: 700;
                 }
                 td:nth-child(2) {
-                  width: 30%
+                  width: auto
                 }
               }
             }
@@ -1151,7 +1117,7 @@
           table {
             table-layout: fixed;
             overflow-x: auto;
-           
+            border-collapse: collapse;
             tbody {
               tr {
                 padding-left: 24px;
@@ -1167,11 +1133,11 @@
                   vertical-align: middle;
                 }
                 td:first-child {
-                  width: 20%;
+                  width: 25%;
                   padding-left: 26px;
                 }
                 td:nth-child(2) {
-                  width: 30%
+                  width: auto
                 }
               }
               tr:nth-of-type(odd) {
@@ -1346,9 +1312,6 @@
                 border: 1px solid #F1F1F1;
                 border-radius: 8px;
                 font-size: 16px;
-                .v-input{
-                    display: none;
-                }
             }
             .question-section-title{
                 border-top: 1px solid #f1f1f1;

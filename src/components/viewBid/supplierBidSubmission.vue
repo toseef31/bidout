@@ -178,7 +178,7 @@
                         :disabled="!bidDetail.receivingBids || isBidOut"
                       />
 
-                    <div>
+                    <div class="mt-1">
                       <v-icon class="mr-4">mdi-cloud-upload-outline</v-icon>Upload here
                     </div>
                     </label>
@@ -362,7 +362,7 @@ export default {
       if (this.bidDetail.bidData.type === 'BidOut Process' && this.bidDetail.bidout) {
         return true;
       }
-      return true;
+      return false;
     },
   },
   methods: {
@@ -377,7 +377,7 @@ export default {
       }
     },
     async submit(action) {
-      if (!this.$refs.form.validate()) {
+      if (!this.$refs.form.validate() && action === 'edit' && this.isBidOut) {
         this.$store.commit('setLoweringPriceAlert');
         window.scrollTo({ top: 0, behavior: 'smooth' });
       }
