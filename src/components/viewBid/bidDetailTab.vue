@@ -15,7 +15,7 @@
           <div><span>Region:</span> {{ bidDetail.bidData.regions }}</div>
           <div>
             <span>Q&A:</span>
-            {{ bidDetail.bidData.qAndAEnabled ? "Yes" : "No" }}
+            {{ bidDetail.bidData.qAndAEnabled === 'true' ? "Yes" : "No" }}
           </div>
         </div>
         <br />
