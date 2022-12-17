@@ -31,8 +31,8 @@ export default {
             })
             commit('setUser',responce.data)
             localStorage.setItem('userData', JSON.stringify(responce.data)); 
-            router.push('/dashboard');
-            // window.location.href ="/dashboard";
+            // router.push('/dashboard');
+            window.location.href ="/dashboard";
           }
           
         })
