@@ -32,8 +32,8 @@
           <tr>
              <td>Bid Example Pre-BidOut Period</td>
             <template v-for="(submission) in bidDetail.supplierSubmissions">
-              <td v-if="submission.bidoutPricepre === null">
-                <v-icon color="#F32349">mdi-close</v-icon> Not submitted
+              <td v-if="!submission.bidoutPricepre ||submission.bidoutPricepre === null">
+                Not submitted
               </td>
               <td v-else>
                 $ {{submission.bidoutPricepre}}
@@ -43,11 +43,16 @@
           <tr>
              <td>Bid Example Post-BidOut Period</td>
             <template v-for="(submission) in bidDetail.supplierSubmissions">
-              <td v-if="submission.bidoutPricepre === null">
-                <v-icon color="#F32349">mdi-close</v-icon> Not submitted
+              <td v-if="!submission.postBidoutPrice ||submission.postBidoutPrice
+ === null">
+               Not submitted
               </td>
               <td v-else>
-                $ {{submission.bidoutPricepre}}
+                <v-icon color="#0D9648">mdi-arrow-down-thin-circle-outline</v-icon>
+          <span class="ml-1">$ {{submission.postBidoutPrice
+}}</span>
+          <div class="subscript">Saving {{(submission.postBidoutPrice/submission.bidoutPricepre) * 100}}%</div>
+
               </td>
             </template>
           </tr>
@@ -309,13 +314,13 @@ export default {
       if (this.bidDetail.bidData.type === 'BidOut Process' && this.bidDetail.bidout) {
         return true;
       }
-      return true;
+      return false;
     },
     checkTime() {
       if (this.isBidOut) return true;
       if (this.bidDetail.bidData.type === 'BidOut Process' && !this.bidDetail.receivingBids) return true;
 
-      return false;
+      return true;
     },
   },
   methods: {

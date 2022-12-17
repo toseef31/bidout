@@ -348,7 +348,6 @@ export default {
       let result = 'neither';
       const intent = this.getBidAllIntend;
 
-      console.log('Intent - ', intent);
       if (intent && id) {
         intent.forEach((el) => {
           if (el.companyId === id && el.answer === 'true') {

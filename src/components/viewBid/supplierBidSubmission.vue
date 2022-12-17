@@ -153,7 +153,7 @@
                 <div class="upload-attach" v-if="item.questionType === 'uploadFile'">
                     <div class="d-flex justify-space-between align-center" v-if="((answers[index].answer && answers[index].answer.name || answers[index].fileName) )">
                 <div class="doc-list">{{(answers[index].answer.name || answers[index].fileName)}}</div>
-                    <v-btn @click="removeQuesDoc(index)" icon>
+                    <v-btn @click="removeQuesDoc(index)" icon v-if="bidDetail.receivingBids && !isBidOut">
                         <v-icon size="20" color="#F03F20" >mdi-close
                         </v-icon>
                    </v-btn>

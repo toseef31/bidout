@@ -415,7 +415,7 @@
               <div
                 @click="ChangeT('tab-2')"
                 v-if="isBidSubmitted"
-              >Bid Submitted</div>
+              >Update your best price now!</div>
             </div>
           </v-sheet>
 
@@ -599,12 +599,13 @@ export default {
     SupplierBidDetail,
     SupplierBidSubmission,
   },
+  // moment.tz("2013-12-03T15:00:00","America/Los_Angeles").utc().format()
   data() {
     return {
       currentItem: 'tab-1',
       isSetting: false,
       users: '',
-      actualTime: moment().format('X'),
+      actualTime: moment.tz('America/Chicago').format('X'),
       years: 0,
       months: 0,
       days: 0,
@@ -686,7 +687,7 @@ export default {
     },
     addOneSecondToActualTimeEverySecond() {
       const component = this;
-      component.actualTime = moment().format('X');
+      component.actualTime = moment.tz('America/Chicago').format('X');
       setTimeout(() => {
         component.addOneSecondToActualTimeEverySecond();
       }, 1000);
@@ -697,8 +698,13 @@ export default {
       const momentTime = moment(bidDueTime, ['h:mm:ss A']).format('HH:mm:ss');
 
       const stringDate = `${bidDueDate}T${momentTime}`;
-      const momentDueDate = moment(stringDate);
-      return moment(momentDueDate).format('X') - this.actualTime;
+      let momentDueDate = moment.tz(stringDate, 'America/Chicago');
+
+      if (this.bidDetail.bidData.type === 'BidOut Process' && !this.bidDetail.bidout) {
+        momentDueDate = momentDueDate.subtract(4, 'hours');
+      }
+
+      return moment.tz(momentDueDate, 'America/Chicago').format('X') - this.actualTime;
     },
     compute() {
       const duration = moment.duration(this.getDiffInSeconds(), 'seconds');
@@ -757,7 +763,7 @@ export default {
       if (this.bidDetail.bidData.type === 'BidOut Process' && this.bidDetail.bidout) {
         return true;
       }
-      return true;
+      return false;
     },
     getLoweringPriceAlert() {
       return this.$store.getters.loweringPriceAlert;
