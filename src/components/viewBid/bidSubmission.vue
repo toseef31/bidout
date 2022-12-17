@@ -25,7 +25,7 @@
       </template>
     </v-simple-table>
 
-<div class="submission-section" v-if="bidDetail.supplierSubmissions.length && isBidOut">
+<div class="submission-section" v-if="bidDetail.supplierSubmissions.length && checkTime">
     <v-simple-table class="submission-table-style">
       <template v-slot:default>
         <tbody>
@@ -33,7 +33,18 @@
              <td>Bid Example Pre-BidOut Period</td>
             <template v-for="(submission) in bidDetail.supplierSubmissions">
               <td v-if="submission.bidoutPricepre === null">
-                <v-icon color="#F32349">mdi-close</v-icon> None
+                <v-icon color="#F32349">mdi-close</v-icon> Not submitted
+              </td>
+              <td v-else>
+                $ {{submission.bidoutPricepre}}
+              </td>
+            </template>
+          </tr>
+          <tr>
+             <td>Bid Example Post-BidOut Period</td>
+            <template v-for="(submission) in bidDetail.supplierSubmissions">
+              <td v-if="submission.bidoutPricepre === null">
+                <v-icon color="#F32349">mdi-close</v-icon> Not submitted
               </td>
               <td v-else>
                 $ {{submission.bidoutPricepre}}
@@ -299,6 +310,12 @@ export default {
         return true;
       }
       return true;
+    },
+    checkTime() {
+      if (this.isBidOut) return true;
+      if (this.bidDetail.bidData.type === 'BidOut Process' && !this.bidDetail.receivingBids) return true;
+
+      return false;
     },
   },
   methods: {
