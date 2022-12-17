@@ -389,7 +389,7 @@ export default {
       for (let i = 0; i < payload.lineItems.length; i++) {
         formData.append(`lineItems[${i}][price]`, payload.lineItems[i].price);
         formData.append(`lineItems[${i}][id]`, payload.lineItems[i].id);
-        formData.append(`lineItems[${i}][quantity]`, payload.lineItems[i].quantity);
+        formData.append(`lineItems[${i}][Qty]`, payload.lineItems[i].quantity);
         formData.append(`lineItems[${i}][required]`, payload.lineItems[i].required);
       }
     }
@@ -448,7 +448,7 @@ export default {
       for (let i = 0; i < payload.lineItems.length; i++) {
         formData.append(`lineItems[${i}][price]`, payload.lineItems[i].price);
         formData.append(`lineItems[${i}][id]`, payload.lineItems[i].id);
-        formData.append(`lineItems[${i}][quantity]`, payload.lineItems[i].quantity);
+        formData.append(`lineItems[${i}][Qty]`, payload.lineItems[i].quantity);
         formData.append(`lineItems[${i}][required]`, payload.lineItems[i].required);
       }
     }
