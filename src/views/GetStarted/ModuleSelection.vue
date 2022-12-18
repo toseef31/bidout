@@ -38,7 +38,7 @@
                         ></v-checkbox> -->
                       </v-sheet>
                     </div>
-                    <p class="font-weight-medium">BidOut's flagship RFP Platform. The ability to create and distribute RPF's to BidOut's network or <br>service providers.</p>
+                    <p class="font-weight-medium">BidOut's flagship RFP Platform. The ability to create and distribute RPF's to BidOut's network of <br>service providers.</p>
                     <div class="d-inline-block">
                       <div class="d-inline-block agreement-box pa-3">
                         <div class="d-flex">
@@ -65,7 +65,7 @@
                         ></v-switch>
                       </v-sheet>
                     </div>
-                    <p class="font-weight-medium">BidOut's flagship RFP Platform. The ability to create and distribute RPF's to BidOut's network or <br>service providers.</p>
+                    <p class="font-weight-medium">BidOut's flagship RFP Platform. The ability to create and distribute RPF's to BidOut's network of <br>service providers.</p>
                     <div class="d-inline-block">
                       <v-btn color="#0D9647" large dense width="260px" height="56" class="font-weight-bold white--text text-capitalize pa-4" @click="generateContract('rfx')" :disabled="rfxBtn == true ?  false : true" :loading="loadingRfx">Execute Agreement Now <v-icon class="pl-2" color="#fff">mdi-arrow-right-circle</v-icon></v-btn>
                     </div>
@@ -91,7 +91,7 @@
                         ></v-checkbox>  -->
                       </v-sheet>
                     </div>
-                    <p class="font-weight-medium">Respond to bid invitiations & showcase your services to oil and gas operators to gain access to <br>greater visibility.</p>
+                    <p class="font-weight-medium">Respond to bid invitations & showcase your services to oil and gas operators to gain access to <br>greater visibility.</p>
                     <div class="d-flex">
                       <v-radio-group
                         v-model="ofsContractData[0].contractType == 'ofs' ? 'free' : 'premium'" 
@@ -164,7 +164,7 @@
                         ></v-switch>
                       </v-sheet>
                     </div>
-                    <p class="font-weight-medium">Respond to bid invitiations & showcase your services to oil and gas operators to gain access to <br>greater visibility.</p>
+                    <p class="font-weight-medium">Respond to bid invitations & showcase your services to oil and gas operators to gain access to <br>greater visibility.</p>
                     <div class="d-flex">
                       <v-radio-group
                         v-model="trial_end"
@@ -241,7 +241,7 @@
                       ></v-switch>
                     </v-sheet>
                   </div>
-                  <p class="font-weight-medium">BidOut's flagship RFP Platform. The ability to create and distribute RPF's to BidOut's network or <br>service providers.</p>
+                  <p class="font-weight-medium">BidOut's flagship RFP Platform. The ability to create and distribute RPF's to BidOut's network of <br>service providers.</p>
                   <div class="d-inline-block">
                     <v-btn color="#0D9647" large dense width="260px" height="56" class="font-weight-bold white--text text-capitalize pa-4" @click="generateContract('rfx')" :disabled="rfxBtn == true ?  false : true" :loading="loadingRfx">Execute Agreement Now <v-icon class="pl-2" color="#fff">mdi-arrow-right-circle</v-icon></v-btn>
                   </div>
@@ -274,7 +274,7 @@
                       ></v-switch>
                     </v-sheet>
                   </div>
-                  <p class="font-weight-medium">Respond to bid invitiations & showcase your services to oil and gas operators to gain access to <br>greater visibility.</p>
+                  <p class="font-weight-medium">Respond to bid invitations & showcase your services to oil and gas operators to gain access to <br>greater visibility.</p>
                   <div class="d-flex">
                     <v-radio-group
                       v-model="trial_end"
