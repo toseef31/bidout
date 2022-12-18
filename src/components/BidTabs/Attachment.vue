@@ -136,11 +136,15 @@ export default {
           }
         }else{
           if(this.$store.getters.bidData.attachments != ""){
+            console.log('attachData',this.$store.getters.attachData);
+            console.log('file Data',this.$store.state.bid.attachement);
             if(this.$store.getters.attachData){
-              var totalDay = this.$store.getters.bidData.attachments.concat(this.$store.getters.attachData);
-              this.documents = totalDay;
+              const attch = [...new Map(this.$store.getters.attachData.map((m) => [m.size, m])).values()]
+              var totalDay = this.$store.state.bid.attachement.concat(attch);
+              // this.documents = totalDay;
+              this.documents = [...new Map(totalDay.map((m) => [m.id, m])).values()]
             }else{
-              this.documents = this.$store.getters.bidData.attachments;
+              this.documents = this.$store.state.bid.attachement;
             }
             this.$store.commit('setAttachement',null);
             this.$store.commit('setAttachement',this.documents);
@@ -192,7 +196,7 @@ export default {
       this.fileName = this.file.name;
       this.fileExt = this.fileName.split(".").pop();
       this.fileSize = (this.file.size / (1024 * 1024)).toFixed(2);
-      
+      console.log('before',this.uploadDoc);
       this.uploadDoc.push(this.file);
       const head = Date.now().toString();
       const tail = Math.random().toString().substr(2);
@@ -225,13 +229,13 @@ export default {
       }else if(this.$route.name == 'EditTemplate'){
         this.updateTemplate({ attachement: this.docsList });
       }else{
-        const data = {
-          uploadedBy: `${this.$store.getters.userInfo.firstName} ${this.$store.getters.userInfo.lastName}`,
-          attachement: doc,
-        };
+        
+        console.log('adad',doc,'array',this.docsList);
         // this.uploadDoc.push(doc);
-        // this.$store.commit('setAttachData',doc);
+        // this.$store.commit('setAttachement',this.docsList);
+        // this.$store.state.attachData = this.docsList;
         this.updateDraftBid({ attachement: this.docsList });
+        this.uploadDoc = [];
       }
     },
     savedraftOnInterval(){
@@ -260,7 +264,7 @@ export default {
     if(this.$store.getters.bidData != null){
       if(this.$store.getters.bidData.attachments != ""){
         if(this.$store.getters.bidData.statusType == 'draftBid'){
-          console
+         
           this.$store.commit('setAttachement',null);
           this.$store.commit('setAttachement',this.$store.getters.bidData.attachments);
           this.documents = this.$store.getters.bidData.attachments;

@@ -879,6 +879,7 @@ export default {
     }
   },
   async uploadBidAttach({ commit, state, dispatch }, payload) {
+    console.log(payload.attachement);
     const config = {
       headers: {
         'Content-Type': 'multipart/form-data',
@@ -893,7 +894,7 @@ export default {
       }
     }
     try {
-      console.log(payload.attachement);
+      
       const res = await axios.post('bid/uploadBidAttachment/', formData, config);
 
       if (res.status == 200) {
