@@ -77,8 +77,8 @@
                     >
                       <td class="text-left pl-sm-6">{{ bid.serial }}</td>
                       <td class="text-left">{{ bid.title }}</td>
-                      <td class="text-left">{{ userDatas.firstName }} {{ userDatas.lastName }}</td>
-                      <td class="text-left">{{ bid.entries ? bid.entries.length : 0 }}</td>
+                      <td class="text-left">{{ checkIfUserIsSupplier(bid) ? bid.company : `${userDatas.firstName} ${ userDatas.lastName}` }}</td>
+                      <td class="text-left">{{ bid.bidEntries }}</td>
                       <td class="text-left">{{ bid.dueDate | moment('MM/DD/YYYY') }} {{bid.dueTime}}</td>
                       <td class="text-left d-none d-sm-block pt-3"><router-link
                         :to="{
@@ -107,7 +107,7 @@
                       <td class="text-left pl-sm-6">{{ bid.serial }}</td>
                       <td class="text-left">{{ bid.title }}</td>
                       <td class="text-left">{{ userDatas.firstName }} {{ userDatas.lastName }}</td>
-                      <td class="text-left">{{ bid.entries ? bid.entries.length : 0 }}</td>
+                      <td class="text-left">{{ bid.bidEntries ? bid.bidEntries : 0 }}</td>
                       <td class="text-left">{{ bid.dueDate | moment('MM/DD/YYYY') }} {{bid.dueTime}}</td>
                       <td class="text-left d-none d-sm-block pt-3" @click="editDraft(bid.serial)"><router-link to="">Edit Draft</router-link></td>
                     </tr>
@@ -150,8 +150,8 @@
                     >
                       <td class="text-left pl-sm-6">{{ bid.serial }}</td>
                       <td class="text-left">{{ bid.title }}</td>
-                      <td class="text-left">{{ userDatas.firstName }} {{ userDatas.lastName }}</td>
-                      <td class="text-left">{{ bid.entries ? bid.entries.length : 0 }}</td>
+                      <td class="text-left"> {{ checkIfUserIsSupplier(bid) ? bid.company : `${userDatas.firstName} ${ userDatas.lastName}` }} </td>
+                      <td class="text-left">{{ bid.bidEntries }}</td>
                       <td class="text-left">{{ bid.dueDate | moment('MM/DD/YYYY') }} {{bid.dueTime}}</td>
                       <td class="text-left d-none d-sm-block pt-3"><a href="">View Bid</a></td>
                     </tr>
@@ -236,7 +236,17 @@ export default {
     ...mapActions(['getDraftBids', 'getBidsLists','getDraftBySerial']),
     editDraft(serial){
       this.getDraftBySerial({serial,company:this.$store.getters.userInfo.company.company});
-    }
+    },
+    checkIfUserIsSupplier(bid) {
+      if (bid.invitedSuppliers) {
+        const found = bid.invitedSuppliers.find((el) => el === this.users.companyId);
+        if (found) {
+          return true;
+        }
+        return false;
+      }
+      return false;
+    },
   },
   mounted() {
     document.title = 'Bids - BidOut';
