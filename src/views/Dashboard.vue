@@ -44,7 +44,7 @@
                             >
                               <td class="text-left">{{ bid.serial }}</td>
                               <td class="text-left">{{ bid.title }}</td>
-                              <td class="text-left">{{ bid.entries ? bid.entries.length : 0 }}</td>
+                              <td class="text-left">{{ bid.bidEntries ? bid.bidEntries : 0 }}</td>
                               <td class="text-left">{{ bid.dueDate | moment('MM/DD/YYYY') }} {{bid.dueTime}}</td>
                               <td class="text-left d-none d-sm-block pt-3"><router-link class="text-decoration-none"
                                 :to="{
