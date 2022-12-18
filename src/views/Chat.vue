@@ -115,7 +115,7 @@
                           >
                             <v-list class="pa-0">
                               <v-list-item-group color="success">
-                                <v-dialog v-model="dialog" width="700">
+                                <!-- <v-dialog v-model="dialog" width="700">
                                   <template v-slot:activator="{ on, attrs }">
                                     <v-btn
                                       color="transparent"
@@ -190,7 +190,7 @@
                                       </v-btn>
                                     </v-card-actions>
                                   </v-card>
-                                </v-dialog>
+                                </v-dialog> -->
                                 <v-list-item
                                   v-for="(menu, i) in toggleMenu"
                                   :key="i"

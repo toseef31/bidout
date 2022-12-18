@@ -13,7 +13,7 @@
       </template>
     </v-text-field>
   </div>
-  <div class="add-people">
+  <div class="add-people d-none">
     <template>
       <span class="icon-box" @click="isAddUser = !isAddUser"
               :class="{ 'active-btn': isAddUser}">
