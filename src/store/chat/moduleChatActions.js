@@ -28,9 +28,9 @@ export default {
         console.log(err);
       });
   },
-  async getBidAllConversations({ commit }, payload) {
+  async getBidAllConversations({ commit, state }, payload) {
     await axios
-      .get(`/chat/getBidConversations/${payload}`)
+      .get(`/chat/getBidConversations/${payload}/${state.userId.id}`)
       .then((responce) => {
         commit('setBidConversationList', responce.data);
       })
