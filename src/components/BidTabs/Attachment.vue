@@ -120,28 +120,12 @@ export default {
     docsList() {
       if(this.$store.getters.bidData != null){
         if(this.$store.getters.bidData.statusType == 'template'){
-          if(this.$store.getters.bidData.attachment != ""){
-            if(this.$store.getters.attachData){
-              var totalDay = this.$store.getters.bidData.attachment.concat(this.$store.getters.attachData);
-              this.documents = totalDay;
-            }else{
-              this.documents = this.$store.getters.bidData.attachment;
-            }
-            this.$store.commit('setAttachement',null);
-            this.$store.commit('setAttachement',this.documents);
-            return this.documents;
-          }else{
-            this.$store.commit('setAttachement',this.$store.getters.attachData);
-            return this.$store.getters.attachData;
-          }
-        }else{
-          if(this.$store.getters.bidData.attachments != ""){
-            console.log('attachData',this.$store.getters.attachData);
-            console.log('file Data',this.$store.state.bid.attachement);
+          console.log(this.$store.getters.bidData.statusType);
+          if(this.$store.getters.bidData.attachment != "" || this.$store.state.bid.attachement != ""){
+            console.log(this.$store.getters.bidData,'bid',this.$store.state.bid);
             if(this.$store.getters.attachData){
               const attch = [...new Map(this.$store.getters.attachData.map((m) => [m.size, m])).values()]
               var totalDay = this.$store.state.bid.attachement.concat(attch);
-              // this.documents = totalDay;
               this.documents = [...new Map(totalDay.map((m) => [m.id, m])).values()]
             }else{
               this.documents = this.$store.state.bid.attachement;
@@ -150,8 +134,22 @@ export default {
             this.$store.commit('setAttachement',this.documents);
             return this.documents;
           }else{
-            this.$store.commit('setAttachement',this.$store.getters.attachData);
             return this.$store.getters.attachData;
+          }
+        }else{
+          if(this.$store.getters.bidData.attachments != "" || this.$store.state.bid.attachement != ""){
+            if(this.$store.getters.attachData){
+              const attch = [...new Map(this.$store.getters.attachData.map((m) => [m.size, m])).values()]
+              var totalDay = this.$store.state.bid.attachement.concat(attch);
+              this.documents = [...new Map(totalDay.map((m) => [m.id, m])).values()]
+            }else{
+              this.documents = this.$store.state.bid.attachement;
+            }
+            this.$store.commit('setAttachement',null);
+            this.$store.commit('setAttachement',this.documents);
+            return this.documents;
+          }else{
+              return this.$store.getters.attachData;
           }
         }
         
@@ -225,15 +223,14 @@ export default {
     saveComment(doc) {
       this.isEdit = false;
       if(this.$route.name == 'EditBid'){
+        this.$store.commit('setAttachement',this.docsList);
         this.updateBid({ attachement: this.docsList });
       }else if(this.$route.name == 'EditTemplate'){
+        this.$store.commit('setAttachement',this.docsList);
         this.updateTemplate({ attachement: this.docsList });
+        this.uploadDoc = [];
       }else{
-        
-        console.log('adad',doc,'array',this.docsList);
-        // this.uploadDoc.push(doc);
-        // this.$store.commit('setAttachement',this.docsList);
-        // this.$store.state.attachData = this.docsList;
+        this.$store.commit('setAttachement',this.docsList);
         this.updateDraftBid({ attachement: this.docsList });
         this.uploadDoc = [];
       }
@@ -268,6 +265,9 @@ export default {
           this.$store.commit('setAttachement',null);
           this.$store.commit('setAttachement',this.$store.getters.bidData.attachments);
           this.documents = this.$store.getters.bidData.attachments;
+        }else if(this.$store.getters.bidData.statusType == 'template'){
+          this.$store.commit('setAttachement',this.$store.getters.bidData.attachment);
+          this.documents = this.$store.getters.bidData.attachment;
         }else{
           this.$store.commit('setAttachement',this.$store.getters.bidData.attachments);
           this.documents = this.$store.getters.bidData.attachments;

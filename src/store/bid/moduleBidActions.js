@@ -675,6 +675,7 @@ export default {
       const res = await axios.post('bid/draft/createDraft', formData, config);
       if (res.status == 200) {
         commit('setBidData', res.data);
+        commit('setAttachement',res.data.attachments);
         dispatch('getTeamMembers', payload.company);
         dispatch('getSalesReps', { query: '', basin: 'all' });
         dispatch('getCategories');
@@ -879,7 +880,7 @@ export default {
     }
   },
   async uploadBidAttach({ commit, state, dispatch }, payload) {
-    console.log(payload.attachement);
+    
     const config = {
       headers: {
         'Content-Type': 'multipart/form-data',
@@ -1057,6 +1058,7 @@ export default {
       const res = await axios.post('bid/createTemplateBid', formData, config);
       if (res.status == 200) {
         commit('setBidData', res.data);
+        commit('setAttachement', res.data.attachment);
         dispatch('getTeamMembers', payload.company);
         dispatch('getSalesReps', { query: '', basin: 'all' });
         dispatch('getCategories');
