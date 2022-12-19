@@ -111,12 +111,20 @@
                        v-model="answers[index]['answer']"
                     ></v-checkbox>
 
+                    <v-checkbox
+                       v-if="(item.questionType === 'checkbox'  && item.options.length === 1)"
+                       :rules="item.required === 'true' ?answerRule : []"
+                       :disabled="!bidDetail.receivingBids || isBidOut"
+                       :label="item.options[0].label"
+                       v-model="answers[index]['answer']"
+                    ></v-checkbox>
+
                     <v-radio-group
                     v-model="answers[index]['answer']"
                        row
                        :disabled="!bidDetail.receivingBids || isBidOut"
                        :rules="item.required === 'true' ?answerRule : []"
-                       v-if="(item.questionType === 'checkbox' && item.options)"
+                       v-if="(item.questionType === 'checkbox' && item.options.length > 1)"
                        >
                         <v-radio
                             :label="item.options[0].label"
@@ -189,7 +197,7 @@
               </div>
            </div>
        </div>
-       <div class="bid-row-3 pt-8 pb-11">
+       <div class="bid-row-3 pt-8 pb-11" v-if="checkTime">
           <div class="title-detail px-4">Supplier Attachments</div>
 
           <v-row no-gutters align="center" class="px-4 mt-7" v-if="bidDetail.receivingBids && !isBidOut">
@@ -238,8 +246,9 @@
  | moment("MM/DD/YYYY") }}
                   </td>
                   <td class="text-left delete-class text-decoration-underline"
+                  v-if="bidDetail.receivingBids && !isBidOut"
                   @click="deleteAttach(index)"
-                  v-if="bidDetail.receivingBids">
+                  >
                     <div>Delete</div>
                   </td>
                 </tr>
@@ -362,6 +371,13 @@ export default {
       if (this.bidDetail.bidData.type === 'BidOut Process' && this.bidDetail.bidout) {
         return true;
       }
+      return false;
+    },
+    checkTime() {
+      if (this.isBidOut && this.supplierDocList && this.supplierDocList.length) return true;
+      if (!this.isBidOut && this.bidDetail.receivingBids) return true;
+      if (!this.isBidOut && !this.bidDetail.receivingBids && this.supplierDocList && this.supplierDocList.length) return true;
+
       return false;
     },
   },
