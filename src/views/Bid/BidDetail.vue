@@ -69,6 +69,9 @@
     <v-alert type="success"  v-show="showBidSubmissionAlert.unDisqualify" class="mx-5 mt-5">
       You have been Un-disqualified a company successfully!
     </v-alert>
+    <v-alert type="error"  v-show="getLoweringPriceAlert" class="mx-5 mt-5">
+      Suppliers can only lower the prices during the BidOut Phase!
+    </v-alert>
 
       <v-row class="px-5 my-5 row-title" no-gutters v-if="getUserType === 'buyer'">
         <v-col>
@@ -103,12 +106,36 @@
             rounded="lg"
             height="119"
             width="300"
-            v-if="bidDetail.receivingBids"
+            v-if="bidDetail.receivingBids && !isBidOut"
           >
-            <div class="status" v-if="bidDetail.receivingBids">
+            <div class="status">
               Status: Receiving Bids
             </div>
-            <div class="status" v-if="bidDetail.bidout">
+            <div
+              class="time pt-2 align-center"
+            >
+              <v-icon small color="#0D9648"> mdi-timer-outline</v-icon>
+              {{ days }} days, {{ hours }} hours, {{ minutes }} min,
+              {{ seconds }} sec remaining
+            </div>
+
+            <v-divider color="#0D9648"></v-divider>
+            <div
+              class="bid-number"
+            >
+              {{noOfBidSubmitted}} Bids Received
+            </div>
+          </v-sheet>
+
+          <v-sheet
+            class="py-2 px-4 bid-status-card text-left"
+            rounded="lg"
+            height="119"
+            width="300"
+            v-if="bidDetail.receivingBids && isBidOut"
+          >
+
+            <div class="status">
               Status: BidOut Phase
             </div>
             <div
@@ -126,11 +153,12 @@
               {{noOfBidSubmitted}} Bids Received
             </div>
           </v-sheet>
+
           <v-sheet  class="py-2 px-5 text-left award-status-card"
             rounded="lg"
             height="85"
             width="290"
-            v-else>
+            v-if="!bidDetail.receivingBids">
 
               <div  class="award-status" v-if="(bidDetail.bidData.rejectees && bidDetail.bidData.rejectees.length === 0 && bidDetail.bidData.awardees && bidDetail.bidData.awardees.length === 0) || !bidDetail.bidData.rejectees &&  !bidDetail.bidData.awardees">Status: Not Awarded</div>
 
@@ -149,7 +177,7 @@
         </v-col>
 
         <v-col cols="auto">
-          <div class="toggle-setting" v-if="bidDetail.receivingBids">
+          <div class="toggle-setting" v-if="bidDetail.receivingBids && !isBidOut">
             <v-btn
               class="py-2 setting"
               plain
@@ -263,7 +291,7 @@
           </v-card>
             </div>
           </div>
-          <v-btn v-else  color="#F03F20" depressed @click="ChangeT('tab-2')">
+          <v-btn v-if="!bidDetail.receivingBids"  color="#F03F20" depressed @click="ChangeT('tab-2')">
             <div class="supplier-class">Select Supplier</div>
           </v-btn>
         </v-col>
@@ -324,13 +352,10 @@
             rounded="lg"
             height="119"
             width="300"
-            v-if="bidDetail.receivingBids"
+            v-if="bidDetail.receivingBids && !isBidOut"
           >
-            <div class="status" v-if="bidDetail.receivingBids">
+            <div class="status">
               Status: Receiving Bids
-            </div>
-            <div class="status" v-if="bidDetail.bidout">
-              Status: BidOut Phase
             </div>
             <div
               class="time pt-2 align-center"
@@ -357,6 +382,43 @@
               >Bid Submitted</div>
             </div>
           </v-sheet>
+
+          <v-sheet
+            class="py-2 px-4 bid-status-card text-left"
+            rounded="lg"
+            height="119"
+            width="300"
+            v-if="bidDetail.receivingBids && isBidOut"
+          >
+          <div class="status">
+              Status: BidOut Phase
+            </div>
+            <div
+              class="time pt-2 align-center"
+            >
+              <v-icon small color="#0D9648"> mdi-timer-outline</v-icon>
+              {{ days }} days, {{ hours }} hours, {{ minutes }} min,
+              {{ seconds }} sec remaining
+            </div>
+
+            <v-divider color="#0D9648"></v-divider>
+            <div
+              class="bid-number"
+
+            >
+              {{showIntent === null && !isBidSubmitted ? 'Please specify your intend to bid' : ''}}
+              {{ showIntent === false || showIntent === 'false' ? 'Bid Submission is not allowed' : ''}}
+              <div
+                v-if="showIntent === true ||showIntent === 'true' && !isBidSubmitted"
+                @click="ChangeT('tab-2')"
+              >Submit Bid</div>
+              <div
+                @click="ChangeT('tab-2')"
+                v-if="isBidSubmitted"
+              >Update your best price now!</div>
+            </div>
+          </v-sheet>
+
           <v-sheet  class="py-2 px-5 text-left award-status-card"
             rounded="lg"
             height="85"
@@ -542,7 +604,7 @@ export default {
       currentItem: 'tab-1',
       isSetting: false,
       users: '',
-      actualTime: moment().format('X'),
+      actualTime: moment.tz('America/Chicago').format('X'),
       years: 0,
       months: 0,
       days: 0,
@@ -624,7 +686,7 @@ export default {
     },
     addOneSecondToActualTimeEverySecond() {
       const component = this;
-      component.actualTime = moment().format('X');
+      component.actualTime = moment.tz('America/Chicago').format('X');
       setTimeout(() => {
         component.addOneSecondToActualTimeEverySecond();
       }, 1000);
@@ -635,8 +697,13 @@ export default {
       const momentTime = moment(bidDueTime, ['h:mm:ss A']).format('HH:mm:ss');
 
       const stringDate = `${bidDueDate}T${momentTime}`;
-      const momentDueDate = moment(stringDate);
-      return moment(momentDueDate).format('X') - this.actualTime;
+      let momentDueDate = moment.tz(stringDate, 'America/Chicago');
+
+      if (this.bidDetail.bidData.type === 'BidOut Process' && !this.bidDetail.bidout) {
+        momentDueDate = momentDueDate.subtract(4, 'hours');
+      }
+
+      return moment.tz(momentDueDate, 'America/Chicago').format('X') - this.actualTime;
     },
     compute() {
       const duration = moment.duration(this.getDiffInSeconds(), 'seconds');
@@ -690,6 +757,15 @@ export default {
     },
     showBidSubmissionAlert() {
       return this.$store.getters.bidSubmissionAlert;
+    },
+    isBidOut() {
+      if (this.bidDetail.bidData.type === 'BidOut Process' && this.bidDetail.bidout) {
+        return true;
+      }
+      return false;
+    },
+    getLoweringPriceAlert() {
+      return this.$store.getters.loweringPriceAlert;
     },
   },
   mounted() {

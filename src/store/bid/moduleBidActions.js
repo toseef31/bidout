@@ -118,6 +118,7 @@ export default {
   async getBidBySerial({ commit, dispatch, state }, payload) {
     try {
       commit('setPageLoader', true);
+      state.supplierAttachment = [];
       const res = await axios.get(
         `bid/getBidBySerial/${payload.serial}/${payload.id}`,
       );
@@ -131,6 +132,8 @@ export default {
         if (res.data.user_type === 'supplier' && res.data.supplierSubmissions) {
           commit('setSupplierBid', res.data.supplierSubmissions);
           commit('setIsBidSubmitted', true);
+        } else {
+          commit('setIsBidSubmitted', false);
         }
       } else {
         commit('setPageLoader', false);
@@ -385,6 +388,9 @@ export default {
     if (payload.lineItems) {
       for (let i = 0; i < payload.lineItems.length; i++) {
         formData.append(`lineItems[${i}][price]`, payload.lineItems[i].price);
+        formData.append(`lineItems[${i}][id]`, payload.lineItems[i].id);
+        formData.append(`lineItems[${i}][Qty]`, payload.lineItems[i].quantity);
+        formData.append(`lineItems[${i}][required]`, payload.lineItems[i].required);
       }
     }
 
@@ -399,6 +405,7 @@ export default {
 
       if (res.status === 200) {
         commit('setIsBidSubmitted', true);
+        state.supplierAttachment = [];
         dispatch('getBidBySerial', {
           id: payload.userId,
           serial: payload.serial,
@@ -440,6 +447,9 @@ export default {
     if (payload.lineItems) {
       for (let i = 0; i < payload.lineItems.length; i++) {
         formData.append(`lineItems[${i}][price]`, payload.lineItems[i].price);
+        formData.append(`lineItems[${i}][id]`, payload.lineItems[i].id);
+        formData.append(`lineItems[${i}][Qty]`, payload.lineItems[i].quantity);
+        formData.append(`lineItems[${i}][required]`, payload.lineItems[i].required);
       }
     }
 
@@ -460,6 +470,7 @@ export default {
       const res = await axios.post('bidSubmission/editSubmitBid/', formData, config);
 
       if (res.status === 200) {
+        state.supplierAttachment = [];
         dispatch('getBidBySerial', {
           id: payload.userId,
           serial: payload.serial,
