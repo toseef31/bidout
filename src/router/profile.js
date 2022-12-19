@@ -17,7 +17,16 @@ const routes = [
            if(store.getters.userInfo == null) {
                next('/login');
            } else {
-               next();
+            if(store.getters.userInfo.company.contracts.length >= 2){
+              next(); 
+            }
+            if(store.getters.userInfo.company.contracts.length == 1){
+              if(store.getters.userInfo.company.contracts[0].contractType == 'ofs' || store.getters.userInfo.company.contracts[0].contractType == 'ofs-premium'){
+                  next();
+              }else{
+                  next('/dashboard');
+              }
+            }
            }
        }
       },
