@@ -25,14 +25,17 @@
       </template>
     </v-simple-table>
 
-<div class="submission-section" v-if="bidDetail.supplierSubmissions.length && checkTime">
+ <div class="submission-section" v-if="bidDetail.supplierSubmissions.length && checkTime">
     <v-simple-table class="submission-table-style">
       <template v-slot:default>
         <tbody>
           <tr>
              <td>Bid Example Pre-BidOut Period</td>
             <template v-for="(submission) in bidDetail.supplierSubmissions">
-              <td v-if="!submission.bidoutPricepre ||submission.bidoutPricepre === null">
+              <td v-if="!submission.bidoutPricepre">
+                Not submitted
+              </td>
+              <td v-else-if="submission.bidoutPricepre === null">
                 Not submitted
               </td>
               <td v-else>
@@ -43,7 +46,10 @@
           <tr>
              <td>Bid Example Post-BidOut Period</td>
             <template v-for="(submission) in bidDetail.supplierSubmissions">
-              <td v-if="!submission.postBidoutPrice ||submission.postBidoutPrice
+              <td v-if="!submission.postBidoutPrice">
+               Not submitted
+              </td>
+              <td v-else-if="submission.postBidoutPrice
  === null">
                Not submitted
               </td>
@@ -51,8 +57,9 @@
                 <v-icon color="#0D9648">mdi-arrow-down-thin-circle-outline</v-icon>
           <span class="ml-1">$ {{submission.postBidoutPrice
 }}</span>
-          <div class="subscript">Saving {{(submission.postBidoutPrice/submission.bidoutPricepre) * 100}}%</div>
+          <div class="subscript">Saving {{ Math.round(((submission.postBidoutPrice/submission.bidoutPricepre) + Number.EPSILON ) * 100)}}%</div>
 
+          Math.round((num + Number.EPSILON) * 100) / 100
               </td>
             </template>
           </tr>
@@ -225,7 +232,7 @@
     </v-simple-table>
 
   <div v-if="!isBidOut && !bidDetail.receivingBids && bidDetail.supplierSubmissions.length">
-    <v-simple-table class="award-table-style mt-8" v-if="bidDetail.bidData.awardees.length || bidDetail.bidData.rejectees.length">
+    <v-simple-table class="award-table-style mt-8" v-if="bidDetail.bidData.awardees && bidDetail.bidData.awardees.length || bidDetail.bidData.rejectees &&bidDetail.bidData.rejectees.length">
       <template v-slot:default>
         <tbody>
           <tr>
@@ -320,7 +327,7 @@ export default {
       if (this.isBidOut) return true;
       if (this.bidDetail.bidData.type === 'BidOut Process' && !this.bidDetail.receivingBids) return true;
 
-      return true;
+      return false;
     },
   },
   methods: {

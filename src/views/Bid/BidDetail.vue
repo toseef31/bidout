@@ -599,7 +599,6 @@ export default {
     SupplierBidDetail,
     SupplierBidSubmission,
   },
-  // moment.tz("2013-12-03T15:00:00","America/Los_Angeles").utc().format()
   data() {
     return {
       currentItem: 'tab-1',

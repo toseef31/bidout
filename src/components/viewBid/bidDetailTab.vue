@@ -59,8 +59,10 @@
         <div class="d-flex align-center">
           <v-img
             v-if="item && item.image"
-            width="60px"
+            width="60"
             height="auto"
+            contain
+            :aspect-ratio="16/9"
             :src="item && item.image"
           ></v-img>
           <v-icon size="42" v-else >mdi-domain</v-icon>
