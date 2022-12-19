@@ -197,6 +197,7 @@ export default {
       this.$store.commit('setInvitedSuppliersData', null);
       this.$store.commit('setBidlines', null);
       this.$store.commit('setAttachement', null);
+      this.$store.commit('setAttachData', null);
       this.$store.commit('setQuestions', null);
       this.$store.commit('setDraftBidsList', null);
       this.$store.commit('setDraftTime', null);

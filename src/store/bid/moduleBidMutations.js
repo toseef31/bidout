@@ -82,6 +82,7 @@ export default {
     state.bidlines = payload;
   },
   setAttachement(state, payload) {
+    console.log('payload',payload);
     state.attachement = payload;
   },
   setQuestions(state, payload) {
