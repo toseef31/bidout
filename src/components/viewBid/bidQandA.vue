@@ -1,5 +1,6 @@
 <template>
   <v-col class="my-7 pa-0 qanda-section fill-height" align="start">
+  <div v-if="bidDetail.bidData.qAndAEnabled === 'true'">
     <div class="px-6" v-if="(getUserType === 'buyer' && getQAndA.length)">
       <span class="title-detail" v-if="getQAndForAnswer.length">Unanswered questions</span >
 
@@ -68,7 +69,7 @@
       <div class="title-detail" v-if="!getQAndForAnswer.length">Answered questions</div>
       <div v-if="getQAndAAnswered.length && getQAndForAnswer.length" class="title-detail mt-6">Answered questions</div>
 
-   <div v-for="(item,index) in getQAndAAnswered" :key="index">
+          <div v-for="(item,index) in getQAndAAnswered" :key="index">
 
       <div class="header d-flex flex-column pt-4">
         <span>Question:</span>
@@ -78,7 +79,7 @@
         >
 
         <span class="sub-title mt-4">By {{(item.questionedUserName)}} ({{item.questionedUserCompany
-}})</span>
+          }})</span>
         <span class="sub-title mt-2">{{ item.askedOn._seconds | moment('MM/DD/YYYY')}} - {{ item.askedOn._seconds | moment('hh:mma')}}</span>
       </div>
 
@@ -233,7 +234,11 @@
     </div>
   </div>
   </div>
+</div>
 
+<div v-else class="text-center q-title-detail ">
+  Buyer has configured this bid to not allow any Q&Aa.
+</div>
   </v-col>
 </template>
 
