@@ -49,20 +49,20 @@
                 <v-list-item-title class="font-weight-bold" v-text="item.title"></v-list-item-title>
               </v-list-item-content>
             </template>
-            
+           
             <template v-for="(child,index) in item.items"
               > 
                 <v-list-item
-                   v-if="userDatas.role == 'admin' && (index === 0 || index === 3)"
+                   v-if="userDatas.role == 'admin' && (index === 0) "
                 >
-                  <v-list-item-icon class="mr-6 mt-3" v-show="!showSideBar">
-                    <router-link :to="'/'+child.link" class="text-decoration-none"><v-icon v-text="child.icon"></v-icon></router-link>
-                  </v-list-item-icon>
-                  <v-list-item-content class="text-left py-1" v-show="showSideBar">
-                    <router-link :to="'/'+child.link"  @click="isHidden = !isHidden" :class="{ 'active-btn': isHidden}" class="text-decoration-none">
-                      <v-list-item-title class="font-weight-bold" v-text="child.title"></v-list-item-title>
-                    </router-link>
-                  </v-list-item-content>
+                    <v-list-item-icon class="mr-6 mt-3" v-show="!showSideBar">
+                      <router-link :to="'/'+child.link" class="text-decoration-none"><v-icon v-text="child.icon"></v-icon></router-link>
+                    </v-list-item-icon>
+                    <v-list-item-content class="text-left py-1" v-show="showSideBar">
+                      <router-link :to="'/'+child.link"  @click="isHidden = !isHidden" :class="{ 'active-btn': isHidden}" class="text-decoration-none">
+                        <v-list-item-title class="font-weight-bold" v-text="child.title"></v-list-item-title>
+                      </router-link>
+                    </v-list-item-content>
                 </v-list-item>
 
                 <v-list-item
@@ -77,7 +77,42 @@
                     </router-link>
                   </v-list-item-content>
                 </v-list-item>
+
             </template>
+              
+              <template v-if="moduleData.length >= 2 ">
+                <v-list-item
+                    
+                >
+                    <template>
+                      <v-list-item-icon class="mr-6 mt-3" v-show="!showSideBar">
+                        <router-link :to="'/company-profile'" class="text-decoration-none"><v-icon>mdi-cog-outline</v-icon></router-link>
+                      </v-list-item-icon>
+                      <v-list-item-content class="text-left py-1" v-show="showSideBar">
+                        <router-link :to="'/company-profile'" @click="isHidden = !isHidden" :class="{ 'active-btn': isHidden}" class="text-decoration-none">
+                          <v-list-item-title class="font-weight-bold">Manage Company Profile</v-list-item-title>
+                        </router-link>
+                      </v-list-item-content>
+                    </template>
+                </v-list-item>
+              </template>
+              
+              <template v-if="moduleData.length == 1 ">
+                <v-list-item
+                    v-if="moduleData[0].contractType == 'ofs' || moduleData[0].contractType == 'ofs-premium'"
+                >
+                    <template>
+                      <v-list-item-icon class="mr-6 mt-3" v-show="!showSideBar">
+                        <router-link :to="'/company-profile'" class="text-decoration-none"><v-icon>mdi-cog-outline</v-icon></router-link>
+                      </v-list-item-icon>
+                      <v-list-item-content class="text-left py-1" v-show="showSideBar">
+                        <router-link :to="'/company-profile'" @click="isHidden = !isHidden" :class="{ 'active-btn': isHidden}" class="text-decoration-none">
+                          <v-list-item-title class="font-weight-bold">Manage Company Profile</v-list-item-title>
+                        </router-link>
+                      </v-list-item-content>
+                    </template>
+                </v-list-item>
+              </template>
               
           </v-list-group>
         </v-list>
@@ -134,7 +169,7 @@ export default {
               { icon: 'mdi-account-multiple',title: 'Manage Users', link: 'manage-users' },
               { icon: 'mdi-cog-outline' ,title: 'Manage Modules', link: 'manage-module' },
               { icon: 'mdi-account-multiple',title: 'Manage Templates', link: 'manage-templates' },
-              { icon: 'mdi-cog-outline' ,title: 'Manage Company Profile', link: 'company-profile' },
+              // { icon: 'mdi-cog-outline' ,title: 'Manage Company Profile', link: 'company-profile' },
             ],
             title: 'Company Settings'
           },
@@ -153,6 +188,14 @@ export default {
     },
     userDatas(){
         return this.$store.getters.userInfo;
+    },
+    moduleData(){
+      if(this.$store.getters.userInfo.company.contracts){
+        return this.$store.getters.userInfo.company.contracts.filter((item)=>{
+          return this.$store.getters.userInfo.id == item.signedBy
+        })
+      }
+      
     },
   },
   methods: {
