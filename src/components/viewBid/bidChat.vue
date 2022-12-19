@@ -64,7 +64,7 @@ you will be able to see the message here.
           <v-row align="center">
             <v-col cols="12" md="6">
               <div class="company-title text-left" v-if="chatData">
-                <h4>{{ chatData.conversation.name ||chatData.conversation.company.company.split('|||')[0] }}</h4>
+                <h4>{{ getConversationName(chatData.conversation) }}</h4>
 
                 <p class="mb-0">
                   <router-link :to="(chatData.conversation.company && chatData.conversation.company.slug ? '/company/'+ chatData.conversation.company.slug: '')" class="text-decoration-underline">View Profile</router-link>
@@ -390,6 +390,12 @@ export default {
     },
     get_url_extension(url) {
       return url.split(/[#?]/)[0].split('.').pop().trim();
+    },
+    getConversationName(conversation) {
+      if (conversation.type === 'GROUP') {
+        return conversation.name.split('|||').find((el) => el.trim() !== this.user.company.company);
+      }
+      return conversation.name;
     },
   },
   beforeMount() {
