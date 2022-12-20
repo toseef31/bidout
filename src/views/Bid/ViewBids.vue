@@ -171,6 +171,7 @@ import { mapActions } from 'vuex';
 import Navbar from '../../components/Layout/Navbar.vue';
 import LeftSidebar from '../../components/Layout/Dashboard/LeftSidebar.vue';
 import RightSidebar from '../../components/Layout/Dashboard/RightSidebar.vue';
+import _ from 'lodash'
 
 export default {
   name: 'ViewBids',
@@ -207,8 +208,9 @@ export default {
     },
     bidsList() {
       if (this.$store.getters.bidsList.length > 0) {
-        this.$store.getters.bidsList.filter((item) => {
-          if (!item.status) {
+        return _.orderBy(this.$store.getters.bidsList.filter((item) => {
+
+          if (item.receivingBids == true) {
             const found = this.openBids.find((el) => el.id === item.id);
             if (!found) this.openBids.push(item);
           } else {
@@ -224,7 +226,7 @@ export default {
             .split(' ')
             .every((v) => item.title.toLowerCase().includes(v)));
         }
-        return this.$store.getters.bidsList;
+        return _.orderBy(this.$store.getters.bidsList,['dueDate','asc','dueTime','asc']);
       }
       return [];
     },
