@@ -36,7 +36,7 @@
               single-line
               outlined
               type="text"
-              v-model="answer"
+              v-model="answers[index].answer"
             >
             </v-textarea>
 
@@ -45,12 +45,12 @@
                 color="#0D9648"
                 height="32"
                 class="text-capitalize white--text font-weight-bold save-button px-12"
-                @click="reply(item.id)"
+                @click="reply(item.id,index)"
                 large
-                :disabled="showLoading"
+                :disabled="getLoading[index].loading"
                 >
                 <v-progress-circular
-                    v-if="showLoading"
+                    v-if="getLoading[index].loading"
                     indeterminate
                     :width="2"
                     size="20"
@@ -251,7 +251,7 @@ export default {
       question: '',
       user: '',
       loading: false,
-      answer: '',
+      answers: [],
       editedAnswer: '',
       isEdit: false,
       editable: [],
@@ -278,13 +278,22 @@ export default {
       return this.$store.getters.qAndA.filter((el) => !el.answer && this.user.id === el.questionBy);
     },
     getQAndForAnswer() {
-      return this.getQAndA.filter((el) => !el.answer);
+      return this.getQAndA.filter((el) => {
+        this.answers.push({
+          loading: false,
+          answer: '',
+        });
+        return !el.answer;
+      });
     },
     bidDetail() {
       return this.$store.getters.bidViewData;
     },
     showLoading() {
       return this.loading;
+    },
+    getLoading() {
+      return this.answers;
     },
     getUnansweredQuestionCount() {
       return this.$store.getters.unansweredQuestionCount;
@@ -310,18 +319,18 @@ export default {
       this.loading = false;
       this.question = '';
     },
-    async reply(questionId) {
-      this.loading = true;
+    async reply(questionId, index) {
+      this.answers[index].loading = true;
 
       await this.answerQuestion({
-        answer: this.answer,
+        answer: this.answers[index].answer,
         userId: this.user.id,
         bidId: this.bidDetail.bidData.id,
         questionId,
       });
 
-      this.loading = false;
-      this.answer = '';
+      this.answers[index].loading = false;
+      this.answers[index].answer = '';
     },
     editAction(index, answer) {
       this.editable[index].isEdit = !this.editable[index].isEdit;
