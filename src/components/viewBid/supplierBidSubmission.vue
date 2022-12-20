@@ -161,10 +161,48 @@
                 <div class="upload-attach" v-if="item.questionType === 'uploadFile'">
                     <div class="d-flex justify-space-between align-center" v-if="((answers[index].answer && answers[index].answer.name || answers[index].fileName) )">
                 <div class="doc-list">{{(answers[index].answer.name || answers[index].fileName)}}</div>
-                    <v-btn @click="removeQuesDoc(index)" icon v-if="bidDetail.receivingBids && !isBidOut">
+
+                   <v-dialog
+                  class="dialog-class"
+                  v-model="dialog"
+                  width="320"
+                  >
+
+                    <template v-slot:activator="{ on, attrs }">
+
+                      <v-btn  v-on="on"  v-bind="attrs"  icon v-if="bidDetail.receivingBids && !isBidOut">
                         <v-icon size="20" color="#F03F20" >mdi-close
                         </v-icon>
                    </v-btn>
+                    </template>
+
+                    <v-card >
+                      <v-card-title  class="text-h5 justify-center grey lighten-2">
+                        Remove Attachment file
+                      </v-card-title>
+                      <v-card-text class="pt-3 mb-n2">Are you sure you really want to remove this attachment file?</v-card-text>
+                      <v-divider></v-divider>
+                      <v-card-actions>
+                        <v-spacer></v-spacer>
+
+                        <v-btn
+                        color="#0d9648"
+                        outlined
+                        @click="dialog = false"
+                        >
+                        Cancel
+                        </v-btn>
+                        <v-btn
+                        color="#F32349"
+                        outlined
+                        @click="dialog = false;removeQuesDoc(index)"
+                        >
+                        Agree
+                        </v-btn>
+                      </v-card-actions>
+                    </v-card>
+
+                  </v-dialog>
 
                 </div>
 
@@ -249,7 +287,47 @@
                   v-if="bidDetail.receivingBids && !isBidOut"
                   @click="deleteAttach(index)"
                   >
-                    <div>Delete</div>
+
+                    <v-dialog
+                  class="dialog-class"
+                  v-model="dialogT"
+                  width="320"
+                  >
+
+                    <template v-slot:activator="{ on, attrs }">
+
+                      <v-btn  v-on="on"  v-bind="attrs"  text v-if="bidDetail.receivingBids && !isBidOut" :ripple="false">
+                        Delete
+                   </v-btn>
+                    </template>
+
+                    <v-card >
+                      <v-card-title  class="text-h5 justify-center grey lighten-2">
+                        Remove Attachment file
+                      </v-card-title>
+                      <v-card-text class="pt-3 mb-n2">Are you sure you really want to remove this attachment file?</v-card-text>
+                      <v-divider></v-divider>
+                      <v-card-actions>
+                        <v-spacer></v-spacer>
+
+                        <v-btn
+                        color="#0d9648"
+                        outlined
+                        @click="dialogT = false"
+                        >
+                        Cancel
+                        </v-btn>
+                        <v-btn
+                        color="#F32349"
+                        outlined
+                        @click="dialogT = false;deleteAttach(index)"
+                        >
+                        Agree
+                        </v-btn>
+                      </v-card-actions>
+                    </v-card>
+
+                  </v-dialog>
                   </td>
                 </tr>
               </tbody>
@@ -313,6 +391,7 @@
         >
       </div>
     </v-form>
+
   </v-col>
 
 </template>
@@ -326,6 +405,8 @@ export default {
       lineItems: [],
       intent: 'true',
       loading: false,
+      dialog: false,
+      dialogT: false,
       valid: true,
       supplierNote: '',
       file: '',
