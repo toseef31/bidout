@@ -7,7 +7,7 @@
             bidDetail.bidData.lineItems &&
             bidDetail.bidData.lineItems.length > 0
           ">Line Items</div>
-    <v-simple-table class="template-table-style mt-1" v-if="
+    <v-simple-table class="template-table-style mt-1 pb-8" v-if="
             bidDetail.bidData &&
             bidDetail.bidData.lineItems &&
             bidDetail.bidData.lineItems.length > 0
@@ -78,8 +78,12 @@
       </template>
     </v-simple-table>
 
-  <div class="pt-8 bid-row-3 pb-2"  v-if="bidDetail.bidData.questions && bidDetail.bidData.questions.length">
-        <div class="question-section-title">
+  <div class=" bid-row-3 pb-2"  v-if="bidDetail.bidData.questions && bidDetail.bidData.questions.length">
+        <div class="question-section-title" v-if="bidDetail.bidData.lineItems &&
+            bidDetail.bidData.lineItems.length > 0">
+          <span class="title-detail px-4">Buyer Questions</span>
+        </div>
+        <div  v-else>
           <span class="title-detail px-4">Buyer Questions</span>
         </div>
         <div
@@ -112,7 +116,7 @@
                     ></v-checkbox>
 
                     <v-checkbox
-                       v-if="(item.questionType === 'checkbox'  && item.options.length === 1)"
+                       v-if="(item.questionType === 'checkbox'  && item.options && item.options.length === 1)"
                        :rules="item.required === 'true' ?answerRule : []"
                        :disabled="!bidDetail.receivingBids || isBidOut"
                        :label="item.options[0].label"
@@ -124,7 +128,7 @@
                        row
                        :disabled="!bidDetail.receivingBids || isBidOut"
                        :rules="item.required === 'true' ?answerRule : []"
-                       v-if="(item.questionType === 'checkbox' && item.options.length > 1)"
+                       v-if="(item.questionType === 'checkbox' && item.options && item.options.length > 1)"
                        >
                         <v-radio
                             :label="item.options[0].label"
