@@ -145,7 +145,6 @@ export default {
       return _.orderBy(this.$store.getters.bidsList.filter((items)=>{
         return items.receivingBids != false;
       }).slice(0,6),['dueDate','asc','dueTime','asc']);
-      // return _.orderBy(this.$store.getters.bidsList.slice(0,6),['dueDate','asc','dueTime','asc']);
     }
   },
   methods: {
