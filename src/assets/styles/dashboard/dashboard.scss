@@ -43,14 +43,47 @@
 			   	color: #959595;
 			    font-weight: 600;
 			    font-size: 14px;
+			    &:nth-child(4){
+			    	width: 150px;
+			    }
 			 	}
 				table tbody tr td {
 			   	color: #0D1139;
 			    font-weight: 600;
 			    font-size: 14px;
+
 			    a:hover{
 			    	text-decoration: underline !important;
 			    }
+			 	}
+			 	tbody{
+			 		tr{
+			 			.title-truncate{
+			 				min-width: 268px;
+			 				max-width: 268px;
+	 				    white-space: nowrap;
+	 				    overflow: hidden;
+	 				    text-overflow: ellipsis;
+			 			}
+			 			td{
+			 				border-bottom: 0 !important;
+			 				&:nth-child(1){
+			 					min-width: 68px;
+			 					max-width: 68px;
+			 				}
+			 				&:nth-child(3){
+			 					min-width: 60px;
+			 					max-width: 60px;
+			 				}
+			 				&:nth-child(4){
+			 					min-width: 150px;
+			 					max-width: 150px;
+			 				}
+			 				&:nth-child(5){
+			 					min-width: 75px;
+			 				}
+			 			}
+			 		}
 			 	}
 			 	.icon-circle{
 			 		background: rgba(0, 0, 0, 0.1);
@@ -97,6 +130,8 @@
 }
 @media (max-width: 768px) {
 	.dashboard-module{
+		flex: 0 0 100%;
+  	max-width: 100%;
 		.mid-content {
 			flex: 0 0 100%;
 	  	max-width: 100%;
