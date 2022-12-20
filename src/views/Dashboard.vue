@@ -5,86 +5,93 @@
     </v-col>
   </v-row>
   <v-col class="dashboard-module pa-0 pa-sm-3 pl-sm-0" :class="[ showSideBar ? 'col-md-6 col-12 col-sm-7' : 'mid-content-collapse', activityPanel ? 'd-sm-block' : 'd-md-block']" v-show="!activityPanel" v-else>
-          <v-row>
-           
-            <v-col class="col-md-8 col-12 col-sm-8">
-              <div class="mid-content">
-                  <div class="content-section">
-                    <div class="title-block">
-                      <h3 class="font-weight-bold">Active Bids</h3>
-                      <router-link to="/view-bids">View all</router-link>
-                    </div>
-                    <v-simple-table class="bids-table">
-                      <template v-slot:default>
-                        <thead>
-                          <tr>
-                            <th class="text-left">
-                              Bid ID
-                            </th>
-                            <th class="text-left">
-                              Title
-                            </th>
-                            <th class="text-left">
-                              Entries
-                            </th>
-                            <th class="text-left">
-                              End Time
-                            </th>
-                            <th class="text-left">
-                              <span class=" d-none d-sm-block">Action</span>
-                            </th>
-                          </tr>
-                        </thead>
+    <v-row>
+     
+      <v-col class="col-md-8 col-12">
+        <div class="mid-content">
+            <div class="content-section">
+              <div class="title-block">
+                <h3 class="font-weight-bold">Active Bids</h3>
+                <router-link to="/view-bids">View all</router-link>
+              </div>
+              <v-simple-table class="bids-table">
+                <template v-slot:default>
+                  <thead>
+                    <tr>
+                      <th class="text-left">
+                        Bid ID
+                      </th>
+                      <th class="text-left pl-0">
+                        Title
+                      </th>
+                      <th class="text-left">
+                        Entries
+                      </th>
+                      <th class="text-left">
+                        End Time
+                      </th>
+                      <th class="text-left pl-0">
+                        <span class=" d-none d-sm-block">Action</span>
+                      </th>
+                    </tr>
+                  </thead>
 
-                        <tbody>
-                          <template v-if="bidsList.length > 0">
-                            <tr
-                              v-for="bid in bidsList"
-                              :key="bid.id" v-if=""
-                            >
-                              <td class="text-left">{{ bid.serial }}</td>
-                              <td class="text-left">{{ bid.title }}</td>
-                              <td class="text-left">{{ bid.bidEntries ? bid.bidEntries : 0 }}</td>
-                              <td class="text-left">{{ bid.dueDate | moment('MM/DD/YYYY') }} {{bid.dueTime}}</td>
-                              <td class="text-left d-none d-sm-block pt-3"><router-link class="text-decoration-none"
-                                :to="{
-                                  path: `/view-bids/${bid.serial}`,
-                                }"
-                                >View Bid</router-link
-                              ></td>
-                              <td class="text-left d-flex d-sm-none align-center"><span class="icon-circle"><v-icon>mdi-chevron-right</v-icon></span></td>
-                            </tr>
-                          </template>
-                          <tr v-else>
-                            <td colspan="5">There are no active bids, <router-link to="/create">create a new bid?</router-link></td>
-                          </tr>
-                        </tbody>
-                      </template>
-                    </v-simple-table>
-                    
-                  </div>
-                  <div class="pending-queue mb-2" v-if="userDatas.role == 'admin' && pendingCount > 0">
-                    <div class="d-flex justify-space-between">
-                      <div class="pending-content d-flex">
-                        <v-img :src="require('@/assets/images/dashboard/userCircle.png')" height="24px" width="24px"></v-img> <span class="pl-3">{{pendingCount}} Pending User in Queue</span>
-                      </div>
-                      <div>
-                        <router-link to="/manage-users">Manage Users</router-link>
-                      </div>
-                    </div>
-                  </div>
-                  <div class="map-section">
-                    <div id="map" class="map" height="415px"></div>
-                  </div>
+                  <tbody>
+                    <template v-if="bidsList.length > 0">
+                      <tr
+                        v-for="bid in bidsList"
+                        :key="bid.id"
+                      >
+                        <td class="text-left pr-sm-0" width="60px">{{ bid.serial }}</td>
+                        <td class="text-left title-truncate pl-0">{{ bid.title }}</td>
+                        <td class="text-left" width="50px">{{ bid.bidEntries ? bid.bidEntries : 0 }}</td>
+                        <td class="text-left" width="100px">{{ bid.dueDate | moment('MM/DD/YYYY') }} {{bid.dueTime}}</td>
+                        <td class="text-left d-none d-sm-block pt-3 pl-0" width="65px"><router-link class="text-decoration-none"
+                          :to="{
+                            path: `/view-bids/${bid.serial}`,
+                          }"
+                          >View Bid</router-link
+                        ></td>
+                        <td class="text-left d-flex d-sm-none align-center">
+                          <router-link class="text-decoration-none icon-circle" :to="{
+                            path: `/view-bids/${bid.serial}`,
+                          }"> 
+                            <span class=""><v-icon>mdi-chevron-right</v-icon></span> 
+                          </router-link>
+                          
+                        </td>
+                      </tr>
+                    </template>
+                    <tr v-else>
+                      <td colspan="5">There are no active bids, <router-link to="/create">create a new bid?</router-link></td>
+                    </tr>
+                  </tbody>
+                </template>
+              </v-simple-table>
+              
+            </div>
+            <div class="pending-queue mb-2" v-if="userDatas.role == 'admin' && pendingCount > 0">
+              <div class="d-flex justify-space-between">
+                <div class="pending-content d-flex">
+                  <v-img :src="require('@/assets/images/dashboard/userCircle.png')" height="24px" width="24px"></v-img> <span class="pl-3">{{pendingCount}} Pending User in Queue</span>
                 </div>
-            </v-col>
-            <v-col cols="12" md="4" sm="4" class="pl-0 right-col" :class="[ activityPanel ? '' : 'mobile-right-col']" >
-             <div class="right-sidebar"> 
-               <RightSidebar></RightSidebar>
-             </div>
-            </v-col>
-          </v-row>
-       </v-col>
+                <div>
+                  <router-link to="/manage-users">Manage Users</router-link>
+                </div>
+              </div>
+            </div>
+            <div class="map-section">
+              <div id="map" class="map" height="415px"></div>
+            </div>
+          </div>
+      </v-col>
+      <v-col cols="12" md="4" sm="4" class="pl-0 right-col" :class="[ activityPanel ? '' : 'mobile-right-col']" >
+       <div class="right-sidebar"> 
+         <RightSidebar></RightSidebar>
+       </div>
+      </v-col>
+    </v-row>
+ </v-col>
        
    <!-- </section> -->
 </template>
@@ -135,7 +142,10 @@ export default {
      return this.$store.getters.pageLoader;
     },
     bidsList(){
-      return _.orderBy(this.$store.getters.bidsList.slice(0,6),'dueDate','desc');
+      return _.orderBy(this.$store.getters.bidsList.filter((items)=>{
+        return items.receivingBids != false;
+      }).slice(0,6),['dueDate','asc','dueTime','asc']);
+      // return _.orderBy(this.$store.getters.bidsList.slice(0,6),['dueDate','asc','dueTime','asc']);
     }
   },
   methods: {
@@ -143,10 +153,11 @@ export default {
     getLocation(){
       var LocationsForMap = this.locations;
       var map = new google.maps.Map(document.getElementById('map'), {
+        mapId: "2993bb26d878ba6a",
         center: new google.maps.LatLng(LocationsForMap[0].locations[0].lattitude, LocationsForMap[0].locations[0].longitude),
         streetViewControl: false,
         mapTypeControl: false,
-        mapTypeId: google.maps.MapTypeId.ROADMAP
+        // mapTypeId: google.maps.MapTypeId.ROADMAP
       });
 
       var infowindow = new google.maps.InfoWindow();
