@@ -40,7 +40,7 @@
                     <template v-if="bidsList.length > 0">
                       <tr
                         v-for="bid in bidsList"
-                        :key="bid.id" v-if="bid.receivingBids != false"
+                        :key="bid.id"
                       >
                         <td class="text-left pr-sm-0" width="60px">{{ bid.serial }}</td>
                         <td class="text-left title-truncate pl-0">{{ bid.title }}</td>
