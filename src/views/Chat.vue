@@ -66,7 +66,7 @@
                 <v-row align="center">
                   <v-col cols="12" md="6">
                     <div class="title-section text-left">
-                      <h4 class="mb-0 font-weight-bold">{{ chatData.name }}</h4>
+                      <h4 v-if="chatData.group" class="mb-0 font-weight-bold">{{ getConversationName(chatData.group) }}</h4>
                       <template v-if="chatData.group">
                         <template v-if="chatData.group.isBid == true">
                           <p class="sub-title mb-0 font-weight-regular">
@@ -77,7 +77,6 @@
                           </p>
                         </template>
                       </template>
-                      
                     </div>
                   </v-col>
                   <v-col cols="12" md="6">
@@ -115,82 +114,6 @@
                           >
                             <v-list class="pa-0">
                               <v-list-item-group color="success">
-                                <!-- <v-dialog v-model="dialog" width="700">
-                                  <template v-slot:activator="{ on, attrs }">
-                                    <v-btn
-                                      color="transparent"
-                                      v-bind="attrs"
-                                      v-on="on"
-                                      class="text-capitalize text-left justify-start manage-btn font-weight-bold"
-                                      height="48px"
-                                      width="100%"
-                                    >
-                                      <v-icon class="mr-2" color="#0D9648"
-                                        >mdi-account-star-outline</v-icon
-                                      >Manage Members
-                                    </v-btn>
-                                  </template>
-                                  <v-card>
-                                    <v-card-title
-                                      class="text-h6 lighten-2 justify-space-between"
-                                    >
-                                      Manage Members
-                                      <v-icon
-                                        @click="dialog = false"
-                                        color="#0D9648"
-                                      >
-                                        mdi-close</v-icon
-                                      >
-                                    </v-card-title>
-                                    <v-divider></v-divider>
-                                    <v-card-text class="my-8" v-if="chatData">
-                                      <label
-                                        class="d-block text-left input-label font-weight-bold black--text"
-                                        >Manage Members</label
-                                      >
-                                      <v-autocomplete
-                                        v-model="removeMember"
-                                        :items="allMembers"
-                                        item-value="id"
-                                        item-text="name"
-                                        chips
-                                        outlined
-                                        auto-select-first
-                                        full-width
-                                        hide-details
-                                        hide-no-data
-                                        hide-selected
-                                        single-line
-                                        deletable-chips
-                                        search-input
-                                        return-object
-                                        class="text-left addChat-box"
-                                      >
-                                      </v-autocomplete>
-                                    </v-card-text>
-                                    <v-divider></v-divider>
-                                    <v-card-actions>
-                                      <v-spacer></v-spacer>
-                                      <v-btn
-                                        color="#0D9648"
-                                        text
-                                        @click="dialog = false"
-                                        class="text-capitalize"
-                                      >
-                                        Cancel
-                                      </v-btn>
-                                      <v-btn
-                                        color="#0D9648"
-                                        rounded
-                                        class="text-capitalize white--text px-3"
-                                        min-width="100px"
-                                        @click="removeUser(chatData.group._id)"
-                                      >
-                                        Save
-                                      </v-btn>
-                                    </v-card-actions>
-                                  </v-card>
-                                </v-dialog> -->
                                 <v-list-item
                                   v-for="(menu, i) in toggleMenu"
                                   :key="i"
@@ -591,6 +514,12 @@ export default {
     },
     istoday(date) {
       return moment(date).calendar();
+    },
+    getConversationName(conversation) {
+      if (conversation.type === 'GROUP') {
+        return conversation.name.split('|||').find((el) => el.trim() !== this.user.company.company);
+      }
+      return conversation.name;
     },
   },
   beforeMount() {

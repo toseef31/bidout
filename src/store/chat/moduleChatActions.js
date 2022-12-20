@@ -196,6 +196,7 @@ export default {
       .post('/chat/newbroadcastMessage/', {
         messageContent: payload.messageContent,
         bidId: payload.bidId,
+        buyerUserId: payload.buyerUserId,
       })
       .then((responce) => {
         commit('showBroadcastAlert');

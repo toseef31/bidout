@@ -219,9 +219,7 @@ export default {
       return moment(date).calendar();
     },
     getConversationName(conversation) {
-      console.log(conversation.type, 'conversation');
       if (conversation.type === 'GROUP') {
-        console.log(conversation.name.split('|||').find((el) => el.trim() !== this.user.company.company))
         return conversation.name.split('|||').find((el) => el.trim() !== this.user.company.company);
       }
       return conversation.name;
