@@ -132,7 +132,7 @@
             rounded="lg"
             height="119"
             width="300"
-            v-if="bidDetail.receivingBids && isBidOut"
+            v-if="!bidDetail.receivingBids && isBidOut"
           >
 
             <div class="status">
@@ -158,7 +158,7 @@
             rounded="lg"
             height="85"
             width="290"
-            v-if="!bidDetail.receivingBids">
+            v-if="!bidDetail.receivingBids && !isBidOut">
 
               <div  class="award-status" v-if="(bidDetail.bidData.rejectees && bidDetail.bidData.rejectees.length === 0 && bidDetail.bidData.awardees && bidDetail.bidData.awardees.length === 0) || !bidDetail.bidData.rejectees &&  !bidDetail.bidData.awardees">Status: Not Awarded</div>
 
@@ -291,7 +291,7 @@
           </v-card>
             </div>
           </div>
-          <v-btn v-if="!bidDetail.receivingBids"  color="#F03F20" depressed @click="ChangeT('tab-2')">
+          <v-btn v-if="!bidDetail.receivingBids && !isBidOut"  color="#F03F20" depressed @click="ChangeT('tab-2')">
             <div class="supplier-class">Select Supplier</div>
           </v-btn>
         </v-col>
@@ -388,7 +388,7 @@
             rounded="lg"
             height="119"
             width="300"
-            v-if="bidDetail.receivingBids && isBidOut"
+            v-if="!bidDetail.receivingBids && isBidOut"
           >
           <div class="status">
               Status: BidOut Phase
@@ -423,7 +423,7 @@
             rounded="lg"
             height="85"
             width="290"
-            v-if="!bidDetail.receivingBids && bidDetail.user_status !== 'awarded'">
+            v-if="!bidDetail.receivingBids && !isBidOut && bidDetail.user_status !== 'awarded'">
 
               <div  class="award-status" v-if="bidDetail.user_status === 'waiting'">Status: Awarding Phase</div>
 
@@ -443,7 +443,7 @@
             rounded="lg"
             height="85"
             width="290"
-            v-if="bidDetail.user_status === 'awarded' && isBidSubmitted && !bidDetail.receivingBids">
+            v-if="bidDetail.user_status === 'awarded' && isBidSubmitted && !bidDetail.receivingBids && !isBidOut">
 
               <div class="status">Status: Awarded, Congrats!</div>
 
@@ -699,8 +699,8 @@ export default {
       const stringDate = `${bidDueDate}T${momentTime}`;
       let momentDueDate = moment.tz(stringDate, 'America/Chicago');
 
-      if (this.bidDetail.bidData.type === 'BidOut Process' && !this.bidDetail.bidout) {
-        momentDueDate = momentDueDate.subtract(4, 'hours');
+      if (this.bidDetail.bidData.type === 'BidOut Process' && this.bidDetail.bidout && !this.bidDetail.receivingBids) {
+        momentDueDate = momentDueDate.add(4, 'hours');
       }
 
       return moment.tz(momentDueDate, 'America/Chicago').format('X') - this.actualTime;

@@ -25,7 +25,7 @@
       </template>
     </v-simple-table>
 
- <div class="submission-section" v-if="bidDetail.supplierSubmissions.length && checkTime">
+ <div class="submission-section" v-if="bidDetail.supplierSubmissions.length && isBidOut && !bidDetail.receivingBids">
     <v-simple-table class="submission-table-style">
       <template v-slot:default>
         <tbody>
@@ -321,12 +321,6 @@ export default {
       if (this.bidDetail.bidData.type === 'BidOut Process' && this.bidDetail.bidout) {
         return true;
       }
-      return false;
-    },
-    checkTime() {
-      if (this.isBidOut) return true;
-      if (this.bidDetail.bidData.type === 'BidOut Process' && !this.bidDetail.receivingBids) return true;
-
       return false;
     },
   },
