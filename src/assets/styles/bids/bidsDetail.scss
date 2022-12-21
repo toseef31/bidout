@@ -943,55 +943,6 @@
       }
    
       .template-table-style-sub {
-        table {
-          overflow-x: auto;
-           table-layout: fixed;
-          border-collapse: collapse;
-          thead {
-            tr {
-              th {
-               
-                color: #000000;
-                font-size: 16px;
-                font-weight: 700;
-                &:first-child {
-                  padding-left: 26px;
-
-                }
-                
-              }
-            }
-          }
-          tbody {
-            tr {
-              padding-left: 24px;
-              padding-right: 24px;
-              td {
-                color: #0d1139;
-                font-size: 16px;
-                font-weight: 500;
-                padding-top: 16px;
-                padding-bottom: 16px;
-                padding-left: 17px;
-              }
-              td:first-child {
-                width: 25%;
-                padding-left: 26px;
-              }
-              td:nth-child(2) {
-                width: auto
-              }
-            }
-            tr:nth-of-type(even) {
-              background-color: #fbfbfb;
-            }
-          }
-        }
-      }
-  
-      .button-table-style {
-        margin-bottom: 10px;
-        border-top: 1px solid #f1f1f1;
         .v-btn:not(.v-btn--round).v-size--default {
           width: 190px;
           height: 43px;
@@ -1004,37 +955,8 @@
       
          }
          }
-        table {
-          table-layout: fixed;
-          overflow-x: auto;
-          border-collapse: collapse;
-          tbody {
-            tr:hover {
-              background-color: transparent !important;
-           }
-            tr {
-              padding-left: 24px;
-              padding-right: 24px;
-              td {
-                padding-top: 30px;
-                padding-left: 17px;
-              }
-              td:first-child {
-                width: 25%;
-              }
-              td:nth-child(2) {
-                width: auto
-              }
-              
-            }
-           
-          }
-        }
-      }
 
-      .award-table-style {
-        border-top: 1px solid #f1f1f1;
-        .action {
+         .action {
           border: 1px solid #f1f1f1;
           border-radius: 8px;
           column-gap: 15px;
@@ -1046,118 +968,75 @@
           height: 56px;
         }
         table {
-          table-layout: fixed;
           overflow-x: auto;
-          border-collapse: collapse;
+          display: block;
+          thead {        
+            white-space: nowrap;
+            tr {
+              th {          
+                color: #000000;
+                font-size: 16px;
+                font-weight: 700;
+                &:first-child {
+                  padding-left: 26px;
+                }
+              }
+            }
+          }
           tbody {
             tr:hover {
               background-color: transparent !important;
            }
-            tr {
-              padding-left: 24px;
-              padding-right: 24px;
-              td {
-                padding-top: 30px;
-                padding-left: 17px;
-              }
-              td:first-child {
-                width: 25%;
-                padding-left: 26px;
-              }
-              td:nth-child(2) {
-                width: auto
-              }
-              
+           .action-button-class {
+            td {
+              padding-top: 40px;
             }
            
           }
-        }
-      }
-  
-      .submission-section {
-        border-top: 1px solid #f1f1f1;
-        font-weight: 600;
-        margin-top: 10px;
-        .submission-table-style {
-          table {
-            table-layout: fixed;
-            overflow-x: auto;
-            border-collapse: collapse;
-            tbody {
-              tr:hover {
-                background-color: transparent !important;
-             }
-              tr {
-                padding-left: 24px;
-                padding-right: 24px;
-                background-color: white;
-                td {
-                  color: #0d1139;
-                  font-size: 16px;
-                  font-weight: 500;
-                  padding-top: 48px;
-                  padding-bottom: 48px;
-                  padding-left: 17px;
-                  vertical-align: top;
-                }
-                td:first-child {
-                  width: 25%;
-                  padding-left: 26px;
-                  font-weight: 700;
-                }
-                td:nth-child(2) {
-                  width: auto
-                }
+            tr {
+              .bid-example-title {
+                font-weight: 700;
+                font-size: 16px;
+                padding-top: 48px;
+                padding-bottom: 48px;
+                vertical-align: top;
               }
-            }
-          }
-        }
+              .bid-note {
+                vertical-align: top;
+              }
 
-        .supplier-answer-table-style {
-          table {
-            table-layout: fixed;
-            overflow-x: auto;
-            border-collapse: collapse;
-            tbody {
-              tr {
-                padding-left: 24px;
-                padding-right: 24px;
-                background-color: white;
-                td {
-                  color: #0d1139;
-                  font-size: 16px;
-                  font-weight: 500;
-                  padding-top: 20px;
-                  padding-bottom: 20px;
-                  padding-left: 17px;
-                  vertical-align: middle;
-                }
-                td:first-child {
-                  width: 25%;
-                  padding-left: 26px;
-                }
-                td:nth-child(2) {
-                  width: auto
-                }
+              padding-left: 24px;
+              padding-right: 24px;
+              td {
+                color: #0d1139;
+                font-size: 16px;
+                font-weight: 500;
+                padding-top: 16px;
+                padding-bottom: 16px;
+                padding-left: 17px;
               }
-              tr:nth-of-type(odd) {
-                background-color: #fbfbfb;
+              td:first-child {
+                width: 30% !important;
+                padding-left: 26px;
               }
+            }
+            tr:nth-of-type(odd) {
+              background-color: #fbfbfb;
             }
           }
         }
-        .none-class {
-          color: #959595;
-        }
-  
-        .subscript {
-          color: #0d9648;
-          font-weight: 600;
-          font-size: 11px;
-          margin-left: 28px;
-        }
       }
   
+      .none-class {
+        color: #959595;
+      }
+
+      .subscript {
+        color: #0d9648;
+        font-weight: 600;
+        font-size: 11px;
+        margin-left: 28px;
+      }
       .title-detail-supplier {
         font-size: 16px;
         font-weight: 700;

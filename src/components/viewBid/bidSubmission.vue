@@ -4,12 +4,13 @@
     <v-simple-table class="template-table-style-sub mt-2" v-if="bidDetail.supplierSubmissions.length">
       <template v-slot:default>
         <thead>
-          <tr  >
+          <tr>
             <th class="text-left">Line Items</th>
             <th class="text-left" v-for="(item,index) in bidDetail.supplierSubmissions" :key="index">{{ item.company}}</th>
           </tr>
         </thead>
         <tbody>
+
           <tr v-for="(item,index) in bidDetail.bidData.lineItems" :key="index">
             <td>{{item.description}}</td>
             <template v-for="(submission) in bidDetail.supplierSubmissions">
@@ -21,16 +22,9 @@
               </td>
             </template>
           </tr>
-        </tbody>
-      </template>
-    </v-simple-table>
 
- <div class="submission-section" v-if="bidDetail.supplierSubmissions.length && isBidOut && !bidDetail.receivingBids">
-    <v-simple-table class="submission-table-style">
-      <template v-slot:default>
-        <tbody>
-          <tr>
-             <td>Bid Example Pre-BidOut Period</td>
+          <tr   v-if="bidDetail.supplierSubmissions.length  && !bidDetail.receivingBids">
+             <td class="bid-example-title">Bid Example Pre-BidOut Period</td>
             <template v-for="(submission) in bidDetail.supplierSubmissions">
               <td v-if="!submission.bidoutPricepre">
                 Not submitted
@@ -43,53 +37,46 @@
               </td>
             </template>
           </tr>
-          <tr>
-             <td>Bid Example Post-BidOut Period</td>
+
+          <tr  v-if="bidDetail.supplierSubmissions.length  && !bidDetail.receivingBids">
+             <td class="bid-example-title">Bid Example Post-BidOut Period</td>
             <template v-for="(submission) in bidDetail.supplierSubmissions">
               <td v-if="!submission.postBidoutPrice">
                Not submitted
               </td>
               <td v-else-if="submission.postBidoutPrice
- === null">
+               === null">
                Not submitted
               </td>
               <td v-else>
                 <v-icon color="#0D9648">mdi-arrow-down-thin-circle-outline</v-icon>
           <span class="ml-1">$ {{submission.postBidoutPrice
-}}</span>
+              }}</span>
           <div class="subscript">Saving {{ Math.round(((submission.postBidoutPrice/submission.bidoutPricepre) + Number.EPSILON ) * 100)}}%</div>
 
           Math.round((num + Number.EPSILON) * 100) / 100
               </td>
             </template>
           </tr>
-        </tbody>
-      </template>
-    </v-simple-table>
-  </div>
 
-  <div class=" submission-section" v-if="bidDetail.supplierSubmissions.length">
-    <v-simple-table class="submission-table-style">
-      <template v-slot:default>
-        <tbody>
           <tr>
-            <td class="text-left">Supplier Note</td>
+            <td class="text-left bid-example-title">Supplier Note</td>
             <template v-for="(item) in bidDetail.supplierSubmissions">
-              <td class="text-left" v-if="item.supplierNote && item.supplierNote !== ''">
+              <td class="text-left bid-note" v-if="item.supplierNote && item.supplierNote !== ''">
               {{item.supplierNote}}
             </td>
 
-            <td class="text-left " v-else>
+            <td class="text-left bid-note" v-else>
               <span class="none-class">None provided.</span>
             </td>
             </template>
-
           </tr>
+
           <tr>
-            <td class="text-left">Supplier Attachments</td>
-            <template v-for="(item,index) in bidDetail.supplierSubmissions">
-              <td class="text-left " v-if="item.supplierAttachments && item.supplierAttachments.length">
-              <div class="pb-4  d-inline-flex pr-10" v-for="(doc,attIndex) in bidDetail.supplierSubmissions[index].supplierAttachments" :key="attIndex">
+            <td class="text-left bid-example-title">Supplier Attachments</td>
+            <template v-for="(item,aIndex) in bidDetail.supplierSubmissions">
+              <td class="text-left bid-note" v-if="item.supplierAttachments && item.supplierAttachments.length">
+              <div class="pb-4  d-inline-flex pr-10" v-for="(doc,attIndex) in bidDetail.supplierSubmissions[aIndex].supplierAttachments" :key="attIndex">
             <img
               :src="require('@/assets/images/bids/FilePdf.png')"
               width="32"
@@ -101,33 +88,25 @@
           ">{{doc.fileName}}</a>
           </div>
             </td>
-            <td class="text-left " v-else>
+            <td class="text-left bid-note" v-else>
               <span class="none-class">None provided.</span>
             </td>
             </template>
-
           </tr>
-        </tbody>
-      </template>
-    </v-simple-table>
-  </div>
 
-    <div class="submission-section" v-if="question.length && bidDetail.supplierSubmissions.length">
-      <div class="title-detail-supplier mt-10">Supplier Answers</div>
-      <v-simple-table class="supplier-answer-table-style mt-3">
-      <template v-slot:default>
-        <tbody>
-          <tr v-for="(item,index) in question" :key="index">
+          <tr v-if="question.length && bidDetail.supplierSubmissions.length"><div class="title-detail-supplier mt-10 mb-5">Supplier Answers</div></tr>
+
+          <tr v-for="(item,qIndex) in question" :key="qIndex + item.questionId" v-if="question.length && bidDetail.supplierSubmissions.length">
             <td class="text-left" v-if="item.type !== 'category'"> {{item.title}}</td>
 
             <template v-for="(ans) in answers">
-              <td class="text-left" v-if="ans.answers[index].answer !== 'null' && item.questionType === 'checkbox'">
-               {{ans.answers[index].answer === 'true' ? "Yes" : 'No' }}
+              <td class="text-left" v-if="ans.answers[qIndex].answer !== 'null' && item.questionType === 'checkbox'">
+               {{ans.answers[qIndex].answer === 'true' ? "Yes" : 'No' }}
             </td>
-            <td class="text-left" v-if="ans.answers[index].answer !== 'null' && item.questionType === 'textfield' ||item.questionType === 'textarea'">
-              {{ans.answers[index].answer}}
+            <td class="text-left" v-if="ans.answers[qIndex].answer !== 'null' && item.questionType === 'textfield' ||item.questionType === 'textarea'">
+              {{ans.answers[qIndex].answer}}
             </td>
-            <td class="text-left" v-if="ans.answers[index].answer !== 'null' && item.questionType === 'uploadFile'">
+            <td class="text-left" v-if="ans.answers[qIndex].answer !== 'null' && item.questionType === 'uploadFile'">
               <div class="pb-4 d-inline-flex">
             <v-img
               :src="require('@/assets/images/bids/FilePdf.png')"
@@ -137,28 +116,18 @@
 
             />
             <a target="_blank"
-            class="text-decoration-none pl-2" :href="ans.answers[index].answer
-          ">{{ans.answers[index].fileName}}</a>
+            class="text-decoration-none pl-2" :href="ans.answers[qIndex].answer
+          ">{{ans.answers[qIndex].fileName}}</a>
 
               </div>
             </td>
-            <td class="text-left " v-if="ans.answers[index].answer === 'null' && item.type !== 'category'">
+            <td class="text-left " v-if="ans.answers[qIndex].answer === 'null' && item.type !== 'category'">
               None
             </td>
             </template>
-
           </tr>
 
-        </tbody>
-      </template>
-    </v-simple-table>
-
-  </div>
-
-        <v-simple-table class="button-table-style mt-8" v-if="!isBidOut && !bidDetail.receivingBids && bidDetail.supplierSubmissions.length">
-      <template v-slot:default>
-        <tbody>
-          <tr>
+          <tr v-if="!isBidOut && !bidDetail.receivingBids && bidDetail.supplierSubmissions.length" class="action-button-class">
             <td class="text-left"></td>
             <template v-for="(item,index) in bidDetail.supplierSubmissions">
               <td class="text-left">
@@ -225,17 +194,9 @@
 
             </td>
             </template>
-
           </tr>
-        </tbody>
-      </template>
-    </v-simple-table>
 
-  <div v-if="!isBidOut && !bidDetail.receivingBids && bidDetail.supplierSubmissions.length">
-    <v-simple-table class="award-table-style mt-8" v-if="bidDetail.bidData.awardees && bidDetail.bidData.awardees.length || bidDetail.bidData.rejectees &&bidDetail.bidData.rejectees.length">
-      <template v-slot:default>
-        <tbody>
-          <tr>
+          <tr class="action-button-class" v-if="!isBidOut && !bidDetail.receivingBids && bidDetail.supplierSubmissions.length && bidDetail.bidData.awardees && (bidDetail.bidData.awardees.length || bidDetail.bidData.rejectees &&bidDetail.bidData.rejectees.length)">
             <td class="text-left"></td>
             <template v-for="(item,index) in bidDetail.supplierSubmissions">
             <td class="text-left">
@@ -266,10 +227,11 @@
             </td>
           </template>
           </tr>
+
         </tbody>
       </template>
     </v-simple-table>
-  </div>
+
     <div class="text-center b-title-detail " v-if="bidDetail.supplierSubmissions.length === 0">There are currently no bid submissions by service providers. </div>
   </v-col>
 </template>
