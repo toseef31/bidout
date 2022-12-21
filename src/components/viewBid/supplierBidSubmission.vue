@@ -37,7 +37,7 @@
                     class="mt-7"
                     :rules="item.required === 'true' ?lineItemsRule : []"
                     outlined
-                    :disabled="!bidDetail.receivingBids"
+                    :disabled="checkTimeForLineItems"
                     dense
                     min="0"
                     prefix="$"
@@ -111,14 +111,14 @@
                     <v-checkbox
                        v-if="(item.questionType === 'checkbox'  && !item.options)"
                        :rules="item.required === 'true' ?answerRule : []"
-                       :disabled="!bidDetail.receivingBids || isBidOut"
+                       :disabled="!bidDetail.receivingBids "
                        v-model="answers[index]['answer']"
                     ></v-checkbox>
 
                     <v-checkbox
                        v-if="(item.questionType === 'checkbox'  && item.options && item.options.length === 1)"
                        :rules="item.required === 'true' ?answerRule : []"
-                       :disabled="!bidDetail.receivingBids || isBidOut"
+                       :disabled="!bidDetail.receivingBids "
                        :label="item.options[0].label"
                        v-model="answers[index]['answer']"
                     ></v-checkbox>
@@ -126,7 +126,7 @@
                     <v-radio-group
                     v-model="answers[index]['answer']"
                        row
-                       :disabled="!bidDetail.receivingBids || isBidOut"
+                       :disabled="!bidDetail.receivingBids "
                        :rules="item.required === 'true' ?answerRule : []"
                        v-if="(item.questionType === 'checkbox' && item.options && item.options.length > 1)"
                        >
@@ -147,7 +147,7 @@
                         v-if="item.questionType === 'textfield'"
                         :rules="item.required === 'true' ?answerRule : []"
                         outlined
-                        :disabled="!bidDetail.receivingBids || isBidOut"
+                        :disabled="!bidDetail.receivingBids"
                         v-model="answers[index]['answer']"
                     ></v-text-field>
 
@@ -155,7 +155,7 @@
                         v-if="item.questionType === 'textarea'"
                         outlined
                         auto-grow
-                        :disabled="!bidDetail.receivingBids || isBidOut"
+                        :disabled="!bidDetail.receivingBids"
                         rows="3"
                         row-height="25"
                         :rules="item.required === 'true' ?answerRule : []"
@@ -174,7 +174,7 @@
 
                     <template v-slot:activator="{ on, attrs }">
 
-                      <v-btn  v-on="on"  v-bind="attrs"  icon v-if="bidDetail.receivingBids && !isBidOut">
+                      <v-btn  v-on="on"  v-bind="attrs"  icon v-if="bidDetail.receivingBids">
                         <v-icon size="20" color="#F03F20" >mdi-close
                         </v-icon>
                    </v-btn>
@@ -225,7 +225,7 @@
                         :id="`uploadFileQ${index}`"
                         @change="handleDocumentForAnswer($event,index)"
                         :rules="fileRule"
-                        :disabled="!bidDetail.receivingBids || isBidOut"
+                        :disabled="!bidDetail.receivingBids"
                       />
 
                     <div class="mt-1">
@@ -242,7 +242,7 @@
        <div class="bid-row-3 pt-8 pb-11" v-if="checkTime">
           <div class="title-detail px-4">Supplier Attachments</div>
 
-          <v-row no-gutters align="center" class="px-4 mt-7" v-if="bidDetail.receivingBids && !isBidOut">
+          <v-row no-gutters align="center" class="px-4 mt-7" v-if="bidDetail.receivingBids">
                 <v-col cols="12" sm="12" md="12">
                     <div class="upload-attach text-center">
                     <label
@@ -288,7 +288,7 @@
  | moment("MM/DD/YYYY") }}
                   </td>
                   <td class="text-left delete-class text-decoration-underline"
-                  v-if="bidDetail.receivingBids && !isBidOut"
+                  v-if="bidDetail.receivingBids"
                   @click="deleteAttach(index)"
                   >
 
@@ -300,7 +300,7 @@
 
                     <template v-slot:activator="{ on, attrs }">
 
-                      <v-btn  v-on="on"  v-bind="attrs"  text v-if="bidDetail.receivingBids && !isBidOut" :ripple="false">
+                      <v-btn  v-on="on"  v-bind="attrs"  text v-if="bidDetail.receivingBids" :ripple="false">
                         Delete
                    </v-btn>
                     </template>
@@ -351,7 +351,7 @@
                     auto-grow
                     rows="6"
                     row-height="25"
-                    :disabled="!bidDetail.receivingBids || isBidOut"
+                    :disabled="!bidDetail.receivingBids"
                     ></v-textarea></div>
 
       </div>
@@ -375,7 +375,7 @@
           <div v-else>Submit bid</div></v-btn
         >
       </div>
-      <div class="text-center mt-3" v-if="(getIntent !== null && getIntent === 'true' && bidDetail.receivingBids && isBidSubmitted)">
+      <div class="text-center mt-3" v-if="(getIntent !== null && getIntent === 'true' && !checkTimeForLineItems && isBidSubmitted)">
         <v-btn
           color="#0D9648"
           height="56"
@@ -464,6 +464,14 @@ export default {
       if (!this.isBidOut && !this.bidDetail.receivingBids && this.supplierDocList && this.supplierDocList.length) return true;
 
       return false;
+    },
+
+    checkTimeForLineItems() {
+      if (this.bidDetail.bidData.type === 'BidOut Process' && this.bidDetail.bidout) {
+        return false;
+      }
+      if (this.bidDetail.receivingBids) return false;
+      return true;
     },
   },
   methods: {
