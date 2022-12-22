@@ -1,7 +1,8 @@
 <template>
   <v-col class="my-7 pa-0 bid-submission-tab" align="start">
 
-    <v-simple-table class="template-table-style-sub mt-2" v-if="bidDetail.supplierSubmissions.length">
+<div class="table-class" v-if="bidDetail.supplierSubmissions.length">
+    <v-simple-table class="template-table-style-sub mt-2" >
       <template v-slot:default>
         <thead>
           <tr>
@@ -231,6 +232,7 @@
         </tbody>
       </template>
     </v-simple-table>
+  </div>
 
     <div class="text-center b-title-detail " v-if="bidDetail.supplierSubmissions.length === 0">There are currently no bid submissions by service providers. </div>
   </v-col>

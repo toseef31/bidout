@@ -941,7 +941,11 @@
         font-weight: 600;
         font-size: 16px;
       }
-   
+      
+      .table-class {
+  
+        overflow-x: auto;
+      }
       .template-table-style-sub {
         .v-btn:not(.v-btn--round).v-size--default {
           width: 190px;
@@ -969,7 +973,6 @@
         }
         table {
           overflow-x: auto;
-          display: block;
           thead {        
             white-space: nowrap;
             tr {
