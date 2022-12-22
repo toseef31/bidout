@@ -99,10 +99,12 @@ export default {
     }
   },
   async getBidsLists({ commit, dispatch, state }, payload) {
+    commit('setPageLoader', true);
     try {
       const res = await axios.get(`bid/getBidList/${payload}`);
       if (res.status === 200) {
         commit('setBidsList', res.data);
+        commit('setPageLoader', false);
       }
     } catch (err) {
       if (state.apiCounter == 2) {
