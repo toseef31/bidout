@@ -90,7 +90,7 @@
                    </div>
                  </div>
                </div>
-               <div class="map-section">
+               <div class="map-section pa-1">
                  <div id="map" class="map" height="415px"></div>
                </div>
              </div>
