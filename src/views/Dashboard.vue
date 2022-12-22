@@ -5,10 +5,10 @@
     </v-col>
   </v-row>
   <v-row class="dashboard-module pa-0 pa-sm-3 pl-sm-0" v-else>
-     <v-col :class="[ showSideBar ? 'col-md-12 col-12 col-sm-12' : 'mid-content-collapse', activityPanel ? 'd-sm-block' : 'd-md-block']" v-show="!activityPanel" >
-       <v-row>
+     <v-col :class="[ showSideBar ? 'col-md-12 col-12 col-sm-12 pr-0' : 'mid-content-collapse', activityPanel ? 'd-sm-flex' : 'd-md-flex']" v-show="!activityPanel" >
+       <v-row class="mr-sm-1">
         
-         <v-col class="col-md-8 col-12">
+         <v-col class="col-md-12 col-12 pr-0 pr-sm-3">
            <div class="mid-content">
                <div class="content-section">
                  <div class="title-block">
@@ -35,7 +35,7 @@
                      </thead>
 
                      <tbody>
-                       <tr v-if="subLoading">
+                       <tr v-if="subLoading" style="height: 288px;" class="white">
                          <td colspan="4">
                            <v-row fill-height align="center" class="fill-height">
                              <v-col cols="12">
@@ -95,12 +95,13 @@
                </div>
              </div>
          </v-col>
-         <v-col cols="12" md="4" sm="4" class="pl-0 right-col" :class="[ activityPanel ? '' : 'mobile-right-col']" >
-          <div class="right-sidebar"> 
-            <RightSidebar></RightSidebar>
-          </div>
-         </v-col>
+         
        </v-row>
+       <div class="pl-0 right-col ml-sm-n2" :class="[ activityPanel ? '' : 'mobile-right-col']" >
+        <div class="right-sidebar"> 
+          <RightSidebar></RightSidebar>
+        </div>
+       </div>
     </v-col>
   </v-row>
        

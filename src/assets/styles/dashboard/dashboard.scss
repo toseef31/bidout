@@ -39,7 +39,7 @@
 				.v-data-table__wrapper{
 					height: 336px;
 				}
-				table tbody tr:nth-of-type(even) {
+				table tbody tr:nth-of-type(odd) {
 			   	background-color: #F2F2F2;
 			 	}
 				table tbody tr th {
@@ -125,8 +125,8 @@
 		color: #fff;
 	}
 	.right-col{
-		flex: 0 0 22em !important;
-		max-width: 22em !important;
+		flex: 0 0 22.5em !important;
+		max-width: 22.5em !important;
 	}
 }
 @media (max-width: 768px) {
@@ -147,6 +147,10 @@
 				border: 0;
 				border-radius:0;
 			}
+		}
+		.right-col{
+			flex: 0 0 100% !important;
+			max-width: 100% !important;
 		}
 	}
 	/*.activity-section{
