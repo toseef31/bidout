@@ -15,7 +15,7 @@
           <div><span>Region:</span> {{ bidDetail.bidData.regions }}</div>
           <div>
             <span>Q&A:</span>
-            {{ bidDetail.bidData.qAndAEnabled ? "Yes" : "No" }}
+            {{ bidDetail.bidData.qAndAEnabled === 'true' ? "Yes" : "No" }}
           </div>
         </div>
         <br />
@@ -59,8 +59,10 @@
         <div class="d-flex align-center">
           <v-img
             v-if="item && item.image"
-            width="60px"
+            width="60"
             height="auto"
+            contain
+            :aspect-ratio="16/9"
             :src="item && item.image"
           ></v-img>
           <v-icon size="42" v-else >mdi-domain</v-icon>
@@ -347,6 +349,7 @@ export default {
     getCompanyIntend(id) {
       let result = 'neither';
       const intent = this.getBidAllIntend;
+
       if (intent && id) {
         intent.forEach((el) => {
           if (el.companyId === id && el.answer === 'true') {

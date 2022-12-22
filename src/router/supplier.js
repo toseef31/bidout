@@ -13,7 +13,7 @@ const routes = [
         name: 'ViewOfsSupplier',
         component: () => import('@/views/Ofs/ViewOFsSupplier.vue'),
         beforeEnter: (to, from, next) => {
-           if(store.state.auth.userInfo == null) {
+           if(store.getters.userInfo == null) {
                next('/login');
            } else {
                next();
@@ -25,7 +25,7 @@ const routes = [
         name: 'SupplierListing',
         component: () => import('@/views/Ofs/SupplierListing.vue'),
          beforeEnter: (to, from, next) => {
-            if(store.state.auth.userInfo == null) {
+            if(store.getters.userInfo == null) {
                 next('/login');
             } else {
                 next();
@@ -37,7 +37,7 @@ const routes = [
         name: 'SupplierName',
         component: () => import('@/views/Ofs/SupplierListing.vue'),
          beforeEnter: (to, from, next) => {
-            if(store.state.auth.userInfo == null) {
+            if(store.getters.userInfo == null) {
                 next('/login');
             } else {
                 next();
@@ -49,7 +49,7 @@ const routes = [
         name: 'EditProfile',
         component: () => import('@/views/EditProfile.vue'),
         beforeEnter: (to, from, next) => {
-           if(store.state.auth.userInfo == null) {
+           if(store.getters.userInfo == null) {
                next('/login');
            } else {
                next();
@@ -61,7 +61,7 @@ const routes = [
         name: 'Company',
         component: () => import('@/views/Ofs/Company.vue'),
         beforeEnter: (to, from, next) => {
-           if(store.state.auth.userInfo == null) {
+           if(store.getters.userInfo == null) {
                next('/login');
            } else {
                next();
@@ -73,7 +73,7 @@ const routes = [
         name: 'PlaceOrder',
         component: () => import('@/views/Ofs/PlaceOrder.vue'),
         beforeEnter: (to, from, next) => {
-           if(store.state.auth.userInfo == null) {
+           if(store.getters.userInfo == null) {
                next('/login');
            } else {
                next();
@@ -85,7 +85,7 @@ const routes = [
         name: 'ConfirmOrder',
         component: () => import('@/views/Ofs/OrderConfirm.vue'),
         beforeEnter: (to, from, next) => {
-           if(store.state.auth.userInfo == null) {
+           if(store.getters.userInfo == null) {
                next('/login');
            } else {
                next();

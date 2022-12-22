@@ -28,7 +28,7 @@
 
         <v-row>
         <v-col md="2" class="text-right mr-1 title-desc">Q&A:</v-col>
-         <v-col class="title-brief">{{ bidDetail.bidData.qAndAEnabled ? "Yes" : "No" }}</v-col>
+         <v-col class="title-brief">{{ bidDetail.bidData.qAndAEnabled === 'true' ? "Yes" : "No" }}</v-col>
         </v-row>
 <br/>
         <v-row >
@@ -118,7 +118,7 @@
 
           <div class="d-flex flex-column">
           <div>
-            <span class="text--black pl-6 bid-creator"
+            <span class="text--black pl-4 bid-creator"
             >{{ item && item.firstName }} {{ item && item.lastName }}</span
             >
             <v-tooltip top>

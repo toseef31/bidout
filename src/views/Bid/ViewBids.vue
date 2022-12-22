@@ -50,71 +50,75 @@
                 <template v-slot:default>
                   <thead>
                     <tr>
-                      <th class="text-left pl-sm-6 black--text font-weight-bold">
+                      <th class="text-left pl-sm-6 black--text font-weight-bold" width="84px">
                         Bid ID
                       </th>
                       <th class="text-left black--text font-weight-bold">
                         Title
                       </th>
-                      <th class="text-left black--text font-weight-bold">
+                      <th class="text-left black--text font-weight-bold" width="150px">
                         Creator
                       </th>
-                      <th class="text-left black--text font-weight-bold">
+                      <!-- <th class="text-left black--text font-weight-bold">
                         Entries
-                      </th>
-                      <th class="text-left black--text font-weight-bold">
+                      </th> -->
+                      <th class="text-left black--text font-weight-bold" width="145px">
                         End Date/Time
                       </th>
-                      <th class="text-left black--text font-weight-bold">
+                      <th class="text-left black--text font-weight-bold" width="100px">
                         <span class=" d-none d-sm-block">Action</span>
                       </th>
                     </tr>
                   </thead>
                   <tbody>
+
                     <tr
-                      v-for="bid in bidsList"
+                      v-for="bid in openBids"
                       :key="bid.id"
                     >
-                      <td class="text-left pl-sm-6">{{ bid.serial }}</td>
-                      <td class="text-left">{{ bid.title }}</td>
-                      <td class="text-left">{{ userDatas.firstName }} {{ userDatas.lastName }}</td>
-                      <td class="text-left">{{ bid.entries ? bid.entries.length : 0 }}</td>
-                      <td class="text-left">{{ bid.dueDate | moment('MM/DD/YYYY') }} {{bid.dueTime}}</td>
-                      <td class="text-left d-none d-sm-block pt-3"><router-link
+                      <td class="text-left pl-sm-6" width="84px">{{ bid.serial }}</td>
+                      <td class="text-left title-truncate">{{ bid.title }}</td>
+                      <td class="text-left" width="150px">{{ checkIfUserIsSupplier(bid) ? bid.company : `${userDatas.firstName} ${ userDatas.lastName}` }}</td>
+                      <!-- <td class="text-left" width="50px">{{ bid.bidEntries }}</td> -->
+                      <td class="text-left" width="145px">{{ bid.dueDate | moment('MM/DD/YYYY') }} {{bid.dueTime}}</td>
+                      <td class="text-left d-none d-sm-block pt-3" width="100px"><router-link
                         :to="{
                           path: `/view-bids/${bid.serial}`,
                         }"
                         >View Bid</router-link
                       ></td>
+                      <td class="text-left d-flex d-sm-none align-center">
+                        <router-link class="text-decoration-none" :to="{
+                          path: `/view-bids/${bid.serial}`,
+                        }"> 
+                          <span class=""><v-icon>mdi-chevron-right</v-icon></span> 
+                        </router-link>
+                        
+                      </td>
                     </tr>
-                  </tbody>
-                </template>
-              </v-simple-table>
-              <div class="title-block d-flex justify-space-between px-4 px-sm-6 py-4 align-center">
-                <div>
-                  <h3 class="font-weight-bold">Draft Bids <font color="#B8B8B8">({{draftBidsList.length}})</font></h3>
-                </div>
-              </div>
-              <v-simple-table class="bids-table draft-table">
-                <template v-slot:default>
-
-                  <tbody>
+                    <tr class="draft-title pl-sm-3">
+                      <td colspan="6" class="text-left pl-sm-6"><h3 class="font-weight-bold">Draft Bids <font color="#B8B8B8">({{draftBidsList.length}})</font></h3></td>
+                    </tr>
                     <template v-if="draftBidsList">
                       <tr
                       v-for="bid in draftBidsList"
                       :key="bid.id"
                     >
-                      <td class="text-left pl-sm-6">{{ bid.serial }}</td>
-                      <td class="text-left">{{ bid.title }}</td>
-                      <td class="text-left">{{ userDatas.firstName }} {{ userDatas.lastName }}</td>
-                      <td class="text-left">{{ bid.entries ? bid.entries.length : 0 }}</td>
-                      <td class="text-left">{{ bid.dueDate | moment('MM/DD/YYYY') }} {{bid.dueTime}}</td>
-                      <td class="text-left d-none d-sm-block pt-3" @click="editDraft(bid.serial)"><router-link to="">Edit Draft</router-link></td>
+                      <td class="text-left pl-sm-6" width="84px">{{ bid.serial }}</td>
+                      <td class="text-left title-truncate">{{ bid.title }}</td>
+                      <td class="text-left" width="150px">{{ userDatas.firstName }} {{ userDatas.lastName }}</td>
+                      <!-- <td class="text-left" width="50px">{{ bid.bidEntries ? bid.bidEntries : 0 }}</td> -->
+                      <td class="text-left" width="145px">{{ bid.dueDate | moment('MM/DD/YYYY') }} {{bid.dueTime}}</td>
+                      <td class="text-left d-none d-sm-block pt-3" @click="editDraft(bid.serial)"  width="100px"><router-link to="">Edit Draft</router-link></td>
+                      <td class="text-left d-flex d-sm-none align-center" @click="editDraft(bid.serial)">
+                        <span class=""><v-icon>mdi-square-edit-outline</v-icon></span> 
+                      </td>
                     </tr>
                     </template>
                   </tbody>
                 </template>
               </v-simple-table>
+              
             </v-tab-item>
             <v-tab-item
               value="tab-1"
@@ -132,13 +136,13 @@
                       <th class="text-left black--text font-weight-bold">
                         Creator
                       </th>
-                      <th class="text-left black--text font-weight-bold">
+                      <!-- <th class="text-left black--text font-weight-bold">
                         Entries
-                      </th>
+                      </th> -->
                       <th class="text-left black--text font-weight-bold">
                         End Date/Time
                       </th>
-                      <th class="text-left black--text font-weight-bold">
+                      <th class="text-left black--text font-weight-bold" width="100px">
                         <span class=" d-none d-sm-block">Action</span>
                       </th>
                     </tr>
@@ -148,12 +152,12 @@
                       v-for="bid in closedBids"
                       :key="bid.id"
                     >
-                      <td class="text-left pl-sm-6">{{ bid.serial }}</td>
-                      <td class="text-left">{{ bid.title }}</td>
-                      <td class="text-left">{{ userDatas.firstName }} {{ userDatas.lastName }}</td>
-                      <td class="text-left">{{ bid.entries ? bid.entries.length : 0 }}</td>
-                      <td class="text-left">{{ bid.dueDate | moment('MM/DD/YYYY') }} {{bid.dueTime}}</td>
-                      <td class="text-left d-none d-sm-block pt-3"><a href="">View Bid</a></td>
+                      <td class="text-left pl-sm-6" width="60px">{{ bid.serial }}</td>
+                      <td class="text-left title-truncate">{{ bid.title }}</td>
+                      <td class="text-left" width="150px"> {{ checkIfUserIsSupplier(bid) ? bid.company : `${userDatas.firstName} ${ userDatas.lastName}` }} </td>
+                      <!-- <td class="text-left" width="50px">{{ bid.bidEntries }}</td> -->
+                      <td class="text-left" width="100px">{{ bid.dueDate | moment('MM/DD/YYYY') }} {{bid.dueTime}}</td>
+                      <td class="text-left d-none d-sm-block pt-3" width="100px"><a href="">View Bid</a></td>
                     </tr>
                   </tbody>
                 </template>
@@ -167,11 +171,11 @@
   </v-col>
 </template>
 <script>
-import { mapActions } from 'vuex';
+import { mapActions, mapGetters } from 'vuex';
 import Navbar from '../../components/Layout/Navbar.vue';
 import LeftSidebar from '../../components/Layout/Dashboard/LeftSidebar.vue';
 import RightSidebar from '../../components/Layout/Dashboard/RightSidebar.vue';
-
+import _ from 'lodash'
 export default {
   name: 'ViewBids',
   components: {
@@ -185,12 +189,11 @@ export default {
       users: '',
       tab: 'tab-0',
       searchBid: '',
-      openBids: [],
-      closedBids: [],
       items: [],
     };
   },
   computed: {
+    ...mapGetters(["bidsList"]),
     showSideBar() {
       return this.$store.getters.g_sideBarOpen;
     },
@@ -205,28 +208,41 @@ export default {
         return this.$store.getters.draftBidsList;
       }
     },
-    bidsList() {
+    openBids(){
       if (this.$store.getters.bidsList.length > 0) {
-        this.$store.getters.bidsList.filter((item) => {
-          if (!item.status) {
-            const found = this.openBids.find((el) => el.id === item.id);
-            if (!found) this.openBids.push(item);
-          } else {
-            const foundC = this.closedBids.find((el) => el.id === item.id);
-
-            if (!foundC) this.closedBids.push(item);
-          }
-        });
-
         if (this.searchBid) {
-          this.openBids = this.openBids.filter((item) => this.searchBid
+          return _.orderBy(this.$store.getters.bidsList.filter((item) => {
+            if(item.receivingBids == true){
+              return this.searchBid
             .toLowerCase()
             .split(' ')
-            .every((v) => item.title.toLowerCase().includes(v)));
+            .every((v) => item.title.toLowerCase().includes(v))
+            }
+          }),['dueDate','asc','dueTime','asc']);
+        }else{
+          return _.orderBy(this.$store.getters.bidsList.filter((item) => {
+            return item.receivingBids == true
+          }),['dueDate','asc','dueTime','asc']);
         }
-        return this.$store.getters.bidsList;
       }
-      return [];
+    },
+    closedBids(){
+      if (this.$store.getters.bidsList.length > 0) {
+        if (this.searchBid) {
+          return _.orderBy(this.$store.getters.bidsList.filter((item) => {
+            if(item.receivingBids == false){
+              return this.searchBid
+            .toLowerCase()
+            .split(' ')
+            .every((v) => item.title.toLowerCase().includes(v)) 
+            }
+          }),['dueDate','asc','dueTime','asc']);
+        }else{
+          return _.orderBy(this.$store.getters.bidsList.filter((item) => {
+            return item.receivingBids == false
+          }),['dueDate','asc','dueTime','asc']);
+        }
+      }
     },
     showSuccessDeleteBidAlert() {
       return this.$store.getters.showSuccessDeleteBid;
@@ -236,7 +252,17 @@ export default {
     ...mapActions(['getDraftBids', 'getBidsLists','getDraftBySerial']),
     editDraft(serial){
       this.getDraftBySerial({serial,company:this.$store.getters.userInfo.company.company});
-    }
+    },
+    checkIfUserIsSupplier(bid) {
+      if (bid.invitedSuppliers) {
+        const found = bid.invitedSuppliers.find((el) => el === this.users.companyId);
+        if (found) {
+          return true;
+        }
+        return false;
+      }
+      return false;
+    },
   },
   mounted() {
     document.title = 'Bids - BidOut';

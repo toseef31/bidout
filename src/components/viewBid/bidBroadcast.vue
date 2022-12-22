@@ -77,6 +77,9 @@ export default {
     showLoading() {
       return this.loading;
     },
+    loggedInUser() {
+      return this.$store.getters.userInfo;
+    },
   },
   methods: {
     ...mapActions(['sendBroadcast']),
@@ -85,6 +88,7 @@ export default {
       await this.sendBroadcast({
         messageContent: this.messageContent,
         bidId: this.bidId,
+        buyerUserId: this.loggedInUser.id,
       });
       this.loading = false;
       this.messageContent = '';

@@ -1,5 +1,6 @@
 <template>
   <v-col class="my-7 pa-0 qanda-section fill-height" align="start">
+  <div v-if="bidDetail.bidData.qAndAEnabled === 'true'">
     <div class="px-6" v-if="(getUserType === 'buyer' && getQAndA.length)">
       <span class="title-detail" v-if="getQAndForAnswer.length">Unanswered questions</span >
 
@@ -35,7 +36,7 @@
               single-line
               outlined
               type="text"
-              v-model="answer"
+              v-model="answers[index].answer"
             >
             </v-textarea>
 
@@ -44,12 +45,12 @@
                 color="#0D9648"
                 height="32"
                 class="text-capitalize white--text font-weight-bold save-button px-12"
-                @click="reply(item.id)"
+                @click="reply(item.id,index)"
                 large
-                :disabled="showLoading"
+                :disabled="getLoading[index].loading"
                 >
                 <v-progress-circular
-                    v-if="showLoading"
+                    v-if="getLoading[index].loading"
                     indeterminate
                     :width="2"
                     size="20"
@@ -68,7 +69,7 @@
       <div class="title-detail" v-if="!getQAndForAnswer.length">Answered questions</div>
       <div v-if="getQAndAAnswered.length && getQAndForAnswer.length" class="title-detail mt-6">Answered questions</div>
 
-   <div v-for="(item,index) in getQAndAAnswered" :key="index">
+          <div v-for="(item,index) in getQAndAAnswered" :key="index">
 
       <div class="header d-flex flex-column pt-4">
         <span>Question:</span>
@@ -78,7 +79,7 @@
         >
 
         <span class="sub-title mt-4">By {{(item.questionedUserName)}} ({{item.questionedUserCompany
-}})</span>
+          }})</span>
         <span class="sub-title mt-2">{{ item.askedOn._seconds | moment('MM/DD/YYYY')}} - {{ item.askedOn._seconds | moment('hh:mma')}}</span>
       </div>
 
@@ -233,7 +234,11 @@
     </div>
   </div>
   </div>
+</div>
 
+<div v-else class="text-center q-title-detail ">
+  Buyer has configured this bid to not allow any Q&Aa.
+</div>
   </v-col>
 </template>
 
@@ -246,7 +251,7 @@ export default {
       question: '',
       user: '',
       loading: false,
-      answer: '',
+      answers: [],
       editedAnswer: '',
       isEdit: false,
       editable: [],
@@ -273,13 +278,22 @@ export default {
       return this.$store.getters.qAndA.filter((el) => !el.answer && this.user.id === el.questionBy);
     },
     getQAndForAnswer() {
-      return this.getQAndA.filter((el) => !el.answer);
+      return this.getQAndA.filter((el) => {
+        this.answers.push({
+          loading: false,
+          answer: '',
+        });
+        return !el.answer;
+      });
     },
     bidDetail() {
       return this.$store.getters.bidViewData;
     },
     showLoading() {
       return this.loading;
+    },
+    getLoading() {
+      return this.answers;
     },
     getUnansweredQuestionCount() {
       return this.$store.getters.unansweredQuestionCount;
@@ -305,18 +319,18 @@ export default {
       this.loading = false;
       this.question = '';
     },
-    async reply(questionId) {
-      this.loading = true;
+    async reply(questionId, index) {
+      this.answers[index].loading = true;
 
       await this.answerQuestion({
-        answer: this.answer,
+        answer: this.answers[index].answer,
         userId: this.user.id,
         bidId: this.bidDetail.bidData.id,
         questionId,
       });
 
-      this.loading = false;
-      this.answer = '';
+      this.answers[index].loading = false;
+      this.answers[index].answer = '';
     },
     editAction(index, answer) {
       this.editable[index].isEdit = !this.editable[index].isEdit;

@@ -1,13 +1,13 @@
 <template>
   <v-col class="my-7 pa-0 bid-submission-tab" align="start">
 
-<v-form @submit.prevent="submit"  ref="form" v-model="valid">
+<v-form @submit.prevent="submit"  ref="form" v-model="valid" lazy-validation>
     <div class="title-line" v-if="
             bidDetail.bidData &&
             bidDetail.bidData.lineItems &&
             bidDetail.bidData.lineItems.length > 0
           ">Line Items</div>
-    <v-simple-table class="template-table-style mt-1" v-if="
+    <v-simple-table class="template-table-style mt-1 pb-8" v-if="
             bidDetail.bidData &&
             bidDetail.bidData.lineItems &&
             bidDetail.bidData.lineItems.length > 0
@@ -37,9 +37,12 @@
                     class="mt-7"
                     :rules="item.required === 'true' ?lineItemsRule : []"
                     outlined
+                    :disabled="checkTimeForLineItems"
                     dense
+                    min="0"
                     prefix="$"
                     type="number"
+                    @input="validatePrice(index)"
                     v-if="lineItems[index]['bid']"
                     v-model="lineItems[index]['price']"
 
@@ -48,7 +51,7 @@
                 </div>
              </div>
 
-          <div v-if="item.required === 'false'">
+          <div v-if="item.required === 'false' && bidDetail.receivingBids">
               <v-btn @click="noBidUpdate(index)" icon v-if="lineItems[index]['bid']">
               <v-icon size="20" color="#F03F20" >mdi-close</v-icon>
               </v-btn>
@@ -75,8 +78,12 @@
       </template>
     </v-simple-table>
 
-  <div class="pt-8 bid-row-3 pb-2"  v-if="bidDetail.bidData.questions && bidDetail.bidData.questions.length">
-        <div class="question-section-title">
+  <div class=" bid-row-3 pb-2"  v-if="bidDetail.bidData.questions && bidDetail.bidData.questions.length">
+        <div class="question-section-title" v-if="bidDetail.bidData.lineItems &&
+            bidDetail.bidData.lineItems.length > 0">
+          <span class="title-detail px-4">Buyer Questions</span>
+        </div>
+        <div  v-else>
           <span class="title-detail px-4">Buyer Questions</span>
         </div>
         <div
@@ -104,14 +111,24 @@
                     <v-checkbox
                        v-if="(item.questionType === 'checkbox'  && !item.options)"
                        :rules="item.required === 'true' ?answerRule : []"
+                       :disabled="!bidDetail.receivingBids "
+                       v-model="answers[index]['answer']"
+                    ></v-checkbox>
+
+                    <v-checkbox
+                       v-if="(item.questionType === 'checkbox'  && item.options && item.options.length === 1)"
+                       :rules="item.required === 'true' ?answerRule : []"
+                       :disabled="!bidDetail.receivingBids "
+                       :label="item.options[0].label"
                        v-model="answers[index]['answer']"
                     ></v-checkbox>
 
                     <v-radio-group
                     v-model="answers[index]['answer']"
                        row
+                       :disabled="!bidDetail.receivingBids "
                        :rules="item.required === 'true' ?answerRule : []"
-                       v-if="(item.questionType === 'checkbox' && item.options)"
+                       v-if="(item.questionType === 'checkbox' && item.options && item.options.length > 1)"
                        >
                         <v-radio
                             :label="item.options[0].label"
@@ -130,6 +147,7 @@
                         v-if="item.questionType === 'textfield'"
                         :rules="item.required === 'true' ?answerRule : []"
                         outlined
+                        :disabled="!bidDetail.receivingBids"
                         v-model="answers[index]['answer']"
                     ></v-text-field>
 
@@ -137,6 +155,7 @@
                         v-if="item.questionType === 'textarea'"
                         outlined
                         auto-grow
+                        :disabled="!bidDetail.receivingBids"
                         rows="3"
                         row-height="25"
                         :rules="item.required === 'true' ?answerRule : []"
@@ -146,10 +165,48 @@
                 <div class="upload-attach" v-if="item.questionType === 'uploadFile'">
                     <div class="d-flex justify-space-between align-center" v-if="((answers[index].answer && answers[index].answer.name || answers[index].fileName) )">
                 <div class="doc-list">{{(answers[index].answer.name || answers[index].fileName)}}</div>
-                    <v-btn @click="removeQuesDoc(index)" icon>
+
+                   <v-dialog
+                  class="dialog-class"
+                  v-model="dialog"
+                  width="320"
+                  >
+
+                    <template v-slot:activator="{ on, attrs }">
+
+                      <v-btn  v-on="on"  v-bind="attrs"  icon v-if="bidDetail.receivingBids">
                         <v-icon size="20" color="#F03F20" >mdi-close
                         </v-icon>
                    </v-btn>
+                    </template>
+
+                    <v-card >
+                      <v-card-title  class="text-h5 justify-center grey lighten-2">
+                        Remove Attachment file
+                      </v-card-title>
+                      <v-card-text class="pt-3 mb-n2">Are you sure you really want to remove this attachment file?</v-card-text>
+                      <v-divider></v-divider>
+                      <v-card-actions>
+                        <v-spacer></v-spacer>
+
+                        <v-btn
+                        color="#0d9648"
+                        outlined
+                        @click="dialog = false"
+                        >
+                        Cancel
+                        </v-btn>
+                        <v-btn
+                        color="#F32349"
+                        outlined
+                        @click="dialog = false;removeQuesDoc(index)"
+                        >
+                        Agree
+                        </v-btn>
+                      </v-card-actions>
+                    </v-card>
+
+                  </v-dialog>
 
                 </div>
 
@@ -164,14 +221,14 @@
                         text-center
                       "
                     >
-                      <input
-                        class="d-none"
-                        type="file"
+                      <v-file-input
                         :id="`uploadFileQ${index}`"
-                        @change="handleDocument($event,'questionUpload',index,item.id)"
+                        @change="handleDocumentForAnswer($event,index)"
+                        :rules="fileRule"
+                        :disabled="!bidDetail.receivingBids"
                       />
 
-                    <div>
+                    <div class="mt-1">
                       <v-icon class="mr-4">mdi-cloud-upload-outline</v-icon>Upload here
                     </div>
                     </label>
@@ -182,10 +239,10 @@
               </div>
            </div>
        </div>
-       <div class="bid-row-3 pt-8 pb-11">
+       <div class="bid-row-3 pt-8 pb-11" v-if="checkTime">
           <div class="title-detail px-4">Supplier Attachments</div>
 
-          <v-row no-gutters align="center" class="px-4 mt-7">
+          <v-row no-gutters align="center" class="px-4 mt-7" v-if="bidDetail.receivingBids">
                 <v-col cols="12" sm="12" md="12">
                     <div class="upload-attach text-center">
                     <label
@@ -230,8 +287,51 @@
                     {{ doc.uploadedAt
  | moment("MM/DD/YYYY") }}
                   </td>
-                  <td class="text-left delete-class text-decoration-underline" @click="deleteAttach(index)">
-                    <div>Delete</div>
+                  <td class="text-left delete-class text-decoration-underline"
+                  v-if="bidDetail.receivingBids"
+                  @click="deleteAttach(index)"
+                  >
+
+                    <v-dialog
+                  class="dialog-class"
+                  v-model="dialogT"
+                  width="320"
+                  >
+
+                    <template v-slot:activator="{ on, attrs }">
+
+                      <v-btn  v-on="on"  v-bind="attrs"  text v-if="bidDetail.receivingBids" :ripple="false">
+                        Delete
+                   </v-btn>
+                    </template>
+
+                    <v-card >
+                      <v-card-title  class="text-h5 justify-center grey lighten-2">
+                        Remove Attachment file
+                      </v-card-title>
+                      <v-card-text class="pt-3 mb-n2">Are you sure you really want to remove this attachment file?</v-card-text>
+                      <v-divider></v-divider>
+                      <v-card-actions>
+                        <v-spacer></v-spacer>
+
+                        <v-btn
+                        color="#0d9648"
+                        outlined
+                        @click="dialogT = false"
+                        >
+                        Cancel
+                        </v-btn>
+                        <v-btn
+                        color="#F32349"
+                        outlined
+                        @click="dialogT = false;deleteAttach(index)"
+                        >
+                        Agree
+                        </v-btn>
+                      </v-card-actions>
+                    </v-card>
+
+                  </v-dialog>
                   </td>
                 </tr>
               </tbody>
@@ -251,6 +351,7 @@
                     auto-grow
                     rows="6"
                     row-height="25"
+                    :disabled="!bidDetail.receivingBids"
                     ></v-textarea></div>
 
       </div>
@@ -274,7 +375,7 @@
           <div v-else>Submit bid</div></v-btn
         >
       </div>
-      <div class="text-center mt-3" v-if="(getIntent !== null && getIntent === 'true' && bidDetail.receivingBids && isBidSubmitted)">
+      <div class="text-center mt-3" v-if="(getIntent !== null && getIntent === 'true' && !checkTimeForLineItems && isBidSubmitted)">
         <v-btn
           color="#0D9648"
           height="56"
@@ -294,6 +395,7 @@
         >
       </div>
     </v-form>
+
   </v-col>
 
 </template>
@@ -307,13 +409,22 @@ export default {
       lineItems: [],
       intent: 'true',
       loading: false,
+      dialog: false,
+      dialogT: false,
       valid: true,
       supplierNote: '',
       file: '',
       answers: [],
       user: '',
+      index: 0,
+      value: [],
       lineItemsRule: [
         (value) => !!value || 'Line item is required!',
+        (value) => {
+          if (this.isBidSubmitted && this.value.length && Number(this.value[this.index]) < Number(value) && this.isBidOut) {
+            return 'Suppliers can only lower the prices during the BidOut Phase!';
+          } return true;
+        },
       ],
       answerRule: [
         (value) => !!value || 'Answer is required!',
@@ -342,6 +453,27 @@ export default {
     isBidSubmitted() {
       return this.$store.getters.isBidSubmitted;
     },
+    isBidOut() {
+      if (this.bidDetail.bidData.type === 'BidOut Process' && this.bidDetail.bidout) {
+        return true;
+      }
+      return false;
+    },
+    checkTime() {
+      if (this.isBidOut && this.supplierDocList && this.supplierDocList.length) return true;
+      if (!this.isBidOut && this.bidDetail.receivingBids) return true;
+      if (!this.isBidOut && !this.bidDetail.receivingBids && this.supplierDocList && this.supplierDocList.length) return true;
+
+      return false;
+    },
+
+    checkTimeForLineItems() {
+      if (this.bidDetail.bidData.type === 'BidOut Process' && this.bidDetail.bidout) {
+        return false;
+      }
+      if (this.bidDetail.receivingBids) return false;
+      return true;
+    },
   },
   methods: {
     ...mapActions(['submitBid', 'editSubmitBid']),
@@ -349,8 +481,18 @@ export default {
       const sizeInMB = (size / (1024 * 1024)).toFixed(2);
       return `${sizeInMB}mb`;
     },
+    validatePrice(index) {
+      if (this.isBidSubmitted && this.isBidOut) {
+        this.index = index;
+        this.value[index] = this.getSupplierBid.lineItems[index].price;
+      }
+    },
     async submit(action) {
-      if (this.$refs.form.validate()) {
+      if (!this.valid && action === 'edit' && this.isBidOut) {
+        this.$store.commit('setLoweringPriceAlert');
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      }
+      if (this.valid) {
         if (action === 'submit') {
           this.loading = true;
 
@@ -399,18 +541,18 @@ export default {
         }
       }
     },
-    handleDocument(event, slug, index) {
+    handleDocumentForAnswer(event, index) {
+      this.answers[index].answer = event;
+    },
+    handleDocument(event) {
       this.file = event.target.files[0];
-      if (slug) {
-        this.answers[index].answer = this.file;
-      } else {
-        this.$store.commit('setSupplierAttachment', {
-          fileName: this.file.name,
-          fileSize: this.file.size,
-          attachment: this.file,
-          uploadedAt: Date.now(),
-        });
-      }
+
+      this.$store.commit('setSupplierAttachment', {
+        fileName: this.file.name,
+        fileSize: this.file.size,
+        attachment: this.file,
+        uploadedAt: Date.now(),
+      });
     },
 
     deleteAttach(index) {
@@ -440,6 +582,8 @@ export default {
           price: null,
           bid: true,
           id: bidData.lineItems[i].id,
+          quantity: bidData.lineItems[i].quantity,
+          required: bidData.lineItems[i].required,
         });
       }
 
@@ -459,6 +603,8 @@ export default {
           price: this.getSupplierBid.lineItems[i].price,
           bid: this.getSupplierBid.lineItems[i].price !== 'NO_BID',
           id: this.getSupplierBid.lineItems[i].id,
+          quantity: this.getSupplierBid.lineItems[i].Qty,
+          required: this.getSupplierBid.lineItems[i].required,
         });
       }
 

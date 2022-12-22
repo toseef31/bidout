@@ -38,7 +38,7 @@
 </template>
 <script>
 export default {
-  name: 'CreateBid',
+  name: 'CreateBidTemplate',
   components: {
   },
 
@@ -66,10 +66,12 @@ export default {
       this.$store.state.bid.bidData.status = '';
       this.$store.state.bid.bidData.statusType = '';
       this.$store.state.bid.bidData.attachments = '';
+      this.$store.state.bid.bidData.attachment = '';
       this.$store.state.bid.bidData.invitedSuppliers = '';
       this.$store.state.bid.bidData.invitedTeamMembers = '';
       this.$store.state.bid.bidData.lineItems = '';
       this.$store.state.bid.bidData.questions = '';
+      this.$store.state.bid.bidData.userId = '';
       this.$store.commit('setBidTitle', '');
       this.$store.commit('setBidType', '');
       this.$store.commit('setBidDueDate', '');
@@ -81,9 +83,11 @@ export default {
       this.$store.commit('setInvitedSuppliersData', null);
       this.$store.commit('setBidlines', null);
       this.$store.commit('setAttachement', null);
+      this.$store.commit('setAttachData', null);
       this.$store.commit('setQuestions', null);
       this.$store.commit('setDraftBidsList', null);
       this.$store.commit('setDraftTime', null);
+     
       this.$router.push('/create-bid');
     },
   },

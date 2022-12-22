@@ -97,7 +97,7 @@
             <v-row justify="center" class="mt-16">
               <v-col cols="12" md="12" class="pl-sm-5 pr-sm-5">
                 <div class="ofs-bottom-section text-left pl-2">
-                  <router-link to="/get-started" class="text-decoration-none">
+                  <router-link to="/manage-module" class="text-decoration-none">
                     <div class="ofs-bottom-content d-flex justify-space-between">
                       <div class="ml-5 ml-sm-5 my-5 my-sm-12">
                         <h1 class="mb-4 font-weight-medium white--text">OFS DIRECTORY</h1>

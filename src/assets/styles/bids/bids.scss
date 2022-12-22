@@ -43,49 +43,54 @@
         thead {
           tr {
             th {
-              font-size: 16px;
+              font-size: 14px;
               border-bottom: thin solid #f1f1f1 !important;
             }
           }
         }
         tbody {
           tr {
-            td {
+            .title-truncate{
+              min-width: 350px;
+              max-width: 460px;
+              white-space: nowrap;
+              overflow: hidden;
+              text-overflow: ellipsis;
+            }
+            td{
               color: #0d1139;
-              font-size: 16px;
+              font-size: 14px;
               font-weight: 600;
               border-bottom: 0 !important;
+              &:nth-child(1){
+                min-width: 84px;
+                max-width: 84px;
+              }
+              &:nth-child(3){
+                max-width: 220px;
+                white-space: nowrap;
+                overflow: hidden;
+                text-overflow: ellipsis;
+              }
+              &:nth-child(4){
+                min-width: 150px;
+                max-width: 150px;
+              }
+              &:nth-child(5){
+                min-width: 100px;
+              }
+              .icon-circle {
+                background: rgba(0, 0, 0, 0.1);
+                border-radius: 50%;
+              }
             }
             &:nth-child(even) {
               background: #fbfbfb;
             }
+
           }
-        }
-      }
-      .draft-table {
-        tbody {
-          tr {
-            td:first-child {
-              width: 9%;
-            }
-            td:nth-child(2) {
-              width: 29%;
-            }
-            td:nth-child(3) {
-              width: 18.7%;
-            }
-            td:nth-child(4) {
-              width: 6.55%;
-            }
-            td:nth-child(5) {
-              width: 25%;
-            }
-            &:nth-child(odd) {
-              background: #fbfbfb;
-            }
-            &:nth-child(even) {
-              background: #ffffff;
-            }
+          .draft-title{
+            background: transparent !important;
           }
         }
       }
@@ -93,20 +98,31 @@
       .open-bid-table {
         tbody {
           tr {
-            td:first-child {
-              width: 9%;
+            .title-truncate{
+              min-width: 350px;
+              max-width: 460px;
+              white-space: nowrap;
+              overflow: hidden;
+              text-overflow: ellipsis;
             }
-            td:nth-child(2) {
-              width: 29%;
-            }
-            td:nth-child(3) {
-              width: 18.7%;
-            }
-            td:nth-child(4) {
-              width: 5%;
-            }
-            td:nth-child(5) {
-              width: 25%;
+            td{
+              &:nth-child(1){
+                min-width: 84px;
+                max-width: 84px;
+              }
+              &:nth-child(3){
+                max-width: 220px;
+                white-space: nowrap;
+                overflow: hidden;
+                text-overflow: ellipsis;
+              }
+              &:nth-child(4){
+                min-width: 150px;
+                max-width: 150px;
+              }
+              &:nth-child(5){
+                min-width: 100px;
+              }
             }
           }
         }

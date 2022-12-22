@@ -82,6 +82,7 @@ export default {
     state.bidlines = payload;
   },
   setAttachement(state, payload) {
+    console.log('payload',payload);
     state.attachement = payload;
   },
   setQuestions(state, payload) {
@@ -172,6 +173,12 @@ export default {
     state.bidSubmissionAlert.unDisqualify = true;
     setTimeout(() => {
       state.bidSubmissionAlert.unDisqualify = false;
+    }, 8000);
+  },
+  setLoweringPriceAlert(state) {
+    state.loweringPriceAlert = true;
+    setTimeout(() => {
+      state.loweringPriceAlert = false;
     }, 8000);
   },
 };

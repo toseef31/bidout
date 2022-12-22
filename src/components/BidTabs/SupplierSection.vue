@@ -147,25 +147,6 @@
 		    </div>
 		    <div>
 		      <div class="companies-list">
-		        <template  v-if="filteredEntries.length">
-	  	        <template v-for="(company,index) in filteredEntries" >
-	  	        	<div class="d-flex align-center justify-space-between list-company pa-4">
-	  	        	  <div class="comapny-data d-flex align-center">
-	  	        	    <div class="company-img">
-	  	        	      <img v-if="!company.image" :src="require('@/assets/images/bids/company.png')">
-	  	        	      <img v-else :src="company.image" width="56.25px" height="15px">
-	  	        	    </div>
-	  	        	    <div class="company-title text-left pl-4">
-	  	        	      <h4>{{company.company}} </h4>
-	  									<router-link :to="`/company/${company.slug}`" target="_blank" class="mb-0">View Profile</router-link>
-	  	        	    </div>
-	  	        	  </div>
-	  	        	  <div class="add-company">
-	  	        	    <v-btn color="rgba(243, 35, 73, 0.1)" tile min-width="32px" height="32" class="pa-0" elevation="0" @click="removeCompany(company,index)"> <v-icon color="#F32349">mdi-minus</v-icon></v-btn>
-	  	        	  </div>
-	  	        	</div>
-	  	        </template>
-		        </template>
 		        <template  v-for="(company,index) in newRepsInvited">
 		        	<div class="d-flex align-center justify-space-between list-company pa-4">
 		        	  <div class="comapny-data d-flex align-center">
@@ -184,15 +165,16 @@
 		        	  </div>
 		        	</div>
 		        </template>
+		        {{filteredEntries}}
 		        <template  v-for="(company,index) in repsInvited">
-		        	<div class="d-flex align-center justify-space-between list-company pa-4" v-if="!company.item.companyId">
+		        	<div class="d-flex align-center justify-space-between list-company pa-4" v-if="!company.companyId">
 		        	  <div class="comapny-data d-flex align-center">
 		        	    <div class="company-img">
-		        	      <img v-if="!company.item.image" :src="require('@/assets/images/bids/company.png')">
-		        	      <img v-else :src="company.item.image" width="56.25px" height="15px">
+		        	      <img v-if="!company.image" :src="require('@/assets/images/bids/company.png')">
+		        	      <img v-else :src="company.image" width="56.25px" height="15px">
 		        	    </div>
 		        	    <div class="company-title text-left pl-4">
-		        	      <h4>{{company.item.company}} </h4>
+		        	      <h4>{{company.company}} </h4>
 										<router-link :to="`/company/${company.slug}`" target="_blank" class="mb-0">View Profile</router-link>
 		        	    </div>
 		        	  </div>
@@ -200,16 +182,16 @@
 		        	    <v-btn color="rgba(243, 35, 73, 0.1)" tile min-width="32px" height="32" class="pa-0" elevation="0" @click="removeCompany(company,index)"> <v-icon color="#F32349">mdi-minus</v-icon></v-btn>
 		        	  </div>
 		        	</div>
-		        	<div class="d-flex align-center justify-space-between list-company pa-4" v-if="company.item.companyId">
+		        	<div class="d-flex align-center justify-space-between list-company pa-4" v-if="company.companyId">
 		        	  <div class="comapny-data d-flex align-center">
 		        	    <div class="company-img">
-		        	      <img v-if="!company.item.image" :src="require('@/assets/images/chat/chatUser.png')">
-		        	      <img v-else :src="company.item.image" width="48px" height="48px">
+		        	      <img v-if="!company.image" :src="require('@/assets/images/chat/chatUser.png')">
+		        	      <img v-else :src="company.image" width="48px" height="48px">
 		        	    </div>
 		        	    <div class="company-title text-left pl-4">
-		        	      <h4>{{company.item.firstName}} {{company.item.lastName}}</h4>
-		        	      <p class="mb-0">{{company.item.company}}
-		        	      	<!-- <a @click="viewCompany(company.item.companyId,company.item.company)" class="text-decoration-underline">View Profile</a> -->
+		        	      <h4>{{company.firstName}} {{company.lastName}}</h4>
+		        	      <p class="mb-0">{{company.company}}
+		        	      	<!-- <a @click="viewCompany(company.companyId,company.item.company)" class="text-decoration-underline">View Profile</a> -->
 		        	      </p>
 		        	    </div>
 		        	  </div>
@@ -367,6 +349,8 @@ export default {
       newCount: '',
       filterData: [],
       newRepsInvited: [],
+      filterAfter: [],
+      inviteCount: 1,
     };
   },
   computed: {
@@ -413,18 +397,17 @@ export default {
     	return this.$store.getters.serviceCompaniesList;
     },
     filteredEntries() {
-    	if(this.$store.getters.bidData){
-    		if(this.$store.getters.bidData.invitedSuppliers != ""){
-    			if(this.$route.name == 'EditBid'){
-    				return this.$store.getters.companiesList.filter((el) => { return this.$store.getters.bidData.invitedSuppliers.find((supplier) => supplier.id === el.objectID); }).slice();
-    			}else{
-    				return this.$store.getters.companiesList.filter((el) => { return this.$store.getters.bidData.invitedSuppliers.includes(el.objectID); }).slice();
-    			}
-    		}else{
-    			return 0;
-    		}
-    	}else{
-    		return [];
+    	if(this.$store.getters.bidData.invitedSuppliers != ''){
+  			if(this.$route.name == 'EditBid'){
+  				if(this.inviteCount == 1){
+  					this.repsInvited = this.$store.getters.companiesList.filter((el) => { return this.$store.state.bid.invitedSuppliers.find((supplier) => supplier.id === el.objectID); });
+  				}
+  			}else{
+  				if(this.inviteCount == 1){
+  					this.repsInvited = this.$store.getters.companiesList.filter((el) => { return this.$store.state.bid.invitedSuppliers.includes(el.objectID); });
+  				}
+  				
+  			}
     	}
     	
     },
@@ -496,20 +479,24 @@ export default {
       this.getCompanyInfo({ id, name });
     },
     addReps(list, index) {
-    	const data = {
-    		type: 'user',
-    		item: list,
-    	};
+    	// const data = {
+    	// 	type: 'user',
+    	// 	item: list,
+    	// };
     	this.oldCount = this.repsInvited.length; 
-    	this.repsInvited.push(data);
+    	this.repsInvited.push(list);
+    	this.inviteCount = 2;
     	this.newCount = this.repsInvited.length;
     	this.$store.getters.salesRepsList.splice(index, 1);
-    	this.$store.commit('setInvitedSuppliersData', this.repsInvited);
+    	const unique = [...new Map(this.repsInvited.map((m) => [m.company, m])).values()];
+    	
+    	this.$store.commit('setInvitedSuppliersData', unique);
     },
     removeReps(list, index) {
-    	this.$store.getters.salesRepsList.push(list.item);
+    	this.$store.getters.salesRepsList.push(list);
     	this.oldCount = this.repsInvited.length;
     	this.repsInvited.splice(index, 1);
+    	this.inviteCount = 2;
     	this.newCount = this.repsInvited.length;
     	this.$store.commit('setInvitedSuppliersData', this.repsInvited);
     },
@@ -525,37 +512,44 @@ export default {
     	this.getCompanyByServices(category);
     },
     addCompany(company, index) {
-    	const data = {
-    		type: 'company',
-    		item: company,
-    	};
+    	// const data = {
+    	// 	type: 'company',
+    	// 	item: company,
+    	// };
     	this.oldCount = this.repsInvited.length;
-    	this.repsInvited.push(data);
+    	this.repsInvited.push(company);
+    	this.inviteCount = 2;
     	this.newCount = this.repsInvited.length;
     	this.$store.getters.companiesList.splice(index, 1);
-    	this.$store.commit('setInvitedSuppliersData', this.repsInvited);
+    	const unique = [...new Map(this.repsInvited.map((m) => [m.company, m])).values()];
+    	
+    	this.$store.commit('setInvitedSuppliersData', unique);
     },
     addServiceCompany(company, index) {
-    	const data = {
-    		type: 'company',
-    		item: company,
-    	};
+    	// const data = {
+    	// 	type: 'company',
+    	// 	item: company,
+    	// };
     	this.oldCount = this.repsInvited.length;
-    	this.repsInvited.push(data);
+    	this.repsInvited.push(company);
+    	this.inviteCount = 2;
     	this.newCount = this.repsInvited.length;
     	this.$store.getters.companiesList.splice(index, 1);
-    	this.$store.commit('setInvitedSuppliersData', this.repsInvited);
+    	const unique = [...new Map(this.repsInvited.map((m) => [m.company, m])).values()];
+    	this.$store.commit('setInvitedSuppliersData', unique);
     },
     removeCompany(company, index) {
     	this.oldCount = this.repsInvited.length;
     	this.repsInvited.splice(index, 1);
+    	this.inviteCount = 2;
     	this.newCount = this.repsInvited.length;
-    	this.$store.getters.companiesList.push(company.item);
+    	this.$store.getters.companiesList.push(company);
     	this.$store.commit('setInvitedSuppliersData', this.repsInvited);
     },
     removeNewSup(company, index) {
     	this.oldCount = this.newRepsInvited.length;
     	this.newRepsInvited.splice(index, 1);
+    	this.inviteCount = 2;
     	this.newCount = this.newRepsInvited.length;
     	this.$store.commit('setInvitedNewSuppliers', this.newRepsInvited);
     },

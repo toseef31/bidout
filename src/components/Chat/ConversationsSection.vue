@@ -12,7 +12,7 @@
       </v-tab>
     </v-tabs>
     <v-tabs-items v-model="convTab">
-      <v-tab-item> 
+      <v-tab-item>
         <v-list two-line  class="py-0">
           <v-list-item-group
             v-model="selectedUser"
@@ -24,8 +24,7 @@
                     <v-icon>mdi-account-group-outline</v-icon>
                   </v-list-item-avatar>
                   <v-list-item-content>
-                    <v-list-item-title v-if="conversation.company == ''" v-text="conversation.company"></v-list-item-title>
-                    <v-list-item-title v-else v-text="conversation.groupName"></v-list-item-title>
+                    <v-list-item-title> {{  getConversationName(conversation)  }} </v-list-item-title>
 
                     <v-list-item-subtitle v-if="conversation.isBid == true"
                       class="text--primary"
@@ -106,7 +105,7 @@
                     :content="msgCount" overlap
                   ></v-badge> -->
               </template>
-              
+
             </v-list-item>
             <v-list-item v-if="conversation.type == 'PRIVATE' && participant.id != user.id"  v-for="participant in conversation.participantDetails" @click="openChat(conversation,participant.name)" :key="participant.id">
               <template >
@@ -120,7 +119,6 @@
                     <v-list-item-title v-text="participant.name"></v-list-item-title>
                   </v-list-item-content>
 
-                
                 <v-list-item-action>
                   <v-btn color="rgba(13, 150, 72, 0.1)" elevation="0" class="text-capitalize archive-btn" @click="unarchive(conversation._id)">
                     Unarchive
@@ -145,12 +143,13 @@
   </div>
 </template>
 <script>
-  import _ from 'lodash';
-  import VueMoment from 'vue-moment';
-  import moment from 'moment-timezone';
-  import { mapActions } from "vuex";
+import _ from 'lodash';
+import VueMoment from 'vue-moment';
+import moment from 'moment-timezone';
+import { mapActions } from 'vuex';
+
 export default {
-  props: ["searchUser"],
+  props: ['searchUser'],
   data() {
     return {
       selectedUser: null,
@@ -158,96 +157,98 @@ export default {
       chatTab: [
         'All', 'Archive',
       ],
-      userList : true,
+      userList: true,
       selected: null,
       chatData: '',
       searchUsers: this.searchUser,
-      user:'',
-      conversationId : '',
-      backArrow : false,
+      user: '',
+      conversationId: '',
+      backArrow: false,
       loading: true,
     };
   },
-  computed:{
-    conversationsList(){
-      if(this.$store.state.chat.searchConv != null){
-        return _.orderBy(this.$store.getters.conversations.filter((item)=>{
-          return this.$store.state.chat.searchConv.toLowerCase().split(' ').every(v => item.company.toLowerCase().includes(v))
-        }), 'updatedAt', 'desc')
-      }else{
-        return _.orderBy(this.$store.getters.conversations, 'updatedAt', 'desc');
+  computed: {
+    conversationsList() {
+      if (this.$store.state.chat.searchConv != null) {
+        return _.orderBy(this.$store.getters.conversations.filter((item) => this.$store.state.chat.searchConv.toLowerCase().split(' ').every((v) => item.company.toLowerCase().includes(v))), 'updatedAt', 'desc');
       }
+      return _.orderBy(this.$store.getters.conversations, 'updatedAt', 'desc');
     },
-    archiveList(){
+    archiveList() {
       return this.$store.getters.archiveList;
     },
   },
   methods: {
-    ...mapActions(["getAllConversations","getAllMessages","lastMessageRead","getArchiveChats","unArchiveConversation"]),
-    getConversations(id){
+    ...mapActions(['getAllConversations', 'getAllMessages', 'lastMessageRead', 'getArchiveChats', 'unArchiveConversation']),
+    getConversations(id) {
       this.getAllConversations(id);
     },
-    openChat(group,name){
-      if(screen.width < 767){
+    openChat(group, name) {
+      if (screen.width < 767) {
         this.userList = false;
         this.showMsgBlock = true;
-        this.backArrow= true;
+        this.backArrow = true;
       }
-      var obj = {
-        'group': group,
-        'name': name,
-      }
+      const obj = {
+        group,
+        name,
+      };
       this.conversationId = group._id;
       this.chatData = obj;
-      if(this.chatData){
-        this.$emit('membersData',this.chatData.group.participantDetails);
+      if (this.chatData) {
+        this.$emit('membersData', this.chatData.group.participantDetails);
       }
-      var ids = {
+      const ids = {
         userId: this.user.id,
         conversationId: this.conversationId,
-      }
-      this.$emit('ChatDatas',this.chatData);
-      this.$emit('callTest', group,name)
+      };
+      this.$emit('ChatDatas', this.chatData);
+      this.$emit('callTest', group, name);
     },
-    archiveConversations(id){
+    archiveConversations(id) {
       this.getArchiveChats(id);
     },
-    unarchive(id){
-      var conv = {
+    unarchive(id) {
+      const conv = {
         conversationId: id,
         userId: this.user.id,
-      }
+      };
       this.unArchiveConversation(conv);
     },
-    istoday (date) {
+    istoday(date) {
       return moment(date).calendar();
+    },
+    getConversationName(conversation) {
+      if (conversation.type === 'GROUP') {
+        return conversation.name.split('|||').find((el) => el.trim() !== this.user.company.company);
+      }
+      return conversation.name;
     },
   },
   beforeMount() {
     this.user = this.$store.getters.userInfo;
   },
-  updated(){
-    console.log('dddds',this.searchUser);
+  updated() {
+    console.log('dddds', this.searchUser);
   },
-  mounted: async function() { 
-    
+  async mounted() {
     this.archiveConversations(this.user.id);
-    var convo = await _.orderBy(this.$store.getters.conversations, 'latestMessage', 'desc')[0];
-    console.log(convo,'dada');
-    if(convo.type == 'PRIVATE'){
-      var membr = convo.participantDetails.filter((item)=>{
-       if(this.user.id != item.id){
-        return item;
-       }
-      })
+    const convo = await _.orderBy(this.$store.getters.conversations, 'latestMessage', 'desc')[0];
+    console.log(convo, 'dada');
+    if (convo.type == 'PRIVATE') {
+      const membr = convo.participantDetails.filter((item) => {
+        if (this.user.id != item.id) {
+          return item;
+        }
+      });
       var grpName = membr[0].name;
-    }else{
+    } else {
       var grpName = convo.groupName;
     }
-    if(convo){ 
-      await this.openChat(convo,grpName);
+    if (convo) {
+      await this.openChat(convo, grpName);
     }
-    console.log('ddsda',this.$store.state.chat.searchConv);
-  } 
+    console.log('ddsda', this.$store.state.chat.searchConv);
+  },
 };
 </script>
