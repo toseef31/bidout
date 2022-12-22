@@ -30,6 +30,7 @@
                   <company-logo></company-logo>
                   <hr>
                   <v-container class="pa-sm-10 pa-4">
+
                     <v-row>
                       <v-col cols="12" sm="12">
                       <label class="d-block text-left input-label">Company's Name</label>
@@ -42,7 +43,9 @@
                     </v-row>
                     <v-row>
                       <v-col cols="12" sm="12">
-                        <v-btn color="#0D9648" large class="text-capitalize white--text" width="176px" height="54px" @click="updateBasic">Save Info</v-btn>
+                        <v-btn color="#0D9648" large class="text-capitalize white--text" width="176px" height="54px" @click="updateBasic" 
+                        :loading="loadingBasic"
+                        :disabled="loadingBasic">Save Info</v-btn>
                       </v-col>
                     </v-row>
                   </v-container>
@@ -272,18 +275,31 @@ export default {
     },
     loading(){
       return this.$store.getters.pageLoader;
-    }
+    },
+    loadingBasic(){
+      return this.$store.getters.loadingBasic;
+    },
+    
   },
   methods: {
     ...mapActions(["getCompany","getCategories","getSubCategories","updateBasicProfile","addCompanyService","addCompanyBasins"]),
     ...mapMutations(["setBasinLoading"]),
-      updateBasic(){
+      async updateBasic(){
         var data = {
           companyId: this.$store.getters.userInfo.company.id,
+          userId: this.$store.getters.userInfo.id,
           profileName: this.profileName,
           profileSummary: this.profileSummary,
         }
-        this.updateBasicProfile(data);
+        await this.updateBasicProfile(data);
+        if(this.$store.state.companyProfile.basicError){
+          return this.$toasted.show(`Error! Something went wrong please try again`, {
+            class: 'error-toast',
+            type : 'error',
+            duration: 5000,
+            position: 'top-center',
+          });
+        }
       },
       getAllCategories(){
         this.getCategories();

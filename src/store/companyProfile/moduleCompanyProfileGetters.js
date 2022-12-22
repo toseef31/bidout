@@ -7,5 +7,8 @@ export default {
    },
    loadingBasin (state){
       return state.loadingBasin
+   },
+   loadingBasic (state){
+      return state.loadingBasic
    }
 }

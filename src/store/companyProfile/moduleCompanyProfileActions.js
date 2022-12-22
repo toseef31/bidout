@@ -10,6 +10,7 @@ export default {
         commit('setCompany',responce.data)
         commit('setBasinLoading',false)
         commit('setPageLoader',false)
+        commit('setBasicLoading',false)
       }
      
     }).catch(async(err) => {
@@ -78,11 +79,13 @@ export default {
       });
   },  
   updateBasicProfile({commit,dispatch,state}, payload){
-    axios.post('/company/updateBasicProfile/',{'companyId': payload.companyId,'profileName': payload.profileName,'profileSummary': payload.profileSummary})
+    commit('setBasicLoading',true);
+    axios.post('/company/updateBasicProfile/',{'companyId': payload.companyId,'userId':payload.userId,'profileName': payload.profileName,'profileSummary': payload.profileSummary})
      .then(responce => {
       
       if(responce.status === 200){
         dispatch("getCompany",payload.companyId)
+
       }
     }).catch(async(err) => {
       if(state.apiCounter === 2){
@@ -93,6 +96,9 @@ export default {
          await dispatch('refreshToken');
          state.apiCounter = 2;
          dispatch('updateBasicProfile',payload);
+        }
+        if(err.response.status === 400){
+          state.basicError = true;
         }
       }
           console.log(err);
