@@ -5,4 +5,6 @@ export default {
    companyData: null,
    subCategories: null,
    loadingBasin: true,
+   loadingBasic: true,
+   basicError: false,
 }

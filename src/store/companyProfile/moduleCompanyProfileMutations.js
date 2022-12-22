@@ -7,5 +7,8 @@ export default {
     },
     setBasinLoading(state,payload){
       state.loadingBasin = payload
+    },
+    setBasicLoading(state,payload){
+      state.loadingBasic = payload
     }
 }
