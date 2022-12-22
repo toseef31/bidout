@@ -615,10 +615,9 @@ export default {
 
     if (state.invitedSuppliers != null) {
       for (let i = 0; i < state.invitedSuppliers.length; i++) {
-        if(!state.invitedSuppliers[i].companyId && !state.invitedSuppliers[i].objectID){
+        if (!state.invitedSuppliers[i].companyId && !state.invitedSuppliers[i].objectID) {
           formData.append(`invitedSuppliers[${i}]`, state.invitedSuppliers[i]);
-        }
-        else if (state.invitedSuppliers[i].companyId) {
+        } else if (state.invitedSuppliers[i].companyId) {
           formData.append(`invitedSuppliers[${i}]`, state.invitedSuppliers[i].companyId);
         } else {
           formData.append(`invitedSuppliers[${i}]`, state.invitedSuppliers[i].objectID);
@@ -686,7 +685,7 @@ export default {
       const res = await axios.post('bid/draft/createDraft', formData, config);
       if (res.status == 200) {
         commit('setBidData', res.data);
-        commit('setAttachement',res.data.attachments);
+        commit('setAttachement', res.data.attachments);
         dispatch('getTeamMembers', payload.company);
         dispatch('getSalesReps', { query: '', basin: 'all' });
         dispatch('getCategories');
@@ -742,10 +741,9 @@ export default {
 
     if (state.invitedSuppliers != null) {
       for (let i = 0; i < state.invitedSuppliers.length; i++) {
-        if(!state.invitedSuppliers[i].companyId && !state.invitedSuppliers[i].objectID){
+        if (!state.invitedSuppliers[i].companyId && !state.invitedSuppliers[i].objectID) {
           formData.append(`invitedSuppliers[${i}]`, state.invitedSuppliers[i]);
-        }
-        else if (state.invitedSuppliers[i].companyId) {
+        } else if (state.invitedSuppliers[i].companyId) {
           formData.append(`invitedSuppliers[${i}]`, state.invitedSuppliers[i].companyId);
         } else {
           formData.append(`invitedSuppliers[${i}]`, state.invitedSuppliers[i].objectID);
@@ -891,7 +889,6 @@ export default {
     }
   },
   async uploadBidAttach({ commit, state, dispatch }, payload) {
-    
     const config = {
       headers: {
         'Content-Type': 'multipart/form-data',
@@ -906,7 +903,6 @@ export default {
       }
     }
     try {
-      
       const res = await axios.post('bid/uploadBidAttachment/', formData, config);
 
       if (res.status == 200) {
@@ -1154,11 +1150,9 @@ export default {
     if (state.bidData.status == 'templateCreate') {
       if (state.invitedSuppliers) {
         for (let i = 0; i < state.invitedSuppliers.length; i++) {
-          if(!state.invitedSuppliers[i].companyId && !state.invitedSuppliers[i].objectID){
-           
+          if (!state.invitedSuppliers[i].companyId && !state.invitedSuppliers[i].objectID) {
             formData.append(`invitedSuppliers[${i}]`, state.invitedSuppliers[i]);
-          }
-          else if (state.invitedSuppliers[i].companyId) {
+          } else if (state.invitedSuppliers[i].companyId) {
             formData.append(`invitedSuppliers[${i}]`, state.invitedSuppliers[i].companyId);
           } else {
             formData.append(`invitedSuppliers[${i}]`, state.invitedSuppliers[i].objectID);
@@ -1169,11 +1163,9 @@ export default {
       }
     } else if (state.invitedSuppliers != null) {
       for (let i = 0; i < state.invitedSuppliers.length; i++) {
-        if(!state.invitedSuppliers[i].companyId && !state.invitedSuppliers[i].objectID){
-         
+        if (!state.invitedSuppliers[i].companyId && !state.invitedSuppliers[i].objectID) {
           formData.append(`invitedSuppliers[${i}]`, state.invitedSuppliers[i]);
-        }
-        else if (state.invitedSuppliers[i].companyId) {
+        } else if (state.invitedSuppliers[i].companyId) {
           formData.append(`invitedSuppliers[${i}]`, state.invitedSuppliers[i].companyId);
         } else {
           formData.append(`invitedSuppliers[${i}]`, state.invitedSuppliers[i].objectID);
@@ -1389,6 +1381,12 @@ export default {
         dispatch('getCategories');
         dispatch('searchByCompany', { query: '', basin: 'all' });
         commit('setBidData', res.data.bidData);
+
+        if (res.data.supplierSubmissions
+          && res.data.supplierSubmissions
+            .length) {
+          commit('setEntryCheckForEditBid', true);
+        }
         commit('setPageLoader', false);
       } else {
         commit('setPageLoader', false);
@@ -1442,9 +1440,9 @@ export default {
 
     if (state.invitedSuppliers != '') {
       for (let i = 0; i < state.invitedSuppliers.length; i++) {
-        if(state.invitedSuppliers[i].id){
+        if (state.invitedSuppliers[i].id) {
           formData.append(`invitedSuppliers[${i}]`, state.invitedSuppliers[i].id);
-        }else if (state.invitedSuppliers[i].companyId) {
+        } else if (state.invitedSuppliers[i].companyId) {
           formData.append(`invitedSuppliers[${i}]`, state.invitedSuppliers[i].companyId);
         } else {
           formData.append(`invitedSuppliers[${i}]`, state.invitedSuppliers[i].objectID);
