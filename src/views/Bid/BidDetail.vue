@@ -92,7 +92,7 @@
                 {{ bidDetail.bidData.dueTime }} CST
               </div>
               <div>
-                Created by: {{ bidDetail.bidData.userId.firstName }}
+                Created by:  <strong>{{ bidDetail.bidData.company }}</strong>, {{ bidDetail.bidData.userId.firstName }}
                 {{ bidDetail.bidData.userId.lastName }}
               </div>
               <div>Bid Type: {{ bidDetail.bidData.type }}</div>
@@ -316,7 +316,7 @@
                 {{ bidDetail.bidData.dueTime }} CST
               </div>
               <div>
-                Created by: {{ bidDetail.bidData.userId.firstName }}
+                Created by: <strong>{{ bidDetail.bidData.company }}</strong>, {{ bidDetail.bidData.userId.firstName }}
                 {{ bidDetail.bidData.userId.lastName }}
               </div>
               <div>Bid Type: {{ bidDetail.bidData.type }}</div>

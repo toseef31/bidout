@@ -112,7 +112,7 @@
                     </v-list-item-icon>
 
                     <v-list-item-content class="text-left py-1">
-                      <router-link :to="item.link" class="text-decoration-none"><v-list-item-title v-text="item.title"></v-list-item-title></router-link>
+                      <router-link :to="item.link" class="text-decoration-none"><v-list-item-title v-text="item.title" @click="getData(item)"></v-list-item-title></router-link>
                       <span class="msg-badge" v-if="i == 4">(2)</span>
                     </v-list-item-content>
                   </v-list-item>
@@ -157,7 +157,7 @@
                       <v-icon></v-icon>
                     </v-list-item-icon>
                     <v-list-item-content class="text-left py-1">
-                      <v-list-item-title>Manage Modules</v-list-item-title>
+                      <router-link to="/manage-module" class="text-decoration-none"><v-list-item-title @click="getData(manageModule)">Manage Modules</v-list-item-title></router-link>
                     </v-list-item-content>
                   </v-list-item>
                 </v-list-item-group>
