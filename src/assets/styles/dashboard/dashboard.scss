@@ -147,6 +147,11 @@
 				border: 0;
 				border-radius:0;
 			}
+			.bids-table {
+				.v-data-table__wrapper{
+					height: auto !important;
+				}
+			}
 		}
 		.right-col{
 			flex: 0 0 100% !important;
