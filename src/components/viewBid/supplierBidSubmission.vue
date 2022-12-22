@@ -601,7 +601,7 @@ export default {
           price: this.getSupplierBid.lineItems[i].price,
           bid: this.getSupplierBid.lineItems[i].price !== 'NO_BID',
           id: this.getSupplierBid.lineItems[i].id,
-          quantity: this.getSupplierBid.lineItems[i].quantity,
+          quantity: this.getSupplierBid.lineItems[i].Qty,
           required: this.getSupplierBid.lineItems[i].required,
         });
       }
