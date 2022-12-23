@@ -366,6 +366,9 @@
         }
         .attachment-list-style {
           margin-top: 16px;
+          .doc-class {
+            width: 400px !important;
+          }
           table {
             thead {
               tr {
@@ -386,7 +389,17 @@
                   height: 56px;
                   padding-left: 24px;
                 }
+                td:first-child {
+                  width: 5%; 
+                }
+                td:nth-child(2) {
+                  width: 20%;
+                }
+                td:nth-child(3) {
+                  width: 27%;
               }
+              }
+              
             }
           }
         }
