@@ -4,15 +4,15 @@
 .left-sidebar{
 	background-color: #fff !important;
 	position: relative !important;
-	flex: 0 0 22% !important;
-	max-width: 22% !important;
-	height: calc(100vh - 96px) !important;
+	flex: 0 0 20em !important;
+	max-width: 20em !important;
+	height: calc(100vh - 104px) !important;
 	position: sticky !important;
 	top: 92px;
 }
 .toggleLeft-sidebar{
-	flex: 0 0 5% !important;
-  	max-width: 5% !important;
+	flex: 0 0 5em !important;
+  	max-width: 5em !important;
   ::v-deep .v-list-group .v-list-group__header .v-list-item__icon.v-list-group__header__append-icon{
   	margin-left: -22px;
   	min-width: 0px;

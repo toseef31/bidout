@@ -1,6 +1,6 @@
 .companySupplier-module{
-	flex: 0 0 78%;
-  	max-width: 78%;
+	/*flex: 0 0 78%;
+  max-width: 78%;*/
 	.mid-content{
 			flex: 0 0 100%;
 		  max-width: 100%;
@@ -23,8 +23,8 @@
 	
 }
 .mid-content-collapse{
-	flex: 0 0 95%;
-  max-width: 95%;
+	flex: 0 0 100%;
+  max-width: 100%;
 }
 @media (max-width: 768px) {
 	.companySupplier-module{
