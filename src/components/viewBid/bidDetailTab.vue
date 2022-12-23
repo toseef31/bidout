@@ -315,7 +315,7 @@
               </v-row>
             </div>
       </div>
-       <div v-else class="no-data py-5">None</div>
+       <div v-else class="no-data py-5">No questions are configured</div>
     </div>
   </v-col>
 </template>
