@@ -219,11 +219,13 @@ export default {
             .every((v) => item.title.toLowerCase().includes(v))
             }
           }),['dueDate','asc','dueTime','asc']);
-        }else{
+        }
           return _.orderBy(this.$store.getters.bidsList.filter((item) => {
             return item.receivingBids == true
           }),['dueDate','asc','dueTime','asc']);
-        }
+        
+      } else {
+        return [];
       }
     },
     closedBids(){
@@ -237,11 +239,13 @@ export default {
             .every((v) => item.title.toLowerCase().includes(v)) 
             }
           }),['dueDate','asc','dueTime','asc']);
-        }else{
+        }
           return _.orderBy(this.$store.getters.bidsList.filter((item) => {
             return item.receivingBids == false
           }),['dueDate','asc','dueTime','asc']);
-        }
+        
+      } else {
+        return [];
       }
     },
     showSuccessDeleteBidAlert() {
