@@ -366,6 +366,9 @@
         }
         .attachment-list-style {
           margin-top: 16px;
+          .doc-class {
+            width: 400px !important;
+          }
           table {
             thead {
               tr {
