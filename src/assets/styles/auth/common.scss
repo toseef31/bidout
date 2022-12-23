@@ -1,0 +1,68 @@
+.section-container.auth-module {
+  background: #fff;
+  width: 100%;
+  box-sizing: border-box;
+  .signin {
+    padding: 0;
+    margin: 0 auto;
+    height: 100vh;
+    .left {
+      padding: 0px;
+      justify-content: center;
+      align-items: center;
+      box-sizing: border-box;
+      display: flex;
+      flex-direction: column;
+      height: 100vh;
+      .form-section{
+        text-align: left;
+        width: 55%;
+        .view-pass {
+          color: #0D1139 !important;
+        }
+        .logo{
+          width: 55%;
+        }
+        .login-form a:hover {
+          text-decoration: none;
+        }
+        .signin-btn {
+          width: 100%;
+          background-color: #0D9648 !important;
+          height: 56px;
+          font-size: 16px;
+        }
+
+      }
+      .bottom-section{
+        position: absolute;
+        bottom: 5%;
+        a:hover{
+          text-decoration: none;
+        }
+        a:hover span{
+          text-decoration: none !important;
+        }
+      }
+    }
+    .right {
+      padding: 0px;
+      box-sizing: border-box;
+      /*background: #0D9648;*/
+      color: #fff;
+      height: 100vh;
+      overflow: hidden;
+    }
+  }
+}
+@media (max-width: 768px) {
+  .section-container.auth-module {
+    .signin {
+      .left {
+        .form-section{
+          width: 85%;
+        }
+      }
+    }
+  }
+}

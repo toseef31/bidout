@@ -2,7 +2,7 @@ name: Dev - Deploy to Google App Engine
 on:
   push:
     branches:
-      - master
+      - dev
 jobs:
   build:
     name: Build
@@ -15,6 +15,17 @@ jobs:
       - name: Create Env
         run: |
           touch .env
+          echo VITE_FIREBASE_API_KEY=${{ secrets.VITE_FIREBASE_API_KEY_DEV }} >> .env
+          echo VITE_FIREBASE_AUTH_DOMAIN=${{ secrets.VITE_FIREBASE_AUTH_DOMAIN_DEV }} >> .env
+          echo VITE_FIREBASE_DATABASE_URL=${{ secrets.VITE_FIREBASE_DATABASE_URL_DEV }} >> .env
+          echo VITE_FIREBASE_PROJECT_ID=${{ secrets.VITE_FIREBASE_PROJECT_ID_DEV }} >> .env
+          echo VITE_FIREBASE_STORAGE_BUCKET=${{ secrets.VITE_FIREBASE_STORAGE_BUCKET_DEV }} >> .env
+          echo VITE_FIREBASE_MESSAGE_SENDER_ID=1:${{ secrets.VITE_FIREBASE_MESSAGE_SENDER_ID_DEV }} >> .env
+          echo VITE_FIREBASE_APP_ID=${{ secrets.VITE_FIREBASE_APP_ID_DEV }} >> .env
+          echo VITE_FIREBASE_MEASUREMENT_ID=${{ secrets.VITE_FIREBASE_MEASUREMENT_ID_DEV }} >> .env
+          echo VITE_GOOGLE_MAP=${{ secrets.VITE_GOOGLE_MAP_DEV }} >> .env
+          echo VITE_GOOGLE_TAG_MANAGER=${{ secrets.VITE_GOOGLE_TAG_MANAGER_DEV }} >> .env
+          echo VITE_API_BASE_URL=${{ secrets.VITE_API_BASE_URL_DEV }} >> .env
           cat .env
       - name: Build
         run: npm run build
@@ -35,7 +46,12 @@ jobs:
         with:
           name: Dist
           path: dist/
+      - uses: 'google-github-actions/auth@v1'
+        name: 'Authenticate to Google Cloud'
+        with:
+          credentials_json: ${{ secrets.gcp_credentials }}
       - uses: google-github-actions/deploy-appengine@main
+        name: 'Deploy to App Engine'
         with:
           credentials: ${{ secrets.gcp_credentials }}
           deliverables: 'dev.yaml'
@@ -51,3 +67,4 @@ jobs:
       run: |
         echo "::add-mask::$FOR_WEBHOOKS_SECRET"
         curl --verbose --fail --show-error --location --request POST "https://api.github.com/repos/$GITHUB_REPOSITORY/dispatches" --header "Authorization: token $FOR_WEBHOOKS_SECRET" --header 'Content-Type: application/json' --header 'Accept: application/vnd.github.everest-preview+json' --data-raw "{ \"event_type\": \"delete_all_artifacts\", \"client_payload\": {\"parent_runid\": \"$GITHUB_RUN_ID\", \"parent_repo\": \"$GITHUB_REPOSITORY\"} }"
+ 

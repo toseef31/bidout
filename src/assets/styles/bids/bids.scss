@@ -1,0 +1,171 @@
+.bids-module {
+  .mid-content {
+    .content-section {
+      .title-block {
+        h3 {
+          font-size: 20px;
+        }
+      }
+      .__searchBox {
+        .v-input {
+          &__slot {
+            min-height: 45px;
+            width: 272px;
+            fieldset {
+              border-color: #f1f1f1;
+            }
+          }
+          &__prepend-inner {
+            margin-top: 13px;
+            .v-icon {
+              color: #b8b8b8;
+            }
+          }
+        }
+      }
+      .bid-tab {
+        .v-tabs-bar {
+          align-items: center;
+          height: 31px;
+        }
+        .v-tab {
+          height: 31px;
+          border-radius: 16px;
+          background: #fbfbfb;
+          color: #0d1139;
+          &--active {
+            background: rgba(13, 150, 72, 0.1);
+            color: #0d9648 !important;
+          }
+        }
+      }
+      .bids-table {
+        thead {
+          tr {
+            th {
+              font-size: 14px;
+              border-bottom: thin solid #f1f1f1 !important;
+            }
+          }
+        }
+        tbody {
+          tr {
+            .title-truncate{
+              min-width: 350px;
+              max-width: 460px;
+              white-space: nowrap;
+              overflow: hidden;
+              text-overflow: ellipsis;
+            }
+            td{
+              color: #0d1139;
+              font-size: 14px;
+              font-weight: 600;
+              border-bottom: 0 !important;
+              &:nth-child(1){
+                min-width: 84px;
+                max-width: 84px;
+              }
+              &:nth-child(3){
+                max-width: 220px;
+                white-space: nowrap;
+                overflow: hidden;
+                text-overflow: ellipsis;
+              }
+              &:nth-child(4){
+                min-width: 150px;
+                max-width: 150px;
+              }
+              &:nth-child(5){
+                min-width: 100px;
+              }
+              .icon-circle {
+                background: rgba(0, 0, 0, 0.1);
+                border-radius: 50%;
+              }
+            }
+            &:nth-child(even) {
+              background: #fbfbfb;
+            }
+
+          }
+          .draft-title{
+            background: transparent !important;
+          }
+        }
+      }
+
+      .open-bid-table {
+        tbody {
+          tr {
+            .title-truncate{
+              min-width: 350px;
+              max-width: 460px;
+              white-space: nowrap;
+              overflow: hidden;
+              text-overflow: ellipsis;
+            }
+            td{
+              &:nth-child(1){
+                min-width: 84px;
+                max-width: 84px;
+              }
+              &:nth-child(3){
+                max-width: 220px;
+                white-space: nowrap;
+                overflow: hidden;
+                text-overflow: ellipsis;
+              }
+              &:nth-child(4){
+                min-width: 150px;
+                max-width: 150px;
+              }
+              &:nth-child(5){
+                min-width: 100px;
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}
+@media (max-width: 768px) {
+  .bids-module {
+    .mid-content {
+      .content-section {
+        .__searchBox {
+          .v-input__slot {
+            width: 100%;
+          }
+        }
+        .bid-tab {
+          .v-slide-group {
+            &__next {
+              display: none;
+            }
+            &__prev {
+              display: none;
+            }
+          }
+        }
+        .bids-table {
+          thead {
+            tr {
+              th {
+                font-size: 14px;
+              }
+            }
+          }
+          tbody {
+            tr {
+              td {
+                font-size: 14px;
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}

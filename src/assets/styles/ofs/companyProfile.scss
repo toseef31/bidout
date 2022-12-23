@@ -1,0 +1,157 @@
+.company-module{
+	.company-leftSidebar{
+		.facts-data{
+			background: #F4F5F7;
+			margin-top: 18px;
+			h3{
+				font-size: 20px;
+				color: #013D3A;
+				line-height: 20px;
+			}
+			p{
+				color: #013D3A;
+				a{
+					color: #013D3A !important;
+					font-weight: 500;
+				}
+			}
+			.contact-list{
+				h4{
+					font-size: 16px;
+					color: #013D3A;
+					&:nth-child(2){
+						font-weight: 400;
+					}
+				}
+			}
+			.v-btn{
+				font-size: 10px;
+			}
+		}
+		.similar-companies{
+			p{
+				a{
+					font-size: 15px;
+				}
+			}
+		}
+		.tag-box{
+			background: rgba(13, 150, 71, 0.2);
+			height: 60px;
+			margin-top: 18px;
+			h4{
+				color: #0D9647;
+				font-size: 13px;
+			}
+		}
+	}
+	.company-content{
+		h1{
+			color: #013D3A;
+		}
+		.company-title{
+			h1{
+				font-size: 40px;
+				display: flex;
+				align-items: center;
+				span{
+					font-size: 16px;
+				}
+			}
+		}
+		.company-service{
+			.service-list{
+				display: grid;
+		    grid-template-columns: repeat(3, 1fr);
+		    /*grid-template-rows: repeat(3, 0fr);*/
+		    grid-column-gap: 5px;
+		    grid-row-gap: 15px;
+				label{
+					font-weight: 400;
+			    font-size: 11px;
+			    line-height: 12px;
+			    margin-right: 2px;
+			    color: #013D3A;
+			    .v-icon{
+			    	color: #0D9647;
+			    	margin-right: 5px;
+			    }
+				}
+			}
+		}
+		.company-documents{
+			.doc-col{
+				p{
+			    font-weight: 500;
+			    font-size: 12px;
+			    line-height: 25px;
+			    color: #013D3A;
+				}
+			}
+		}
+		.company-news{
+			.news-list{
+				p{
+					color: #013D3A;
+				}
+			}
+		}
+		.company-leadership{
+			.leader-list{
+				display: grid;
+		    grid-template-columns: repeat(4, 1fr);
+		    grid-column-gap: 32px;
+		    grid-row-gap: 15px;
+				.profile-list{
+					h6{
+						font-weight: 700;
+						font-size: 16px;
+						line-height: 20px;
+						color: #013D3A;
+						margin-top: 16px;
+						margin-bottom: 8px;
+					}
+					p{
+						font-weight: 500;
+						font-size: 16px;
+						line-height: 20px;
+						color: #013D3A;
+					}
+				}
+			}
+		}
+		.company-subsi{
+			.subsidary-list{
+				display: grid;
+		    grid-template-columns: repeat(3, 1fr);
+		    grid-column-gap: 32px;
+		    grid-row-gap: 15px;
+			}
+		}
+		.company-esg{
+			.esg-list{
+				h4{
+					font-weight: 700;
+					font-size: 20px;
+					line-height: 20px;
+					color: #013D3A;
+				}
+				p{
+					font-weight: 400;
+					font-size: 15px;
+					line-height: 20px;
+					color: #013D3A;
+				}
+				a{
+					background-color: rgba(13, 150, 71, 0.2);
+			    border-radius: 36px;
+			    padding: 8px;
+			    color: #0D9647 !important;
+			    .v-icon{
+			    	color: #0D9647 !important;
+			    }
+				}
+			}
+		}
+	}
+}

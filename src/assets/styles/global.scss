@@ -1,0 +1,161 @@
+.section-container{
+	background: #FBFBFB;
+}
+.left-sidebar{
+	background-color: #fff !important;
+	position: relative !important;
+	flex: 0 0 22% !important;
+	max-width: 22% !important;
+	height: calc(100vh - 96px) !important;
+	position: sticky !important;
+	top: 92px;
+}
+.toggleLeft-sidebar{
+	flex: 0 0 5% !important;
+  	max-width: 5% !important;
+  ::v-deep .v-list-group .v-list-group__header .v-list-item__icon.v-list-group__header__append-icon{
+  	margin-left: -22px;
+  	min-width: 0px;
+  }
+  .sub-menu-item {
+  	.v-list-group__items > .v-list-item{
+	    padding-left: 59px;
+	  }
+  }
+}
+.bg-light{
+	background: #F4F5F7;
+}
+.v-label{
+	color: #0D1139 !important;
+}
+.text-muted{
+	color: #959595 !important;
+}
+.save-btn{
+	font-size: 20px !important;
+	border-radius: 8px;
+}
+.question-menu {
+  margin-top: 15px;
+  contain: initial;
+  overflow: visible;
+}
+.question-menu::before {
+  position: absolute;
+  content: "";
+  top: 0;
+  left: 10px;
+  transform: translateY(-100%);
+  width: 10px; 
+  height: 13px; 
+  border-left: 10px solid transparent;
+  border-right: 10px solid transparent;
+  border-bottom: 15px solid #fff;
+}
+/*Get Started Selection*/
+.get-topHeader{
+	background-image: url(@/assets/images/topheader.png);
+	height: 200px;
+	background-size: cover;
+	background-repeat: no-repeat;
+	h1{
+		font-size: 48px;
+		line-height: 48px;
+	}
+}
+.getStart-box{
+	background: rgba(13, 150, 71, 0.1);
+	border-top: 6px solid #0D9647;
+	border-radius: 1px;
+	margin-top: 6rem;
+	margin-bottom: 6rem;
+	h1{
+		font-size: 26px;
+		line-height: 40px;
+		color: #0D1139;
+	}
+	p{
+		font-weight: 500;
+		font-size: 18px;
+		line-height: 30px;
+		color: #0D1139;
+	}
+}
+.ofs-bottom-section{
+	background-image: url(@/assets/images/ofs/bottom-bg.jpg);
+	background-size: cover;
+	background-repeat: no-repeat;
+	.title{
+		font-size: 32px !important;
+	}
+}
+.countrySelect{
+	border: 1px solid #B8B8B8;
+  height: 56px;
+  background-color: #fff;
+  align-items: center;
+  padding: 0 12px;
+  width: 100%;
+  -webkit-appearance: auto;
+  &:focus-visible{
+  	outline: 1px solid #B8B8B8;
+  }
+}
+.company-link{
+	cursor: pointer;
+}
+.green-color{
+	color: #0D9647 !important;
+}
+#MazPhoneNumberInput{
+	margin-bottom: 0!important;
+	.country-selector{
+		&__input{
+			height: 56px;
+			min-height: 56px;
+		}
+	}
+	.input-tel{
+		&__input{
+			height: 56px;
+			min-height: 56px;
+		}
+	}
+}
+@media (min-width: 769px) {
+	
+}
+@media(max-width:  768px){
+	.left-sidebar{
+		display: none;
+	}
+	.get-topHeader{
+		height: 200px;
+		h1{
+			font-size: 35px;
+		}
+	}
+	.getStart-box{
+		h1{
+			font-size: 23px;
+		}
+		p{
+			font-size: 16px;
+		}
+	}
+	.ofs-bottom-section{
+		.title{
+			font-size: 24px !important;
+		}
+	}
+}
+.toasted-primary {
+	background-color: #0D9647 !important;
+	color: #fff !important;
+	font-size: 16px !important;
+	font-weight: 500 !important;
+	padding: 10px 20px !important;
+	border-radius: 4px !important;
+	box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25) !important;
+}

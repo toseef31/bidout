@@ -1,0 +1,42 @@
+.companySupplier-module{
+	flex: 0 0 78%;
+  	max-width: 78%;
+	.mid-content{
+			flex: 0 0 100%;
+		  max-width: 100%;
+		  z-index: 2;
+		  padding-left: 0 !important;
+		.content-section{
+			background: #FFFFFF;
+	  	border: 1px solid #B8B8B8;
+	  	border-radius: 8px;
+	  	margin-bottom: 0px;
+	  	padding: 0px 0px;
+	  	min-height: calc(100vh - 110px);
+	  	.get-topHeader{
+	  		border-top-right-radius: 8px;
+		    border-top-left-radius: 8px;
+	  	}
+		}
+	}
+	
+	
+}
+.mid-content-collapse{
+	flex: 0 0 95%;
+  max-width: 95%;
+}
+@media (max-width: 768px) {
+	.companySupplier-module{
+		flex: 0 0 100%;
+	  	max-width: 100%;
+		.mid-content {
+			flex: 0 0 100%;
+	  	max-width: 100%;
+			.content-section{
+				border: 0px;
+				padding: 0;
+			}
+		}
+	}
+}

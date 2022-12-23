@@ -1,0 +1,201 @@
+.getstarted-module{
+	background-color: #fff;
+	.top-header{
+		background-image: url(@/assets/images/topheader.png);
+		height: 200px;
+		background-size: cover;
+		background-repeat: no-repeat;
+		h1{
+			font-size: 48px;
+			line-height: 48px;
+		}
+	}
+	.tabs-head{
+		background: #F4F5F7;
+		h4{
+			font-size: 16px;
+			line-height: 20px;
+			color: #0D1139;
+		}
+		.v-slide-group{
+			background-color: transparent !important;
+			.v-tab{
+				border: 1px solid #0D1139;
+				font-size: 16px;
+				line-height: 16px;
+				color: #0D1139 !important;
+				background: white;
+				&:hover{
+					border: 1px solid #0D9647;
+					color: #0D9647 !important;
+				}
+				&:before{
+					background-color: transparent;
+				}
+			}
+			.v-tab--active{
+				background-color: #0D9647;
+				color: #fff !important;
+				border: 1px solid #0D9647;
+				&:hover{
+					border: 1px solid #0D9647;
+					color: #0D9647 !important;
+					background-color: transparent;
+				}
+			}
+		}
+	}
+	.getStart-box{
+		background: rgba(13, 150, 71, 0.1);
+		border-top: 6px solid #0D9647;
+		border-radius: 1px;
+		margin-top: 6rem;
+		margin-bottom: 6rem;
+		h1{
+			font-size: 26px;
+			line-height: 40px;
+			color: #0D1139;
+		}
+		p{
+			font-weight: 500;
+			font-size: 18px;
+			line-height: 30px;
+			color: #0D1139;
+		}
+	}
+	.v-form{
+		.v-input{
+			.v-input__control{
+				.v-input__slot{
+					background: #ffffff;
+					margin-bottom: 0;
+					border-radius: 0;
+					fieldset{
+						border-color: #B8B8B8;
+					}
+				}
+				.v-text-field__details{
+					display: none;
+				}
+			}
+		}
+		#MazPhoneNumberInput{
+			margin-bottom: 0!important;
+			.country-selector{
+				&__input{
+					height: 56px;
+					min-height: 56px;
+				}
+			}
+			.input-tel{
+				&__input{
+					height: 56px;
+					min-height: 56px;
+				}
+			}
+		}
+		.company-list{
+			cursor: pointer;
+			position: absolute;
+			width: 94.4%;
+			z-index: 10;
+			max-height: 320px;
+			overflow: auto;
+			&::-webkit-scrollbar {
+			  width: 6px;
+			  height: 6px;
+			}
+			&::-webkit-scrollbar-thumb {
+			  background: #e1e1e1;
+			  border: 14px solid #0d9647;
+			  border-radius: 26px;
+			}
+			&::-webkit-scrollbar-thumb:hover {
+			  background: #ffffff;
+			}
+			&::-webkit-scrollbar-thumb:active {
+			  background: #0d9647;
+			}
+			&::-webkit-scrollbar-track {
+			  background: #666666;
+			  border: 36px solid #c7c7c7;
+			  border-radius: 42px;
+			}
+			&::-webkit-scrollbar-track:hover {
+			  background: #666666;
+			}
+			&::-webkit-scrollbar-track:active {
+			  background: #0d9647;
+			}
+			&::-webkit-scrollbar-corner {
+			  background: transparent;
+			}
+			.v-list-item{
+				&:not(&:last-Child){
+					border-bottom: 1px solid #e7e5e5;
+				}
+			}
+		}
+		.countrySelect{
+			border: 1px solid #B8B8B8;
+	    height: 56px;
+	    background-color: #fff;
+	    align-items: center;
+	    padding: 0 12px;
+	    width: 100%;
+	    -webkit-appearance: auto;
+	    &:focus-visible{
+	    	outline: 1px solid #B8B8B8;
+	    }
+		}
+	}
+	.alert-section{
+		.v-img{
+			margin-bottom: 2rem;
+		}
+		p{
+			font-size: 21px;
+			font-weight: 500;
+		}
+	}
+	.confirm-box{
+		h1{
+			color: #989C9A;
+		}
+		.v-btn{
+			border-radius: 0;
+		}
+	}
+}
+@media(max-width:768px){
+	.getstarted-module{
+		.top-header{
+			height: 170px;
+			h1{
+				font-size: 40px;
+			}
+			
+		}
+		.tabs-head{
+			.v-slide-group__prev{
+				display: none;
+			}
+			.v-slide-group{
+				.v-tab{
+					width: 48%;
+				}
+				.v-tab:first-child{
+					margin-right: 8px !important;
+				}
+				.v-tab:last-child{
+					margin-right: 0 !important;
+				}
+			}
+		}
+		.alert-section{
+			p{
+				font-size: 17px;
+			}
+		}
+	}
+}
