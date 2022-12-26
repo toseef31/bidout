@@ -1,7 +1,7 @@
 <template>
   <v-col class="my-7 pa-0 bid-submission-tab" align="start">
 
-<v-form @submit.prevent="submit"  ref="form" v-model="valid">
+<v-form @submit.prevent="submit"  ref="form" v-model="valid" lazy-validation>
     <div class="title-line" v-if="
             bidDetail.bidData &&
             bidDetail.bidData.lineItems &&
@@ -416,11 +416,12 @@ export default {
       file: '',
       answers: [],
       user: '',
-      value: '',
+      index: 0,
+      value: [],
       lineItemsRule: [
         (value) => !!value || 'Line item is required!',
         (value) => {
-          if (this.isBidSubmitted && this.value !== '' && Number(this.value) < Number(value) && this.isBidOut) {
+          if (this.isBidSubmitted && this.value.length && Number(this.value[this.index]) < Number(value) && this.isBidOut) {
             return 'Suppliers can only lower the prices during the BidOut Phase!';
           } return true;
         },
@@ -482,15 +483,16 @@ export default {
     },
     validatePrice(index) {
       if (this.isBidSubmitted && this.isBidOut) {
-        this.value = this.getSupplierBid.lineItems[index].price;
+        this.index = index;
+        this.value[index] = this.getSupplierBid.lineItems[index].price;
       }
     },
     async submit(action) {
-      if (!this.$refs.form.validate() && action === 'edit' && this.isBidOut) {
+      if (!this.valid && action === 'edit' && this.isBidOut) {
         this.$store.commit('setLoweringPriceAlert');
         window.scrollTo({ top: 0, behavior: 'smooth' });
       }
-      if (this.$refs.form.validate()) {
+      if (this.valid) {
         if (action === 'submit') {
           this.loading = true;
 
