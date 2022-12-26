@@ -82,7 +82,7 @@ export default {
     state.bidlines = payload;
   },
   setAttachement(state, payload) {
-    console.log('payload',payload);
+    console.log('payload', payload);
     state.attachement = payload;
   },
   setQuestions(state, payload) {
@@ -180,5 +180,8 @@ export default {
     setTimeout(() => {
       state.loweringPriceAlert = false;
     }, 8000);
+  },
+  setEntryCheckForEditBid(state, payload) {
+    state.entryCheckForEditBid = payload;
   },
 };
