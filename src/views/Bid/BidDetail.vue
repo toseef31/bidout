@@ -469,6 +469,7 @@
           fixed-tabs
           hide-slider
           :mobile-breakpoint="767"
+          @change="reload"
         >
           <v-tab
             v-for="item in tabs"
@@ -526,6 +527,7 @@
           fixed-tabs
           hide-slider
           :mobile-breakpoint="767"
+          @change="reload"
         >
           <v-tab
             v-for="item in tabsSupplier"
@@ -662,6 +664,51 @@ export default {
   },
   methods: {
     ...mapActions(['getBidBySerial', 'deleteBid', 'bidMessageUnreadCount', 'makeIntent', 'getIntent', 'updateIntent', 'getQA', 'getAllIntent']),
+    async reload(event) {
+      if (this.getUserType === 'buyer' && event !== 'tab-4') {
+        await this.getBidBySerial({
+          serial: this.$route.params.serial,
+          id: this.users.id,
+        });
+
+        await this.bidMessageUnreadCount({
+          userId: this.users.id,
+          bidId: this.bidDetail.bidData.id,
+        });
+
+        await this.getAllIntent({
+          bidId: this.bidDetail.bidData.id,
+        });
+
+        await this.getQA({
+          bidId: this.bidDetail.bidData.id,
+          userId: this.users.id,
+        });
+      } else if (this.getUserType === 'supplier' && event !== 'tab-2') {
+        await this.getBidBySerial({
+          serial: this.$route.params.serial,
+          id: this.users.id,
+        });
+
+        await this.bidMessageUnreadCount({
+          userId: this.users.id,
+          bidId: this.bidDetail.bidData.id,
+        });
+
+        await this.getIntent({
+          companyId: this.users.company.id,
+          bidId: this.bidDetail.bidData.id,
+          companyName: this.users.company.company,
+        });
+
+        this.answer = this.$store.getters.bidIntent;
+
+        await this.getQA({
+          bidId: this.bidDetail.bidData.id,
+          userId: this.users.id,
+        });
+      }
+    },
     ChangeT(tab) {
       this.currentItem = tab;
     },
@@ -804,15 +851,15 @@ export default {
       });
 
       this.answer = this.$store.getters.bidIntent;
+    } else {
+      await this.getAllIntent({
+        bidId: this.bidDetail.bidData.id,
+      });
     }
 
     await this.getQA({
       bidId: this.bidDetail.bidData.id,
       userId: this.users.id,
-    });
-
-    await this.getAllIntent({
-      bidId: this.bidDetail.bidData.id,
     });
   },
   watch: {
