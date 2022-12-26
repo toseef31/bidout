@@ -527,6 +527,7 @@
           fixed-tabs
           hide-slider
           :mobile-breakpoint="767"
+          @change="reload"
         >
           <v-tab
             v-for="item in tabsSupplier"
@@ -683,7 +684,7 @@ export default {
           bidId: this.bidDetail.bidData.id,
           userId: this.users.id,
         });
-      } else if (this.getUserType === 'supplier') {
+      } else if (this.getUserType === 'supplier' && event !== 'tab-2') {
         await this.getBidBySerial({
           serial: this.$route.params.serial,
           id: this.users.id,
