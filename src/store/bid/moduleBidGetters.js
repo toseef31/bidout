@@ -113,4 +113,7 @@ export default {
   loweringPriceAlert(state) {
     return state.loweringPriceAlert;
   },
+  entryCheckForEditBid(state) {
+    return state.entryCheckForEditBid;
+  },
 };

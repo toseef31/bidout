@@ -1,181 +1,183 @@
 <template>
-  <v-col class="company-module companySupplier-module white pa-0 pa-sm-3" :class="[ showSideBar ? 'col-md-9 col-12 col-sm-7' : 'mid-content-collapse', activityPanel ? 'd-sm-block' : 'd-md-block']" v-show="!activityPanel">
-    <div class="mid-content">
-      <div class="content-section fill-height d-flex justify-center align-center"  v-if="loading">
-        <v-progress-circular :width="3" color="green" indeterminate ></v-progress-circular>
-      </div>
-      <div class="content-section fill-height" v-else>
-        <div class="get-Header d-flex pt-5">
-          <v-container fill-height class="pl-0">
-            <v-row
-              align="center"
-              no-gutters
-            >
-              <v-col
-                class="text-left"
-                cols="12" sm="4"
-              >
-                <v-img :src="supplierData.image"></v-img>
-                <h4 class="pl-3 mt-2"><span v-if="supplierData.isOfsPremium"><span v-if="supplierData.isOfsPremium == 1"></span><v-icon color="#0D9647">mdi-check-decagram</v-icon>Premium Service Provider</span></h4>
-              </v-col>
-              <v-col
-                class="text-left"
-                cols="12" sm="8"
-              >
-                <div class="company-title ml-10">
-                  <h1>{{supplierData.company}}</h1>
-                </div>
-              </v-col>
-            </v-row>
-          </v-container>
+  <v-row class="company-module companySupplier-module white pa-0 pa-sm-3">
+    <v-col :class="[ showSideBar ? 'col-md-12 col-12 col-sm-12' : 'mid-content-collapse', activityPanel ? 'd-sm-block' : 'd-md-block']" v-show="!activityPanel">
+      <div class="mid-content">
+        <div class="content-section fill-height d-flex justify-center align-center"  v-if="loading">
+          <v-progress-circular :width="3" color="green" indeterminate ></v-progress-circular>
         </div>
-          <v-container>
-            <v-main class="mb-16 pt-0">
-              <v-row justify="center">
-                <v-col cols="12" md="9">
-                  <div class="company-content text-left">
-                   <div class="company-desc">
-                      <h1 class="mb-4 font-weight-bold">Corporate Summary</h1>
-                      <p>{{supplierData.overview}}</p>
-                      <h3 class="text-center" v-if="!supplierData.overview">No summary added yet</h3>
-                    </div>
-                    <div class="company-service mb-12" v-if="supplierData.services.length > 0">
-                      <h1 class="mb-4 font-weight-bold">Services Portfolio</h1>
-                      <div class="service-list text-left mt-4">
-                        <template v-for="services in companyCategories"  v-if="services.subCategories.length > 0">
-                            <label v-for="(sub,index) in services.subCategories">
-                              <v-icon>mdi-check</v-icon>
-                              <span>{{services.name}}: {{sub.subname}}  </span>
-                            </label>
-                          </template>
+        <div class="content-section fill-height" v-else>
+          <div class="get-Header d-flex pt-5">
+            <v-container fill-height class="pl-0">
+              <v-row
+                align="center"
+                no-gutters
+              >
+                <v-col
+                  class="text-left"
+                  cols="12" sm="4"
+                >
+                  <v-img :src="supplierData.image"></v-img>
+                  <h4 class="pl-3 mt-2"><span v-if="supplierData.isOfsPremium"><span v-if="supplierData.isOfsPremium == 1"></span><v-icon color="#0D9647">mdi-check-decagram</v-icon>Premium Service Provider</span></h4>
+                </v-col>
+                <v-col
+                  class="text-left"
+                  cols="12" sm="8"
+                >
+                  <div class="company-title ml-10">
+                    <h1>{{supplierData.company}}</h1>
+                  </div>
+                </v-col>
+              </v-row>
+            </v-container>
+          </div>
+            <v-container>
+              <v-main class="mb-16 pt-0">
+                <v-row justify="center">
+                  <v-col cols="12" md="9">
+                    <div class="company-content text-left">
+                     <div class="company-desc">
+                        <h1 class="mb-4 font-weight-bold">Corporate Summary</h1>
+                        <p>{{supplierData.overview}}</p>
+                        <h3 class="text-center" v-if="!supplierData.overview">No summary added yet</h3>
                       </div>
-                        <h3 v-if="!supplierData.services" class="text-center">No services added yet</h3>
-                      <!-- <p class="text-right">View all services</p> -->
-                    </div>
-                  <div class="company-location mb-12"  v-if="supplierData.companyLocations.length > 0">
-                    <h1 class="mb-4 font-weight-bold">Service Locations</h1>
-                    <div id="map"class="map" style="height:350px" v-if="supplierData.companyLocations"></div>
-                    <h3 class="text-center" v-if="!supplierData.companyLocations">Location not added</h3>
-                  </div>
-                  <template v-if="supplierData.isOfsPremium || supplierData.isOfsPremium == 1">
-                    <div class="company-location mb-12" v-if="supplierData.corporateVideos.length > 0">
-                      <h1 class="mb-4 font-weight-bold">Corporate Videos</h1>
-                      <v-row>
-                        <v-col cols="12" md="6" v-for="video in supplierData.corporateVideos">
-                          <div class="video-col">
-                            
-                            <iframe
-                              width="100%"
-                              height="350px"
-                              :src="'https://www.youtube.com/embed/'+video"
-                              frameborder="0"
-                              allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture"
-                              allowfullscreen
-                            ></iframe>
-                          </div>
-                        </v-col>
-                        <v-col cols="12" md="12" v-if="!supplierData.corporateVideos">
-                          <h3 class="text-center">No videos to show</h3>
-                        </v-col>
-                      </v-row>
-                    </div>
-                    <div class="company-documents mb-12" v-if="supplierData.corporateDocuments.length > 0">
-                      <h1 class="mb-4 font-weight-bold">Corporate Documents</h1>
-                      <v-row>
-                        <v-col cols="3" sm="2" v-for="docs in supplierData.corporateDocuments">
-                          <div class="doc-col text-center">
-                            <a :href="docs.attachment" target="_blank" class="text-decoration-none">
-                              <v-img v-if="get_url_extension(docs.attachment) == 'pdf'" :src="require('@/assets/images/profile/pdf.png')" width="80px" class="mx-auto"></v-img>
-                              <v-img v-else-if="get_url_extension(docs.attachment) == 'xlsx' || get_url_extension(docs.attachment) == 'xls'" :src="require('@/assets/images/profile/excel.png')" width="80px" class="mx-auto"></v-img>
-                              <v-img v-else :src="require('@/assets/images/profile/other.png')" width="80px" class="mx-auto"></v-img>
-                            </a>
-                            <a :href="docs.attachment" target="_blank" class="text-decoration-none"><p>{{docs.name}}</p></a>
-                          </div>
-                        </v-col>
-                        <v-col cols="12" sm="12" v-if="!supplierData.corporateDocuments">
-                          <h3 class="text-center">No documents to show</h3>
-                        </v-col>
-                      </v-row>
-                    </div>
-                      <div class="company-news mb-12" v-if="supplierData.corporateNews.length > 0">
-                    <h1 class="mb-4 font-weight-bold">Corporate News & Press Releases</h1>
-                    <div class="news-list" v-for="news in supplierData.corporateNews">
-                       <p>{{news.date | moment('MM/DD/YYYY')}} -  <a :href="news.url" target="_blank" class="text-decoration-none">{{news.title}}</a></p>
-                    </div>
-                    <div class="news-list" v-if="!supplierData.corporateNews">
-                      <h3 class="text-center">No news to show</h3>
-                    </div>
-                  </div>
-                    <div class="company-leadership mb-12" v-if="supplierData.executiveLeadership.length > 0">
-                      <h1 class="mb-4 font-weight-bold">Executive Leadership</h1>
-                      <div class="leader-list text-left mt-10">
-                        <div class="profile-list" v-for="excutive in orderCate(supplierData.executiveLeadership)">
-                          <v-img  width="175px" height="175px" :src="excutive.profilePicture"></v-img>
-                          <h6>{{excutive.name}}</h6>
-                          <p>{{excutive.role}}</p>
-                          <a v-if="excutive.linkedin" class="text-decoration-none" target="_blank" :href="excutive.linkedin">
-                            <v-icon color="#013D3A">mdi-linkedin</v-icon>
-                          </a>
-
-                          </div>
+                      <div class="company-service mb-12" v-if="supplierData.services.length > 0">
+                        <h1 class="mb-4 font-weight-bold">Services Portfolio</h1>
+                        <div class="service-list text-left mt-4">
+                          <template v-for="services in companyCategories"  v-if="services.subCategories.length > 0">
+                              <label v-for="(sub,index) in services.subCategories">
+                                <v-icon>mdi-check</v-icon>
+                                <span>{{services.name}}: {{sub.subname}}  </span>
+                              </label>
+                            </template>
                         </div>
-                        <h3 v-if="!supplierData.executiveLeadership" class="text-center">No data to show</h3>
+                          <h3 v-if="!supplierData.services" class="text-center">No services added yet</h3>
+                        <!-- <p class="text-right">View all services</p> -->
                       </div>
-                      
-                      <div class="company-esg mb-16" v-if="supplierData.esgInitiatives.length > 0">
-                        <h1 class="mb-4 font-weight-bold">ESG Inititives</h1>
-                        <v-row class="mt-5">
-                          <v-col cols="12" sm="4" v-for="esg in esgsupplierData">
-                            <div class="esg-list text-left">
-                              <h4 class="text-left mb-5">{{esg.name}}</h4>
-                              <p class="text-left">{{esg.description}}</p>
-                              <a :href="esg.attachment" download class="text-decoration-none px-5" v-if="esg.attachment">Download <v-icon>mdi-tray-arrow-down</v-icon></a>
+                    <div class="company-location mb-12"  v-if="supplierData.companyLocations.length > 0">
+                      <h1 class="mb-4 font-weight-bold">Service Locations</h1>
+                      <div id="map"class="map" style="height:350px" v-if="supplierData.companyLocations"></div>
+                      <h3 class="text-center" v-if="!supplierData.companyLocations">Location not added</h3>
+                    </div>
+                    <template v-if="supplierData.isOfsPremium || supplierData.isOfsPremium == 1">
+                      <div class="company-location mb-12" v-if="supplierData.corporateVideos.length > 0">
+                        <h1 class="mb-4 font-weight-bold">Corporate Videos</h1>
+                        <v-row>
+                          <v-col cols="12" md="6" v-for="video in supplierData.corporateVideos">
+                            <div class="video-col">
+                              
+                              <iframe
+                                width="100%"
+                                height="350px"
+                                :src="'https://www.youtube.com/embed/'+video"
+                                frameborder="0"
+                                allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture"
+                                allowfullscreen
+                              ></iframe>
                             </div>
+                          </v-col>
+                          <v-col cols="12" md="12" v-if="!supplierData.corporateVideos">
+                            <h3 class="text-center">No videos to show</h3>
                           </v-col>
                         </v-row>
                       </div>
-                    </template>
-                </div>
-              </v-col>
-              <v-col cols="12" md="3" class="pl-0">
-                <aside class="company-leftSidebar">
-                  <div>
-                    <router-link :to="'/place-order/'+supplierData.slug" class="text-decoration-none"><v-btn color="#0D9647" large tile dense width="100%" height="56" class="font-weight-bold text-capitalize mb-4" outlined>Place Order <v-icon class="pl-2">mdi-arrow-right-circle</v-icon></v-btn></router-link>
-                    <router-link to="/create" class="text-decoration-none"><v-btn color="#0D9647" large tile dense width="100%" height="56" class="font-weight-bold text-capitalize" type="submit" outlined>Create RFP <v-icon class="pl-2">mdi-arrow-right-circle</v-icon></v-btn></router-link>
-                  </div>
-                  <div class="facts-data pa-6 text-left" v-if="supplierData.founded != null || supplierData.employees != null  || supplierData.hqlocation != null || supplierData.website != null || supplierData.linkedin != null || supplierData.careers != null">
-                    <h3 class="mb-4"><font color="#013D3A">Key Facts</font></h3>
-                    <p><font class="font-weight-bold">Founded:</font> {{supplierData.founded}}</p>
-                    <p><font class="font-weight-bold">Employees:</font> {{supplierData.employees}}</p>
-                    <p><font class="font-weight-bold">HQ Location:</font> {{supplierData.hqlocation}}</p>
-                    <!-- <p><font class="font-weight-bold">Stock Price:</font> {{supplierData.stockPrice}} </p> -->
-                      <div class="company-links mt-6">
-                        <p><a :href="supplierData.website" target="_blank">Website</a><v-icon class="pl-2" color="#013D3A">mdi-arrow-top-right-bold-box-outline</v-icon></p>
-                        <p><a :href="supplierData.linkedin" target="_blank">LinkedIn</a><v-icon class="pl-2" color="#013D3A">mdi-arrow-top-right-bold-box-outline</v-icon></p>
-                        <p><a :href="supplierData.careers" target="_blank">Careers</a><v-icon class="pl-2" color="#013D3A">mdi-arrow-top-right-bold-box-outline</v-icon></p>
+                      <div class="company-documents mb-12" v-if="supplierData.corporateDocuments.length > 0">
+                        <h1 class="mb-4 font-weight-bold">Corporate Documents</h1>
+                        <v-row>
+                          <v-col cols="3" sm="2" v-for="docs in supplierData.corporateDocuments">
+                            <div class="doc-col text-center">
+                              <a :href="docs.attachment" target="_blank" class="text-decoration-none">
+                                <v-img v-if="get_url_extension(docs.attachment) == 'pdf'" :src="require('@/assets/images/profile/pdf.png')" width="80px" class="mx-auto"></v-img>
+                                <v-img v-else-if="get_url_extension(docs.attachment) == 'xlsx' || get_url_extension(docs.attachment) == 'xls'" :src="require('@/assets/images/profile/excel.png')" width="80px" class="mx-auto"></v-img>
+                                <v-img v-else :src="require('@/assets/images/profile/other.png')" width="80px" class="mx-auto"></v-img>
+                              </a>
+                              <a :href="docs.attachment" target="_blank" class="text-decoration-none"><p>{{docs.name}}</p></a>
+                            </div>
+                          </v-col>
+                          <v-col cols="12" sm="12" v-if="!supplierData.corporateDocuments">
+                            <h3 class="text-center">No documents to show</h3>
+                          </v-col>
+                        </v-row>
                       </div>
-                  </div>
-                  <div class="facts-data pa-5 text-left">
-                    <h3 class="mb-4"><font color="#013D3A">Account Contacts</font></h3>
-                    <div class="contact-list mb-4" v-for="contacts in supplierData.accountContacts">
-                      <h4 class="mb-0 font-weight-bold">{{contacts.name}}</h4>
-                      <h4 class="font-weight-medium">{{contacts.position}}</h4>
-                      <h4 class="font-weight-medium"><span class="font-weight-bold">Email:</span> <a :href="'mailto:'+contacts.email" class="text-decoration-none"><font color="#013D3A">{{contacts.email}}</font></a></h4>
-                      <h4 class="font-weight-medium"><span class="font-weight-bold">Phone:</span> {{contacts.phoneNo}}</h4>
+                        <div class="company-news mb-12" v-if="supplierData.corporateNews.length > 0">
+                      <h1 class="mb-4 font-weight-bold">Corporate News & Press Releases</h1>
+                      <div class="news-list" v-for="news in supplierData.corporateNews">
+                         <p>{{news.date | moment('MM/DD/YYYY')}} -  <a :href="news.url" target="_blank" class="text-decoration-none">{{news.title}}</a></p>
+                      </div>
+                      <div class="news-list" v-if="!supplierData.corporateNews">
+                        <h3 class="text-center">No news to show</h3>
+                      </div>
                     </div>
-                    <h4 v-if="!supplierData.accountContacts" class="text-center"> No contacts</h4>
+                      <div class="company-leadership mb-12" v-if="supplierData.executiveLeadership.length > 0">
+                        <h1 class="mb-4 font-weight-bold">Executive Leadership</h1>
+                        <div class="leader-list text-left mt-10">
+                          <div class="profile-list" v-for="excutive in orderCate(supplierData.executiveLeadership)">
+                            <v-img  width="175px" height="175px" :src="excutive.profilePicture"></v-img>
+                            <h6>{{excutive.name}}</h6>
+                            <p>{{excutive.role}}</p>
+                            <a v-if="excutive.linkedin" class="text-decoration-none" target="_blank" :href="excutive.linkedin">
+                              <v-icon color="#013D3A">mdi-linkedin</v-icon>
+                            </a>
+
+                            </div>
+                          </div>
+                          <h3 v-if="!supplierData.executiveLeadership" class="text-center">No data to show</h3>
+                        </div>
+                        
+                        <div class="company-esg mb-16" v-if="supplierData.esgInitiatives.length > 0">
+                          <h1 class="mb-4 font-weight-bold">ESG Inititives</h1>
+                          <v-row class="mt-5">
+                            <v-col cols="12" sm="4" v-for="esg in esgsupplierData">
+                              <div class="esg-list text-left">
+                                <h4 class="text-left mb-5">{{esg.name}}</h4>
+                                <p class="text-left">{{esg.description}}</p>
+                                <a :href="esg.attachment" download class="text-decoration-none px-5" v-if="esg.attachment">Download <v-icon>mdi-tray-arrow-down</v-icon></a>
+                              </div>
+                            </v-col>
+                          </v-row>
+                        </div>
+                      </template>
                   </div>
-                  <div class="tag-box pa-3 d-flex align-center" v-if="!supplierData.isOfsPremium">
-                    <h4 class="font-weight-bold mb-0"><a href="mailto:hello@bidout.app" class="text-decoration-none green-color"><v-icon color="#0D9647">mdi-check-decagram-outline</v-icon> Upgrade to a Premium Profile Today</a></h4>
-                  </div>
-                </aside>
-              </v-col>
-            </v-row>
-          </v-main>
-        </v-container> 
+                </v-col>
+                <v-col cols="12" md="3" class="pl-0">
+                  <aside class="company-leftSidebar">
+                    <div>
+                      <router-link :to="'/place-order/'+supplierData.slug" class="text-decoration-none"><v-btn color="#0D9647" large tile dense width="100%" height="56" class="font-weight-bold text-capitalize mb-4" outlined>Place Order <v-icon class="pl-2">mdi-arrow-right-circle</v-icon></v-btn></router-link>
+                      <router-link to="/create" class="text-decoration-none"><v-btn color="#0D9647" large tile dense width="100%" height="56" class="font-weight-bold text-capitalize" type="submit" outlined>Create RFP <v-icon class="pl-2">mdi-arrow-right-circle</v-icon></v-btn></router-link>
+                    </div>
+                    <div class="facts-data pa-6 text-left" v-if="supplierData.founded != null || supplierData.employees != null  || supplierData.hqlocation != null || supplierData.website != null || supplierData.linkedin != null || supplierData.careers != null">
+                      <h3 class="mb-4"><font color="#013D3A">Key Facts</font></h3>
+                      <p><font class="font-weight-bold">Founded:</font> {{supplierData.founded}}</p>
+                      <p><font class="font-weight-bold">Employees:</font> {{supplierData.employees}}</p>
+                      <p><font class="font-weight-bold">HQ Location:</font> {{supplierData.hqlocation}}</p>
+                      <!-- <p><font class="font-weight-bold">Stock Price:</font> {{supplierData.stockPrice}} </p> -->
+                        <div class="company-links mt-6">
+                          <p><a :href="supplierData.website" target="_blank">Website</a><v-icon class="pl-2" color="#013D3A">mdi-arrow-top-right-bold-box-outline</v-icon></p>
+                          <p><a :href="supplierData.linkedin" target="_blank">LinkedIn</a><v-icon class="pl-2" color="#013D3A">mdi-arrow-top-right-bold-box-outline</v-icon></p>
+                          <p><a :href="supplierData.careers" target="_blank">Careers</a><v-icon class="pl-2" color="#013D3A">mdi-arrow-top-right-bold-box-outline</v-icon></p>
+                        </div>
+                    </div>
+                    <div class="facts-data pa-5 text-left">
+                      <h3 class="mb-4"><font color="#013D3A">Account Contacts</font></h3>
+                      <div class="contact-list mb-4" v-for="contacts in supplierData.accountContacts">
+                        <h4 class="mb-0 font-weight-bold">{{contacts.name}}</h4>
+                        <h4 class="font-weight-medium">{{contacts.position}}</h4>
+                        <h4 class="font-weight-medium"><span class="font-weight-bold">Email:</span> <a :href="'mailto:'+contacts.email" class="text-decoration-none"><font color="#013D3A">{{contacts.email}}</font></a></h4>
+                        <h4 class="font-weight-medium"><span class="font-weight-bold">Phone:</span> {{contacts.phoneNo}}</h4>
+                      </div>
+                      <h4 v-if="!supplierData.accountContacts" class="text-center"> No contacts</h4>
+                    </div>
+                    <div class="tag-box pa-3 d-flex align-center" v-if="!supplierData.isOfsPremium">
+                      <h4 class="font-weight-bold mb-0"><a href="mailto:hello@bidout.app" class="text-decoration-none green-color"><v-icon color="#0D9647">mdi-check-decagram-outline</v-icon> Upgrade to a Premium Profile Today</a></h4>
+                    </div>
+                  </aside>
+                </v-col>
+              </v-row>
+            </v-main>
+          </v-container> 
+        </div>
       </div>
-    </div>
-  </v-col>
+    </v-col>
+  </v-row>
 </template>
 <script>
   import { mapActions,mapGetters } from "vuex";

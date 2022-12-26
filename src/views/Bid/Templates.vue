@@ -1,5 +1,6 @@
 <template>
-   <v-col class="createBid-module pa-0 pa-sm-3 pl-sm-0 pb-sm-0" :class="[ showSideBar ? 'col-md-9 col-12 col-sm-7' : 'mid-content-collapse', activityPanel ? 'd-sm-block' : 'd-md-block']" v-show="!activityPanel">
+  <v-row class="createBid-module pa-0 ma-0">
+    <v-col class="pa-0 pr-sm-3" :class="[ showSideBar ? 'col-md-12 col-12 col-sm-12' : 'mid-content-collapse', activityPanel ? 'd-sm-block' : 'd-md-block']" v-show="!activityPanel">
       <div class="mid-content">
         <div class="content-section fill-height d-flex justify-center align-center"  v-if="loading">
           <v-progress-circular :width="3" color="green" indeterminate ></v-progress-circular>
@@ -51,7 +52,8 @@
           </v-simple-table>
         </div>
       </div>
-   </v-col>
+    </v-col>
+  </v-row>
 </template>
 <script>
   import Navbar from '../../components/Layout/Navbar.vue'

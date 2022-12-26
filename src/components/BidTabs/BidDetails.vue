@@ -283,9 +283,8 @@ export default {
       get() {
         if (!this.$store.getters.bidData.id) {
           return '';
-        }else{
-          return this.$store.getters.bidData.statusType;
         }
+        return this.$store.getters.bidData.statusType;
       },
       set(value) {
         // this.$store.commit('setBidEnabled', value)
@@ -303,7 +302,7 @@ export default {
     },
   },
   methods: {
-    ...mapActions(['saveDraftBid','updateDraftBid','deleteDraftBid','saveTemplateBid','updateTemplate','updateBid']),
+    ...mapActions(['saveDraftBid', 'updateDraftBid', 'deleteDraftBid', 'saveTemplateBid', 'updateTemplate', 'updateBid']),
     async changeTab() {
       if (this.$store.getters.bidData != null) {
         const bidDetails = {
@@ -319,15 +318,15 @@ export default {
             } else {
               await this.updateTemplate(bidDetails);
             }
-          }else{
-            if(this.$route.name == 'EditBid'){
+          } else {
+            if (this.$route.name == 'EditBid') {
               await this.updateBid(bidDetails);
             }
-            if(!this.$store.getters.bidData.id){
+            if (!this.$store.getters.bidData.id) {
               await this.saveDraftBid(bidDetails);
-            }else if(this.$store.getters.bidData.id && this.$store.getters.bidData.statusType == 'templateBid'){
+            } else if (this.$store.getters.bidData.id && this.$store.getters.bidData.statusType == 'templateBid') {
               await this.saveDraftBid(bidDetails);
-            }else{
+            } else {
               await this.updateDraftBid(bidDetails);
             }
           }
@@ -360,20 +359,20 @@ export default {
           if (this.$route.name == 'EditTemplate') {
             if (!this.$store.getters.bidData.id) {
               await this.saveTemplateBid(bidDetails);
-            }else if (this.$store.getters.bidData.id && this.$store.getters.bidData.statusType == 'templateBid') {
+            } else if (this.$store.getters.bidData.id && this.$store.getters.bidData.statusType == 'templateBid') {
               await this.saveTemplateBid(bidDetails);
             } else {
               await this.updateTemplate(bidDetails);
             }
-          }else{
-            if(this.$route.name == 'EditBid'){
-             await this.updateBid(bidDetails);
+          } else {
+            if (this.$route.name == 'EditBid') {
+              await this.updateBid(bidDetails);
             }
-            if(!this.$store.getters.bidData.id){
+            if (!this.$store.getters.bidData.id) {
               await this.saveDraftBid(bidDetails);
-            }else if(this.$store.getters.bidData.id && this.$store.getters.bidData.statusType == 'templateBid'){
+            } else if (this.$store.getters.bidData.id && this.$store.getters.bidData.statusType == 'templateBid') {
               await this.saveDraftBid(bidDetails);
-            }else{
+            } else {
               await this.updateDraftBid(bidDetails);
             }
           }
@@ -420,26 +419,27 @@ export default {
   },
   mounted() {
     this.route = this.$route.name;
-    console.log(this.$store.getters.bidData);
+
+    if (this.$store.getters.entryCheckForEditBid) {
+    this.$router.push('/view-bids')
+    }
     this.$store.commit('setInvitedSuppliersData', this.$store.getters.bidData.invitedSuppliers);
     this.$store.commit('setInvitedNewSuppliers', this.$store.getters.bidData.invitedNewSuppliers);
     this.$store.commit('setInvitedTeamMembers', this.$store.getters.bidData.invitedTeamMembers);
     this.$store.commit('setBidlines', this.$store.getters.bidData.lineItems);
-    if(this.$route.name == 'EditBid'){
+    if (this.$route.name == 'EditBid') {
       this.$store.commit('setAttachement', this.$store.getters.bidData.attachments);
-    }else{
-      if (this.$store.getters.bidData.statusType == 'draftBid') {
-        this.$store.commit('setAttachData',null);
-        this.$store.commit('setAttachement', null);
-        this.$store.commit('setAttachement', this.$store.getters.bidData.attachments);
-      }else if(this.$store.getters.bidData.statusType == 'templateBid') {
-        this.$store.commit('setAttachement', this.$store.getters.bidData.attachment);
-      }else {
-        this.$store.commit('setAttachement', this.$store.getters.bidData.attachment);
-      }
+    } else if (this.$store.getters.bidData.statusType == 'draftBid') {
+      this.$store.commit('setAttachData', null);
+      this.$store.commit('setAttachement', null);
+      this.$store.commit('setAttachement', this.$store.getters.bidData.attachments);
+    } else if (this.$store.getters.bidData.statusType == 'templateBid') {
+      this.$store.commit('setAttachement', this.$store.getters.bidData.attachment);
+    } else {
+      this.$store.commit('setAttachement', this.$store.getters.bidData.attachment);
     }
     this.$store.commit('setQuestions', this.$store.getters.bidData.questions);
-    if(this.$store.getters.bidData.statusType == 'templateBid'){
+    if (this.$store.getters.bidData.statusType == 'templateBid') {
       this.savedraft();
     }
     this.savedraftOnInterval();
