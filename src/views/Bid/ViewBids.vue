@@ -1,6 +1,7 @@
 <template>
-   <v-col class="createBid-module bids-module pa-0 pa-sm-3 pl-sm-0 pb-sm-0" :class="[ showSideBar ? 'col-md-9 col-12 col-sm-7' : 'mid-content-collapse', activityPanel ? 'd-sm-block' : 'd-md-block']" v-show="!activityPanel">
-      <div class="mid-content">
+  <v-row class="createBid-module bids-module pa-0 ma-0" >
+    <v-col class="pa-0 pr-sm-3" :class="[ showSideBar ? 'col-md-12 col-12 col-sm-12' : 'mid-content-collapse', activityPanel ? 'd-sm-block' : 'd-md-block']" v-show="!activityPanel">
+     <div class="mid-content">
         <v-row fill-height align="center" class="fill-height content-section" v-if="loading">
           <v-col cols="12">
             <v-progress-circular :width="3" color="green" indeterminate ></v-progress-circular>
@@ -27,24 +28,23 @@
                   Open Bids {{openBids.length}}
                   </v-tab>
                   <v-tab class="text-capitalize font-weight-bold mr-8" :href="'#tab-1'" @click="tabValue('2')" ripple rounded
+                    >
+                    Closed Bids {{closedBids.length}}
+                    </v-tab>
+                  </v-tabs>
+                <div class="__searchBox">
+                  <v-text-field
+                    v-model="searchBid"
+                    prepend-inner-icon="search"
+                    placeholder="Search here..."
+                    single-line
 
-                  >
-                  Closed Bids {{closedBids.length}}
-                  </v-tab>
-                </v-tabs>
-              <div class="__searchBox">
-                <v-text-field
-                  v-model="searchBid"
-                  prepend-inner-icon="search"
-                  placeholder="Search here..."
-                  single-line
-
-                  outlined min-height="40px" min-width="100%"
-                  hide-details
-                ></v-text-field>
+                    outlined min-height="40px" min-width="100%"
+                    hide-details
+                  ></v-text-field>
+                </div>
               </div>
             </div>
-          </div>
 
           <v-tabs-items v-model="tab">
             <v-tab-item
@@ -183,9 +183,10 @@
           </v-tabs-items>
         </div>
 
+        </div>
       </div>
-    </div>
-  </v-col>
+    </v-col>
+  </v-row>
 </template>
 <script>
 import { mapActions, mapGetters } from 'vuex';
