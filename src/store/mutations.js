@@ -12,6 +12,9 @@ const mutations = {
     setPageLoader (state, payload){
         state.pageLoader = payload;
     },
+    setPageSubLoader (state, payload){
+        state.pageSubLoader = payload;
+    },
 }
 
 export default mutations
