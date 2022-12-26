@@ -7,5 +7,11 @@ export default {
     },
     setBasinLoading(state,payload){
       state.loadingBasin = payload
+    },
+    setProgressCount(state,payload){
+      state.progressCount += payload
+    },
+    setModuleCOunt(state,payload){
+      state.moduleCOunt += payload
     }
 }

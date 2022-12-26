@@ -62,6 +62,8 @@ export default {
       
       if(responce.status === 200){
         dispatch("getCompany",payload.companyId)
+        commit('setProgressCount',9);
+        commit('setModuleCOunt',1);
       }
     }).catch(async(err) => {
       if(state.apiCounter === 2){
