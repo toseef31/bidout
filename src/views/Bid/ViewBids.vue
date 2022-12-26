@@ -46,65 +46,68 @@
               </div>
             </div>
 
-            <v-tabs-items v-model="tab">
-              <v-tab-item
-                value="tab-0"
-              >
-                <v-simple-table class="bids-table open-bid-table">
-                  <template v-slot:default>
-                    <thead>
-                      <tr>
-                        <th class="text-left pl-sm-6 black--text font-weight-bold" width="84px">
-                          Bid ID
-                        </th>
-                        <th class="text-left black--text font-weight-bold">
-                          Title
-                        </th>
-                        <th class="text-left black--text font-weight-bold" width="150px">
-                          Creator
-                        </th>
-                        <!-- <th class="text-left black--text font-weight-bold">
-                          Entries
-                        </th> -->
-                        <th class="text-left black--text font-weight-bold" width="145px">
-                          End Date/Time
-                        </th>
-                        <th class="text-left black--text font-weight-bold" width="100px">
-                          <span class=" d-none d-sm-block">Action</span>
-                        </th>
+          <v-tabs-items v-model="tab">
+            <v-tab-item
+              value="tab-0"
+            >
+              <v-simple-table class="bids-table open-bid-table">
+                <template v-slot:default>
+                  <thead>
+                    <tr>
+                      <th class="text-left pl-sm-6 black--text font-weight-bold" width="84px">
+                        Bid ID
+                      </th>
+                      <th class="text-left black--text font-weight-bold">
+                        Title
+                      </th>
+                      <th class="text-left black--text font-weight-bold" width="150px">
+                        Creator
+                      </th>
+                      <!-- <th class="text-left black--text font-weight-bold">
+                        Entries
+                      </th> -->
+                      <th class="text-left black--text font-weight-bold" width="145px">
+                        End Date/Time
+                      </th>
+                      <th class="text-left black--text font-weight-bold" width="100px">
+                        <span class=" d-none d-sm-block">Action</span>
+                      </th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <template v-if="openBids.length > 0">
+                      <tr class="company-link" 
+                        v-for="bid in openBids"
+                        :key="bid.id" @click="redirectBid(bid.serial)"
+                      >
+                        <td class="text-left pl-sm-6" width="84px">{{ bid.serial }}</td>
+                        <td class="text-left title-truncate">{{ bid.title }}</td>
+                        <td class="text-left" width="150px">{{ checkIfUserIsSupplier(bid) ? bid.company : `${userDatas.firstName} ${ userDatas.lastName}` }}</td>
+                        <!-- <td class="text-left" width="50px">{{ bid.bidEntries }}</td> -->
+                        <td class="text-left" width="145px">{{ bid.dueDate | moment('MM/DD/YYYY') }} {{bid.dueTime}}</td>
+                        <td class="text-left d-none d-sm-block pt-3" width="100px"><router-link
+                          :to="{
+                            path: `/view-bids/${bid.serial}`,
+                          }"
+                          >View Bid</router-link
+                        ></td>
+                        <td class="text-left d-flex d-sm-none align-center">
+                          <router-link class="text-decoration-none" :to="{
+                            path: `/view-bids/${bid.serial}`,
+                          }"> 
+                            <span class=""><v-icon>mdi-chevron-right</v-icon></span> 
+                          </router-link>
+                          
+                        </td>
                       </tr>
-                    </thead>
-                    <tbody>
-
-
-                    <tr class="company-link" 
-                      v-for="bid in openBids"
-                      :key="bid.id" @click="redirectBid(bid.serial)"
-                    >
-                      <td class="text-left pl-sm-6" width="84px">{{ bid.serial }}</td>
-                      <td class="text-left title-truncate">{{ bid.title }}</td>
-                      <td class="text-left" width="150px">{{ checkIfUserIsSupplier(bid) ? bid.company : `${userDatas.firstName} ${ userDatas.lastName}` }}</td>
-                      <!-- <td class="text-left" width="50px">{{ bid.bidEntries }}</td> -->
-                      <td class="text-left" width="145px">{{ bid.dueDate | moment('MM/DD/YYYY') }} {{bid.dueTime}}</td>
-                      <td class="text-left d-none d-sm-block pt-3" width="100px"><router-link
-                        :to="{
-                          path: `/view-bids/${bid.serial}`,
-                        }"
-                        >View Bid</router-link
-                      ></td>
-                      <td class="text-left d-flex d-sm-none align-center">
-                        <router-link class="text-decoration-none" :to="{
-                          path: `/view-bids/${bid.serial}`,
-                        }"> 
-                          <span class=""><v-icon>mdi-chevron-right</v-icon></span> 
-                        </router-link>
-                        
-                      </td>
+                    </template>
+                    <tr v-else>
+                      <td colspan="5" class="font-weight-bold">There are no active bids, <router-link to="/create">create a new bid?</router-link></td>
                     </tr>
                     <tr class="draft-title pl-sm-3">
                       <td colspan="6" class="text-left pl-sm-6"><h3 class="font-weight-bold">Draft Bids <font color="#B8B8B8">({{draftBidsList.length}})</font></h3></td>
                     </tr>
-                    <template v-if="draftBidsList">
+                    <template v-if="draftBidsList.length > 0">
                       <tr class="company-link"
                       v-for="bid in draftBidsList"
                       :key="bid.id"  @click="editDraft(bid.serial)"
@@ -120,6 +123,9 @@
                       </td>
                     </tr>
                     </template>
+                    <tr v-else>
+                      <td colspan="5" class="font-weight-bold">There are no draft bids, <router-link to="/create">create a new bid?</router-link></td>
+                    </tr>
                   </tbody>
                 </template>
               </v-simple-table>
