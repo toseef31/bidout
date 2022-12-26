@@ -74,17 +74,17 @@ export default {
     ...mapActions(["addCompanyLocation","deleteCompanyLocation"]),
     getLocation(){
      
-        if(this.$store.getters.companyData.companyData.companyLocations && this.$store.getters.companyData.companyData.companyLocations.length > 0){
+        if(this.$store.getters.companyData.companyData.companyLocations && this.$store.getters.companyData.companyData.companyLocations && this.$store.getters.companyData.companyData.companyLocations.length > 0){
         var lat = this.$store.getters.companyData.companyData.companyLocations[0].lattitude;
       }else{
         var lat = 29.721085;
       }
-      if(this.$store.getters.companyData.companyData.companyLocations && this.$store.getters.companyData.companyData.companyLocations.length > 0){
+      if(this.$store.getters.companyData.companyData.companyLocations && this.$store.getters.companyData.companyData.companyLocations && this.$store.getters.companyData.companyData.companyLocations.length > 0){
         var lng = this.$store.getters.companyData.companyData.companyLocations[0].longitude;
       }else{
         var lng = -95.342049;
       }
-      if(this.$store.getters.companyData.companyData.companyLocations && this.$store.getters.companyData.companyData.companyLocations.length > 0){
+      if(this.$store.getters.companyData.companyData.companyLocations && this.$store.getters.companyData.companyData.companyLocations && this.$store.getters.companyData.companyData.companyLocations.length > 0){
         var LocationsForMap = this.$store.getters.companyData.companyData.companyLocations;
       }else{
         var LocationsForMap = [
@@ -96,7 +96,7 @@ export default {
         ];
       }
 
-     if(this.$store.getters.companyData.companyData.companyLocations.length == 1){
+     if(this.$store.getters.companyData.companyData.companyLocations && this.$store.getters.companyData.companyData.companyLocations.length == 1){
           var map = new google.maps.Map(document.getElementById('map'), {
             zoom: 9,
             center: new google.maps.LatLng(LocationsForMap[0].lattitude, LocationsForMap[0].longitude),
@@ -125,7 +125,7 @@ export default {
           } 
           
           }
-     else if(this.$store.getters.companyData.companyData.companyLocations.length > 1){
+     else if(this.$store.getters.companyData.companyData.companyLocations && this.$store.getters.companyData.companyData.companyLocations.length > 1){
       var map = new google.maps.Map(document.getElementById('map'), {
         center: new google.maps.LatLng(LocationsForMap[0].lattitude, LocationsForMap[0].longitude),
         mapTypeId: google.maps.MapTypeId.ROADMAP
