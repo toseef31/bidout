@@ -277,7 +277,8 @@ export default {
       var map = new google.maps.Map(document.getElementById('map'), {
         zoom: 9,
         center: new google.maps.LatLng(LocationsForMap[0].lattitude, LocationsForMap[0].longitude),
-        mapTypeId: google.maps.MapTypeId.ROADMAP,
+        // mapTypeId: google.maps.MapTypeId.ROADMAP,
+        mapId: "2993bb26d878ba6a",
         streetViewControl: false,
         mapTypeControl: false,
       });
@@ -307,7 +308,8 @@ export default {
   
       var map = new google.maps.Map(document.getElementById('map'), {
         center: new google.maps.LatLng(LocationsForMap[0].lattitude, LocationsForMap[0].longitude),
-        mapTypeId: google.maps.MapTypeId.ROADMAP,
+        // mapTypeId: google.maps.MapTypeId.ROADMAP,
+        mapId: "2993bb26d878ba6a",
         streetViewControl: false,
         mapTypeControl: false,
       });
