@@ -23,7 +23,7 @@
             <v-list-item :key="item.index">
               <template v-slot:default="{ active }">
                 
-                <v-list-item-avatar class="my-1">
+                <v-list-item-avatar class="my-1 mr-2">
                   <v-icon
                     class="notification-icon"
                   >mdi-email-outline

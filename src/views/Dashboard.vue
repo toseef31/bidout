@@ -4,7 +4,7 @@
       <v-progress-circular :width="3" color="green" indeterminate ></v-progress-circular>
     </v-col>
   </v-row>
-  <v-row class="dashboard-module pa-0 ma-0" v-else>
+  <v-row class="dashboard-module white pa-0 ma-0" v-else>
      <v-col class="pa-0 pr-sm-3" :class="[ showSideBar ? 'col-md-12 col-12 col-sm-12' : 'mid-content-collapse', activityPanel ? 'd-sm-flex' : 'd-md-flex']" v-show="!activityPanel" >
        <v-row class="ma-0">
         
@@ -25,7 +25,7 @@
                          <th class="text-left pl-0">
                            Title
                          </th>
-                         <th class="text-left" width="150px">
+                         <th class="text-left" width="145px">
                            End Time
                          </th>
                          <th class="text-left pl-0"  width="65px">
@@ -54,7 +54,7 @@
                            >
                              <td class="text-left pr-sm-0" width="60px">{{ bid.serial }}</td>
                              <td class="text-left title-truncate pl-0">{{ bid.title }}</td>
-                             <td class="text-left" width="150px">{{ bid.dueDate | moment('MM/DD/YYYY') }} {{bid.dueTime}}</td>
+                             <td class="text-left" width="145px">{{ bid.dueDate | moment('MM/DD/YYYY') }} {{bid.dueTime}}</td>
                              <td class="text-left d-none d-sm-block pt-3 pl-0" width="65px"><router-link class="text-decoration-none"
                                :to="{
                                  path: `/view-bids/${bid.serial}`,
@@ -90,14 +90,14 @@
                    </div>
                  </div>
                </div>
-               <div class="map-section pa-1">
+               <div class="map-section pa-1" :class="[activities.length > 6 ? 'map-section-full' : 'map-section']">
                  <div id="map" class="map" height="415px"></div>
                </div>
              </div>
          </v-col>
          
        </v-row>
-       <div class="pl-0 right-col ml-sm-n2" :class="[ activityPanel ? '' : 'mobile-right-col']" >
+       <div class="pl-0 right-col ml-md-n2" :class="[ bidsList.length > 0 ? '' : 'mobile-right-col']" >
         <div class="right-sidebar"> 
           <RightSidebar></RightSidebar>
         </div>
@@ -112,7 +112,7 @@
   import LeftSidebar from '../components/Layout/Dashboard/LeftSidebar.vue'
   import RightSidebar from '../components/Layout/Dashboard/RightSidebar.vue'
   import _ from 'lodash'
-  import { mapActions } from "vuex";
+  import { mapActions,mapGetters } from "vuex";
 export default {
   name : "Dashboard",
   components: {
@@ -132,6 +132,7 @@ export default {
     };
   },
   computed:{
+    ...mapGetters(["activities"]),
     showSideBar(){
         return this.$store.getters.g_sideBarOpen;
     },
