@@ -105,7 +105,7 @@ export default {
         return this.$store.getters.g_activityPanel;
     },
     activities(){
-      return _.orderBy(this.$store.getters.activities.slice(0,13),'date','desc');
+      return _.orderBy(this.$store.getters.activities.slice(0,7),'date','desc');
     },
     loading(){
      return this.$store.getters.pageLoader;

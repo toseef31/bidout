@@ -97,7 +97,7 @@
          </v-col>
          
        </v-row>
-       <div class="pl-0 right-col ml-md-n2" :class="[ bidsList.length > 0 ? '' : 'mobile-right-col']" >
+       <div class="pl-0 right-col ml-md-n2" :class="[ activityPanel ? '' : 'mobile-right-col']" >
         <div class="right-sidebar"> 
           <RightSidebar></RightSidebar>
         </div>
