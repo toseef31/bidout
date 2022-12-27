@@ -370,7 +370,17 @@
         .attachment-list-style {
           margin-top: 16px;
           .doc-class {
-            width: 400px !important;
+            max-width: 460px;
+            min-width: 250px;
+            text-overflow: ellipsis;
+            overflow: hidden;
+            white-space: nowrap;
+          }
+          .comment-class {
+            max-width:200px;
+            text-overflow: ellipsis;
+            overflow: hidden;
+            white-space: nowrap;
           }
           table {
             thead {
@@ -392,15 +402,6 @@
                   height: 56px;
                   padding-left: 24px;
                 }
-                td:first-child {
-                  width: 5%; 
-                }
-                td:nth-child(2) {
-                  width: 20%;
-                }
-                td:nth-child(3) {
-                  width: 27%;
-              }
               }
               
             }
