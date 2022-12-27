@@ -203,7 +203,7 @@ export default {
      
       const head = Date.now().toString();
       const tail = Math.random().toString().substr(2);
-      let order = this.$store.getters.companyData.companyData.executiveLeadership.length;
+      let order = this.$store.getters.companyData.companyData.executiveLeadership ? this.$store.getters.companyData.companyData.executiveLeadership.length : 0;
       var leader = {
         profilePicture : this.croppieProfile,
         name: this.excutiveName,
