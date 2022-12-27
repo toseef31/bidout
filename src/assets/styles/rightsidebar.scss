@@ -54,11 +54,10 @@
   .social-section{
     background: rgba(53, 120, 177, 0.1);
     border-radius: 8px;
-    height: 106px;
     .social-text{
       font-weight: 800;
-      font-size: 19px;
-      line-height: 24px;
+      font-size: 18px;
+      line-height: 20px;
       color: #0D1139;
     }
     .follow-btn{
@@ -74,6 +73,12 @@
       line-height: 20px;
       color: #fff;
       width: 100%;
+    }
+  }
+  .calendly-section{
+    
+    .v-image{
+      border-radius: 8px;
     }
   }
 }
@@ -107,6 +112,9 @@
       .row:first-child{
         border-bottom: 1px solid #919191;
       }
+    }
+    .calendly-section{
+      margin: 0 0px 0 10px;
     }
   }
 }
