@@ -4,11 +4,11 @@
       <v-progress-circular :width="3" color="green" indeterminate ></v-progress-circular>
     </v-col>
   </v-row>
-  <v-row class="dashboard-module pa-0 pa-sm-3 pl-sm-0" v-else>
-     <v-col :class="[ showSideBar ? 'col-md-12 col-12 col-sm-12 pr-0' : 'mid-content-collapse', activityPanel ? 'd-sm-flex' : 'd-md-flex']" v-show="!activityPanel" >
-       <v-row class="mr-sm-1">
+  <v-row class="dashboard-module pa-0 ma-0" v-else>
+     <v-col class="pa-0 pr-sm-3" :class="[ showSideBar ? 'col-md-12 col-12 col-sm-12' : 'mid-content-collapse', activityPanel ? 'd-sm-flex' : 'd-md-flex']" v-show="!activityPanel" >
+       <v-row class="ma-0">
         
-         <v-col class="col-md-12 col-12 pr-0 pr-sm-3">
+         <v-col class="col-md-12 col-12 pr-0 pr-sm-3 pt-0 pl-0">
            <div class="mid-content">
                <div class="content-section">
                  <div class="title-block">
@@ -35,7 +35,7 @@
                      </thead>
 
                      <tbody>
-                       <tr v-if="subLoading" style="height: 288px;" class="white">
+                       <tr v-if="subLoading" style="height: 60px;" class="white">
                          <td colspan="4">
                            <v-row fill-height align="center" class="fill-height">
                              <v-col cols="12">
@@ -186,11 +186,19 @@ export default {
             title: 'Marker',
             anchorPoint: new google.maps.Point(0, -29),
           });
+          var imageAppend;
+          var image = '<h1 id="firstHeading" class="firstHeading"><img src="'+LocationsForMap[i].companyImage+'" height="50px" width="100px"></h1>';
+          if(LocationsForMap[i].companyImage){
+            imageAppend = image;
+          }else{
+            imageAppend = '';
+          }
           const contentString =
             '<div id="content">' +
             '<div id="siteNotice">' +
             "</div>" +
-            '<h1 id="firstHeading" class="firstHeading"><img src="'+LocationsForMap[i].companyImage+'" height="50px" width="100px"></h1>' +
+            imageAppend +
+            
             '<div id="bodyContent">' +
             '<p><b>'+LocationsForMap[i].companyName+': </b><a href="company/'+LocationsForMap[i].companySlug+'">' +
             "View Profile</a> </p>" +

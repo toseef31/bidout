@@ -37,7 +37,7 @@
 			}
 			.bids-table {
 				.v-data-table__wrapper{
-					height: 336px;
+					/*height: 336px;*/
 				}
 				table tbody tr:nth-of-type(odd) {
 			   	background-color: #F2F2F2;
@@ -67,6 +67,7 @@
 			 			}
 			 			td{
 			 				border-bottom: 0 !important;
+			 				height: 36px;
 			 				&:nth-child(1){
 			 					min-width: 68px;
 			 					max-width: 68px;
@@ -108,9 +109,10 @@
 		.map-section{
 			border: 1px solid #B8B8B8;
 	    border-radius: 8px;
+	    height: 415px;
+	    min-height: calc(100vh - 327px);
 	    .map{
-	    	height: 415px;
-	    	min-height: calc(100vh - 532px);
+	    	height: 100%;
 	    }
 	    img{
 	    	height: 100%;
