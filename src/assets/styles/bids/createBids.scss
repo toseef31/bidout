@@ -1,6 +1,4 @@
 .createBid-module{
-	flex: 0 0 78%;
-    max-width: 78%;
 	.mid-content{
 		flex: 0 0 100%;
     max-width: 100%;
@@ -187,8 +185,9 @@
 							}
 						}
 						.companies-list{
-							height: 420px;
+							/*height: 420px;*/
 							overflow: auto;
+							height: calc(100vh - 122px);
 							&::-webkit-scrollbar {
 							  width: 4px;
 							  height: 5px;
@@ -236,12 +235,12 @@
 							background: #FBFBFB;
 						}
 						.companies-list{
-							height: 485px;
+							height: calc(100vh - 100px);
 						}
 					}
 					.category-col{
 						border-right: 1px solid #bbbbbb;
-						height: 533px;
+						height: calc(100vh - 52px);
 				    overflow: auto;
 				    &::-webkit-scrollbar {
 				      width: 4px;
@@ -475,8 +474,8 @@
 		}
 	}
 	.mid-content-collapse{
-		flex: 0 0 95%;
-	  max-width: 95%;
+		flex: 0 0 100%;
+	  max-width: 100%;
 	}
 }
 .inviteSupplier-dialog{

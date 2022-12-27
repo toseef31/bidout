@@ -195,7 +195,7 @@
               <v-list class="pa-0">
                 <v-list-item-group color="success">
                   <v-list-item class="edit-item">
-                    <router-link to="#" class="text-decoration-none">
+                    <router-link to="#" class="text-decoration-none" v-if="noOfBidSubmitted === 0">
                       <v-list-item-icon
                       class="mr-2 my-2"
                       @click="isSetting = !isSetting"
@@ -205,12 +205,22 @@
                       >
                     </v-list-item-icon>
                   </router-link>
+
+                  <v-list-item-icon
+                  v-if="noOfBidSubmitted > 0"
+                      class="mr-2 my-2"
+                      @click="isSetting = !isSetting"
+                      >
+                      <v-icon size="24" color="#959595"
+                      >mdi-note-edit-outline</v-icon
+                      >
+                    </v-list-item-icon>
                   <v-list-item-content
                   align-start
                   color="#0D9648"
                   class="pa-0"
                   >
-                    <router-link :to="'/edit-bid/'+bidDetail.bidData.serial" class="text-decoration-none">
+                    <router-link :to="'/edit-bid/'+bidDetail.bidData.serial" class="text-decoration-none" v-if="noOfBidSubmitted === 0">
                       <v-list-item-title
                       color="#0D9648"
                       @click="isSetting = !isSetting"
@@ -218,10 +228,24 @@
                       >Edit Bid</v-list-item-title
                       >
                     </router-link>
+                    <v-tooltip top>
+                      <template v-slot:activator="{ on, attrs }">
+                    <v-list-item-title
+                    v-bind="attrs"
+                  v-on="on"
+                    v-if="noOfBidSubmitted > 0"
+                      color="#959595"
+                      @click="isSetting = !isSetting"
+                      class="pt-2"
+                      ><p class="disabled-item">Edit Bid</p></v-list-item-title
+                      >
+                    </template>
+                      <span>Editing this bid is not allowed once entries are received</span>
+                    </v-tooltip>
                   </v-list-item-content>
                 </v-list-item>
                 <v-list-item class="delete-item">
-                  <router-link to="#" class="text-decoration-none">
+                  <router-link to="#" class="text-decoration-none" v-if="noOfBidSubmitted === 0">
                     <v-list-item-icon
                     class="mr-2 my-2"
                     @click="isSetting = !isSetting"
@@ -231,6 +255,16 @@
                     >
                   </v-list-item-icon>
                 </router-link>
+
+                <v-list-item-icon
+                v-if="noOfBidSubmitted > 0"
+                    class="mr-2 my-2"
+                    @click="isSetting = !isSetting"
+                    >
+                    <v-icon size="24" color="#959595"
+                    >mdi-trash-can-outline</v-icon
+                    >
+                  </v-list-item-icon>
                 <v-list-item-content
                   align-start
                   color="#0D9648"
@@ -240,6 +274,7 @@
                   class="dialog-class"
                   v-model="dialog"
                   width="300"
+                  v-if="noOfBidSubmitted === 0"
                   >
 
                     <template v-slot:activator="{ on, attrs }">
@@ -284,6 +319,22 @@
                     </v-card>
 
                   </v-dialog>
+
+                  <v-tooltip top>
+                      <template v-slot:activator="{ on, attrs }">
+                    <v-list-item-title
+                    v-bind="attrs"
+                  v-on="on"
+                    v-if="noOfBidSubmitted > 0"
+                      color="#959595"
+                      @click="isSetting = !isSetting"
+                      class="pt-2"
+                      ><p class="disabled-item">Delete Bid</p></v-list-item-title
+                      >
+                    </template>
+                      <span>Deleting this bid is not allowed once entries are received</span>
+                    </v-tooltip>
+
                 </v-list-item-content>
               </v-list-item>
             </v-list-item-group>
@@ -469,6 +520,7 @@
           fixed-tabs
           hide-slider
           :mobile-breakpoint="767"
+          @change="reload"
         >
           <v-tab
             v-for="item in tabs"
@@ -526,6 +578,7 @@
           fixed-tabs
           hide-slider
           :mobile-breakpoint="767"
+          @change="reload"
         >
           <v-tab
             v-for="item in tabsSupplier"
@@ -662,6 +715,51 @@ export default {
   },
   methods: {
     ...mapActions(['getBidBySerial', 'deleteBid', 'bidMessageUnreadCount', 'makeIntent', 'getIntent', 'updateIntent', 'getQA', 'getAllIntent']),
+    async reload(event) {
+      if (this.getUserType === 'buyer' && event !== 'tab-4') {
+        await this.getBidBySerial({
+          serial: this.$route.params.serial,
+          id: this.users.id,
+        });
+
+        await this.bidMessageUnreadCount({
+          userId: this.users.id,
+          bidId: this.bidDetail.bidData.id,
+        });
+
+        await this.getAllIntent({
+          bidId: this.bidDetail.bidData.id,
+        });
+
+        await this.getQA({
+          bidId: this.bidDetail.bidData.id,
+          userId: this.users.id,
+        });
+      } else if (this.getUserType === 'supplier' && event !== 'tab-2') {
+        await this.getBidBySerial({
+          serial: this.$route.params.serial,
+          id: this.users.id,
+        });
+
+        await this.bidMessageUnreadCount({
+          userId: this.users.id,
+          bidId: this.bidDetail.bidData.id,
+        });
+
+        await this.getIntent({
+          companyId: this.users.company.id,
+          bidId: this.bidDetail.bidData.id,
+          companyName: this.users.company.company,
+        });
+
+        this.answer = this.$store.getters.bidIntent;
+
+        await this.getQA({
+          bidId: this.bidDetail.bidData.id,
+          userId: this.users.id,
+        });
+      }
+    },
     ChangeT(tab) {
       this.currentItem = tab;
     },
@@ -804,15 +902,15 @@ export default {
       });
 
       this.answer = this.$store.getters.bidIntent;
+    } else {
+      await this.getAllIntent({
+        bidId: this.bidDetail.bidData.id,
+      });
     }
 
     await this.getQA({
       bidId: this.bidDetail.bidData.id,
       userId: this.users.id,
-    });
-
-    await this.getAllIntent({
-      bidId: this.bidDetail.bidData.id,
     });
   },
   watch: {

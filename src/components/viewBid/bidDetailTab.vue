@@ -267,9 +267,9 @@
                 <td class="text-left">
                   <img :src="require('@/assets/images/bids/FilePdf.png')" />
                 </td>
-                <td class="text-left d-block text-truncate pt-4" style="width:200px"><a :href="doc.url" target="_blank" class="text-decoration-none">{{ doc.fileName }}</a></td>
+                <td class="text-left d-block doc-class text-truncate pt-4"><a :href="doc.url" target="_blank" class="text-decoration-none">{{ doc.fileName }}</a></td>
                 <td class="text-left">
-                  <span>{{ doc.comment }}</span>
+                  <span>{{ doc.comment !== 'undefined' ? doc.comment : '' }}</span>
                 </td>
                 <td class="text-left">{{ size(doc.fileSize) }}</td>
                 <td class="text-left">{{ doc.uploadedBy }}</td>

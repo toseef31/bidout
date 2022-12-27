@@ -4,6 +4,7 @@ const state = {
     sideBarOpen: true,
     activityPanel: false,
     pageLoader: false,
+    pageSubLoader: false,
     isCreateBid: false,
     apiCounter: 0,
 }

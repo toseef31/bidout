@@ -55,5 +55,6 @@ export default {
     unAward: false,
     unDisqualify: false,
   },
-  loweringPriceAlert: false
+  loweringPriceAlert: false,
+  entryCheckForEditBid: false
 };

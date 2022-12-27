@@ -163,6 +163,7 @@ export default {
         if(responce.status === 200){
           commit('setActivityList',responce.data)
           commit('setPageLoader', false);
+          // commit('setPageSubLoader', false);
         }
     }).catch(async(err) => {
       if(state.apiCounter === 2){
@@ -194,11 +195,12 @@ export default {
       },
     };
     commit('setPageLoader',true)
+    commit('setPageSubLoader',true)
     try{
       const res = await axios.get('bid/getBidList/'+payload,config);
         commit('setBidsList',res.data);
         await dispatch('getActivities',payload);
-        // commit('setPageLoader',false);
+        commit('setPageSubLoader',false);
     }catch(err){
       console.log(err);
     }
