@@ -8,7 +8,7 @@
         <div class="content-section fill-height" v-else>
           <div class="get-Header d-flex pt-5">
             <v-container fill-height class="pl-0">
-              <v-row
+              <v-row v-if="supplierData.image"
                 align="center"
                 no-gutters
               >
@@ -25,6 +25,20 @@
                 >
                   <div class="company-title ml-10">
                     <h1>{{supplierData.company}}</h1>
+                  </div>
+                </v-col>
+              </v-row>
+              <v-row v-else
+                align="center"
+                no-gutters
+              >
+                <v-col
+                  class="text-left"
+                  cols="12" sm="12"
+                >
+                  <div class="company-title ml-2">
+                    <h1>{{supplierData.company}}</h1>
+                    <h4 class="mt-3"><span v-if="supplierData.isOfsPremium"><span v-if="supplierData.isOfsPremium == 1"></span><v-icon color="#0D9647">mdi-check-decagram</v-icon>Premium Service Provider</span></h4>
                   </div>
                 </v-col>
               </v-row>
