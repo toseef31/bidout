@@ -40,10 +40,10 @@
                         <p>{{supplierData.overview}}</p>
                         <h3 class="text-center" v-if="!supplierData.overview">No summary added yet</h3>
                       </div>
-                      <div class="company-service mb-12" v-if="supplierData.services.length > 0">
+                      <div class="company-service mb-12" v-if="supplierData.services && supplierData.services.length > 0">
                         <h1 class="mb-4 font-weight-bold">Services Portfolio</h1>
                         <div class="service-list text-left mt-4">
-                          <template v-for="services in companyCategories"  v-if="services.subCategories.length > 0">
+                          <template v-for="services in companyCategories"  v-if="services.subCategories && services.subCategories.length > 0">
                               <label v-for="(sub,index) in services.subCategories">
                                 <v-icon>mdi-check</v-icon>
                                 <span>{{services.name}}: {{sub.subname}}  </span>
@@ -53,18 +53,18 @@
                           <h3 v-if="!supplierData.services" class="text-center">No services added yet</h3>
                         <!-- <p class="text-right">View all services</p> -->
                       </div>
-                    <div class="company-location mb-12"  v-if="supplierData.companyLocations.length > 0">
+                    <div class="company-location mb-12"  v-if="supplierData.companyLocations && supplierData.companyLocations.length > 0">
                       <h1 class="mb-4 font-weight-bold">Service Locations</h1>
-                      <div id="map"class="map" style="height:350px" v-if="supplierData.companyLocations"></div>
+                      <div id="map" class="map" style="height:350px" v-if="supplierData.companyLocations"></div>
                       <h3 class="text-center" v-if="!supplierData.companyLocations">Location not added</h3>
                     </div>
                     <template v-if="supplierData.isOfsPremium || supplierData.isOfsPremium == 1">
-                      <div class="company-location mb-12" v-if="supplierData.corporateVideos.length > 0">
+                      <div class="company-location mb-12" v-if="supplierData.corporateVideos && supplierData.corporateVideos.length > 0">
                         <h1 class="mb-4 font-weight-bold">Corporate Videos</h1>
                         <v-row>
                           <v-col cols="12" md="6" v-for="video in supplierData.corporateVideos">
                             <div class="video-col">
-                              
+
                               <iframe
                                 width="100%"
                                 height="350px"
@@ -80,7 +80,7 @@
                           </v-col>
                         </v-row>
                       </div>
-                      <div class="company-documents mb-12" v-if="supplierData.corporateDocuments.length > 0">
+                      <div class="company-documents mb-12" v-if="supplierData.corporateDocuments && supplierData.corporateDocuments.length > 0">
                         <h1 class="mb-4 font-weight-bold">Corporate Documents</h1>
                         <v-row>
                           <v-col cols="3" sm="2" v-for="docs in supplierData.corporateDocuments">
@@ -98,7 +98,7 @@
                           </v-col>
                         </v-row>
                       </div>
-                        <div class="company-news mb-12" v-if="supplierData.corporateNews.length > 0">
+                        <div class="company-news mb-12" v-if="supplierData.corporateNews && supplierData.corporateNews.length > 0">
                       <h1 class="mb-4 font-weight-bold">Corporate News & Press Releases</h1>
                       <div class="news-list" v-for="news in supplierData.corporateNews">
                          <p>{{news.date | moment('MM/DD/YYYY')}} -  <a :href="news.url" target="_blank" class="text-decoration-none">{{news.title}}</a></p>
@@ -107,7 +107,7 @@
                         <h3 class="text-center">No news to show</h3>
                       </div>
                     </div>
-                      <div class="company-leadership mb-12" v-if="supplierData.executiveLeadership.length > 0">
+                      <div class="company-leadership mb-12" v-if="supplierData.executiveLeadership && supplierData.executiveLeadership.length > 0">
                         <h1 class="mb-4 font-weight-bold">Executive Leadership</h1>
                         <div class="leader-list text-left mt-10">
                           <div class="profile-list" v-for="excutive in orderCate(supplierData.executiveLeadership)">
@@ -122,8 +122,8 @@
                           </div>
                           <h3 v-if="!supplierData.executiveLeadership" class="text-center">No data to show</h3>
                         </div>
-                        
-                        <div class="company-esg mb-16" v-if="supplierData.esgInitiatives.length > 0">
+
+                        <div class="company-esg mb-16" v-if="supplierData.esgInitiatives && supplierData.esgInitiatives.length > 0">
                           <h1 class="mb-4 font-weight-bold">ESG Inititives</h1>
                           <v-row class="mt-5">
                             <v-col cols="12" sm="4" v-for="esg in esgsupplierData">
@@ -173,19 +173,20 @@
                 </v-col>
               </v-row>
             </v-main>
-          </v-container> 
+          </v-container>
         </div>
       </div>
     </v-col>
   </v-row>
 </template>
 <script>
-  import { mapActions,mapGetters } from "vuex";
-  import _ from "lodash";
-  import NavbarBeforeLogin from '../../components/Layout/NavbarBeforeLogin.vue'
-  import Footer from '../../components/Layout/Footer.vue'
+import { mapActions, mapGetters } from 'vuex';
+import _ from 'lodash';
+import NavbarBeforeLogin from '../../components/Layout/NavbarBeforeLogin.vue';
+import Footer from '../../components/Layout/Footer.vue';
+
 export default {
-  name : "ModuleSelection",
+  name: 'ModuleSelection',
   components: {
     NavbarBeforeLogin,
     Footer,
@@ -194,14 +195,14 @@ export default {
     return {
       mapOptions: '',
       markerOptions: '',
-      metaTitle: this.$store.getters.supplierCompany.companyData.company,
-      esgData:  [
+      metaTitle: this.$store.getters.supplierCompany && this.$store.getters.supplierCompany.companyData ? this.$store.getters.supplierCompany.companyData.company : '',
+      esgData: [
         {
           name: 'Environmental',
           description: 'No data to show',
           attachment: '',
           type: 'environmetal',
-          id: '1665493735995301876774201398'
+          id: '1665493735995301876774201398',
         },
         {
           name: 'Social',
@@ -215,43 +216,43 @@ export default {
           description: 'No data to show',
           attachment: '',
           type: 'governance',
-          id: '1665493735995301876774201'
+          id: '1665493735995301876774201',
         },
       ],
     };
   },
-  
-  computed:{
-    ...mapGetters(['supplierCompany',"categories"]),
-   showSideBar(){
-       return this.$store.getters.g_sideBarOpen;
-   },
-   activityPanel(){
-       return this.$store.getters.g_activityPanel;
-   },
-   supplierData(){
-     return this.$store.getters.supplierCompany.companyData;
-   },
-   companyCategories(){
-     return this.$store.getters.supplierCompany.categories;
-   },
-   pageTitle(){
-    return this.$store.getters.pageTitle;
-   },
-   esgCompanyData(){
-     var target = this.esgData;
-     var source = this.$store.getters.supplierCompany.companyData.esgInitiatives;
-     Array.prototype.push.apply(target, source);
-     let uniqueObjArray = [
-       ...new Map(target.map((item) => [item["type"], item])).values(),
-     ];
-     return uniqueObjArray;
-   },
-   loading(){
-    return this.$store.getters.pageLoader;
-   },
+
+  computed: {
+    ...mapGetters(['supplierCompany', 'categories']),
+    showSideBar() {
+      return this.$store.getters.g_sideBarOpen;
+    },
+    activityPanel() {
+      return this.$store.getters.g_activityPanel;
+    },
+    supplierData() {
+      return this.$store.getters.supplierCompany ? this.$store.getters.supplierCompany.companyData : {};
+    },
+    companyCategories() {
+      return this.$store.getters.supplierCompany.categories;
+    },
+    pageTitle() {
+      return this.$store.getters.pageTitle;
+    },
+    esgCompanyData() {
+      const target = this.esgData;
+      const source = this.$store.getters.supplierCompany.companyData.esgInitiatives;
+      Array.prototype.push.apply(target, source);
+      const uniqueObjArray = [
+        ...new Map(target.map((item) => [item.type, item])).values(),
+      ];
+      return uniqueObjArray;
+    },
+    loading() {
+      return this.$store.getters.pageLoader;
+    },
   },
-  metaInfo(){
+  metaInfo() {
     return {
       title: this.$store.getters.pageTitle,
       meta: [
@@ -265,116 +266,113 @@ export default {
           name: 'description',
           content: this.$store.getters.pageDescription,
         },
-        
+
       ],
-    }
+    };
   },
   methods: {
-    ...mapActions(["getCompanyInfo"]),
-    getLocation(){
-    
-    if(this.$store.getters.supplierCompany.companyData.companyLocations.length == 1){
-      var LocationsForMap = this.$store.getters.supplierCompany.companyData.companyLocations;
-  
-      var map = new google.maps.Map(document.getElementById('map'), {
-        zoom: 9,
-        center: new google.maps.LatLng(LocationsForMap[0].lattitude, LocationsForMap[0].longitude),
-        // mapTypeId: google.maps.MapTypeId.ROADMAP,
-        mapId: "2993bb26d878ba6a",
-        streetViewControl: false,
-        mapTypeControl: false,
-      });
+    ...mapActions(['getCompanyInfo']),
+    getLocation() {
+      if (this.$store.getters.supplierCompany && this.$store.getters.supplierCompany.companyData && this.$store.getters.supplierCompany.companyData.companyLocations.length == 1) {
+        var LocationsForMap = this.$store.getters.supplierCompany.companyData.companyLocations;
 
-      var infowindow = new google.maps.InfoWindow();
-
-      var marker, i;
-      for (i = 0; i < LocationsForMap.length; i++) {  
-        marker = new google.maps.Marker({
-          position: new google.maps.LatLng(LocationsForMap[i].lattitude, LocationsForMap[i].longitude),
-          map: map,
-          title: 'Marker',
-          anchorPoint: new google.maps.Point(0, -29),
+        var map = new google.maps.Map(document.getElementById('map'), {
+          zoom: 9,
+          center: new google.maps.LatLng(LocationsForMap[0].lattitude, LocationsForMap[0].longitude),
+          // mapTypeId: google.maps.MapTypeId.ROADMAP,
+          mapId: '2993bb26d878ba6a',
+          streetViewControl: false,
+          mapTypeControl: false,
         });
-        google.maps.event.addListener(marker, 'click', (function(marker, i) {
-          return function() {
-            infowindow.setContent(LocationsForMap[i].location);
-            infowindow.open(map, marker);
-          }
-        })(marker, i));
-      }
-      
+
+        var infowindow = new google.maps.InfoWindow();
+
+        var marker; var
+          i;
+        for (i = 0; i < LocationsForMap.length; i++) {
+          marker = new google.maps.Marker({
+            position: new google.maps.LatLng(LocationsForMap[i].lattitude, LocationsForMap[i].longitude),
+            map,
+            title: 'Marker',
+            anchorPoint: new google.maps.Point(0, -29),
+          });
+          google.maps.event.addListener(marker, 'click', (function (marker, i) {
+            return function () {
+              infowindow.setContent(LocationsForMap[i].location);
+              infowindow.open(map, marker);
+            };
+          }(marker, i)));
+        }
+
         map.setCenter(latlngbounds.getCenter());
         map.fitBounds(latlngbounds);
-    }else{
-      var LocationsForMap = this.$store.getters.supplierCompany.companyData.companyLocations;
-  
-      var map = new google.maps.Map(document.getElementById('map'), {
-        center: new google.maps.LatLng(LocationsForMap[0].lattitude, LocationsForMap[0].longitude),
-        // mapTypeId: google.maps.MapTypeId.ROADMAP,
-        mapId: "2993bb26d878ba6a",
-        streetViewControl: false,
-        mapTypeControl: false,
-      });
+      } else if (this.$store.getters.supplierCompany && this.$store.getters.supplierCompany.companyData && this.$store.getters.supplierCompany.companyData.companyLocations) {
+        var LocationsForMap = this.$store.getters.supplierCompany.companyData.companyLocations;
 
-      var infowindow = new google.maps.InfoWindow();
-
-      var marker, i;
-      var latlngbounds =new google.maps.LatLngBounds();
-      for (i = 0; i < LocationsForMap.length; i++) {  
-        marker = new google.maps.Marker({
-          position: new google.maps.LatLng(LocationsForMap[i].lattitude, LocationsForMap[i].longitude),
-          map: map,
-          title: 'Marker',
-          anchorPoint: new google.maps.Point(0, -29),
+        var map = new google.maps.Map(document.getElementById('map'), {
+          center: new google.maps.LatLng(LocationsForMap[0].lattitude, LocationsForMap[0].longitude),
+          // mapTypeId: google.maps.MapTypeId.ROADMAP,
+          mapId: '2993bb26d878ba6a',
+          streetViewControl: false,
+          mapTypeControl: false,
         });
-        google.maps.event.addListener(marker, 'click', (function(marker, i) {
-          return function() {
-            infowindow.setContent(LocationsForMap[i].location);
-            infowindow.open(map, marker);
-          }
-        })(marker, i));
-        latlngbounds.extend(marker.position);
-      }
-      
+
+        var infowindow = new google.maps.InfoWindow();
+
+        var marker; var
+          i;
+        var latlngbounds = new google.maps.LatLngBounds();
+        for (i = 0; i < LocationsForMap.length; i++) {
+          marker = new google.maps.Marker({
+            position: new google.maps.LatLng(LocationsForMap[i].lattitude, LocationsForMap[i].longitude),
+            map,
+            title: 'Marker',
+            anchorPoint: new google.maps.Point(0, -29),
+          });
+          google.maps.event.addListener(marker, 'click', (function (marker, i) {
+            return function () {
+              infowindow.setContent(LocationsForMap[i].location);
+              infowindow.open(map, marker);
+            };
+          }(marker, i)));
+          latlngbounds.extend(marker.position);
+        }
+
         map.setCenter(latlngbounds.getCenter());
         map.fitBounds(latlngbounds);
-    }
-
+      }
     },
-    get_url_extension( url ) {
+    get_url_extension(url) {
       return url.split(/[#?]/)[0].split('.').pop().trim();
     },
-    get_url_name( url ) {
+    get_url_name(url) {
       return url.split('/').pop();
     },
     viewPublicCompany() {
-      this.getCompanyInfo({ slug : this.$route.fullPath.split('/').pop()});
+      this.getCompanyInfo({ slug: this.$route.fullPath.split('/').pop() });
     },
-    orderCate(leadership){
-      return _.orderBy(leadership, "orderNumber", "asc");
+    orderCate(leadership) {
+      return _.orderBy(leadership, 'orderNumber', 'asc');
     },
   },
-  async created(){
-    let mapScp = "map-api-script";
-    let mapAlreadyAttached = !!document.getElementById(mapScp);
-    if(!mapAlreadyAttached){
-     let mapScript = document.createElement('script')
-      mapScript.id = mapScp;
-     await mapScript.setAttribute('src', 'https://maps.googleapis.com/maps/api/js?key='+import.meta.env.VITE_GOOGLE_MAP+'&libraries=places')
-     document.head.appendChild(mapScript);
+  async created() {
+    const mapScpt = 'map-api-script';
+    const mapAlreadyAttached = !!document.getElementById(mapScpt);
+    if (!mapAlreadyAttached) {
+      const mapScript = document.createElement('script');
+      mapScript.id = mapScpt;
+      mapScript.src = `https://maps.googleapis.com/maps/api/js?key=${import.meta.env.VITE_GOOGLE_MAP}&libraries=places`;
+      document.head.appendChild(mapScript);
     }
-    // let mapScript = document.createElement('script')
-    // await mapScript.setAttribute('src', 'https://maps.googleapis.com/maps/api/js?key='+import.meta.env.VITE_GOOGLE_MAP+'&libraries=places')
-    // document.head.appendChild(mapScript);
     await this.viewPublicCompany();
   },
-  updated(){
+  updated() {
     this.getLocation();
   },
   mounted() {
 
-  }
-  
+  },
+
 };
 </script>
 <style scoped lang="scss">
