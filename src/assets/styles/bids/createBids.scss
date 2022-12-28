@@ -133,7 +133,7 @@
 					border-bottom: 1px solid #B8B8B8;
 					.available-data{
 						border-right: 1px solid #B8B8B8;
-						min-height: 70vh;
+						height: calc(100vh - 342px);
 						.supplier-head{
 							background: #FBFBFB;
 							.supplier-tabs{
@@ -187,7 +187,7 @@
 						.companies-list{
 							/*height: 420px;*/
 							overflow: auto;
-							height: calc(100vh - 122px);
+							height: calc(100vh - 454px);
 							&::-webkit-scrollbar {
 							  width: 4px;
 							  height: 5px;
@@ -235,12 +235,12 @@
 							background: #FBFBFB;
 						}
 						.companies-list{
-							height: calc(100vh - 100px);
+							height: calc(100vh - 391px);
 						}
 					}
 					.category-col{
 						border-right: 1px solid #bbbbbb;
-						height: calc(100vh - 52px);
+						height: calc(100vh - 342px);
 				    overflow: auto;
 				    &::-webkit-scrollbar {
 				      width: 4px;

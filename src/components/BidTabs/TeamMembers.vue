@@ -1,6 +1,6 @@
 <template>
 	<div>
-		<v-row class="my-4 supplier-row fill-height" no-gutters>
+		<v-row class="supplier-row fill-height" no-gutters>
 		  <v-col cols="12" sm="6" class="available-data">
 		    <div class="d-flex justify-space-between align-center pl-4 pa-3 supplier-head">
 		      <div>
@@ -68,8 +68,8 @@
 		  </v-col>
 		</v-row>
 		<v-row justify="center" align="center" no-gutters>
-		  <v-col cols="12" md="12">
-		    <v-btn color="#0D9648" elevation="0" height="56px" width="220px" large class="white--text text-capitalize font-weight-bold mt-8 mb-8 save-btn" @click="changeTab">Save Changes</v-btn>
+		  <v-col cols="12" md="12" class="mb-n2">
+		    <v-btn color="#0D9648" elevation="0" height="56px" width="220px" large class="white--text text-capitalize font-weight-bold mt-6 mb-5 save-btn" @click="changeTab">Save Changes</v-btn>
 		  </v-col>
 		</v-row>
 	</div>

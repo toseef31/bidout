@@ -1,6 +1,6 @@
 <template>
 	<div>
-		<v-row class="my-4 supplier-row fill-height" no-gutters>
+		<v-row class="supplier-row fill-height" no-gutters>
 		  <v-col sm="2" v-if="categories" class="category-col">
         {{itemBidId}}
 		  	<v-list class="pt-0">
@@ -206,7 +206,7 @@
 		</v-row>
 
 		<v-row justify="center" align="center" no-gutters>
-		  <v-col cols="12" md="12">
+		  <v-col cols="12" md="12" class="mb-n2">
 
 		    <v-dialog
           v-model="supplierDialog"
@@ -214,7 +214,7 @@
         >
           <template v-slot:activator="{ on, attrs }">
 
-            <v-btn color="rgba(13, 150, 72, 0.1)" elevation="0" height="56px" width="220px" large class="text-capitalize font-weight-bold mt-8 mb-8 invite-btn mr-5" v-bind="attrs"
+            <v-btn color="rgba(13, 150, 72, 0.1)" elevation="0" height="56px" width="220px" large class="text-capitalize font-weight-bold mt-5 mb-5 invite-btn mr-5" v-bind="attrs"
               v-on="on">Invite  New Supplier </v-btn>
           </template>
 
@@ -286,7 +286,7 @@
             </v-card-text>
           </v-card>
         </v-dialog>
-		    <v-btn color="#0D9648" elevation="0" height="56px" width="220px" large class="white--text text-capitalize font-weight-bold mt-8 mb-8 save-btn" @click="changeTab">Save Changes</v-btn>
+		    <v-btn color="#0D9648" elevation="0" height="56px" width="220px" large class="white--text text-capitalize font-weight-bold mt-5 mb-5 save-btn" @click="changeTab">Save Changes</v-btn>
 		  </v-col>
 		</v-row>
 	</div>
