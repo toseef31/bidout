@@ -4,6 +4,9 @@
     border-radius: 8px;
     background-color: #fff;
     padding-bottom: 6px;
+/*    max-height: 299px;*/
+    max-height: calc(100vh - 297px) !important;
+    overflow: hidden;
     .title{
       flex-direction: row;
       align-items: center;
@@ -20,7 +23,7 @@
       .notification-icon{
         background-color: #F2F2F2;
         color: lightgrey;
-        font-size: 19px;
+        font-size: 17px;
         padding: 0 0;
       } 
       .v-list-item__title{
@@ -37,9 +40,9 @@
         }
       }
       .v-list-item__avatar{
-        height: 34px;
-        min-width: 34px;
-        width: 34px;
+        height: 30px !important;
+        min-width: 30px !important;
+        width: 30px !important;
       }
       .v-list-item--link:before{
         background-color: transparent;

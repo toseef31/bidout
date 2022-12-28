@@ -90,7 +90,7 @@
                    </div>
                  </div>
                </div>
-               <div class="map-section pa-1" :class="[activities.length > 6 ? 'map-section-full' : 'map-section']">
+               <div class="map-section map-section-full pa-1" :class="[mapClass]">
                  <div id="map" class="map" height="415px"></div>
                </div>
              </div>
@@ -128,7 +128,7 @@ export default {
       mapOptions: {},
       markerOptions: {},
       map: '',
-      users: ''
+      users: '',
     };
   },
   computed:{
@@ -161,6 +161,23 @@ export default {
       return _.orderBy(this.$store.getters.bidsList.filter((items)=>{
         return items.receivingBids != false;
       }).slice(0,6),['dueDate','asc','dueTime','asc']);
+    },
+    mapClass(){
+      if(this.bidsList.length == '1'){
+        return 'map-section-1';
+      }else if(this.bidsList.length == '2'){
+        return 'map-section-2';
+      }else if(this.bidsList.length == '3'){
+        return 'map-section-3';
+      }else if(this.bidsList.length == '4'){
+        return 'map-section-4';
+      }else if(this.bidsList.length == '5'){
+        return 'map-section-5';
+      }else if(this.bidsList.length == '6'){
+        return 'map-section';
+      }else{
+        return 'map-section-1';
+      }
     }
   },
   methods: {

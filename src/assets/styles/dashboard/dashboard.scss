@@ -1,7 +1,7 @@
 .dashboard-module{
 	/*flex: 0 0 78%;
 	max-width: 78%;*/
-	min-height: calc(100vh - 110px);
+	height: calc(100vh - 110px);
 	.mid-content{
 		flex: 0 0 100%;
 		max-width: 100%;
@@ -39,7 +39,7 @@
 				.v-data-table__wrapper{
 					/*height: 336px;*/
 				}
-				table tbody tr:nth-of-type(odd) {
+				table tbody tr:nth-of-type(even) {
 			   	background-color: #F2F2F2;
 			 	}
 				table tbody tr th {
@@ -109,8 +109,10 @@
 		.map-section{
 			border: 1px solid #B8B8B8;
 	    border-radius: 8px;
-	    height: 415px;
-	    min-height: calc(100vh - 309px);
+	    /*height: 415px;
+	    min-height: calc(100vh - 309px);*/
+	    height: 142px;
+    	min-height: calc(100vh - 455px);
 	    .map{
 	    	height: 100%;
 	    }
@@ -118,8 +120,20 @@
 	    	height: 100%;
 	    }
 		}
-		.map-section-full{
-			min-height: calc(100vh - 136px);
+		.map-section-1{
+			min-height: calc(100vh - 275px);
+		}
+		.map-section-2{
+			min-height: calc(100vh - 311px);
+		}
+		.map-section-3{
+			min-height: calc(100vh - 347px);
+		}
+		.map-section-4{
+			min-height: calc(100vh - 383px);
+		}
+		.map-section-5{
+			min-height: calc(100vh - 420px);
 		}
 	}
 	.mid-content-collapse{
@@ -132,6 +146,7 @@
 	.right-col{
 		flex: 0 0 20em !important;
 		max-width: 20em !important;
+		height: calc(100vh - 104px) !important;
 	}
 	.mobile-right-col{
 		flex: 0 0 100%;
@@ -143,6 +158,13 @@
     .right-col{
 			flex: 0 0 15em !important;
 			max-width: 15em !important;
+		}
+	}
+}
+@media (min-width:769px) and (max-width:900px) {
+  .dashboard-module{
+    .right-col{
+    	display: none;
 		}
 	}
 }
