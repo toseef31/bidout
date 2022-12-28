@@ -82,7 +82,7 @@
                       >
                         <td class="text-left pl-sm-6" width="84px">{{ bid.serial }}</td>
                         <td class="text-left title-truncate">{{ bid.title }}</td>
-                        <td class="text-left" width="150px">{{ checkIfUserIsSupplier(bid) ? bid.company : `${userDatas.firstName} ${ userDatas.lastName}` }}</td>
+                        <td class="text-left" width="150px">{{ checkIfUserIsSupplier(bid) ? bid.company : `${bid.user.firstName} ${ bid.user.lastName}` }}</td>
                         <!-- <td class="text-left" width="50px">{{ bid.bidEntries }}</td> -->
                         <td class="text-left" width="145px">{{ bid.dueDate | moment('MM/DD/YYYY') }} {{bid.dueTime}}</td>
                         <td class="text-left d-none d-sm-block pt-3" width="100px"><router-link
@@ -165,7 +165,7 @@
                     >
                       <td class="text-left pl-sm-6" width="60px">{{ bid.serial }}</td>
                       <td class="text-left title-truncate">{{ bid.title }}</td>
-                      <td class="text-left" width="150px"> {{ checkIfUserIsSupplier(bid) ? bid.company : `${userDatas.firstName} ${ userDatas.lastName}` }} </td>
+                      <td class="text-left" width="150px"> {{ checkIfUserIsSupplier(bid) ? bid.company : `${bid.user.firstName} ${ bid.user.lastName}` }} </td>
                       <!-- <td class="text-left" width="50px">{{ bid.bidEntries }}</td> -->
                       <td class="text-left" width="100px">{{ bid.dueDate | moment('MM/DD/YYYY') }} {{bid.dueTime}}</td>
                       <td class="text-left d-none d-sm-block pt-3" width="100px">
