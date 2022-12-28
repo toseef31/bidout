@@ -63,10 +63,13 @@
 
 						<img
 						 v-if="company.image"
-
+                         class="image-class"
 							:src="company.image"
                        />
-					   <v-icon size="60" v-else >mdi-domain</v-icon>
+
+					   <div   v-else class="icon-class" >
+					    <v-icon size="40" >mdi-domain</v-icon>
+					   </div>
 
 		              </div>
 		              <div class="company-title text-left pl-4">
@@ -100,13 +103,13 @@
 		          <div class="d-flex align-center justify-space-between list-company pa-4" v-for="(list,index) in salesRepsList" v-if="user.id != list.objectID">
 		            <div class="comapny-data d-flex align-center">
 		              <div class="company-img">
-		                <img v-if="!list.image" :src="require('@/assets/images/chat/chatUser.png')" width="60px" height="60px">
-		                <img v-else :src="list.image" width="60px" height="60px">
+		                <img v-if="!list.image" :src="require('@/assets/images/chat/chatUser.png')" >
+		                <img v-else :src="list.image" width="48px" height="48px">
 		              </div>
 		              <div class="company-title text-left pl-4">
 		                <h4>{{list.firstName}} {{list.lastName}}</h4>
 		                <p class="mb-0">{{list.company}}
-		                		<!-- <a @click="viewCompany(team.companyId,team.company)" class="text-decoration-underline">View Profile</a> -->
+
 		                </p>
 		              </div>
 		            </div>
@@ -127,11 +130,13 @@
 		                <div class="company-img">
 							<img
 						 v-if="company.image"
-
+						 class="image-class"
 							:src="company.image"
                        />
-					   <v-icon size="60" v-else >mdi-domain</v-icon>
 
+					   <div   v-else class="icon-class" >
+					    <v-icon size="40" >mdi-domain</v-icon>
+					   </div>
 		                </div>
 		                <div class="company-title text-left pl-4">
 		                  <h4>{{company.company}}</h4>
@@ -161,10 +166,13 @@
 		        	    <div class="company-img">
 							<img
 						 v-if="company.image"
-
+						 class="image-class"
 							:src="company.image"
                        />
-					   <v-icon size="60" v-else >mdi-domain</v-icon>
+
+					   <div   v-else class="icon-class" >
+					    <v-icon size="40" >mdi-domain</v-icon>
+					   </div>
 		        	    </div>
 		        	    <div class="company-title text-left pl-4">
 		        	      <h4>{{company.firstName}} {{company.lastName}} </h4>
@@ -184,10 +192,13 @@
 		        	    <div class="company-img">
 							<img
 						 v-if="company.image"
-
+						 class="image-class"
 							:src="company.image"
                        />
-					   <v-icon size="60" v-else >mdi-domain</v-icon>
+
+					   <div   v-else class="icon-class" >
+					    <v-icon size="40" >mdi-domain</v-icon>
+					   </div>
 		        	    </div>
 		        	    <div class="company-title text-left pl-4">
 		        	      <h4>{{company.company}} </h4>
@@ -201,8 +212,12 @@
 		        	<div class="d-flex align-center justify-space-between list-company pa-4" v-if="company.companyId">
 		        	  <div class="comapny-data d-flex align-center">
 		        	    <div class="company-img">
-		        	      <img v-if="!company.image" :src="require('@/assets/images/chat/chatUser.png')" width="60px" height="60px">
-		        	      <img v-else :src="company.image" width="60px" height="60px">
+						<div class="avatar-image" v-if="!company.image" >
+		        	      <img :src="require('@/assets/images/chat/chatUser.png')" >
+						</div>
+						<div class="avatar-image" v-else>
+		        	      <img  :src="company.image" width="48px" height="48px">
+						</div>
 		        	    </div>
 		        	    <div class="company-title text-left pl-4">
 		        	      <h4>{{company.firstName}} {{company.lastName}}</h4>

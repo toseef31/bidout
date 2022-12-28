@@ -32,14 +32,17 @@ you will be able to see the message here.
           <template>
             <v-img
               v-if="list.company && list.company.image"
-              max-width="65"
-              height="65"
-              contain
-              :aspect-ratio="16/9"
+
+              max-height="26.67px"
+                              max-width="100px"
+                              width="100px"
               :src=" list.company.image"
             />
+<div   v-else class="icon-class"
 
-              <v-icon size="65" v-else >mdi-domain</v-icon>
+                             >
+                              <v-icon size="40"  >mdi-domain</v-icon>
+                              </div>
 
             <v-list-item-content align-center>
               <v-list-item-title v-text="(list.name || list.company.company.split('|||')[0])"></v-list-item-title>

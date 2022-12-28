@@ -219,11 +219,20 @@
 							}
 							.list-company{
 								.company-img {
-									img {
-										object-fit: contain;
-										max-width: 60px;
-										height: 60px;
-										aspect-ratio: 16/9;
+									.image-class {
+									
+										max-width: 100px;
+										height: 26.67px;
+										
+									}
+
+									.avatar-image {
+										min-width: 100px;
+									}
+
+									.icon-class {
+										width: 100px;
+										height: 35px;
 									}
 								}
 								&:nth-child(even){
