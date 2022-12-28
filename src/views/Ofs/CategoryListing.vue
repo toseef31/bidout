@@ -31,11 +31,11 @@
               </div>
               <v-tabs-items v-model="tab">
                 <v-tab-item v-for="item in items" :key="item">
-                  <v-simple-table dense class="company-table mb-12">
+                  <v-simple-table dense v-if="!showLoading" class="company-table mb-12">
                     <template v-slot:default>
                       <thead>
                         <tr class="py-4 px-8">
-                          <th class="pl-8">Companies</th>
+                          <th class="pl-4">Companies</th>
                           <th>HQ Location</th>
                           <th>Employees</th>
                           <th>Field Locations</th>
@@ -45,16 +45,18 @@
                       </thead>
                       <tbody>
                         <tr v-for="company in allcompanies.companies" :key="company.id">
-                          <td class="pl-8">
-                            <span
-                              class="text-decoration-none company-link"
-                              ><router-link :to="company.slug ? '/company-profiles/'+company.slug: '' " class="text-decoration-none">{{ company.company }}</router-link>
-                            </span>
+                          <td class="pl-4 text-truncate   " style="width: 300px">
+
+                    <router-link :to="company.slug ? '/company-profiles/'+company.slug: '' " class="text-decoration-none">{{ company.company }}</router-link>
+
                           </td>
 
-                          <td>
+                          <td class="view-class">
                             <span v-if="!company.companyHq">No location</span
-                            ><span v-else>{{ company.companyHq }}</span>
+                            ><span v-else>{{ company.companyHqCity
+ }}, {{ company.companyHqState
+ }} {{ company.companyHqCountry
+ }}</span>
                           </td>
                           <td>
                             <span v-if="!company.employees">Not Added</span
@@ -72,7 +74,7 @@
                               company.accountContacts.length
                             }}</span>
                           </td>
-                          <td>
+                          <td class="view-class">
                             <span
                               class="text-decoration-none company-link"
                               ><router-link :to="company.slug ? '/company-profiles/'+company.slug: '' " class="text-decoration-none">View Details</router-link></span
@@ -82,6 +84,12 @@
                       </tbody>
                     </template>
                   </v-simple-table>
+                  <v-row fill-height align="center" class="fill-height mt-5" v-if="showLoading">
+          <v-col cols="12">
+            <v-progress-circular :width="3" color="green" indeterminate ></v-progress-circular>
+          </v-col>
+        </v-row>
+
                 </v-tab-item>
               </v-tabs-items>
             </div>
@@ -93,13 +101,13 @@
   </section>
 </template>
 <script>
-import _ from "lodash";
-import { mapActions } from "vuex";
-import NavbarBeforeLogin from "../../components/Layout/NavbarBeforeLogin.vue";
-import Footer from "../../components/Layout/Footer.vue";
+import _ from 'lodash';
+import { mapActions } from 'vuex';
+import NavbarBeforeLogin from '../../components/Layout/NavbarBeforeLogin.vue';
+import Footer from '../../components/Layout/Footer.vue';
 
 export default {
-  name: "ModuleSelection",
+  name: 'ModuleSelection',
   components: {
     NavbarBeforeLogin,
     Footer,
@@ -108,56 +116,57 @@ export default {
   data() {
     return {
       tab: null,
-      filterCompany: "",
+      filterCompany: '',
       page: 1,
       items: [
-        "all",
-        "Gulf Coast",
-        "Northeast",
-        "Rockies",
-        "Mid-Con",
-        "Permian",
-        "Arklatex",
-        "Offshore",
-        "Other",
+        'all',
+        'Gulf Coast',
+        'Northeast',
+        'Rockies',
+        'Mid-Con',
+        'Permian',
+        'Arklatex',
+        'Offshore',
+        'Other',
       ],
       headers: [
         {
-          text: "Companies",
-          align: "start",
-          value: "companies",
+          text: 'Companies',
+          align: 'start',
+          value: 'companies',
         },
-        { text: "HQ Location", value: "hQLocation" },
-        { text: "Employees", value: "employees" },
-        { text: "Field Locations", value: "fieldLocations" },
-        { text: "Account Contacts", value: "accountContacts" },
-        { text: "", value: "link" },
+        { text: 'HQ Location', value: 'hQLocation' },
+        { text: 'Employees', value: 'employees' },
+        { text: 'Field Locations', value: 'fieldLocations' },
+        { text: 'Account Contacts', value: 'accountContacts' },
+        { text: '', value: 'link' },
       ],
     };
   },
   computed: {
     allcompanies() {
       if (this.filterCompany) {
-        return this.$store.getters.serviceCompanies.data.filter((companies) =>
-          this.filterCompany
-            .toLowerCase()
-            .split(" ")
-            .every((v) => companies.company.toLowerCase().includes(v))
-        );
+        return this.$store.getters.serviceCompanies.data.filter((companies) => this.filterCompany
+          .toLowerCase()
+          .split(' ')
+          .every((v) => companies.company.toLowerCase().includes(v)));
       }
       return this.$store.getters.serviceCompanies.data;
     },
     companyName() {
       return this.$store.getters.serviceCompanies.name;
     },
+    showLoading() {
+      return this.$store.getters.ofsLoader;
+    },
   },
   methods: {
     ...mapActions([
-      "getPublicCompanyInfo",
-      "searchCompany",
-      "getCompanyByBasin",
-      "getSupplierCompanyByservice",
-      "getSupplierMainService"
+      'getPublicCompanyInfo',
+      'searchCompany',
+      'getCompanyByBasin',
+      'getSupplierCompanyByservice',
+      'getSupplierMainService',
     ]),
     viewPublicCompany(id, name) {
       this.getPublicCompanyInfo({ id, name });
@@ -170,7 +179,7 @@ export default {
     },
   },
   mounted() {
-    document.title = "Categories - BidOut";
+    document.title = 'Categories - BidOut';
     this.getCompanyByBasin({ basin: 'all', slug: this.$route.fullPath.split('/').pop() });
   },
 };
