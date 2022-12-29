@@ -714,12 +714,13 @@ export default {
     };
   },
   methods: {
-    ...mapActions(['getBidBySerial', 'deleteBid', 'bidMessageUnreadCount', 'makeIntent', 'getIntent', 'updateIntent', 'getQA', 'getAllIntent']),
+    ...mapActions(['getBidBySerial', 'deleteBid', 'bidMessageUnreadCount', 'makeIntent', 'getIntent', 'updateIntent', 'getQA', 'getAllIntent', 'getBidAllConversations']),
     async reload(event) {
       if (this.getUserType === 'buyer' && event !== 'tab-4') {
         await this.getBidBySerial({
           serial: this.$route.params.serial,
           id: this.users.id,
+          reload: false,
         });
 
         await this.bidMessageUnreadCount({
@@ -729,16 +730,21 @@ export default {
 
         await this.getAllIntent({
           bidId: this.bidDetail.bidData.id,
+          reload: false,
         });
 
         await this.getQA({
           bidId: this.bidDetail.bidData.id,
           userId: this.users.id,
+          reload: false,
         });
+
+        await this.getBidAllConversations(this.bidDetail.bidData.id);
       } else if (this.getUserType === 'supplier' && event !== 'tab-2') {
         await this.getBidBySerial({
           serial: this.$route.params.serial,
           id: this.users.id,
+          reload: false,
         });
 
         await this.bidMessageUnreadCount({
@@ -750,6 +756,7 @@ export default {
           companyId: this.users.company.id,
           bidId: this.bidDetail.bidData.id,
           companyName: this.users.company.company,
+          reload: false,
         });
 
         this.answer = this.$store.getters.bidIntent;
@@ -757,7 +764,10 @@ export default {
         await this.getQA({
           bidId: this.bidDetail.bidData.id,
           userId: this.users.id,
+          reload: false,
         });
+
+        await this.getBidAllConversations(this.bidDetail.bidData.id);
       }
     },
     ChangeT(tab) {
