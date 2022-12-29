@@ -72,7 +72,7 @@
 		  	.users-lists{
 		  		
   		    .v-list{
-			  		height: calc(100vh - 243px);
+			  		height: calc(100vh - 248px);
 	  		    overflow: auto;
 	  		    &::-webkit-scrollbar {
 	  		      width: 5px;
@@ -224,7 +224,7 @@
 		    }
 	  	}
 	  	.messages-section{
-	  		height: calc(100vh - 329px);
+	  		height: calc(100vh - 337px);
 	  		.dropzone {
 	  		  box-sizing: border-box;
 	  		  display: none;
