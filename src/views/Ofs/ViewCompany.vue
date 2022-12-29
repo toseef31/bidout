@@ -59,7 +59,7 @@
                   <p>{{companyInfo.overview}}</p>
                   <h3 class="text-center" v-if="!companyInfo.overview">No summary added yet</h3>
                 </div>
-                <div class="company-service mb-12" v-if="companyInfo.services.length > 0">
+                <div class="company-service mb-12" v-if="companyInfo.services && companyInfo.services.length > 0">
                   <h1 class="mb-4 font-weight-bold">Services Portfolio</h1>
                   <div class="service-list text-left mt-4">
                     <template v-for="services in companyCategories"  v-if="services.subCategories.length > 0">
@@ -71,13 +71,13 @@
                   </div>
                     <h3 v-if="!companyInfo.services" class="text-center">No services added yet</h3>
                 </div>
-                <div class="company-location mb-12"  v-if="companyInfo.companyLocations.length > 0">
+                <div class="company-location mb-12"  v-if="companyInfo.companyLocations && companyInfo.companyLocations.length > 0">
                   <h1 class="mb-4 font-weight-bold">Service Locations</h1>
-                  <div id="map"class="map" style="height:350px" v-if="companyInfo.companyLocations"></div>
+                  <div id="map" class="map" style="height:350px" v-if="companyInfo.companyLocations"></div>
                   <h3 class="text-center" v-if="!companyInfo.companyLocations">Location not added</h3>
                 </div>
                 <template v-if="companyInfo.isOfsPremium || companyInfo.isOfsPremium == 'true'">
-                  <div class="company-location mb-12" v-if="companyInfo.corporateVideos.length > 0">
+                  <div class="company-location mb-12" v-if="companyInfo.corporateVideos && companyInfo.corporateVideos.length > 0">
                     <h1 class="mb-4 font-weight-bold">Corporate Videos</h1>
                     <v-row>
                       <v-col cols="12" md="6" v-for="video in companyInfo.corporateVideos">
@@ -97,7 +97,7 @@
                       </v-col>
                     </v-row>
                   </div>
-                  <div class="company-documents mb-12" v-if="companyInfo.corporateDocuments.length > 0">
+                  <div class="company-documents mb-12" v-if="companyInfo.corporateDocuments && companyInfo.corporateDocuments.length > 0">
                     <h1 class="mb-4 font-weight-bold">Corporate Documents</h1>
                     <v-row>
                       <v-col cols="3" sm="2" v-for="docs in companyInfo.corporateDocuments">
@@ -115,7 +115,7 @@
                       </v-col>
                     </v-row>
                   </div>
-                  <div class="company-news mb-12" v-if="companyInfo.corporateNews.length > 0">
+                  <div class="company-news mb-12" v-if="companyInfo.corporateNews && companyInfo.corporateNews.length > 0">
                     <h1 class="mb-4 font-weight-bold">Corporate News & Press Releases</h1>
                     <div class="news-list" v-for="news in companyInfo.corporateNews">
                        <p>{{news.date | moment('MM/DD/YYYY')}} -  <a :href="news.url" target="_blank" class="text-decoration-none">{{news.title}}</a></p>
@@ -124,7 +124,7 @@
                       <h3 class="text-center">No news to show</h3>
                     </div>
                   </div>
-                  <div class="company-leadership mb-12" v-if="companyInfo.executiveLeadership.length > 0">
+                  <div class="company-leadership mb-12" v-if="companyInfo.executiveLeadership && companyInfo.executiveLeadership.length > 0">
                     <h1 class="mb-4 font-weight-bold">Executive Leadership</h1>
                     <div class="leader-list text-left mt-10">
                       <div class="profile-list" v-for="excutive in companyInfo.executiveLeadership">
@@ -137,9 +137,9 @@
                       </div>
                     </div>
                     <h3 v-if="!companyInfo.executiveLeadership" class="text-center">No data to show</h3>
-                  
+
                   </div>
-                  <div class="company-esg mb-16" v-if="companyInfo.esgInitiatives.length > 0">
+                  <div class="company-esg mb-16" v-if="companyInfo.esgInitiatives && companyInfo.esgInitiatives.length > 0">
                     <h1 class="mb-4 font-weight-bold">ESG Inititives</h1>
                     <v-row class="mt-5">
                       <v-col cols="12" sm="4" v-for="(esg,index) in esgCompanyData" :key="index">
@@ -161,11 +161,12 @@
    </section>
 </template>
 <script>
-  import { mapActions } from "vuex";
-  import NavbarBeforeLogin from '../../components/Layout/NavbarBeforeLogin.vue'
-  import Footer from '../../components/Layout/Footer.vue'
+import { mapActions } from 'vuex';
+import NavbarBeforeLogin from '../../components/Layout/NavbarBeforeLogin.vue';
+import Footer from '../../components/Layout/Footer.vue';
+
 export default {
-  name : "ModuleSelection",
+  name: 'ModuleSelection',
   components: {
     NavbarBeforeLogin,
     Footer,
@@ -174,13 +175,13 @@ export default {
     return {
       mapOptions: '',
       markerOptions: '',
-      esgData:  [
+      esgData: [
         {
           name: 'Environmental',
           description: 'No data to show',
           attachment: '',
           type: 'environmetal',
-          id: '1665493735995301876774201398'
+          id: '1665493735995301876774201398',
         },
         {
           name: 'Social',
@@ -194,33 +195,33 @@ export default {
           description: 'No data to show',
           attachment: '',
           type: 'governance',
-          id: '1665493735995301876774201'
+          id: '1665493735995301876774201',
         },
       ],
     };
   },
 
-  computed:{
-   companyInfo(){
-     return this.$store.getters.publicCompany.companyData;
-   },
-   companyCategories(){
-     return this.$store.getters.publicCompany.categories;
-   },
-   esgCompanyData(){
-     var target = this.esgData;
-     var source = this.$store.getters.publicCompany.companyData.esgInitiatives;
-     Array.prototype.push.apply(target, source);
-     let uniqueObjArray = [
-       ...new Map(target.map((item) => [item["type"], item])).values(),
-     ];
-     return uniqueObjArray;
-   },
-   loading(){
-    return this.$store.getters.pageLoader;
-   },
+  computed: {
+    companyInfo() {
+      return this.$store.getters.publicCompany.companyData;
+    },
+    companyCategories() {
+      return this.$store.getters.publicCompany.categories;
+    },
+    esgCompanyData() {
+      const target = this.esgData;
+      const source = this.$store.getters.publicCompany.companyData.esgInitiatives;
+      Array.prototype.push.apply(target, source);
+      const uniqueObjArray = [
+        ...new Map(target.map((item) => [item.type, item])).values(),
+      ];
+      return uniqueObjArray;
+    },
+    loading() {
+      return this.$store.getters.pageLoader;
+    },
   },
-  metaInfo(){
+  metaInfo() {
     return {
       title: this.$store.getters.pageTitle,
       meta: [
@@ -234,96 +235,102 @@ export default {
           name: 'description',
           content: this.$store.getters.pageDescription,
         },
-        
+
       ],
-    }
+    };
   },
   methods: {
-    ...mapActions(["getPublicCompanyInfo"]),
-    getLocation(){
-      if(this.$store.getters.publicCompany.companyData.companyLocations.length == 1){
-        var LocationsForMap = this.$store.getters.publicCompany.companyData.companyLocations;
-    
-        var map = new google.maps.Map(document.getElementById('map'), {
+    ...mapActions(['getPublicCompanyInfo']),
+    getLocation() {
+      if (this.$store.getters.publicCompany.companyData && this.$store.getters.publicCompany.companyData.companyLocations.length === 1) {
+        const LocationsForMap = this.$store.getters.publicCompany.companyData.companyLocations;
+
+        const map = new google.maps.Map(document.getElementById('map'), {
           zoom: 9,
           center: new google.maps.LatLng(LocationsForMap[0].lattitude, LocationsForMap[0].longitude),
-          mapTypeId: google.maps.MapTypeId.ROADMAP
+          // mapTypeId: google.maps.MapTypeId.ROADMAP,
+          mapId: '2993bb26d878ba6a',
+          streetViewControl: false,
+          mapTypeControl: false,
         });
-        var infowindow = new google.maps.InfoWindow();
-        var marker, i;
-        for (i = 0; i < LocationsForMap.length; i++) {  
+        const infowindow = new google.maps.InfoWindow();
+        let marker; let
+          i;
+        for (i = 0; i < LocationsForMap.length; i++) {
           marker = new google.maps.Marker({
             position: new google.maps.LatLng(LocationsForMap[i].lattitude, LocationsForMap[i].longitude),
-            map: map,
+            map,
             title: 'Marker',
             anchorPoint: new google.maps.Point(0, -29),
           });
-          google.maps.event.addListener(marker, 'click', (function(marker, i) {
-            return function() {
+          google.maps.event.addListener(marker, 'click', (function (marker, i) {
+            return function () {
               infowindow.setContent(LocationsForMap[i].location);
               infowindow.open(map, marker);
-            }
-          })(marker, i));
+            };
+          }(marker, i)));
         }
-      
-      }else{
-        var LocationsForMap = this.$store.getters.publicCompany.companyData.companyLocations;
-    
-        var map = new google.maps.Map(document.getElementById('map'), {
+      } else {
+        let LocationsForMap = this.$store.getters.publicCompany.companyData.companyLocations;
+
+        let map = new google.maps.Map(document.getElementById('map'), {
           center: new google.maps.LatLng(LocationsForMap[0].lattitude, LocationsForMap[0].longitude),
-          mapTypeId: google.maps.MapTypeId.ROADMAP
+          // mapTypeId: google.maps.MapTypeId.ROADMAP,
+          mapId: '2993bb26d878ba6a',
+          streetViewControl: false,
+          mapTypeControl: false,
         });
-        var infowindow = new google.maps.InfoWindow();
-        var marker, i;
-        var latlngbounds =new google.maps.LatLngBounds();
-        for (i = 0; i < LocationsForMap.length; i++) {  
+        let infowindow = new google.maps.InfoWindow();
+        let marker; let
+          i;
+        const latlngbounds = new google.maps.LatLngBounds();
+        for (i = 0; i < LocationsForMap.length; i++) {
           marker = new google.maps.Marker({
             position: new google.maps.LatLng(LocationsForMap[i].lattitude, LocationsForMap[i].longitude),
-            map: map,
+            map,
             title: 'Marker',
             anchorPoint: new google.maps.Point(0, -29),
           });
-          google.maps.event.addListener(marker, 'click', (function(marker, i) {
-            return function() {
+          google.maps.event.addListener(marker, 'click', (function (marker, i) {
+            return function () {
               infowindow.setContent(LocationsForMap[i].location);
               infowindow.open(map, marker);
-            }
-          })(marker, i));
+            };
+          }(marker, i)));
           latlngbounds.extend(marker.position);
         }
-        
-          map.setCenter(latlngbounds.getCenter());
-          map.fitBounds(latlngbounds);
+
+        map.setCenter(latlngbounds.getCenter());
+        map.fitBounds(latlngbounds);
       }
-      
     },
-    get_url_extension( url ) {
+    get_url_extension(url) {
       return url.split(/[#?]/)[0].split('.').pop().trim();
     },
-    get_url_name( url ) {
+    get_url_name(url) {
       return url.split('/').pop();
     },
     viewPublicCompany() {
-      this.getPublicCompanyInfo({ slug : this.$route.fullPath.split('/').pop() });
+      this.getPublicCompanyInfo({ slug: this.$route.fullPath.split('/').pop() });
     },
   },
-  async created(){
-    let mapScpt = "map-api-script";
-    let mapAlreadyAttached = !!document.getElementById(mapScpt);
-    if(!mapAlreadyAttached){
-     let mapScript = document.createElement('script')
+  async created() {
+    const mapScpt = 'map-api-script';
+    const mapAlreadyAttached = !!document.getElementById(mapScpt);
+    if (!mapAlreadyAttached) {
+      const mapScript = document.createElement('script');
       mapScript.id = mapScpt;
-     mapScript.src = 'https://maps.googleapis.com/maps/api/js?key='+import.meta.env.VITE_GOOGLE_MAP+'&libraries=places';
-     document.head.appendChild(mapScript);
+      mapScript.src = `https://maps.googleapis.com/maps/api/js?key=${import.meta.env.VITE_GOOGLE_MAP}&libraries=places`;
+      document.head.appendChild(mapScript);
     }
     await this.viewPublicCompany();
   },
-  updated(){
+  updated() {
     this.getLocation();
   },
-  mounted() { 
-    
-  }
+  mounted() {
+
+  },
 };
 </script>
 <style scoped lang="scss">

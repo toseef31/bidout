@@ -1,6 +1,4 @@
 .companySupplier-module{
-	flex: 0 0 78%;
-  	max-width: 78%;
 	.mid-content{
 			flex: 0 0 100%;
 		  max-width: 100%;
@@ -17,14 +15,21 @@
 	  		border-top-right-radius: 8px;
 		    border-top-left-radius: 8px;
 	  	}
+	  	.get-Header{
+	  		.company-title{
+	  			h1{
+	  				font-size: 26px;
+	  			}
+	  		}
+	  	}
 		}
 	}
 	
 	
 }
 .mid-content-collapse{
-	flex: 0 0 95%;
-  max-width: 95%;
+	flex: 0 0 100%;
+  max-width: 100%;
 }
 @media (max-width: 768px) {
 	.companySupplier-module{

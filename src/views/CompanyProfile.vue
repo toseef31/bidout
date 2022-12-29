@@ -2,156 +2,159 @@
   <div class="companyProfile-module inner-Company fill-height d-flex justify-center align-center"  v-if="loading">
     <v-progress-circular :width="3" color="green" indeterminate ></v-progress-circular>
   </div>
-   <v-col class="companyProfile-module inner-Company pa-0 pa-sm-3 pl-sm-0" :class="[ showSideBar ? 'col-md-9 col-12 col-sm-9' : 'mid-content-collapse', activityPanel ? 'd-sm-block' : 'd-md-block']" v-show="!activityPanel" v-else>
-      <div class="mid-content">
-        <div class="content-section" v-if="companyData">
-          <v-row class="mx-0">
-            <v-col cols="12" sm="12" md="12" class="d-sm-block px-0">
-              <div class="manage-sections pa-4 px-0">
-                <div class="top-section d-flex pa-sm-10 pa-4">
-                  <div> 
-                    <h4>{{companyData.companyData.company}} Page</h4>
-                  </div>
-                  <template>
-                    <div class="progress-section">
-                      <div class="d-flex progress-heading">
-                        <p class="mb-0">Page Progress: <strong>{{percentage}}%</strong></p>
-                        <small>{{moduleCount}} out of 11 modules</small>
+   <v-row class="companyProfile-module inner-Company pa-0 ma-0" v-else>
+     <v-col class="pa-0 pr-sm-3" :class="[ showSideBar ? 'col-md-12 col-12 col-sm-12' : 'mid-content-collapse', activityPanel ? 'd-sm-block' : 'd-md-block']" v-show="!activityPanel">
+        <div class="mid-content">
+          <div class="content-section" v-if="companyData">
+            <v-row class="mx-0">
+              <v-col cols="12" sm="12" md="12" class="d-sm-block px-0">
+                <div class="manage-sections pa-4 px-0">
+                  <v-container class="pa-sm-10 pa-4">
+                    <div class="top-section d-flex pa-sm-10 pa-4 pl-sm-0 pr-sm-0">
+                      <div> 
+                        <h4>{{companyData.companyData.company}} Page</h4>
                       </div>
-                      <v-progress-linear 
-                      color="#0D9648"
-                      rounded
-                      :value="percentage" max-width="100%"></v-progress-linear>
-                    </div>
-                  </template>
-                </div>
-                {{companyData.companyData.accountContacts.length}}
-                <div class="company-form mt-16">
-                  <hr>
-                  <company-logo></company-logo>
-                  <hr>
-                  <v-container class="pa-sm-10 pa-4">
-                    <v-row>
-                      <v-col cols="12" sm="12">
-                      <label class="d-block text-left input-label">Company's Name</label>
-                        <v-text-field placeholder="Company's Name" v-model="profileName" single-line outlined hide-details></v-text-field>
-                      </v-col>
-                      <v-col cols="12" sm="12">
-                      <label class="d-block text-left input-label">Corporate Summary</label>
-                        <v-textarea outlined name="input-7-4" v-model="profileSummary" hide-details></v-textarea>
-                      </v-col>
-                    </v-row>
-                    <v-row>
-                      <v-col cols="12" sm="12">
-                        <v-btn color="#0D9648" large class="text-capitalize white--text" width="176px" height="54px" @click="updateBasic">Save Info</v-btn>
-                      </v-col>
-                    </v-row>
-                  </v-container>
-                  <hr>
-                  <v-container class="pa-sm-10 pa-4">
-                      <label class="d-block text-left main-label">Services Portfolio</label>
-                    <v-row class="mt-5">
-                      <v-col cols="6" sm="6">
-
-                        <label class="d-block text-center main-label mb-5">Available Services</label>
-                        <div  class="service-cate">
-                          <div class="px-5 mt-4">
-                            <v-text-field placeholder="Search ..." single-line outlined hide-details min-height="40px" v-model="searchService"></v-text-field>
+                      <template>
+                        <div class="progress-section">
+                          <div class="d-flex progress-heading">
+                            <p class="mb-0">Page Progress: <strong>{{percentage}}%</strong></p>
+                            <small>{{moduleCount}} out of 11 modules</small>
                           </div>
-                            
-                            <v-list class="px-2">
-                              <template v-for="category in allcategories">
-                                <v-list-group>
-                                  <template v-slot:activator>
-                                    <v-list-item-content>
-                                      <v-list-item-title v-text="category.name" class="text-left font-weight-bold"></v-list-item-title>
-                                    </v-list-item-content>
-                                  </template>
-                                  <template>
-                                    <v-list-item min-height="30px" prepend-inner-icon="mdi-close"
-                                      v-for="subcategory in subCategoriesAlign(category.subCategories)"
-                                      :key="subcategory.id"
-                                    >
-                                      <template>
-                                        <v-list-item-content class="py-0 pl-4">
-                                          
-                                          <v-list-item-title class="text-left"><v-icon>mdi-circle-small</v-icon>{{subcategory.name}}<v-icon class="ml-5" small @click="addService(subcategory)">mdi-plus-circle-outline</v-icon></v-list-item-title>
-                                        </v-list-item-content>
-                                      </template> 
-                                    </v-list-item>
-                                  </template>
-                                </v-list-group>
-                              </template>
-                            </v-list>
+                          <v-progress-linear 
+                          color="#0D9648"
+                          rounded
+                          :value="percentage" max-width="100%"></v-progress-linear>
                         </div>
-                      </v-col>
-                      <v-col cols="6" sm="6">
-                        <label class="d-block text-center main-label mb-5">Selected Services</label>
-                        
-                          <div class="subservice-cate service-cate">
-                            <v-list class="px-5" :expand="true">
-                              <v-list-group v-for="(category,i) in companyData.categories" v-if="category.subCategories.length > 0" :value="true">
-                                <template v-slot:activator>
-                                  <v-list-item-content>
-                                    <v-list-item-title v-text="category.name" class="text-left font-weight-bold black--text"></v-list-item-title>
-                                  </v-list-item-content>
-                                </template>
-                                <v-list-item min-height="30px"
-                                  v-for="(subcategory,index) in category.subCategories"
-                                  :key="subcategory.subid"
-                                >
-                                  <v-list-item-content class="py-0 pl-4">
-                                    <v-list-item-title class="text-left"><v-icon>mdi-circle-small</v-icon> {{subcategory.subname}} <v-icon class="ml-5" small @click="deleteService(subcategory)">mdi-trash-can-outline</v-icon></v-list-item-title>
-                                  </v-list-item-content>
-                                </v-list-item>
-                              </v-list-group>
-                            </v-list>
-                          </div>
-                      </v-col>
-                    </v-row>
+                      </template>
+                    </div>
                   </v-container>
-                  <hr>
-                  <v-container class="pa-sm-10 pa-4">
-                    <label class="d-block text-left main-label">Basins</label>
+                  <div class="company-form mt-16">
+                    <hr>
+                    <company-logo></company-logo>
+                    <hr>
+                    <v-container class="pa-sm-10 pa-4">
                       <v-row>
-                        <v-col cols="4" sm="2" v-for="basin in region">
-                            <v-checkbox
-                            v-model="basins"
-                            :label="basin"
-                            color="#0d9648"
-                            :value="basin"
-                            @change="addBasin"
-                            hide-details
-                            :disabled="loadingBasin"
-                            ></v-checkbox>
-                            <label class="d-none">{{basinsDatass}}</label>
+                        <v-col cols="12" sm="12">
+                        <label class="d-block text-left input-label">Company's Name</label>
+                          <v-text-field placeholder="Company's Name" v-model="profileName" single-line outlined hide-details></v-text-field>
+                        </v-col>
+                        <v-col cols="12" sm="12">
+                        <label class="d-block text-left input-label">Corporate Summary</label>
+                          <v-textarea outlined name="input-7-4" v-model="profileSummary" hide-details></v-textarea>
                         </v-col>
                       </v-row>
-                  </v-container>
-                  <hr>
-                  <service-locations></service-locations>
-                  <hr>
-                  <company-videos></company-videos>
-                  <hr>
-                  <company-documents></company-documents>
-                  <hr>
-                  <corporate-news></corporate-news>
-                  <hr>
-                  <excutive-leadership></excutive-leadership>
-                  <hr>
-                  <ESGComponent />
-                  <hr>
-                  <key-facts></key-facts>
+                      <v-row>
+                        <v-col cols="12" sm="12">
+                          <v-btn color="#0D9648" large class="text-capitalize white--text" width="176px" height="54px" @click="updateBasic">Save Info</v-btn>
+                        </v-col>
+                      </v-row>
+                    </v-container>
+                    <hr>
+                    <v-container class="pa-sm-10 pa-4">
+                        <label class="d-block text-left main-label">Services Portfolio</label>
+                      <v-row class="mt-5">
+                        <v-col cols="6" sm="6">
+
+                          <label class="d-block text-center main-label mb-5">Available Services</label>
+                          <div  class="service-cate">
+                            <div class="px-5 mt-4">
+                              <v-text-field placeholder="Search ..." single-line outlined hide-details min-height="40px" v-model="searchService"></v-text-field>
+                            </div>
+                              
+                              <v-list class="px-2">
+                                <template v-for="category in allcategories">
+                                  <v-list-group>
+                                    <template v-slot:activator>
+                                      <v-list-item-content>
+                                        <v-list-item-title v-text="category.name" class="text-left font-weight-bold"></v-list-item-title>
+                                      </v-list-item-content>
+                                    </template>
+                                    <template>
+                                      <v-list-item min-height="30px" prepend-inner-icon="mdi-close"
+                                        v-for="subcategory in subCategoriesAlign(category.subCategories)"
+                                        :key="subcategory.id"
+                                      >
+                                        <template>
+                                          <v-list-item-content class="py-0 pl-4">
+                                            
+                                            <v-list-item-title class="text-left"><v-icon>mdi-circle-small</v-icon>{{subcategory.name}}<v-icon class="ml-5" small @click="addService(subcategory)">mdi-plus-circle-outline</v-icon></v-list-item-title>
+                                          </v-list-item-content>
+                                        </template> 
+                                      </v-list-item>
+                                    </template>
+                                  </v-list-group>
+                                </template>
+                              </v-list>
+                          </div>
+                        </v-col>
+                        <v-col cols="6" sm="6">
+                          <label class="d-block text-center main-label mb-5">Selected Services</label>
+                          
+                            <div class="subservice-cate service-cate">
+                              <v-list class="px-5" :expand="true">
+                                <v-list-group v-for="(category,i) in companyData.categories" v-if="category.subCategories.length > 0" :value="true">
+                                  <template v-slot:activator>
+                                    <v-list-item-content>
+                                      <v-list-item-title v-text="category.name" class="text-left font-weight-bold black--text"></v-list-item-title>
+                                    </v-list-item-content>
+                                  </template>
+                                  <v-list-item min-height="30px"
+                                    v-for="(subcategory,index) in category.subCategories"
+                                    :key="subcategory.subid"
+                                  >
+                                    <v-list-item-content class="py-0 pl-4">
+                                      <v-list-item-title class="text-left"><v-icon>mdi-circle-small</v-icon> {{subcategory.subname}} <v-icon class="ml-5" small @click="deleteService(subcategory)">mdi-trash-can-outline</v-icon></v-list-item-title>
+                                    </v-list-item-content>
+                                  </v-list-item>
+                                </v-list-group>
+                              </v-list>
+                            </div>
+                        </v-col>
+                      </v-row>
+                    </v-container>
+                    <hr>
+                    <v-container class="pa-sm-10 pa-4">
+                      <label class="d-block text-left main-label">Basins</label>
+                        <v-row>
+                          <v-col cols="4" sm="2" v-for="basin in region">
+                              <v-checkbox
+                              v-model="basins"
+                              :label="basin"
+                              color="#0d9648"
+                              :value="basin"
+                              @change="addBasin"
+                              hide-details
+                              :disabled="loadingBasin"
+                              ></v-checkbox>
+                              <label class="d-none">{{basinsDatass}}</label>
+                          </v-col>
+                        </v-row>
+                    </v-container>
+                    <hr>
+                    <service-locations></service-locations>
+                    <hr>
+                    <company-videos></company-videos>
+                    <hr>
+                    <company-documents></company-documents>
+                    <hr>
+                    <corporate-news></corporate-news>
+                    <hr>
+                    <excutive-leadership></excutive-leadership>
+                    <hr>
+                    <ESGComponent />
+                    <hr>
+                    <key-facts></key-facts>
+                  </div>
                 </div>
-              </div>
-            </v-col>
-          </v-row>
+              </v-col>
+            </v-row>
+          </div>
+          <div class="content-section fill-height d-flex justify-center align-center"  v-else>
+          <v-progress-circular :width="3" color="green" indeterminate ></v-progress-circular>
         </div>
-        <div class="content-section fill-height d-flex justify-center align-center"  v-else>
-        <v-progress-circular :width="3" color="green" indeterminate ></v-progress-circular>
-      </div>
-      </div>
-   </v-col>
+        </div>
+     </v-col>
+   </v-row>
 </template>
 <script async defer src="https://maps.googleapis.com/maps/api/js?key=%VITE_GOOGLE_MAP%&libraries=places"></script>
 <script>

@@ -8,265 +8,265 @@
       ></v-progress-circular>
     </v-col>
   </v-row>
-  <v-col
-    class="chat-module pa-0 pa-sm-3 pl-sm-0 pb-sm-0"
-    :class="[
-      showSideBar ? 'col-md-9 col-12 col-sm-9' : 'mid-content-collapse',
-      activityPanel ? 'd-sm-block' : 'd-md-block',
-    ]"
-    v-show="!activityPanel"
-    v-else
-  >
-    <div class="mid-content">
-      <div class="content-section">
-        <v-snackbar
-          v-model="snackbar"
-          :timeout="timeout"
-          color="#0D9648"
-          absolute
-          top
-        >
-          {{ createMsg }}
-          <template v-slot:action="{ attrs }">
-            <v-btn color="white" text v-bind="attrs" @click="snackbar = false">
-              Close
-            </v-btn>
-          </template>
-        </v-snackbar>
-        <v-row>
-          <v-col
-            cols="12"
-            sm="4"
-            md="4"
-            class="userCol d-sm-block"
-            v-if="userList"
+  <v-row class="chat-module pa-0 ma-0" v-else>
+    <v-col  class="pa-0 pr-sm-3"
+      :class="[
+        showSideBar ? 'col-md-12 col-12 col-sm-12' : 'mid-content-collapse',
+        activityPanel ? 'd-sm-block' : 'd-md-block',
+      ]"
+      v-show="!activityPanel"
+    >
+      <div class="mid-content">
+        <div class="content-section">
+          <v-snackbar
+            v-model="snackbar"
+            :timeout="timeout"
+            color="#0D9648"
+            absolute
+            top
           >
-            <div class="userlist-col">
-              <chat-leftsidebar></chat-leftsidebar>
-              <conversations-section
-                @ChatDatas="ChangeT($event)"
-                @callTest="openChat"
-                @membersData="memberT($event)"
-              ></conversations-section>
-            </div>
-          </v-col>
-          <v-col
-            cols="12"
-            sm="8"
-            md="8"
-            class="pl-0 pr-2 pt-0 d-sm-block"
-            v-show="showMsgBlock"
-          >
-            <div class="message-area">
-              <!-- Message Header -->
-              <div class="msg-header pa-5">
-                <v-icon class="back-arrow" v-if="backArrow" @click="closeChat"
-                  >mdi-chevron-left</v-icon
-                >
-                <v-row align="center">
-                  <v-col cols="12" md="6">
-                    <div class="title-section text-left">
-                      <h4 v-if="chatData.group" class="mb-0 font-weight-bold">{{ getConversationName(chatData.group) }}</h4>
-                      <template v-if="chatData.group">
-                        <template v-if="chatData.group.isBid == true">
-                          <p class="sub-title mb-0 font-weight-regular">
-                            {{ chatData.group.bidTitle }}
-                          </p>
-                          <p class="sub-title mb-0">
-                            Bid #{{ chatData.group.bidSerial }}
-                          </p>
-                        </template>
-                      </template>
-                    </div>
-                  </v-col>
-                  <v-col cols="12" md="6">
-                    <div class="msg-options d-flex mt-2 justify-end">
-                      <div class="search">
-                        <v-text-field
-                          v-model="searchMessage"
-                          type="text"
-                          align-center
-                          outlined
-                          class="pt-0 mt-0"
-                          placeholder="Search this conversation"
-                        >
-                          <template v-slot:prepend>
-                            <v-icon>mdi-magnify</v-icon>
+            {{ createMsg }}
+            <template v-slot:action="{ attrs }">
+              <v-btn color="white" text v-bind="attrs" @click="snackbar = false">
+                Close
+              </v-btn>
+            </template>
+          </v-snackbar>
+          <v-row>
+            <v-col
+              cols="12"
+              sm="4"
+              md="4"
+              class="userCol d-sm-block"
+              v-if="userList"
+            >
+              <div class="userlist-col">
+                <chat-leftsidebar></chat-leftsidebar>
+                <conversations-section
+                  @ChatDatas="ChangeT($event)"
+                  @callTest="openChat"
+                  @membersData="memberT($event)"
+                ></conversations-section>
+              </div>
+            </v-col>
+            <v-col
+              cols="12"
+              sm="8"
+              md="8"
+              class="pl-0 pr-2 pt-0 d-sm-block"
+              v-show="showMsgBlock"
+            >
+              <div class="message-area">
+                <!-- Message Header -->
+                <div class="msg-header pa-5">
+                  <v-icon class="back-arrow" v-if="backArrow" @click="closeChat"
+                    >mdi-chevron-left</v-icon
+                  >
+                  <v-row align="center">
+                    <v-col cols="12" md="6">
+                      <div class="title-section text-left">
+                        <h4 v-if="chatData.group" class="mb-0 font-weight-bold">{{ getConversationName(chatData.group) }}</h4>
+                        <template v-if="chatData.group">
+                          <template v-if="chatData.group.isBid == true">
+                            <p class="sub-title mb-0 font-weight-regular">
+                              {{ chatData.group.bidTitle }}
+                            </p>
+                            <p class="sub-title mb-0">
+                              Bid #{{ chatData.group.bidSerial }}
+                            </p>
                           </template>
-                        </v-text-field>
+                        </template>
                       </div>
-                      <div class="toggle-btn ml-5">
-                        <v-btn
-                          fab
-                          small
-                          color="#0d964814"
-                          @click="isChatMenu = !isChatMenu"
-                          :class="{ 'active-btn': isChatMenu }"
-                        >
-                          <v-icon dark> mdi-dots-horizontal </v-icon>
-                        </v-btn>
-                        <div v-show="isChatMenu">
-                          <v-card
-                            class="mx-auto chat-menu-card"
-                            min-width="290"
-                            tile
+                    </v-col>
+                    <v-col cols="12" md="6">
+                      <div class="msg-options d-flex mt-2 justify-end">
+                        <div class="search">
+                          <v-text-field
+                            v-model="searchMessage"
+                            type="text"
+                            align-center
                             outlined
+                            class="pt-0 mt-0"
+                            placeholder="Search this conversation"
                           >
-                            <v-list class="pa-0">
-                              <v-list-item-group color="success">
-                                <v-list-item
-                                  v-for="(menu, i) in toggleMenu"
-                                  :key="i"
-                                  @click="chatActions(chatData.group._id)"
-                                >
-                                  <v-list-item-icon class="mr-2 my-3">
-                                    <v-icon
-                                      color="#0D9648"
-                                      v-text="menu.icon"
-                                    ></v-icon>
-                                  </v-list-item-icon>
-                                  <v-list-item-content
-                                    align-start
-                                    color="#0D9648"
-                                    class="pa-0 text-left"
+                            <template v-slot:prepend>
+                              <v-icon>mdi-magnify</v-icon>
+                            </template>
+                          </v-text-field>
+                        </div>
+                        <div class="toggle-btn ml-5">
+                          <v-btn
+                            fab
+                            small
+                            color="#0d964814"
+                            @click="isChatMenu = !isChatMenu"
+                            :class="{ 'active-btn': isChatMenu }"
+                          >
+                            <v-icon dark> mdi-dots-horizontal </v-icon>
+                          </v-btn>
+                          <div v-show="isChatMenu">
+                            <v-card
+                              class="mx-auto chat-menu-card"
+                              min-width="290"
+                              tile
+                              outlined
+                            >
+                              <v-list class="pa-0">
+                                <v-list-item-group color="success">
+                                  <v-list-item
+                                    v-for="(menu, i) in toggleMenu"
+                                    :key="i"
+                                    @click="chatActions(chatData.group._id)"
                                   >
-                                    <v-list-item-title
-                                      v-text="menu.text"
-                                    ></v-list-item-title>
-                                  </v-list-item-content>
-                                </v-list-item>
-                              </v-list-item-group>
-                            </v-list>
-                          </v-card>
+                                    <v-list-item-icon class="mr-2 my-3">
+                                      <v-icon
+                                        color="#0D9648"
+                                        v-text="menu.icon"
+                                      ></v-icon>
+                                    </v-list-item-icon>
+                                    <v-list-item-content
+                                      align-start
+                                      color="#0D9648"
+                                      class="pa-0 text-left"
+                                    >
+                                      <v-list-item-title
+                                        v-text="menu.text"
+                                      ></v-list-item-title>
+                                    </v-list-item-content>
+                                  </v-list-item>
+                                </v-list-item-group>
+                              </v-list>
+                            </v-card>
+                          </div>
                         </div>
                       </div>
-                    </div>
-                  </v-col>
-                </v-row>
-              </div>
-              <!-- Message Area -->
-              <div class="messages-section" ref="messagesSection">
-                <vue-dropzone
-                  ref="myVueDropzone"
-                  :class="{ dropzoneActive: uploadDrag }"
-                  @ondragleave="dragLeave(event)"
-                  id="dropzone"
-                  @vdropzone-success="afterComplete"
-                  v-on:vdropzone-sending="dragfileupload"
-                  :options="dropzoneOptions"
-                  @dragstart="startDrag($event, item)"
-                  acceptedFiles="image/*,application/pdf"
-                >
-                </vue-dropzone>
-                <v-list
-                  two-line
-                  class="own-user message-list"
-                  v-for="message in messagesList"
-                  :key="message._id"
-                >
-                  <v-list-item-group>
-                    <template>
-                      <v-list-item
-                        class="text-left px-5"
-                        active-class="white--text"
-                      >
-                        <template>
-                          <v-list-item-content>
-                            <v-list-item-title>{{
-                              message.sender.name
-                            }}</v-list-item-title>
-                            <template v-if="message.attachment">
-                              <a
-                                :href="message.attachment"
-                                target="_blank"
-                                v-if="
-                                  get_url_extension(message.attachment) == 'pdf'
-                                "
-                                ><v-img
-                                  :src="require('@/assets/images/chat/pdf.jpg')"
-                                  max-height="50px"
-                                  max-width="50px"
+                    </v-col>
+                  </v-row>
+                </div>
+                <!-- Message Area -->
+                <div class="messages-section" ref="messagesSection">
+                  <vue-dropzone
+                    ref="myVueDropzone"
+                    :class="{ dropzoneActive: uploadDrag }"
+                    @ondragleave="dragLeave(event)"
+                    id="dropzone"
+                    @vdropzone-success="afterComplete"
+                    v-on:vdropzone-sending="dragfileupload"
+                    :options="dropzoneOptions"
+                    @dragstart="startDrag($event, item)"
+                    acceptedFiles="image/*,application/pdf"
+                  >
+                  </vue-dropzone>
+                  <v-list
+                    two-line
+                    class="own-user message-list"
+                    v-for="message in messagesList"
+                    :key="message._id"
+                  >
+                    <v-list-item-group>
+                      <template>
+                        <v-list-item
+                          class="text-left px-5"
+                          active-class="white--text"
+                        >
+                          <template>
+                            <v-list-item-content>
+                              <v-list-item-title>{{
+                                message.sender.name
+                              }}</v-list-item-title>
+                              <template v-if="message.attachment">
+                                <a
+                                  :href="message.attachment"
+                                  target="_blank"
+                                  v-if="
+                                    get_url_extension(message.attachment) == 'pdf'
+                                  "
+                                  ><v-img
+                                    :src="require('@/assets/images/chat/pdf.jpg')"
+                                    max-height="50px"
+                                    max-width="50px"
+                                    class="mt-2"
+                                  ></v-img
+                                ></a>
+                                <v-img
+                                  v-else
+                                  :src="message.attachment"
+                                  max-height="125px"
+                                  max-width="245px"
                                   class="mt-2"
-                                ></v-img
-                              ></a>
-                              <v-img
-                                v-else
-                                :src="message.attachment"
-                                max-height="125px"
-                                max-width="245px"
-                                class="mt-2"
-                              ></v-img>
-                            </template>
-                            <v-list-item-subtitle class="text--primary">{{
-                              message.content
-                            }}</v-list-item-subtitle>
-                          </v-list-item-content>
-                          <v-list-item-action class="mt-n6">
-                            <v-list-item-action-text>{{
-                              istoday(message.updatedAt)
-                            }}</v-list-item-action-text>
-                          </v-list-item-action>
-                        </template>
-                      </v-list-item>
-                    </template>
-                  </v-list-item-group>
-                </v-list>
+                                ></v-img>
+                              </template>
+                              <v-list-item-subtitle class="text--primary">{{
+                                message.content
+                              }}</v-list-item-subtitle>
+                            </v-list-item-content>
+                            <v-list-item-action class="mt-n6">
+                              <v-list-item-action-text>{{
+                                istoday(message.updatedAt)
+                              }}</v-list-item-action-text>
+                            </v-list-item-action>
+                          </template>
+                        </v-list-item>
+                      </template>
+                    </v-list-item-group>
+                  </v-list>
+                </div>
+                <!-- Message Send Area -->
+                <div class="message-send-area px-5 pt-5">
+                  <span class="fileName" v-if="filename">{{ filename }}</span>
+                  <v-row>
+                    <v-col cols="12" sm="10" md="10">
+                      <div class="msg-text-box">
+                        <v-textarea
+                          solo
+                          name="input-7-4"
+                          placeholder="Message here ..."
+                          rows="3"
+                          v-model="message"
+                          @keyup.enter="messageSend"
+                        ></v-textarea>
+                      </div>
+                    </v-col>
+                    <v-col cols="12" sm="2" md="2">
+                      <div class="msg-send-btn">
+                        <v-btn
+                          block
+                          tile
+                          height="43px"
+                          color="#0D9648"
+                          @click="messageSend"
+                          >Send</v-btn
+                        >
+                        <label
+                          for="attach-file"
+                          class="mt-2 attach-btn d-flex justify-center align-center"
+                        >
+                          <input
+                            id="attach-file"
+                            type="file"
+                            class="d-none"
+                            truncate-length="8"
+                            ref="msgFile"
+                            @change="fileUpload"
+                          />
+                          <v-img
+                            :src="require('@/assets/images/chat/attach.png')"
+                            max-width="28px"
+                            height="32px"
+                          ></v-img>
+                        </label>
+                      </div>
+                    </v-col>
+                  </v-row>
+                </div>
+                <!-- End Message Send Area -->
               </div>
-              <!-- Message Send Area -->
-              <div class="message-send-area px-5 pt-5">
-                <span class="fileName" v-if="filename">{{ filename }}</span>
-                <v-row>
-                  <v-col cols="12" sm="10" md="10">
-                    <div class="msg-text-box">
-                      <v-textarea
-                        solo
-                        name="input-7-4"
-                        placeholder="Message here ..."
-                        rows="3"
-                        v-model="message"
-                        @keyup.enter="messageSend"
-                      ></v-textarea>
-                    </div>
-                  </v-col>
-                  <v-col cols="12" sm="2" md="2">
-                    <div class="msg-send-btn">
-                      <v-btn
-                        block
-                        tile
-                        height="43px"
-                        color="#0D9648"
-                        @click="messageSend"
-                        >Send</v-btn
-                      >
-                      <label
-                        for="attach-file"
-                        class="mt-2 attach-btn d-flex justify-center align-center"
-                      >
-                        <input
-                          id="attach-file"
-                          type="file"
-                          class="d-none"
-                          truncate-length="8"
-                          ref="msgFile"
-                          @change="fileUpload"
-                        />
-                        <v-img
-                          :src="require('@/assets/images/chat/attach.png')"
-                          max-width="28px"
-                          height="32px"
-                        ></v-img>
-                      </label>
-                    </div>
-                  </v-col>
-                </v-row>
-              </div>
-              <!-- End Message Send Area -->
-            </div>
-          </v-col>
-        </v-row>
+            </v-col>
+          </v-row>
+        </div>
       </div>
-    </div>
-  </v-col>
+    </v-col>
+  </v-row>
 </template>
 <script>
 import axios from "axios";

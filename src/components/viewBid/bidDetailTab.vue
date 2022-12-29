@@ -253,10 +253,10 @@
               <tr>
                 <th class="text-left"></th>
                 <th class="text-left">File Name</th>
-                <th class="text-left">Comment</th>
-                <th class="text-left">File Size</th>
-                <th class="text-left">Uploaded By</th>
-                <th class="text-left">Uploaded Date</th>
+                <th class="text-left" width="150">Comment</th>
+                <th class="text-left" width="110">File Size</th>
+                <th class="text-left" width="150">Uploaded By</th>
+                <th class="text-left" width="150">Uploaded Date</th>
               </tr>
             </thead>
             <tbody>
@@ -267,9 +267,9 @@
                 <td class="text-left">
                   <img :src="require('@/assets/images/bids/FilePdf.png')" />
                 </td>
-                <td class="text-left d-block text-truncate pt-4" style="width:200px"><a :href="doc.url" target="_blank" class="text-decoration-none">{{ doc.fileName }}</a></td>
-                <td class="text-left">
-                  <span>{{ doc.comment }}</span>
+                <td class="text-left doc-class  pt-4"><a :href="doc.url" target="_blank" class="text-decoration-none">{{ doc.fileName }}</a></td>
+                <td class="text-left text-truncate comment-class">
+                  <span>{{ doc.comment !== 'undefined' ? doc.comment : '' }}</span>
                 </td>
                 <td class="text-left">{{ size(doc.fileSize) }}</td>
                 <td class="text-left">{{ doc.uploadedBy }}</td>
@@ -315,7 +315,7 @@
               </v-row>
             </div>
       </div>
-       <div v-else class="no-data py-5">None</div>
+       <div v-else class="no-data py-5">No questions are currently configured on this bid.</div>
     </div>
   </v-col>
 </template>

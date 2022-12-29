@@ -1,6 +1,6 @@
 <template>
-  
-   <v-col class="manage-users pa-0 pa-sm-3 pl-sm-0" :class="[ showSideBar ? 'col-md-9 col-12 col-sm-9' : 'mid-content-collapse', activityPanel ? 'd-sm-block' : 'd-md-block']" v-show="!activityPanel">
+  <v-row class="manage-users pa-0 ma-0">
+   <v-col class="pa-0 pr-sm-3" :class="[ showSideBar ? 'col-md-12 col-12 col-sm-12' : 'mid-content-collapse', activityPanel ? 'd-sm-block' : 'd-md-block']" v-show="!activityPanel">
       <div class="mid-content">
         <div class="content-section">
           <v-row class="mx-0">
@@ -128,7 +128,8 @@
           </v-row>
         </div>
       </div>
-   </v-col>
+    </v-col>
+  </v-row>
 </template>
 <script>
   import Navbar from '../components/Layout/Navbar.vue'
