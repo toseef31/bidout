@@ -237,10 +237,10 @@
 
 		<v-row justify="center" align="center" no-gutters>
 		  <v-col cols="12" md="12" class="mb-n2">
-
 		    <v-dialog
           v-model="supplierDialog"
           width="800"
+		  v-if="!$route.path.includes('create-template')"
         >
           <template v-slot:activator="{ on, attrs }">
 

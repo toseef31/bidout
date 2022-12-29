@@ -6,7 +6,7 @@
         <v-row justify="center">
           <v-col cols="12" md="12">
             <div class="category-list">
-              <h1 class="text-left service-title mb-8">{{ allcompanies.category.name }}</h1>
+              <h1 class="text-left service-title mb-8">{{ allcompanies && allcompanies.category && allcompanies.category.name }}</h1>
               <div class="d-flex align-center tabs-header">
                 <v-tabs v-model="tab" hide-slider class="service-tabs mb-5">
                   <v-tab
@@ -58,7 +58,7 @@
  }} {{ company.companyHqCountry
  }}</span>
                           </td>
-                          <td>
+                          <td class="view-class">
                             <span v-if="!company.employees">Not Added</span
                             ><span v-else>{{ company.employees }}</span>
                           </td>
