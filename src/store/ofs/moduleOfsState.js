@@ -8,4 +8,5 @@ export default {
    pageDescription: null,
    innerLoader: false,
    orderStatus: false,
+   ofsLoader: false
 }

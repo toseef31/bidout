@@ -1,7 +1,7 @@
 .dashboard-module{
 	/*flex: 0 0 78%;
 	max-width: 78%;*/
-	min-height: calc(100vh - 110px);
+	height: calc(100vh - 110px);
 	.mid-content{
 		flex: 0 0 100%;
 		max-width: 100%;
@@ -37,9 +37,9 @@
 			}
 			.bids-table {
 				.v-data-table__wrapper{
-					height: 336px;
+					/*height: 336px;*/
 				}
-				table tbody tr:nth-of-type(odd) {
+				table tbody tr:nth-of-type(even) {
 			   	background-color: #F2F2F2;
 			 	}
 				table tbody tr th {
@@ -59,7 +59,7 @@
 			 	tbody{
 			 		tr{
 			 			.title-truncate{
-			 				min-width: 268px;
+			 				min-width: 180px;
 			 				max-width: 268px;
 	 				    white-space: nowrap;
 	 				    overflow: hidden;
@@ -67,13 +67,14 @@
 			 			}
 			 			td{
 			 				border-bottom: 0 !important;
+			 				height: 36px;
 			 				&:nth-child(1){
 			 					min-width: 68px;
 			 					max-width: 68px;
 			 				}
 			 				&:nth-child(3){
-			 					min-width: 150px;
-			 					max-width: 155px;
+			 					min-width: 141px;
+			 					max-width: 145px;
 			 				}
 			 				&:nth-child(4){
 			 					min-width: 75px;
@@ -108,13 +109,31 @@
 		.map-section{
 			border: 1px solid #B8B8B8;
 	    border-radius: 8px;
+	    /*height: 415px;
+	    min-height: calc(100vh - 309px);*/
+	    height: 142px;
+    	min-height: calc(100vh - 455px);
 	    .map{
-	    	height: 415px;
-	    	min-height: calc(100vh - 532px);
+	    	height: 100%;
 	    }
 	    img{
 	    	height: 100%;
 	    }
+		}
+		.map-section-1{
+			min-height: calc(100vh - 275px);
+		}
+		.map-section-2{
+			min-height: calc(100vh - 311px);
+		}
+		.map-section-3{
+			min-height: calc(100vh - 347px);
+		}
+		.map-section-4{
+			min-height: calc(100vh - 383px);
+		}
+		.map-section-5{
+			min-height: calc(100vh - 420px);
 		}
 	}
 	.mid-content-collapse{
@@ -125,8 +144,28 @@
 		color: #fff;
 	}
 	.right-col{
-		flex: 0 0 22.5em !important;
-		max-width: 22.5em !important;
+		flex: 0 0 20em !important;
+		max-width: 20em !important;
+		height: calc(100vh - 104px) !important;
+	}
+	.mobile-right-col{
+		flex: 0 0 100%;
+	  max-width: 100%;
+	}
+}
+@media (min-width:950px) and (max-width:1250px) {
+  .dashboard-module{
+    .right-col{
+			flex: 0 0 15em !important;
+			max-width: 15em !important;
+		}
+	}
+}
+@media (min-width:769px) and (max-width:900px) {
+  .dashboard-module{
+    .right-col{
+    	display: none;
+		}
 	}
 }
 @media (max-width: 768px) {

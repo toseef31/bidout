@@ -30,16 +30,20 @@ you will be able to see the message here.
           :key="index"
         >
           <template>
-            <img
+            <v-img
               v-if="list.company && list.company.image"
-              width="88"
-              height="auto"
-              class="img-class"
+
+              max-height="26.67px"
+                              max-width="100px"
+                              width="100px"
               :src=" list.company.image"
             />
-            <v-list-item-icon v-else align-center>
-              <v-icon size="40">mdi-domain</v-icon>
-            </v-list-item-icon>
+<div   v-else class="icon-class"
+
+                             >
+                              <v-icon size="40"  >mdi-domain</v-icon>
+                              </div>
+
             <v-list-item-content align-center>
               <v-list-item-title v-text="(list.name || list.company.company.split('|||')[0])"></v-list-item-title>
               <v-list-item-subtitle>
