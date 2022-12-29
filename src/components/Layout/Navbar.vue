@@ -167,9 +167,9 @@
                 <v-list-item-title @click="getData(profileMenu)" class="text-left" v-text="profileMenu.title"></v-list-item-title>
               </v-list>
               <v-divider></v-divider>
-              <v-list class="px-4 activity-menu">
+              <!-- <v-list class="px-4 activity-menu">
                 <v-list-item-title @click="getData(activityMenu); toggleActivityPanel();" class="text-left" v-text="activityMenu.title"></v-list-item-title>
-              </v-list>
+              </v-list> -->
               <v-list class="px-4">
                 <v-list-item-title  @click="signout" class="text-left" >Logout</v-list-item-title>
               </v-list>
