@@ -167,6 +167,7 @@ export default {
     getLocation(){
       var LocationsForMap = this.locations;
       var map = new google.maps.Map(document.getElementById('map'), {
+        zoom: 4,
         mapId: "2993bb26d878ba6a",
         center: new google.maps.LatLng(LocationsForMap[0].locations[0].lattitude, LocationsForMap[0].locations[0].longitude),
         streetViewControl: false,
@@ -177,7 +178,7 @@ export default {
       var infowindow = new google.maps.InfoWindow();
 
       var marker, i,j;
-      var latlngbounds =new google.maps.LatLngBounds();
+      // var latlngbounds =new google.maps.LatLngBounds();
       for (i = 0; i < LocationsForMap.length; i++) {  
         for (j = 0; j < LocationsForMap[i].locations.length; j++){
           marker = new google.maps.Marker({
@@ -203,12 +204,12 @@ export default {
               infowindow.open(map, marker);
             }
           })(marker, j));
-          latlngbounds.extend(marker.position);
+          // latlngbounds.extend(marker.position);
         }
       }
-      
-        map.setCenter(latlngbounds.getCenter());
-        map.fitBounds(latlngbounds);
+        
+        // map.setCenter(latlngbounds.getCenter());
+        // map.fitBounds(latlngbounds);
 
     },
   },
