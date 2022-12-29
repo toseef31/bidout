@@ -218,6 +218,23 @@
 							  background: transparent;
 							}
 							.list-company{
+								.company-img {
+									.image-class {
+									
+										max-width: 100px;
+										height: 26.67px;
+										
+									}
+
+									.avatar-image {
+										min-width: 100px;
+									}
+
+									.icon-class {
+										width: 100px;
+										height: 35px;
+									}
+								}
 								&:nth-child(even){
 									background: #F4F5F7;
 								}

@@ -770,20 +770,18 @@
         }
       
         .v-list-item {
-          height: 80px;
+          height: 100px;
           padding-left: 20px;
           border-bottom: 1px solid #f1f1f1;
-          .img-class {
-            object-fit: contain;
-            aspect-ratio: 3/2;
-          }
-          .v-list-item__icon:first-child {
-            margin-right: 24px;
+
+          .icon-class {
+            width: 100px;
+            height: 35px;
           }
         }
         .v-list-item__content {
           text-align: left;
-          margin-left: 10px;
+          margin-left: 24px;
           .v-list-item__title {
             color: #0d1139;
             font-weight: 700;
