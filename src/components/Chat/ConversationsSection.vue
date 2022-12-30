@@ -80,7 +80,7 @@
             <v-list-item @click="openChat(conversation,conversation.groupName)" :key="conversation._id" v-if="conversation.type == 'GROUP'">
               <template>
                 <v-list-item-avatar>
-                  <v-icon>mdi-account-group-outline</v-icon>
+                  <v-icon>mdi-domain</v-icon>
                 </v-list-item-avatar>
                 <v-list-item-content>
                   <v-list-item-title v-if="conversation.company == ''" v-text="conversation.company"></v-list-item-title>
