@@ -13,5 +13,15 @@ export default {
     },
     setModuleCOunt(state,payload){
       state.moduleCOunt += payload
+    },
+    setModuleWeight(state,payload){
+      if(payload.status == 'add'){
+        var index = state.moduleWeight.findIndex(x => x.module == payload.module); 
+        index === -1 ? state.moduleWeight.push(payload) : console.log("object already exists")
+      }else{
+        var afterRemove = state.moduleWeight.filter(y => y.module != payload.module);
+        state.moduleWeight = afterRemove;
+      }
+      
     }
 }

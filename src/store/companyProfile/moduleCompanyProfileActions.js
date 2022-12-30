@@ -7,9 +7,111 @@ export default {
     axios.get('company/getCompanyById/'+payload)
      .then(responce => {
       if(responce.status === 200){
+        if(responce.data.companyData.accountContacts.length > 0){
+          const data = {
+            module : 'contacts',
+            weight: 8,
+            status: 'add'
+          }
+          commit('setModuleWeight',data);
+        }
+        if(responce.data.companyData.basins.length > 0){
+          const data = {
+            module : 'basin',
+            weight: 8,
+            status: 'add',
+          }
+          commit('setModuleWeight',data);
+        }
+        if(responce.data.companyData.companyLocations.length > 0){
+          const data = {
+            module : 'locations',
+            weight: 8,
+            status: 'add'
+          }
+          commit('setModuleWeight',data);
+        }else{
+          const data = {
+            module : 'locations',
+            weight: 0,
+            status: 'remove'
+          }
+          commit('setModuleWeight',data);
+        }
+        if(responce.data.companyData.corporateDocuments.length > 0){
+          const data = {
+            module : 'documents',
+            weight: 8,
+            status: 'add',
+          }
+          commit('setModuleWeight',data);
+        }else{
+          const data = {
+            module : 'documents',
+            weight: 0,
+            status: 'remove',
+          }
+          commit('setModuleWeight',data);
+        }
+        if(responce.data.companyData.corporateNews.length > 0){
+          const data = {
+            module : 'news',
+            weight: 8,
+            status: 'add',
+          }
+          commit('setModuleWeight',data);
+        }
+        if(responce.data.companyData.corporateVideos.length > 0){
+          const data = {
+            module : 'videos',
+            weight: 8,
+            status: 'add',
+          }
+          commit('setModuleWeight',data);
+        }
+        if(responce.data.companyData.esgInitiatives.length > 0){
+          const data = {
+            module : 'esg',
+            weight: 8,
+            status: 'add',
+          }
+          commit('setModuleWeight',data);
+        }
+        if(responce.data.companyData.executiveLeadership.length > 0){
+          const data = {
+            module : 'excutive',
+            weight: 8,
+            status: 'add',
+          }
+          commit('setModuleWeight',data);
+        }else{
+          const data = {
+            module : 'excutive',
+            weight: 0,
+            status: 'remove',
+          }
+          commit('setModuleWeight',data);
+        }
+        if(responce.data.companyData.image){
+          const data = {
+            module : 'logo',
+            weight: 8,
+            status: 'add',
+          }
+          commit('setModuleWeight',data);
+        }
+        if(responce.data.companyData.services.length > 0){
+          const data = {
+            module : 'services',
+            weight: 10,
+            status: 'add',
+          }
+          commit('setModuleWeight',data);
+        }
         commit('setCompany',responce.data)
         commit('setBasinLoading',false)
         commit('setPageLoader',false)
+
       }
      
     }).catch(async(err) => {
@@ -64,6 +166,21 @@ export default {
         dispatch("getCompany",payload.companyId)
         commit('setProgressCount',9);
         commit('setModuleCOunt',1);
+        if(payload.files != ''){
+          const data = {
+            module : 'logo',
+            weight: 8,
+            status: 'add',
+          }
+          commit('setModuleWeight',data);
+        }else{
+         const data = {
+           module : 'logo',
+           weight: 8,
+           status: 'remove',
+         }
+         commit('setModuleWeight',data); 
+        }
       }
     }).catch(async(err) => {
       if(state.apiCounter === 2){
@@ -105,6 +222,21 @@ export default {
      .then(responce => {
       
       if(responce.status === 200){
+        if(payload.subCategories.length > 0){
+          const data = {
+            module : 'services',
+            weight: 10,
+            status: 'add',
+          }
+          commit('setModuleWeight',data);
+        }else{
+          const data = {
+            module : 'services',
+            weight: 10,
+            status: 'remove'
+          }
+          commit('setModuleWeight',data);
+        }
         dispatch("getCompany",payload.companyId)
       }
     }).catch(async(err) => {
@@ -126,6 +258,22 @@ export default {
      .then(responce => {
       
       if(responce.status === 200){
+        if(payload.basins.length > 0){
+          const data = {
+            module : 'basin',
+            weight: 8,
+            status: 'add',
+          }
+          commit('setModuleWeight',data);
+        }else{
+          const data = {
+            module : 'basin',
+            weight: 8,
+            status: 'remove'
+          }
+          commit('setModuleWeight',data);
+        }
+        
         dispatch("getCompany",payload.companyId)
       }
     }).catch(async(err) => {
@@ -147,6 +295,12 @@ export default {
      .then(responce => {
       
       if(responce.status === 200){
+        const data = {
+          module : 'locations',
+          weight: 8,
+          status: 'add'
+        }
+        commit('setModuleWeight',data);
         dispatch("getCompany",payload.companyId)
       }
     }).catch(async(err) => {
@@ -191,6 +345,21 @@ export default {
      .then(responce => {
       
       if(responce.status === 200){
+        if(payload.videoLinks.length > 0){
+          const data = {
+            module : 'videos',
+            weight: 8,
+            status: 'add',
+          }
+          commit('setModuleWeight',data);
+        }else{
+          const data = {
+            module : 'videos',
+            weight: 8,
+            status: 'remove',
+          }
+          commit('setModuleWeight',data);
+        }  
         dispatch("getCompany",payload.companyId)
       }
     }).catch(async(err) => {
@@ -224,6 +393,12 @@ export default {
      .then(responce => {
       
       if(responce.status === 200){
+        const data = {
+          module : 'documents',
+          weight: 8,
+          status: 'add',
+        }
+        commit('setModuleWeight',data);
         dispatch("getCompany",payload.companyId)
       }
     }).catch(async(err) => {
@@ -297,6 +472,22 @@ export default {
      .then(responce => {
       
       if(responce.status === 200){
+        if(payload.corporateNews.length > 0){
+          const data = {
+            module : 'news',
+            weight: 8,
+            status: 'add',
+          }
+          commit('setModuleWeight',data);
+        }else{
+          const data = {
+            module : 'news',
+            weight: 8,
+            status: 'remove',
+          }
+          commit('setModuleWeight',data);
+        }
+        
         dispatch("getCompany",payload.companyId)
       }
     }).catch(async(err) => {
@@ -318,6 +509,12 @@ export default {
      .then(responce => {
       
       if(responce.status === 200){
+        const data = {
+          module : 'facts',
+          weight: 8,
+          status: 'add',
+        }
+        commit('setModuleWeight',data);
         dispatch("getCompany",payload.companyId)
       }
     }).catch(async(err) => {
@@ -339,6 +536,21 @@ export default {
     const res = await axios.post('/company/addCompanyContact/',{'companyId':payload.companyId,'accountContacts':payload.accountContacts});
      
       if(res.status === 200){
+        if(payload.accountContacts.length > 0){
+          const data = {
+            module : 'contacts',
+            weight: 8,
+            status: 'add'
+          }
+          commit('setModuleWeight',data);
+        }else{
+          const data = {
+            module : 'contacts',
+            weight: 8,
+            status: 'remove'
+          }
+          commit('setModuleWeight',data);
+        }
         await dispatch("getCompany",payload.companyId)
       }
     } catch (err) {
@@ -372,6 +584,12 @@ export default {
      .then(responce => {
       
       if(responce.status === 200){
+        const data = {
+          module : 'excutive',
+          weight: 8,
+          status: 'add',
+        }
+        commit('setModuleWeight',data);
         dispatch("getCompany",payload.companyId)
       }
     }).catch(async(err) => {
@@ -463,6 +681,12 @@ export default {
      .then(responce => {
       
       if(responce.status === 200){
+        const data = {
+          module : 'esg',
+          weight: 8,
+          status: 'add',
+        }
+        commit('setModuleWeight',data);
         dispatch("getCompany",payload.companyId)
       }
     }).catch(async(err) => {

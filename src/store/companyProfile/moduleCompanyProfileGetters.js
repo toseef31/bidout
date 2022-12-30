@@ -13,5 +13,8 @@ export default {
    },
    moduleCOunt (state){
       return state.moduleCOunt
+   },
+   moduleWeight (state){
+      return state.moduleWeight
    }
 }
