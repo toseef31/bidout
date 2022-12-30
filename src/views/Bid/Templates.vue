@@ -34,7 +34,7 @@
                     Notes
                   </th>
                   <th class="text-left pr-6">
-                    
+
                   </th>
                 </tr>
               </thead>
@@ -45,7 +45,10 @@
                   <td class="text-left">{{template.createdAt | moment('MM/DD/YYYY')}}</td>
                   <td class="text-left">{{template.userName ? template.userName : 'No name'}}</td>
                   <td class="text-left">{{template.note ? template.note : 'Note not added yet.'}}</td>
-                  <td class="text-left pr-6"><v-btn color="#0D9648" elevation="0" class="white--text text-capitalize" @click="useTemplate(template)">Use Template</v-btn></td>
+                  <td class="text-left pr-6">
+
+                  <v-btn v-if="checkTime(template.dueDate,template.dueTime)" color="#F32349" elevation="0" class="white--text text-capitalize expired-button" :ripple="false" >Expired</v-btn>
+                  <v-btn v-else color="#0D9648" elevation="0" class="white--text text-capitalize" @click="useTemplate(template)">Use Template</v-btn></td>
                 </tr>
               </tbody>
             </template>
@@ -56,57 +59,67 @@
   </v-row>
 </template>
 <script>
-  import Navbar from '../../components/Layout/Navbar.vue'
-  import LeftSidebar from '../../components/Layout/Dashboard/LeftSidebar.vue'
-  import RightSidebar from '../../components/Layout/Dashboard/RightSidebar.vue'
-  import { mapActions,mapGetters } from "vuex";
+import { mapActions, mapGetters } from 'vuex';
+import moment from 'moment-timezone';
+import Navbar from '../../components/Layout/Navbar.vue';
+import LeftSidebar from '../../components/Layout/Dashboard/LeftSidebar.vue';
+import RightSidebar from '../../components/Layout/Dashboard/RightSidebar.vue';
+
 export default {
-  name : "Template",
+  name: 'Template',
   components: {
     Navbar,
     LeftSidebar,
     RightSidebar,
   },
-  
+
   data() {
     return {
       users: '',
     };
   },
-  computed:{
-    ...mapGetters(["bidTemplates"]),
-    showSideBar(){
-        return this.$store.getters.g_sideBarOpen;
+  computed: {
+    ...mapGetters(['bidTemplates']),
+    showSideBar() {
+      return this.$store.getters.g_sideBarOpen;
     },
-    activityPanel(){
-        return this.$store.getters.g_activityPanel;
+    activityPanel() {
+      return this.$store.getters.g_activityPanel;
     },
-    userDatas(){
-        return this.$store.getters.userInfo;
+    userDatas() {
+      return this.$store.getters.userInfo;
     },
-    loading(){
-        return this.$store.getters.pageLoader;
+    loading() {
+      return this.$store.getters.pageLoader;
     },
   },
   methods: {
-    ...mapActions(["getBidTemplates"]),
-    async useTemplate(template){
-      this.$store.commit('setBidData',template);
+    ...mapActions(['getBidTemplates']),
+    async useTemplate(template) {
+      this.$store.commit('setBidData', template);
       this.$store.state.bid.bidData.statusType = 'templateBid';
       await this.$store.dispatch('getTeamMembers', this.userDatas.company.company);
       await this.$store.dispatch('getSalesReps', { query: '', basin: 'all' });
       await this.$store.dispatch('getCategories');
       await this.$store.dispatch('searchByCompany', { query: '', basin: 'all' });
       this.$router.push('/create-bid/');
-    }
+    },
+    checkTime(dueDate, dueTime) {
+      const currentDate = moment.tz('America/Chicago');
+      const momentTime = moment(dueTime, ['h:mm:ss A']).format('HH:mm:ss');
+      const stringDate = `${dueDate}T${momentTime}`;
+      const momentDueDate = moment.tz(stringDate, 'America/Chicago');
+
+      return moment(momentDueDate).isBefore(currentDate);
+    },
   },
-  async created(){
+  async created() {
     await this.getBidTemplates();
   },
   mounted() {
-    document.title = "Create Bid - BidOut";
-    this.users = JSON.parse(localStorage.getItem("userData")).user;
-}
+    document.title = 'Create Bid - BidOut';
+    this.users = JSON.parse(localStorage.getItem('userData')).user;
+  },
 };
 </script>
 <style scoped lang="scss">
