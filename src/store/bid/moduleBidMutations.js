@@ -72,7 +72,6 @@ export default {
     state.singleTemplate = payload;
   },
   setInvitedSuppliersData(state, payload) {
-    console.log(payload);
     state.invitedSuppliers = payload;
   },
   setInvitedTeamMembers(state, payload) {
@@ -82,7 +81,6 @@ export default {
     state.bidlines = payload;
   },
   setAttachement(state, payload) {
-    console.log('payload', payload);
     state.attachement = payload;
   },
   setQuestions(state, payload) {

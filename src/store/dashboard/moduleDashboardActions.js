@@ -47,7 +47,6 @@ export default {
   manageUsers({commit,dispatch,state},payload){
     axios.get('/company/getUsersByCompany/'+ payload)
       .then(responce => {
-        console.log(responce.data);
         if(responce.status === 200){
           commit('getUsersList',responce.data)
         }

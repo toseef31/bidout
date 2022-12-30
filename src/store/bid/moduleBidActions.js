@@ -924,7 +924,6 @@ export default {
       const res = await axios.post('bid/uploadBidAttachment/', formData, config);
 
       if (res.status == 200) {
-        console.log(res.data);
         commit('setAttachData', res.data);
         // commit('setAttachement',res.data);
       } else {
