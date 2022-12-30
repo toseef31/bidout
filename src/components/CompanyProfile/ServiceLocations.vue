@@ -297,12 +297,11 @@ export default {
         lat: data.lattitude,
         long: data.longitude,
       }
-      console.log(this.companyData.companyLocations);
+      
       const indexOfObject = this.companyData.companyLocations.findIndex(object => {
         return object.id === data.id;
       });
 
-      console.log(indexOfObject);
 
       this.companyData.companyLocations.splice(indexOfObject, 1);
     
