@@ -47,8 +47,7 @@
                   <td class="text-left">{{template.note ? template.note : 'Note not added yet.'}}</td>
                   <td class="text-left pr-6">
 
-                  <v-btn v-if="checkTime(template.dueDate,template.dueTime)" color="#F32349" elevation="0" class="white--text text-capitalize expired-button" :ripple="false" >Expired</v-btn>
-                  <v-btn v-else color="#0D9648" elevation="0" class="white--text text-capitalize" @click="useTemplate(template)">Use Template</v-btn></td>
+                  <v-btn color="#0D9648" elevation="0" class="white--text text-capitalize" @click="useTemplate(template)">Use Template</v-btn></td>
                 </tr>
               </tbody>
             </template>
@@ -60,7 +59,6 @@
 </template>
 <script>
 import { mapActions, mapGetters } from 'vuex';
-import moment from 'moment-timezone';
 import Navbar from '../../components/Layout/Navbar.vue';
 import LeftSidebar from '../../components/Layout/Dashboard/LeftSidebar.vue';
 import RightSidebar from '../../components/Layout/Dashboard/RightSidebar.vue';
@@ -103,14 +101,6 @@ export default {
       await this.$store.dispatch('getCategories');
       await this.$store.dispatch('searchByCompany', { query: '', basin: 'all' });
       this.$router.push('/create-bid/');
-    },
-    checkTime(dueDate, dueTime) {
-      const currentDate = moment.tz('America/Chicago');
-      const momentTime = moment(dueTime, ['h:mm:ss A']).format('HH:mm:ss');
-      const stringDate = `${dueDate}T${momentTime}`;
-      const momentDueDate = moment.tz(stringDate, 'America/Chicago');
-
-      return moment(momentDueDate).isBefore(currentDate);
     },
   },
   async created() {
