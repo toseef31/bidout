@@ -236,7 +236,7 @@ export default {
       const indexOfObject = this.companyData.executiveLeadership.findIndex(object => {
         return object.id === esgData.id;
       });
-      console.log(indexOfObject);
+      
       this.companyData.executiveLeadership.splice(indexOfObject, 1);
       this.deleteCompanyExcutive(data);
     },

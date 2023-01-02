@@ -16,7 +16,9 @@
                 <div class="category-list">
                   <div class="d-flex justify-space-between px-4">
                     <h1 class="text-left service-title mb-8">
-                      {{ allcompanies && allcompanies.category && allcompanies.category.name }}
+
+                      {{ allcompanies && categoryName.category && categoryName.category.name }}
+                      
                     </h1>
                     <div class="category-list__searchBox">
                       <v-text-field
@@ -57,16 +59,15 @@
                             </tr>
                           </thead>
                           <tbody>
-                            <tr v-for="company in allcompanies.companies" :key="company.id">
+                            <tr v-for="company in allcompanies" :key="company.id">
                               <td class="pl-4 text-truncate" style="width: 300px">
                                 <router-link class="text-decoration-none" :to="company.slug ? '/company/'+company.slug: '' ">{{ company.company }}</router-link>
                               </td>
                               <td class="view-class">
                                 <span v-if="!company.companyHq">No location</span
-                                ><span v-else>{{ company.companyHqCity
- }}, {{ company.companyHqState
- }} {{ company.companyHqCountry
- }}</span>
+                                ><span v-else>{{ company.companyHqCity}}, 
+                                {{ company.companyHqState}} 
+                                {{ company.companyHqCountry}}</span>
                               </td>
                               <td class="view-class">
                                 <span v-if="!company.employees">Not Added</span
@@ -153,14 +154,19 @@ export default {
     activityPanel() {
       return this.$store.getters.g_activityPanel;
     },
+    categoryName(){
+      return this.$store.getters.serviceCompanies.data;
+    },
     allcompanies() {
       if (this.searchCompany) {
-        return this.$store.getters.serviceCompanies.data.filter((companies) => this.searchCompany
+        console.log()
+        return this.$store.getters.serviceCompanies.data.companies.filter((comp) => this.searchCompany
           .toLowerCase()
           .split(' ')
-          .every((v) => companies.company.toLowerCase().includes(v)));
+          .every((v) => comp.company.toLowerCase().includes(v)));
+      }else{
+        return this.$store.getters.serviceCompanies.data.companies;
       }
-      return this.$store.getters.serviceCompanies.data;
     },
     showLoading() {
       return this.$store.getters.ofsLoader;
@@ -168,10 +174,10 @@ export default {
   },
   watch: {
     searchCompany: _.debounce(function () {
-      return this.$store.getters.serviceCompanies.data.filter((companies) => this.searchCompany
+      return this.$store.getters.serviceCompanies.data.companies.filter((comp) => this.searchCompany
         .toLowerCase()
         .split(' ')
-        .every((v) => companies.company.toLowerCase().includes(v)));
+        .every((v) => comp.company.toLowerCase().includes(v)));
     }, 500),
   },
   methods: {

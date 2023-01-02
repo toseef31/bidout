@@ -6,7 +6,7 @@
         <v-row justify="center">
           <v-col cols="12" md="12">
             <div class="category-list">
-              <h1 class="text-left service-title mb-8">{{ allcompanies && allcompanies.category && allcompanies.category.name }}</h1>
+              <h1 class="text-left service-title mb-8">{{ allcompanies && categoryName.category && categoryName.category.name }}</h1>
               <div class="d-flex align-center tabs-header">
                 <v-tabs v-model="tab" hide-slider class="service-tabs mb-5">
                   <v-tab
@@ -44,7 +44,7 @@
                         </tr>
                       </thead>
                       <tbody>
-                        <tr v-for="company in allcompanies.companies" :key="company.id">
+                        <tr v-for="company in allcompanies" :key="company.id">
                           <td class="pl-4 text-truncate   " style="width: 300px">
 
                     <router-link :to="company.slug ? '/company-profiles/'+company.slug: '' " class="text-decoration-none">{{ company.company }}</router-link>
@@ -144,14 +144,18 @@ export default {
     };
   },
   computed: {
+    categoryName(){
+      return this.$store.getters.serviceCompanies.data;
+    },
     allcompanies() {
       if (this.filterCompany) {
-        return this.$store.getters.serviceCompanies.data.filter((companies) => this.filterCompany
+        return this.$store.getters.serviceCompanies.data.companies.filter((comp) => this.filterCompany
           .toLowerCase()
           .split(' ')
-          .every((v) => companies.company.toLowerCase().includes(v)));
+          .every((v) => comp.company.toLowerCase().includes(v)));
+      }else{
+        return this.$store.getters.serviceCompanies.data.companies;
       }
-      return this.$store.getters.serviceCompanies.data;
     },
     companyName() {
       return this.$store.getters.serviceCompanies.name;
