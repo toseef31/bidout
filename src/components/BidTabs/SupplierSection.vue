@@ -185,7 +185,7 @@
 		        	  </div>
 		        	</div>
 		        </template>
-		        {{filteredEntries}}
+		       
 		        <template  v-for="(company,index) in repsInvited">
 		        	<div class="d-flex align-center justify-space-between list-company pa-4" v-if="!company.companyId">
 		        	  <div class="comapny-data d-flex align-center">
@@ -599,6 +599,7 @@ export default {
   mounted() {
   	this.user = this.$store.getters.userInfo;
     this.savedraftOnInterval();
+    this.filteredEntries();
   },
 };
 </script>
