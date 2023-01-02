@@ -118,15 +118,15 @@ export default {
     	bidCompletionEmailsAll: false,
     	notificationPreference: {
     		bidResponses: {
-    			email: '',
+    			email: true,
     			sms: '',
     		},
     		questionAndAnswers: {
-    			email: '',
+    			email: true,
     			sms: '',
     		},
     		bidCompletionEmails: {
-    			email: '',
+    			email: true,
     			sms: '',
     		},
     	},
