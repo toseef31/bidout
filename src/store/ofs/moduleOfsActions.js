@@ -86,7 +86,8 @@ export default {
         const data = {
           data: responce.data,
         };
-        commit('setCompanies', data);
+        commit('setCompanies', responce.data.companies);
+        commit('setServiceCategory', responce.data.category);
         commit('setOfsLoader', false);
       })
       .catch((err) => {

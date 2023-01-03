@@ -5,6 +5,9 @@ export default {
   setCompanies(state, payload) {
     state.serviceCompanies = payload;
   },
+  setServiceCategory(state, payload) {
+    state.serviceCategory = payload;
+  },
   setPremiumList(state, payload) {
     state.premiumCompanies = payload;
   },
