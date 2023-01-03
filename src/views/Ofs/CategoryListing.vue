@@ -6,7 +6,7 @@
         <v-row justify="center">
           <v-col cols="12" md="12">
             <div class="category-list">
-              <h1 class="text-left service-title mb-8">{{ allcompanies && categoryName.category && categoryName.category.name }}</h1>
+              <h1 class="text-left service-title mb-8">{{ categoryName.name }}</h1>
               <div class="d-flex align-center tabs-header">
                 <v-tabs v-model="tab" hide-slider class="service-tabs mb-5">
                   <v-tab
@@ -145,20 +145,20 @@ export default {
   },
   computed: {
     categoryName(){
-      return this.$store.getters.serviceCompanies.data;
+      return this.$store.getters.serviceCategory;
     },
     allcompanies() {
       if (this.filterCompany) {
-        return this.$store.getters.serviceCompanies.data.companies.filter((comp) => this.filterCompany
+        return this.$store.getters.serviceCompanies.filter((comp) => this.filterCompany
           .toLowerCase()
           .split(' ')
           .every((v) => comp.company.toLowerCase().includes(v)));
       }else{
-        return this.$store.getters.serviceCompanies.data.companies;
+        return this.$store.getters.serviceCompanies;
       }
     },
     companyName() {
-      return this.$store.getters.serviceCompanies.name;
+      return this.$store.getters.serviceCompanies;
     },
     showLoading() {
       return this.$store.getters.ofsLoader;
@@ -182,9 +182,12 @@ export default {
       this.getCompanyByBasin({ basin, slug: this.$route.fullPath.split('/').pop() });
     },
   },
+  async created(){
+    await this.getCompanyByBasin({ basin: 'all', slug: this.$route.fullPath.split('/').pop() });
+  },
   mounted() {
     document.title = 'Categories - BidOut';
-    this.getCompanyByBasin({ basin: 'all', slug: this.$route.fullPath.split('/').pop() });
+    
   },
 };
 </script>

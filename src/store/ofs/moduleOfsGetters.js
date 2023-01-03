@@ -5,6 +5,9 @@ export default {
   serviceCompanies(state) {
     return state.serviceCompanies;
   },
+  serviceCategory(state) {
+    return state.serviceCategory;
+  },
   premiumCompanies(state) {
     return state.premiumCompanies;
   },
