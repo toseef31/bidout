@@ -29,4 +29,5 @@ export default {
     credentials: null,
     // companyAdmins: null,
     sameAsData: null,
+    packageValue: null,
 }

@@ -317,6 +317,7 @@ export default {
         commit('setContract', responce.data)
         commit('setPlan', payload.plan)
         commit('setPrice',payload.unit_price)
+        commit('setPackage',payload.package)
         router.replace({
           name: "Contract"
         });

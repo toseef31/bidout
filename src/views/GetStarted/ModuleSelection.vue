@@ -72,15 +72,21 @@
                   </div>
                 </template>
                 <template>
+                  {{ofsContractData}} {{packageValue}}
                   <div class="create-bid text-left mt-10 pa-4" v-if="ofsContractData && ofsContractData.length > 0">
                     <div class="d-flex justify-space-between align-center mb-5 label-title">
                       <h1 class="font-weight-bold">Respond to Bids - OFS Directory</h1>
                       <h1 class="price-text"><span v-if="ofsContractData[0].contractType == 'ofs'">Free</span><span v-else>
-                        <template v-if="package.id == 1">$79.99/month</template>
-                        <template v-if="package == 1">$79.99/month</template>
-                        <template v-if="package == 2">$99.99/month</template>
-                        <template v-if="package == 3">$119.99/month</template>
-                        <template v-if="package == 4">$2400/year</template>
+                        <!-- <template v-if="package.id == 1">$79.99/month</template> -->
+                        
+                        <template v-if="packageValue == 1 && billingCycle == 'Yearly'">$800/year</template>
+                        <template v-if="packageValue == 1 && billingCycle == 'Monthly'">$79.99/month</template>
+                        <template v-if="packageValue == 2 && billingCycle == 'Yearly'">$1,000/year</template>
+                        <template v-if="packageValue == 2 && billingCycle == 'Monthly'">$99.99/month</template>
+                        <template v-if="packageValue == 3 && billingCycle == 'Yearly'">$1,200/year</template>
+                        <template v-if="packageValue == 3 && billingCycle == 'Monthly'">$119.99/month</template>
+                        <template v-if="packageValue == 4 && billingCycle == 'Yearly'">$2,400/year</template>
+                        <template v-if="packageValue == 4 && billingCycle == 'Monthly'">$239.99/month</template>
                       </span></h1>
                       <v-sheet>
                         <v-icon color="#0D9647">mdi-check-circle-outline</v-icon>
@@ -119,7 +125,7 @@
                     <v-row>
                       <v-col cols="12" sm="12" v-show="ofsContractData[0].contractType == 'ofs-premium'">
                         <label class="d-block text-left input-label mb-2 font-weight-bold">Sales Team Contacts</label>
-                        <v-select outlined placeholder="Select" v-model="package" :items="packages" item-text="name" item-value="id" :disabled="true"></v-select>
+                        <v-select outlined placeholder="Select" v-model="packageValue" :items="packages" item-text="name" item-value="id" :disabled="true"></v-select>
                       </v-col>
                     </v-row>
                     <v-row>
@@ -344,7 +350,7 @@
 <script>
   import NavbarBeforeLogin from '../../components/Layout/NavbarBeforeLogin.vue'
   import Footer from '../../components/Layout/Footer.vue'
-  import { mapActions } from "vuex";
+  import { mapActions,mapGetters } from "vuex";
 export default {
   name : "ModuleSelection",
   components: {
@@ -382,6 +388,7 @@ export default {
     };
   },
   computed:{
+    ...mapGetters(["packageValue"]),
    companyName(){
     return this.$store.getters.companyName;
    },
@@ -494,6 +501,7 @@ export default {
         userId: this.$store.getters.id,
         customer_id: this.$store.getters.customerId,
         unit_price: this.unit_price,
+        package: this.package,
       }
       this.contractGenerate(contract);
       if(type == 'ofs-premium'){

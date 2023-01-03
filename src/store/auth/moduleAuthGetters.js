@@ -77,4 +77,7 @@ export default {
     sameAsData (state){
        return state.sameAsData
     },
+    packageValue (state){
+       return state.packageValue
+    },
 }

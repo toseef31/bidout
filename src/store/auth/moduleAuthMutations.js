@@ -81,4 +81,7 @@ export default {
     setSameAsData (state, payload){
       state.sameAsData = payload
     },
+    setPackage (state, payload){
+      state.packageValue = payload
+    },
 }
