@@ -296,9 +296,6 @@ export default {
     console.log("dasdasd");
     const res = fetch('https://api.ipify.org?format=json',{
       method: 'get',
-      headers:{
-        "Content-Type": "application/json"
-      },
     }).then(response => response.json())
     .then(json =>{
       commit('setLocalIp', json.ip)
