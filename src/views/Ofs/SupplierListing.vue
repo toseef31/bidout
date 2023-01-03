@@ -17,7 +17,7 @@
                   <div class="d-flex justify-space-between px-4">
                     <h1 class="text-left service-title mb-8">
 
-                      {{ allcompanies && categoryName.category && categoryName.category.name }}
+                      {{ categoryName.name }}
                       
                     </h1>
                     <div class="category-list__searchBox">
@@ -155,17 +155,17 @@ export default {
       return this.$store.getters.g_activityPanel;
     },
     categoryName(){
-      return this.$store.getters.serviceCompanies.data;
+      return this.$store.getters.serviceCategory;
     },
     allcompanies() {
       if (this.searchCompany) {
-        console.log()
-        return this.$store.getters.serviceCompanies.data.companies.filter((comp) => this.searchCompany
+       
+        return this.$store.getters.serviceCompanies.filter((comp) => this.searchCompany
           .toLowerCase()
           .split(' ')
           .every((v) => comp.company.toLowerCase().includes(v)));
       }else{
-        return this.$store.getters.serviceCompanies.data.companies;
+        return this.$store.getters.serviceCompanies;
       }
     },
     showLoading() {
@@ -174,7 +174,7 @@ export default {
   },
   watch: {
     searchCompany: _.debounce(function () {
-      return this.$store.getters.serviceCompanies.data.companies.filter((comp) => this.searchCompany
+      return this.$store.getters.serviceCompanies.filter((comp) => this.searchCompany
         .toLowerCase()
         .split(' ')
         .every((v) => comp.company.toLowerCase().includes(v)));
@@ -194,9 +194,11 @@ export default {
       this.getCompanyByBasin({ basin, slug: this.$route.fullPath.split('/').pop() });
     },
   },
+  async created(){
+    await this.getCompanyByBasin({ basin: 'all', slug: this.$route.fullPath.split('/').pop() });
+  },
   mounted() {
     document.title = 'Categories - BidOut';
-    this.getCompanyByBasin({ basin: 'all', slug: this.$route.fullPath.split('/').pop() });
   },
 };
 </script>

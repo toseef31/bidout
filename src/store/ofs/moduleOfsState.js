@@ -1,6 +1,7 @@
 export default {
    categories: [], 
    serviceCompanies: [], 
+   serviceCategory: [], 
    premiumCompanies:null,
    publicCompany: null,
    supplierCompany: null,
