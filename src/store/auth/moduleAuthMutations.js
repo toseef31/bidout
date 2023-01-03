@@ -84,4 +84,10 @@ export default {
     setPackage (state, payload){
       state.packageValue = payload
     },
+    setModuleRfxOption (state, payload){
+      state.moduleRfxOption = payload
+    },
+    setModuleOfsOption (state, payload){
+      state.moduleOfsOption = payload
+    },
 }

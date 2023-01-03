@@ -30,4 +30,6 @@ export default {
     // companyAdmins: null,
     sameAsData: null,
     packageValue: null,
+    moduleRfxOption: null,
+    moduleOfsOption: null,
 }

@@ -80,4 +80,10 @@ export default {
     packageValue (state){
        return state.packageValue
     },
+    moduleRfxOption (state){
+       return state.moduleRfxOption
+    },
+    moduleOfsOption (state){
+       return state.moduleOfsOption
+    },
 }
