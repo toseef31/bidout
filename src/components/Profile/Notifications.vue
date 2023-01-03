@@ -183,6 +183,7 @@ export default {
     }
   },
   mounted() {
+  	this.updateNoti();
     if(this.$store.getters.userInfo.notificationPreference){
     	this.notificationPreference.bidResponses.email = this.$store.getters.userInfo.notificationPreference.bidResponses.email;
     	this.notificationPreference.bidResponses.sms = this.$store.getters.userInfo.notificationPreference.bidResponses.sms;
@@ -200,6 +201,7 @@ export default {
 	    	this.bidCompletionEmailsAll = true;
 	    }
     }
+
 
   } 
 };
