@@ -171,7 +171,7 @@ export default {
                 // localStorage.setItem("userId",payload.id);
                 commit('setCompanyId', payload.id);
                 commit('setCompanyName', payload.companyName);
-                commit('setCompanyAdmins', responce.data.admins);
+                commit('setQueueAdmins', responce.data.admins);
                 router.replace({
                   name: "ExistingAccount"
                 });
