@@ -1,7 +1,25 @@
 <template>
   <div>
     <div class="bidline-section">
-      <h4 class="text-left pl-4 font-weight-bold black--text my-4">Bid Line Items</h4>
+      <div class="d-flex justify-space-between align-center">
+        <h4 class="text-left pl-4 font-weight-bold black--text my-4">Bid Line Items</h4>
+        <div>
+          <v-tooltip left >
+            <template v-slot:activator="{ on, attrs }">
+             <v-btn v-bind="attrs" class="mr-4 text-capitalize export-excel" width="125px"
+              v-on="on"  icon color="#0D9648" @click="exportF">
+              Export  <v-icon size="30" class="pl-2" >mdi-microsoft-excel
+               </v-icon>
+            </v-btn>
+            </template>
+            <span>Export Line Items</span>
+          </v-tooltip>
+          <label class="import-excel btn" for="import">
+            Import <v-icon size="30" color="#fff">mdi-microsoft-excel</v-icon>
+            <input type="file" id="import" class="d-none" @change="onChange" />
+          </label>
+        </div>
+      </div>
 
         <input type="hidden" name="" :value="validate">
         {{validate}}
@@ -102,6 +120,7 @@
 <script>
 import draggable from 'vuedraggable';
 import { v4 as uuidv4 } from 'uuid';
+import * as XLSX from 'xlsx';
 import { mapActions } from 'vuex';
 
 export default {
@@ -114,6 +133,7 @@ export default {
       availableSuppl: null,
       inputType: ['USD'],
       units: ['Feet', 'Pound', 'Ton', 'Mile', 'Gallon', 'Barrell', 'Day', 'Each', 'Hourly', 'N/A'],
+      excelHeader: ['Description', 'Unit', 'Quantity', 'BuyerComment'],
       exampleItems: [],
       qtyRules: [
         (v) => !!v || 'This field is required',
@@ -216,6 +236,66 @@ export default {
     removeBidLine(index) {
       this.bidLines.splice(index, 1);
       this.bidLinesStatus = true;
+    },
+    exportF() {
+      const header = this.excelHeader;
+
+      const dataD = [];
+      let index;
+
+      this.bidLines.forEach((el, lIndex) => {
+        // dataD.push([el.description]);
+        console.log('hhh',el);
+          // dataD[lIndex].push(`${el.description}`);
+          // dataD[lIndex].push(`${el.unit}`);
+          // dataD[lIndex].push(`${el.quantity}`);
+          // dataD[lIndex].push(`${el.buyerComment}`);
+        // this.bidDetail.supplierSubmissions.forEach((list) => {
+        // });
+      });
+
+      
+
+      dataD.unshift(header);
+      const data = XLSX.utils.json_to_sheet(dataD, {skipHeader: true});
+      const wb = XLSX.utils.book_new();
+      XLSX.utils.book_append_sheet(wb, data, 'data');
+      XLSX.writeFile(wb, `line.xlsx`);
+    },
+    onChange(event) {
+      this.file = event.target.files ? event.target.files[0] : null;
+      if (this.file) {
+        const reader = new FileReader();
+
+        reader.onload = (e) => {
+          /* Parse data */
+          const bstr = e.target.result;
+          const wb = XLSX.read(bstr, { type: 'binary' });
+          /* Get first worksheet */
+          const wsname = wb.SheetNames[0];
+          const ws = wb.Sheets[wsname];
+          /* Convert array of arrays */
+          const data = XLSX.utils.sheet_to_json(ws, { header: 0,skipHeader:true });
+          console.log('hh',data);
+          for (let i = 0; i < data.length; i++) {
+            // console.log(data[i+1].Unit);
+            this.bidLines.push({
+              id: uuidv4(),
+              type: 'USD',
+              inputType: 'USD',
+              units: ['Gallon', 'Liter'],
+              description: data[i].Description,
+              unit: data[i].Unit,
+              quantity: data[i].Quantity,
+              buyerComment: data[i].BuyerComment,
+              switch1: '',
+              required: true,
+            });
+          }
+        }
+
+        reader.readAsBinaryString(this.file);
+      }
     },
     savedraftOnInterval(){
       const timer = setInterval(() => {
