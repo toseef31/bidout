@@ -33,9 +33,10 @@
 
                     <v-list-item-subtitle v-if="conversation.isBid == true">Bid #{{conversation.bidSerial}}</v-list-item-subtitle>
                   </v-list-item-content>
-
+                  
                   <v-list-item-action class="mt-n5">
-                    <v-list-item-action-text v-if="!conversation.latestMessage || conversation.latestMessage == null">{{ istoday(conversation.updatedAt) }}</v-list-item-action-text>
+                    <v-list-item-action-text v-if="!conversation.latestMessage || conversation.latestMessage == null">{{ istoday(conversation.createdAt) }}</v-list-item-action-text>
+
                       <v-list-item-action-text v-else>{{ istoday(conversation.latestMessage) }}</v-list-item-action-text>
                   </v-list-item-action>
                   <!-- <v-badge
@@ -45,7 +46,7 @@
                     ></v-badge> -->
                 </template>
               </v-list-item>
-              <v-list-item v-if="conversation.type == 'PRIVATE' && participant.id != user.id"  v-for="participant in conversation.participantDetails" @click="openChat(conversation,participant.name)" :class="{ 'grey--text v-list-item--active' : conversation._id === chatData.group._id }" :key="participant.id">
+              <v-list-item v-if="conversation.type == 'PRIVATE' && participant.id != user.id"  v-for="participant in conversation.participantDetails" @click="openChat(conversation,participant.name)" :class="{ 'grey--text v-list-item--active' : conversation._id === chatData.group._id }" :key="participant.id" class="d-none">
                 <template >
                     <v-list-item-avatar>
                       <v-avatar>
@@ -169,10 +170,18 @@ export default {
   },
   computed: {
     conversationsList() {
-      if (this.$store.state.chat.searchConv != null) {
-        return _.orderBy(this.$store.getters.conversations.filter((item) => this.$store.state.chat.searchConv.toLowerCase().split(' ').every((v) => item.company.toLowerCase().includes(v))), 'updatedAt', 'desc');
+      if (this.$store.state.chat.searchConv != '') {
+        return _.orderBy(this.$store.getters.conversations.filter((item) => this.$store.state.chat.searchConv.toLowerCase().split(' ').every((v) => item.company.toLowerCase().includes(v))), 'latestMessage', 'desc');
+      }else{
+        let newArr = this.$store.getters.conversations;
+        newArr.forEach((msg, index) => {
+          if(!msg.latestMessage){
+            msg.latestMessage = msg.createdAt; // add the new field
+          }
+        })
+        return _.orderBy(newArr,'latestMessage', 'desc');
       }
-      return _.orderBy(this.$store.getters.conversations, 'updatedAt', 'desc');
+      
     },
     archiveList() {
       return this.$store.getters.archiveList;
@@ -229,12 +238,11 @@ export default {
     this.user = this.$store.getters.userInfo;
   },
   updated() {
-    console.log('dddds', this.searchUser);
+    
   },
   async mounted() {
     this.archiveConversations(this.user.id);
     const convo = await _.orderBy(this.$store.getters.conversations, 'latestMessage', 'desc')[0];
-    console.log(convo, 'dada');
     if (convo.type == 'PRIVATE') {
       const membr = convo.participantDetails.filter((item) => {
         if (this.user.id != item.id) {
@@ -248,7 +256,6 @@ export default {
     if (convo) {
       await this.openChat(convo, grpName);
     }
-    console.log('ddsda', this.$store.state.chat.searchConv);
   },
 };
 </script>
