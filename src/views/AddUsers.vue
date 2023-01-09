@@ -1,6 +1,8 @@
 <template>
   <v-row class="addUsers-module pa-0 ma-0">
-    <v-col class="pa-0 pr-sm-3" :class="[ showSideBar ? 'col-md-12 col-12 col-sm-12' : 'mid-content-collapse', activityPanel ? 'd-sm-block' : 'd-md-block']" v-show="!activityPanel">
+    <v-col class="pa-0 pr-sm-3"
+      :class="[showSideBar ? 'col-md-12 col-12 col-sm-12' : 'mid-content-collapse', activityPanel ? 'd-sm-block' : 'd-md-block']"
+      v-show="!activityPanel">
       <div class="mid-content">
         <div class="content-section">
           <v-row class="mx-0">
@@ -10,65 +12,30 @@
                   <h4>Add Users</h4>
                 </div>
                 <div class="addUser-form mt-16">
-                  <v-form
-                    ref="form"
-                    v-model="valid"
-                    lazy-validation
-                  >
+                  <v-form ref="form" v-model="valid" lazy-validation>
                     <label class="d-block text-left font-weight-bold mb-2">First Name</label>
-                    <v-text-field
-                      v-model="firstName"
-                      :rules="nameRules"
-                      placeholder="First Name"
-                      required
-                      outlined
-                    ></v-text-field>
+                    <v-text-field v-model="firstName" :rules="nameRules" placeholder="First Name" required
+                      outlined></v-text-field>
                     <label class="d-block text-left font-weight-bold mb-2">Last Name</label>
-                    <v-text-field
-                      v-model="lastName"
-                      :rules="nameRules"
-                      placeholder="Last Name"
-                      required
-                      outlined
-                    ></v-text-field>
+                    <v-text-field v-model="lastName" :rules="nameRules" placeholder="Last Name" required
+                      outlined></v-text-field>
                     <label class="d-block text-left font-weight-bold mb-2">Email Address</label>
-                    <v-text-field
-                      v-model="email"
-                      :rules="emailRules"
-                      placeholder="Example@email.com"
-                      required
-                      outlined
-                    ></v-text-field>
+                    <v-text-field v-model="email" :rules="emailRules" placeholder="Example@email.com" required
+                      outlined></v-text-field>
                     <label class="d-block text-left font-weight-bold mb-2">Privileges
                       <v-tooltip right>
                         <template v-slot:activator="{ on, attrs }">
-                          <v-icon small 
-                            v-bind="attrs"
-                            v-on="on">mdi-information-outline</v-icon>
+                          <v-icon small v-bind="attrs" v-on="on">mdi-information-outline</v-icon>
                         </template>
                         <span>Add user privileges</span>
                       </v-tooltip>
                     </label>
-                    <v-select
-                      v-model="select"
-                      :items="items"
-                      :rules="[v => !!v || 'Privileges is required']"
-                      placeholder="Select"
-                      item-text="label" item-value="value"
-                      required
-                      outlined
-                      solo-flat class="text-capitalize"
-                    ></v-select>
+                    <v-select v-model="select" :items="items" :rules="[v => !!v || 'Privileges is required']"
+                      placeholder="Select" item-text="label" item-value="value" required outlined solo-flat
+                      class="text-capitalize"></v-select>
 
-                    <v-btn
-                      :disabled="!valid"
-                      color="#0D9648"
-                      class="mr-4 text-capitalize white--text font-weight-bold"
-                      @click="validate"
-                      large
-                      height="50px"
-                      min-width="220px"
-                    >
+                    <v-btn :disabled="!valid" color="#0D9648" class="mr-4 text-capitalize white--text font-weight-bold"
+                      @click="validate" large height="50px" min-width="220px">
                       Invite User
                     </v-btn>
                   </v-form>
@@ -78,73 +45,75 @@
           </v-row>
         </div>
       </div>
-     </v-col>
+    </v-col>
   </v-row>
 </template>
 <script>
-  import Navbar from '../components/Layout/Navbar.vue'
-  import LeftSidebar from '../components/Layout/Dashboard/LeftSidebar.vue'
-  import RightSidebar from '../components/Layout/Dashboard/RightSidebar.vue'
-  import axios from 'axios'
-  import { mapActions, mapState } from "vuex";
+
+import { mapActions } from 'vuex';
+import Navbar from '../components/Layout/Navbar.vue';
+import LeftSidebar from '../components/Layout/Dashboard/LeftSidebar.vue';
+import RightSidebar from '../components/Layout/Dashboard/RightSidebar.vue';
+
 export default {
-  name : "ManageUsers",
+  name: 'ManageUsers',
   components: {
     Navbar,
     LeftSidebar,
-    RightSidebar
+    RightSidebar,
   },
-  
+
   data() {
     return {
-      isHidden : false,
+      isHidden: false,
       valid: true,
-        firstName: '',
-        lastName: '',
-        nameRules: [
-          v => !!v || 'Name is required',
-        ],
-        email: '',
-        emailRules: [
-          v => !!v || 'E-mail is required',
-          v => /.+@.+\..+/.test(v) || 'E-mail must be valid',
-        ],
-        select: null,
-        items: [
-          {value: 'admin', label: 'Administrator'},
-          {value:'user', label: 'User'},
-        ],
-        user: '',
+      firstName: '',
+      lastName: '',
+      nameRules: [
+        (v) => !!v || 'Name is required',
+      ],
+      email: '',
+      emailRules: [
+        (v) => !!v || 'E-mail is required',
+        (v) => /.+@.+\..+/.test(v) || 'E-mail must be valid',
+      ],
+      select: null,
+      items: [
+        { value: 'admin', label: 'Administrator' },
+        { value: 'user', label: 'User' },
+      ],
+      user: '',
     };
   },
-  computed:{
-    showSideBar(){
-        return this.$store.getters.g_sideBarOpen;
+  computed: {
+    showSideBar() {
+      return this.$store.getters.g_sideBarOpen;
     },
-    activityPanel(){
-        return this.$store.getters.g_activityPanel;
+    activityPanel() {
+      return this.$store.getters.g_activityPanel;
     },
   },
   methods: {
-    ...mapActions(["inviteUser"]),
-    
+    ...mapActions(['inviteUser']),
+
     validate() {
       this.$refs.form.validate();
-      var data = {
+      const data = {
         firstName: this.firstName,
         lastName: this.lastName,
         email: this.email,
         role: this.select,
         company: this.user.company.company,
         parent: this.user.id,
-      }
+        companyId: this.user.company.id,
+      };
       this.inviteUser(data);
     },
   },
   mounted() {
-    document.title = "Add Users - BidOut";
+    document.title = 'Add Users - BidOut';
     this.user = this.$store.getters.userInfo;
-  }
+  },
 };
 </script>
 <style scoped lang="scss">
