@@ -4,20 +4,26 @@
       <div class="d-flex justify-space-between align-center">
         <h4 class="text-left pl-4 font-weight-bold black--text my-4">Bid Line Items</h4>
         <div>
-          <v-tooltip left >
+          <v-tooltip top >
             <template v-slot:activator="{ on, attrs }">
-             <v-btn v-bind="attrs" class="mr-4 text-capitalize export-excel" width="125px"
-              v-on="on"  icon color="#0D9648" @click="exportF">
-              Export  <v-icon size="30" class="pl-2" >mdi-microsoft-excel
+            
+             <a v-bind="attrs" class="mr-4 text-capitalize text-decoration-none export-excel" href="https://firebasestorage.googleapis.com/v0/b/bidout-dev.appspot.com/o/wordTemplates%2FlineItemsTemplate%20(2).xlsx?alt=media&token=e03e4a03-1a34-413a-81e4-4a0fbaef9f78" download width="125px"
+              v-on="on"  icon color="#0D9648">
+              Export <v-icon size="30" class="pl-2" color="#0d9648">mdi-microsoft-excel
                </v-icon>
-            </v-btn>
+            </a>
             </template>
-            <span>Export Line Items</span>
+            <span>Download the <strong>Excel Template</strong> to upload line items directly from excel</span>
           </v-tooltip>
-          <label class="import-excel btn" for="import">
-            Import <v-icon size="30" color="#fff">mdi-microsoft-excel</v-icon>
-            <input type="file" id="import" class="d-none" @change="onChange" />
-          </label>
+          <v-tooltip top >
+            <template v-slot:activator="{ on, attrs }">
+              <label class="import-excel btn" for="import" v-bind="attrs" v-on="on">
+                Import <v-icon size="30" color="#0d9648">mdi-microsoft-excel</v-icon>
+                <input type="file" id="import" class="d-none" @change="onChange" />
+              </label>
+            </template>
+              <span>Import the <strong>Excel Template</strong> to upload line items</span>
+          </v-tooltip>
         </div>
       </div>
 
@@ -244,18 +250,9 @@ export default {
       let index;
 
       this.bidLines.forEach((el, lIndex) => {
-        // dataD.push([el.description]);
+        dataD.push([el.description]);
         console.log('hhh',el);
-          // dataD[lIndex].push(`${el.description}`);
-          // dataD[lIndex].push(`${el.unit}`);
-          // dataD[lIndex].push(`${el.quantity}`);
-          // dataD[lIndex].push(`${el.buyerComment}`);
-        // this.bidDetail.supplierSubmissions.forEach((list) => {
-        // });
       });
-
-      
-
       dataD.unshift(header);
       const data = XLSX.utils.json_to_sheet(dataD, {skipHeader: true});
       const wb = XLSX.utils.book_new();
@@ -268,17 +265,12 @@ export default {
         const reader = new FileReader();
 
         reader.onload = (e) => {
-          /* Parse data */
           const bstr = e.target.result;
           const wb = XLSX.read(bstr, { type: 'binary' });
-          /* Get first worksheet */
           const wsname = wb.SheetNames[0];
           const ws = wb.Sheets[wsname];
-          /* Convert array of arrays */
           const data = XLSX.utils.sheet_to_json(ws, { header: 0,skipHeader:true });
-          console.log('hh',data);
           for (let i = 0; i < data.length; i++) {
-            // console.log(data[i+1].Unit);
             this.bidLines.push({
               id: uuidv4(),
               type: 'USD',
@@ -289,7 +281,7 @@ export default {
               quantity: data[i].Quantity,
               buyerComment: data[i].BuyerComment,
               switch1: '',
-              required: true,
+              required: ((data[i].Required == 'Yes') ? true : false),
             });
           }
         }

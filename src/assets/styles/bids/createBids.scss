@@ -337,15 +337,15 @@
 						.import-excel{
 							width: 20px;
 					    margin-right: 15px;
-			        background: #0d9648;
-			        padding: 8px 21px;
+			        color: #0d9648;
+			        padding: 8px 4px;
 			        border-radius: 10px;
-			        color: #fff;
 			        cursor: pointer;
 						}
 						.export-excel{
-							border: 1px solid;
-							border-radius: 10px;
+/*							border: 1px solid;*/
+/*							border-radius: 10px;*/
+							color: #0d9648;
 						}
 					}
 					.v-btn{
