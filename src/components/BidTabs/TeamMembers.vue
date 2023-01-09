@@ -1,14 +1,14 @@
 <template>
 	<div>
-		<v-row class="my-4 supplier-row fill-height" no-gutters>
+		<v-row class="supplier-row fill-height" no-gutters>
 		  <v-col cols="12" sm="6" class="available-data">
 		    <div class="d-flex justify-space-between align-center pl-4 pa-3 supplier-head">
 		      <div>
 		        <h4 class="mb-0 black--text font-weight-bold">Invite Team Members</h4>
 		      </div>
-		      
+
 		    </div>
-		    
+
 		      <div>
 		        <div class="available-search mt-5 px-4">
 		          <div>
@@ -26,7 +26,7 @@
 		          <div class="d-flex align-center justify-space-between list-company pa-4" v-for="(team,index) in teamMembers" v-if="user.id != team.id">
 		            <div class="comapny-data d-flex align-center">
 		              <div class="company-img">
-		                <img v-if="!team.image" :src="require('@/assets/images/chat/chatUser.png')">
+		                <img v-if="!team.image" :src="require('@/assets/images/chat/chatUser.png')" width="48px" height="48px">
 		                <img v-else :src="team.image" width="48px" height="48px">
 		              </div>
 		              <div class="company-title text-left pl-4">
@@ -68,14 +68,15 @@
 		  </v-col>
 		</v-row>
 		<v-row justify="center" align="center" no-gutters>
-		  <v-col cols="12" md="12">
-		    <v-btn color="#0D9648" elevation="0" height="56px" width="220px" large class="white--text text-capitalize font-weight-bold mt-8 mb-8 save-btn" @click="changeTab">Save Changes</v-btn>
+		  <v-col cols="12" md="12" class="mb-n2">
+		    <v-btn color="#0D9648" elevation="0" height="56px" width="220px" large class="white--text text-capitalize font-weight-bold mt-6 mb-5 save-btn" @click="changeTab">Save Changes</v-btn>
 		  </v-col>
 		</v-row>
 	</div>
 </template>
 <script>
-  import { mapActions } from "vuex";
+import { mapActions } from 'vuex';
+
 export default {
   data() {
     return {
@@ -88,100 +89,90 @@ export default {
       newCount: 0,
     };
   },
-  computed:{
-    teamMembers(){
-    	if(this.$store.getters.bidData != null){
-    		if(this.$route.name == 'EditBid'){
-    			if(this.$store.getters.bidData.invitedTeamMembers != ""){
-    				return this.$store.getters.teamMembers.filter((el) => { return !this.$store.getters.bidData.invitedTeamMembers.find((team) => team.id === el.id); })
-    			}else{
-    				return this.$store.getters.teamMembers;
+  computed: {
+    teamMembers() {
+    	if (this.$store.getters.bidData != null) {
+    		if (this.$route.name == 'EditBid') {
+    			if (this.$store.getters.bidData.invitedTeamMembers != '') {
+    				return this.$store.getters.teamMembers.filter((el) => !this.$store.getters.bidData.invitedTeamMembers.find((team) => team.id === el.id));
     			}
-    		}else{
-	    		if(this.$store.getters.bidData.invitedTeamMembers != ''){ 
-	    			return this.$store.getters.teamMembers.filter((el) => { return !this.$store.getters.bidData.invitedTeamMembers.includes(el.id); })
-	    		}else{
-	    			return this.$store.getters.teamMembers;
+    				return this.$store.getters.teamMembers;
+    		}
+	    		if (this.$store.getters.bidData.invitedTeamMembers != '') {
+	    			return this.$store.getters.teamMembers.filter((el) => !this.$store.getters.bidData.invitedTeamMembers.includes(el.id));
 	    		}
+	    			return this.$store.getters.teamMembers;
+    	}
+	    	if (this.searchMember) {
+        return this.$store.getters.teamMembers.filter((item) => (this.searchMember.toLowerCase().split(' ').every((v) => item.firstName.toLowerCase().includes(v)) || this.searchMember.toLowerCase().split(' ').every((v) => item.lastName.toLowerCase().includes(v))));
 	    	}
-    	}else{
-	    	if(this.searchMember){
-					return this.$store.getters.teamMembers.filter((item)=>{
-	  			  return (this.searchMember.toLowerCase().split(' ').every(v => item.firstName.toLowerCase().includes(v)) || this.searchMember.toLowerCase().split(' ').every(v => item.lastName.toLowerCase().includes(v)))
-	  			})
-	    	}else{
 	  			return this.$store.getters.teamMembers;
-	    	}
-    	}
     },
-    filterTeam(){
-			if(this.$store.getters.bidData.invitedTeamMembers != ''){
-				if(this.$route.name == 'EditBid'){
-		  		this.membersAdded = this.$store.getters.teamMembers.filter((el) => { return this.$store.state.bid.invitedTeamMembers.find((team) => team.id === el.id); })
-				}else{
-					if(!this.$store.state.bid.invitedTeamMembers[0].id){
-						this.membersAdded = this.$store.getters.teamMembers.filter((el) => { return this.$store.state.bid.invitedTeamMembers.includes(el.id); })
-					}else{
-						this.membersAdded = this.$store.state.bid.invitedTeamMembers;
-					}
-				}
-			}
+    filterTeam() {
+      if (this.$store.getters.bidData.invitedTeamMembers != '') {
+        if (this.$route.name == 'EditBid') {
+		  		this.membersAdded = this.$store.getters.teamMembers.filter((el) => this.$store.state.bid.invitedTeamMembers.find((team) => team.id === el.id));
+        } else if (!this.$store.state.bid.invitedTeamMembers[0].id) {
+          this.membersAdded = this.$store.getters.teamMembers.filter((el) => this.$store.state.bid.invitedTeamMembers.includes(el.id));
+        } else {
+          this.membersAdded = this.$store.state.bid.invitedTeamMembers;
+        }
+      }
     },
-    validat(){
-    	if(this.membersAdded.length > 0){
-    		this.$emit('validation',{'valid': true,'team': '3'});
-    		return this.valid;
-    	}else{
-    		this.$emit('validation',{'valid': false,'team': '3'});
+    validat() {
+    	if (this.membersAdded.length > 0) {
+    		this.$emit('validation', { valid: true, team: '3' });
     		return this.valid;
     	}
+    		this.$emit('validation', { valid: false, team: '3' });
+    		return this.valid;
     },
   },
   methods: {
-  	...mapActions(["getTeamMembers","getCompanyInfo","updateDraftBid","updateTemplate","updateBid"]),
-    changeTab(){
-    	if(this.$route.name == 'EditBid'){
-    		this.updateBid({'invitedTeamMembers':this.membersAdded});
-    	}else if(this.$route.name == 'EditTemplate'){
-    	  this.updateTemplate({'invitedTeamMembers':this.membersAdded});
-    	}else{
-    		this.updateDraftBid({'invitedTeamMembers':this.membersAdded});
+  	...mapActions(['getTeamMembers', 'getCompanyInfo', 'updateDraftBid', 'updateTemplate', 'updateBid']),
+    changeTab() {
+    	if (this.$route.name == 'EditBid') {
+    		this.updateBid({ invitedTeamMembers: this.membersAdded });
+    	} else if (this.$route.name == 'EditTemplate') {
+    	  this.updateTemplate({ invitedTeamMembers: this.membersAdded });
+    	} else {
+    		this.updateDraftBid({ invitedTeamMembers: this.membersAdded });
     	}
       this.$emit('changetab', 'tab-4');
     },
-    viewCompany(id,name){
-      this.getCompanyInfo({'id':id,'name':name});
+    viewCompany(id, name) {
+      this.getCompanyInfo({ id, name });
     },
-    addMember(member,index){
+    addMember(member, index) {
     	this.oldCount = this.membersAdded.length;
     	this.membersAdded.push(member);
-    	console.log('add member',this.membersAdded);
+    	console.log('add member', this.membersAdded);
     	this.newCount = this.membersAdded.length;
-  		this.$store.getters.teamMembers.splice(index,1);
-  		this.$store.commit('setInvitedTeamMembers',this.membersAdded);
+  		this.$store.getters.teamMembers.splice(index, 1);
+  		this.$store.commit('setInvitedTeamMembers', this.membersAdded);
     },
-    remove(member,index){
+    remove(member, index) {
     	this.oldCount = this.membersAdded.length;
 	  	this.$store.getters.teamMembers.push(member);
 	  	this.newCount = this.membersAdded.length;
-			this.membersAdded.splice(index,1);
-  		this.$store.commit('setInvitedTeamMembers',this.membersAdded);
+      this.membersAdded.splice(index, 1);
+  		this.$store.commit('setInvitedTeamMembers', this.membersAdded);
     },
-    savedraftOnInterval(){
+    savedraftOnInterval() {
       const timer = setInterval(() => {
-      	if(this.oldCount != this.newCount){
-      		if(this.$route.name == 'EditBid'){
-      			this.updateBid({'invitedTeamMembers':this.membersAdded});
-      		}else if(this.$route.name == 'EditTemplate'){
-  	    	  this.updateTemplate({'invitedTeamMembers':this.membersAdded});
-  	    	}else{
-  	    		this.updateDraftBid({'invitedTeamMembers':this.membersAdded});
+      	if (this.oldCount != this.newCount) {
+      		if (this.$route.name == 'EditBid') {
+      			this.updateBid({ invitedTeamMembers: this.membersAdded });
+      		} else if (this.$route.name == 'EditTemplate') {
+  	    	  this.updateTemplate({ invitedTeamMembers: this.membersAdded });
+  	    	} else {
+  	    		this.updateDraftBid({ invitedTeamMembers: this.membersAdded });
   	    	}
         	this.oldCount = this.newCount;
       	}
       }, 60000);
 
-      this.$once("hook:beforeDestroy", () => {
+      this.$once('hook:beforeDestroy', () => {
         clearInterval(timer);
       });
     },
@@ -190,9 +181,9 @@ export default {
     // this.interval = setInterval(() => this.updateDraftBid({'invitedTeamMembers':this.membersAdded}));
   },
   mounted() {
-  	this.user = this.$store.getters.userInfo
+  	this.user = this.$store.getters.userInfo;
     this.getTeamMembers(this.$store.getters.userInfo.company.company);
     this.savedraftOnInterval();
-	}	
+  },
 };
 </script>

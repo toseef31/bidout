@@ -1,6 +1,6 @@
 <template>
 	<div>
-		<v-row class="my-4 supplier-row fill-height" no-gutters>
+		<v-row class="supplier-row fill-height" no-gutters>
 		  <v-col sm="2" v-if="categories" class="category-col">
         {{itemBidId}}
 		  	<v-list class="pt-0">
@@ -60,8 +60,17 @@
 		          <div class="d-flex align-center justify-space-between list-company pa-4" v-for="(company,index) in companiesList" v-if="user.company.id != company.objectID">
 		            <div class="comapny-data d-flex align-center">
 		              <div class="company-img">
-		                <img v-if="!company.image" :src="require('@/assets/images/bids/company.png')">
-		                <img v-else :src="company.image" width="56.25px" height="15px">
+
+						<img
+						 v-if="company.image"
+                         class="image-class"
+							:src="company.image"
+                       />
+
+					   <div   v-else class="icon-class" >
+					    <v-icon size="40" >mdi-domain</v-icon>
+					   </div>
+
 		              </div>
 		              <div class="company-title text-left pl-4">
 		                <h4>{{company.company}}</h4>
@@ -94,13 +103,13 @@
 		          <div class="d-flex align-center justify-space-between list-company pa-4" v-for="(list,index) in salesRepsList" v-if="user.id != list.objectID">
 		            <div class="comapny-data d-flex align-center">
 		              <div class="company-img">
-		                <img v-if="!list.image" :src="require('@/assets/images/chat/chatUser.png')">
+		                <img v-if="!list.image" :src="require('@/assets/images/chat/chatUser.png')" >
 		                <img v-else :src="list.image" width="48px" height="48px">
 		              </div>
 		              <div class="company-title text-left pl-4">
 		                <h4>{{list.firstName}} {{list.lastName}}</h4>
 		                <p class="mb-0">{{list.company}}
-		                		<!-- <a @click="viewCompany(team.companyId,team.company)" class="text-decoration-underline">View Profile</a> -->
+
 		                </p>
 		              </div>
 		            </div>
@@ -118,12 +127,16 @@
 		          <div>
 		            <div class="d-flex align-center justify-space-between list-company pa-4" v-for="(company,index) in companiesList" v-if="user.company.id != company.id">
 		              <div class="comapny-data d-flex align-center">
-		                <!-- <div class="pr-4">
-		                  <v-icon>mdi-chevron-down</v-icon>
-		                </div> -->
 		                <div class="company-img">
-		                  <img v-if="!company.image" :src="require('@/assets/images/bids/company.png')">
-		                  <img v-else :src="company.image" width="56.25px" height="15px">
+							<img
+						 v-if="company.image"
+						 class="image-class"
+							:src="company.image"
+                       />
+
+					   <div   v-else class="icon-class" >
+					    <v-icon size="40" >mdi-domain</v-icon>
+					   </div>
 		                </div>
 		                <div class="company-title text-left pl-4">
 		                  <h4>{{company.company}}</h4>
@@ -151,13 +164,20 @@
 		        	<div class="d-flex align-center justify-space-between list-company pa-4">
 		        	  <div class="comapny-data d-flex align-center">
 		        	    <div class="company-img">
-		        	      <img v-if="!company.image" :src="require('@/assets/images/bids/company.png')">
-		        	      <img v-else :src="company.image" width="56.25px" height="15px">
+							<img
+						 v-if="company.image"
+						 class="image-class"
+							:src="company.image"
+                       />
+
+					   <div   v-else class="icon-class" >
+					    <v-icon size="40" >mdi-domain</v-icon>
+					   </div>
 		        	    </div>
 		        	    <div class="company-title text-left pl-4">
 		        	      <h4>{{company.firstName}} {{company.lastName}} </h4>
 										<p>{{company.company}}</p>
-										<!-- <router-link :to="`/company/${company.slug}`" target="_blank" class="mb-0">View Profile</router-link> -->
+
 		        	    </div>
 		        	  </div>
 		        	  <div class="add-company">
@@ -165,13 +185,20 @@
 		        	  </div>
 		        	</div>
 		        </template>
-		        {{filteredEntries}}
+
 		        <template  v-for="(company,index) in repsInvited">
 		        	<div class="d-flex align-center justify-space-between list-company pa-4" v-if="!company.companyId">
 		        	  <div class="comapny-data d-flex align-center">
 		        	    <div class="company-img">
-		        	      <img v-if="!company.image" :src="require('@/assets/images/bids/company.png')">
-		        	      <img v-else :src="company.image" width="56.25px" height="15px">
+							<img
+						 v-if="company.image"
+						 class="image-class"
+							:src="company.image"
+                       />
+
+					   <div   v-else class="icon-class" >
+					    <v-icon size="40" >mdi-domain</v-icon>
+					   </div>
 		        	    </div>
 		        	    <div class="company-title text-left pl-4">
 		        	      <h4>{{company.company}} </h4>
@@ -185,13 +212,16 @@
 		        	<div class="d-flex align-center justify-space-between list-company pa-4" v-if="company.companyId">
 		        	  <div class="comapny-data d-flex align-center">
 		        	    <div class="company-img">
-		        	      <img v-if="!company.image" :src="require('@/assets/images/chat/chatUser.png')">
-		        	      <img v-else :src="company.image" width="48px" height="48px">
+						<div class="avatar-image" v-if="!company.image" >
+		        	      <img :src="require('@/assets/images/chat/chatUser.png')" >
+						</div>
+						<div class="avatar-image" v-else>
+		        	      <img  :src="company.image" width="48px" height="48px">
+						</div>
 		        	    </div>
 		        	    <div class="company-title text-left pl-4">
 		        	      <h4>{{company.firstName}} {{company.lastName}}</h4>
 		        	      <p class="mb-0">{{company.company}}
-		        	      	<!-- <a @click="viewCompany(company.companyId,company.item.company)" class="text-decoration-underline">View Profile</a> -->
 		        	      </p>
 		        	    </div>
 		        	  </div>
@@ -206,15 +236,15 @@
 		</v-row>
 
 		<v-row justify="center" align="center" no-gutters>
-		  <v-col cols="12" md="12">
-
+		  <v-col cols="12" md="12" class="mb-n2">
 		    <v-dialog
           v-model="supplierDialog"
           width="800"
+		  v-if="!$route.path.includes('create-template')"
         >
           <template v-slot:activator="{ on, attrs }">
 
-            <v-btn color="rgba(13, 150, 72, 0.1)" elevation="0" height="56px" width="220px" large class="text-capitalize font-weight-bold mt-8 mb-8 invite-btn mr-5" v-bind="attrs"
+            <v-btn color="rgba(13, 150, 72, 0.1)" elevation="0" height="56px" width="220px" large class="text-capitalize font-weight-bold mt-5 mb-5 invite-btn mr-5" v-bind="attrs"
               v-on="on">Invite  New Supplier </v-btn>
           </template>
 
@@ -286,7 +316,7 @@
             </v-card-text>
           </v-card>
         </v-dialog>
-		    <v-btn color="#0D9648" elevation="0" height="56px" width="220px" large class="white--text text-capitalize font-weight-bold mt-8 mb-8 save-btn" @click="changeTab">Save Changes</v-btn>
+		    <v-btn color="#0D9648" elevation="0" height="56px" width="220px" large class="white--text text-capitalize font-weight-bold mt-5 mb-5 save-btn" @click="changeTab">Save Changes</v-btn>
 		  </v-col>
 		</v-row>
 	</div>
@@ -360,56 +390,45 @@ export default {
       return _.orderBy(this.$store.getters.categories, 'orderNumber', 'asc');
     },
     salesRepsList() {
-    	if(this.$route.name == 'EditBid'){
-    		if(this.$store.getters.bidData.invitedSuppliers != ""){
-    			return this.$store.getters.salesRepsList.filter((el) => { return !this.$store.getters.bidData.invitedSuppliers.find((supplier) => supplier.id === el.companyId); })
-    		}else{
-    			return this.$store.getters.salesRepsList ? this.$store.getters.salesRepsList.filter((rep) => rep.company !== this.userInfo.company.company) : [];
+    	if (this.$route.name == 'EditBid') {
+    		if (this.$store.getters.bidData.invitedSuppliers != '') {
+    			return this.$store.getters.salesRepsList.filter((el) => !this.$store.getters.bidData.invitedSuppliers.find((supplier) => supplier.id === el.companyId));
     		}
-    	}else{
-    		if(this.$store.getters.bidData.invitedSuppliers != ""){
-    			return this.$store.getters.salesRepsList.filter((el) => { return !this.$store.getters.bidData.invitedSuppliers.includes(el.companyId); })
-    		}else{
     			return this.$store.getters.salesRepsList ? this.$store.getters.salesRepsList.filter((rep) => rep.company !== this.userInfo.company.company) : [];
-    		}
     	}
+    		if (this.$store.getters.bidData.invitedSuppliers != '') {
+    			return this.$store.getters.salesRepsList.filter((el) => !this.$store.getters.bidData.invitedSuppliers.includes(el.companyId));
+    		}
+    			return this.$store.getters.salesRepsList ? this.$store.getters.salesRepsList.filter((rep) => rep.company !== this.userInfo.company.company) : [];
     },
     itemBidId() {
       return this.$store.getters.itemBidData;
     },
     companiesList() {
-    	if(this.$route.name == 'EditBid'){
-    		if(this.$store.getters.bidData.invitedSuppliers != ""){
-    			return this.$store.getters.companiesList.filter((el) => { return !this.$store.getters.bidData.invitedSuppliers.find((supplier) => supplier.id === el.objectID); })
-    		}else{
-    			return this.$store.getters.companiesList ? this.$store.getters.companiesList.filter((rep) => rep.company !== this.userInfo.company.company) : [];
+    	if (this.$route.name == 'EditBid') {
+    		if (this.$store.getters.bidData.invitedSuppliers != '') {
+    			return this.$store.getters.companiesList.filter((el) => !this.$store.getters.bidData.invitedSuppliers.find((supplier) => supplier.id === el.objectID));
     		}
-    	}else{
-	  		if(this.$store.getters.bidData.invitedSuppliers != ""){
-	  			return this.$store.getters.companiesList.filter((el) => { return !this.$store.getters.bidData.invitedSuppliers.includes(el.objectID); })
-	  		}else{
-	  			return this.$store.getters.companiesList;
+    			return this.$store.getters.companiesList ? this.$store.getters.companiesList.filter((rep) => rep.company !== this.userInfo.company.company) : [];
+    	}
+	  		if (this.$store.getters.bidData.invitedSuppliers != '') {
+	  			return this.$store.getters.companiesList.filter((el) => !this.$store.getters.bidData.invitedSuppliers.includes(el.objectID));
 	  		}
-	  	}
-    	
+	  			return this.$store.getters.companiesList;
     },
     serviceCompanies() {
     	return this.$store.getters.serviceCompaniesList;
     },
     filteredEntries() {
-    	if(this.$store.getters.bidData.invitedSuppliers != ''){
-  			if(this.$route.name == 'EditBid'){
-  				if(this.inviteCount == 1){
-  					this.repsInvited = this.$store.getters.companiesList.filter((el) => { return this.$store.state.bid.invitedSuppliers.find((supplier) => supplier.id === el.objectID); });
+    	if (this.$store.getters.bidData.invitedSuppliers != '') {
+  			if (this.$route.name == 'EditBid') {
+  				if (this.inviteCount == 1) {
+  					this.repsInvited = this.$store.getters.companiesList.filter((el) => this.$store.state.bid.invitedSuppliers.find((supplier) => supplier.id === el.objectID));
   				}
-  			}else{
-  				if(this.inviteCount == 1){
-  					this.repsInvited = this.$store.getters.companiesList.filter((el) => { return this.$store.state.bid.invitedSuppliers.includes(el.objectID); });
+  			} else if (this.inviteCount == 1) {
+  					this.repsInvited = this.$store.getters.companiesList.filter((el) => this.$store.state.bid.invitedSuppliers.includes(el.objectID));
   				}
-  				
-  			}
     	}
-    	
     },
     validat() {
     	if (this.repsInvited.length > 0) {
@@ -421,13 +440,13 @@ export default {
     },
   },
   methods: {
-  	...mapActions(['getCategories', 'getSalesReps', 'getCompanyInfo', 'searchByCompany', 'getCompanyByServices', 'saveDraftBid', 'inviteNewSupplier', 'updateDraftBid','updateTemplate','updateBid']),
+  	...mapActions(['getCategories', 'getSalesReps', 'getCompanyInfo', 'searchByCompany', 'getCompanyByServices', 'saveDraftBid', 'inviteNewSupplier', 'updateDraftBid', 'updateTemplate', 'updateBid']),
     changeTab() {
-    	if(this.$route.name == 'EditBid'){
+    	if (this.$route.name == 'EditBid') {
     		this.updateBid({ invitedSuppliers: this.repsInvited });
-			}else if(this.$route.name == 'EditTemplate'){
+      } else if (this.$route.name == 'EditTemplate') {
     	  this.updateTemplate({ invitedSuppliers: this.repsInvited });
-    	}else{
+    	} else {
     		this.updateDraftBid({ invitedSuppliers: this.repsInvited });
     	}
       this.$emit('changetab', 'tab-3');
@@ -447,17 +466,17 @@ export default {
     		bidDueDate: this.$store.getters.bidData.dueDate,
     		bidDueTime: this.$store.getters.bidData.dueTime,
     	};
-    	if(this.$refs.form.validate()){
+    	if (this.$refs.form.validate()) {
     		try {
     			const user = await this.inviteNewSupplier(supplier);
     			this.supplierDialog = false;
-    			this.oldCount = this.newRepsInvited.length; 
+    			this.oldCount = this.newRepsInvited.length;
     			this.newRepsInvited.push(user);
     			this.newCount = this.newRepsInvited.length;
     			this.$store.commit('setInvitedNewSuppliers', this.newRepsInvited);
     			this.$refs.form.reset();
-    		} catch(error) {
-    			console.log(error)
+    		} catch (error) {
+    			console.log(error);
     		}
     	}
     },
@@ -483,13 +502,13 @@ export default {
     	// 	type: 'user',
     	// 	item: list,
     	// };
-    	this.oldCount = this.repsInvited.length; 
+    	this.oldCount = this.repsInvited.length;
     	this.repsInvited.push(list);
     	this.inviteCount = 2;
     	this.newCount = this.repsInvited.length;
     	this.$store.getters.salesRepsList.splice(index, 1);
     	const unique = [...new Map(this.repsInvited.map((m) => [m.company, m])).values()];
-    	
+
     	this.$store.commit('setInvitedSuppliersData', unique);
     },
     removeReps(list, index) {
@@ -522,7 +541,7 @@ export default {
     	this.newCount = this.repsInvited.length;
     	this.$store.getters.companiesList.splice(index, 1);
     	const unique = [...new Map(this.repsInvited.map((m) => [m.company, m])).values()];
-    	
+
     	this.$store.commit('setInvitedSuppliersData', unique);
     },
     addServiceCompany(company, index) {
@@ -555,24 +574,24 @@ export default {
     },
     savedraftOnInterval() {
   		const timer = setInterval(() => {
-  			if(this.oldCount != this.newCount){
-  				if(this.$route.name == 'EditBid'){
+  			if (this.oldCount != this.newCount) {
+  				if (this.$route.name == 'EditBid') {
   					this.updateBid({ invitedSuppliers: this.repsInvited });
-  				}else if(this.$route.name == 'EditTemplate'){
-  				  this.updateTemplate({'invitedSuppliers':this.repsInvited});
-  				}else{
-  				  this.updateDraftBid({'invitedSuppliers':this.repsInvited});
+  				} else if (this.$route.name == 'EditTemplate') {
+  				  this.updateTemplate({ invitedSuppliers: this.repsInvited });
+  				} else {
+  				  this.updateDraftBid({ invitedSuppliers: this.repsInvited });
   				}
   		  	this.oldCount = this.newCount;
   		  }
   		}, 60000);
 
-  		this.$once("hook:beforeDestroy", () => {
+  		this.$once('hook:beforeDestroy', () => {
   		  clearInterval(timer);
-  		}); 
+  		});
     },
   },
-  beforeMount(){
+  beforeMount() {
   	this.getCategories();
   	this.getSales();
   	this.getCompanies();
@@ -580,7 +599,6 @@ export default {
   mounted() {
   	this.user = this.$store.getters.userInfo;
     this.savedraftOnInterval();
-
   },
 };
 </script>

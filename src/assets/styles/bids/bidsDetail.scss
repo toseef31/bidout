@@ -370,7 +370,17 @@
         .attachment-list-style {
           margin-top: 16px;
           .doc-class {
-            width: 400px !important;
+            max-width: 460px;
+            min-width: 250px;
+            text-overflow: ellipsis;
+            overflow: hidden;
+            white-space: nowrap;
+          }
+          .comment-class {
+            max-width:250px;
+            text-overflow: ellipsis;
+            overflow: hidden;
+            white-space: nowrap;
           }
           table {
             thead {
@@ -390,17 +400,13 @@
                   font-size: 16px;
                   font-weight: 600;
                   height: 56px;
+                  padding-left: 16px;
+                  vertical-align: middle;
+                }
+                td:first-child{
+                  width: 4%;
                   padding-left: 24px;
                 }
-                td:first-child {
-                  width: 5%; 
-                }
-                td:nth-child(2) {
-                  width: 20%;
-                }
-                td:nth-child(3) {
-                  width: 27%;
-              }
               }
               
             }
@@ -769,20 +775,18 @@
         }
       
         .v-list-item {
-          height: 80px;
+          height: 100px;
           padding-left: 20px;
           border-bottom: 1px solid #f1f1f1;
-          .img-class {
-            object-fit: contain;
-            aspect-ratio: 3/2;
-          }
-          .v-list-item__icon:first-child {
-            margin-right: 24px;
+
+          .icon-class {
+            width: 100px;
+            height: 35px;
           }
         }
         .v-list-item__content {
           text-align: left;
-          margin-left: 10px;
+          margin-left: 24px;
           .v-list-item__title {
             color: #0d1139;
             font-weight: 700;

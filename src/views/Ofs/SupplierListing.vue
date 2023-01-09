@@ -16,7 +16,9 @@
                 <div class="category-list">
                   <div class="d-flex justify-space-between px-4">
                     <h1 class="text-left service-title mb-8">
-                      {{ allcompanies.category.name }}
+
+                      {{ categoryName.name }}
+                      
                     </h1>
                     <div class="category-list__searchBox">
                       <v-text-field
@@ -44,11 +46,11 @@
                   </div>
                   <v-tabs-items v-model="tab">
                     <v-tab-item v-for="item in items" :key="item">
-                      <v-simple-table dense class="company-table mb-12">
+                      <v-simple-table dense v-if="!showLoading" class="company-table mb-12">
                         <template v-slot:default>
                           <thead>
                             <tr class="py-4 px-6">
-                              <th class="pl-6">Companies</th>
+                              <th class="pl-4">Companies</th>
                               <th>HQ Location</th>
                               <th>Employees</th>
                               <th>Field Locations</th>
@@ -57,17 +59,17 @@
                             </tr>
                           </thead>
                           <tbody>
-                            <tr v-for="company in allcompanies.companies" :key="company.id">
-                              <td class="pl-6">
-                                <span class="text-decoration-none company-link"
-                                  ><router-link class="text-decoration-none" :to="company.slug ? '/company/'+company.slug: '' ">{{ company.company }}</router-link></span
-                                >
+                            <tr v-for="company in allcompanies" :key="company.id">
+                              <td class="pl-4 text-truncate" style="width: 300px">
+                                <router-link class="text-decoration-none" :to="company.slug ? '/company/'+company.slug: '' ">{{ company.company }}</router-link>
                               </td>
-                              <td>
+                              <td class="view-class">
                                 <span v-if="!company.companyHq">No location</span
-                                ><span v-else>{{ company.companyHq }}</span>
+                                ><span v-else>{{ company.companyHqCity}}, 
+                                {{ company.companyHqState}} 
+                                {{ company.companyHqCountry}}</span>
                               </td>
-                              <td>
+                              <td class="view-class">
                                 <span v-if="!company.employees">Not Added</span
                                 ><span v-else>{{ company.employees }}</span>
                               </td>
@@ -87,7 +89,7 @@
                                   company.accountContacts.length
                                 }}</span>
                               </td>
-                              <td>
+                              <td class="view-class">
                                 <span
                                   class="text-decoration-none company-link"
                                   ><router-link class="text-decoration-none" :to="company.slug ? '/company/'+company.slug: '' ">View Details</router-link></span
@@ -97,6 +99,11 @@
                           </tbody>
                         </template>
                       </v-simple-table>
+                      <v-row fill-height align="center" class="fill-height mt-5" v-if="showLoading">
+          <v-col cols="12">
+            <v-progress-circular :width="3" color="green" indeterminate ></v-progress-circular>
+          </v-col>
+        </v-row>
                     </v-tab-item>
                   </v-tabs-items>
                 </div>
@@ -109,13 +116,13 @@
   </v-row>
 </template>
 <script>
-import _ from "lodash";
-import { mapActions } from "vuex";
-import Navbar from "../../components/Layout/Navbar.vue";
-import LeftSidebar from "../../components/Layout/Dashboard/LeftSidebar.vue";
+import _ from 'lodash';
+import { mapActions } from 'vuex';
+import Navbar from '../../components/Layout/Navbar.vue';
+import LeftSidebar from '../../components/Layout/Dashboard/LeftSidebar.vue';
 
 export default {
-  name: "SupplierListing",
+  name: 'SupplierListing',
   components: {
     Navbar,
     LeftSidebar,
@@ -124,18 +131,18 @@ export default {
   data() {
     return {
       tab: null,
-      searchCompany: "",
+      searchCompany: '',
       page: 1,
       items: [
-        "all",
-        "Gulf Coast",
-        "Northeast",
-        "Rockies",
-        "Mid-Con",
-        "Permian",
-        "Arklatex",
-        "Offshore",
-        "Other",
+        'all',
+        'Gulf Coast',
+        'Northeast',
+        'Rockies',
+        'Mid-Con',
+        'Permian',
+        'Arklatex',
+        'Offshore',
+        'Other',
       ],
       cateSlug: '',
     };
@@ -147,34 +154,38 @@ export default {
     activityPanel() {
       return this.$store.getters.g_activityPanel;
     },
+    categoryName(){
+      return this.$store.getters.serviceCategory;
+    },
     allcompanies() {
       if (this.searchCompany) {
-        return this.$store.getters.serviceCompanies.data.filter((companies) =>
-          this.searchCompany
-            .toLowerCase()
-            .split(" ")
-            .every((v) => companies.company.toLowerCase().includes(v))
-        );
+       
+        return this.$store.getters.serviceCompanies.filter((comp) => this.searchCompany
+          .toLowerCase()
+          .split(' ')
+          .every((v) => comp.company.toLowerCase().includes(v)));
+      }else{
+        return this.$store.getters.serviceCompanies;
       }
-      return this.$store.getters.serviceCompanies.data;
+    },
+    showLoading() {
+      return this.$store.getters.ofsLoader;
     },
   },
   watch: {
     searchCompany: _.debounce(function () {
-      return this.$store.getters.serviceCompanies.data.filter((companies) =>
-        this.searchCompany
-          .toLowerCase()
-          .split(" ")
-          .every((v) => companies.company.toLowerCase().includes(v))
-      );
+      return this.$store.getters.serviceCompanies.filter((comp) => this.searchCompany
+        .toLowerCase()
+        .split(' ')
+        .every((v) => comp.company.toLowerCase().includes(v)));
     }, 500),
   },
   methods: {
     ...mapActions([
-      "getCompanyInfo",
-      "getCompanyByBasin",
-      "getSupplierMainService",
-      "getSupplierCompanyByservice",
+      'getCompanyInfo',
+      'getCompanyByBasin',
+      'getSupplierMainService',
+      'getSupplierCompanyByservice',
     ]),
     viewCompany(id, name) {
       this.getCompanyInfo({ id, name });
@@ -183,9 +194,11 @@ export default {
       this.getCompanyByBasin({ basin, slug: this.$route.fullPath.split('/').pop() });
     },
   },
+  async created(){
+    await this.getCompanyByBasin({ basin: 'all', slug: this.$route.fullPath.split('/').pop() });
+  },
   mounted() {
-    document.title = "Categories - BidOut";
-    this.getCompanyByBasin({ basin: 'all', slug: this.$route.fullPath.split('/').pop() });
+    document.title = 'Categories - BidOut';
   },
 };
 </script>

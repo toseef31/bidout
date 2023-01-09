@@ -54,6 +54,9 @@
 			}
 		}
 		.company-table{
+			.view-class {
+				white-space: nowrap;
+			}
 			table{
 				thead{
 					tr{
@@ -81,8 +84,9 @@
 							text-align: left;
 							border-bottom: 0 !important;
 							&:first-child{
-								display: flex;
-								align-items: center;
+								display: block;
+								align-self: center;
+								margin-top: 10px;
 							}
 						}
 					}

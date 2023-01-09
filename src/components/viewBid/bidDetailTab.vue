@@ -253,10 +253,10 @@
               <tr>
                 <th class="text-left"></th>
                 <th class="text-left">File Name</th>
-                <th class="text-left">Comment</th>
-                <th class="text-left">File Size</th>
-                <th class="text-left">Uploaded By</th>
-                <th class="text-left">Uploaded Date</th>
+                <th class="text-left" width="250">Comment</th>
+                <th class="text-left" width="110">File Size</th>
+                <th class="text-left" width="150">Uploaded By</th>
+                <th class="text-left" width="150">Uploaded Date</th>
               </tr>
             </thead>
             <tbody>
@@ -264,11 +264,11 @@
                 v-for="(doc, index) in bidDetail.bidData.attachments"
                 :key="index"
               >
-                <td class="text-left">
+                <td class="text-left ">
                   <img :src="require('@/assets/images/bids/FilePdf.png')" />
                 </td>
-                <td class="text-left d-block doc-class text-truncate pt-4"><a :href="doc.url" target="_blank" class="text-decoration-none">{{ doc.fileName }}</a></td>
-                <td class="text-left">
+                <td class="text-left doc-class "><a :href="doc.url" target="_blank" class="text-decoration-none">{{ doc.fileName }}</a></td>
+                <td class="text-left text-truncate comment-class">
                   <span>{{ doc.comment !== 'undefined' ? doc.comment : '' }}</span>
                 </td>
                 <td class="text-left">{{ size(doc.fileSize) }}</td>
@@ -291,7 +291,7 @@
       </div>
  <div
         class="question-sub-section"
-        v-if="bidDetail.bidData.questions && bidDetail.bidData.questions.length"
+        v-if=" bidDetail.bidData && Array.isArray(bidDetail.bidData.questions) && bidDetail.bidData.questions.length"
       >
 
             <div v-for="(item, index) in bidDetail.bidData.questions"

@@ -118,8 +118,12 @@ export default {
   },
 
   async getBidBySerial({ commit, dispatch, state }, payload) {
-    try {
+    if (payload.reload === false) {
+      commit('setPageLoader', false);
+    } else {
       commit('setPageLoader', true);
+    }
+    try {
       state.supplierAttachment = [];
       const res = await axios.get(
         `bid/getBidBySerial/${payload.serial}/${payload.id}`,
@@ -177,8 +181,12 @@ export default {
     }
   },
   async getIntent({ commit, dispatch, state }, payload) {
-    try {
+    if (payload.reload === false) {
+      commit('setPageLoader', false);
+    } else {
       commit('setPageLoader', true);
+    }
+    try {
       const res = await axios.get(`intend/getIntends/${payload.companyId}/${payload.bidId}/${payload.companyName}`);
 
       if (res.status === 200) {
@@ -203,8 +211,12 @@ export default {
   },
 
   async getAllIntent({ commit, dispatch, state }, payload) {
-    try {
+    if (payload.reload === false) {
+      commit('setPageLoader', false);
+    } else {
       commit('setPageLoader', true);
+    }
+    try {
       const res = await axios.get(`intend/getAllIntends/${payload.bidId}`);
 
       if (res.status === 200) {
@@ -491,8 +503,12 @@ export default {
   },
 
   async getQA({ commit, dispatch, state }, payload) {
-    try {
+    if (payload.reload === false) {
+      commit('setPageLoader', false);
+    } else {
       commit('setPageLoader', true);
+    }
+    try {
       const res = await axios.get(`bidSubmission/getQA/${payload.bidId}/${payload.userId}`);
 
       if (res.status === 200) {
