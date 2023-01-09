@@ -15,7 +15,7 @@ export default {
       if(state.apiCounter === 2){
         dispatch('apiSignOutAction')
       }else{
-        if(err.response.status === 403){
+        if(err.response && err.response.status === 403){
          await dispatch('refreshToken');
          state.apiCounter = 2;
          dispatch('pendingUserCount',payload);
@@ -35,7 +35,7 @@ export default {
       if(state.apiCounter === 2){
         dispatch('apiSignOutAction')
       }else{
-        if(err.response.status === 403){
+        if(err.response && err.response.status === 403){
          await dispatch('refreshToken');
          state.apiCounter = 2;
          dispatch('getPendingList',payload);
@@ -55,7 +55,7 @@ export default {
       if(state.apiCounter === 2){
         dispatch('apiSignOutAction')
       }else{
-        if(err.response.status === 403){
+        if(err.response && err.response.status === 403){
          await dispatch('refreshToken');
          state.apiCounter = 2;
          dispatch('manageUsers',payload);
@@ -75,7 +75,7 @@ export default {
         if(state.apiCounter === 2){
           dispatch('apiSignOutAction')
         }else{
-          if(err.response.status === 403){
+          if(err.response && err.response.status === 403){
            await dispatch('refreshToken');
            state.apiCounter = 2;
            dispatch('getInvitedList',payload);
@@ -99,7 +99,7 @@ export default {
       if(state.apiCounter === 2){
         dispatch('apiSignOutAction')
       }else{
-        if(err.response.status === 403){
+        if(err.response && err.response.status === 403){
          await dispatch('refreshToken');
          state.apiCounter = 2;
          dispatch('disableUser',payload);
@@ -123,7 +123,7 @@ export default {
       if(state.apiCounter === 2){
         dispatch('apiSignOutAction')
       }else{
-        if(err.response.status === 403){
+        if(err.response && err.response.status === 403){
          await dispatch('refreshToken');
          state.apiCounter = 2;
          dispatch('enableUser',payload);
@@ -146,7 +146,7 @@ export default {
       if(state.apiCounter === 2){
         dispatch('apiSignOutAction')
       }else{
-        if(err.response.status === 403){
+        if(err.response && err.response.status === 403){
          await dispatch('refreshToken');
          state.apiCounter = 2;
          dispatch('acceptPendingUser',payload);
@@ -169,7 +169,7 @@ export default {
       if(state.apiCounter === 2){
         dispatch('apiSignOutAction')
       }else{
-        if(err.response.status === 403){
+        if(err.response && err.response.status === 403){
          await dispatch('refreshToken');
          state.apiCounter = 2;
          dispatch('getActivities',payload);
