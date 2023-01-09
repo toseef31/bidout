@@ -7,7 +7,7 @@ export default {
     axios.get('company/getCompanyById/'+payload)
      .then(responce => {
       if(responce.status === 200){
-        if(responce.data.companyData.accountContacts.length > 0){
+        if(responce.data.companyData.accountContacts && responce.data.companyData.accountContacts.length > 0){
           const data = {
             module : 'contacts',
             weight: 8,
@@ -15,7 +15,7 @@ export default {
           }
           commit('setModuleWeight',data);
         }
-        if(responce.data.companyData.basins.length > 0){
+        if(responce.data.companyData.basins && responce.data.companyData.basins.length > 0){
           const data = {
             module : 'basin',
             weight: 8,
@@ -23,7 +23,7 @@ export default {
           }
           commit('setModuleWeight',data);
         }
-        if(responce.data.companyData.companyLocations.length > 0){
+        if(responce.data.companyData.companyLocations && responce.data.companyData.companyLocations.length > 0){
           const data = {
             module : 'locations',
             weight: 8,
@@ -38,7 +38,7 @@ export default {
           }
           commit('setModuleWeight',data);
         }
-        if(responce.data.companyData.corporateDocuments.length > 0){
+        if(responce.data.companyData.corporateDocuments && responce.data.companyData.corporateDocuments.length > 0){
           const data = {
             module : 'documents',
             weight: 8,
@@ -53,7 +53,7 @@ export default {
           }
           commit('setModuleWeight',data);
         }
-        if(responce.data.companyData.corporateNews.length > 0){
+        if(responce.data.companyData.corporateNews && responce.data.companyData.corporateNews.length > 0){
           const data = {
             module : 'news',
             weight: 8,
@@ -61,7 +61,7 @@ export default {
           }
           commit('setModuleWeight',data);
         }
-        if(responce.data.companyData.corporateVideos.length > 0){
+        if(responce.data.companyData.corporateVideos && responce.data.companyData.corporateVideos.length > 0){
           const data = {
             module : 'videos',
             weight: 8,
@@ -69,7 +69,7 @@ export default {
           }
           commit('setModuleWeight',data);
         }
-        if(responce.data.companyData.esgInitiatives.length > 0){
+        if(responce.data.companyData.esgInitiatives && responce.data.companyData.esgInitiatives.length > 0){
           const data = {
             module : 'esg',
             weight: 8,
@@ -77,7 +77,7 @@ export default {
           }
           commit('setModuleWeight',data);
         }
-        if(responce.data.companyData.executiveLeadership.length > 0){
+        if(responce.data.companyData.executiveLeadership && responce.data.companyData.executiveLeadership.length > 0){
           const data = {
             module : 'excutive',
             weight: 8,
@@ -100,7 +100,7 @@ export default {
           }
           commit('setModuleWeight',data);
         }
-        if(responce.data.companyData.services.length > 0){
+        if(responce.data.companyData.services && responce.data.companyData.services.length > 0){
           const data = {
             module : 'services',
             weight: 10,
