@@ -169,7 +169,7 @@ export default {
   }, 
   inviteUser({commit,dispatch,state},payload){
     
-    axios.post('/company/addInvitedUser/',{'firstName':payload.firstName,'lastName': payload.lastName,'company': payload.company,'email':payload.email,'parent': payload.parent,'role': payload.role})
+    axios.post('/company/addInvitedUser/',{'firstName':payload.firstName,'lastName': payload.lastName,'company': payload.company,'companyId':payload.companyId,'email':payload.email,'parent': payload.parent,'role': payload.role})
      .then(responce => {
         
         if(responce.status === 200){
