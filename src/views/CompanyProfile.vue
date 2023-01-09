@@ -5,7 +5,7 @@
    <v-row class="companyProfile-module inner-Company pa-0 ma-0" v-else>
      <v-col class="pa-0 pr-sm-3" :class="[ showSideBar ? 'col-md-12 col-12 col-sm-12' : 'mid-content-collapse', activityPanel ? 'd-sm-block' : 'd-md-block']" v-show="!activityPanel">
         <div class="mid-content">
-          <div class="content-section" v-if="companyData">
+          <div class="content-section" v-if="companyData && companyData.companyData">
             <v-row class="mx-0">
               <v-col cols="12" sm="12" md="12" class="d-sm-block px-0">
                 <div class="manage-sections pa-4 px-0">
