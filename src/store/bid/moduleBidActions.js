@@ -16,7 +16,7 @@ export default {
     } catch (err) {
       if (state.apiCounter === 2) {
         dispatch('apiSignOutAction');
-      } else if (err.response.status === 403) {
+      } else if (err.response && err.response.status === 403) {
         await dispatch('refreshToken');
         state.apiCounter = 2;
         dispatch('getTeamMembers', payload);
@@ -35,7 +35,7 @@ export default {
     } catch (err) {
       if (state.apiCounter == 2) {
         dispatch('apiSignOutAction');
-      } else if (err.response.status === 403) {
+      } else if (err.response && err.response.status === 403) {
         await dispatch('refreshToken');
         state.apiCounter = 2;
         dispatch('getSalesReps', payload);
@@ -54,7 +54,7 @@ export default {
     } catch (err) {
       if (state.apiCounter == 2) {
         dispatch('apiSignOutAction');
-      } else if (err.response.status === 403) {
+      } else if (err.response && err.response.status === 403) {
         await dispatch('refreshToken');
         state.apiCounter = 2;
         dispatch('searchByCompany', payload);
@@ -74,7 +74,7 @@ export default {
     } catch (err) {
       if (state.apiCounter == 2) {
         dispatch('apiSignOutAction');
-      } else if (err.response.status === 403) {
+      } else if (err.response && err.response.status === 403) {
         await dispatch('refreshToken');
         state.apiCounter = 2;
         dispatch('getCompanyByServices', payload);
@@ -91,7 +91,7 @@ export default {
     } catch (err) {
       if (state.apiCounter == 2) {
         dispatch('apiSignOutAction');
-      } else if (err.response.status === 403) {
+      } else if (err.response && err.response.status === 403) {
         await dispatch('refreshToken');
         state.apiCounter = 2;
         dispatch('getDraftBids', payload);
@@ -109,7 +109,7 @@ export default {
     } catch (err) {
       if (state.apiCounter == 2) {
         dispatch('apiSignOutAction');
-      } else if (err.response.status === 403) {
+      } else if (err.response && err.response.status === 403) {
         await dispatch('refreshToken');
         state.apiCounter = 2;
         dispatch('getBidsLists', payload);
@@ -146,7 +146,7 @@ export default {
       commit('setViewBidError', true);
       if (state.bidApiCounter == 2) {
         dispatch('apiSignOutAction');
-      } else if (err.response.status === 403) {
+      } else if (err.response && err.response.status === 403) {
         await dispatch('refreshToken');
         state.bidApiCounter = 2;
         dispatch('getBidBySerial', payload);
@@ -169,7 +169,7 @@ export default {
       commit('setErrorDeleteBid');
       if (state.apiCounter == 2) {
         dispatch('apiSignOutAction');
-      } else if (err.response.status === 403) {
+      } else if (err.response && err.response.status === 403) {
         await dispatch('refreshToken');
         state.apiCounter = 2;
         dispatch('deleteBid', payload);
@@ -194,7 +194,7 @@ export default {
       commit('setPageLoader', false);
       if (state.apiCounter == 2) {
         dispatch('apiSignOutAction');
-      } else if (err.response.status === 403) {
+      } else if (err.response && err.response.status === 403) {
         await dispatch('refreshToken');
         state.apiCounter = 2;
         dispatch('getIntent', payload);
@@ -215,7 +215,7 @@ export default {
       commit('setPageLoader', false);
       if (state.apiCounter == 2) {
         dispatch('apiSignOutAction');
-      } else if (err.response.status === 403) {
+      } else if (err.response && err.response.status === 403) {
         await dispatch('refreshToken');
         state.apiCounter = 2;
         dispatch('getAllIntent', payload);
@@ -235,7 +235,7 @@ export default {
     } catch (err) {
       if (state.apiCounter == 2) {
         dispatch('apiSignOutAction');
-      } else if (err.response.status === 403) {
+      } else if (err.response && err.response.status === 403) {
         await dispatch('refreshToken');
         state.apiCounter = 2;
         dispatch('updateIntent', payload);
@@ -259,7 +259,7 @@ export default {
     } catch (err) {
       if (state.apiCounter == 2) {
         dispatch('apiSignOutAction');
-      } else if (err.response.status === 403) {
+      } else if (err.response && err.response.status === 403) {
         await dispatch('refreshToken');
         state.apiCounter = 2;
         dispatch('makeIntent', payload);
@@ -285,7 +285,7 @@ export default {
     } catch (err) {
       if (state.apiCounter == 2) {
         dispatch('apiSignOutAction');
-      } else if (err.response.status === 403) {
+      } else if (err.response && err.response.status === 403) {
         await dispatch('refreshToken');
         state.apiCounter = 2;
         dispatch('awardCompany', payload);
@@ -310,7 +310,7 @@ export default {
     } catch (err) {
       if (state.apiCounter == 2) {
         dispatch('apiSignOutAction');
-      } else if (err.response.status === 403) {
+      } else if (err.response && err.response.status === 403) {
         await dispatch('refreshToken');
         state.apiCounter = 2;
         dispatch('rejectCompany', payload);
@@ -335,7 +335,7 @@ export default {
     } catch (err) {
       if (state.apiCounter == 2) {
         dispatch('apiSignOutAction');
-      } else if (err.response.status === 403) {
+      } else if (err.response && err.response.status === 403) {
         await dispatch('refreshToken');
         state.apiCounter = 2;
         dispatch('UnAwardCompany', payload);
@@ -359,7 +359,7 @@ export default {
     } catch (err) {
       if (state.apiCounter == 2) {
         dispatch('apiSignOutAction');
-      } else if (err.response.status === 403) {
+      } else if (err.response && err.response.status === 403) {
         await dispatch('refreshToken');
         state.apiCounter = 2;
         dispatch('UnDisqualifyCompany', payload);
@@ -416,7 +416,7 @@ export default {
     } catch (err) {
       if (state.apiCounter == 2) {
         dispatch('apiSignOutAction');
-      } else if (err.response.status === 403) {
+      } else if (err.response && err.response.status === 403) {
         await dispatch('refreshToken');
         state.apiCounter = 2;
         dispatch('submitBid', payload);
@@ -482,7 +482,7 @@ export default {
     } catch (err) {
       if (state.apiCounter == 2) {
         dispatch('apiSignOutAction');
-      } else if (err.response.status === 403) {
+      } else if (err.response && err.response.status === 403) {
         await dispatch('refreshToken');
         state.apiCounter = 2;
         dispatch('editSubmitBid', payload);
@@ -515,7 +515,7 @@ export default {
       commit('setPageLoader', false);
       if (state.apiCounter === 2) {
         dispatch('apiSignOutAction');
-      } else if (err.response.status === 403) {
+      } else if (err.response && err.response.status === 403) {
         await dispatch('refreshToken');
         state.apiCounter = 2;
         dispatch('getQA', payload);
@@ -538,7 +538,7 @@ export default {
     } catch (err) {
       if (state.apiCounter == 2) {
         dispatch('apiSignOutAction');
-      } else if (err.response.status === 403) {
+      } else if (err.response && err.response.status === 403) {
         await dispatch('refreshToken');
         state.apiCounter = 2;
         dispatch('askQuestion', payload);
@@ -561,7 +561,7 @@ export default {
     } catch (err) {
       if (state.apiCounter == 2) {
         dispatch('apiSignOutAction');
-      } else if (err.response.status === 403) {
+      } else if (err.response && err.response.status === 403) {
         await dispatch('refreshToken');
         state.apiCounter = 2;
         dispatch('answerQuestion', payload);
@@ -582,7 +582,7 @@ export default {
     } catch (err) {
       if (state.apiCounter == 2) {
         dispatch('apiSignOutAction');
-      } else if (err.response.status === 403) {
+      } else if (err.response && err.response.status === 403) {
         await dispatch('refreshToken');
         state.apiCounter = 2;
         dispatch('editAnswer', payload);
@@ -702,7 +702,7 @@ export default {
     } catch (err) {
       if (state.apiCounter == 2) {
         dispatch('apiSignOutAction');
-      } else if (err.response.status === 403) {
+      } else if (err.response && err.response.status === 403) {
         await dispatch('refreshToken');
         state.apiCounter = 2;
         dispatch('saveDraftBid', payload);
@@ -819,7 +819,7 @@ export default {
     } catch (err) {
       if (state.apiCounter == 2) {
         dispatch('apiSignOutAction');
-      } else if (err.response.status === 403) {
+      } else if (err.response && err.response.status === 403) {
         await dispatch('refreshToken');
         state.apiCounter = 2;
         dispatch('updateDraftBid', payload);
@@ -840,7 +840,7 @@ export default {
     } catch (err) {
       if (state.apiCounter == 2) {
         dispatch('apiSignOutAction');
-      } else if (err.response.status === 403) {
+      } else if (err.response && err.response.status === 403) {
         await dispatch('refreshToken');
         state.apiCounter = 2;
         dispatch('inviteNewSupplier', payload);
@@ -917,7 +917,7 @@ export default {
     } catch (err) {
       if (state.apiCounter == 2) {
         dispatch('apiSignOutAction');
-      } else if (err.response.status === 403) {
+      } else if (err.response && err.response.status === 403) {
         await dispatch('refreshToken');
         state.apiCounter = 2;
         dispatch('uploadBidAttach', payload);
@@ -933,7 +933,7 @@ export default {
     } catch (err) {
       if (state.apiCounter == 2) {
         dispatch('apiSignOutAction');
-      } else if (err.response.status === 403) {
+      } else if (err.response && err.response.status === 403) {
         await dispatch('refreshToken');
         state.apiCounter = 2;
         dispatch('getBidTemplates', payload);
@@ -981,7 +981,7 @@ export default {
     } catch (err) {
       if (state.apiCounter == 2) {
         dispatch('apiSignOutAction');
-      } else if (err.response.status === 403) {
+      } else if (err.response && err.response.status === 403) {
         await dispatch('refreshToken');
         state.apiCounter = 2;
         dispatch('deleteTemplate', payload);
@@ -997,7 +997,7 @@ export default {
     } catch (err) {
       if (state.apiCounter == 2) {
         dispatch('apiSignOutAction');
-      } else if (err.response.status === 403) {
+      } else if (err.response && err.response.status === 403) {
         await dispatch('refreshToken');
         state.apiCounter = 2;
         dispatch('deleteTemplate', payload);
@@ -1024,7 +1024,7 @@ export default {
     } catch (err) {
       if (state.apiCounter == 2) {
         dispatch('apiSignOutAction');
-      } else if (err.response.status === 403) {
+      } else if (err.response && err.response.status === 403) {
         await dispatch('refreshToken');
         state.apiCounter = 2;
         dispatch('getEditTemplate', payload);
@@ -1082,7 +1082,7 @@ export default {
     } catch (err) {
       if (state.apiCounter == 2) {
         dispatch('apiSignOutAction');
-      } else if (err.response.status === 403) {
+      } else if (err.response && err.response.status === 403) {
         await dispatch('refreshToken');
         state.apiCounter = 2;
         dispatch('saveTemplateBid', payload);
@@ -1110,7 +1110,7 @@ export default {
     } catch (err) {
       if (state.apiCounter == 2) {
         dispatch('apiSignOutAction');
-      } else if (err.response.status === 403) {
+      } else if (err.response && err.response.status === 403) {
         await dispatch('refreshToken');
         state.apiCounter = 2;
         dispatch('getBidBySerial', payload);
@@ -1307,7 +1307,7 @@ export default {
     } catch (err) {
       if (state.apiCounter == 2) {
         dispatch('apiSignOutAction');
-      } else if (err.response.status === 403) {
+      } else if (err.response && err.response.status === 403) {
         await dispatch('refreshToken');
         state.apiCounter = 2;
 
@@ -1363,7 +1363,7 @@ export default {
     } catch (err) {
       if (state.apiCounter == 2) {
         dispatch('apiSignOutAction');
-      } else if (err.response.status === 403) {
+      } else if (err.response && err.response.status === 403) {
         await dispatch('refreshToken');
         state.apiCounter = 2;
         dispatch('deleteDraftBid', payload);
@@ -1397,7 +1397,7 @@ export default {
       commit('setPageLoader', false);
       if (state.apiCounter == 2) {
         dispatch('apiSignOutAction');
-      } else if (err.response.status === 403) {
+      } else if (err.response && err.response.status === 403) {
         await dispatch('refreshToken');
         state.apiCounter = 2;
         dispatch('getUpdateBid', payload);
@@ -1523,7 +1523,7 @@ export default {
     } catch (err) {
       if (state.apiCounter == 2) {
         dispatch('apiSignOutAction');
-      } else if (err.response.status === 403) {
+      } else if (err.response && err.response.status === 403) {
         await dispatch('refreshToken');
         state.apiCounter = 2;
         dispatch('updateBid', payload);
