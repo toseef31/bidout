@@ -17,13 +17,13 @@
                       <template>
                         <div class="progress-section">
                           <div class="d-flex progress-heading">
-                            <p class="mb-0">Page Progress: <strong>{{moduleWeight}}%</strong></p>
-                            <small>{{modulesCounts}} out of 12 modules</small>
+                            <p class="mb-0">Page Progress: <strong>{{percentage}}%</strong></p>
+                            <small>11 out of 11 modules</small>
                           </div>
                           <v-progress-linear 
                           color="#0D9648"
                           rounded
-                          :value="moduleWeight" max-width="100%"></v-progress-linear>
+                          :value="percentage" max-width="100%"></v-progress-linear>
                         </div>
                       </template>
                     </div>
@@ -170,7 +170,7 @@
   import CompanyVideos from '../components/CompanyProfile/CompanyVideos.vue'
   import CompanyLogo from '../components/CompanyProfile/CompanyLogo.vue'
   import _ from 'lodash';
-  import { mapActions,mapMutations,mapGetters } from "vuex"
+  import { mapActions,mapMutations } from "vuex"
 export default {
   name : "CompanyProfile",
   components: {
@@ -203,12 +203,9 @@ export default {
       servData: [],
       
       basinLoader: null,
-      progressBar :10,
-      moduleCount : 1,
     };
   },
   computed:{
-    ...mapGetters(["progressCount","moduleCOunt"]),
     showSideBar(){
         return this.$store.getters.g_sideBarOpen;
     },
@@ -261,130 +258,15 @@ export default {
          return this.servData;
       }
     },
-    moduleWeight(){
-      // return this.$store.getters.moduleWeight;
-      if(this.$store.getters.moduleWeight) {
-        const sum = this.$store.getters.moduleWeight.reduce((accumulator, object) => {
-          return accumulator + object.weight;
-        }, 0);
-        return sum;
-      } else {
-        return 0;
-      }
-    },
-    modulesCounts(){
-      return this.$store.getters.moduleWeight ? this.$store.getters.moduleWeight.length : 0;
-    },
     percentage(){
-      if(this.companyData.companyData.image && this.companyData.companyData.services && this.companyData.companyData.services.length > 0 && this.companyData.companyData.companyLocations && this.companyData.companyData.companyLocations.length > 0 && this.companyData.companyData.corporateVideos && this.companyData.companyData.corporateVideos.length > 0 && this.companyData.companyData.corporateDocuments && this.companyData.companyData.corporateDocuments.length > 0 && this.companyData.companyData.corporateNews && this.companyData.companyData.corporateNews.length > 0 && this.companyData.companyData.executiveLeadership && this.companyData.companyData.executiveLeadership.length > 0 && this.companyData.companyData.esgInitiatives && this.companyData.companyData.esgInitiatives.length > 0 && this.companyData.companyData.accountContacts && this.companyData.companyData.accountContacts.length > 0 && this.companyData.companyData.basins && this.companyData.companyData.basins.length > 0){
-        this.progressBar = 100;
-        this.moduleCount = 11;
-        console.log('alll');
-        return this.progressBar;
-      }else{
-        if(this.companyData.companyData.image){
-          this.progressBar = this.progressBar + 10;
-          this.moduleCount = this.moduleCount + 1;
-          return this.progressBar;
-        }else{
-          this.progressBar = this.progressBar - 10;
-          this.moduleCount = this.moduleCount - 1;
-          return this.progressBar;
-        }
-        if(this.companyData.companyData.services.length == 1){
-          // this.progressBar = this.progressBar + 10;
-          this.moduleCount = this.moduleCount + 1;
-          return this.progressBar += this.progressBar;
-        }else{
-          this.progressBar = this.progressBar - 10;
-          this.moduleCount = this.moduleCount - 1;
-          console.log('else',this.progressBar);
-          return this.progressBar;
-        }
-        if(this.companyData.companyData.corporateVideos.length == 1){
-          this.progressBar = this.progressBar + 10;
-          this.moduleCount = this.moduleCount + 1;
-          return this.progressBar;
-        }else{
-          console.log('else',this.progressBar);
-          this.progressBar = this.progressBar - 10;
-          console.log('else',this.progressBar);
-          this.moduleCount = this.moduleCount - 1;
-          console.log('else',this.moduleCount);
-        }
-        if(this.companyData.companyData.corporateDocuments.length == 1){
-          this.progressBar = this.progressBar + 10;
-          this.moduleCount = this.moduleCount + 1;
-          return this.progressBar;
-        }else{
-          console.log('else',this.progressBar);
-          this.progressBar = this.progressBar - 10;
-          console.log('else',this.progressBar);
-          this.moduleCount = this.moduleCount - 1;
-          console.log('else',this.moduleCount);
-        }
-        if(this.companyData.companyData.corporateNews.length == 1){
-          this.progressBar = this.progressBar + 10;
-          this.moduleCount = this.moduleCount + 1;
-          return this.progressBar;
-        }else{
-          console.log('else',this.progressBar);
-          this.progressBar = this.progressBar - 10;
-          console.log('else',this.progressBar);
-          this.moduleCount = this.moduleCount - 1;
-          console.log('else',this.moduleCount);
-          return this.progressBar;
-        }
-        if(this.companyData.companyData.executiveLeadership.length == 1){
-          this.progressBar = this.progressBar + 10;
-          this.moduleCount = this.moduleCount + 1;
-          return this.progressBar;
-        }else{
-          this.progressBar = this.progressBar - 10;
-          this.moduleCount = this.moduleCount - 1;
-          return this.progressBar;
-        }
-        if(this.companyData.companyData.esgInitiatives.length == 1){
-          this.progressBar = this.progressBar + 10;
-          this.moduleCount = this.moduleCount + 1;
-          return this.progressBar;
-        }else{
-          this.progressBar = this.progressBar - 10;
-          this.moduleCount = this.moduleCount - 1;
-          return this.progressBar;
-        }
-        if(this.companyData.companyData.accountContacts.length == 1){
-          console.log(this.companyData.companyData.accountContacts);
-          console.log('length',this.companyData.companyData.accountContacts);
-          this.progressBar = this.progressBar + 10;
-          this.moduleCount = this.moduleCount + 1;
-          return this.progressBar;
-        }else{
-          alert('dasdasdas');
-          this.progressBar = this.progressBar - 10;
-          this.moduleCount = this.moduleCount - 1;
-          return this.progressBar;
-        }
-        if(this.companyData.companyData.companyLocations.length == 1){
-          this.progressBar = this.progressBar + 10;
-          this.moduleCount = this.moduleCount + 1;
-          return this.progressBar;
-        }else{
-          this.progressBar = this.progressBar - 10;
-          this.moduleCount = this.moduleCount - 1;
-          return this.progressBar;
-        }
-        if(this.companyData.companyData.basins.length == 1){
-          this.progressBar = this.progressBar + 10;
-          this.moduleCount = this.moduleCount + 1;
-          return this.progressBar;
-        }else{
-          this.progressBar = this.progressBar - 10;
-          this.moduleCount = this.moduleCount - 1;
-          return this.progressBar;
-        }  
+      if(this.$store.getters.companyData.companyData.image && this.$store.getters.companyData.companyData.services && this.$store.getters.companyData.companyData.companyLocations && this.$store.getters.companyData.companyData.corporateVideos && this.$store.getters.companyData.companyData.corporateDocuments && this.$store.getters.companyData.companyData.corporateNews && this.$store.getters.companyData.companyData.executiveLeadership && this.$store.getters.companyData.companyData.esgInitiatives && this.$store.getters.companyData.companyData.accountContacts){
+        return 100;
       }
-      
+      if(this.$store.getters.companyData.companyData.image && this.$store.getters.companyData.companyData.esgInitiatives == []){
+        return 30;
+      }else{
+        return 20;
+      }
     },
     subCategories(){
       return this.$store.getters.subCategories;
