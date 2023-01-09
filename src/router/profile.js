@@ -17,13 +17,11 @@ const routes = [
            if(store.getters.userInfo == null) {
                next('/login');
            } else {
-            if(store.getters.userInfo.company.contracts.length >= 2){
-              next(); 
-            }
-            if(store.getters.userInfo.company.contracts.length == 1){
-              if(store.getters.userInfo.company.contracts[0].contractType == 'ofs' || store.getters.userInfo.company.contracts[0].contractType == 'ofs-premium'){
+            if(store.getters.userInfo.company.contracts){
+              if(store.getters.userInfo.company.contracts.find(contract => contract.contractType == 'ofs' || contract.contractType == 'ofs-premium')){
                   next();
               }else{
+                console.log('here')
                   next('/dashboard');
               }
             }
