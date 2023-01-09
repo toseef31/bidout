@@ -77,4 +77,13 @@ export default {
     sameAsData (state){
        return state.sameAsData
     },
+    packageValue (state){
+       return state.packageValue
+    },
+    moduleRfxOption (state){
+       return state.moduleRfxOption
+    },
+    moduleOfsOption (state){
+       return state.moduleOfsOption
+    },
 }
