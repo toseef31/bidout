@@ -8,5 +8,4 @@ export default {
    invitedList: [], 
    pendingCount : 0,
    allLocations: null,
-   mapLoader: false,
 }
