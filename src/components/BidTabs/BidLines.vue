@@ -9,11 +9,11 @@
             
              <a v-bind="attrs" class="mr-4 text-capitalize text-decoration-none export-excel" href="https://firebasestorage.googleapis.com/v0/b/bidout-dev.appspot.com/o/wordTemplates%2FlineItemsTemplate%20(2).xlsx?alt=media&token=e03e4a03-1a34-413a-81e4-4a0fbaef9f78" download width="125px"
               v-on="on"  icon color="#0D9648">
-              Export <v-icon size="30" class="pl-2" color="#0d9648">mdi-microsoft-excel
+               <v-icon size="24" class="pl-2" color="#0d9648">mdi-information-outline
                </v-icon>
             </a>
             </template>
-            <span>Download the <strong>Excel Template</strong> to upload line items directly from excel</span>
+            <span>Click here to download the <strong>Excel template</strong></span>
           </v-tooltip>
           <v-tooltip top >
             <template v-slot:activator="{ on, attrs }">
