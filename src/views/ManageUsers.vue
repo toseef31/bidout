@@ -94,9 +94,9 @@
                               <v-icon>mdi-square-edit-outline</v-icon>
                             Edit Details</v-btn>
                            
-                            <!-- <v-btn depressed color="transparent" class="text-capitalize" @click="disable(user.id)">
-                              <v-icon color="#F32349">mdi-window-close</v-icon>
-                            Disable </v-btn> -->
+                            <v-btn depressed color="transparent" class="text-capitalize edit-btn">
+                              <v-icon>mdi-check</v-icon>
+                            Invited </v-btn>
 
                           </td>
                         </tr>
