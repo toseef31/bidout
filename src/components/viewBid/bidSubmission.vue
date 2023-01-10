@@ -2,6 +2,18 @@
   <v-col class="my-7 pa-0 bid-submission-tab" align="start">
 
 <div class="table-class" v-if="bidDetail.supplierSubmissions.length">
+    <div class="d-flex justify-end mr-5" v-if="!isBidOut && !bidDetail.receivingBids">
+      <v-tooltip top>
+        <template v-slot:activator="{ on, attrs }">
+         <v-btn v-bind="attrs"
+          v-on="on"  icon color="#0D9648" @click="exportF">
+           <v-icon size="30" >mdi-microsoft-excel
+           </v-icon>
+        </v-btn>
+        </template>
+        <span>Export Awards</span>
+    </v-tooltip>
+    </div>
     <v-simple-table class="template-table-style-sub mt-2" >
       <template v-slot:default>
         <thead>
@@ -240,6 +252,7 @@
 
 <script>
 import { mapActions } from 'vuex';
+import * as XLSX from 'xlsx';
 
 export default {
   data() {
@@ -290,6 +303,75 @@ export default {
   },
   methods: {
     ...mapActions(['awardCompany', 'rejectCompany', 'UnAwardCompany', 'UnDisqualifyCompany']),
+    exportF() {
+      const header = this.bidDetail.supplierSubmissions.map((el) => el.company);
+
+      header.unshift('Line Items');
+
+      const dataD = [];
+      let index;
+
+      this.bidDetail.bidData.lineItems.forEach((el, lIndex) => {
+        dataD.push([el.description]);
+        this.bidDetail.supplierSubmissions.forEach((list) => {
+          dataD[lIndex].push(`${list.lineItems[lIndex].price} ${el.unit}`);
+        });
+      });
+
+      dataD.push(['Supplier Note']);
+
+      index = this.indexOfArray(['Supplier Note'], dataD);
+
+      this.bidDetail.supplierSubmissions.forEach((list) => {
+        if (list.supplierNote && list.supplierNote !== '') {
+          dataD[index].push(`${list.supplierNote}`);
+        }
+      });
+
+      dataD.push(['Supplier Attachment']);
+
+      index = this.indexOfArray(['Supplier Attachment'], dataD);
+
+      this.bidDetail.supplierSubmissions.forEach((list) => {
+        if (list.supplierAttachments && list.supplierAttachments.length) {
+          let doc = '';
+          list.supplierAttachments.forEach((el) => {
+            doc += `${el.fileName}\r\n`;
+          });
+          dataD[index].push(`${doc}`);
+        }
+      });
+
+      if (this.question.length) {
+        this.question.forEach((el, qInd) => {
+          dataD.push([el.title]);
+          const fI = this.indexOfArray([el.title], dataD);
+          this.answers.forEach((list) => {
+            if (el.questionType === 'checkbox') {
+              dataD[fI].push(`${list.answers[qInd].answer === 'true' ? 'Yes' : 'No'}`);
+            } else if (el.questionType === 'uploadFile') {
+              dataD[fI].push(`${list.answers[qInd].fileName}`);
+            } else {
+              dataD[fI].push(`${list.answers[qInd].answer}`);
+            }
+          });
+        });
+      }
+
+      dataD.unshift(header);
+      const data = XLSX.utils.aoa_to_sheet(dataD);
+      const wb = XLSX.utils.book_new();
+      XLSX.utils.book_append_sheet(wb, data, 'data');
+      XLSX.writeFile(wb, `${this.bidDetail.bidData.title}.xlsx`);
+    },
+    indexOfArray(val, array) {
+      const hash = {};
+      for (let i = 0; i < array.length; i++) {
+        hash[array[i]] = i;
+      }
+
+      return (hash.hasOwnProperty(val)) ? hash[val] : -1;
+    },
     checkAwardee(id) {
       const { awardees } = this.bidDetail.bidData;
 
