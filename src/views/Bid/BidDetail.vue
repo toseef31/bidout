@@ -29,7 +29,7 @@
     </v-col>
   </v-row>
 
-  <v-col v-else  class="pl-0 pr-3 pb-0 pt-3 bid-detail-module  ">
+  <v-col v-else  class="pl-0 pr-3 pb-0 pt-0 bid-detail-module  ">
     <v-alert type="error"  v-show="showErrorDeleteAlert" class="mx-5" v-if="getUserType === 'buyer'">
       Deleting this bid was failed. Please Try again!
     </v-alert>
