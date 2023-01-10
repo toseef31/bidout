@@ -26,4 +26,7 @@ export default {
    allLocations (state){
       return state.allLocations
    },
+   mapLoader (state){
+      return state.mapLoader
+   },
 }
