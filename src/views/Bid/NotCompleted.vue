@@ -234,7 +234,7 @@ export default {
       this.bidTitle = event.bidTitle;
     },
     validateSupplier(event) {
-      console.log(event);
+      
       this.supplierValid = event.valid;
       this.supplierValue = event.supplier;
     },
@@ -247,14 +247,14 @@ export default {
       this.itemsValue = event.items;
     },
     validateAttachment(event) {
-      console.log(event);
+      
       this.attachValid = event.valid;
       this.attachValue = event.attach;
     },
     async publishBid() {
       try {
         const serial = await this.$store.dispatch('publishBid');
-        console.log(serial);
+        
         this.$router.push(`/view-bids/${serial}?new=true`);
         this.$store.commit('setDraftBidsList', null);
       } catch (error) {
