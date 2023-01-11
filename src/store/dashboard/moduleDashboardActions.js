@@ -45,9 +45,7 @@ export default {
       });
   },
   manageUsers({commit,dispatch,state},payload){
-    const name = encodeURIComponent(payload);
-    console.log('name',name);
-    console.log('payload',payload);
+    const name = decodeURIComponent(payload);
     axios.get('/company/getUsersByCompany/'+ name)
       .then(responce => {
         if(responce.status === 200){
