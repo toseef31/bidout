@@ -214,7 +214,6 @@ export default {
         mapTypeControl: false,
         mapTypeId: google.maps.MapTypeId.ROADMAP
       });
-
       this.infowindow = new google.maps.InfoWindow();
       var marker, i,j;
       // var latlngbounds =new google.maps.LatLngBounds();
@@ -262,24 +261,30 @@ export default {
   },
   
   async created(){
-    await this.getAllLocations();
-    await this.loadMapScript();
+     await this.getAllLocations();
+     await this.loadMapScript();
+
   },
   async beforeUpdate(){
-    this.getLocation();
+    if(this.locations != null){
+       this.getLocation();
+    }else{
+      await this.getAllLocations();
+      // this.getLocation();
+    }
   },
   async updated(){
-    // this.getLocation();
+    
+    
   },
   async beforeMount(){
-     // this.getLocation();
+    
   },
   async mounted() {
     document.title = "Dashboard - BidOut";
     this.pendingUserCount(this.$store.getters.userInfo.company.id)
     this.users = this.$store.getters.userInfo;
     this.getBidDashboard(this.userDatas.id);
-    // this.getLocation();
   }
 };
 </script>

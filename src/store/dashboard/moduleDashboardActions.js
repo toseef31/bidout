@@ -181,6 +181,7 @@ export default {
     commit('setMapLoader',true)
     try{
       const res = await axios.get('/company/getCompanyLocations');
+      console.log('response',res.data);
       commit('setAllLocations',res.data)
       commit('setMapLoader',false)
     }catch(err){
