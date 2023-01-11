@@ -45,7 +45,10 @@ export default {
       });
   },
   manageUsers({commit,dispatch,state},payload){
-    axios.get('/company/getUsersByCompany/'+ payload)
+    const name = encodeURIComponent(payload);
+    console.log('name',name);
+    console.log('payload',payload);
+    axios.get('/company/getUsersByCompany/'+ name)
       .then(responce => {
         if(responce.status === 200){
           commit('getUsersList',responce.data)
