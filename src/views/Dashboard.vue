@@ -261,21 +261,13 @@ export default {
   },
   
   async created(){
-     await this.getAllLocations();
      await this.loadMapScript();
-
   },
   async beforeUpdate(){
-    if(this.locations != null){
-       this.getLocation();
-    }else{
-      await this.getAllLocations();
-      // this.getLocation();
-    }
+    await this.getAllLocations().finally(this.getLocation());
   },
   async updated(){
-    
-    
+
   },
   async beforeMount(){
     
