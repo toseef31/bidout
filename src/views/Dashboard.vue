@@ -266,19 +266,20 @@ export default {
     await this.loadMapScript();
   },
   async beforeUpdate(){
-    await this.getLocation();
+    this.getLocation();
   },
   async updated(){
-    
+    // this.getLocation();
   },
   async beforeMount(){
-    // await this.getLocation();
+     // this.getLocation();
   },
   async mounted() {
     document.title = "Dashboard - BidOut";
     this.pendingUserCount(this.$store.getters.userInfo.company.id)
     this.users = this.$store.getters.userInfo;
     this.getBidDashboard(this.userDatas.id);
+    // this.getLocation();
   }
 };
 </script>
