@@ -23,11 +23,11 @@ const routes = [
         name: 'ExistingAccount',
         component: () => import('@/views/GetStarted/ExistingAccount.vue'),
         beforeEnter: (to, from, next) => {
-            if(store.getters.userInfo == null) {
+            if(store.getters.companyName) {
                 
                 next();
             }else{
-              next('/dashboard');
+              next('/get-started');
             }
         }
       },
@@ -36,11 +36,11 @@ const routes = [
         name: 'ModuleSelection',
         component: () => import('@/views/GetStarted/ModuleSelection.vue'),
         beforeEnter: (to, from, next) => {
-            if(store.getters.userInfo == null) {
+            if(store.getters.id) {
                 
                 next();
             }else{
-              next('/dashboard');
+              next('/get-started');
             }
         }
       },
@@ -49,11 +49,11 @@ const routes = [
         name: 'Contract',
         component: () => import('@/views/GetStarted/Contract.vue'),
         beforeEnter: (to, from, next) => {
-            if(store.getters.userInfo == null) {
+            if(store.getters.id) {
                 
                 next();
             }else{
-              next('/dashboard');
+              next('/get-started');
             }
         }
       },
@@ -62,11 +62,11 @@ const routes = [
         name: 'Payment',
         component: () => import('@/views/GetStarted/Payment.vue'),
         beforeEnter: (to, from, next) => {
-          if(store.getters.userInfo == null) {
+          if(store.getters.id) {
               
               next();
           }else{
-            next('/dashboard');
+            next('/get-started');
           }
         }
       },
@@ -75,11 +75,11 @@ const routes = [
         name: 'Confirmation',
         component: () => import('@/views/GetStarted/Confirmation.vue'),
         beforeEnter: (to, from, next) => {
-            if(store.getters.userInfo == null) {
+            if(store.getters.id) {
                 
                 next();
             }else{
-              next('/dashboard');
+              next('/get-started');
             }
         }
       },

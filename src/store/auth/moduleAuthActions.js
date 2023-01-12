@@ -293,12 +293,9 @@ export default {
   },
   // Get IP
   getIpAddress({ commit }, payload){
-    console.log("dasdasd");
+    
     const res = fetch('https://api.ipify.org?format=json',{
       method: 'get',
-      headers:{
-        "Content-Type": "application/json"
-      },
     }).then(response => response.json())
     .then(json =>{
       commit('setLocalIp', json.ip)
@@ -317,6 +314,7 @@ export default {
         commit('setContract', responce.data)
         commit('setPlan', payload.plan)
         commit('setPrice',payload.unit_price)
+        commit('setPackage',payload.package)
         router.replace({
           name: "Contract"
         });

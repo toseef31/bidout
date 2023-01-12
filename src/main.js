@@ -64,17 +64,17 @@ Vue.use(VueMeta, {
 Vue.use(VueSignaturePad);
 Vue.use(VueCroppie);
 Vue.use(Toasted);
-// Sentry.init({
-//   Vue: Vue,
-//   dsn: import.meta.env.VITE_SENTRY_DSN,
-//   integrations: [
-//     new BrowserTracing({
-//       routingInstrumentation: Sentry.vueRouterInstrumentation(router),
-//       tracingOrigins: ["localhost", "http://localhost:8080/", /^\//],
-//     }),
-//   ],
+Sentry.init({
+  Vue: Vue,
+  dsn: import.meta.env.VITE_SENTRY_DSN,
+  integrations: [
+    new BrowserTracing({
+      routingInstrumentation: Sentry.vueRouterInstrumentation(router),
+      tracingOrigins: ["localhost", "http://localhost:8080/", /^\//],
+    }),
+  ],
 
-// })
+})
 
 LogRocket.getSessionURL((sessionURL) => {
   Sentry.configureScope((scope) => {

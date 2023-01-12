@@ -27,7 +27,7 @@ export default {
           if(state.apiCounter === 2){
             dispatch('apiSignOutAction')
           }else{
-            if(err.response.status === 403){
+            if(err.response && err.response.status === 403){
              await dispatch('refreshToken');
              state.apiCounter = 2;
              dispatch('updateProfileImg',payload);
@@ -40,7 +40,7 @@ export default {
       if(state.apiCounter === 2){
         dispatch('apiSignOutAction')
       }else{
-        if(err.response.status === 403){
+        if(err.response && err.response.status === 403){
          await dispatch('refreshToken');
          state.apiCounter = 2;
          dispatch('updateProfileImg',payload);
@@ -62,7 +62,7 @@ export default {
           if(state.apiCounter === 2){
             dispatch('apiSignOutAction')
           }else{
-            if(err.response.status === 403){
+            if(err.response && err.response.status === 403){
              await dispatch('refreshToken');
              state.apiCounter = 2;
              dispatch('updateProfile',payload);
@@ -76,7 +76,7 @@ export default {
       if(state.apiCounter === 2){
         dispatch('apiSignOutAction')
       }else{
-        if(err.response.status === 403){
+        if(err.response && err.response.status === 403){
          await dispatch('refreshToken');
          state.apiCounter = 2;
          dispatch('updateProfile',payload);
@@ -97,7 +97,7 @@ export default {
       if(state.apiCounter === 2){
         dispatch('apiSignOutAction')
       }else{
-        if(err.response.status === 403){
+        if(err.response && err.response.status === 403){
          await dispatch('refreshToken');
          state.apiCounter = 2;
          dispatch('changePassword',payload);
@@ -126,7 +126,7 @@ export default {
       if(state.apiCounter === 2){
         dispatch('apiSignOutAction')
       }else{
-        if(err.response.status === 403){
+        if(err.response && err.response.status === 403){
          await dispatch('refreshToken');
          state.apiCounter = 2;
          dispatch('adminsCompany',payload);
@@ -146,7 +146,7 @@ export default {
           commit('setUser',responce.data)
           localStorage.setItem("userData",JSON.stringify(responce.data));
         }).catch(async(err) => {
-          if(err.response.status === 403){
+          if(err.response && err.response.status === 403){
            await dispatch('refreshToken');
            state.apiCounter = 2;
            dispatch('updateNotifications',payload);
@@ -158,7 +158,7 @@ export default {
       if(state.apiCounter === 2){
         dispatch('apiSignOutAction')
       }else{
-        if(err.response.status === 403){
+        if(err.response && err.response.status === 403){
          await dispatch('refreshToken');
          state.apiCounter = 2;
          dispatch('updateNotifications',payload);
@@ -168,8 +168,7 @@ export default {
       });
   }, 
   inviteUser({commit,dispatch,state},payload){
-    
-    axios.post('/company/addInvitedUser/',{'firstName':payload.firstName,'lastName': payload.lastName,'company': payload.company,'email':payload.email,'parent': payload.parent,'role': payload.role})
+    axios.post('/company/addInvitedUser/',{'firstName':payload.firstName,'lastName': payload.lastName,'company': payload.company,'companyId':payload.companyId,'email':payload.email,'parent': payload.parent,'role': payload.role})
      .then(responce => {
         
         if(responce.status === 200){
@@ -180,7 +179,7 @@ export default {
       if(state.apiCounter === 2){
         dispatch('apiSignOutAction')
       }else{
-        if(err.response.status === 403){
+        if(err.response && err.response.status === 403){
          await dispatch('refreshToken');
          state.apiCounter = 2;
          dispatch('inviteUser',payload);
@@ -207,7 +206,7 @@ export default {
       if(state.apiCounter === 2){
         dispatch('apiSignOutAction')
       }else{
-        if(err.response.status === 403){
+        if(err.response && err.response.status === 403){
           await dispatch('refreshToken');
           state.apiCounter = 2;
           dispatch('updateUser',payload);
@@ -230,7 +229,7 @@ export default {
       if(state.apiCounter === 2){
         dispatch('apiSignOutAction')
       }else{
-        if(err.response.status === 403){
+        if(err.response && err.response.status === 403){
           await dispatch('refreshToken');
           state.apiCounter = 2;
           dispatch('updateInvite',payload);
@@ -251,7 +250,7 @@ export default {
       if(state.apiCounter === 2){
         dispatch('apiSignOutAction')
       }else{
-        if(err.response.status === 403){
+        if(err.response && err.response.status === 403){
           await dispatch('refreshToken');
           state.apiCounter = 2;
           dispatch('getDisabledUsers',payload);
@@ -272,7 +271,7 @@ export default {
       if(state.apiCounter === 2){
         dispatch('apiSignOutAction')
       }else{
-        if(err.response.status === 403){
+        if(err.response && err.response.status === 403){
           await dispatch('refreshToken');
           state.apiCounter = 2;
           dispatch('getPendingUsers',payload);

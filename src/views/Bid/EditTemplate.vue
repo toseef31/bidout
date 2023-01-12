@@ -231,7 +231,7 @@ export default {
       this.bidTitle = event.bidTitle;
     },
     validateSupplier(event) {
-      console.log(event);
+      
       this.supplierValid = event.valid;
       this.supplierValue = event.supplier;
     },
@@ -244,7 +244,7 @@ export default {
       this.itemsValue = event.items;
     },
     validateAttachment(event) {
-      console.log(event);
+     
       this.attachValid = event.valid;
       this.attachValue = event.attach;
     },
@@ -265,7 +265,6 @@ export default {
   },
   mounted() {
     document.title = 'Create Bid - BidOut';
-    console.log(this.$route.name);
     this.users = JSON.parse(localStorage.getItem('userData')).user;
   },
 };

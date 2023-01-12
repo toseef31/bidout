@@ -15,7 +15,7 @@ export default {
       if(state.apiCounter === 2){
         dispatch('apiSignOutAction')
       }else{
-        if(err.response.status === 403){
+        if(err.response && err.response.status === 403){
          await dispatch('refreshToken');
          state.apiCounter = 2;
          dispatch('pendingUserCount',payload);
@@ -35,7 +35,7 @@ export default {
       if(state.apiCounter === 2){
         dispatch('apiSignOutAction')
       }else{
-        if(err.response.status === 403){
+        if(err.response && err.response.status === 403){
          await dispatch('refreshToken');
          state.apiCounter = 2;
          dispatch('getPendingList',payload);
@@ -47,7 +47,6 @@ export default {
   manageUsers({commit,dispatch,state},payload){
     axios.get('/company/getUsersByCompany/'+ payload)
       .then(responce => {
-        console.log(responce.data);
         if(responce.status === 200){
           commit('getUsersList',responce.data)
         }
@@ -55,7 +54,7 @@ export default {
       if(state.apiCounter === 2){
         dispatch('apiSignOutAction')
       }else{
-        if(err.response.status === 403){
+        if(err.response && err.response.status === 403){
          await dispatch('refreshToken');
          state.apiCounter = 2;
          dispatch('manageUsers',payload);
@@ -75,7 +74,7 @@ export default {
         if(state.apiCounter === 2){
           dispatch('apiSignOutAction')
         }else{
-          if(err.response.status === 403){
+          if(err.response && err.response.status === 403){
            await dispatch('refreshToken');
            state.apiCounter = 2;
            dispatch('getInvitedList',payload);
@@ -99,7 +98,7 @@ export default {
       if(state.apiCounter === 2){
         dispatch('apiSignOutAction')
       }else{
-        if(err.response.status === 403){
+        if(err.response && err.response.status === 403){
          await dispatch('refreshToken');
          state.apiCounter = 2;
          dispatch('disableUser',payload);
@@ -123,7 +122,7 @@ export default {
       if(state.apiCounter === 2){
         dispatch('apiSignOutAction')
       }else{
-        if(err.response.status === 403){
+        if(err.response && err.response.status === 403){
          await dispatch('refreshToken');
          state.apiCounter = 2;
          dispatch('enableUser',payload);
@@ -146,7 +145,7 @@ export default {
       if(state.apiCounter === 2){
         dispatch('apiSignOutAction')
       }else{
-        if(err.response.status === 403){
+        if(err.response && err.response.status === 403){
          await dispatch('refreshToken');
          state.apiCounter = 2;
          dispatch('acceptPendingUser',payload);
@@ -169,7 +168,7 @@ export default {
       if(state.apiCounter === 2){
         dispatch('apiSignOutAction')
       }else{
-        if(err.response.status === 403){
+        if(err.response && err.response.status === 403){
          await dispatch('refreshToken');
          state.apiCounter = 2;
          dispatch('getActivities',payload);
@@ -179,11 +178,11 @@ export default {
       })
   }, 
   async getAllLocations({commit},payload){
-    // commit('setPageLoader',true)
+    commit('setMapLoader',true)
     try{
       const res = await axios.get('/company/getCompanyLocations');
       commit('setAllLocations',res.data)
-      // commit('setPageLoader',false)
+      commit('setMapLoader',false)
     }catch(err){
       console.log(err);
     }  

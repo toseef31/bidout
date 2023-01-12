@@ -81,4 +81,13 @@ export default {
     setSameAsData (state, payload){
       state.sameAsData = payload
     },
+    setPackage (state, payload){
+      state.packageValue = payload
+    },
+    setModuleRfxOption (state, payload){
+      state.moduleRfxOption = payload
+    },
+    setModuleOfsOption (state, payload){
+      state.moduleOfsOption = payload
+    },
 }
