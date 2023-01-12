@@ -84,7 +84,7 @@
             <v-icon color="#F32349" class="pa-1 white"  @click="deleteExcutive(excutive)">mdi-trash-can-outline</v-icon>
             <v-img :src="excutive.profilePicture" width="173"></v-img>
             <h6>{{excutive.name}}</h6>
-            <p>{{excutive.role}}</p>
+            <p class="mb-1">{{excutive.role}}</p>
             <a v-if="excutive.linkedin" class="text-decoration-none" target="_blank" :href="excutive.linkedin">
               <v-icon color="#013D3A">mdi-linkedin</v-icon>
             </a>

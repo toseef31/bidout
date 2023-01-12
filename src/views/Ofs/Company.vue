@@ -127,7 +127,7 @@
                           <div class="profile-list" v-for="excutive in orderCate(supplierData.executiveLeadership)">
                             <v-img  width="175px" height="175px" :src="excutive.profilePicture"></v-img>
                             <h6>{{excutive.name}}</h6>
-                            <p>{{excutive.role}}</p>
+                            <p class="mb-1">{{excutive.role}}</p>
                             <a v-if="excutive.linkedin" class="text-decoration-none" target="_blank" :href="excutive.linkedin">
                               <v-icon color="#013D3A">mdi-linkedin</v-icon>
                             </a>
@@ -140,7 +140,7 @@
                         <div class="company-esg mb-16" v-if="supplierData.esgInitiatives && supplierData.esgInitiatives.length > 0">
                           <h1 class="mb-4 font-weight-bold">ESG Inititives</h1>
                           <v-row class="mt-5">
-                            <v-col cols="12" sm="4" v-for="esg in esgsupplierData">
+                            <v-col cols="12" sm="4" v-for="esg in esgCompanyData">
                               <div class="esg-list text-left">
                                 <h4 class="text-left mb-5">{{esg.name}}</h4>
                                 <p class="text-left">{{esg.description}}</p>
