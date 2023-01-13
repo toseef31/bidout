@@ -1,9 +1,5 @@
 // import Base from '@/components/Layout/Base.vue';
 import Settings from '@/components/Layout/Settings.vue';
-import firebase from 'firebase/compat/app';
-import 'firebase/compat/auth';
-import 'firebase/compat/firestore';
-import axios from 'axios'
 import store from '@/store';
 
 const routes = [
