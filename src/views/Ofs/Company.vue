@@ -175,8 +175,8 @@
                       <div class="contact-list mb-4" v-for="contacts in supplierData.accountContacts">
                         <h4 class="mb-0 font-weight-bold">{{contacts.name}}</h4>
                         <h4 class="font-weight-medium">{{contacts.position}}</h4>
-                        <h4 class="font-weight-medium"><span class="font-weight-bold">Email:</span> <a :href="'mailto:'+contacts.email" class="text-decoration-none"><font color="#013D3A">{{contacts.email}}</font></a></h4>
-                        <h4 class="font-weight-medium"><span class="font-weight-bold">Phone:</span> {{contacts.phoneNo}}</h4>
+                        <h4 class="font-weight-medium contact-email"><span class="font-weight-bold">Email:</span> <a :href="'mailto:'+contacts.email" class="text-decoration-none"><font color="#013D3A">{{contacts.email}}</font></a></h4>
+                        <h4 class="font-weight-medium"><span class="font-weight-bold">Phone:</span> <a :href="'tel:'+contacts.phoneNo" class="text-decoration-none"><font color="#013D3A">{{contacts.phoneNo}}</font></a></h4>
                       </div>
                       <h4 v-if="!supplierData.accountContacts" class="text-center"> No contacts</h4>
                     </div>
