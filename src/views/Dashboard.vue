@@ -55,7 +55,7 @@
                              <td class="text-left pr-sm-0" width="60px">{{ bid.serial }}</td>
                              <td class="text-left title-truncate pl-0">{{ bid.title }}</td>
                              <td class="text-left" width="145px">{{ bid.dueDate | moment('MM/DD/YYYY') }} {{bid.dueTime}}</td>
-                             <td class="text-left d-none d-sm-block pt-3 pl-0" width="65px"><router-link class="text-decoration-none"
+                             <td class="text-left d-none d-sm-block pt-2 pl-0" width="65px"><router-link class="text-decoration-none"
                                :to="{
                                  path: `/view-bids/${bid.serial}`,
                                }"
