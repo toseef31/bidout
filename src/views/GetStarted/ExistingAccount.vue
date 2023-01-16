@@ -71,7 +71,7 @@ export default {
         return this.$store.getters.companyName;
     },
     companyAdmins(){
-        return this.$store.getters.companyAdmins;
+        return this.$store.getters.queueAdmins;
     },
   },
   methods: {
