@@ -71,11 +71,9 @@
                     submission.postBidoutPrice
                   }}</span>
                   <div class="subscript">Saving {{
-                    Math.round(((submission.postBidoutPrice / submission.bidoutPricepre) +
+                    100 - Math.round(((submission.postBidoutPrice / submission.bidoutPricepre) +
                       Number.EPSILON) * 100)
                   }}%</div>
-
-                  Math.round((num + Number.EPSILON) * 100) / 100
                 </td>
               </template>
             </tr>
