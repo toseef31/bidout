@@ -3,6 +3,7 @@
 
     <div class="table-class" v-if="bidDetail.supplierSubmissions.length">
       <div class="d-flex justify-end mr-5" v-if="!isBidOut && !bidDetail.receivingBids">
+
         <v-tooltip top>
           <template v-slot:activator="{ on, attrs }">
             <v-btn v-bind="attrs" v-on="on" icon color="#0D9648" @click="exportF">
@@ -274,15 +275,25 @@ export default {
     exportF() {
       const header = this.bidDetail.supplierSubmissions.map((el) => el.company);
 
+      header.unshift('UOM');
+      header.unshift('QTY');
       header.unshift('Line Items');
 
-      const dataD = [];
+      let dataD = [];
       let index;
 
       this.bidDetail.bidData.lineItems.forEach((el, lIndex) => {
         dataD.push([el.description]);
+        dataD[lIndex].push(el.quantity);
+        dataD[lIndex].push(el.unit);
         this.bidDetail.supplierSubmissions.forEach((list) => {
-          dataD[lIndex].push(`${list.lineItems[lIndex].price} ${el.unit}`);
+          if (list.lineItems[lIndex].price === 'NO_BID') {
+            dataD[lIndex].push('NO-BID');
+          } else if (list.lineItems[lIndex].price === 0 || list.lineItems[lIndex].price === '0') {
+            dataD[lIndex].push(0);
+          } else {
+            dataD[lIndex].push(`$${Number(`${Math.round(parseFloat(`${list.lineItems[lIndex].price}e${2}`))}e-${2}`).toFixed(2)}`);
+          }
         });
       });
 
@@ -293,8 +304,12 @@ export default {
       this.bidDetail.supplierSubmissions.forEach((list) => {
         if (list.supplierNote && list.supplierNote !== '') {
           dataD[index].push(`${list.supplierNote}`);
+        } else {
+          dataD[index].push('None');
         }
       });
+
+      dataD = this.spacer(dataD, index);
 
       dataD.push(['Supplier Attachment']);
 
@@ -307,8 +322,12 @@ export default {
             doc += `${el.fileName}\r\n`;
           });
           dataD[index].push(`${doc}`);
+        } else {
+          dataD[index].push('None');
         }
       });
+
+      dataD = this.spacer(dataD, index);
 
       if (this.question.length) {
         this.question.forEach((el, qInd) => {
@@ -319,18 +338,30 @@ export default {
               dataD[fI].push(list.answers[qInd].answer);
             } else if (el.questionType === 'uploadFile') {
               dataD[fI].push(`${list.answers[qInd].fileName}`);
+            } else if (list.answers[qInd].answer === 'null') {
+              dataD[fI].push('None');
             } else {
               dataD[fI].push(`${list.answers[qInd].answer}`);
             }
           });
+          dataD = this.spacer(dataD, fI);
         });
       }
 
       dataD.unshift(header);
+
       const data = XLSX.utils.aoa_to_sheet(dataD);
+
       const wb = XLSX.utils.book_new();
       XLSX.utils.book_append_sheet(wb, data, 'data');
+
       XLSX.writeFile(wb, `${this.bidDetail.bidData.title}.xlsx`);
+    },
+    spacer(data, index) {
+      data[index].splice(1, 0, '');
+      data[index].splice(2, 0, '');
+
+      return data;
     },
     indexOfArray(val, array) {
       const hash = {};
