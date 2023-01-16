@@ -27,7 +27,7 @@
           <tbody>
 
             <tr v-for="(item, index) in bidDetail.bidData.lineItems" :key="index">
-              <td>{{ item.description }}</td>
+              <td class="no-wrap">{{ item.description }}</td>
               <template v-for="(submission) in bidDetail.supplierSubmissions">
                 <td
                   v-if="submission.lineItems[index].price === 'NO_BID' || submission.lineItems[index].price === '' || submission.lineItems[index].price === 'null'">

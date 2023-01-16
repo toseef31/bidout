@@ -209,7 +209,7 @@
           </v-row>
         </div>
       </div>
-      <div v-else class="no-data py-4">None</div>
+      <div v-else class="no-data py-4">No questions are currently configured on this bid.</div>
     </div>
 
   </v-col>
