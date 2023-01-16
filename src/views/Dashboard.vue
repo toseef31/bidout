@@ -91,12 +91,7 @@
                  </div>
                </div>
                <div class="map-section map-section-full pa-1" :class="[mapClass]">
-                <v-row fill-height align="center" class="fill-height dashboard-module" v-if="mapLoading">
-                  <v-col cols="12">
-                    <v-progress-circular :width="3" color="green" indeterminate ></v-progress-circular>
-                  </v-col>
-                </v-row>
-                 <div id="map" class="map" height="415px" v-else></div>
+                 <div id="map" class="map" height="415px"></div>
                </div>
              </div>
          </v-col>
@@ -132,9 +127,8 @@ export default {
       bidss:{},
       mapOptions: {},
       markerOptions: {},
-      map: null,
+      map: '',
       users: '',
-      infowindow: null,
     };
   },
   computed:{
@@ -159,9 +153,6 @@ export default {
     },
     loading(){
      return this.$store.getters.pageLoader;
-    },
-    mapLoading(){
-     return this.$store.getters.mapLoader;
     },
     subLoading(){
      return this.$store.getters.pageSubLoader;
@@ -191,37 +182,26 @@ export default {
   },
   methods: {
     ...mapActions(["pendingUserCount","getAllLocations","getBidDashboard"]),
-    loadMapScript() {
-        // Check if the map script is already loaded
-        let scriptId = "map-api-script";
-        let mapAlreadyAttached = !!document.getElementById(scriptId);
-        if(!mapAlreadyAttached){
-          // Create the script element
-          let mapScript = document.createElement('script');
-          mapScript.id = scriptId;
-          mapScript.src = 'https://maps.googleapis.com/maps/api/js?key='+import.meta.env.VITE_GOOGLE_MAP+'&libraries=places';
-          document.head.appendChild(mapScript);
-        }
-      },
-    
     getLocation(){
       var LocationsForMap = this.locations;
-      this.map = new google.maps.Map(document.getElementById('map'), {
+      var map = new google.maps.Map(document.getElementById('map'), {
         zoom: 4,
         mapId: "2993bb26d878ba6a",
         center: new google.maps.LatLng(LocationsForMap[0].locations[0].lattitude, LocationsForMap[0].locations[0].longitude),
         streetViewControl: false,
         mapTypeControl: false,
-        mapTypeId: google.maps.MapTypeId.ROADMAP
+        // mapTypeId: google.maps.MapTypeId.ROADMAP
       });
+
       var infowindow = new google.maps.InfoWindow();
+
       var marker, i,j;
       // var latlngbounds =new google.maps.LatLngBounds();
       for (i = 0; i < LocationsForMap.length; i++) {  
         for (j = 0; j < LocationsForMap[i].locations.length; j++){
           marker = new google.maps.Marker({
             position: new google.maps.LatLng(LocationsForMap[i].locations[j].lattitude, LocationsForMap[i].locations[j].longitude),
-            map: this.map,
+            map: map,
             title: 'Marker',
             anchorPoint: new google.maps.Point(0, -29),
           });
@@ -247,7 +227,7 @@ export default {
           google.maps.event.addListener(marker, 'click', (function(marker, i) {
             return function() {
               infowindow.setContent(contentString);
-              infowindow.open(this.map, marker);
+              infowindow.open(map, marker);
             }
           })(marker, j));
           // latlngbounds.extend(marker.position);
@@ -259,7 +239,6 @@ export default {
 
     },
   },
-  
   async created(){
      await this.loadMapScript();
   },

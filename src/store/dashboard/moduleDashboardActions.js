@@ -179,12 +179,12 @@ export default {
       })
   }, 
   async getAllLocations({commit},payload){
-    // commit('setMapLoader',true)
+    // commit('setPageLoader',true)
     try{
       const res = await axios.get('/company/getCompanyLocations');
       console.log('response',res.data);
       commit('setAllLocations',res.data)
-      commit('setMapLoader',false)
+      // commit('setPageLoader',false)
     }catch(err){
       console.log(err);
     }  
