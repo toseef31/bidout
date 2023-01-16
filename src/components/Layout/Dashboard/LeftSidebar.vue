@@ -96,7 +96,7 @@
                 </v-list-item>
               </template>
 
-              <template v-if="moduleData.length == 1 ">
+              <!-- <template v-if="moduleData.length == 1 ">
                 <v-list-item
                     v-if="moduleData[0].contractType == 'ofs' || moduleData[0].contractType == 'ofs-premium'"
                 >
@@ -111,7 +111,7 @@
                       </v-list-item-content>
                     </template>
                 </v-list-item>
-              </template>
+              </template> -->
 
           </v-list-group>
         </v-list>
