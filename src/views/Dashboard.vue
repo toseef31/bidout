@@ -127,7 +127,7 @@ export default {
       bidss:{},
       mapOptions: {},
       markerOptions: {},
-      map: '',
+      map: null,
       users: '',
     };
   },
@@ -182,9 +182,21 @@ export default {
   },
   methods: {
     ...mapActions(["pendingUserCount","getAllLocations","getBidDashboard"]),
+    loadMapScript() {
+        // Check if the map script is already loaded
+        let scriptId = "map-api-script";
+        let mapAlreadyAttached = !!document.getElementById(scriptId);
+        if(!mapAlreadyAttached){
+          // Create the script element
+          let mapScript = document.createElement('script');
+          mapScript.id = scriptId;
+          mapScript.src = 'https://maps.googleapis.com/maps/api/js?key='+import.meta.env.VITE_GOOGLE_MAP+'&libraries=places';
+          document.head.appendChild(mapScript);
+        }
+      },
     getLocation(){
       var LocationsForMap = this.locations;
-      var map = new google.maps.Map(document.getElementById('map'), {
+      this.map = new google.maps.Map(document.getElementById('map'), {
         zoom: 4,
         mapId: "2993bb26d878ba6a",
         center: new google.maps.LatLng(LocationsForMap[0].locations[0].lattitude, LocationsForMap[0].locations[0].longitude),
@@ -201,7 +213,7 @@ export default {
         for (j = 0; j < LocationsForMap[i].locations.length; j++){
           marker = new google.maps.Marker({
             position: new google.maps.LatLng(LocationsForMap[i].locations[j].lattitude, LocationsForMap[i].locations[j].longitude),
-            map: map,
+            map: this.map,
             title: 'Marker',
             anchorPoint: new google.maps.Point(0, -29),
           });
@@ -227,7 +239,7 @@ export default {
           google.maps.event.addListener(marker, 'click', (function(marker, i) {
             return function() {
               infowindow.setContent(contentString);
-              infowindow.open(map, marker);
+              infowindow.open(this.map, marker);
             }
           })(marker, j));
           // latlngbounds.extend(marker.position);
