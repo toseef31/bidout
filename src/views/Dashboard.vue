@@ -91,12 +91,7 @@
                  </div>
                </div>
                <div class="map-section map-section-full pa-1" :class="[mapClass]">
-                <v-row fill-height align="center" class="fill-height dashboard-module" v-if="mapLoading">
-                  <v-col cols="12">
-                    <v-progress-circular :width="3" color="green" indeterminate ></v-progress-circular>
-                  </v-col>
-                </v-row>
-                 <div id="map" class="map" height="415px" v-else></div>
+                 <div id="map" class="map" height="415px"></div>
                </div>
              </div>
          </v-col>
@@ -134,7 +129,6 @@ export default {
       markerOptions: {},
       map: null,
       users: '',
-      infowindow: null,
     };
   },
   computed:{
@@ -159,9 +153,6 @@ export default {
     },
     loading(){
      return this.$store.getters.pageLoader;
-    },
-    mapLoading(){
-     return this.$store.getters.mapLoader;
     },
     subLoading(){
      return this.$store.getters.pageSubLoader;
@@ -203,7 +194,6 @@ export default {
           document.head.appendChild(mapScript);
         }
       },
-    
     getLocation(){
       var LocationsForMap = this.locations;
       this.map = new google.maps.Map(document.getElementById('map'), {
@@ -212,9 +202,11 @@ export default {
         center: new google.maps.LatLng(LocationsForMap[0].locations[0].lattitude, LocationsForMap[0].locations[0].longitude),
         streetViewControl: false,
         mapTypeControl: false,
-        mapTypeId: google.maps.MapTypeId.ROADMAP
+        // mapTypeId: google.maps.MapTypeId.ROADMAP
       });
+
       var infowindow = new google.maps.InfoWindow();
+
       var marker, i,j;
       // var latlngbounds =new google.maps.LatLngBounds();
       for (i = 0; i < LocationsForMap.length; i++) {  
@@ -259,7 +251,6 @@ export default {
 
     },
   },
-  
   async created(){
      await this.loadMapScript();
   },
