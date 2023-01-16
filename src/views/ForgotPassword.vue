@@ -27,7 +27,7 @@
                    background-color="white"
                  ></v-text-field>
                <div class="text-center">
-                 <v-btn class="signin-btn rounded-lg text-capitalize font-weight-bold"  type="submit" color="success" :disabled="!valid" @click="reset">
+                 <v-btn class="reset-btn rounded-lg text-capitalize font-weight-bold white--text" color="#0D9648"  type="submit" :disabled="loading" :loading="loading" @click="reset">
                    Request Reset Password Link
                  </v-btn>
                </div>
@@ -52,6 +52,7 @@ export default {
   data() {
     return {
       valid: true,
+      loading: false,
       email: "",
       emailRules: [
         v => !!v || 'E-mail is required',
@@ -63,9 +64,12 @@ export default {
   },
   computed: {
     emailError () {
-      return this.$store.getters.errorMessage
+      return this.$store.getters.errorMessage;
     },
     emailSucess () {
+      if(this.$store.getters.successMessage){
+        this.loading = false;
+      }
       return this.$store.getters.successMessage
     },
   },
@@ -74,10 +78,11 @@ export default {
     reset() {
       this.$refs.form.validate();
       const { email } = this;
-      console.log(email + "logged in")
     },
     forgetPassword() {
       this.forgotEmail({ 'email': this.email});
+      this.loading = true;
+      this.$refs.form.reset();
     }
   },
   mounted(){
