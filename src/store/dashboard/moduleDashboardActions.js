@@ -45,7 +45,8 @@ export default {
       });
   },
   manageUsers({commit,dispatch,state},payload){
-    axios.get('/company/getUsersByCompany/'+ payload)
+    const name = decodeURIComponent(payload);
+    axios.get('/company/getUsersByCompany/'+ name)
       .then(responce => {
         if(responce.status === 200){
           commit('getUsersList',responce.data)
@@ -178,11 +179,12 @@ export default {
       })
   }, 
   async getAllLocations({commit},payload){
-    // commit('setPageLoader',true)
+    // commit('setMapLoader',true)
     try{
       const res = await axios.get('/company/getCompanyLocations');
+      console.log('response',res.data);
       commit('setAllLocations',res.data)
-      // commit('setPageLoader',false)
+      commit('setMapLoader',false)
     }catch(err){
       console.log(err);
     }  

@@ -22,7 +22,6 @@
                 item.company
               }}
               </th>
-
             </tr>
           </thead>
           <tbody>
@@ -30,13 +29,14 @@
             <tr v-for="(item, index) in bidDetail.bidData.lineItems" :key="index">
               <td class="no-wrap">{{ item.description }}</td>
               <template v-for="(submission) in bidDetail.supplierSubmissions">
-                <td v-if="submission.lineItems[index].price === 'NO_BID'">
+                <td
+                  v-if="submission.lineItems[index].price === 'NO_BID' || submission.lineItems[index].price === '' || submission.lineItems[index].price === 'null'">
                   <v-icon color="#F32349">mdi-close</v-icon> No Bid
                 </td>
+
                 <td v-else>
                   $ {{ submission.lineItems[index].price }} {{ bidDetail.bidData.lineItems[index].unit }}
                 </td>
-
               </template>
             </tr>
 
@@ -52,7 +52,6 @@
                 <td v-else>
                   $ {{ submission.bidoutPricepre }}
                 </td>
-
               </template>
             </tr>
 
@@ -72,13 +71,10 @@
                     submission.postBidoutPrice
                   }}</span>
                   <div class="subscript">Saving {{
-                    Math.round(((submission.postBidoutPrice / submission.bidoutPricepre) +
+                    100 - Math.round(((submission.postBidoutPrice / submission.bidoutPricepre) +
                       Number.EPSILON) * 100)
                   }}%</div>
-
-                  Math.round((num + Number.EPSILON) * 100) / 100
                 </td>
-
               </template>
             </tr>
 
@@ -92,9 +88,7 @@
                 <td class="text-left bid-note" v-else>
                   <span class="none-class">None provided.</span>
                 </td>
-
               </template>
-
             </tr>
 
             <tr>
@@ -113,7 +107,6 @@
                 <td class="text-left bid-note" v-else>
                   <span class="none-class">None provided.</span>
                 </td>
-
               </template>
             </tr>
 
@@ -127,7 +120,7 @@
 
               <template v-for="(ans) in answers">
                 <td class="text-left" v-if="ans.answers[qIndex].answer !== 'null' && item.questionType === 'checkbox'">
-                  {{ ans.answers[qIndex].answer === 'true' ? "Yes" : 'No' }}
+                  {{ ans.answers[qIndex].answer }}
                 </td>
                 <td class="text-left"
                   v-if="ans.answers[qIndex].answer !== 'null' && item.questionType === 'textfield' || item.questionType === 'textarea'">
@@ -145,7 +138,6 @@
                 <td class="text-left " v-if="ans.answers[qIndex].answer === 'null' && item.type !== 'category'">
                   None
                 </td>
-
               </template>
             </tr>
 
@@ -324,7 +316,7 @@ export default {
           const fI = this.indexOfArray([el.title], dataD);
           this.answers.forEach((list) => {
             if (el.questionType === 'checkbox') {
-              dataD[fI].push(`${list.answers[qInd].answer === 'true' ? 'Yes' : 'No'}`);
+              dataD[fI].push(list.answers[qInd].answer);
             } else if (el.questionType === 'uploadFile') {
               dataD[fI].push(`${list.answers[qInd].fileName}`);
             } else {
