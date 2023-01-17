@@ -17,13 +17,13 @@
                       <template>
                         <div class="progress-section">
                           <div class="d-flex progress-heading">
-                            <p class="mb-0">Page Progress: <strong>{{percentage}}%</strong></p>
-                            <small>11 out of 11 modules</small>
+                            <p class="mb-0">Page Progress: <strong>{{moduleWeight}}%</strong></p>
+                            <small>{{modulesCounts}} out of 12 modules</small>
                           </div>
                           <v-progress-linear 
                           color="#0D9648"
                           rounded
-                          :value="percentage" max-width="100%"></v-progress-linear>
+                          :value="moduleWeight" max-width="100%"></v-progress-linear>
                         </div>
                       </template>
                     </div>
@@ -170,7 +170,7 @@
   import CompanyVideos from '../components/CompanyProfile/CompanyVideos.vue'
   import CompanyLogo from '../components/CompanyProfile/CompanyLogo.vue'
   import _ from 'lodash';
-  import { mapActions,mapMutations } from "vuex"
+  import { mapActions,mapMutations,mapGetters } from "vuex"
 export default {
   name : "CompanyProfile",
   components: {
@@ -258,15 +258,15 @@ export default {
          return this.servData;
       }
     },
-    percentage(){
-      if(this.$store.getters.companyData.companyData.image && this.$store.getters.companyData.companyData.services && this.$store.getters.companyData.companyData.companyLocations && this.$store.getters.companyData.companyData.corporateVideos && this.$store.getters.companyData.companyData.corporateDocuments && this.$store.getters.companyData.companyData.corporateNews && this.$store.getters.companyData.companyData.executiveLeadership && this.$store.getters.companyData.companyData.esgInitiatives && this.$store.getters.companyData.companyData.accountContacts){
-        return 100;
-      }
-      if(this.$store.getters.companyData.companyData.image && this.$store.getters.companyData.companyData.esgInitiatives == []){
-        return 30;
-      }else{
-        return 20;
-      }
+    moduleWeight(){
+      // return this.$store.getters.moduleWeight;
+      const sum = this.$store.getters.moduleWeight.reduce((accumulator, object) => {
+        return accumulator + object.weight;
+      }, 0);
+      return sum;
+    },
+    modulesCounts(){
+      return this.$store.getters.moduleWeight.length;
     },
     subCategories(){
       return this.$store.getters.subCategories;
