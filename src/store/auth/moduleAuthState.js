@@ -27,7 +27,7 @@ export default {
     customerId: null,
     price: null,
     credentials: null,
-    // companyAdmins: null,
+    queueAdmins: null,
     sameAsData: null,
     packageValue: null,
     moduleRfxOption: null,
