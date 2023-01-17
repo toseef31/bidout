@@ -284,6 +284,7 @@ export default {
       updateBasic(){
         var data = {
           companyId: this.$store.getters.userInfo.company.id,
+          userId: this.$store.getters.userInfo.id,
           profileName: this.profileName,
           profileSummary: this.profileSummary,
         }
