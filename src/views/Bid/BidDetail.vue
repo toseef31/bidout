@@ -875,6 +875,9 @@ export default {
     getLoweringPriceAlert() {
       return this.$store.getters.loweringPriceAlert;
     },
+    userDatas() {
+      return this.$store.getters.userInfo;
+    },
   },
   mounted() {
     document.title = 'View Bid - BidOut';
@@ -882,12 +885,15 @@ export default {
   },
   async created() {
     this.users = this.$store.getters.userInfo;
-
-    await this.getBidBySerial({
-      serial: this.$route.params.serial,
-      id: this.users.id,
-    });
-
+    if(this.users){
+      await this.getBidBySerial({
+        serial: this.$route.params.serial,
+        id: this.users.id,
+      });
+    }else{
+      this.$router.push('/login');
+    }
+    
     this.compute();
     this.addOneSecondToActualTimeEverySecond();
 
