@@ -4,7 +4,7 @@
       <v-progress-circular :width="3" color="green" indeterminate ></v-progress-circular>
     </v-col>
   </v-row>
-  <v-row class="ofs-module ofsSupplier-module white pa-0 ma-0" v-else>
+  <v-row class="ofs-module ofsSupplier-module ofsSupplierHome-module white pa-0 ma-0" v-else>
     <v-col class="pa-0 pr-sm-3" :class="[ showSideBar ? 'col-md-12 col-12 col-sm-12' : 'mid-content-collapse', activityPanel ? 'd-sm-block' : 'd-md-block']" v-show="!activityPanel">
       <div class="mid-content">
         <div class="content-section fill-height">

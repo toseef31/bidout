@@ -101,6 +101,28 @@
     }
 	}
 }
+@media(min-width: 1250px){
+  .ofsSupplierHome-module{
+    .mid-content {
+      .content-section{
+        .container{
+          max-width: 930px;
+        }
+      }
+    }
+  }
+}
+@media(min-width: 1350px){
+  .ofsSupplierHome-module{
+    .mid-content {
+      .content-section{
+        .container{
+          max-width: 1185px;
+        }
+      }
+    }
+  }
+}
 @media (max-width: 768px) {
 	.ofsSupplier-module{
 		flex: 0 0 100%;
