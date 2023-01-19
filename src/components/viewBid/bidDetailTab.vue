@@ -9,7 +9,7 @@
           <div><span>Bid Title:</span> {{ bidDetail.bidData.title }}</div>
           <div><span>Bid Type:</span> {{ bidDetail.bidData.type }}</div>
           <div>
-            <span>Due Date/Time:</span> {{ bidDetail.bidData.dueDate | moment('MM/DD/YYYY') }} @
+            <span>Due Date/Time:</span> {{ formatDate }} @
             {{ bidDetail.bidData.dueTime }} CST
           </div>
           <div><span>Region:</span> {{ bidDetail.bidData.regions }}</div>
@@ -321,6 +321,7 @@
 </template>
 
 <script>
+import moment from 'moment-timezone';
 
 export default {
   data() {
@@ -384,6 +385,9 @@ export default {
     },
     getBidAllIntend() {
       return this.$store.getters.bidAllIntend;
+    },
+    formatDate() {
+      return moment.tz(this.bidDetail.bidData.dueDate, 'America/Chicago').format('MM/DD/YYYY');
     },
   },
 };
