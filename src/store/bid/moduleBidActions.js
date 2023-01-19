@@ -124,7 +124,7 @@ export default {
       commit('setPageLoader', true);
     }
     try {
-      state.supplierAttachment = [];
+      commit('removeSupplierAttachment');
       const res = await axios.get(
         `bid/getBidBySerial/${payload.serial}/${payload.id}`,
       );
