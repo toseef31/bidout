@@ -18,7 +18,7 @@
         <v-row>
           <v-col md="2" class="text-right mr-1 title-desc">Due Date/Time:</v-col>
           <v-col class="title-brief">
-            {{ formatDate }} @
+            {{ formatDate(bidDetail.bidData.dueDate) }} @
             {{ bidDetail.bidData.dueTime }} CST</v-col>
 
         </v-row>
@@ -227,13 +227,13 @@ export default {
       const sizeInMB = (size / (1024 * 1024)).toFixed(2);
       return `${sizeInMB}mb`;
     },
+    formatDate(dueDate) {
+      return dueDate !== '' && dueDate !== null ? moment.tz(dueDate, 'America/Chicago').format('MM/DD/YYYY') : '';
+    },
   },
   computed: {
     bidDetail() {
       return this.$store.getters.bidViewData;
-    },
-    formatDate() {
-      return moment.tz(this.bidDetail.bidData.dueDate, 'America/Chicago').format('MM/DD/YYYY');
     },
   },
   mounted() {

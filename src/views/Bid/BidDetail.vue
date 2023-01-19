@@ -69,7 +69,7 @@
                 Bid: <span class="serial">#{{ bidDetail.bidData.serial }}</span>
               </div>
               <div>
-                Due Date/Time: {{ formatDate }} @
+                Due Date/Time: {{ formatDate(bidDetail.bidData.dueDate) }} @
                 {{ bidDetail.bidData.dueTime }} CST
               </div>
               <div>
@@ -245,7 +245,7 @@
                 Bid: <span class="serial">#{{ bidDetail.bidData.serial }}</span>
               </div>
               <div>
-                Due Date/Time: {{ formatDate }} @
+                Due Date/Time: {{ formatDate(bidDetail.bidData.dueDate) }} @
                 {{ bidDetail.bidData.dueTime }} CST
               </div>
               <div>
@@ -603,6 +603,9 @@ export default {
       this.minutes = duration.minutes() > 0 ? duration.minutes() : 0;
       this.seconds = duration.seconds() > 0 ? duration.seconds() : 0;
     },
+    formatDate(dueDate) {
+      return dueDate !== '' && dueDate !== null ? moment.tz(dueDate, 'America/Chicago').format('MM/DD/YYYY') : '';
+    },
   },
   computed: {
     bidDetail() {
@@ -655,9 +658,6 @@ export default {
     },
     getLoweringPriceAlert() {
       return this.$store.getters.loweringPriceAlert;
-    },
-    formatDate() {
-      return moment.tz(this.bidDetail.bidData.dueDate, 'America/Chicago').format('MM/DD/YYYY');
     },
   },
   mounted() {
