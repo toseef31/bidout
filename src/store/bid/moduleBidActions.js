@@ -735,8 +735,10 @@ export default {
     const formData = new FormData();
 
     if (state.bidData.id) {
-      state.draftBidsList = state.bidData.id;
-      state.bidSerial = state.bidData.serial;
+      commit('setDraftBidsList',state.bidData.id);
+      commit('setBidSerial',state.bidData.serial);
+      // state.draftBidsList = state.bidData.id;
+      // state.bidSerial = state.bidData.serial;
     }
     formData.append('title', state.bidData.title);
     formData.append('type', state.bidData.type);
