@@ -194,7 +194,6 @@ export default {
       this.fileName = this.file.name;
       this.fileExt = this.fileName.split(".").pop();
       this.fileSize = (this.file.size / (1024 * 1024)).toFixed(2);
-      console.log('before',this.uploadDoc);
       this.uploadDoc.push(this.file);
       const head = Date.now().toString();
       const tail = Math.random().toString().substr(2);
@@ -213,6 +212,7 @@ export default {
         this.updateTemplate({ attachement: this.docsList });
         this.uploadDoc = [];
       }else{
+        console.log('filess',this.docsList);
         this.$store.commit('setAttachement',this.docsList);
         this.updateDraftBid({ attachement: this.docsList });
         this.uploadDoc = [];
