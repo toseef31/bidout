@@ -206,11 +206,14 @@ export default {
       this.isAttaching = false;
       this.attachStatus = true;
       if(this.$route.name == 'EditBid'){
+        this.$store.commit('setAttachement',this.docsList);
         this.updateBid({ attachement: this.docsList });
       }else if(this.$route.name == 'EditTemplate'){
+        this.$store.commit('setAttachement',this.docsList);
         this.updateTemplate({ attachement: this.docsList });
         this.uploadDoc = [];
       }else{
+        this.$store.commit('setAttachement',this.docsList);
         this.updateDraftBid({ attachement: this.docsList });
         this.uploadDoc = [];
       }
