@@ -69,6 +69,27 @@
     display: none;
   }
 } 
+@media(max-width: 1285px) and (min-width: 1160px){
+  .navbar-module{
+    .v-sheet.v-app-bar{
+      .toggle-btn{
+        width: 12em;
+      }
+    }
+  }
+}
+@media (min-width:770px) and (max-width:1160px) {
+  .navbar-module{
+    .v-sheet.v-app-bar{
+      .logo_main{
+        max-width: 120px;
+      }
+      .toggle-btn{
+        width: 11em;
+      }
+    }
+  }
+}
 @media (max-width: 768px) {
   .navbar-module{
     .desktop-navbar{
