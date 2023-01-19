@@ -205,6 +205,16 @@ export default {
       await this.uploadBidAttach(data);
       this.isAttaching = false;
       this.attachStatus = true;
+      if(this.$route.name == 'EditBid'){
+        this.updateBid({ attachement: this.docsList });
+      }else if(this.$route.name == 'EditTemplate'){
+        this.updateTemplate({ attachement: this.docsList });
+        this.uploadDoc = [];
+      }else{
+        this.updateDraftBid({ attachement: this.docsList });
+        this.uploadDoc = [];
+      }
+
     },
     size(size) {
       const sizeInMB = (size / (1024 * 1024)).toFixed(2);
