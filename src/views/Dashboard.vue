@@ -270,8 +270,8 @@ export default {
   },
   async mounted() {
     document.title = "Dashboard - BidOut";
-    this.pendingUserCount(this.$store.getters.userInfo.company.id)
     this.users = this.$store.getters.userInfo;
+    this.pendingUserCount(this.userDatas.company.id)
     this.getBidDashboard(this.userDatas.id);
   }
 };

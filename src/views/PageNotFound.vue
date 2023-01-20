@@ -103,7 +103,7 @@ export default {
   },
   mounted() {
     document.title = "Opps! - BidOut";  
-    this.users = JSON.parse(localStorage.getItem("userData")).user;
+    this.users = this.$store.getters.userInfo;
   }
 };
 </script>

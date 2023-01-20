@@ -60,8 +60,7 @@ export default {
   },
   mounted() {
     document.title = "Opps! - BidOut";  
-    this.users = JSON.parse(localStorage.getItem("userData")).user;
-    console.log(this.users);
+    this.users = this.$store.getters.userInfo;
   }
 };
 </script>

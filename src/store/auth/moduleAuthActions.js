@@ -30,9 +30,7 @@ export default {
               commit('setCompany',responce.data)
             })
             commit('setUser',responce.data)
-            localStorage.setItem('userData', JSON.stringify(responce.data)); 
-            // router.push('/dashboard');
-            window.location.href ="/dashboard";
+            router.push('/dashboard');
           }
           
         })
@@ -42,6 +40,22 @@ export default {
         // commit('showErrorAlert')
       })
   },  
+  getCurrentUser({commit,dispatch}){
+    return new Promise((resolve, reject) => {
+      firebase.auth().onAuthStateChanged(function(users) {
+        if (users) {
+          axios.get('/user/getUserData/'+users.multiFactor.user.email)
+           .then(responce => {
+              commit('setUser',responce.data)
+              resolve(responce.data);
+           })
+        } else {
+          dispatch('signOutAction');
+          reject("User is not logged In")
+        }
+      });
+    });
+  },
   signOutAction({ commit }) {
     
     // Try to sigout
