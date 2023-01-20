@@ -44,18 +44,17 @@
       <div class="title-detail">Invited Suppliers</div>
 
       <div v-if="
-        bidDetail.bidData &&
-        Array.isArray(bidDetail.bidData.invitedSuppliers) && bidDetail.bidData.invitedSuppliers.length
+        getAllInvitedSuppliers && getAllInvitedSuppliers.length
       ">
-        <div class="d-flex bid-section-2" v-for="(item, i) in bidDetail.bidData.invitedSuppliers" :key="i">
+        <div class="d-flex bid-section-2" v-for="(item, i) in getAllInvitedSuppliers" :key="i">
           <div class="d-flex align-center">
             <v-img v-if="item && item.image" width="60" height="auto" contain :aspect-ratio="16 / 9"
               :src="item && item.image"></v-img>
             <v-icon size="42" v-else>mdi-domain</v-icon>
             <div class="ml-5">
               <div class="font-weight-bold">{{ item && item.company }}</div>
-              <router-link :to="item.slug ? '/company/' + item.slug : ''"
-                class="text-decoration-underline text-body-2">View profile</router-link>
+              <router-link v-if="item.slug" :to="item.slug ? '/company/' + item.slug : ''"
+                class="text-decoration-underline text-body-2 profile">View profile</router-link>
             </div>
           </div>
 
@@ -341,6 +340,24 @@ export default {
     },
     getBidAllIntend() {
       return this.$store.getters.bidAllIntend;
+    },
+    getAllInvitedSuppliers() {
+      const { invitedNewSuppliers, invitedSuppliers } = this.bidDetail.bidData;
+
+      if (this.bidDetail.bidData) {
+        if ((invitedSuppliers && Array.isArray(invitedSuppliers) && invitedSuppliers.length > 0) && (invitedNewSuppliers && Array.isArray(invitedNewSuppliers) && invitedNewSuppliers.length > 0)) {
+          return [...invitedSuppliers, ...invitedNewSuppliers];
+        }
+        if (invitedNewSuppliers && Array.isArray(invitedNewSuppliers) && invitedNewSuppliers.length > 0) {
+          return invitedNewSuppliers;
+        }
+        if (invitedSuppliers && Array.isArray(invitedSuppliers) && invitedSuppliers.length > 0) {
+          return invitedSuppliers;
+        }
+
+        return [];
+      }
+      return [];
     },
   },
 };
