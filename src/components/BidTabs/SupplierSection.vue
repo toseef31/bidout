@@ -159,6 +159,7 @@
 		      </div>
 		    </div>
 		    <div>
+					
 		      <div class="companies-list">
 		        <template  v-for="(company,index) in newRepsInvited">
 		        	<div class="d-flex align-center justify-space-between list-company pa-4">
@@ -176,7 +177,7 @@
 		        	    </div>
 		        	    <div class="company-title text-left pl-4">
 		        	      <h4>{{company.firstName}} {{company.lastName}} </h4>
-										<p>{{company.company}}</p>
+										<p class="mb-0">{{company.company}}</p>
 
 		        	    </div>
 		        	  </div>
@@ -430,6 +431,17 @@ export default {
   				}
     	}
     },
+		newSupplierFiltered() {
+    	if (this.$store.getters.bidData.invitedNewSuppliers != '') {
+  			if (this.$route.name == 'EditBid') {
+  				if (this.inviteCount == 1) {
+  					this.newRepsInvited = this.$store.state.bid.invitedNewSuppliers;
+  				}
+  			} else if (this.inviteCount == 1) {
+  					this.newRepsInvited = this.$store.state.bid.invitedNewSuppliers;
+  				}
+    	}
+    },
     validat() {
     	if (this.repsInvited.length > 0) {
     		this.$emit('validation', { valid: true, supplier: '2' });
@@ -599,7 +611,8 @@ export default {
   mounted() {
   	this.user = this.$store.getters.userInfo;
     this.savedraftOnInterval();
-    this.filteredEntries();
+    this.filteredEntries;
+		this.newSupplierFiltered;
   },
 };
 </script>
