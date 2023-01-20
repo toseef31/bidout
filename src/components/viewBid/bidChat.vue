@@ -46,7 +46,7 @@ you will be able to see the message here.
 
             <v-list-item-content align-center>
               <v-list-item-title v-text="(list.name || list.company.company.split('|||')[0])"></v-list-item-title>
-              <v-list-item-subtitle>
+              <v-list-item-subtitle v-if="checkIfCompanyOfs(list.company)">
                 <router-link :to="list.company && list.company.slug ? '/company/'+list.company.slug: ''" class="text-decoration-underline"
                   >View Profile</router-link
                 ></v-list-item-subtitle
@@ -70,7 +70,7 @@ you will be able to see the message here.
               <div class="company-title text-left" v-if="chatData">
                 <h4>{{ getConversationName(chatData.conversation) }}</h4>
 
-                <p class="mb-0">
+                <p class="mb-0"  v-if="checkIfCompanyOfs(chatData.conversation.company)">
                   <router-link :to="(chatData.conversation.company && chatData.conversation.company.slug ? '/company/'+ chatData.conversation.company.slug: '')" class="text-decoration-underline">View Profile</router-link>
                 </p>
               </div>
@@ -400,6 +400,13 @@ export default {
         return conversation.name.split('|||').find((el) => el.trim() !== this.user.company.company);
       }
       return conversation.name;
+    },
+    checkIfCompanyOfs(company) {
+      console.log(company);
+      if (company && company.contracts) {
+        return company.contracts.find((contract) => contract.contractType === 'ofs' || contract.contractType === 'ofs-premium');
+      }
+      return false;
     },
   },
   beforeMount() {
