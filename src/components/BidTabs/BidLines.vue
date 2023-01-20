@@ -239,6 +239,15 @@ export default {
   mounted(){
     if(this.$store.getters.bidData.lineItems != ""){
       this.bidLines = this.$store.getters.bidData.lineItems;
+      this.bidLines = JSON.parse(JSON.stringify(this.bidLines.map((item, index) => {
+      if(item.required == "true"){
+        item.required = true;
+      }else{
+        item.required = false;
+      }
+      return item;
+      })));
+      console.log('line item',this.bidLines);
       this.$emit('validation', { valid: true, items: '4' });
       this.$store.commit('setLineItemsComplete', true);
       this.$store.commit('setBidlines',this.bidLines);
