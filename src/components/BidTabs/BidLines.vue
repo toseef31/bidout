@@ -113,7 +113,7 @@ export default {
       availableSearch: ['All', 'Company'],
       availableSuppl: null,
       inputType: ['USD'],
-      units: ['Feet', 'Pound', 'Ton', 'Mile', 'Gallon', 'Barrell', 'Day', 'Each', 'Hourly', 'N/A'],
+      units: ['Feet', 'Pound', 'Ton', 'Mile', 'Gallon', 'Barrell', 'Day', 'Each', 'Hourly','Stage','Job', 'N/A'],
       exampleItems: [],
       qtyRules: [
         (v) => !!v || 'This field is required',
