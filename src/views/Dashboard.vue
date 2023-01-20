@@ -191,9 +191,14 @@ export default {
         if(!mapAlreadyAttached){
           // Create the script element
           let mapScript = document.createElement('script');
+          mapScript.setAttribute("defer", "defer");
           mapScript.id = scriptId;
           mapScript.src = 'https://maps.googleapis.com/maps/api/js?key='+import.meta.env.VITE_GOOGLE_MAP+'&libraries=places';
           document.head.appendChild(mapScript);
+          mapScript.onload = () => {
+              // Initialize the map
+              this.getLocation();
+          }
         }
       },
       formatDate(dueDate) {
@@ -260,7 +265,9 @@ export default {
      await this.loadMapScript();
   },
   async beforeUpdate(){
-    await this.getAllLocations().finally(this.getLocation());
+    await this.getAllLocations().then(() => {
+      this.getLocation();
+    });
   },
   async updated(){
 

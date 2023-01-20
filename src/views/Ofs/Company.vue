@@ -374,6 +374,7 @@ export default {
     const mapAlreadyAttached = !!document.getElementById(mapScpt);
     if (!mapAlreadyAttached) {
       const mapScript = document.createElement('script');
+      mapScript.setAttribute("defer", "defer");
       mapScript.id = mapScpt;
       mapScript.src = `https://maps.googleapis.com/maps/api/js?key=${import.meta.env.VITE_GOOGLE_MAP}&libraries=places`;
       document.head.appendChild(mapScript);
