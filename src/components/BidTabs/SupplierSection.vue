@@ -599,7 +599,7 @@ export default {
   mounted() {
   	this.user = this.$store.getters.userInfo;
     this.savedraftOnInterval();
-    this.filteredEntries();
+    this.filteredEntries;
   },
 };
 </script>
