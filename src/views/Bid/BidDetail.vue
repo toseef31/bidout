@@ -519,7 +519,7 @@ export default {
           reload: false,
         });
 
-        await this.getBidAllConversations(this.bidDetail.bidData.id);
+        await this.getBidAllConversations({ bidId: this.bidDetail.bidData.id, userId: this.users.id });
       } else if (this.getUserType === 'supplier' && event !== 'tab-2') {
         await this.getBidBySerial({
           serial: this.$route.params.serial,
@@ -547,7 +547,7 @@ export default {
           reload: false,
         });
 
-        await this.getBidAllConversations(this.bidDetail.bidData.id);
+        await this.getBidAllConversations({ bidId: this.bidDetail.bidData.id, userId: this.users.id });
       }
     },
     ChangeT(tab) {
@@ -659,9 +659,6 @@ export default {
     getLoweringPriceAlert() {
       return this.$store.getters.loweringPriceAlert;
     },
-    userDatas() {
-      return this.$store.getters.userInfo;
-    },
   },
   mounted() {
     document.title = 'View Bid - BidOut';
@@ -670,15 +667,15 @@ export default {
   },
   async created() {
     this.users = this.$store.getters.userInfo;
-    if(this.users){
+    if (this.users) {
       await this.getBidBySerial({
         serial: this.$route.params.serial,
         id: this.users.id,
       });
-    }else{
+    } else {
       this.$router.push('/login');
     }
-    
+
     this.compute();
     this.addOneSecondToActualTimeEverySecond();
 
