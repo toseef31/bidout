@@ -61,7 +61,7 @@ export default {
   },
   mounted() {
     document.title = "Create Bid - BidOut";
-    this.users = JSON.parse(localStorage.getItem("userData")).user;
+    this.users = this.$store.getters.userInfo;
 }
 };
 </script>

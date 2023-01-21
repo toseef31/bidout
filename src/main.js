@@ -41,10 +41,6 @@ firebase.initializeApp(firebaseConfig);
 axios.defaults.baseURL = import.meta.env.VITE_API_BASE_URL;
 axios.defaults.headers.common.Authorization = `Bearer ${JSON.parse(localStorage.getItem('token'))}`;
 
-if (process.env.NODE_ENV === 'production') {
-  LogRocket.init('voayxx/v2-ib4bb');
-}
-
 const logrocketPlugin = createPlugin(LogRocket);
 
 Vue.use(vueCountryRegionSelect);
@@ -64,17 +60,22 @@ Vue.use(VueMeta, {
 Vue.use(VueSignaturePad);
 Vue.use(VueCroppie);
 Vue.use(Toasted);
-// Sentry.init({
-//   Vue: Vue,
-//   dsn: import.meta.env.VITE_SENTRY_DSN,
-//   integrations: [
-//     new BrowserTracing({
-//       routingInstrumentation: Sentry.vueRouterInstrumentation(router),
-//       tracingOrigins: ["localhost", "http://localhost:8080/", /^\//],
-//     }),
-//   ],
 
-// })
+if (process.env.NODE_ENV === 'production') {
+  LogRocket.init('voayxx/v2-ib4bb');
+
+  Sentry.init({
+    Vue,
+    dsn: import.meta.env.VITE_SENTRY_DSN,
+    integrations: [
+      new BrowserTracing({
+        routingInstrumentation: Sentry.vueRouterInstrumentation(router),
+        tracingOrigins: [import.meta.env.VITE_PROJECT_URL, /^\//],
+      }),
+    ],
+
+  });
+}
 
 LogRocket.getSessionURL((sessionURL) => {
   Sentry.configureScope((scope) => {

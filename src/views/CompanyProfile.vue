@@ -5,7 +5,7 @@
    <v-row class="companyProfile-module inner-Company pa-0 ma-0" v-else>
      <v-col class="pa-0 pr-sm-3" :class="[ showSideBar ? 'col-md-12 col-12 col-sm-12' : 'mid-content-collapse', activityPanel ? 'd-sm-block' : 'd-md-block']" v-show="!activityPanel">
         <div class="mid-content">
-          <div class="content-section" v-if="companyData">
+          <div class="content-section" v-if="companyData && companyData.companyData">
             <v-row class="mx-0">
               <v-col cols="12" sm="12" md="12" class="d-sm-block px-0">
                 <div class="manage-sections pa-4 px-0">
@@ -203,12 +203,9 @@ export default {
       servData: [],
       
       basinLoader: null,
-      progressBar :10,
-      moduleCount : 1,
     };
   },
   computed:{
-    ...mapGetters(["progressCount","moduleCOunt"]),
     showSideBar(){
         return this.$store.getters.g_sideBarOpen;
     },
@@ -271,117 +268,6 @@ export default {
     modulesCounts(){
       return this.$store.getters.moduleWeight.length;
     },
-    percentage(){
-      if(this.companyData.companyData.image && this.companyData.companyData.services.length > 0 && this.companyData.companyData.companyLocations.length > 0 && this.companyData.companyData.corporateVideos.length > 0 && this.companyData.companyData.corporateDocuments.length > 0 && this.companyData.companyData.corporateNews.length > 0 && this.companyData.companyData.executiveLeadership.length > 0 && this.companyData.companyData.esgInitiatives.length > 0 && this.companyData.companyData.accountContacts.length > 0 && this.companyData.companyData.basins.length > 0){
-        this.progressBar = 100;
-        this.moduleCount = 11;
-        console.log('alll');
-        return this.progressBar;
-      }else{
-        if(this.companyData.companyData.image){
-          this.progressBar = this.progressBar + 10;
-          this.moduleCount = this.moduleCount + 1;
-          return this.progressBar;
-        }else{
-          this.progressBar = this.progressBar - 10;
-          this.moduleCount = this.moduleCount - 1;
-          return this.progressBar;
-        }
-        if(this.companyData.companyData.services.length == 1){
-          // this.progressBar = this.progressBar + 10;
-          this.moduleCount = this.moduleCount + 1;
-          return this.progressBar += this.progressBar;
-        }else{
-          this.progressBar = this.progressBar - 10;
-          this.moduleCount = this.moduleCount - 1;
-          console.log('else',this.progressBar);
-          return this.progressBar;
-        }
-        if(this.companyData.companyData.corporateVideos.length == 1){
-          this.progressBar = this.progressBar + 10;
-          this.moduleCount = this.moduleCount + 1;
-          return this.progressBar;
-        }else{
-          console.log('else',this.progressBar);
-          this.progressBar = this.progressBar - 10;
-          console.log('else',this.progressBar);
-          this.moduleCount = this.moduleCount - 1;
-          console.log('else',this.moduleCount);
-        }
-        if(this.companyData.companyData.corporateDocuments.length == 1){
-          this.progressBar = this.progressBar + 10;
-          this.moduleCount = this.moduleCount + 1;
-          return this.progressBar;
-        }else{
-          console.log('else',this.progressBar);
-          this.progressBar = this.progressBar - 10;
-          console.log('else',this.progressBar);
-          this.moduleCount = this.moduleCount - 1;
-          console.log('else',this.moduleCount);
-        }
-        if(this.companyData.companyData.corporateNews.length == 1){
-          this.progressBar = this.progressBar + 10;
-          this.moduleCount = this.moduleCount + 1;
-          return this.progressBar;
-        }else{
-          console.log('else',this.progressBar);
-          this.progressBar = this.progressBar - 10;
-          console.log('else',this.progressBar);
-          this.moduleCount = this.moduleCount - 1;
-          console.log('else',this.moduleCount);
-          return this.progressBar;
-        }
-        if(this.companyData.companyData.executiveLeadership.length == 1){
-          this.progressBar = this.progressBar + 10;
-          this.moduleCount = this.moduleCount + 1;
-          return this.progressBar;
-        }else{
-          this.progressBar = this.progressBar - 10;
-          this.moduleCount = this.moduleCount - 1;
-          return this.progressBar;
-        }
-        if(this.companyData.companyData.esgInitiatives.length == 1){
-          this.progressBar = this.progressBar + 10;
-          this.moduleCount = this.moduleCount + 1;
-          return this.progressBar;
-        }else{
-          this.progressBar = this.progressBar - 10;
-          this.moduleCount = this.moduleCount - 1;
-          return this.progressBar;
-        }
-        if(this.companyData.companyData.accountContacts.length == 1){
-          console.log(this.companyData.companyData.accountContacts);
-          console.log('length',this.companyData.companyData.accountContacts);
-          this.progressBar = this.progressBar + 10;
-          this.moduleCount = this.moduleCount + 1;
-          return this.progressBar;
-        }else{
-          alert('dasdasdas');
-          this.progressBar = this.progressBar - 10;
-          this.moduleCount = this.moduleCount - 1;
-          return this.progressBar;
-        }
-        if(this.companyData.companyData.companyLocations.length == 1){
-          this.progressBar = this.progressBar + 10;
-          this.moduleCount = this.moduleCount + 1;
-          return this.progressBar;
-        }else{
-          this.progressBar = this.progressBar - 10;
-          this.moduleCount = this.moduleCount - 1;
-          return this.progressBar;
-        }
-        if(this.companyData.companyData.basins.length == 1){
-          this.progressBar = this.progressBar + 10;
-          this.moduleCount = this.moduleCount + 1;
-          return this.progressBar;
-        }else{
-          this.progressBar = this.progressBar - 10;
-          this.moduleCount = this.moduleCount - 1;
-          return this.progressBar;
-        }  
-      }
-      
-    },
     subCategories(){
       return this.$store.getters.subCategories;
     },
@@ -398,6 +284,7 @@ export default {
       updateBasic(){
         var data = {
           companyId: this.$store.getters.userInfo.company.id,
+          userId: this.$store.getters.userInfo.id,
           profileName: this.profileName,
           profileSummary: this.profileSummary,
         }
@@ -496,5 +383,4 @@ export default {
 };
 </script>
 <style scoped lang="scss">
-
 </style>

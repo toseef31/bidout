@@ -72,7 +72,6 @@ export default {
     state.singleTemplate = payload;
   },
   setInvitedSuppliersData(state, payload) {
-    console.log(payload);
     state.invitedSuppliers = payload;
   },
   setInvitedTeamMembers(state, payload) {
@@ -82,7 +81,6 @@ export default {
     state.bidlines = payload;
   },
   setAttachement(state, payload) {
-    console.log('payload', payload);
     state.attachement = payload;
   },
   setQuestions(state, payload) {
@@ -96,6 +94,9 @@ export default {
     state.supplierAttachment = state.supplierAttachment.filter((value, index, self) => index === self.findIndex((t) => (
       t.fileName === value.fileName
     )));
+  },
+  removeSupplierAttachment(state) {
+    state.supplierAttachment = [];
   },
   setUserType(state, payload) {
     state.userType = payload;

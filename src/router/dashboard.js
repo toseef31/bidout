@@ -1,7 +1,6 @@
 // import Base from '@/components/Layout/Base.vue';
 import Settings from '@/components/Layout/Settings.vue';
 import store from '@/store';
-
 const routes = [
   {
     path: '',
@@ -12,9 +11,11 @@ const routes = [
         path: '/dashboard',
         name: 'Dashboard',
         component: () => import('@/views/Dashboard.vue'),
-        beforeEnter: (to, from, next) => {
+        beforeEnter: async (to, from, next)=> {
            if(store.getters.userInfo == null) {
-               next('/login');
+             store.dispatch('getCurrentUser').then((data) => {
+                next();
+              });
            } else {
                next();
            }

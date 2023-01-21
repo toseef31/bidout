@@ -75,10 +75,19 @@ export default {
     setCredentials (state, payload){
       state.credentials = payload
     },
-    // setCompanyAdmins (state, payload){
-    //   state.companyAdmins = payload
-    // },
+    setQueueAdmins (state, payload){
+      state.queueAdmins = payload
+    },
     setSameAsData (state, payload){
       state.sameAsData = payload
+    },
+    setPackage (state, payload){
+      state.packageValue = payload
+    },
+    setModuleRfxOption (state, payload){
+      state.moduleRfxOption = payload
+    },
+    setModuleOfsOption (state, payload){
+      state.moduleOfsOption = payload
     },
 }

@@ -14,7 +14,9 @@ const routes = [
         component: () => import('@/views/Chat.vue'),
         beforeEnter: (to, from, next) => {
            if(store.getters.userInfo == null) {
-               next('/login');
+              store.dispatch('getCurrentUser').then((data) => {
+                next();
+              });
            } else {
                next();
            }
@@ -25,7 +27,7 @@ const routes = [
       //   name: 'Message',
       //   component: () => import('@/views/Chat.vue'),
       //   beforeEnter: (to, from, next) => {
-      //      if(localStorage.getItem("userData") == null) {
+      //      if(this.$store.getters.userInfo == null) {
       //          next('/login');
       //      } else {
       //          next();

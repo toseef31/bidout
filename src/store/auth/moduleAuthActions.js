@@ -30,9 +30,7 @@ export default {
               commit('setCompany',responce.data)
             })
             commit('setUser',responce.data)
-            localStorage.setItem('userData', JSON.stringify(responce.data)); 
-            // router.push('/dashboard');
-            window.location.href ="/dashboard";
+            router.push('/dashboard');
           }
           
         })
@@ -42,6 +40,22 @@ export default {
         // commit('showErrorAlert')
       })
   },  
+  getCurrentUser({commit,dispatch}){
+    return new Promise((resolve, reject) => {
+      firebase.auth().onAuthStateChanged(function(users) {
+        if (users) {
+          axios.get('/user/getUserData/'+users.multiFactor.user.email)
+           .then(responce => {
+              commit('setUser',responce.data)
+              resolve(responce.data);
+           })
+        } else {
+          dispatch('signOutAction');
+          reject("User is not logged In")
+        }
+      });
+    });
+  },
   signOutAction({ commit }) {
     
     // Try to sigout
@@ -171,7 +185,7 @@ export default {
                 // localStorage.setItem("userId",payload.id);
                 commit('setCompanyId', payload.id);
                 commit('setCompanyName', payload.companyName);
-                commit('setCompanyAdmins', responce.data.admins);
+                commit('setQueueAdmins', responce.data.admins);
                 router.replace({
                   name: "ExistingAccount"
                 });
@@ -293,7 +307,7 @@ export default {
   },
   // Get IP
   getIpAddress({ commit }, payload){
-    console.log("dasdasd");
+    
     const res = fetch('https://api.ipify.org?format=json',{
       method: 'get',
     }).then(response => response.json())
@@ -314,6 +328,7 @@ export default {
         commit('setContract', responce.data)
         commit('setPlan', payload.plan)
         commit('setPrice',payload.unit_price)
+        commit('setPackage',payload.package)
         router.replace({
           name: "Contract"
         });

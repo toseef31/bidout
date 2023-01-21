@@ -52,7 +52,15 @@
                       outlined disabled
                     ></v-text-field>
                     <label class="d-block text-left font-weight-bold mb-2">Privileges
-                      <v-tooltip right>
+                      <v-tooltip right v-if="userInfo.role == 'admin' && userInfo.id == userData.id">
+                        <template v-slot:activator="{ on, attrs }">
+                          <v-icon small 
+                            v-bind="attrs"
+                            v-on="on">mdi-information-outline</v-icon>
+                        </template>
+                        <span>You cannot change your role from admin</span>
+                      </v-tooltip>
+                      <v-tooltip right v-else>
                         <template v-slot:activator="{ on, attrs }">
                           <v-icon small 
                             v-bind="attrs"
@@ -70,6 +78,7 @@
                       required
                       outlined
                       solo-flat class="text-capitalize"
+                      :disabled="userInfo.role == 'admin' && userInfo.id == userData.id ? true : false "
                     ></v-select>
 
                     <v-btn
@@ -96,7 +105,7 @@
 <script>
   import Navbar from '../components/Layout/Navbar.vue'
   import LeftSidebar from '../components/Layout/Dashboard/LeftSidebar.vue'
-  import { mapActions,mapState } from "vuex";
+  import { mapActions,mapState,mapGetters } from "vuex";
 export default {
   name : "EditUser",
   components: {
@@ -126,6 +135,7 @@ export default {
   },
   computed:{
     ...mapState(["userData"]),
+    ...mapGetters(["userInfo"]),
     showSideBar(){
         return this.$store.getters.g_sideBarOpen;
     },

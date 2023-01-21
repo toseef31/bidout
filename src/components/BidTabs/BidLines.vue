@@ -138,8 +138,8 @@ export default {
       availableSearch: ['All', 'Company'],
       availableSuppl: null,
       inputType: ['USD'],
-      units: ['Feet', 'Pound', 'Ton', 'Mile', 'Gallon', 'Barrell', 'Day', 'Each', 'Hourly', 'N/A'],
       excelHeader: ['Description', 'Unit', 'Quantity', 'BuyerComment'],
+      units: ['Feet', 'Pound', 'Ton', 'Mile', 'Gallon', 'Barrell', 'Day', 'Each', 'Hourly','Stage','Job', 'N/A'],
       exampleItems: [],
       qtyRules: [
         (v) => !!v || 'This field is required',
@@ -311,6 +311,15 @@ export default {
   mounted(){
     if(this.$store.getters.bidData.lineItems != ""){
       this.bidLines = this.$store.getters.bidData.lineItems;
+      this.bidLines = JSON.parse(JSON.stringify(this.bidLines.map((item, index) => {
+      if(item.required == "true"){
+        item.required = true;
+      }else{
+        item.required = false;
+      }
+      return item;
+      })));
+      console.log('line item',this.bidLines);
       this.$emit('validation', { valid: true, items: '4' });
       this.$store.commit('setLineItemsComplete', true);
       this.$store.commit('setBidlines',this.bidLines);
