@@ -124,7 +124,7 @@ export default {
       commit('setPageLoader', true);
     }
     try {
-      state.supplierAttachment = [];
+      commit('removeSupplierAttachment');
       const res = await axios.get(
         `bid/getBidBySerial/${payload.serial}/${payload.id}`,
       );
@@ -1467,6 +1467,13 @@ export default {
       }
     } else {
       formData.append('invitedSuppliers', '');
+    }
+    if (state.invitedNewSuppliers != null) {
+      for (let i = 0; i < state.invitedNewSuppliers.length; i++) {
+        formData.append(`invitedNewSuppliers[${i}]`, state.invitedNewSuppliers[i].id);
+      }
+    }else{
+      formData.append('invitedNewSuppliers', '');
     }
     if (state.invitedTeamMembers != '') {
       for (let t = 0; t < state.invitedTeamMembers.length; t++) {

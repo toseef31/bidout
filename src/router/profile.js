@@ -15,7 +15,9 @@ const routes = [
         component: () => import('@/views/CompanyProfile.vue'),
         beforeEnter: (to, from, next) => {
           if (store.getters.userInfo == null) {
-            next('/login');
+            store.dispatch('getCurrentUser').then((data) => {
+              next();
+            });
           } else if (store.getters.userInfo.company.contracts && store.getters.userInfo.company.contracts.find((contract) => contract.contractType === 'ofs' || contract.contractType === 'ofs-premium')) {
             next();
           } else {
@@ -36,7 +38,9 @@ const routes = [
               next();
             }
           } else {
-            next('/login');
+            store.dispatch('getCurrentUser').then((data) => {
+              next();
+            });
           }
         },
       },
@@ -46,7 +50,9 @@ const routes = [
         component: () => import('@/views/PendingUsers.vue'),
         beforeEnter: (to, from, next) => {
           if (store.getters.userInfo == null) {
-            next('/login');
+            store.dispatch('getCurrentUser').then((data) => {
+              next();
+            });
           } else {
             next();
           }
@@ -58,7 +64,9 @@ const routes = [
         component: () => import('@/views/DisabledUsers.vue'),
         beforeEnter: (to, from, next) => {
           if (store.getters.userInfo == null) {
-            next('/login');
+            store.dispatch('getCurrentUser').then((data) => {
+              next();
+            });
           } else {
             next();
           }
@@ -70,7 +78,9 @@ const routes = [
         component: () => import('@/views/AddUsers.vue'),
         beforeEnter: (to, from, next) => {
           if (store.getters.userInfo == null) {
-            next('/login');
+            store.dispatch('getCurrentUser').then((data) => {
+              next();
+            });
           } else {
             next();
           }
@@ -82,7 +92,9 @@ const routes = [
         component: () => import('@/views/EditUser.vue'),
         beforeEnter: (to, from, next) => {
           if (store.getters.userInfo == null) {
-            next('/login');
+            store.dispatch('getCurrentUser').then((data) => {
+              next();
+            });
           } else {
             next();
           }
@@ -94,7 +106,9 @@ const routes = [
         component: () => import('@/views/ManageModule.vue'),
         beforeEnter: (to, from, next) => {
           if (store.getters.userInfo == null) {
-            next('/login');
+            store.dispatch('getCurrentUser').then((data) => {
+              next();
+            });
           } else {
             next();
           }
@@ -106,7 +120,9 @@ const routes = [
         component: () => import('@/views/ManageTemplates.vue'),
         beforeEnter: (to, from, next) => {
           if (store.getters.userInfo == null) {
-            next('/login');
+            store.dispatch('getCurrentUser').then((data) => {
+              next();
+            });
           } else {
             next();
           }
