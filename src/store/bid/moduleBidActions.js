@@ -735,8 +735,10 @@ export default {
     const formData = new FormData();
 
     if (state.bidData.id) {
-      state.draftBidsList = state.bidData.id;
-      state.bidSerial = state.bidData.serial;
+      commit('setDraftBidsList',state.bidData.id);
+      commit('setBidSerial',state.bidData.serial);
+      // state.draftBidsList = state.bidData.id;
+      // state.bidSerial = state.bidData.serial;
     }
     formData.append('title', state.bidData.title);
     formData.append('type', state.bidData.type);
@@ -1142,7 +1144,8 @@ export default {
     const formData = new FormData();
 
     if (state.bidData.id) {
-      state.draftBidsList = state.bidData.id;
+      // state.draftBidsList = state.bidData.id;
+      commit('setDraftBidsList',state.bidData.id);
     }
     formData.append('templateId', state.draftBidsList);
     formData.append('title', state.bidData.title);
@@ -1429,8 +1432,10 @@ export default {
     const formData = new FormData();
 
     if (state.bidData.id) {
-      state.draftBidsList = state.bidData.id;
-      state.bidSerial = state.bidData.serial;
+      commit('setDraftBidsList',state.bidData.id);
+      commit('setBidSerial',state.bidData.serial);
+      // state.draftBidsList = state.bidData.id;
+      // state.bidSerial = state.bidData.serial;
     }
     if (state.bidData.company == '') {
       state.bidData.company = payload.company;

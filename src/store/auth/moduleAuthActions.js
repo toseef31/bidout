@@ -63,12 +63,12 @@ export default {
       .auth()
       .signOut()
       .then((result) => {
-        commit('setUser', null)
         commit('setToken', null)
         commit('setUserId', null)
         commit('setError', null)
         commit('setCompany', null)
         commit('setCredentials', null)
+        commit('setUser', null)
         // console.log(result);
         localStorage.removeItem("userData");
         // localStorage.removeItem("userId");
