@@ -98,6 +98,9 @@ export default {
       t.fileName === value.fileName
     )));
   },
+  removeSupplierAttachment(state) {
+    state.supplierAttachment = [];
+  },
   setUserType(state, payload) {
     state.userType = payload;
   },

@@ -1,6 +1,5 @@
 <template>
   <v-col class="my-7 pa-0 bid-submission-tab" align="start">
-
     <v-form @submit.prevent="submit" ref="form" v-model="valid" lazy-validation>
       <div class="title-line" v-if="
         bidDetail.bidData &&
@@ -32,11 +31,17 @@
                 <div class="d-flex align-center unit-class">
                   <div class=" unit">{{ item.unit }}</div>
                   <div class="mr-2">
+
                     <v-text-field single-line class="mt-7" :rules="item.required === 'true' ? lineItemsRule : []"
                       outlined :disabled="checkTimeForLineItems" dense min="0" prefix="$" type="number"
-                      @input="validatePrice(index)" v-if="lineItems[index]['bid']"
-                      v-model="lineItems[index]['price']"></v-text-field>
+                      @input="validatePrice($event, index)" :key="index" v-if="lineItems[index]['bid']"
+                      v-model="lineItems[index]['price']" :hideDetails="getPriceError[index].message !== ''"
+                      :class="{ 'error--text': getPriceError[index].message !== '' }"></v-text-field>
+
                     <div v-else class="no-bid d-flex align-center">No bids
+                    </div>
+
+                    <div class="price-error" v-if="!getPriceError[index].status">{{ getPriceError[index].message }}
                     </div>
                   </div>
 
@@ -291,15 +296,9 @@ export default {
       file: '',
       answers: [],
       user: '',
-      index: 0,
       value: [],
       lineItemsRule: [
         (value) => !!value || 'Line item is required!',
-        (value) => {
-          if (this.isBidSubmitted && this.value.length && Number(this.value[this.index]) < Number(value) && this.isBidOut) {
-            return 'Suppliers can only lower the prices during the BidOut Phase!';
-          } return true;
-        },
       ],
       answerRule: [
         (value) => !!value || 'Answer is required!',
@@ -349,6 +348,13 @@ export default {
       if (this.bidDetail.receivingBids) return false;
       return true;
     },
+    getPriceError() {
+      return this.value;
+    },
+
+    isValid() {
+      return this.value && this.value.length && this.value.reduce((acc, curr) => acc && curr.status, true);
+    },
   },
   methods: {
     ...mapActions(['submitBid', 'editSubmitBid']),
@@ -356,64 +362,69 @@ export default {
       const sizeInMB = (size / (1024 * 1024)).toFixed(2);
       return `${sizeInMB}mb`;
     },
-    validatePrice(index) {
+    validatePrice(event, index) {
       if (this.isBidSubmitted && this.isBidOut) {
-        this.index = index;
-        this.value[index] = this.getSupplierBid.lineItems[index].price;
+        if (this.getSupplierBid.lineItems[index].price < event) {
+          this.value[index].message = 'Suppliers can only lower the prices during the BidOut Phase!';
+          this.value[index].status = false;
+        } else {
+          this.value[index].message = '';
+          this.value[index].status = true;
+        }
       }
     },
     async submit(action) {
-      if (!this.valid && action === 'edit' && this.isBidOut) {
+      if (!this.isValid && action === 'edit' && this.isBidOut) {
         this.$store.commit('setLoweringPriceAlert');
         window.scrollTo({ top: 0, behavior: 'smooth' });
+        return;
       }
-      if (this.valid) {
-        if (action === 'submit') {
-          this.loading = true;
 
-          const lineItemsA = this.lineItems;
-          const answersA = this.answers;
+      if (action === 'submit' && this.$refs.form.validate()) {
+        this.loading = true;
 
-          lineItemsA.forEach((el) => delete el.bid);
+        const lineItemsA = this.lineItems;
+        const answersA = this.answers;
 
-          answersA.forEach((el) => delete el.category);
+        lineItemsA.forEach((el) => delete el.bid);
 
-          await this.submitBid({
-            userId: this.user.id,
-            companyId: this.user.company.id,
-            bidId: this.bidDetail.bidData.id,
-            supplierNote: this.supplierNote,
-            supplierAttachments: this.supplierDocList,
-            lineItems: lineItemsA,
-            answers: answersA,
-            serial: this.$route.params.serial,
-          });
+        answersA.forEach((el) => delete el.category);
 
-          this.loading = false;
+        await this.submitBid({
+          userId: this.user.id,
+          companyId: this.user.company.id,
+          bidId: this.bidDetail.bidData.id,
+          supplierNote: this.supplierNote,
+          supplierAttachments: this.supplierDocList,
+          lineItems: lineItemsA,
+          answers: answersA,
+          serial: this.$route.params.serial,
+        });
 
-          this.$store.getters.supplierAttachment = [];
-        } else {
-          this.loading = true;
+        this.loading = false;
 
-          const lineItemsA = this.lineItems;
-          const supplierAttachmentA = this.supplierDocList.map((el) => el.attachment);
+        this.$store.commit('removeSupplierAttachment');
+      } else if (action === 'edit' && this.$refs.form.validate() && this.isValid) {
+        this.loading = true;
 
-          lineItemsA.forEach((el) => delete el.bid);
+        const lineItemsA = this.lineItems;
+        const supplierAttachmentA = this.supplierDocList.map((el) => el.attachment);
 
-          await this.editSubmitBid({
-            userId: this.user.id,
-            companyId: this.user.company.id,
-            bidId: this.bidDetail.bidData.id,
-            supplierNote: this.supplierNote,
-            supplierAttachments: supplierAttachmentA,
-            lineItems: lineItemsA,
-            answers: this.answers,
-            submitBidId: this.getSupplierBid.id,
-            serial: this.$route.params.serial,
-          });
+        lineItemsA.forEach((el) => delete el.bid);
 
-          this.loading = false;
-        }
+        await this.editSubmitBid({
+          userId: this.user.id,
+          companyId: this.user.company.id,
+          bidId: this.bidDetail.bidData.id,
+          supplierNote: this.supplierNote,
+          supplierAttachments: supplierAttachmentA,
+          lineItems: lineItemsA,
+          answers: this.answers,
+          submitBidId: this.getSupplierBid.id,
+          serial: this.$route.params.serial,
+        });
+
+        this.loading = false;
       }
     },
     handleDocumentForAnswer(event, index) {
@@ -431,7 +442,7 @@ export default {
     },
 
     deleteAttach(index) {
-      this.$store.getters.supplierAttachment.splice(index, 1);
+      this.$store.state.bid.supplierAttachment.splice(index, 1);
     },
     removeQuesDoc(index) {
       this.answers[index].answer = null;
@@ -460,6 +471,11 @@ export default {
           quantity: bidData.lineItems[i].quantity,
           required: bidData.lineItems[i].required,
         });
+
+        this.value.push({
+          message: '',
+          status: true,
+        });
       }
 
       for (let i = 0; i < bidData.questions.length; i++) {
@@ -480,6 +496,11 @@ export default {
           id: this.getSupplierBid.lineItems[i].id,
           quantity: this.getSupplierBid.lineItems[i].Qty,
           required: this.getSupplierBid.lineItems[i].required,
+        });
+
+        this.value.push({
+          message: '',
+          status: true,
         });
       }
 

@@ -17,8 +17,10 @@
 
         <v-row>
           <v-col md="2" class="text-right mr-1 title-desc">Due Date/Time:</v-col>
-          <v-col class="title-brief">{{ bidDetail.bidData.dueDate | moment('MM/DD/YYYY') }} @
+          <v-col class="title-brief">
+            {{ formatDate(bidDetail.bidData.dueDate) }} @
             {{ bidDetail.bidData.dueTime }} CST</v-col>
+
         </v-row>
 
         <v-row>
@@ -85,7 +87,8 @@
           bidDetail.bidData.invitedTeamMembers.length > 0
         " v-for="(item, index) in bidDetail.bidData.invitedTeamMembers" :key="index"
           class="d-flex align-center flex-child">
-          <v-img v-if="item.image" max-width="100" height="auto" contain :aspect-ratio="16 / 9" :src="item.image"></v-img>
+          <v-img v-if="item.image" max-width="100" height="auto" contain :aspect-ratio="16 / 9"
+            :src="item.image"></v-img>
           <v-avatar v-else color="#0d96481a" size="62">
             <v-icon color="#0d9648" large>mdi-account-outline </v-icon>
           </v-avatar>
@@ -216,12 +219,16 @@
 </template>
 
 <script>
+import moment from 'moment-timezone';
 
 export default {
   methods: {
     size(size) {
       const sizeInMB = (size / (1024 * 1024)).toFixed(2);
       return `${sizeInMB}mb`;
+    },
+    formatDate(dueDate) {
+      return dueDate !== '' && dueDate !== null ? moment.tz(dueDate, 'America/Chicago').format('MM/DD/YYYY') : '';
     },
   },
   computed: {

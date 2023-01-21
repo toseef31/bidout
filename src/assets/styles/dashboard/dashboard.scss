@@ -1,7 +1,7 @@
 .dashboard-module{
 	/*flex: 0 0 78%;
 	max-width: 78%;*/
-	height: calc(100vh - 110px);
+	min-height: calc(100vh - 110px);
 	.mid-content{
 		flex: 0 0 100%;
 		max-width: 100%;

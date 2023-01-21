@@ -84,7 +84,7 @@
                         <td class="text-left title-truncate">{{ bid.title }}</td>
                         <td class="text-left" width="150px">{{ checkIfUserIsSupplier(bid) ? bid.company : `${bid.user.firstName} ${ bid.user.lastName}` }}</td>
                         <!-- <td class="text-left" width="50px">{{ bid.bidEntries }}</td> -->
-                        <td class="text-left" width="145px">{{ bid.dueDate | moment('MM/DD/YYYY') }} {{bid.dueTime}}</td>
+                        <td class="text-left" width="145px">{{ formatDate(bid.dueDate) }} {{bid.dueTime}}</td>
                         <td class="text-left d-none d-sm-block pt-3" width="100px"><router-link
                           :to="{
                             path: `/view-bids/${bid.serial}`,
@@ -116,7 +116,7 @@
                       <td class="text-left title-truncate">{{ bid.title }}</td>
                       <td class="text-left" width="150px">{{ userDatas.firstName }} {{ userDatas.lastName }}</td>
                       <!-- <td class="text-left" width="50px">{{ bid.bidEntries ? bid.bidEntries : 0 }}</td> -->
-                      <td class="text-left" width="145px">{{ bid.dueDate | moment('MM/DD/YYYY') }} {{bid.dueTime}}</td>
+                      <td class="text-left" width="145px">{{ formatDate(bid.dueDate) }} {{bid.dueTime}}</td>
                       <td class="text-left d-none d-sm-block pt-3" @click="editDraft(bid.serial)"  width="100px"><router-link to="">Edit Draft</router-link></td>
                       <td class="text-left d-flex d-sm-none align-center" @click="editDraft(bid.serial)">
                         <span class=""><v-icon>mdi-square-edit-outline</v-icon></span> 
@@ -167,7 +167,7 @@
                       <td class="text-left title-truncate">{{ bid.title }}</td>
                       <td class="text-left" width="150px"> {{ checkIfUserIsSupplier(bid) ? bid.company : `${bid.user.firstName} ${ bid.user.lastName}` }} </td>
                       <!-- <td class="text-left" width="50px">{{ bid.bidEntries }}</td> -->
-                      <td class="text-left" width="100px">{{ bid.dueDate | moment('MM/DD/YYYY') }} {{bid.dueTime}}</td>
+                      <td class="text-left" width="100px">{{ formatDate(bid.dueDate)  }} {{bid.dueTime}}</td>
                       <td class="text-left d-none d-sm-block pt-3" width="100px">
                         <router-link
                           :to="{
@@ -194,6 +194,8 @@ import Navbar from '../../components/Layout/Navbar.vue';
 import LeftSidebar from '../../components/Layout/Dashboard/LeftSidebar.vue';
 import RightSidebar from '../../components/Layout/Dashboard/RightSidebar.vue';
 import _ from 'lodash'
+import moment from 'moment-timezone';
+
 export default {
   name: 'ViewBids',
   components: {
@@ -303,6 +305,10 @@ export default {
     },
     tabValue(value){
       this.tabVal = value;
+    },
+    formatDate(dueDate) {
+      
+      return dueDate !== '' && dueDate !== null ? moment.tz(dueDate, 'America/Chicago').format('MM/DD/YYYY') : '';
     }
   },
   mounted() {

@@ -54,7 +54,7 @@
                            >
                              <td class="text-left pr-sm-0" width="60px">{{ bid.serial }}</td>
                              <td class="text-left title-truncate pl-0">{{ bid.title }}</td>
-                             <td class="text-left" width="145px">{{ bid.dueDate | moment('MM/DD/YYYY') }} {{bid.dueTime}}</td>
+                             <td class="text-left" width="145px">{{ formatDate(bid.dueDate)  }} {{bid.dueTime}}</td>
                              <td class="text-left d-none d-sm-block pt-3 pl-0" width="65px"><router-link class="text-decoration-none"
                                :to="{
                                  path: `/view-bids/${bid.serial}`,
@@ -113,6 +113,8 @@
   import RightSidebar from '../components/Layout/Dashboard/RightSidebar.vue'
   import _ from 'lodash'
   import { mapActions,mapGetters } from "vuex";
+  import moment from 'moment-timezone';
+
 export default {
   name : "Dashboard",
   components: {
@@ -194,6 +196,9 @@ export default {
           document.head.appendChild(mapScript);
         }
       },
+      formatDate(dueDate) {
+        return dueDate !== '' && dueDate !== null ? moment.tz(dueDate, 'America/Chicago').format('MM/DD/YYYY') : '';
+    },
     getLocation(){
       var LocationsForMap = this.locations;
       this.map = new google.maps.Map(document.getElementById('map'), {
@@ -265,8 +270,8 @@ export default {
   },
   async mounted() {
     document.title = "Dashboard - BidOut";
-    this.pendingUserCount(this.$store.getters.userInfo.company.id)
     this.users = this.$store.getters.userInfo;
+    this.pendingUserCount(this.userDatas.company.id)
     this.getBidDashboard(this.userDatas.id);
   }
 };
