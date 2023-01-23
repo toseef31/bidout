@@ -18,7 +18,7 @@
             v-model="selectedUser"
             active-class="grey--text">
             <template v-for="(conversation, index) in conversationsList">
-              <v-list-item   @click="openChat(conversation,conversation.groupName)"   :class="{ 'grey--text v-list-item--active' : conversation._id === chatData.group._id }" v-if="conversation.type == 'GROUP'">
+              <v-list-item   @click="openChat(conversation,conversation.groupName)" :key="conversation._id"  :class="{ 'grey--text v-list-item--active' : conversation._id === chatData.group._id }" v-if="conversation.type == 'GROUP'">
                 <template>
                   <v-list-item-avatar>
                     <v-icon>mdi-domain</v-icon>
@@ -78,7 +78,7 @@
           v-model="selectedUser"
           active-class="grey--text">
           <template v-for="(conversation, index) in archiveList">
-            <v-list-item @click="openChat(conversation,conversation.groupName)"  v-if="conversation.type == 'GROUP'">
+            <v-list-item @click="openChat(conversation,conversation.groupName)" :key="conversation._id" v-if="conversation.type == 'GROUP'">
               <template>
                 <v-list-item-avatar>
                   <v-icon>mdi-domain</v-icon>
