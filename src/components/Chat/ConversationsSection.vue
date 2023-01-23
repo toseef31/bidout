@@ -18,7 +18,7 @@
             v-model="selectedUser"
             active-class="grey--text">
             <template v-for="(conversation, index) in conversationsList">
-              <v-list-item   @click="openChat(conversation,conversation.groupName)" :key="conversation._id"  :class="{ 'grey--text v-list-item--active' : conversation._id === chatData.group._id }" v-if="conversation.type == 'GROUP'">
+              <v-list-item   @click="openChat(conversation,conversation.groupName)"   :class="{ 'grey--text v-list-item--active' : conversation._id === chatData.group._id }" v-if="conversation.type == 'GROUP'">
                 <template>
                   <v-list-item-avatar>
                     <v-icon>mdi-domain</v-icon>
@@ -78,21 +78,21 @@
           v-model="selectedUser"
           active-class="grey--text">
           <template v-for="(conversation, index) in archiveList">
-            <v-list-item @click="openChat(conversation,conversation.groupName)" :key="conversation._id" v-if="conversation.type == 'GROUP'">
+            <v-list-item @click="openChat(conversation,conversation.groupName)"  v-if="conversation.type == 'GROUP'">
               <template>
                 <v-list-item-avatar>
                   <v-icon>mdi-domain</v-icon>
                 </v-list-item-avatar>
                 <v-list-item-content>
                   <v-list-item-title v-if="conversation.company == ''" v-text="conversation.company"></v-list-item-title>
-                  <v-list-item-title v-else v-text="conversation.groupName"></v-list-item-title>
+                  <v-list-item-title v-else >{{  getConversationName(conversation)  }}</v-list-item-title>
 
-                  <v-list-item-subtitle
+                  <!-- <v-list-item-subtitle  v-if="conversation.isBid == true"
                     class="text--primary"
-                    v-text="conversation.headline"
-                  ></v-list-item-subtitle>
+                    v-text="conversation.bidTitle"
+                  ></v-list-item-subtitle> -->
 
-                  <v-list-item-subtitle v-text="conversation.subtitle"></v-list-item-subtitle>
+                  <!-- <v-list-item-subtitle  v-if="conversation.isBid == true">Bid #{{conversation.bidSerial}}</v-list-item-subtitle> -->
                 </v-list-item-content>
 
                 <v-list-item-action>
@@ -173,13 +173,15 @@ export default {
       if (this.$store.state.chat.searchConv != '') {
         return _.orderBy(this.$store.getters.conversations.filter((item) => this.$store.state.chat.searchConv.toLowerCase().split(' ').every((v) => item.company.toLowerCase().includes(v))), 'latestMessage', 'desc');
       }else{
-        let newArr = this.$store.getters.conversations;
+        if(this.$store.getters.conversations){
+          let newArr = this.$store.getters.conversations;
         newArr.forEach((msg, index) => {
           if(!msg.latestMessage){
             msg.latestMessage = msg.createdAt; // add the new field
           }
         })
         return _.orderBy(newArr,'latestMessage', 'desc');
+        }
       }
       
     },
@@ -243,17 +245,18 @@ export default {
   async mounted() {
     this.archiveConversations(this.user.id);
     const convo = await _.orderBy(this.$store.getters.conversations, 'latestMessage', 'desc')[0];
-    if (convo.type == 'PRIVATE') {
-      const membr = convo.participantDetails.filter((item) => {
-        if (this.user.id != item.id) {
-          return item;
-        }
-      });
-      var grpName = membr[0].name;
-    } else {
-      var grpName = convo.groupName;
-    }
+    
     if (convo) {
+      if (convo.type == 'PRIVATE') {
+        const membr = convo.participantDetails.filter((item) => {
+          if (this.user.id != item.id) {
+            return item;
+          }
+        });
+        var grpName = membr[0].name;
+      } else {
+        var grpName = convo.groupName;
+      }
       await this.openChat(convo, grpName);
     }
   },
