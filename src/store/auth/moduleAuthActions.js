@@ -30,9 +30,7 @@ export default {
               commit('setCompany',responce.data)
             })
             commit('setUser',responce.data)
-            localStorage.setItem('userData', JSON.stringify(responce.data)); 
-            // router.push('/dashboard');
-            window.location.href ="/dashboard";
+            router.push('/dashboard');
           }
           
         })
@@ -42,6 +40,22 @@ export default {
         // commit('showErrorAlert')
       })
   },  
+  getCurrentUser({commit,dispatch}){
+    return new Promise((resolve, reject) => {
+      firebase.auth().onAuthStateChanged(function(users) {
+        if (users) {
+          axios.get('/user/getUserData/'+users.multiFactor.user.email)
+           .then(responce => {
+              commit('setUser',responce.data)
+              resolve(responce.data);
+           })
+        } else {
+          dispatch('signOutAction');
+          reject("User is not logged In")
+        }
+      });
+    });
+  },
   signOutAction({ commit }) {
     
     // Try to sigout
@@ -49,12 +63,12 @@ export default {
       .auth()
       .signOut()
       .then((result) => {
-        commit('setUser', null)
         commit('setToken', null)
         commit('setUserId', null)
         commit('setError', null)
         commit('setCompany', null)
         commit('setCredentials', null)
+        commit('setUser', null)
         // console.log(result);
         localStorage.removeItem("userData");
         // localStorage.removeItem("userId");
@@ -171,7 +185,7 @@ export default {
                 // localStorage.setItem("userId",payload.id);
                 commit('setCompanyId', payload.id);
                 commit('setCompanyName', payload.companyName);
-                commit('setCompanyAdmins', responce.data.admins);
+                commit('setQueueAdmins', responce.data.admins);
                 router.replace({
                   name: "ExistingAccount"
                 });

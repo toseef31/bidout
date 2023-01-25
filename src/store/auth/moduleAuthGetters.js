@@ -71,9 +71,9 @@ export default {
     credentials (state){
        return state.credentials
     },
-    // companyAdmins (state){
-    //    return state.companyAdmins
-    // },
+    queueAdmins (state){
+       return state.queueAdmins
+    },
     sameAsData (state){
        return state.sameAsData
     },

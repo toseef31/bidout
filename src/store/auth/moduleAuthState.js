@@ -2,7 +2,7 @@ import axios from 'axios';
 import store from "../../store";
 
 export default {
-    userInfo: JSON.parse(localStorage.getItem('userData')),
+    userInfo: null,
     userToken: JSON.parse(localStorage.getItem('token')),
     isAuthenticated: false,
     userId: '',
@@ -27,7 +27,7 @@ export default {
     customerId: null,
     price: null,
     credentials: null,
-    // companyAdmins: null,
+    queueAdmins: null,
     sameAsData: null,
     packageValue: null,
     moduleRfxOption: null,
