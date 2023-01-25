@@ -178,17 +178,7 @@ export default {
           console.log(err);
       })
   }, 
-  // async getAllLocations({commit},payload){
-  //   // commit('setPageLoader',true)
-  //   try{
-  //     const res = await axios.get('/company/getCompanyLocations');
-  //     console.log('response',res.data);
-  //     commit('setAllLocations',res.data)
-  //     // commit('setPageLoader',false)
-  //   }catch(err){
-  //     console.log(err);
-  //   }  
-  // },
+  
   getAllLocations({commit,dispatch}){
     return new Promise(async (resolve, reject) => {
       try{
