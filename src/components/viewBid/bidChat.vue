@@ -15,12 +15,12 @@
       you will be able to see the message here.
     </div>
 
-    <v-col v-if="conversationsList.length > 0" cols="12" sm="5" md="5" class="available-data">
+    <v-col v-if="conversationsList && conversationsList.length > 0" cols="12" sm="5" md="5" class="available-data">
       <v-list two-line class="pb-0">
         <v-list-item-group v-model="selectedUser" active-class="grey--text">
           <v-list-item v-for="(list, index) in conversationsList" @click="openChat(list)" :class="{
             'grey--text v-list-item--active':
-              list._id === chatData.conversation._id,
+              list._id === chatData && chatData.conversation && chatData.conversation._id,
           }" :key="index">
             <template>
               <v-img v-if="list.company && list.company.image" max-height="26.67px" max-width="100px" width="100px"
@@ -30,7 +30,7 @@
               </div>
 
               <v-list-item-content align-center>
-                <v-list-item-title v-text="(list.name || list.company.company.split('|||')[0])"></v-list-item-title>
+                <v-list-item-title v-text="getName(list)"></v-list-item-title>
                 <v-list-item-subtitle v-if="checkIfCompanyOfs(list.company)">
                   <router-link :to="list.company && list.company.slug ? '/company/' + list.company.slug : ''"
                     class="text-decoration-underline">View Profile</router-link></v-list-item-subtitle>
@@ -195,20 +195,13 @@ export default {
       return this.pageLoading;
     },
     conversationsList() {
-      const bidConvo = this.$store.getters.bidConversations;
-
-      const name = [];
-
-      for (let i = 0; i < bidConvo.length; i++) {
-        name[i] = bidConvo[i].name && bidConvo[i].name.split('|||').find((el) => el.trim() !== this.user.company.company);
-
-        bidConvo[i].name = name[i] && name[i].trim();
-      }
-      return _.orderBy(
-        bidConvo,
-        'latestMessage',
-        'desc',
-      );
+      if (this.$store.getters.bidConversations) {
+        return _.orderBy(
+          this.$store.getters.bidConversations,
+          'latestMessage',
+          'desc',
+        );
+      } return [];
     },
     getUserType() {
       return this.$store.getters.userType;
@@ -216,7 +209,9 @@ export default {
   },
   methods: {
     ...mapActions(['getAllMessages', 'lastMessageRead', 'sendMessage', 'getBidAllConversations']),
-
+    getName(conversation) {
+      return conversation.name.split('|||').find((el) => el.trim() !== this.user.company.company);
+    },
     openChat(conversation) {
       this.chatData = {
         conversation,
@@ -338,11 +333,9 @@ export default {
       return false;
     },
   },
-  beforeMount() {
+  async created() {
     this.user = this.$store.getters.userInfo;
     this.bidId = this.$store.getters.bidViewData.bidData.id;
-  },
-  async mounted() {
     await this.getBidAllConversations({ bidId: this.bidId, userId: this.user.id });
 
     this.pageLoading = false;
@@ -355,26 +348,6 @@ export default {
     if (convo) {
       await this.openChat(convo);
     }
-
-    document.addEventListener('dragenter', (e) => {
-      if (
-        e.target.className == 'message-area'
-        || e.target.className == 'messages-section'
-        || e.target.className == 'v-list-item__content'
-        || e.target.className == 'v-list-item__title'
-        || e.target.className
-        == 'v-list own-user message-list v-sheet theme--light v-list--two-line'
-        || e.target.className == 'v-item-group theme--light v-list-item-group'
-        || e.target.className == 'message-send-area'
-        || e.target.className == 'row'
-        || e.target.className == 'col-sm-10 col-md-10 col-12'
-        || e.target.className == 'msg-text-box'
-      ) {
-        document.getElementById('dropzone').style.display = 'block';
-      } else {
-        document.getElementById('dropzone').style.display = 'none';
-      }
-    });
   },
 };
 </script>
