@@ -173,13 +173,15 @@ export default {
       if (this.$store.state.chat.searchConv != '') {
         return _.orderBy(this.$store.getters.conversations.filter((item) => this.$store.state.chat.searchConv.toLowerCase().split(' ').every((v) => item.company.toLowerCase().includes(v))), 'latestMessage', 'desc');
       }else{
-        let newArr = this.$store.getters.conversations;
-        newArr.forEach((msg, index) => {
-          if(!msg.latestMessage){
-            msg.latestMessage = msg.createdAt; // add the new field
-          }
-        })
-        return _.orderBy(newArr,'latestMessage', 'desc');
+        if(this.$store.getters.conversations){
+          let newArr = this.$store.getters.conversations;
+          newArr.forEach((msg, index) => {
+            if(!msg.latestMessage){
+              msg.latestMessage = msg.createdAt; // add the new field
+            }
+          })
+          return _.orderBy(newArr,'latestMessage', 'desc');
+        }  
       }
       
     },
@@ -234,28 +236,33 @@ export default {
       return conversation.name;
     },
   },
-  beforeMount() {
+  async created(){
     this.user = this.$store.getters.userInfo;
+    this.archiveConversations(this.user.id);
+    const convo = await _.orderBy(this.$store.getters.conversations, 'latestMessage', 'desc')[0];
+    
+    if (convo) {
+      if (convo.type == 'PRIVATE') {
+        const membr = convo.participantDetails.filter((item) => {
+          if (this.user.id != item.id) {
+            return item;
+          }
+        });
+        var grpName = membr[0].name;
+      } else {
+        var grpName = convo.groupName;
+      }
+      await this.openChat(convo, grpName);
+    }
+  },
+  beforeMount() {
+    
   },
   updated() {
     
   },
   async mounted() {
-    this.archiveConversations(this.user.id);
-    const convo = await _.orderBy(this.$store.getters.conversations, 'latestMessage', 'desc')[0];
-    if (convo.type == 'PRIVATE') {
-      const membr = convo.participantDetails.filter((item) => {
-        if (this.user.id != item.id) {
-          return item;
-        }
-      });
-      var grpName = membr[0].name;
-    } else {
-      var grpName = convo.groupName;
-    }
-    if (convo) {
-      await this.openChat(convo, grpName);
-    }
+    
   },
 };
 </script>

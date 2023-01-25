@@ -595,12 +595,12 @@ export default {
     },
   },
   beforeMount() {
+    this.user = this.$store.getters.userInfo;
   	this.getCategories();
   	this.getSales();
   	this.getCompanies();
   },
   mounted() {
-  	this.user = this.$store.getters.userInfo;
     this.savedraftOnInterval();
     this.filteredEntries;
 		this.newSupplierFiltered;
