@@ -301,9 +301,13 @@
 
             <v-divider color="#0D9648"></v-divider>
             <div class="bid-number">
-              {{ showIntent === null && !isBidSubmitted ? 'Please specify your intend to bid' : ''}}
+              {{ showIntent === null && !isBidSubmitted && !isBidOut ? 'Please specify your intend to bid' : ''}}
+              {{ showIntent === null && isBidOut ? 'Bid Submission is not allowed' : '' }}
               {{ showIntent === false || showIntent === 'false' ? 'Bid Submission is not allowed' : ''}}
-              <div v-if="showIntent === true || showIntent === 'true' && !isBidSubmitted" @click="ChangeT('tab-2')">
+              {{ showIntent === true || showIntent === 'true' && !isBidSubmitted && isBidOut ? 'Bid Submission is not
+              allowed' : ''}}
+              <div v-if="showIntent === true || showIntent === 'true' && !isBidSubmitted && !isBidOut"
+                @click="ChangeT('tab-2')">
                 Submit Bid</div>
               <div @click="ChangeT('tab-2')" v-if="isBidSubmitted">Update your best price now!</div>
             </div>
@@ -588,8 +592,8 @@ export default {
 
       let momentDueDate = moment.tz(stringDate, 'America/Chicago');
 
-      if (this.bidDetail.bidData.type === 'BidOut Process' && this.bidDetail.bidout && !this.bidDetail.receivingBids) {
-        momentDueDate = momentDueDate.add(4, 'hours');
+      if (this.bidDetail.bidData.type === 'BidOut Process' && !this.bidDetail.bidout && this.bidDetail.receivingBids) {
+        momentDueDate = momentDueDate.subtract(4, 'hours');
       }
 
       return moment.tz(momentDueDate, 'America/Chicago').format('X') - this.actualTime;
