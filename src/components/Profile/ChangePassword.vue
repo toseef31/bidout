@@ -126,13 +126,11 @@ export default {
       }
     },
     passwordForm(){
-      console.log(this.currentPassword,'sdasdas');
       var data = {
         userid: this.$store.getters.userInfo.id,
         currentPassword: this.currentPassword,
         newPassword: this.newPassword,
       }
-      console.log(data);
       this.changePassword(data);
     }
   },

@@ -218,9 +218,13 @@ export default {
     ...mapActions(['getAllMessages', 'lastMessageRead', 'sendMessage', 'getBidAllConversations']),
 
     openChat(conversation) {
-      this.chatData = {
-        conversation,
-      };
+      console.log('before',conversation);
+      if(conversation){
+        this.chatData = {
+          conversation,
+        };
+      }
+      
       console.log(conversation);
       this.conversationId = conversation._id;
       const ids = {

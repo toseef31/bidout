@@ -568,12 +568,12 @@ export default {
     rfxToggle(){
       this.rfxBtn = !this.rfxBtn; 
       this.$store.commit('setModuleRfxOption',this.rfxBtn);
-      console.log(this.rfxBtn);
+      
     },
     ofsToggle(){
       this.ofsBtn = !this.ofsBtn
       this.$store.commit('setModuleOfsOption',this.ofsBtn);
-      console.log(this.ofsBtn);
+
     },
   },
   mounted() {

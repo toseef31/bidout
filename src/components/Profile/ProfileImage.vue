@@ -69,7 +69,6 @@ export default {
       var files = e.target.files || e.dataTransfer.files;
       if (!files.length) return;
       
-      // console.log(files[0]);
       this.fileName = files[0].name;
       this.dialog = true;
       var reader = new FileReader();

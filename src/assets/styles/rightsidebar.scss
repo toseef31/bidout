@@ -4,7 +4,7 @@
     border-radius: 8px;
     background-color: #fff;
     padding-bottom: 6px;
-/*    max-height: 299px;*/
+    min-height: 108px;
     max-height: calc(100vh - 297px) !important;
     overflow: hidden;
     .title{

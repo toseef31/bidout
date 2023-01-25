@@ -69,9 +69,9 @@ export default {
         commit('setCompany', null)
         commit('setCredentials', null)
         commit('setUser', null)
-        // console.log(result);
+        
         localStorage.removeItem("userData");
-        // localStorage.removeItem("userId");
+       
         localStorage.removeItem("token");
         localStorage.removeItem("companyData");
         router.replace({
@@ -96,9 +96,9 @@ export default {
         commit('setError', null)
         commit('setCompany', null)
         commit('setCredentials', null)
-        // console.log(result);
+       
         localStorage.removeItem("userData");
-        // localStorage.removeItem("userId");
+        
         localStorage.removeItem("token");
         localStorage.removeItem("companyData");
         localStorage.removeItem("companyId");
@@ -116,7 +116,7 @@ export default {
     // Try to sendForgot email
     axios.post('/auth/sendPasswordResetEmail',{'email': payload.email})
      .then(responce => {
-      // console.log(responce.data.message);
+      
       // if(responce.status == 200){
         commit('setEmailSuccess', 'If this account exists, a password reset email has been sent to the email address for the account.');
     }, (err) => {
@@ -313,7 +313,7 @@ export default {
     }).then(response => response.json())
     .then(json =>{
       commit('setLocalIp', json.ip)
-      console.log(json.ip);
+      
     }).catch(err => {
       console.log(err);
     });
@@ -321,7 +321,7 @@ export default {
 
   // signAgreement
   contractGenerate({commit}, payload){
-    // console.log(payload,'contract');
+    
     axios.post('/ofs/generateContract',{'id': payload.id,'ip': payload.ip,'contractType': payload.contractType, 'plan': payload.plan,'userId':payload.userId})
      .then(responce => {
       if(responce.status == 200){

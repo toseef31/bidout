@@ -120,9 +120,8 @@ export default {
     docsList() {
       if(this.$store.getters.bidData != null){
         if(this.$store.getters.bidData.statusType == 'template'){
-          console.log(this.$store.getters.bidData.statusType);
           if(this.$store.getters.bidData.attachment != "" || this.$store.state.bid.attachement != ""){
-            console.log(this.$store.getters.bidData,'bid',this.$store.state.bid);
+          
             if(this.$store.getters.attachData){
               const attch = [...new Map(this.$store.getters.attachData.map((m) => [m.size, m])).values()]
               var totalDay = this.$store.state.bid.attachement.concat(attch);
@@ -212,7 +211,7 @@ export default {
         this.updateTemplate({ attachement: this.docsList });
         this.uploadDoc = [];
       }else{
-        console.log('filess',this.docsList);
+        
         this.$store.commit('setAttachement',this.docsList);
         this.updateDraftBid({ attachement: this.docsList });
         this.uploadDoc = [];

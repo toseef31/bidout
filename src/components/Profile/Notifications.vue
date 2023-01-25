@@ -178,7 +178,7 @@ export default {
     		email: this.$store.getters.userInfo.email,
     		notificationPreference: this.notificationPreference,
     	}
-    	// console.log(data);
+    	
     	this.updateNotifications(data);
     }
   },

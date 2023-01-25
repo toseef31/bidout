@@ -150,7 +150,7 @@ export default {
     ...mapActions(['updateUser',"updateInvite"]),
     validate() {
       this.$refs.form.validate();
-      // console.log()
+      
       var data = {
         firstName: this.userData.firstName,
         lastName: this.userData.lastName,
