@@ -120,21 +120,39 @@
 	    	height: 100%;
 	    }
 		}
+    .map-section-pend{
+      min-height: calc(100vh - 535px);
+    }
 		.map-section-1{
 			min-height: calc(100vh - 275px);
 		}
+    .map-section-pend-1{
+      min-height: calc(100vh - 355px);
+    }
 		.map-section-2{
 			min-height: calc(100vh - 311px);
 		}
+    .map-section-pend-2{
+      min-height: calc(100vh - 391px);
+    }
 		.map-section-3{
 			min-height: calc(100vh - 347px);
 		}
+    .map-section-pend-3{
+      min-height: calc(100vh - 427px);
+    }
 		.map-section-4{
 			min-height: calc(100vh - 383px);
 		}
+    .map-section-pend-4{
+      min-height: calc(100vh - 463px);
+    }
 		.map-section-5{
 			min-height: calc(100vh - 420px);
 		}
+    .map-section-pend-5{
+      min-height: calc(100vh - 500px);
+    }
 	}
 	.mid-content-collapse{
 			flex: 0 0 100%;

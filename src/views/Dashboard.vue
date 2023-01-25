@@ -170,19 +170,47 @@ export default {
     },
     mapClass(){
       if(this.bidsList.length == '1'){
-        return 'map-section-1';
+        if(this.pendingCount > 0){
+          return 'map-section-pend-1';
+        }else{
+          return 'map-section-1';
+        }
       }else if(this.bidsList.length == '2'){
-        return 'map-section-2';
+        if(this.pendingCount > 0){
+          return 'map-section-pend-2';
+        }else{
+          return 'map-section-2';
+        }
       }else if(this.bidsList.length == '3'){
-        return 'map-section-3';
+        if(this.pendingCount > 0){
+          return 'map-section-pend-3';
+        }else{
+          return 'map-section-3';
+        }
       }else if(this.bidsList.length == '4'){
-        return 'map-section-4';
+        if(this.pendingCount > 0){
+          return 'map-section-pend-4';
+        }else{
+          return 'map-section-4';
+        }
       }else if(this.bidsList.length == '5'){
-        return 'map-section-5';
+        if(this.pendingCount > 0){
+          return 'map-section-pend-5';
+        }else{
+          return 'map-section-5';
+        }
       }else if(this.bidsList.length == '6'){
-        return 'map-section';
+        if(this.pendingCount > 0){
+          return 'map-section-pend';
+        }else{
+          return 'map-section';
+        }
       }else{
-        return 'map-section-1';
+        if(this.pendingCount > 0){
+          return 'map-section-pend-1';
+        }else{
+          return 'map-section-1';
+        }
       }
     }
   },
