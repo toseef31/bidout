@@ -30,7 +30,8 @@ export default {
               commit('setCompany',responce.data)
             })
             commit('setUser',responce.data)
-            router.push('/dashboard');
+            
+            window.location.href = "/dashboard";
           }
           
         })
