@@ -342,9 +342,18 @@ export default {
     },
 
     checkTimeForLineItems() {
-      if (this.bidDetail.bidData.type === 'BidOut Process' && this.bidDetail.bidout) {
+      if (this.isBidOut && this.getIntent !== null && this.isBidSubmitted) {
         return false;
       }
+
+      if (this.isBidOut && this.getIntent === null) {
+        return true;
+      }
+
+      if (this.isBidOut && !this.isBidSubmitted) {
+        return true;
+      }
+
       if (this.bidDetail.receivingBids) return false;
       return true;
     },
@@ -364,7 +373,7 @@ export default {
     },
     validatePrice(event, index) {
       if (this.isBidSubmitted && this.isBidOut) {
-        if (this.getSupplierBid.lineItems[index].price < event) {
+        if (Number(this.getSupplierBid.lineItems[index].price) < Number(event)) {
           this.value[index].message = 'Suppliers can only lower the prices during the BidOut Phase!';
           this.value[index].status = false;
         } else {

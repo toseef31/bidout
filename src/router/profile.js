@@ -1,4 +1,3 @@
-// import Settings from '@/components/Layout/Base.vue';
 import Settings from '@/components/Layout/Settings.vue';
 import store from '@/store';
 
@@ -29,7 +28,6 @@ const routes = [
         path: '/manage-users',
         name: 'ManageUsers',
         component: () => import('@/views/ManageUsers.vue'),
-        // meta: { authorize: [store.getters.userInfo.role == 'admin'] }
         beforeEnter: (to, from, next) => {
           if (store.getters.userInfo != null) {
             if (store.getters.userInfo.role == 'user') {

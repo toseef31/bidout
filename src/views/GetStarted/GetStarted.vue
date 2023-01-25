@@ -545,10 +545,10 @@ export default {
       }
     },
     companyList(title,id){
-      console.log(id);
+      
       this.company = title;
       this.companyId = id;
-      // this.hideList = true;
+      
       setTimeout(() => this.hideList = false, 1000);
       this.hideList = false;
       this.companyInfo = false;

@@ -193,8 +193,6 @@ export default {
           }
     
 
-
-        // [START maps_places_autocomplete_creation]
         const center = { lat: lat, lng: lng };
         // Create a bounding box with sides ~10km away from the center point
         const defaultBounds = {
@@ -214,9 +212,6 @@ export default {
         };
         const autocomplete = new google.maps.places.Autocomplete(input, options);
         
-
-        // [END maps_places_autocomplete_countries_multiple]
-        // [START maps_places_autocomplete_setbounds]
         const southwest = { lat: 5.6108, lng: 136.589326 };
         const northeast = { lat: 61.179287, lng: 2.64325 };
         const newBounds = new google.maps.LatLngBounds(southwest, northeast);
@@ -228,8 +223,7 @@ export default {
 
           const place = autocomplete.getPlace();
           if (!place.geometry || !place.geometry.location) {
-            // User entered the name of a Place that was not suggested and
-            // pressed the Enter key, or the Place Details request failed.
+            
             window.alert("No details available for input: '" + place.name + "'");
             return;
           }
@@ -240,7 +234,7 @@ export default {
             // map.setZoom(2);
           } else {
             map.setCenter(place.geometry.location);
-            map.setZoom(2); // Why 17? Because it looks good.
+            map.setZoom(2); 
           }
 
           marker.setPosition(place.geometry.location);

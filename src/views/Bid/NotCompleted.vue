@@ -266,8 +266,8 @@ export default {
     }
   },
   mounted() {
-    document.title = 'Create Template - BidOut';
-    this.users = JSON.parse(localStorage.getItem('userData')).user;
+    document.title = 'Create Bid - BidOut';
+    this.users = this.$store.getters.userInfo;
   },
 };
 </script>

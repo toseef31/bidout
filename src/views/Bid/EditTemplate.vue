@@ -46,7 +46,6 @@
               class="bids-tabs"
               fixed-tabs
               hide-slider
-              mobile-breakpoint="767px"
             >
               <v-tab
                 v-for="(item, index) in tabs"
@@ -264,8 +263,8 @@ export default {
 
   },
   mounted() {
-    document.title = 'Create Bid - BidOut';
-    this.users = JSON.parse(localStorage.getItem('userData')).user;
+    document.title = 'Create Template - BidOut';
+    this.users = this.$store.getters.userInfo;
   },
 };
 </script>

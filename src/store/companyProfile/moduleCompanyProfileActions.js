@@ -606,7 +606,7 @@ export default {
       });
   },
   editCompanyExcutive({commit,dispatch,state}, payload){
-    // console.log(payload);
+  
     axios.post('/company/updateCompanyLeadership/',{'companyId': payload.companyId, 'leadershipData': payload.leadership})
      .then(responce => {
       

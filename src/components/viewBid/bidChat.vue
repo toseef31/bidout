@@ -221,7 +221,6 @@ export default {
       this.chatData = {
         conversation,
       };
-      console.log(conversation);
       this.conversationId = conversation._id;
       const ids = {
         userId: this.user.id,
