@@ -67,7 +67,7 @@ export default {
     ...mapActions(["companyProfileImg"]),
     croppie (e) {
       var files = e.target.files || e.dataTransfer.files;
-      // alert(files);
+      
       if (!files.length) return;
       this.logoName = files[0].name;
       this.dialog = true;

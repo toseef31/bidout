@@ -67,7 +67,7 @@ export default {
       this.file = event.target.files[0];
       this.fileName = this.file.name;
       this.fileExt =  this.fileName.split('.').pop();
-      // this.previewDoc();
+      
       if(this.$store.getters.companyData.companyData.corporateDocuments){
         this.documents = this.$store.getters.companyData.companyData.corporateDocuments;
       }

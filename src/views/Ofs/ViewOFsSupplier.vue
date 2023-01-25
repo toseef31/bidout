@@ -252,7 +252,11 @@ export default {
       return this.$store.getters.supplier;
     },
     premiumCompanies(){
-      return this.$store.getters.premiumCompanies;
+      if(this.$store.getters.premiumCompanies){
+        return this.$store.getters.premiumCompanies;
+      }else{
+        return [];
+      }
     }
   },
   methods: {

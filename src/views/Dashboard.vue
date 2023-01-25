@@ -144,7 +144,9 @@ export default {
         return this.$store.getters.g_activityPanel;
     },
     userDatas(){
+      if(this.$store.getters.userInfo){
         return this.$store.getters.userInfo;
+      }
     },
     userToken(){
       return this.$store.getters.userToken;
@@ -187,15 +189,17 @@ export default {
   methods: {
     ...mapActions(["pendingUserCount","getAllLocations","getBidDashboard"]),
     loadMapScript() {
-        // Check if the map script is already loaded
         let scriptId = "map-api-script";
         let mapAlreadyAttached = !!document.getElementById(scriptId);
         if(!mapAlreadyAttached){
-          // Create the script element
           let mapScript = document.createElement('script');
+          mapScript.setAttribute("defer", "defer");
           mapScript.id = scriptId;
-          mapScript.src = 'https://maps.googleapis.com/maps/api/js?key='+import.meta.env.VITE_GOOGLE_MAP+'&libraries=places';
+          mapScript.src = 'https://maps.googleapis.com/maps/api/js?key='+import.meta.env.VITE_GOOGLE_MAP+'&libraries=places&callback=Function.prototype';
           document.head.appendChild(mapScript);
+          mapScript.onload = () => {
+              this.getLocation();
+          }
         }
       },
       formatDate(dueDate) {
@@ -203,66 +207,64 @@ export default {
     },
     getLocation(){
       var LocationsForMap = this.locations;
-      this.map = new google.maps.Map(document.getElementById('map'), {
-        zoom: 4,
-        mapId: "2993bb26d878ba6a",
-        center: new google.maps.LatLng(LocationsForMap[0].locations[0].lattitude, LocationsForMap[0].locations[0].longitude),
-        streetViewControl: false,
-        mapTypeControl: false,
-        // mapTypeId: google.maps.MapTypeId.ROADMAP
-      });
+      if(LocationsForMap){
+        this.map = new google.maps.Map(document.getElementById('map'), {
+          zoom: 4,
+          mapId: "2993bb26d878ba6a",
+          center: new google.maps.LatLng(LocationsForMap[0].locations[0].lattitude, LocationsForMap[0].locations[0].longitude),
+          streetViewControl: false,
+          mapTypeControl: false,
+          // mapTypeId: google.maps.MapTypeId.ROADMAP
+        });
 
-      var infowindow = new google.maps.InfoWindow();
+        var infowindow = new google.maps.InfoWindow();
 
-      var marker, i,j;
-      // var latlngbounds =new google.maps.LatLngBounds();
-      for (i = 0; i < LocationsForMap.length; i++) {  
-        for (j = 0; j < LocationsForMap[i].locations.length; j++){
-          marker = new google.maps.Marker({
-            position: new google.maps.LatLng(LocationsForMap[i].locations[j].lattitude, LocationsForMap[i].locations[j].longitude),
-            map: this.map,
-            title: 'Marker',
-            anchorPoint: new google.maps.Point(0, -29),
-          });
-          var imageAppend;
-          var image = '<h1 id="firstHeading" class="firstHeading"><img src="'+LocationsForMap[i].companyImage+'" height="50px" width="100px"></h1>';
-          if(LocationsForMap[i].companyImage){
-            imageAppend = image;
-          }else{
-            imageAppend = '';
-          }
-          const contentString =
-            '<div id="content">' +
-            '<div id="siteNotice">' +
-            "</div>" +
-            imageAppend +
-            
-            '<div id="bodyContent">' +
-            '<p><b>'+LocationsForMap[i].companyName+': </b><a href="company/'+LocationsForMap[i].companySlug+'">' +
-            "View Profile</a> </p>" +
-            "<p><b>"+LocationsForMap[i].locations[j].location+"<b></p> " +
-            "</div>" +
-            "</div>";
-          google.maps.event.addListener(marker, 'click', (function(marker, i) {
-            return function() {
-              infowindow.setContent(contentString);
-              infowindow.open(this.map, marker);
+        var marker, i,j;
+        // var latlngbounds =new google.maps.LatLngBounds();
+        for (i = 0; i < LocationsForMap.length; i++) {  
+          for (j = 0; j < LocationsForMap[i].locations.length; j++){
+            marker = new google.maps.Marker({
+              position: new google.maps.LatLng(LocationsForMap[i].locations[j].lattitude, LocationsForMap[i].locations[j].longitude),
+              map: this.map,
+              title: 'Marker',
+              anchorPoint: new google.maps.Point(0, -29),
+            });
+            var imageAppend;
+            var image = '<h1 id="firstHeading" class="firstHeading"><img src="'+LocationsForMap[i].companyImage+'" height="50px" width="100px"></h1>';
+            if(LocationsForMap[i].companyImage){
+              imageAppend = image;
+            }else{
+              imageAppend = '';
             }
-          })(marker, j));
-          // latlngbounds.extend(marker.position);
+            const contentString =
+              '<div id="content">' +
+              '<div id="siteNotice">' +
+              "</div>" +
+              imageAppend +
+              
+              '<div id="bodyContent">' +
+              '<p><b>'+LocationsForMap[i].companyName+': </b><a href="company/'+LocationsForMap[i].companySlug+'">' +
+              "View Profile</a> </p>" +
+              "<p><b>"+LocationsForMap[i].locations[j].location+"<b></p> " +
+              "</div>" +
+              "</div>";
+            google.maps.event.addListener(marker, 'click', (function(marker, i) {
+              return function() {
+                infowindow.setContent(contentString);
+                infowindow.open(this.map, marker);
+              }
+            })(marker, j));
+          }
         }
-      }
-        
-        // map.setCenter(latlngbounds.getCenter());
-        // map.fitBounds(latlngbounds);
+      } 
 
     },
   },
   async created(){
      await this.loadMapScript();
-  },
-  async beforeUpdate(){
-    await this.getAllLocations().finally(this.getLocation());
+     await this.getAllLocations().then((data) => {
+      this.getLocation();
+    });
   },
   async updated(){
 

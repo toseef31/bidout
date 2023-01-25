@@ -146,7 +146,7 @@ export default {
     addMember(member, index) {
     	this.oldCount = this.membersAdded.length;
     	this.membersAdded.push(member);
-    	console.log('add member', this.membersAdded);
+    	
     	this.newCount = this.membersAdded.length;
   		this.$store.getters.teamMembers.splice(index, 1);
   		this.$store.commit('setInvitedTeamMembers', this.membersAdded);
@@ -178,7 +178,7 @@ export default {
     },
   },
   created() {
-    // this.interval = setInterval(() => this.updateDraftBid({'invitedTeamMembers':this.membersAdded}));
+    
   },
   mounted() {
   	this.user = this.$store.getters.userInfo;

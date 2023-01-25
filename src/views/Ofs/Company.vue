@@ -375,7 +375,7 @@ export default {
     if (!mapAlreadyAttached) {
       const mapScript = document.createElement('script');
       mapScript.id = mapScpt;
-      mapScript.src = `https://maps.googleapis.com/maps/api/js?key=${import.meta.env.VITE_GOOGLE_MAP}&libraries=places`;
+      mapScript.src = `https://maps.googleapis.com/maps/api/js?key=${import.meta.env.VITE_GOOGLE_MAP}&libraries=places&callback=Function.prototype`;
       document.head.appendChild(mapScript);
     }
     await this.viewPublicCompany();

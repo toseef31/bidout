@@ -76,7 +76,7 @@ export default {
      if(this.$store.getters.contractData){
        return this.$store.getters.contractData;
      }
-     // return this.$store.getters.contractData;
+     
     },
     credent(){
       return this.$store.getters.credentials;
