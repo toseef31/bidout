@@ -450,7 +450,7 @@ export default {
       };
       this.archiveChat(archivess);
       this.isChatMenu = false;
-      this.chatData.name = "";
+      this.chatData.group = "";
     },
     getText: (item) => `${item.firstName} ${item.lastName}`,
     dragfileupload(file, xhr, formData) {
