@@ -135,6 +135,8 @@ export default {
   },
   data() {
     return {
+      on: '',
+      attrs:'',
       availableSearch: ['All', 'Company'],
       availableSuppl: null,
       inputType: ['USD'],
@@ -196,7 +198,7 @@ export default {
   watch: {
     bidLines: {
       handler() {
-        this.validate();
+        this.validate;
       },
       deep: true,
     },
