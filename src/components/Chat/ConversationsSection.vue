@@ -85,14 +85,14 @@
                 </v-list-item-avatar>
                 <v-list-item-content>
                   <v-list-item-title v-if="conversation.company == ''" v-text="conversation.company"></v-list-item-title>
-                  <v-list-item-title v-else v-text="conversation.groupName"></v-list-item-title>
+                  <v-list-item-title v-else >{{  getConversationName(conversation)  }}</v-list-item-title>
 
-                  <v-list-item-subtitle
+                  <!-- <v-list-item-subtitle  v-if="conversation.isBid == true"
                     class="text--primary"
-                    v-text="conversation.headline"
-                  ></v-list-item-subtitle>
+                    v-text="conversation.bidTitle"
+                  ></v-list-item-subtitle> -->
 
-                  <v-list-item-subtitle v-text="conversation.subtitle"></v-list-item-subtitle>
+                  <!-- <v-list-item-subtitle  v-if="conversation.isBid == true">Bid #{{conversation.bidSerial}}</v-list-item-subtitle> -->
                 </v-list-item-content>
 
                 <v-list-item-action>
@@ -175,13 +175,13 @@ export default {
       }else{
         if(this.$store.getters.conversations){
           let newArr = this.$store.getters.conversations;
-          newArr.forEach((msg, index) => {
-            if(!msg.latestMessage){
-              msg.latestMessage = msg.createdAt; // add the new field
-            }
-          })
-          return _.orderBy(newArr,'latestMessage', 'desc');
-        }  
+        newArr.forEach((msg, index) => {
+          if(!msg.latestMessage){
+            msg.latestMessage = msg.createdAt; // add the new field
+          }
+        })
+        return _.orderBy(newArr,'latestMessage', 'desc');
+        }
       }
       
     },
