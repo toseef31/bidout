@@ -61,5 +61,8 @@ export default {
   },
   setsearchConv(state,payload){
     state.searchConv = payload;
+  },
+  setChatRefreshToken(state,payload){
+    state.chatRefreshToken = payload;
   }
 };

@@ -450,7 +450,7 @@ export default {
       };
       this.archiveChat(archivess);
       this.isChatMenu = false;
-      this.chatData.name = "";
+      this.chatData.group = "";
     },
     getText: (item) => `${item.firstName} ${item.lastName}`,
     dragfileupload(file, xhr, formData) {
@@ -522,11 +522,15 @@ export default {
       return conversation.name;
     },
   },
-  beforeMount() {
+  async created(){
     this.user = this.$store.getters.userInfo;
+    await this.getAllConversations(this.user.id);
+  },
+  beforeMount() {
+    
   },
   async mounted() {
-    await this.getAllConversations(this.user.id);
+    
     document.title = "Messages - BidOut";
     if (screen.width < 767) {
       this.userList = true;
