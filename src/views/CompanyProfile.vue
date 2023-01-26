@@ -156,7 +156,7 @@
      </v-col>
    </v-row>
 </template>
-<script async defer src="https://maps.googleapis.com/maps/api/js?key=%VITE_GOOGLE_MAP%&libraries=places"></script>
+<script async defer src="https://maps.googleapis.com/maps/api/js?key=%VITE_GOOGLE_MAP%&libraries=places&callback=Function.prototype"></script>
 <script>
   import Navbar from '../components/Layout/Navbar.vue'
   import LeftSidebar from '../components/Layout/Dashboard/LeftSidebar.vue'
@@ -259,7 +259,7 @@ export default {
       }
     },
     moduleWeight(){
-      // return this.$store.getters.moduleWeight;
+   
       const sum = this.$store.getters.moduleWeight.reduce((accumulator, object) => {
         return accumulator + object.weight;
       }, 0);
@@ -370,7 +370,7 @@ export default {
     if(!mapAlreadyAttached){
      let mapScript = document.createElement('script')
       mapScript.id = mapScpManage;
-     await mapScript.setAttribute('src', 'https://maps.googleapis.com/maps/api/js?key='+import.meta.env.VITE_GOOGLE_MAP+'&libraries=places')
+     await mapScript.setAttribute('src', 'https://maps.googleapis.com/maps/api/js?key='+import.meta.env.VITE_GOOGLE_MAP+'&libraries=places&callback=Function.prototype')
      document.head.appendChild(mapScript);
     }
     await this.getCategories();

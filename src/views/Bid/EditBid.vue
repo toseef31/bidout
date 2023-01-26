@@ -260,7 +260,7 @@ export default {
         await this.publishUpdateBid({serial:this.$route.params.serial});
         this.$router.push(`/view-bids/${this.$route.params.serial}`);
         this.$store.commit('setDraftBidsList', null);
-        // this.$store.commit('setBidData', null);
+        
       } catch (error) {
         console.log(error);
       }

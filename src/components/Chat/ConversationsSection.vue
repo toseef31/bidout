@@ -236,13 +236,8 @@ export default {
       return conversation.name;
     },
   },
-  beforeMount() {
+  async created(){
     this.user = this.$store.getters.userInfo;
-  },
-  updated() {
-    
-  },
-  async mounted() {
     this.archiveConversations(this.user.id);
     const convo = await _.orderBy(this.$store.getters.conversations, 'latestMessage', 'desc')[0];
     
@@ -259,6 +254,15 @@ export default {
       }
       await this.openChat(convo, grpName);
     }
+  },
+  beforeMount() {
+    
+  },
+  updated() {
+    
+  },
+  async mounted() {
+    
   },
 };
 </script>

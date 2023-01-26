@@ -148,7 +148,7 @@ export default {
       }
       this.conversationId = group._id;
       this.chatData = obj;
-      console.log(this.chatData);
+      
       if(this.chatData){
         this.allMembers = this.chatData.group.participantDetails;
       }
@@ -157,17 +157,10 @@ export default {
         conversationId: this.conversationId,
       }
       this.getAllMessages(ids);
-      // var container = this.$refs.messagesSection;
       
-      // setTimeout(function(){
-      //   container.scrollTop = container.scrollHeight;
-      // }, 4000);
       
       this.lastMessageRead(ids);
-      // var container = this.$refs.messagesSection;
-      // setTimeout(function(){
-      //   container.scrollTop = container.scrollHeight;
-      // }, 1000);
+      
       this.isChatMenu  = false;
     },
     removeUser(id){

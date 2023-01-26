@@ -510,10 +510,7 @@ export default {
       this.getCompanyInfo({ id, name });
     },
     addReps(list, index) {
-    	// const data = {
-    	// 	type: 'user',
-    	// 	item: list,
-    	// };
+    	
     	this.oldCount = this.repsInvited.length;
     	this.repsInvited.push(list);
     	this.inviteCount = 2;
@@ -543,10 +540,7 @@ export default {
     	this.getCompanyByServices(category);
     },
     addCompany(company, index) {
-    	// const data = {
-    	// 	type: 'company',
-    	// 	item: company,
-    	// };
+    	
     	this.oldCount = this.repsInvited.length;
     	this.repsInvited.push(company);
     	this.inviteCount = 2;
@@ -557,10 +551,7 @@ export default {
     	this.$store.commit('setInvitedSuppliersData', unique);
     },
     addServiceCompany(company, index) {
-    	// const data = {
-    	// 	type: 'company',
-    	// 	item: company,
-    	// };
+    	
     	this.oldCount = this.repsInvited.length;
     	this.repsInvited.push(company);
     	this.inviteCount = 2;
@@ -604,12 +595,12 @@ export default {
     },
   },
   beforeMount() {
+    this.user = this.$store.getters.userInfo;
   	this.getCategories();
   	this.getSales();
   	this.getCompanies();
   },
   mounted() {
-  	this.user = this.$store.getters.userInfo;
     this.savedraftOnInterval();
     this.filteredEntries;
 		this.newSupplierFiltered;

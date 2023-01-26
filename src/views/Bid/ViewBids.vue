@@ -182,8 +182,6 @@
             </v-tab-item>
           </v-tabs-items>
         </div>
-
-        </div>
       </div>
     </v-col>
   </v-row>
@@ -236,6 +234,8 @@ export default {
         }else{
           return _.orderBy(this.$store.getters.draftBidsList,['dueDate','asc','dueTime','asc']);
         }
+      }else{
+        return [];
       }
     },
     openBids(){

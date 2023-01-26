@@ -18,6 +18,7 @@ export default {
     axios
       .get(`/chat/getConversations/${payload}`)
       .then((responce) => {
+
         commit('setConverstaionList', responce.data.conversations);
         if (state.chatRefreshToken != 1) {
           commit('setPageLoader', false);

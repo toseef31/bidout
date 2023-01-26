@@ -112,6 +112,8 @@ export default {
     activities(){
       if(this.$store.getters.activities){  
         return _.orderBy(this.$store.getters.activities.slice(0,40),'date','desc');
+      }else{
+        return [];
       }
     },
     loading(){

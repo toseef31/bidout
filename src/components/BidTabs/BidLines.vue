@@ -135,6 +135,8 @@ export default {
   },
   data() {
     return {
+      on: '',
+      attrs:'',
       availableSearch: ['All', 'Company'],
       availableSuppl: null,
       inputType: ['USD'],
@@ -196,7 +198,7 @@ export default {
   watch: {
     bidLines: {
       handler() {
-        this.validate();
+        this.validate;
       },
       deep: true,
     },
@@ -251,7 +253,6 @@ export default {
 
       this.bidLines.forEach((el, lIndex) => {
         dataD.push([el.description]);
-        console.log('hhh',el);
       });
       dataD.unshift(header);
       const data = XLSX.utils.json_to_sheet(dataD, {skipHeader: true});
@@ -319,7 +320,7 @@ export default {
       }
       return item;
       })));
-      console.log('line item',this.bidLines);
+      
       this.$emit('validation', { valid: true, items: '4' });
       this.$store.commit('setLineItemsComplete', true);
       this.$store.commit('setBidlines',this.bidLines);

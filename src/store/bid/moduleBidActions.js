@@ -419,7 +419,7 @@ export default {
 
       if (res.status === 200) {
         commit('setIsBidSubmitted', true);
-        state.supplierAttachment = [];
+        commit('removeSupplierAttachment');
         dispatch('getBidBySerial', {
           id: payload.userId,
           serial: payload.serial,
@@ -484,7 +484,7 @@ export default {
       const res = await axios.post('bidSubmission/editSubmitBid/', formData, config);
 
       if (res.status === 200) {
-        state.supplierAttachment = [];
+        commit('removeSupplierAttachment');
         dispatch('getBidBySerial', {
           id: payload.userId,
           serial: payload.serial,
