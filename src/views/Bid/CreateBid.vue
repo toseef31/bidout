@@ -69,6 +69,7 @@ export default {
       this.$store.state.bid.bidData.attachments = '';
       this.$store.state.bid.bidData.attachment = '';
       this.$store.state.bid.bidData.invitedSuppliers = '';
+      this.$store.state.bid.bidData.invitedNewSuppliers = '';
       this.$store.state.bid.bidData.invitedTeamMembers = '';
       this.$store.state.bid.bidData.lineItems = '';
       this.$store.state.bid.bidData.questions = '';
@@ -82,6 +83,7 @@ export default {
       this.$store.commit('setBidDescription', [{ body: '' }]);
       this.$store.commit('setInvitedTeamMembers', null);
       this.$store.commit('setInvitedSuppliersData', null);
+      this.$store.commit('setInvitedNewSuppliers', null);
       this.$store.commit('setBidlines', null);
       this.$store.commit('setAttachement', null);
       this.$store.commit('setAttachData', null);
