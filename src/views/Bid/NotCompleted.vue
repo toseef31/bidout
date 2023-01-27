@@ -31,6 +31,7 @@
                 </p>
                 <v-btn
                   color="#0D9648"
+                  :loading="publishLoading"
                   :disabled="!bidDetailsComplete || !lineItemsComplete ? true : false"
                   class="white--text text-capitalize publish-btn"
                   width="250px"
@@ -196,6 +197,7 @@ export default {
       attachValue: '',
       questionValid: '',
       questionValue: '',
+      publishLoading: false,
     };
   },
   computed: {
@@ -252,13 +254,16 @@ export default {
       this.attachValue = event.attach;
     },
     async publishBid() {
+      this.publishLoading = true;
       try {
         const serial = await this.$store.dispatch('publishBid');
         
         this.$router.push(`/view-bids/${serial}?new=true`);
         this.$store.commit('setDraftBidsList', null);
+        this.publishLoading = false;
       } catch (error) {
         console.log(error);
+        this.publishLoading = false;
       }
     },
     async updateDraft(){

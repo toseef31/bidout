@@ -413,7 +413,10 @@
     </v-row>
     <v-row justify="center" no-gutters class="mt-10 mb-8">
       <v-col cols="12">
-        <v-btn color="#0D9648" large height="56px" class="white--text text-capitalize font-weight-bold save-btn px-9" @click="updateQuestion">Save Changes</v-btn>
+        <v-btn color="#0D9648" large height="56px" class="white--text text-capitalize font-weight-bold save-btn px-9" @click="updateQuestion"
+        :disabled="loading"
+        :loading="loading"
+        >Save Changes</v-btn>
       </v-col>
     </v-row>
   </div>
@@ -446,6 +449,7 @@ export default {
       isLbl: [false],
       multiOptions: [],
       questionStatus: false,
+      loading: false,
     };
   },
   watch: {
@@ -543,13 +547,18 @@ export default {
       this.questionStatus = true;
     },
     updateQuestion() {
+      this.loading = true;
       if(this.$route.name == 'EditBid'){
         this.updateBid({ questions: this.categories });
+        this.loading = false;
       }else if(this.$route.name == 'EditTemplate'){
         this.updateTemplate({ questions: this.categories });
+        this.loading = false;
       }else{
         this.updateDraftBid({ questions: this.categories });
+        this.loading = false;
       }
+      
     },
     deleteQuestion(index) {
       this.categories.splice(index, 1);
