@@ -159,7 +159,7 @@
                         text-center
                       ">
                     <v-file-input :id="`uploadFileQ${index}`" @change="handleDocumentForAnswer($event, index)"
-                      :rules="fileRule" :disabled="!bidDetail.receivingBids" />
+                      :disabled="!bidDetail.receivingBids" :rules="item.required === 'true' ? fileRule : []" />
 
                     <div class="mt-1">
                       <v-icon class="mr-4">mdi-cloud-upload-outline</v-icon>Upload here
