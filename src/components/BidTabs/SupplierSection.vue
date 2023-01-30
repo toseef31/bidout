@@ -83,6 +83,7 @@
 		          </div>
 		        </div>
 		      </v-tab-item>
+					{{ checkIfCompanyOfs }}
 		      <v-tab-item value="salesRep">
 		        <div class="available-search d-flex justify-space-between align-center mt-5 px-4">
 		          <div>
@@ -593,6 +594,16 @@ export default {
   		  clearInterval(timer);
   		});
     },
+		checkIfCompanyOfs() {
+      if (this.$store.getters.companiesList) {
+        return this.$store.getters.companiesList.filter((company) => {
+					// console.log(company);
+					return company.contracts.find((contract) => {contract.contractType === 'ofs-premium'});
+					
+				});
+      }
+      return false;
+    },
   },
   beforeMount() {
     this.user = this.$store.getters.userInfo;
@@ -604,6 +615,7 @@ export default {
     this.savedraftOnInterval();
     this.filteredEntries;
 		this.newSupplierFiltered;
+		this.checkIfCompanyOfs();
   },
 };
 </script>
