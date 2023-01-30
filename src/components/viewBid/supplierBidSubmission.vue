@@ -222,7 +222,7 @@
 
                       <v-card>
                         <v-card-title class="text-h5 justify-center grey lighten-2">
-                          Remove Attachment file
+                          Remove File Attachment?
                         </v-card-title>
                         <v-card-text class="pt-3 mb-n2">Are you sure you really want to remove this attachment
                           file?</v-card-text>
@@ -271,7 +271,7 @@
           class="text-capitalize white--text font-weight-bold save-button px-9" @click="submit('edit')"
           :disabled="showLoading" large>
           <v-progress-circular v-if="showLoading" indeterminate color="#0D9648"></v-progress-circular>
-          <div v-else>Edit bid</div>
+          <div v-else>Update bid</div>
         </v-btn>
       </div>
     </v-form>
