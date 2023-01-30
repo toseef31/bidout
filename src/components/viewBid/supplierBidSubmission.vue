@@ -118,7 +118,7 @@
                     v-if="((answers[index].answer && answers[index].answer.name || answers[index].fileName))">
                     <div class="doc-list">{{(answers[index].answer.name || answers[index].fileName)}}</div>
 
-                    <v-dialog class="dialog-class" v-model="dialog" width="320">
+                    <v-dialog class="dialog-class" v-model="dialog" width="340">
 
                       <template v-slot:activator="{ on, attrs }">
 
@@ -130,7 +130,7 @@
 
                       <v-card>
                         <v-card-title class="text-h5 justify-center grey lighten-2">
-                          Remove Attachment file
+                          Remove File Attachment?
                         </v-card-title>
                         <v-card-text class="pt-3 mb-n2">Are you sure you really want to remove this attachment
                           file?</v-card-text>
