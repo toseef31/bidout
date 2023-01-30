@@ -39,6 +39,7 @@
                   height="52px"
                   large
                   @click="publishBid"
+                  :loading="saveLoading"
                 >
                   Save Bid
                 </v-btn>
@@ -198,6 +199,7 @@ export default {
       attachValue: '',
       questionValid: '',
       questionValue: '',
+      saveLoading: false,
     };
   },
   computed: {
@@ -256,6 +258,7 @@ export default {
       this.attachValue = event.attach;
     },
     async publishBid() {
+      this.saveLoading = true;
       try {
         await this.publishUpdateBid({serial:this.$route.params.serial});
         this.$router.push(`/view-bids/${this.$route.params.serial}`);
@@ -264,6 +267,7 @@ export default {
       } catch (error) {
         console.log(error);
       }
+      this.saveLoading = false;
     },
     async updateDraft(){
       await this.updateBid({'supplier': this.$store.state.bid.invitedSuppliers});
