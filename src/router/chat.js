@@ -1,4 +1,3 @@
-// import Base from '@/components/Layout/Base.vue';
 import Settings from '@/components/Layout/Settings.vue';
 import store from '@/store';
 
@@ -14,24 +13,15 @@ const routes = [
         component: () => import('@/views/Chat.vue'),
         beforeEnter: (to, from, next) => {
            if(store.getters.userInfo == null) {
-               next('/login');
+              store.dispatch('getCurrentUser').then((data) => {
+                next();
+              });
            } else {
                next();
            }
        }
       },
-      // {
-      //   path: '/messages?room_id=:id',
-      //   name: 'Message',
-      //   component: () => import('@/views/Chat.vue'),
-      //   beforeEnter: (to, from, next) => {
-      //      if(localStorage.getItem("userData") == null) {
-      //          next('/login');
-      //      } else {
-      //          next();
-      //      }
-      //  }
-      // },
+      
       
     ],
   },

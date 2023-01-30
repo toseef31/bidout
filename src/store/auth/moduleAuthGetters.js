@@ -71,10 +71,19 @@ export default {
     credentials (state){
        return state.credentials
     },
-    // companyAdmins (state){
-    //    return state.companyAdmins
-    // },
+    queueAdmins (state){
+       return state.queueAdmins
+    },
     sameAsData (state){
        return state.sameAsData
+    },
+    packageValue (state){
+       return state.packageValue
+    },
+    moduleRfxOption (state){
+       return state.moduleRfxOption
+    },
+    moduleOfsOption (state){
+       return state.moduleOfsOption
     },
 }

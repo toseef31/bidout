@@ -159,6 +159,7 @@
 		      </div>
 		    </div>
 		    <div>
+					
 		      <div class="companies-list">
 		        <template  v-for="(company,index) in newRepsInvited">
 		        	<div class="d-flex align-center justify-space-between list-company pa-4">
@@ -176,7 +177,7 @@
 		        	    </div>
 		        	    <div class="company-title text-left pl-4">
 		        	      <h4>{{company.firstName}} {{company.lastName}} </h4>
-										<p>{{company.company}}</p>
+										<p class="mb-0">{{company.company}}</p>
 
 		        	    </div>
 		        	  </div>
@@ -185,7 +186,7 @@
 		        	  </div>
 		        	</div>
 		        </template>
-
+		       
 		        <template  v-for="(company,index) in repsInvited">
 		        	<div class="d-flex align-center justify-space-between list-company pa-4" v-if="!company.companyId">
 		        	  <div class="comapny-data d-flex align-center">
@@ -302,6 +303,7 @@
                 ></v-text-field>
 
                 <v-btn
+									:loading="loadingInvite"
                   :disabled="!valid"
                   color="#0D9648"
                   class="mr-4 text-capitalize white--text font-weight-bold"
@@ -381,6 +383,7 @@ export default {
       newRepsInvited: [],
       filterAfter: [],
       inviteCount: 1,
+			loadingInvite: false,
     };
   },
   computed: {
@@ -430,6 +433,17 @@ export default {
   				}
     	}
     },
+		newSupplierFiltered() {
+    	if (this.$store.getters.bidData.invitedNewSuppliers) {
+  			if (this.$route.name == 'EditBid') {
+  				if (this.inviteCount == 1) {
+  					this.newRepsInvited = this.$store.state.bid.invitedNewSuppliers;
+  				}
+  			} else if (this.inviteCount == 1) {
+  					this.newRepsInvited = this.$store.state.bid.invitedNewSuppliers;
+  				}
+    	}
+    },
     validat() {
     	if (this.repsInvited.length > 0) {
     		this.$emit('validation', { valid: true, supplier: '2' });
@@ -467,6 +481,7 @@ export default {
     		bidDueTime: this.$store.getters.bidData.dueTime,
     	};
     	if (this.$refs.form.validate()) {
+				this.loadingInvite = true;
     		try {
     			const user = await this.inviteNewSupplier(supplier);
     			this.supplierDialog = false;
@@ -475,6 +490,8 @@ export default {
     			this.newCount = this.newRepsInvited.length;
     			this.$store.commit('setInvitedNewSuppliers', this.newRepsInvited);
     			this.$refs.form.reset();
+					this.loadingInvite = false;
+					this.phoneNumber = '';
     		} catch (error) {
     			console.log(error);
     		}
@@ -498,10 +515,7 @@ export default {
       this.getCompanyInfo({ id, name });
     },
     addReps(list, index) {
-    	// const data = {
-    	// 	type: 'user',
-    	// 	item: list,
-    	// };
+    	
     	this.oldCount = this.repsInvited.length;
     	this.repsInvited.push(list);
     	this.inviteCount = 2;
@@ -531,10 +545,7 @@ export default {
     	this.getCompanyByServices(category);
     },
     addCompany(company, index) {
-    	// const data = {
-    	// 	type: 'company',
-    	// 	item: company,
-    	// };
+    	
     	this.oldCount = this.repsInvited.length;
     	this.repsInvited.push(company);
     	this.inviteCount = 2;
@@ -545,10 +556,7 @@ export default {
     	this.$store.commit('setInvitedSuppliersData', unique);
     },
     addServiceCompany(company, index) {
-    	// const data = {
-    	// 	type: 'company',
-    	// 	item: company,
-    	// };
+    	
     	this.oldCount = this.repsInvited.length;
     	this.repsInvited.push(company);
     	this.inviteCount = 2;
@@ -592,13 +600,15 @@ export default {
     },
   },
   beforeMount() {
+    this.user = this.$store.getters.userInfo;
   	this.getCategories();
   	this.getSales();
   	this.getCompanies();
   },
   mounted() {
-  	this.user = this.$store.getters.userInfo;
     this.savedraftOnInterval();
+    this.filteredEntries;
+		this.newSupplierFiltered;
   },
 };
 </script>

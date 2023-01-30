@@ -59,10 +59,20 @@
                     <div class="d-flex justify-space-between align-center mb-5 label-title">
                       <h1 class="font-weight-bold">RFx Platform - Create Bids</h1>
                       <v-sheet>
-                        <v-switch
-                          v-model="rfxModule"
-                          inset @change="rfxToggle"
-                        ></v-switch>
+                        
+                        <template v-if="moduleRfxOption == true">
+                          <v-switch
+                            v-model="rfxModule"
+                            inset @change="rfxToggle"
+                          ></v-switch>
+                        </template>
+                        <template v-else>
+                          <v-switch
+                            v-model="moduleRfxOption"
+                            inset @change="rfxToggle"
+                          ></v-switch>
+                        </template>
+                        
                       </v-sheet>
                     </div>
                     <p class="font-weight-medium">BidOut's flagship RFP Platform. The ability to create and distribute RPF's to BidOut's network of <br>service providers.</p>
@@ -72,15 +82,21 @@
                   </div>
                 </template>
                 <template>
+                  
                   <div class="create-bid text-left mt-10 pa-4" v-if="ofsContractData && ofsContractData.length > 0">
                     <div class="d-flex justify-space-between align-center mb-5 label-title">
                       <h1 class="font-weight-bold">Respond to Bids - OFS Directory</h1>
                       <h1 class="price-text"><span v-if="ofsContractData[0].contractType == 'ofs'">Free</span><span v-else>
-                        <template v-if="package.id == 1">$79.99/month</template>
-                        <template v-if="package == 1">$79.99/month</template>
-                        <template v-if="package == 2">$99.99/month</template>
-                        <template v-if="package == 3">$119.99/month</template>
-                        <template v-if="package == 4">$2400/year</template>
+                        <!-- <template v-if="package.id == 1">$79.99/month</template> -->
+                        
+                        <template v-if="packageValue == 1 && billingCycle == 'Yearly'">$800/year</template>
+                        <template v-if="packageValue == 1 && billingCycle == 'Monthly'">$79.99/month</template>
+                        <template v-if="packageValue == 2 && billingCycle == 'Yearly'">$1,000/year</template>
+                        <template v-if="packageValue == 2 && billingCycle == 'Monthly'">$99.99/month</template>
+                        <template v-if="packageValue == 3 && billingCycle == 'Yearly'">$1,200/year</template>
+                        <template v-if="packageValue == 3 && billingCycle == 'Monthly'">$119.99/month</template>
+                        <template v-if="packageValue == 4 && billingCycle == 'Yearly'">$2,400/year</template>
+                        <template v-if="packageValue == 4 && billingCycle == 'Monthly'">$239.99/month</template>
                       </span></h1>
                       <v-sheet>
                         <v-icon color="#0D9647">mdi-check-circle-outline</v-icon>
@@ -119,7 +135,7 @@
                     <v-row>
                       <v-col cols="12" sm="12" v-show="ofsContractData[0].contractType == 'ofs-premium'">
                         <label class="d-block text-left input-label mb-2 font-weight-bold">Sales Team Contacts</label>
-                        <v-select outlined placeholder="Select" v-model="package" :items="packages" item-text="name" item-value="id" :disabled="true"></v-select>
+                        <v-select outlined placeholder="Select" v-model="packageValue" :items="packages" item-text="name" item-value="id" :disabled="true"></v-select>
                       </v-col>
                     </v-row>
                     <v-row>
@@ -157,11 +173,20 @@
                         <template v-if="package == 4 && billingCycle == 'Monthly'">$239.99/month</template>
                       </span></h1>
                       <v-sheet>
-                        <v-switch
-                          v-model="ofsModule"
-                          inset
-                          @change="ofsToggle"
-                        ></v-switch>
+                        <template v-if="moduleOfsOption == true">
+                          <v-switch
+                            v-model="ofsModule"
+                            inset
+                            @change="ofsToggle"
+                          ></v-switch>
+                        </template>
+                        <template v-else>
+                          <v-switch
+                            v-model="moduleOfsOption"
+                            inset
+                            @change="ofsToggle"
+                          ></v-switch>
+                        </template>
                       </v-sheet>
                     </div>
                     <p class="font-weight-medium">Respond to bid invitations & showcase your services to oil and gas operators to gain access to <br>greater visibility.</p>
@@ -169,7 +194,7 @@
                       <v-radio-group
                         v-model="trial_end"
                         mandatory
-                        row
+                        row :disabled="!moduleOfsOption"
                       >
                         <v-radio
                           label="Standard Edition (Free)"
@@ -186,19 +211,19 @@
                     <v-row>
                       <v-col cols="12" sm="12" v-show="trial_end == 'premium'">
                         <label class="d-block text-left input-label mb-2 font-weight-bold">Billing Cycle</label>
-                        <v-select outlined hide-details placeholder="Select" v-model="billingCycle" :items="cycle" @change="getCycle"  :disabled="ofsModule == true ?  false : true" class="text-capitalize"></v-select>
+                        <v-select outlined hide-details placeholder="Select" v-model="billingCycle" :items="cycle" @change="getCycle"  :disabled="moduleOfsOption == true ?  false : true" class="text-capitalize"></v-select>
                       </v-col>
                     </v-row>
                     <v-row>
                       <v-col cols="12" sm="12" v-show="trial_end == 'premium'">
                         <label class="d-block text-left input-label mb-2 font-weight-bold">Sales Team Contacts</label>
-                        <v-select outlined placeholder="Select" v-model="package" :items="packages" item-text="name" item-value="id" @change="getPackage" :disabled="ofsModule == true ?  false : true"></v-select>
+                        <v-select outlined placeholder="Select" v-model="package" :items="packages" item-text="name" item-value="id" @change="getPackage" :disabled="moduleOfsOption == true ?  false : true"></v-select>
                         
                       </v-col>
                     </v-row>
                     <v-row v-if="trial_end == 'premium'">
                       <v-col cols="12" sm="4" text="left">
-                        <v-btn color="#0D9647" large dense width="260px" height="56" class="font-weight-bold white--text text-capitalize pa-4" @click="generateContract('ofs-premium')" :disabled="ofsBtn == true ?  false : true" :loading="loading">Execute Agreement Now <v-icon class="pl-2" color="#fff">mdi-arrow-right-circle</v-icon></v-btn>
+                        <v-btn color="#0D9647" large dense width="260px" height="56" class="font-weight-bold white--text text-capitalize pa-4" @click="generateContract('ofs-premium')" :disabled="moduleOfsOption == true ?  false : true" :loading="loading">Execute Agreement Now <v-icon class="pl-2" color="#fff">mdi-arrow-right-circle</v-icon></v-btn>
                       </v-col>
                     </v-row>
                     <v-row v-else>
@@ -344,7 +369,7 @@
 <script>
   import NavbarBeforeLogin from '../../components/Layout/NavbarBeforeLogin.vue'
   import Footer from '../../components/Layout/Footer.vue'
-  import { mapActions } from "vuex";
+  import { mapActions,mapGetters } from "vuex";
 export default {
   name : "ModuleSelection",
   components: {
@@ -382,6 +407,7 @@ export default {
     };
   },
   computed:{
+    ...mapGetters(["packageValue","moduleRfxOption"]),
    companyName(){
     return this.$store.getters.companyName;
    },
@@ -425,13 +451,13 @@ export default {
    buttonStatus(){
     if(this.rfxModuleSign == true && this.ofsModuleSign == true){
       return false;
-    }else if(this.rfxModuleSign == true && this.ofsModule == true){
+    }else if(this.rfxModuleSign == true && this.moduleOfsOption == true){
       return true;
-    }else if(this.ofsModuleSign == true && this.rfxModule == true){
+    }else if(this.ofsModuleSign == true && this.moduleRfxOption == true){
       return true;
-    }else if(this.rfxModuleSign == true && this.ofsModule == false){
+    }else if(this.rfxModuleSign == true && this.moduleOfsOption == false){
       return false;
-    }else if(this.ofsModuleSign == true && this.rfxModule == false){
+    }else if(this.ofsModuleSign == true && this.moduleRfxOption == false){
       return false;
     }else{
       return false;
@@ -442,6 +468,14 @@ export default {
    },
    userid(){
     return this.$store.getters.id;
+   },
+   moduleRfxOption(){
+    this.rfxBtn = this.$store.getters.moduleRfxOption;
+    return this.$store.getters.moduleRfxOption;
+   },
+   moduleOfsOption(){
+    this.ofsBtn = this.$store.getters.moduleOfsOption;
+    return this.$store.getters.moduleOfsOption;
    }
   },
   methods: {
@@ -494,7 +528,9 @@ export default {
         userId: this.$store.getters.id,
         customer_id: this.$store.getters.customerId,
         unit_price: this.unit_price,
+        package: this.package,
       }
+
       this.contractGenerate(contract);
       if(type == 'ofs-premium'){
         this.loading = 'loading';
@@ -529,8 +565,16 @@ export default {
         this.billingCycle = 'Yearly';
       }
     },
-    rfxToggle(){this.rfxBtn = !this.rfxBtn; },
-    ofsToggle(){this.ofsBtn = !this.ofsBtn},
+    rfxToggle(){
+      this.rfxBtn = !this.rfxBtn; 
+      this.$store.commit('setModuleRfxOption',this.rfxBtn);
+      
+    },
+    ofsToggle(){
+      this.ofsBtn = !this.ofsBtn
+      this.$store.commit('setModuleOfsOption',this.ofsBtn);
+
+    },
   },
   mounted() {
     document.title = "Module Selection - BidOut" 

@@ -110,7 +110,11 @@ export default {
         return this.$store.getters.g_activityPanel;
     },
     activities(){
-      return _.orderBy(this.$store.getters.activities.slice(0,40),'date','desc');
+      if(this.$store.getters.activities){  
+        return _.orderBy(this.$store.getters.activities.slice(0,40),'date','desc');
+      }else{
+        return [];
+      }
     },
     loading(){
      return this.$store.getters.pageLoader;

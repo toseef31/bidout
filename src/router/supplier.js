@@ -1,4 +1,3 @@
-// import Base from '@/components/Layout/Base.vue';
 import Settings from '@/components/Layout/Settings.vue';
 import store from '@/store';
 
@@ -14,7 +13,9 @@ const routes = [
         component: () => import('@/views/Ofs/ViewOFsSupplier.vue'),
         beforeEnter: (to, from, next) => {
            if(store.getters.userInfo == null) {
-               next('/login');
+               store.dispatch('getCurrentUser').then((data) => {
+                 next();
+               });
            } else {
                next();
            }
@@ -26,7 +27,9 @@ const routes = [
         component: () => import('@/views/Ofs/SupplierListing.vue'),
          beforeEnter: (to, from, next) => {
             if(store.getters.userInfo == null) {
-                next('/login');
+              store.dispatch('getCurrentUser').then((data) => {
+                next();
+              });
             } else {
                 next();
             }
@@ -38,7 +41,9 @@ const routes = [
         component: () => import('@/views/Ofs/SupplierListing.vue'),
          beforeEnter: (to, from, next) => {
             if(store.getters.userInfo == null) {
-                next('/login');
+              store.dispatch('getCurrentUser').then((data) => {
+                next();
+              });
             } else {
                 next();
             }
@@ -50,7 +55,9 @@ const routes = [
         component: () => import('@/views/EditProfile.vue'),
         beforeEnter: (to, from, next) => {
            if(store.getters.userInfo == null) {
-               next('/login');
+              store.dispatch('getCurrentUser').then((data) => {
+                next();
+              });
            } else {
                next();
            }
@@ -62,7 +69,9 @@ const routes = [
         component: () => import('@/views/Ofs/Company.vue'),
         beforeEnter: (to, from, next) => {
            if(store.getters.userInfo == null) {
-               next('/login');
+              store.dispatch('getCurrentUser').then((data) => {
+                next();
+              });
            } else {
                next();
            }
@@ -74,7 +83,9 @@ const routes = [
         component: () => import('@/views/Ofs/PlaceOrder.vue'),
         beforeEnter: (to, from, next) => {
            if(store.getters.userInfo == null) {
-               next('/login');
+              store.dispatch('getCurrentUser').then((data) => {
+                next();
+              });
            } else {
                next();
            }
@@ -86,17 +97,15 @@ const routes = [
         component: () => import('@/views/Ofs/OrderConfirm.vue'),
         beforeEnter: (to, from, next) => {
            if(store.getters.userInfo == null) {
-               next('/login');
+              store.dispatch('getCurrentUser').then((data) => {
+                next();
+              });
            } else {
                next();
            }
        }
       },
-      // { 
-      //   path: "*", 
-      //   component: () => import('@/components/PageNotFoundLogin.vue'),
-         
-      // }
+      
     ],
   },
 ];

@@ -31,6 +31,7 @@
                 </p>
                 <v-btn
                   color="#0D9648"
+                  :loading="publishLoading"
                   :disabled="!bidDetailsComplete || !lineItemsComplete ? true : false"
                   class="white--text text-capitalize publish-btn"
                   width="250px"
@@ -196,6 +197,7 @@ export default {
       attachValue: '',
       questionValid: '',
       questionValue: '',
+      publishLoading: false,
     };
   },
   computed: {
@@ -234,7 +236,7 @@ export default {
       this.bidTitle = event.bidTitle;
     },
     validateSupplier(event) {
-      console.log(event);
+      
       this.supplierValid = event.valid;
       this.supplierValue = event.supplier;
     },
@@ -247,18 +249,21 @@ export default {
       this.itemsValue = event.items;
     },
     validateAttachment(event) {
-      console.log(event);
+      
       this.attachValid = event.valid;
       this.attachValue = event.attach;
     },
     async publishBid() {
+      this.publishLoading = true;
       try {
         const serial = await this.$store.dispatch('publishBid');
-        console.log(serial);
+        
         this.$router.push(`/view-bids/${serial}?new=true`);
         this.$store.commit('setDraftBidsList', null);
+        this.publishLoading = false;
       } catch (error) {
         console.log(error);
+        this.publishLoading = false;
       }
     },
     async updateDraft(){
@@ -266,8 +271,8 @@ export default {
     }
   },
   mounted() {
-    document.title = 'Create Template - BidOut';
-    this.users = JSON.parse(localStorage.getItem('userData')).user;
+    document.title = 'Create Bid - BidOut';
+    this.users = this.$store.getters.userInfo;
   },
 };
 </script>

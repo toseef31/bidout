@@ -98,7 +98,7 @@
 
           <v-row justify="center">
             <v-col cols="12">
-              <v-btn color="#0D9648" height="56" class="text-capitalize white--text font-weight-bold save-btn px-9" :disabled="!valid" @click="changeTab" large>Save Changes</v-btn>
+              <v-btn color="#0D9648" height="56" class="text-capitalize white--text font-weight-bold save-btn px-9" :loading="loading" :disabled="!valid" @click="changeTab" large>Save Changes</v-btn>
             </v-col>
           </v-row>
           <template v-if="route != 'EditTemplate'">
@@ -147,6 +147,7 @@
 </template>
 <script>
 import { mapActions, mapGetters } from 'vuex';
+import moment from 'moment-timezone';
 
 export default {
   data() {
@@ -160,6 +161,14 @@ export default {
       ],
       dueDateRules: [
         (v) => !!v || 'Due date is required',
+        (v) => {
+          const currentDate = moment.tz('America/Chicago');
+          const momentDueDate = moment.tz(v, 'America/Chicago');
+
+          if (moment(momentDueDate).isBefore(currentDate)) return 'Due Date cannot be today or in the past';
+
+          return true;
+        },
       ],
       dueTimeRules: [
         (v) => !!v || 'Please select due time',
@@ -184,6 +193,8 @@ export default {
       formStatus: false,
       dialog: false,
       route: '',
+      isTemplate: false,
+      loading: false,
     };
   },
   computed: {
@@ -215,9 +226,17 @@ export default {
     },
     dueDate: {
       get() {
+        if (this.isTemplate) {
+          let currentDate = moment.tz('America/Chicago');
+          currentDate = currentDate.add(10, 'days');
+          this.$store.commit('setBidDueDate', currentDate.format('YYYY-MM-DD'));
+
+          return currentDate.format('YYYY-MM-DD');
+        }
         if (!this.$store.getters.bidData.id) {
           return '';
         }
+
         return this.$store.getters.bidData.dueDate;
       },
       set(value) {
@@ -312,6 +331,8 @@ export default {
           company: this.userInfo.company.company,
         };
         if (this.$refs.form.validate()) {
+          this.valid = true;
+          this.loading = true;
           if (this.$route.name == 'EditTemplate') {
             if (!this.$store.getters.bidData.id) {
               await this.saveTemplateBid(bidDetails);
@@ -421,7 +442,7 @@ export default {
     this.route = this.$route.name;
 
     if (this.$store.getters.entryCheckForEditBid) {
-    this.$router.push('/view-bids')
+      this.$router.push('/view-bids');
     }
     this.$store.commit('setInvitedSuppliersData', this.$store.getters.bidData.invitedSuppliers);
     this.$store.commit('setInvitedNewSuppliers', this.$store.getters.bidData.invitedNewSuppliers);
@@ -440,6 +461,7 @@ export default {
     }
     this.$store.commit('setQuestions', this.$store.getters.bidData.questions);
     if (this.$store.getters.bidData.statusType == 'templateBid') {
+      this.isTemplate = true;
       this.savedraft();
     }
     this.savedraftOnInterval();

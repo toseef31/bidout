@@ -130,7 +130,7 @@
                       <div class="profile-list" v-for="excutive in companyInfo.executiveLeadership">
                         <v-img  width="175px" height="175px" :src="excutive.profilePicture"></v-img>
                         <h6>{{excutive.name}}</h6>
-                        <p>{{excutive.role}}</p>
+                        <p class="mb-1">{{excutive.role}}</p>
                         <a v-if="excutive.linkedin" class="text-decoration-none" target="_blank" :href="excutive.linkedin">
                           <v-icon color="#013D3A">mdi-linkedin</v-icon>
                         </a>
@@ -320,7 +320,7 @@ export default {
     if (!mapAlreadyAttached) {
       const mapScript = document.createElement('script');
       mapScript.id = mapScpt;
-      mapScript.src = `https://maps.googleapis.com/maps/api/js?key=${import.meta.env.VITE_GOOGLE_MAP}&libraries=places`;
+      mapScript.src = `https://maps.googleapis.com/maps/api/js?key=${import.meta.env.VITE_GOOGLE_MAP}&libraries=places&callback=Function.prototype`;
       document.head.appendChild(mapScript);
     }
     await this.viewPublicCompany();

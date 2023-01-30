@@ -45,9 +45,9 @@ export default {
       });
   },
   manageUsers({commit,dispatch,state},payload){
-    axios.get('/company/getUsersByCompany/'+ payload)
+    const name = decodeURIComponent(payload);
+    axios.get('/company/getUsersByCompany/'+ name)
       .then(responce => {
-        console.log(responce.data);
         if(responce.status === 200){
           commit('getUsersList',responce.data)
         }
@@ -178,15 +178,18 @@ export default {
           console.log(err);
       })
   }, 
-  async getAllLocations({commit},payload){
-    // commit('setPageLoader',true)
-    try{
-      const res = await axios.get('/company/getCompanyLocations');
-      commit('setAllLocations',res.data)
-      // commit('setPageLoader',false)
-    }catch(err){
-      console.log(err);
-    }  
+  
+  getAllLocations({commit,dispatch}){
+    return new Promise(async (resolve, reject) => {
+      try{
+        const res = await axios.get('/company/getCompanyLocations');
+        commit('setAllLocations',res.data)
+        resolve(res.data);
+      }catch(err){
+        console.log(err);
+        reject(err)
+      }
+    });
   }, 
   async getBidDashboard({commit,dispatch}, payload){
     var config = {

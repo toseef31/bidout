@@ -30,9 +30,8 @@ export default {
               commit('setCompany',responce.data)
             })
             commit('setUser',responce.data)
-            localStorage.setItem('userData', JSON.stringify(responce.data)); 
-            // router.push('/dashboard');
-            window.location.href ="/dashboard";
+            
+            window.location.href = "/dashboard";
           }
           
         })
@@ -42,6 +41,22 @@ export default {
         // commit('showErrorAlert')
       })
   },  
+  getCurrentUser({commit,dispatch}){
+    return new Promise((resolve, reject) => {
+      firebase.auth().onAuthStateChanged(function(users) {
+        if (users) {
+          axios.get('/user/getUserData/'+users.multiFactor.user.email)
+           .then(responce => {
+              commit('setUser',responce.data)
+              resolve(responce.data);
+           })
+        } else {
+          dispatch('signOutAction');
+          reject("User is not logged In")
+        }
+      });
+    });
+  },
   signOutAction({ commit }) {
     
     // Try to sigout
@@ -49,15 +64,15 @@ export default {
       .auth()
       .signOut()
       .then((result) => {
-        commit('setUser', null)
         commit('setToken', null)
         commit('setUserId', null)
         commit('setError', null)
         commit('setCompany', null)
         commit('setCredentials', null)
-        // console.log(result);
+        commit('setUser', null)
+        
         localStorage.removeItem("userData");
-        // localStorage.removeItem("userId");
+       
         localStorage.removeItem("token");
         localStorage.removeItem("companyData");
         router.replace({
@@ -82,9 +97,9 @@ export default {
         commit('setError', null)
         commit('setCompany', null)
         commit('setCredentials', null)
-        // console.log(result);
+       
         localStorage.removeItem("userData");
-        // localStorage.removeItem("userId");
+        
         localStorage.removeItem("token");
         localStorage.removeItem("companyData");
         localStorage.removeItem("companyId");
@@ -102,7 +117,7 @@ export default {
     // Try to sendForgot email
     axios.post('/auth/sendPasswordResetEmail',{'email': payload.email})
      .then(responce => {
-      // console.log(responce.data.message);
+      
       // if(responce.status == 200){
         commit('setEmailSuccess', 'If this account exists, a password reset email has been sent to the email address for the account.');
     }, (err) => {
@@ -171,7 +186,7 @@ export default {
                 // localStorage.setItem("userId",payload.id);
                 commit('setCompanyId', payload.id);
                 commit('setCompanyName', payload.companyName);
-                commit('setCompanyAdmins', responce.data.admins);
+                commit('setQueueAdmins', responce.data.admins);
                 router.replace({
                   name: "ExistingAccount"
                 });
@@ -293,13 +308,13 @@ export default {
   },
   // Get IP
   getIpAddress({ commit }, payload){
-    console.log("dasdasd");
+    
     const res = fetch('https://api.ipify.org?format=json',{
       method: 'get',
     }).then(response => response.json())
     .then(json =>{
       commit('setLocalIp', json.ip)
-      console.log(json.ip);
+      
     }).catch(err => {
       console.log(err);
     });
@@ -307,13 +322,14 @@ export default {
 
   // signAgreement
   contractGenerate({commit}, payload){
-    // console.log(payload,'contract');
+    
     axios.post('/ofs/generateContract',{'id': payload.id,'ip': payload.ip,'contractType': payload.contractType, 'plan': payload.plan,'userId':payload.userId})
      .then(responce => {
       if(responce.status == 200){
         commit('setContract', responce.data)
         commit('setPlan', payload.plan)
         commit('setPrice',payload.unit_price)
+        commit('setPackage',payload.package)
         router.replace({
           name: "Contract"
         });

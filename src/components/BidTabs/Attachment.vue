@@ -120,9 +120,8 @@ export default {
     docsList() {
       if(this.$store.getters.bidData != null){
         if(this.$store.getters.bidData.statusType == 'template'){
-          console.log(this.$store.getters.bidData.statusType);
           if(this.$store.getters.bidData.attachment != "" || this.$store.state.bid.attachement != ""){
-            console.log(this.$store.getters.bidData,'bid',this.$store.state.bid);
+          
             if(this.$store.getters.attachData){
               const attch = [...new Map(this.$store.getters.attachData.map((m) => [m.size, m])).values()]
               var totalDay = this.$store.state.bid.attachement.concat(attch);
@@ -194,7 +193,6 @@ export default {
       this.fileName = this.file.name;
       this.fileExt = this.fileName.split(".").pop();
       this.fileSize = (this.file.size / (1024 * 1024)).toFixed(2);
-      console.log('before',this.uploadDoc);
       this.uploadDoc.push(this.file);
       const head = Date.now().toString();
       const tail = Math.random().toString().substr(2);
@@ -205,6 +203,20 @@ export default {
       await this.uploadBidAttach(data);
       this.isAttaching = false;
       this.attachStatus = true;
+      if(this.$route.name == 'EditBid'){
+        this.$store.commit('setAttachement',this.docsList);
+        this.updateBid({ attachement: this.docsList });
+      }else if(this.$route.name == 'EditTemplate'){
+        this.$store.commit('setAttachement',this.docsList);
+        this.updateTemplate({ attachement: this.docsList });
+        this.uploadDoc = [];
+      }else{
+        
+        this.$store.commit('setAttachement',this.docsList);
+        this.updateDraftBid({ attachement: this.docsList });
+        this.uploadDoc = [];
+      }
+
     },
     size(size) {
       const sizeInMB = (size / (1024 * 1024)).toFixed(2);

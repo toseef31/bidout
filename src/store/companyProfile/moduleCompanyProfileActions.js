@@ -197,7 +197,7 @@ export default {
       });
   },  
   updateBasicProfile({commit,dispatch,state}, payload){
-    axios.post('/company/updateBasicProfile/',{'companyId': payload.companyId,'profileName': payload.profileName,'profileSummary': payload.profileSummary})
+    axios.post('/company/updateBasicProfile/',{'userId': payload.userId,'companyId': payload.companyId,'profileName': payload.profileName,'profileSummary': payload.profileSummary})
      .then(responce => {
       
       if(responce.status === 200){
@@ -606,7 +606,7 @@ export default {
       });
   },
   editCompanyExcutive({commit,dispatch,state}, payload){
-    // console.log(payload);
+  
     axios.post('/company/updateCompanyLeadership/',{'companyId': payload.companyId, 'leadershipData': payload.leadership})
      .then(responce => {
       

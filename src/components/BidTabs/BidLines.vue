@@ -1,7 +1,31 @@
 <template>
   <div>
     <div class="bidline-section">
-      <h4 class="text-left pl-4 font-weight-bold black--text my-4">Bid Line Items</h4>
+      <div class="d-flex justify-space-between align-center">
+        <h4 class="text-left pl-4 font-weight-bold black--text my-4">Bid Line Items</h4>
+        <div>
+          <v-tooltip top >
+            <template v-slot:activator="{ on, attrs }">
+            
+             <a v-bind="attrs" class="mr-4 text-capitalize text-decoration-none export-excel" href="https://firebasestorage.googleapis.com/v0/b/bidout-dev.appspot.com/o/wordTemplates%2FlineItemsTemplate%20(2).xlsx?alt=media&token=e03e4a03-1a34-413a-81e4-4a0fbaef9f78" download width="125px"
+              v-on="on"  icon color="#0D9648">
+               <v-icon size="24" class="pl-2" color="#0d9648">mdi-information-outline
+               </v-icon>
+            </a>
+            </template>
+            <span>Click here to download the <strong>Excel template</strong></span>
+          </v-tooltip>
+          <v-tooltip top >
+            <template v-slot:activator="{ on, attrs }">
+              <label class="import-excel btn" for="import" v-bind="attrs" v-on="on">
+                Import <v-icon size="30" color="#0d9648">mdi-microsoft-excel</v-icon>
+                <input type="file" id="import" class="d-none" @change="onChange" />
+              </label>
+            </template>
+              <span>Import the <strong>Excel Template</strong> to upload line items</span>
+          </v-tooltip>
+        </div>
+      </div>
 
         <input type="hidden" name="" :value="validate">
         {{validate}}
@@ -102,6 +126,7 @@
 <script>
 import draggable from 'vuedraggable';
 import { v4 as uuidv4 } from 'uuid';
+import * as XLSX from 'xlsx';
 import { mapActions } from 'vuex';
 
 export default {
@@ -110,10 +135,13 @@ export default {
   },
   data() {
     return {
+      on: '',
+      attrs:'',
       availableSearch: ['All', 'Company'],
       availableSuppl: null,
       inputType: ['USD'],
-      units: ['Feet', 'Pound', 'Ton', 'Mile', 'Gallon', 'Barrell', 'Day', 'Each', 'Hourly', 'N/A'],
+      excelHeader: ['Description', 'Unit', 'Quantity', 'BuyerComment'],
+      units: ['Feet', 'Pound', 'Ton', 'Mile', 'Gallon', 'Barrell', 'Day', 'Each', 'Hourly','Stage','Job', 'N/A'],
       exampleItems: [],
       qtyRules: [
         (v) => !!v || 'This field is required',
@@ -170,7 +198,7 @@ export default {
   watch: {
     bidLines: {
       handler() {
-        this.validate();
+        this.validate;
       },
       deep: true,
     },
@@ -217,6 +245,51 @@ export default {
       this.bidLines.splice(index, 1);
       this.bidLinesStatus = true;
     },
+    exportF() {
+      const header = this.excelHeader;
+
+      const dataD = [];
+      let index;
+
+      this.bidLines.forEach((el, lIndex) => {
+        dataD.push([el.description]);
+      });
+      dataD.unshift(header);
+      const data = XLSX.utils.json_to_sheet(dataD, {skipHeader: true});
+      const wb = XLSX.utils.book_new();
+      XLSX.utils.book_append_sheet(wb, data, 'data');
+      XLSX.writeFile(wb, `line.xlsx`);
+    },
+    onChange(event) {
+      this.file = event.target.files ? event.target.files[0] : null;
+      if (this.file) {
+        const reader = new FileReader();
+
+        reader.onload = (e) => {
+          const bstr = e.target.result;
+          const wb = XLSX.read(bstr, { type: 'binary' });
+          const wsname = wb.SheetNames[0];
+          const ws = wb.Sheets[wsname];
+          const data = XLSX.utils.sheet_to_json(ws, { header: 0,skipHeader:true });
+          for (let i = 0; i < data.length; i++) {
+            this.bidLines.push({
+              id: uuidv4(),
+              type: 'USD',
+              inputType: 'USD',
+              units: ['Gallon', 'Liter'],
+              description: data[i].Description,
+              unit: data[i].Unit,
+              quantity: data[i].Quantity,
+              buyerComment: data[i].BuyerComment,
+              switch1: '',
+              required: ((data[i].Required == 'Yes') ? true : false),
+            });
+          }
+        }
+
+        reader.readAsBinaryString(this.file);
+      }
+    },
     savedraftOnInterval(){
       const timer = setInterval(() => {
         if(this.bidLinesStatus == true){
@@ -239,6 +312,15 @@ export default {
   mounted(){
     if(this.$store.getters.bidData.lineItems != ""){
       this.bidLines = this.$store.getters.bidData.lineItems;
+      this.bidLines = JSON.parse(JSON.stringify(this.bidLines.map((item, index) => {
+      if(item.required == "true"){
+        item.required = true;
+      }else{
+        item.required = false;
+      }
+      return item;
+      })));
+      
       this.$emit('validation', { valid: true, items: '4' });
       this.$store.commit('setLineItemsComplete', true);
       this.$store.commit('setBidlines',this.bidLines);

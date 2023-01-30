@@ -119,14 +119,24 @@ export default {
    },
    contractData(){
     return this.$store.getters.contractData;
-   }
+   },
+  
   },
+ 
   methods: {
     ...mapActions(["getIpAddress","signAgreement"]),
+    
     sign() {
       const { isEmpty, data } = this.$refs.signaturePad.saveSignature();
-      
-      var agreement = {
+      if(isEmpty){
+        this.$toasted.show(`Please sign the contract to proceed.`, {
+          class: 'error-toast',
+          duration: 5000,
+          type: 'error',
+          position: 'top-center',
+        });
+      }else{
+        var agreement = {
         contractType : this.$store.getters.contractData.contractType,
         fileName : this.$store.getters.contractData.fileName,
         sign: data,
@@ -138,6 +148,8 @@ export default {
       this.signAgreement(agreement);
       this.loading = 'loading';
       this.disable = true;
+      }
+      
     },
     undo() {
       this.$refs.signaturePad.undoSignature();

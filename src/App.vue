@@ -6,7 +6,7 @@
 export default {
   name: 'Settings',
   metaInfo: {
-    // title: 'BidOut – Oil & Gas Procurement Platform',
+    
     meta: [
       {
         vmid: 'title',
@@ -30,13 +30,6 @@ export default {
     this.timer = setInterval(() => {
       this.$store.dispatch('refreshToken');
     }, 3480000);
-    // window.addEventListener('beforeunload', () => { 
-    //   localStorage.setItem('userData', JSON.stringify(this.$store.state.auth.userInfo)); 
-    // });
-    // window.addEventListener('load', (event) => {
-    //   this.$store.state.auth.userInfo = JSON.parse(localStorage.getItem('userData'));
-    //   localStorage.removeItem('userData');
-    // });
   },
   beforeDestroy() {
     clearInterval(this.timer);

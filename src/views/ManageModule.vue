@@ -92,6 +92,7 @@ export default {
     },
     moduleData(){
       if(this.$store.getters.userInfo.company.contracts){
+       
         return this.$store.getters.userInfo.company.contracts.filter((item)=>{
           return this.$store.getters.userInfo.id == item.signedBy
         })

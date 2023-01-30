@@ -39,6 +39,7 @@
                   height="52px"
                   large
                   @click="publishBid"
+                  :loading="saveLoading"
                 >
                   Save Bid
                 </v-btn>
@@ -198,6 +199,7 @@ export default {
       attachValue: '',
       questionValid: '',
       questionValue: '',
+      saveLoading: false,
     };
   },
   computed: {
@@ -239,7 +241,6 @@ export default {
       this.bidTitle = event.bidTitle;
     },
     validateSupplier(event) {
-      console.log(event);
       this.supplierValid = event.valid;
       this.supplierValue = event.supplier;
     },
@@ -252,19 +253,21 @@ export default {
       this.itemsValue = event.items;
     },
     validateAttachment(event) {
-      console.log(event);
+     
       this.attachValid = event.valid;
       this.attachValue = event.attach;
     },
     async publishBid() {
+      this.saveLoading = true;
       try {
         await this.publishUpdateBid({serial:this.$route.params.serial});
         this.$router.push(`/view-bids/${this.$route.params.serial}`);
         this.$store.commit('setDraftBidsList', null);
-        // this.$store.commit('setBidData', null);
+        
       } catch (error) {
         console.log(error);
       }
+      this.saveLoading = false;
     },
     async updateDraft(){
       await this.updateBid({'supplier': this.$store.state.bid.invitedSuppliers});
@@ -276,7 +279,6 @@ export default {
   mounted() {
     document.title = 'Create Bid - BidOut';
     this.users = this.userDatas;
-    console.log(this.$route.params.serial,'ddd',this.userDatas.id)
     
   },
 };

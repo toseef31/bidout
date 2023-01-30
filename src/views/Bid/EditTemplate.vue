@@ -28,6 +28,7 @@
                 
                 <v-btn
                   color="#0D9648"
+                  :loading="templateLoading"
                   :disabled="!bidDetailsComplete || !lineItemsComplete ? true : false"
                   class="white--text text-capitalize publish-btn"
                   width="250px"
@@ -46,7 +47,6 @@
               class="bids-tabs"
               fixed-tabs
               hide-slider
-              mobile-breakpoint="767px"
             >
               <v-tab
                 v-for="(item, index) in tabs"
@@ -193,6 +193,7 @@ export default {
       attachValue: '',
       questionValid: '',
       questionValue: '',
+      templateLoading: false,
     };
   },
   computed: {
@@ -231,7 +232,7 @@ export default {
       this.bidTitle = event.bidTitle;
     },
     validateSupplier(event) {
-      console.log(event);
+      
       this.supplierValid = event.valid;
       this.supplierValue = event.supplier;
     },
@@ -244,16 +245,19 @@ export default {
       this.itemsValue = event.items;
     },
     validateAttachment(event) {
-      console.log(event);
+     
       this.attachValid = event.valid;
       this.attachValue = event.attach;
     },
     async publishBid() {
+      this.templateLoading = true;
       try {
         await this.$store.dispatch('publishTemplate');
         this.$router.push('/manage-templates');
+        this.templateLoading = false;
       } catch (error) {
         console.log(error);
+        this.templateLoading = false;
       }
     },
     async updateTemplateBid(){
@@ -264,9 +268,8 @@ export default {
 
   },
   mounted() {
-    document.title = 'Create Bid - BidOut';
-    console.log(this.$route.name);
-    this.users = JSON.parse(localStorage.getItem('userData')).user;
+    document.title = 'Create Template - BidOut';
+    this.users = this.$store.getters.userInfo;
   },
 };
 </script>

@@ -118,15 +118,15 @@ export default {
     	bidCompletionEmailsAll: false,
     	notificationPreference: {
     		bidResponses: {
-    			email: '',
+    			email: true,
     			sms: '',
     		},
     		questionAndAnswers: {
-    			email: '',
+    			email: true,
     			sms: '',
     		},
     		bidCompletionEmails: {
-    			email: '',
+    			email: true,
     			sms: '',
     		},
     	},
@@ -178,11 +178,12 @@ export default {
     		email: this.$store.getters.userInfo.email,
     		notificationPreference: this.notificationPreference,
     	}
-    	// console.log(data);
+    	
     	this.updateNotifications(data);
     }
   },
   mounted() {
+  	this.updateNoti();
     if(this.$store.getters.userInfo.notificationPreference){
     	this.notificationPreference.bidResponses.email = this.$store.getters.userInfo.notificationPreference.bidResponses.email;
     	this.notificationPreference.bidResponses.sms = this.$store.getters.userInfo.notificationPreference.bidResponses.sms;
@@ -200,6 +201,7 @@ export default {
 	    	this.bidCompletionEmailsAll = true;
 	    }
     }
+
 
   } 
 };

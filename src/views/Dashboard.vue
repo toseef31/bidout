@@ -54,8 +54,10 @@
                            >
                              <td class="text-left pr-sm-0" width="60px">{{ bid.serial }}</td>
                              <td class="text-left title-truncate pl-0">{{ bid.title }}</td>
-                             <td class="text-left" width="145px">{{ bid.dueDate | moment('MM/DD/YYYY') }} {{bid.dueTime}}</td>
-                             <td class="text-left d-none d-sm-block pt-3 pl-0" width="65px"><router-link class="text-decoration-none"
+
+                             <td class="text-left" width="145px">{{ formatDate(bid.dueDate)  }} {{bid.dueTime}}</td>
+                             <td class="text-left d-none d-sm-block pt-2 pl-0" width="65px"><router-link class="text-decoration-none"
+
                                :to="{
                                  path: `/view-bids/${bid.serial}`,
                                }"
@@ -113,6 +115,8 @@
   import RightSidebar from '../components/Layout/Dashboard/RightSidebar.vue'
   import _ from 'lodash'
   import { mapActions,mapGetters } from "vuex";
+  import moment from 'moment-timezone';
+
 export default {
   name : "Dashboard",
   components: {
@@ -127,7 +131,7 @@ export default {
       bidss:{},
       mapOptions: {},
       markerOptions: {},
-      map: '',
+      map: null,
       users: '',
     };
   },
@@ -140,7 +144,9 @@ export default {
         return this.$store.getters.g_activityPanel;
     },
     userDatas(){
+      if(this.$store.getters.userInfo){
         return this.$store.getters.userInfo;
+      }
     },
     userToken(){
       return this.$store.getters.userToken;
@@ -182,82 +188,94 @@ export default {
   },
   methods: {
     ...mapActions(["pendingUserCount","getAllLocations","getBidDashboard"]),
+    loadMapScript() {
+        let scriptId = "map-api-script";
+        let mapAlreadyAttached = !!document.getElementById(scriptId);
+        if(!mapAlreadyAttached){
+          let mapScript = document.createElement('script');
+          mapScript.setAttribute("defer", "defer");
+          mapScript.id = scriptId;
+          mapScript.src = 'https://maps.googleapis.com/maps/api/js?key='+import.meta.env.VITE_GOOGLE_MAP+'&libraries=places&callback=Function.prototype';
+          document.head.appendChild(mapScript);
+          mapScript.onload = () => {
+              this.getLocation();
+          }
+        }
+      },
+      formatDate(dueDate) {
+        return dueDate !== '' && dueDate !== null ? moment.tz(dueDate, 'America/Chicago').format('MM/DD/YYYY') : '';
+    },
     getLocation(){
       var LocationsForMap = this.locations;
-      var map = new google.maps.Map(document.getElementById('map'), {
-        zoom: 4,
-        mapId: "2993bb26d878ba6a",
-        center: new google.maps.LatLng(LocationsForMap[0].locations[0].lattitude, LocationsForMap[0].locations[0].longitude),
-        streetViewControl: false,
-        mapTypeControl: false,
-        // mapTypeId: google.maps.MapTypeId.ROADMAP
-      });
+      if(LocationsForMap){
+        this.map = new google.maps.Map(document.getElementById('map'), {
+          zoom: 4,
+          mapId: "2993bb26d878ba6a",
+          center: new google.maps.LatLng(LocationsForMap[0].locations[0].lattitude, LocationsForMap[0].locations[0].longitude),
+          streetViewControl: false,
+          mapTypeControl: false,
+          // mapTypeId: google.maps.MapTypeId.ROADMAP
+        });
 
-      var infowindow = new google.maps.InfoWindow();
+        var infowindow = new google.maps.InfoWindow();
 
-      var marker, i,j;
-      // var latlngbounds =new google.maps.LatLngBounds();
-      for (i = 0; i < LocationsForMap.length; i++) {  
-        for (j = 0; j < LocationsForMap[i].locations.length; j++){
-          marker = new google.maps.Marker({
-            position: new google.maps.LatLng(LocationsForMap[i].locations[j].lattitude, LocationsForMap[i].locations[j].longitude),
-            map: map,
-            title: 'Marker',
-            anchorPoint: new google.maps.Point(0, -29),
-          });
-          var imageAppend;
-          var image = '<h1 id="firstHeading" class="firstHeading"><img src="'+LocationsForMap[i].companyImage+'" height="50px" width="100px"></h1>';
-          if(LocationsForMap[i].companyImage){
-            imageAppend = image;
-          }else{
-            imageAppend = '';
-          }
-          const contentString =
-            '<div id="content">' +
-            '<div id="siteNotice">' +
-            "</div>" +
-            imageAppend +
-            
-            '<div id="bodyContent">' +
-            '<p><b>'+LocationsForMap[i].companyName+': </b><a href="company/'+LocationsForMap[i].companySlug+'">' +
-            "View Profile</a> </p>" +
-            "<p><b>"+LocationsForMap[i].locations[j].location+"<b></p> " +
-            "</div>" +
-            "</div>";
-          google.maps.event.addListener(marker, 'click', (function(marker, i) {
-            return function() {
-              infowindow.setContent(contentString);
-              infowindow.open(map, marker);
+        var marker, i,j;
+        // var latlngbounds =new google.maps.LatLngBounds();
+        for (i = 0; i < LocationsForMap.length; i++) {  
+          for (j = 0; j < LocationsForMap[i].locations.length; j++){
+            marker = new google.maps.Marker({
+              position: new google.maps.LatLng(LocationsForMap[i].locations[j].lattitude, LocationsForMap[i].locations[j].longitude),
+              map: this.map,
+              title: 'Marker',
+              anchorPoint: new google.maps.Point(0, -29),
+            });
+            var imageAppend;
+            var image = '<h1 id="firstHeading" class="firstHeading"><img src="'+LocationsForMap[i].companyImage+'" height="50px" width="100px"></h1>';
+            if(LocationsForMap[i].companyImage){
+              imageAppend = image;
+            }else{
+              imageAppend = '';
             }
-          })(marker, j));
-          // latlngbounds.extend(marker.position);
+            const contentString =
+              '<div id="content">' +
+              '<div id="siteNotice">' +
+              "</div>" +
+              imageAppend +
+              
+              '<div id="bodyContent">' +
+              '<p><b>'+LocationsForMap[i].companyName+': </b><a href="company/'+LocationsForMap[i].companySlug+'">' +
+              "View Profile</a> </p>" +
+              "<p><b>"+LocationsForMap[i].locations[j].location+"<b></p> " +
+              "</div>" +
+              "</div>";
+            google.maps.event.addListener(marker, 'click', (function(marker, i) {
+              return function() {
+                infowindow.setContent(contentString);
+                infowindow.open(this.map, marker);
+              }
+            })(marker, j));
+          }
         }
-      }
-        
-        // map.setCenter(latlngbounds.getCenter());
-        // map.fitBounds(latlngbounds);
+      } 
 
     },
   },
   async created(){
-   let scriptId = "map-api-script";
-   let mapAlreadyAttached = !!document.getElementById(scriptId);
-   if(!mapAlreadyAttached){
-    let mapScript = document.createElement('script')
-    mapScript.id = scriptId;
-    mapScript.src = 'https://maps.googleapis.com/maps/api/js?key='+import.meta.env.VITE_GOOGLE_MAP+'&libraries=places';
-    document.head.appendChild(mapScript);
-    this.users = JSON.parse(localStorage.getItem("userData")).user;
-   }
+     await this.loadMapScript();
+     await this.getAllLocations().then((data) => {
+      this.getLocation();
+    });
   },
   async updated(){
-    await this.getAllLocations();
-    await this.getLocation();
+
   },
-  mounted() {
+  async beforeMount(){
+    
+  },
+  async mounted() {
     document.title = "Dashboard - BidOut";
-    this.pendingUserCount(this.$store.getters.userInfo.company.id)
     this.users = this.$store.getters.userInfo;
+    this.pendingUserCount(this.userDatas.company.id)
     this.getBidDashboard(this.userDatas.id);
   }
 };

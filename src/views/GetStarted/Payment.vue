@@ -429,7 +429,7 @@
           email: this.email,
           phone: this.results,
         }
-        console.log(data);
+        
         this.savePaymentsNet30(data);
         this.loading = 'loading';
         this.disable = true;
