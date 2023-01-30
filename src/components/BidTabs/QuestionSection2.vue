@@ -601,6 +601,9 @@ export default {
     if(this.$store.getters.bidData.questions || this.$store.getters.bidData.questions.length > 0)
     {
       this.categories = this.$store.getters.bidData.questions;
+      this.categories.forEach((cat, index) => {
+        cat.required == "true" ? this.categories[index].required = true : this.categories[index].required = false;
+      });
     }
     this.savedraftOnInterval();
   }
