@@ -1,4 +1,5 @@
 import Base from '@/components/Layout/Base.vue';
+import router from '@/router'
 import store from '@/store';
 const routes = [
   {
@@ -10,15 +11,18 @@ const routes = [
         name: 'OFSHome',
         component: () => import('@/views/Ofs/OFSHome.vue'),
         beforeEnter: (to, from, next) => {
+          console.log('to',to);
+          console.log('current',router.currentRoute);
+          console.log('from',from);
           if(store.getters.userInfo == null) {
-            next();
-          }else{
             store.dispatch('getCurrentUser').then((data) => {
               next('/dashboard');
             }).catch((error) => {
               console.log(error);
-              next('/');
+              next();
             });
+          }else{
+            next();
             
           }
           

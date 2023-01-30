@@ -75,9 +75,10 @@ export default {
        
         localStorage.removeItem("token");
         localStorage.removeItem("companyData");
-        router.replace({
-          name: "OFSHome"
-        });
+        // router.replace({
+        //   name: "OFSHome"
+        // });
+        router.push('/');
       })
       .catch((error) => {
         commit('setError', error.message)
