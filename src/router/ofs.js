@@ -11,11 +11,17 @@ const routes = [
         component: () => import('@/views/Ofs/OFSHome.vue'),
         beforeEnter: (to, from, next) => {
           if(store.getters.userInfo == null) {
-              
-              next();
+            next();
           }else{
-            next('/dashboard');
+            store.dispatch('getCurrentUser').then((data) => {
+              next('/dashboard');
+            }).catch((error) => {
+              console.log(error);
+              next('/');
+            });
+            
           }
+          
         }
       },
       {
@@ -24,10 +30,14 @@ const routes = [
         component: () => import('@/views/Ofs/CategoryListing.vue'),
         beforeEnter: (to, from, next) => {
           if(store.getters.userInfo == null) {
-              
               next();
           }else{
-            next('/dashboard');
+            store.dispatch('getCurrentUser').then((data) => {
+              next('/dashboard');
+            }).catch((error) => {
+              console.log(error);
+              next();
+            });
           }
         }
       },
@@ -40,7 +50,12 @@ const routes = [
               
               next();
           }else{
-            next('/dashboard');
+            store.dispatch('getCurrentUser').then((data) => {
+              next('/dashboard');
+            }).catch((error) => {
+              console.log(error);
+              next();
+            });
           }
         }
       },
@@ -53,7 +68,12 @@ const routes = [
               
               next();
           }else{
-            next('/dashboard');
+            store.dispatch('getCurrentUser').then((data) => {
+              next('/dashboard');
+            }).catch((error) => {
+              console.log(error);
+              next();
+            });
           }
         }
       },
@@ -65,7 +85,12 @@ const routes = [
           if(store.getters.userInfo == null) {
             next();
           }else{
-            next('/dashboard');
+            store.dispatch('getCurrentUser').then((data) => {
+              next('/dashboard');
+            }).catch((error) => {
+              console.log(error);
+              next();
+            });
           }
         }
       },

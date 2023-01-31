@@ -126,9 +126,6 @@ export default {
     get_url_extension( url ) {
       return url.split(/[#?]/)[0].split('.').pop().trim();
     },
-    get_url_name( url ) {
-      return url.split('/').pop();
-    },
   },
   mounted() {
   } 
