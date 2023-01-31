@@ -2,6 +2,7 @@ export default {
     setUser (state, payload){
     	state.userInfo = payload;
       state.isAuthenticated = Boolean(payload);
+      state.isUserData = false;
     },
     setToken (state, payload){
       state.userToken = payload
@@ -90,4 +91,7 @@ export default {
     setModuleOfsOption (state, payload){
       state.moduleOfsOption = payload
     },
+    setIsUserData (state,payload){
+      state.isUserData = payload;
+    }
 }
