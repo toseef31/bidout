@@ -434,7 +434,6 @@ export default {
       filterAfter: [],
       inviteCount: 1,
 			loadingInvite: false,
-			companiesData: [],
     };
   },
   computed: {
@@ -493,16 +492,16 @@ export default {
     companiesList() {
     	if (this.$route.name == 'EditBid') {
     		if (this.$store.getters.bidData.invitedSuppliers != '') {
-    			return this.$store.getters.companiesList.filter((el) => !this.$store.getters.bidData.invitedSuppliers.find((supplier) => supplier.id === el.objectID));
-					// console.log('computed',this.companiesData)
-// ;					return this.companiesData.sort((a, b) => {
-// 						let aHasOfsPremium = a.contracts.some(contract => contract.contractType === 'ofs-premium');
-// 						let bHasOfsPremium = b.contracts.some(contract => contract.contractType === 'ofs-premium');
-// 						if (aHasOfsPremium === bHasOfsPremium) {
-// 							return 0;
-// 						}
-// 						return aHasOfsPremium ? -1 : 1;
-// 					});
+    			let companiesData = this.$store.getters.companiesList.filter((el) => !this.$store.getters.bidData.invitedSuppliers.find((supplier) => supplier.id === el.objectID));
+					console.log(companiesData);
+;					return companiesData.sort((a, b) => {
+						let aHasOfsPremium = a.contracts.some(contract => contract.contractType === 'ofs-premium');
+						let bHasOfsPremium = b.contracts.some(contract => contract.contractType === 'ofs-premium');
+						if (aHasOfsPremium === bHasOfsPremium) {
+							return 0;
+						}
+						return aHasOfsPremium ? -1 : 1;
+					});
 				}
     			let companiesData = this.$store.getters.companiesList ? this.$store.getters.companiesList.filter((rep) => rep.company !== this.userInfo.company.company) : [];
 					return companiesData.sort((a, b) => {
@@ -515,25 +514,24 @@ export default {
 					});
 				}
 	  		if (this.$store.getters.bidData.invitedSuppliers != '') {
-	  			return this.$store.getters.companiesList.filter((el) => !this.$store.getters.bidData.invitedSuppliers.includes(el.objectID));
-					// return companiesData.sort((a, b) => {
-					// 	let aHasOfsPremium = a.contracts.some(contract => contract.contractType === 'ofs-premium');
-					// 	let bHasOfsPremium = b.contracts.some(contract => contract.contractType === 'ofs-premium');
-					// 	if (aHasOfsPremium === bHasOfsPremium) {
-					// 		return 0;
-					// 	}
-					// 	return aHasOfsPremium ? -1 : 1;
-					// });
+	  			let companiesData = this.$store.getters.companiesList.filter((el) => !this.$store.getters.bidData.invitedSuppliers.includes(el.objectID));
+					return companiesData.sort((a, b) => {
+						let aHasOfsPremium = a.contracts.some(contract => contract.contractType === 'ofs-premium');
+						let bHasOfsPremium = b.contracts.some(contract => contract.contractType === 'ofs-premium');
+						if (aHasOfsPremium === bHasOfsPremium) {
+							return 0;
+						}
+						return aHasOfsPremium ? -1 : 1;
+					});
 				}
-				// return this.$store.getters.companiesList.sort((a, b) => {
-        //   let aHasOfsPremium = a.contracts.some(contract => contract.contractType === 'ofs-premium');
-        //   let bHasOfsPremium = b.contracts.some(contract => contract.contractType === 'ofs-premium');
-        //   if (aHasOfsPremium === bHasOfsPremium) {
-        //     return 0;
-        //   }
-        //   return aHasOfsPremium ? -1 : 1;
-        // });
-	  			return this.$store.getters.companiesList;
+				return this.$store.getters.companiesList.sort((a, b) => {
+          let aHasOfsPremium = a.contracts.some(contract => contract.contractType === 'ofs-premium');
+          let bHasOfsPremium = b.contracts.some(contract => contract.contractType === 'ofs-premium');
+          if (aHasOfsPremium === bHasOfsPremium) {
+            return 0;
+          }
+          return aHasOfsPremium ? -1 : 1;
+        });
     },
     serviceCompanies() {
 			return this.$store.getters.serviceCompaniesList.sort((a, b) => {
@@ -690,7 +688,8 @@ export default {
     	this.inviteCount = 2;
     	this.newCount = this.repsInvited.length;
 			console.log('before splice',this.$store.getters.companiesList);
-    	this.$store.getters.companiesList.splice(index, 1);
+    	// this.$store.getters.companiesList.splice(index, 1);
+			this.$store.commit('spliceCompanies',index);
 			console.log('after Splice',this.$store.getters.companiesList);
 			// this.companiesList;
     	const unique = [...new Map(this.repsInvited.map((m) => [m.company, m])).values()];

@@ -188,4 +188,7 @@ export default {
   setEntryCheckForEditBid(state, payload) {
     state.entryCheckForEditBid = payload;
   },
+  spliceCompanies(state,index){
+    state.companiesList.splice(index,1);
+  }
 };
