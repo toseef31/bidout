@@ -48,9 +48,12 @@
       ">
         <div class="d-flex bid-section-2" v-for="(item, i) in getAllInvitedSuppliers" :key="i">
           <div class="d-flex align-center">
-            <v-img v-if="item && item.image" width="60" height="auto" contain :aspect-ratio="16 / 9"
+            <v-img v-if="item && item.image" max-height="26.67" max-width="100" width="100"
               :src="item && item.image"></v-img>
-            <v-icon size="42" v-else>mdi-domain</v-icon>
+
+            <div v-else class="icon-class">
+              <v-icon size="40">mdi-domain</v-icon>
+            </div>
             <div class="ml-5">
               <div class="font-weight-bold">{{ item && item.company }}</div>
               <router-link v-if="item.slug" :to="item.slug ? '/company/' + item.slug : ''"
@@ -60,17 +63,27 @@
 
           <div class="invitedS-sec">
             <v-row>
-              <v-col class="mr-2">
+              <v-col class="mr-10">
                 <v-tooltip top>
                   <template v-slot:activator="{ on, attrs }">
-                    <v-badge color="#0D9648" dot overlap>
+                    <v-badge color="#0D9648" dot overlap v-if="checkActiveSupplier(item.id)">
                       <v-icon v-bind="attrs" v-on="on">mdi-domain</v-icon>
                     </v-badge>
                   </template>
                   <span>Active</span>
                 </v-tooltip>
+
+                <v-tooltip top>
+                  <template v-slot:activator="{ on, attrs }">
+                    <v-badge color="#D5D91C" dot overlap v-if="checkInActiveSupplier(item.id)">
+                      <v-icon v-bind="attrs" v-on="on">mdi-domain</v-icon>
+                    </v-badge>
+                  </template>
+                  <span>In Active</span>
+                </v-tooltip>
+
               </v-col>
-              <v-col class="mr-2">
+              <v-col class="mr-10">
                 <v-tooltip top>
                   <template v-slot:activator="{ on, attrs }">
                     <v-icon v-bind="attrs" v-on="on">mdi-eye-outline</v-icon>
@@ -78,7 +91,7 @@
                   <span>Viewed {{ getBidViewNumber(item.id) }} Times</span>
                 </v-tooltip>
               </v-col>
-              <v-col class="mr-2">
+              <v-col class="mr-10">
 
                 <v-tooltip top>
                   <template v-slot:activator="{ on, attrs }">
@@ -108,7 +121,7 @@
                       v-if="getSubmissionStatus(item.id) === 'not-sent' && getCompanyIntend(item.id) !== 'not-intended'">mdi-circle-outline</v-icon>
                     <img :src="require('@/assets/images/bids/bidSubmitted.svg')"
                       v-if="getSubmissionStatus(item.id) === 'sent' && getCompanyIntend(item.id) !== 'not-intended'"
-                      width="60" height="24" v-bind="attrs" v-on="on" />
+                      width="24" height="24" v-bind="attrs" v-on="on" />
                     <v-icon v-bind="attrs" v-on="on" v-if="getCompanyIntend(item.id) === 'not-intended'"
                       color="#F32349">mdi-close-circle-outline</v-icon>
                   </template>
@@ -333,6 +346,34 @@ export default {
     formatDate(dueDate) {
       return dueDate !== '' && dueDate !== null ? moment.tz(dueDate, 'America/Chicago').format('MM/DD/YYYY') : '';
     },
+    checkActiveSupplier(id) {
+      const { invitedSuppliers } = this.bidDetail.bidData;
+      let active = false;
+      if (invitedSuppliers.length) {
+        invitedSuppliers.forEach((el) => {
+          if (el && el.id === id) {
+            active = true;
+          }
+        });
+      }
+
+      return active;
+    },
+    checkInActiveSupplier(id) {
+      const { invitedNewSuppliers } = this.bidDetail.bidData;
+
+      let inActive = false;
+      if (invitedNewSuppliers.length) {
+        invitedNewSuppliers.forEach((el) => {
+          if (el && el.id === id) {
+            inActive = true;
+          }
+        });
+      }
+
+      return inActive;
+    },
+
   },
   computed: {
     bidDetail() {

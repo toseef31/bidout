@@ -658,14 +658,18 @@ export default {
     }
 
     if (state.bidlines != null) {
+      let lineItemsindex = 0;
       for (let i = 0; i < state.bidlines.length; i++) {
-        formData.append(`lineItems[${i}][id]`, state.bidlines[i].id);
-        formData.append(`lineItems[${i}][description]`, state.bidlines[i].description);
-        formData.append(`lineItems[${i}][unit]`, state.bidlines[i].unit);
-        formData.append(`lineItems[${i}][inputType]`, state.bidlines[i].inputType);
-        formData.append(`lineItems[${i}][quantity]`, state.bidlines[i].quantity);
-        formData.append(`lineItems[${i}][buyerComment]`, state.bidlines[i].buyerComment);
-        formData.append(`lineItems[${i}][required]`, state.bidlines[i].required);
+        if(state.bidlines[i].description != '' && state.bidlines[i].quantity != ''){
+          formData.append(`lineItems[${lineItemsindex}][id]`, state.bidlines[i].id);
+          formData.append(`lineItems[${lineItemsindex}][description]`, state.bidlines[i].description);
+          formData.append(`lineItems[${lineItemsindex}][unit]`, state.bidlines[i].unit);
+          formData.append(`lineItems[${lineItemsindex}][inputType]`, state.bidlines[i].inputType);
+          formData.append(`lineItems[${lineItemsindex}][quantity]`, state.bidlines[i].quantity);
+          formData.append(`lineItems[${lineItemsindex}][buyerComment]`, state.bidlines[i].buyerComment);
+          formData.append(`lineItems[${lineItemsindex}][required]`, state.bidlines[i].required);
+          lineItemsindex++;
+        }
       }
     }
 
@@ -786,14 +790,18 @@ export default {
     }
 
     if (state.bidlines != null) {
+      let lineItemsindex = 0;
       for (let i = 0; i < state.bidlines.length; i++) {
-        formData.append(`lineItems[${i}][id]`, state.bidlines[i].id);
-        formData.append(`lineItems[${i}][description]`, state.bidlines[i].description);
-        formData.append(`lineItems[${i}][unit]`, state.bidlines[i].unit);
-        formData.append(`lineItems[${i}][inputType]`, state.bidlines[i].inputType);
-        formData.append(`lineItems[${i}][quantity]`, state.bidlines[i].quantity);
-        formData.append(`lineItems[${i}][buyerComment]`, state.bidlines[i].buyerComment);
-        formData.append(`lineItems[${i}][required]`, state.bidlines[i].required);
+        if(state.bidlines[i].description != '' && state.bidlines[i].quantity != ''){
+          formData.append(`lineItems[${lineItemsindex}][id]`, state.bidlines[i].id);
+          formData.append(`lineItems[${lineItemsindex}][description]`, state.bidlines[i].description);
+          formData.append(`lineItems[${lineItemsindex}][unit]`, state.bidlines[i].unit);
+          formData.append(`lineItems[${lineItemsindex}][inputType]`, state.bidlines[i].inputType);
+          formData.append(`lineItems[${lineItemsindex}][quantity]`, state.bidlines[i].quantity);
+          formData.append(`lineItems[${lineItemsindex}][buyerComment]`, state.bidlines[i].buyerComment);
+          formData.append(`lineItems[${lineItemsindex}][required]`, state.bidlines[i].required);
+          lineItemsindex++;
+        }
       }
     }
 
@@ -1220,27 +1228,35 @@ export default {
 
     if (state.bidData.status == 'templateCreate') {
       if (state.bidlines) {
+        let lineItemsindex = 0;
         for (let i = 0; i < state.bidlines.length; i++) {
-          formData.append(`lineItems[${i}][id]`, state.bidlines[i].id);
-          formData.append(`lineItems[${i}][description]`, state.bidlines[i].description);
-          formData.append(`lineItems[${i}][unit]`, state.bidlines[i].unit);
-          formData.append(`lineItems[${i}][inputType]`, state.bidlines[i].inputType);
-          formData.append(`lineItems[${i}][quantity]`, state.bidlines[i].quantity);
-          formData.append(`lineItems[${i}][buyerComment]`, state.bidlines[i].buyerComment);
-          formData.append(`lineItems[${i}][required]`, state.bidlines[i].required);
+          if(state.bidlines[i].description != '' && state.bidlines[i].quantity != ''){
+            formData.append(`lineItems[${lineItemsindex}][id]`, state.bidlines[i].id);
+            formData.append(`lineItems[${lineItemsindex}][description]`, state.bidlines[i].description);
+            formData.append(`lineItems[${lineItemsindex}][unit]`, state.bidlines[i].unit);
+            formData.append(`lineItems[${lineItemsindex}][inputType]`, state.bidlines[i].inputType);
+            formData.append(`lineItems[${lineItemsindex}][quantity]`, state.bidlines[i].quantity);
+            formData.append(`lineItems[${lineItemsindex}][buyerComment]`, state.bidlines[i].buyerComment);
+            formData.append(`lineItems[${lineItemsindex}][required]`, state.bidlines[i].required);
+            lineItemsindex++;
+          }
         }
       } else {
         formData.append('lineItems', '');
       }
     } else if (state.bidlines != null) {
+      let lineItemsindex = 0;
       for (let i = 0; i < state.bidlines.length; i++) {
-        formData.append(`lineItems[${i}][id]`, state.bidlines[i].id);
-        formData.append(`lineItems[${i}][description]`, state.bidlines[i].description);
-        formData.append(`lineItems[${i}][unit]`, state.bidlines[i].unit);
-        formData.append(`lineItems[${i}][inputType]`, state.bidlines[i].inputType);
-        formData.append(`lineItems[${i}][quantity]`, state.bidlines[i].quantity);
-        formData.append(`lineItems[${i}][buyerComment]`, state.bidlines[i].buyerComment);
-        formData.append(`lineItems[${i}][required]`, state.bidlines[i].required);
+        if(state.bidlines[i].description != '' && state.bidlines[i].quantity != ''){
+          formData.append(`lineItems[${lineItemsindex}][id]`, state.bidlines[i].id);
+          formData.append(`lineItems[${lineItemsindex}][description]`, state.bidlines[i].description);
+          formData.append(`lineItems[${lineItemsindex}][unit]`, state.bidlines[i].unit);
+          formData.append(`lineItems[${lineItemsindex}][inputType]`, state.bidlines[i].inputType);
+          formData.append(`lineItems[${lineItemsindex}][quantity]`, state.bidlines[i].quantity);
+          formData.append(`lineItems[${lineItemsindex}][buyerComment]`, state.bidlines[i].buyerComment);
+          formData.append(`lineItems[${lineItemsindex}][required]`, state.bidlines[i].required);
+          lineItemsindex++;
+        }
       }
     } else {
       formData.append('lineItems', '');
@@ -1493,14 +1509,18 @@ export default {
     }
 
     if (state.bidlines != '') {
+      let lineItemsindex = 0;
       for (let i = 0; i < state.bidlines.length; i++) {
-        formData.append(`lineItems[${i}][id]`, state.bidlines[i].id);
-        formData.append(`lineItems[${i}][description]`, state.bidlines[i].description);
-        formData.append(`lineItems[${i}][unit]`, state.bidlines[i].unit);
-        formData.append(`lineItems[${i}][inputType]`, state.bidlines[i].inputType);
-        formData.append(`lineItems[${i}][quantity]`, state.bidlines[i].quantity);
-        formData.append(`lineItems[${i}][buyerComment]`, state.bidlines[i].buyerComment);
-        formData.append(`lineItems[${i}][required]`, state.bidlines[i].required);
+        if(state.bidlines[i].description != '' && state.bidlines[i].quantity != ''){
+          formData.append(`lineItems[${lineItemsindex}][id]`, state.bidlines[i].id);
+          formData.append(`lineItems[${lineItemsindex}][description]`, state.bidlines[i].description);
+          formData.append(`lineItems[${lineItemsindex}][unit]`, state.bidlines[i].unit);
+          formData.append(`lineItems[${lineItemsindex}][inputType]`, state.bidlines[i].inputType);
+          formData.append(`lineItems[${lineItemsindex}][quantity]`, state.bidlines[i].quantity);
+          formData.append(`lineItems[${lineItemsindex}][buyerComment]`, state.bidlines[i].buyerComment);
+          formData.append(`lineItems[${lineItemsindex}][required]`, state.bidlines[i].required);
+          lineItemsindex++;
+        }
       }
     } else {
       formData.append('lineItems', '');

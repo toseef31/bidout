@@ -87,16 +87,6 @@ Vue.use(VueGtag, {
   config: { id: import.meta.env.VITE_GOOGLE_TAG_MANAGER },
 });
 
-const userData = store.getters.userInfo;
-if (userData) {
-  LogRocket.identify(userData.id, {
-    name: `${userData.firstName} ${userData.lastName}`,
-    email: userData.email,
-
-    // Add your own custom user variables here, ie:
-    subscriptionType: 'pro',
-  });
-}
 
 new Vue({
   vuetify,

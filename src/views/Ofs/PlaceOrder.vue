@@ -69,7 +69,9 @@ export default {
       return this.$store.getters.g_activityPanel;
     },
     supplierData(){
-      return this.$store.getters.supplierCompany.companyData;
+      if(this.$store.getters.supplierCompany.companyData){
+        return this.$store.getters.supplierCompany.companyData;
+      }
     },
     orderStatus(){
       return this.$store.getters.orderStatus;
