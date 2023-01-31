@@ -36,7 +36,7 @@
                 </td>
 
                 <td v-else>
-                  $ {{ submission.lineItems[index].price }} {{ bidDetail.bidData.lineItems[index].unit }}
+                  $ {{ formatPrice(submission.lineItems[index].price) }} {{ bidDetail.bidData.lineItems[index].unit }}
                 </td>
               </template>
             </tr>
@@ -453,6 +453,11 @@ export default {
       this.loadings[index].load = false;
       this.loadings[index].action = 'neither';
     },
+    formatPrice(value) {
+      let val = (value/1).toFixed(2).replace(',', '.')
+      return val.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")
+     
+    }
   },
   mounted() {
     window.scrollTo({ top: 0, behavior: 'smooth' });
