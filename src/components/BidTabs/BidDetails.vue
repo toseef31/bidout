@@ -98,7 +98,7 @@
 
           <v-row justify="center">
             <v-col cols="12">
-              <v-btn color="#0D9648" height="56" class="text-capitalize white--text font-weight-bold save-btn px-9" :disabled="!valid" @click="changeTab" large>Save Changes</v-btn>
+              <v-btn color="#0D9648" height="56" class="text-capitalize white--text font-weight-bold save-btn px-9" :loading="loading" :disabled="!valid" @click="changeTab" large>Save Changes</v-btn>
             </v-col>
           </v-row>
           <template v-if="route != 'EditTemplate'">
@@ -194,6 +194,7 @@ export default {
       dialog: false,
       route: '',
       isTemplate: false,
+      loading: false,
     };
   },
   computed: {
@@ -330,6 +331,8 @@ export default {
           company: this.userInfo.company.company,
         };
         if (this.$refs.form.validate()) {
+          this.valid = true;
+          this.loading = true;
           if (this.$route.name == 'EditTemplate') {
             if (!this.$store.getters.bidData.id) {
               await this.saveTemplateBid(bidDetails);

@@ -28,6 +28,7 @@
                 
                 <v-btn
                   color="#0D9648"
+                  :loading="templateLoading"
                   :disabled="!bidDetailsComplete || !lineItemsComplete ? true : false"
                   class="white--text text-capitalize publish-btn"
                   width="250px"
@@ -192,6 +193,7 @@ export default {
       attachValue: '',
       questionValid: '',
       questionValue: '',
+      templateLoading: false,
     };
   },
   computed: {
@@ -248,11 +250,14 @@ export default {
       this.attachValue = event.attach;
     },
     async publishBid() {
+      this.templateLoading = true;
       try {
         await this.$store.dispatch('publishTemplate');
         this.$router.push('/manage-templates');
+        this.templateLoading = false;
       } catch (error) {
         console.log(error);
+        this.templateLoading = false;
       }
     },
     async updateTemplateBid(){

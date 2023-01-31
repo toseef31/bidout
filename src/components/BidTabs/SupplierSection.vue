@@ -342,6 +342,7 @@
                 ></v-text-field>
 
                 <v-btn
+									:loading="loadingInvite"
                   :disabled="!valid"
                   color="#0D9648"
                   class="mr-4 text-capitalize white--text font-weight-bold"
@@ -421,6 +422,7 @@ export default {
       newRepsInvited: [],
       filterAfter: [],
       inviteCount: 1,
+			loadingInvite: false,
     };
   },
   computed: {
@@ -471,7 +473,7 @@ export default {
     	}
     },
 		newSupplierFiltered() {
-    	if (this.$store.getters.bidData.invitedNewSuppliers != '') {
+    	if (this.$store.getters.bidData.invitedNewSuppliers) {
   			if (this.$route.name == 'EditBid') {
   				if (this.inviteCount == 1) {
   					this.newRepsInvited = this.$store.state.bid.invitedNewSuppliers;
@@ -518,6 +520,7 @@ export default {
     		bidDueTime: this.$store.getters.bidData.dueTime,
     	};
     	if (this.$refs.form.validate()) {
+				this.loadingInvite = true;
     		try {
     			const user = await this.inviteNewSupplier(supplier);
     			this.supplierDialog = false;
@@ -526,6 +529,8 @@ export default {
     			this.newCount = this.newRepsInvited.length;
     			this.$store.commit('setInvitedNewSuppliers', this.newRepsInvited);
     			this.$refs.form.reset();
+					this.loadingInvite = false;
+					this.phoneNumber = '';
     		} catch (error) {
     			console.log(error);
     		}
