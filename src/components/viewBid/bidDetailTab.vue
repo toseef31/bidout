@@ -66,12 +66,22 @@
               <v-col class="mr-10">
                 <v-tooltip top>
                   <template v-slot:activator="{ on, attrs }">
-                    <v-badge color="#0D9648" dot overlap>
+                    <v-badge color="#0D9648" dot overlap v-if="checkActiveSupplier(item.id)">
                       <v-icon v-bind="attrs" v-on="on">mdi-domain</v-icon>
                     </v-badge>
                   </template>
                   <span>Active</span>
                 </v-tooltip>
+
+                <v-tooltip top>
+                  <template v-slot:activator="{ on, attrs }">
+                    <v-badge color="#D5D91C" dot overlap v-if="checkInActiveSupplier(item.id)">
+                      <v-icon v-bind="attrs" v-on="on">mdi-domain</v-icon>
+                    </v-badge>
+                  </template>
+                  <span>In Active</span>
+                </v-tooltip>
+
               </v-col>
               <v-col class="mr-10">
                 <v-tooltip top>
@@ -336,6 +346,34 @@ export default {
     formatDate(dueDate) {
       return dueDate !== '' && dueDate !== null ? moment.tz(dueDate, 'America/Chicago').format('MM/DD/YYYY') : '';
     },
+    checkActiveSupplier(id) {
+      const { invitedSuppliers } = this.bidDetail.bidData;
+      let active = false;
+      if (invitedSuppliers.length) {
+        invitedSuppliers.forEach((el) => {
+          if (el && el.id === id) {
+            active = true;
+          }
+        });
+      }
+
+      return active;
+    },
+    checkInActiveSupplier(id) {
+      const { invitedNewSuppliers } = this.bidDetail.bidData;
+
+      let inActive = false;
+      if (invitedNewSuppliers.length) {
+        invitedNewSuppliers.forEach((el) => {
+          if (el && el.id === id) {
+            inActive = true;
+          }
+        });
+      }
+
+      return inActive;
+    },
+
   },
   computed: {
     bidDetail() {
