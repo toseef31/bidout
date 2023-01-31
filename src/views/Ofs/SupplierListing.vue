@@ -61,7 +61,20 @@
                           <tbody>
                             <tr v-for="company in allcompanies" :key="company.id">
                               <td class="pl-4 text-truncate" style="width: 300px">
-                                <router-link class="text-decoration-none" :to="company.slug ? '/company/'+company.slug: '' ">{{ company.company }}</router-link>
+                                <router-link class="text-decoration-none" :to="company.slug ? '/company/'+company.slug: '' ">{{ company.company }}
+                                  <span v-if="hasOfsPremium(company)">
+                                    <v-tooltip top>
+                                      <template v-slot:activator="{ on, attrs }">
+                                        <v-icon 
+                                          color="#0D9647" 
+                                          size="16px" 
+                                          v-bind="attrs"
+                                          v-on="on">mdi-check-decagram</v-icon>
+                                      </template>
+                                      <span>Premium Service Provider</span>
+                                    </v-tooltip> 
+                                  </span>
+                                </router-link>
                               </td>
                               <td class="view-class">
                                 <span v-if="!company.companyHq">No location</span
@@ -165,7 +178,15 @@ export default {
           .split(' ')
           .every((v) => comp.company.toLowerCase().includes(v)));
       }else{
-        return this.$store.getters.serviceCompanies;
+        return this.$store.getters.serviceCompanies.sort((a, b) => {
+          let aHasOfsPremium = a.contracts.some(contract => contract.contractType === 'ofs-premium');
+          let bHasOfsPremium = b.contracts.some(contract => contract.contractType === 'ofs-premium');
+          if (aHasOfsPremium === bHasOfsPremium) {
+            return 0;
+          }
+          return aHasOfsPremium ? -1 : 1;
+        });
+        // return this.$store.getters.serviceCompanies;
       }
     },
     showLoading() {
@@ -192,6 +213,9 @@ export default {
     },
     getByBasin(basin) {
       this.getCompanyByBasin({ basin, slug: this.$route.fullPath.split('/').pop() });
+    },
+    hasOfsPremium(supplier) {
+      return supplier.contracts.some(contract => contract.contractType === 'ofs-premium');
     },
   },
   async created(){

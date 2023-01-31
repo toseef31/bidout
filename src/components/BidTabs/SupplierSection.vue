@@ -73,7 +73,20 @@
 
 		              </div>
 		              <div class="company-title text-left pl-4">
-		                <h4>{{company.company}}</h4>
+		                <h4>{{company.company}}
+											<span v-if="hasOfsPremium(company)">
+												<v-tooltip top>
+													<template v-slot:activator="{ on, attrs }">
+														<v-icon 
+															color="#0D9647" 
+															size="16px" 
+															v-bind="attrs"
+															v-on="on">mdi-check-decagram</v-icon>
+													</template>
+													<span>Premium Service Provider</span>
+												</v-tooltip> 
+											</span>
+										</h4>
 										<router-link :to="`/company/${company.slug}`" target="_blank" class="mb-0">View Profile</router-link>
 		              </div>
 		            </div>
@@ -83,7 +96,6 @@
 		          </div>
 		        </div>
 		      </v-tab-item>
-					{{ checkIfCompanyOfs }}
 		      <v-tab-item value="salesRep">
 		        <div class="available-search d-flex justify-space-between align-center mt-5 px-4">
 		          <div>
@@ -140,7 +152,20 @@
 					   </div>
 		                </div>
 		                <div class="company-title text-left pl-4">
-		                  <h4>{{company.company}}</h4>
+		                  <h4>{{company.company}}
+												<span v-if="hasOfsPremium(company)">
+												<v-tooltip top>
+													<template v-slot:activator="{ on, attrs }">
+														<v-icon 
+															color="#0D9647" 
+															size="16px" 
+															v-bind="attrs"
+															v-on="on">mdi-check-decagram</v-icon>
+													</template>
+													<span>Premium Service Provider</span>
+												</v-tooltip> 
+											</span>
+											</h4>
 		                  <router-link :to="`/company/${company.slug}`" target="_blank" class="mb-0">View Profile</router-link>
 		                </div>
 		              </div>
@@ -203,7 +228,20 @@
 					   </div>
 		        	    </div>
 		        	    <div class="company-title text-left pl-4">
-		        	      <h4>{{company.company}} </h4>
+		        	      <h4>{{company.company}} 
+											<span v-if="hasOfsPremium(company)">
+												<v-tooltip top>
+													<template v-slot:activator="{ on, attrs }">
+														<v-icon 
+															color="#0D9647" 
+															size="16px" 
+															v-bind="attrs"
+															v-on="on">mdi-check-decagram</v-icon>
+													</template>
+													<span>Premium Service Provider</span>
+												</v-tooltip> 
+											</span>
+										</h4>
 										<router-link :to="`/company/${company.slug}`" target="_blank" class="mb-0">View Profile</router-link>
 		        	    </div>
 		        	  </div>
@@ -594,15 +632,8 @@ export default {
   		  clearInterval(timer);
   		});
     },
-		checkIfCompanyOfs() {
-      if (this.$store.getters.companiesList) {
-        return this.$store.getters.companiesList.filter((company) => {
-					// console.log(company);
-					return company.contracts.find((contract) => {contract.contractType === 'ofs-premium'});
-					
-				});
-      }
-      return false;
+		hasOfsPremium(supplier) {
+      return supplier.contracts.some(contract => contract.contractType === 'ofs-premium');
     },
   },
   beforeMount() {
@@ -615,7 +646,6 @@ export default {
     this.savedraftOnInterval();
     this.filteredEntries;
 		this.newSupplierFiltered;
-		this.checkIfCompanyOfs();
   },
 };
 </script>
