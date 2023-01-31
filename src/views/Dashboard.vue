@@ -169,7 +169,6 @@ export default {
       }).slice(0,6),['dueDate','asc','dueTime','asc']);
     },
     mapClass(){
-      console.log('ddd',this.pendingCount,'userDatas',this.userDatas.role);
       if(this.bidsList.length == '1'){
         if(this.pendingCount > 0 && this.userDatas.role == 'admin'){
           return 'map-section-pend-1';
