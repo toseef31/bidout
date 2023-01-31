@@ -42,16 +42,20 @@ export default {
       })
   },  
   getCurrentUser({commit,dispatch}){
+    commit('setIsUserData',true)
     return new Promise((resolve, reject) => {
+      
       firebase.auth().onAuthStateChanged(function(users) {
         if (users) {
           axios.get('/user/getUserData/'+users.multiFactor.user.email)
            .then(responce => {
               commit('setUser',responce.data)
+              // commit('setIsUserData',false)
               resolve(responce.data);
            })
         } else {
           dispatch('signOutAction');
+          // commit('setIsUserData',false)
           reject("User is not logged In")
         }
       });
