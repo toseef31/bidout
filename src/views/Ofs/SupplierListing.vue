@@ -186,7 +186,6 @@ export default {
           }
           return aHasOfsPremium ? -1 : 1;
         });
-        // return this.$store.getters.serviceCompanies;
       }
     },
     showLoading() {
