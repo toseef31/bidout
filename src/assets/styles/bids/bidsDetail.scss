@@ -347,11 +347,6 @@
         border-bottom: 1px solid #f1f1f1;
 
         .bid-section-2 {
-          // .v-icon {
-          //   width: 60px;
-          //   height: auto;
-          // }
-
           .icon-class {
             width: 100px;
             height: 35px;
@@ -362,7 +357,7 @@
             cursor: pointer;
           }
 
-          margin: 30px 105px;
+          margin: 30px 100px;
           align-items: center;
 
           .invitedS-sec {
@@ -370,7 +365,7 @@
 
             .v-badge__wrapper {
               .v-badge__badge {
-                inset: auto auto calc(100% - 5px) calc(100% - 29px) !important;
+                inset: auto auto calc(100% - 5px) calc(100% - 14px) !important;
               }
             }
 

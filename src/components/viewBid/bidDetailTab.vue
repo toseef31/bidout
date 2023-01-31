@@ -63,7 +63,7 @@
 
           <div class="invitedS-sec">
             <v-row>
-              <v-col class="mr-2">
+              <v-col class="mr-10">
                 <v-tooltip top>
                   <template v-slot:activator="{ on, attrs }">
                     <v-badge color="#0D9648" dot overlap>
@@ -73,7 +73,7 @@
                   <span>Active</span>
                 </v-tooltip>
               </v-col>
-              <v-col class="mr-2">
+              <v-col class="mr-10">
                 <v-tooltip top>
                   <template v-slot:activator="{ on, attrs }">
                     <v-icon v-bind="attrs" v-on="on">mdi-eye-outline</v-icon>
@@ -81,7 +81,7 @@
                   <span>Viewed {{ getBidViewNumber(item.id) }} Times</span>
                 </v-tooltip>
               </v-col>
-              <v-col class="mr-2">
+              <v-col class="mr-10">
 
                 <v-tooltip top>
                   <template v-slot:activator="{ on, attrs }">
