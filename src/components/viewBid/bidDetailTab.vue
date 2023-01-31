@@ -111,7 +111,7 @@
                       v-if="getSubmissionStatus(item.id) === 'not-sent' && getCompanyIntend(item.id) !== 'not-intended'">mdi-circle-outline</v-icon>
                     <img :src="require('@/assets/images/bids/bidSubmitted.svg')"
                       v-if="getSubmissionStatus(item.id) === 'sent' && getCompanyIntend(item.id) !== 'not-intended'"
-                      width="60" height="24" v-bind="attrs" v-on="on" />
+                      width="24" height="24" v-bind="attrs" v-on="on" />
                     <v-icon v-bind="attrs" v-on="on" v-if="getCompanyIntend(item.id) === 'not-intended'"
                       color="#F32349">mdi-close-circle-outline</v-icon>
                   </template>
