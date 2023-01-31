@@ -347,9 +347,15 @@
         border-bottom: 1px solid #f1f1f1;
 
         .bid-section-2 {
-          .v-icon {
-            width: 60px;
-            height: auto;
+          // .v-icon {
+          //   width: 60px;
+          //   height: auto;
+          // }
+
+          .icon-class {
+            width: 100px;
+            height: 35px;
+            text-align: center;
           }
 
           .profile {

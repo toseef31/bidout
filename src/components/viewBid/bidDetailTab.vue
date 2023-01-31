@@ -48,9 +48,12 @@
       ">
         <div class="d-flex bid-section-2" v-for="(item, i) in getAllInvitedSuppliers" :key="i">
           <div class="d-flex align-center">
-            <v-img v-if="item && item.image" width="60" height="auto" contain :aspect-ratio="16 / 9"
+            <v-img v-if="item && item.image" max-height="26.67" max-width="100" width="100"
               :src="item && item.image"></v-img>
-            <v-icon size="42" v-else>mdi-domain</v-icon>
+
+            <div v-else class="icon-class">
+              <v-icon size="40">mdi-domain</v-icon>
+            </div>
             <div class="ml-5">
               <div class="font-weight-bold">{{ item && item.company }}</div>
               <router-link v-if="item.slug" :to="item.slug ? '/company/' + item.slug : ''"
