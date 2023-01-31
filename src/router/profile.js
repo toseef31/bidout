@@ -16,6 +16,9 @@ const routes = [
           if (store.getters.userInfo == null) {
             store.dispatch('getCurrentUser').then((data) => {
               next();
+            }).catch((error) => {
+              console.log(error);
+              next('/login');
             });
           } else if (store.getters.userInfo.company.contracts && store.getters.userInfo.company.contracts.find((contract) => contract.contractType === 'ofs' || contract.contractType === 'ofs-premium')) {
             next();
@@ -38,6 +41,9 @@ const routes = [
           } else {
             store.dispatch('getCurrentUser').then((data) => {
               next();
+            }).catch((error) => {
+              console.log(error);
+              next('/login');
             });
           }
         },
@@ -50,6 +56,9 @@ const routes = [
           if (store.getters.userInfo == null) {
             store.dispatch('getCurrentUser').then((data) => {
               next();
+            }).catch((error) => {
+              console.log(error);
+              next('/login');
             });
           } else {
             next();
@@ -64,6 +73,9 @@ const routes = [
           if (store.getters.userInfo == null) {
             store.dispatch('getCurrentUser').then((data) => {
               next();
+            }).catch((error) => {
+              console.log(error);
+              next('/login');
             });
           } else {
             next();
@@ -78,6 +90,9 @@ const routes = [
           if (store.getters.userInfo == null) {
             store.dispatch('getCurrentUser').then((data) => {
               next();
+            }).catch((error) => {
+              console.log(error);
+              next('/login');
             });
           } else {
             next();
@@ -92,6 +107,9 @@ const routes = [
           if (store.getters.userInfo == null) {
             store.dispatch('getCurrentUser').then((data) => {
               next();
+            }).catch((error) => {
+              console.log(error);
+              next('/login');
             });
           } else {
             next();
@@ -106,6 +124,9 @@ const routes = [
           if (store.getters.userInfo == null) {
             store.dispatch('getCurrentUser').then((data) => {
               next();
+            }).catch((error) => {
+              console.log(error);
+              next('/login');
             });
           } else {
             next();
@@ -120,6 +141,9 @@ const routes = [
           if (store.getters.userInfo == null) {
             store.dispatch('getCurrentUser').then((data) => {
               next();
+            }).catch((error) => {
+              console.log(error);
+              next('/login');
             });
           } else {
             next();

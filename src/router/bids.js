@@ -15,6 +15,9 @@ const routes = [
           if (store.getters.userInfo == null) {
             store.dispatch('getCurrentUser').then((data) => {
               next();
+            }).catch((error) => {
+              console.log(error);
+              next('/login');
             });
           } else {
             next();
@@ -29,6 +32,9 @@ const routes = [
           if (store.getters.userInfo == null) {
             store.dispatch('getCurrentUser').then((data) => {
               next();
+            }).catch((error) => {
+              console.log(error);
+              next('/login');
             });
           } else {
             next();
@@ -43,6 +49,9 @@ const routes = [
           if (store.getters.userInfo == null) {
             store.dispatch('getCurrentUser').then((data) => {
               next();
+            }).catch((error) => {
+              console.log(error);
+              next('/login');
             });
           } else {
             next();
@@ -57,6 +66,9 @@ const routes = [
           if (store.getters.userInfo == null) {
             store.dispatch('getCurrentUser').then((data) => {
               next();
+            }).catch((error) => {
+              console.log(error);
+              next('/login');
             });
           } else {
             next();
@@ -71,6 +83,9 @@ const routes = [
           if (store.getters.userInfo == null) {
             store.dispatch('getCurrentUser').then((data) => {
               next();
+            }).catch((error) => {
+              console.log(error);
+              next('/login');
             });
           } else {
             next();
@@ -86,6 +101,9 @@ const routes = [
           if (store.getters.userInfo == null) {
             store.dispatch('getCurrentUser').then((data) => {
               next();
+            }).catch((error) => {
+              console.log(error);
+              next('/login');
             });
           } else {
             next();
@@ -101,6 +119,9 @@ const routes = [
           if (store.getters.userInfo == null) {
             store.dispatch('getCurrentUser').then((data) => {
               next();
+            }).catch((error) => {
+              console.log(error);
+              next('/login');
             });
           } else {
             next();
@@ -115,6 +136,9 @@ const routes = [
           if (store.getters.userInfo == null) {
             store.dispatch('getCurrentUser').then((data) => {
               next();
+            }).catch((error) => {
+              console.log(error);
+              next('/login');
             });
           } else {
             next();
