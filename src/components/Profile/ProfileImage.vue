@@ -4,8 +4,8 @@
 	  <div class="user-info d-flex align-center">
 	    
 	    <div size="120" class="user">
-        <v-img :src="userDatas.image" v-if="userDatas.image" class="profile-img"></v-img>
-      	<v-img :src="require('@/assets/images/user/demo.png')" v-else class="profile-img"></v-img>
+        <v-img :src="userDatas.image" v-if="userDatas && userDatas.image" class="profile-img"></v-img>
+      	<v-img :src="require('@/assets/images/user/user1.png')" v-else class="profile-img"></v-img>
         <v-icon class="icon white--text" @click="$refs.FileInput.click()">mdi-upload</v-icon>
         <input ref="FileInput" type="file" style="display: none;" @change="croppie($event)" />
       </div>
@@ -57,7 +57,9 @@ export default {
   },
   computed:{
     userDatas(){
-      return this.$store.getters.userInfo;
+      if(this.$store.getters.userInfo != null){
+        return this.$store.getters.userInfo;
+      }
     },
     userImg(){
       return this.$store.getters.userImg;
