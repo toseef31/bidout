@@ -519,21 +519,11 @@ export default {
           quantity: this.getSupplierBid.lineItems[i].Qty,
           required: this.getSupplierBid.lineItems[i].required,
         });
+
         this.value.push({
           message: '',
           status: true,
         });
-        // if (this.isBidOut) {
-        //   this.value.push({
-        //     message: 'Suppliers can only lower the prices during the BidOut Phase!',
-        //     status: false,
-        //   });
-        // } else {
-        //   this.value.push({
-        //     message: '',
-        //     status: true,
-        //   });
-        // }
       }
 
       for (let i = 0; i < this.getSupplierBid.supplierAttachments.length; i++) {
