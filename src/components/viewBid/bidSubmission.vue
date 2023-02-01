@@ -41,7 +41,7 @@
               </template>
             </tr>
 
-            <tr v-if="bidDetail.supplierSubmissions.length && !bidDetail.receivingBids">
+            <tr v-if="bidDetail.supplierSubmissions.length && !bidDetail.receivingBids && isBidOut">
               <td class="bid-example-title">Bid Example Pre-BidOut Period</td>
               <template v-for="(submission) in bidDetail.supplierSubmissions">
                 <td v-if="!submission.bidoutPricepre">
@@ -56,7 +56,7 @@
               </template>
             </tr>
 
-            <tr v-if="bidDetail.supplierSubmissions.length && !bidDetail.receivingBids">
+            <tr v-if="bidDetail.supplierSubmissions.length && !bidDetail.receivingBids && isBidOut">
               <td class="bid-example-title">Bid Example Post-BidOut Period</td>
               <template v-for="(submission) in bidDetail.supplierSubmissions">
                 <td v-if="!submission.postBidoutPrice">
@@ -454,9 +454,9 @@ export default {
       this.loadings[index].action = 'neither';
     },
     formatPrice(value) {
-      let val = (value/1).toFixed(2).replace(',', '.')
-      return val.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")
-    }
+      const val = (value / 1).toFixed(2).replace(',', '.');
+      return val.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+    },
   },
   mounted() {
     window.scrollTo({ top: 0, behavior: 'smooth' });
