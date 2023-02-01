@@ -5,6 +5,19 @@ import router from '@/router'
 import store from "../../store";
 import axios from 'axios'
 
+let isNavigating = false;
+
+function navigate(route) {
+  if (isNavigating) {
+    return;
+  }
+  isNavigating = true;
+  router.push(route)
+    .finally(() => {
+      isNavigating = false;
+    });
+}
+
 export default {
     
   signInAction({ commit }, payload) {
@@ -75,10 +88,8 @@ export default {
        
         localStorage.removeItem("token");
         localStorage.removeItem("companyData");
-        // router.replace({
-        //   name: "OFSHome"
-        // });
-        router.push('/');
+        
+        navigate('/');
       })
       .catch((error) => {
         commit('setError', error.message)

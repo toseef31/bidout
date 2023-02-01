@@ -11,9 +11,6 @@ const routes = [
         name: 'OFSHome',
         component: () => import('@/views/Ofs/OFSHome.vue'),
         beforeEnter: (to, from, next) => {
-          console.log('to',to);
-          console.log('current',router.currentRoute);
-          console.log('from',from);
           if(store.getters.userInfo == null) {
             store.dispatch('getCurrentUser').then((data) => {
               next('/dashboard');

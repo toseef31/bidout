@@ -195,7 +195,11 @@ export default {
       return this.$store.getters.unreadCount;
     },
     userDatas() {
-      return this.$store.getters.userInfo;
+      return (
+        typeof this.$store.getters.userInfo !== "undefined" &&
+        typeof this.$store.getters.userInfo.role !== "undefined" &&
+        this.$store.getters.userInfo.role
+      );
     },
     moduleData() {
       if (this.$store.getters.userInfo.company.contracts) {
