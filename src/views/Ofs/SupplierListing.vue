@@ -178,14 +178,7 @@ export default {
           .split(' ')
           .every((v) => comp.company.toLowerCase().includes(v)));
       }else{
-        return this.$store.getters.serviceCompanies.sort((a, b) => {
-          let aHasOfsPremium = a.contracts.some(contract => contract.contractType === 'ofs-premium');
-          let bHasOfsPremium = b.contracts.some(contract => contract.contractType === 'ofs-premium');
-          if (aHasOfsPremium === bHasOfsPremium) {
-            return 0;
-          }
-          return aHasOfsPremium ? -1 : 1;
-        });
+        return this.$store.getters.serviceCompanies;
       }
     },
     showLoading() {
