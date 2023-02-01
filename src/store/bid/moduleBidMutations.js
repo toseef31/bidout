@@ -3,13 +3,31 @@ export default {
     state.teamMembers = payload;
   },
   setSalesReps(state, payload) {
-    state.salesRepsList = payload;
+    state.salesRepsList = payload.sort((a, b) => {
+      let aHasOfsPremium = a.contracts.some(contract => contract === 'ofs-premium');
+      if (aHasOfsPremium) {
+        return -1;
+      }
+      return 1;
+    });
   },
   setCompaniesList(state, payload) {
-    state.companiesList = payload;
+    state.companiesList = payload.sort((a, b) => {
+      let aHasOfsPremium = a.contracts.some(contract => contract.contractType === 'ofs-premium');
+      if (aHasOfsPremium) {
+        return -1;
+      }
+      return 1;
+    });
   },
   setServiceCompanies(state, payload) {
-    state.serviceCompaniesList = payload;
+    state.serviceCompaniesList = payload.sort((a, b) => {
+      let aHasOfsPremium = a.contracts.some(contract => contract.contractType === 'ofs-premium');
+      if (aHasOfsPremium) {
+        return -1;
+      }
+      return 1;
+    });
   },
   setDraftBidsList(state, payload) {
     state.draftBidsList = payload;
@@ -187,5 +205,17 @@ export default {
   },
   setEntryCheckForEditBid(state, payload) {
     state.entryCheckForEditBid = payload;
+  },
+  spliceCompanies(state,index){
+    state.companiesList.splice(index,1);
+  },
+  pushCompanies(state,company){
+    state.companiesList.push(company);
+  },
+  spliceSalesRepsList(state,index){
+    state.salesRepsList.splice(index,1);
+  },
+  pushSalesRepsList(state,list){
+    state.salesRepsList.push(list);
   },
 };

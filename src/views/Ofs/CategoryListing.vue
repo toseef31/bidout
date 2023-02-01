@@ -47,7 +47,20 @@
                         <tr v-for="company in allcompanies" :key="company.id">
                           <td class="pl-4 text-truncate   " style="width: 300px">
 
-                    <router-link :to="company.slug ? '/company-profiles/'+company.slug: '' " class="text-decoration-none">{{ company.company }}</router-link>
+                          <router-link :to="company.slug ? '/company-profiles/'+company.slug: '' " class="text-decoration-none">{{ company.company }}
+                            <span v-if="hasOfsPremium(company)">
+                              <v-tooltip top>
+                                <template v-slot:activator="{ on, attrs }">
+                                  <v-icon 
+                                    color="#0D9647" 
+                                    size="16px" 
+                                    v-bind="attrs"
+                                    v-on="on">mdi-check-decagram</v-icon>
+                                </template>
+                                <span>Premium Service Provider</span>
+                              </v-tooltip> 
+                            </span>
+                          </router-link>
 
                           </td>
 
@@ -180,6 +193,9 @@ export default {
     },
     getByBasin(basin) {
       this.getCompanyByBasin({ basin, slug: this.$route.fullPath.split('/').pop() });
+    },
+    hasOfsPremium(supplier) {
+      return supplier.contracts.some(contract => contract.contractType === 'ofs-premium');
     },
   },
   async created(){
