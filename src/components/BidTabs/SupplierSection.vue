@@ -56,13 +56,10 @@
 								v-for="(company, index) in companiesList" v-if="user.company.id != company.objectID">
 								<div class="comapny-data d-flex align-center">
 									<div class="company-img">
-
 										<img v-if="company.image" class="image-class" :src="company.image" />
-
 										<div v-else class="icon-class">
 											<v-icon size="40">mdi-domain</v-icon>
 										</div>
-
 									</div>
 									<div class="company-title text-left pl-4">
 										<h4>{{ company.company }}
