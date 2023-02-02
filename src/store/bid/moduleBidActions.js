@@ -741,8 +741,7 @@ export default {
     if (state.bidData.id) {
       commit('setDraftBidsList',state.bidData.id);
       commit('setBidSerial',state.bidData.serial);
-      // state.draftBidsList = state.bidData.id;
-      // state.bidSerial = state.bidData.serial;
+      
     }
     formData.append('title', state.bidData.title);
     formData.append('type', state.bidData.type);
@@ -837,10 +836,11 @@ export default {
     try {
       const res = await axios.post(`bid/draft/updateDraft/${state.draftBidsList}`, formData, config);
       if (res.status == 200) {
-        // commit('setDraftBidsList',null);
+        
+        commit('setBidSerial', res.data.serial);
         commit('setDraftTime', new Date().toLocaleString());
       } else {
-        // commit('setDraftBidsList',null);
+        
       }
     } catch (err) {
       if (state.apiCounter == 2) {
@@ -861,7 +861,7 @@ export default {
       if (res.status == 200) {
         const userData = res.data;
         return userData;
-        // commit('setBidData', null);
+        
       }
     } catch (err) {
       if (state.apiCounter == 2) {
