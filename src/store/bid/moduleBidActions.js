@@ -861,7 +861,7 @@ export default {
       if (res.status == 200) {
         const userData = res.data;
         return userData;
-        // commit('setBidData', null);
+        
       }
     } catch (err) {
       if (state.apiCounter == 2) {
