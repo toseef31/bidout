@@ -729,16 +729,10 @@ export default {
       this.compute();
     },
     changeTime(newVal, oldVal) {
-      console.log('New - ', newVal);
       const [years, months, days, hours, minutes, seconds] = newVal.split('|');
 
       if (this.checkZero(years) && this.checkZero(months) && this.checkZero(days) && this.checkZero(hours) && this.checkZero(minutes) && this.checkZero(seconds)) {
-        if (this.bidDetail.bidData.type === 'BidOut Process' && !this.bidDetail.bidout) {
-          this.$router.go(0);
-        }
-        if (this.bidDetail.bidData.type !== 'BidOut Process' && !this.bidDetail.receivingBids) {
-          this.$router.go(0);
-        }
+        this.$router.go(0);
       }
     },
   },
