@@ -224,7 +224,9 @@ export default {
     },
     deleteAttach(index) {
       this.documents.splice(index, 1);
-      this.$store.getters.attachData.splice(index, 1);
+      if(this.$store.getters.attachData){
+        this.$store.commit('spliceAttachData',index);
+      }
       this.$store.commit('setAttachement',this.documents);
       this.attachStatus = true;
     },

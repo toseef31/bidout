@@ -18,7 +18,8 @@
             v-model="selectedUser"
             active-class="grey--text">
             <template v-for="(conversation, index) in conversationsList">
-              <v-list-item   @click="openChat(conversation,conversation.groupName)" :key="conversation._id"  :class="{ 'grey--text v-list-item--active' : conversation._id === chatData.group._id }" v-if="conversation.type == 'GROUP'">
+              <template v-if="chatData">
+                <v-list-item   @click="openChat(conversation,conversation.groupName)" :key="conversation._id"  :class="{ 'grey--text v-list-item--active' : conversation._id === (chatData && chatData.group._id) }" v-if="conversation.type == 'GROUP'">
                 <template>
                   <v-list-item-avatar>
                     <v-icon>mdi-domain</v-icon>
@@ -46,7 +47,8 @@
                     ></v-badge> -->
                 </template>
               </v-list-item>
-              <v-list-item v-if="conversation.type == 'PRIVATE' && participant.id != user.id"  v-for="participant in conversation.participantDetails" @click="openChat(conversation,participant.name)" :class="{ 'grey--text v-list-item--active' : conversation._id === chatData.group._id }" :key="participant.id" class="d-none">
+              </template>
+              <v-list-item v-if="conversation.type == 'PRIVATE' && participant.id != user.id"  v-for="participant in conversation.participantDetails" @click="openChat(conversation,participant.name)" :class="{ 'grey--text v-list-item--active' : conversation._id === (chatData && chatData.group._id) }" :key="participant.id" class="d-none">
                 <template >
                     <v-list-item-avatar>
                       <v-avatar>
