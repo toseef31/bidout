@@ -69,7 +69,7 @@ export default {
       return this.$store.getters.g_activityPanel;
     },
     supplierData(){
-      if(this.$store.getters.supplierCompany.companyData){
+      if(this.$store.getters.supplierCompany && this.$store.getters.supplierCompany.companyData){
         return this.$store.getters.supplierCompany.companyData;
       }
     },

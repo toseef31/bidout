@@ -47,6 +47,9 @@ export default {
   setAttachData(state, payload) {
     state.attachData = payload;
   },
+  spliceAttachData(state,index){
+    state.attachData.splice(index,1);
+  },
   setDraftTime(state, payload) {
     state.draftTime = payload;
   },
