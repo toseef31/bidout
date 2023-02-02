@@ -156,7 +156,7 @@
      </v-col>
    </v-row>
 </template>
-<script async defer src="https://maps.googleapis.com/maps/api/js?key=%VITE_GOOGLE_MAP%&libraries=places&callback=Function.prototype"></script>
+<!-- <script async defer src="https://maps.googleapis.com/maps/api/js?key=%VITE_GOOGLE_MAP%&libraries=places&callback=Function.prototype"></script> -->
 <script>
   import Navbar from '../components/Layout/Navbar.vue'
   import LeftSidebar from '../components/Layout/Dashboard/LeftSidebar.vue'
@@ -363,10 +363,11 @@ export default {
     let mapScpManage = "map-api-script-company-profile";
     let mapAlreadyAttached = !!document.getElementById(mapScpManage);
     if(!mapAlreadyAttached){
-     let mapScript = document.createElement('script')
+      let mapScript = document.createElement('script');
+      mapScript.setAttribute("defer", "defer");
       mapScript.id = mapScpManage;
-     await mapScript.setAttribute('src', 'https://maps.googleapis.com/maps/api/js?key='+import.meta.env.VITE_GOOGLE_MAP+'&libraries=places&callback=Function.prototype')
-     document.head.appendChild(mapScript);
+      await mapScript.setAttribute('src', 'https://maps.googleapis.com/maps/api/js?key='+import.meta.env.VITE_GOOGLE_MAP+'&libraries=places&callback=Function.prototype')
+      document.head.appendChild(mapScript);
     }
     await this.getCategories();
     
