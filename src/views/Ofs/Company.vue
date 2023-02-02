@@ -321,7 +321,7 @@ export default {
         
       } else if (this.$store.getters.supplierCompany && this.$store.getters.supplierCompany.companyData && this.$store.getters.supplierCompany.companyData.companyLocations) {
         var LocationsForMap = this.$store.getters.supplierCompany.companyData.companyLocations;
-        console.log('loc',LocationsForMap);
+        
         if(LocationsForMap.length > 0){
           var map = new google.maps.Map(document.getElementById('map'), {
             center: new google.maps.LatLng(LocationsForMap[0].lattitude, LocationsForMap[0].longitude),

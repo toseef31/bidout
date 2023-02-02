@@ -156,7 +156,7 @@
      </v-col>
    </v-row>
 </template>
-<!-- <script async defer src="https://maps.googleapis.com/maps/api/js?key=%VITE_GOOGLE_MAP%&libraries=places&callback=Function.prototype"></script> -->
+<script async defer src="https://maps.googleapis.com/maps/api/js?key=%VITE_GOOGLE_MAP%&libraries=places&callback=Function.prototype"></script>
 <script>
   import Navbar from '../components/Layout/Navbar.vue'
   import LeftSidebar from '../components/Layout/Dashboard/LeftSidebar.vue'
