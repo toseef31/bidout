@@ -241,8 +241,13 @@ export default {
   async created(){
     this.user = this.$store.getters.userInfo;
     this.archiveConversations(this.user.id);
-    const convo = await _.orderBy(this.$store.getters.conversations, 'latestMessage', 'desc')[0];
-    
+    let chatArr = this.$store.getters.conversations;
+    chatArr.forEach((msg, index) => {
+      if(!msg.latestMessage){
+        msg.latestMessage = msg.createdAt; // add the new field
+      }
+    });
+    const convo = await _.orderBy(chatArr, 'latestMessage', 'desc')[0];
     if (convo) {
       if (convo.type == 'PRIVATE') {
         const membr = convo.participantDetails.filter((item) => {
@@ -254,6 +259,7 @@ export default {
       } else {
         var grpName = convo.groupName;
       }
+      
       await this.openChat(convo, grpName);
     }
   },
