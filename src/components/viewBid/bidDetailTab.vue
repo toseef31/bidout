@@ -46,7 +46,7 @@
       <div v-if="
         getAllInvitedSuppliers && getAllInvitedSuppliers.length
       ">
-        <div class="d-flex bid-section-2" v-for="(item, i) in sortedSuppliers(getAllInvitedSuppliers)" :key="i">
+        <div class="d-flex bid-section-2" v-for="(item, i) in getAllInvitedSuppliers" :key="i">
           <div class="d-flex align-center">
             <v-img v-if="item && item.image" max-height="26.67" max-width="100" width="100"
               :src="item && item.image"></v-img>
@@ -55,20 +55,7 @@
               <v-icon size="40">mdi-domain</v-icon>
             </div>
             <div class="ml-5">
-              <div class="font-weight-bold">{{ item && item.company }}
-                <span v-if="hasOfsPremium(item)">
-                  <v-tooltip top>
-                    <template v-slot:activator="{ on, attrs }">
-                      <v-icon 
-                        color="#0D9647" 
-                        size="16px" 
-                        v-bind="attrs"
-                        v-on="on">mdi-check-decagram</v-icon>
-                    </template>
-                    <span>Premium Service Provider</span>
-                  </v-tooltip> 
-                </span>
-              </div>
+              <div class="font-weight-bold">{{ item && item.company }}</div>
               <router-link v-if="item.slug" :to="item.slug ? '/company/' + item.slug : ''"
                 class="text-decoration-underline text-body-2 profile">View profile</router-link>
             </div>
