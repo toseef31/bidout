@@ -63,7 +63,6 @@
                         <v-row justify="center">
                           <v-col cols="12" sm="12" text="left">
                             <label class="d-block text-left input-label mb-2 font-weight-bold">Timezone </label>
-                            </v-text-field>
                             
                             <v-autocomplete
                               v-model="userTimezone"
@@ -80,7 +79,7 @@
                         </v-row>
                         <v-row justify="center">
                           <v-col cols="12">
-                            <v-btn color="#0D9648" type="submit" height="56" min-width="220px" class="text-capitalize white--text font-weight-bold save-btn px-9"  large>Save</v-btn>
+                            <v-btn color="#0D9648" type="submit" height="56" min-width="220px" class="text-capitalize white--text font-weight-bold save-btn px-9" :loading="profileLoading" :disabled="profileLoading"  large>Save</v-btn>
                           </v-col>
                         </v-row>
                       </v-form>
@@ -176,7 +175,7 @@
   import VueMoment from 'vue-moment';
   import moment from 'moment-timezone';
   import _ from 'lodash';
-  import { mapActions } from "vuex";
+  import { mapActions,mapGetters } from "vuex";
 export default {
   name : "EditProfile",
   components: {
@@ -211,6 +210,7 @@ export default {
       results: {},
       twoFactor: true,
       timee: '',
+      saveLoading: false,
     };
   },
   watch: {
@@ -219,6 +219,7 @@ export default {
     },
   },
   computed:{
+    ...mapGetters(['profileLoading']),
     showSideBar(){
         return this.$store.getters.g_sideBarOpen;
     },

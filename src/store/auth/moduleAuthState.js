@@ -33,4 +33,5 @@ export default {
     moduleRfxOption: null,
     moduleOfsOption: null,
     isUserData: false,
+    loginLoading: false,
 }

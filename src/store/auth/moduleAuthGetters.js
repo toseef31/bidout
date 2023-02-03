@@ -86,4 +86,8 @@ export default {
     moduleOfsOption (state){
        return state.moduleOfsOption
     },
+    loginLoading (state){
+      return state.loginLoading;
+    }
+    
 }
