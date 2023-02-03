@@ -46,7 +46,7 @@
       <div v-if="
         getAllInvitedSuppliers && getAllInvitedSuppliers.length
       ">
-        <div class="d-flex bid-section-2" v-for="(item, i) in sortedSuppliers(getAllInvitedSuppliers)" :key="i">
+        <div class="d-flex bid-section-2" v-for="(item, i) in getAllInvitedSuppliers" :key="i">
           <div class="d-flex align-center">
             <v-img v-if="item && item.image" max-height="26.67" max-width="100" width="100"
               :src="item && item.image"></v-img>

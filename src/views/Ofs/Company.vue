@@ -289,71 +289,73 @@ export default {
     getLocation() {
       if (this.$store.getters.supplierCompany && this.$store.getters.supplierCompany.companyData && this.$store.getters.supplierCompany.companyData.companyLocations.length == 1) {
         var LocationsForMap = this.$store.getters.supplierCompany.companyData.companyLocations;
-
-        var map = new google.maps.Map(document.getElementById('map'), {
-          zoom: 9,
-          center: new google.maps.LatLng(LocationsForMap[0].lattitude, LocationsForMap[0].longitude),
-          // mapTypeId: google.maps.MapTypeId.ROADMAP,
-          mapId: '2993bb26d878ba6a',
-          streetViewControl: false,
-          mapTypeControl: false,
-        });
-
-        var infowindow = new google.maps.InfoWindow();
-
-        var marker; var
-          i;
-        for (i = 0; i < LocationsForMap.length; i++) {
-          marker = new google.maps.Marker({
-            position: new google.maps.LatLng(LocationsForMap[i].lattitude, LocationsForMap[i].longitude),
-            map,
-            title: 'Marker',
-            anchorPoint: new google.maps.Point(0, -29),
+        if(LocationsForMap.length > 0){
+          var map = new google.maps.Map(document.getElementById('map'), {
+            zoom: 9,
+            center: new google.maps.LatLng(LocationsForMap[0].lattitude, LocationsForMap[0].longitude),
+            // mapTypeId: google.maps.MapTypeId.ROADMAP,
+            mapId: '2993bb26d878ba6a',
+            streetViewControl: false,
+            mapTypeControl: false,
           });
-          google.maps.event.addListener(marker, 'click', (function (marker, i) {
-            return function () {
-              infowindow.setContent(LocationsForMap[i].location);
-              infowindow.open(map, marker);
-            };
-          }(marker, i)));
-        }
 
-        map.setCenter(latlngbounds.getCenter());
-        map.fitBounds(latlngbounds);
+          var infowindow = new google.maps.InfoWindow();
+
+          var marker; var i;
+          for (i = 0; i < LocationsForMap.length; i++) {
+            marker = new google.maps.Marker({
+              position: new google.maps.LatLng(LocationsForMap[i].lattitude, LocationsForMap[i].longitude),
+              map,
+              title: 'Marker',
+              anchorPoint: new google.maps.Point(0, -29),
+            });
+            google.maps.event.addListener(marker, 'click', (function (marker, i) {
+              return function () {
+                infowindow.setContent(LocationsForMap[i].location);
+                infowindow.open(map, marker);
+              };
+            }(marker, i)));
+          }
+
+        }
+        
       } else if (this.$store.getters.supplierCompany && this.$store.getters.supplierCompany.companyData && this.$store.getters.supplierCompany.companyData.companyLocations) {
         var LocationsForMap = this.$store.getters.supplierCompany.companyData.companyLocations;
-
-        var map = new google.maps.Map(document.getElementById('map'), {
-          center: new google.maps.LatLng(LocationsForMap[0].lattitude, LocationsForMap[0].longitude),
-          // mapTypeId: google.maps.MapTypeId.ROADMAP,
-          mapId: '2993bb26d878ba6a',
-          streetViewControl: false,
-          mapTypeControl: false,
-        });
-
-        var infowindow = new google.maps.InfoWindow();
-
-        var marker; var
-          i;
-        var latlngbounds = new google.maps.LatLngBounds();
-        for (i = 0; i < LocationsForMap.length; i++) {
-          marker = new google.maps.Marker({
-            position: new google.maps.LatLng(LocationsForMap[i].lattitude, LocationsForMap[i].longitude),
-            map,
-            title: 'Marker',
-            anchorPoint: new google.maps.Point(0, -29),
+        
+        if(LocationsForMap.length > 0){
+          var map = new google.maps.Map(document.getElementById('map'), {
+            center: new google.maps.LatLng(LocationsForMap[0].lattitude, LocationsForMap[0].longitude),
+            // mapTypeId: google.maps.MapTypeId.ROADMAP,
+            mapId: '2993bb26d878ba6a',
+            streetViewControl: false,
+            mapTypeControl: false,
           });
-          google.maps.event.addListener(marker, 'click', (function (marker, i) {
-            return function () {
-              infowindow.setContent(LocationsForMap[i].location);
-              infowindow.open(map, marker);
-            };
-          }(marker, i)));
-          latlngbounds.extend(marker.position);
-        }
 
-        map.setCenter(latlngbounds.getCenter());
-        map.fitBounds(latlngbounds);
+          var infowindow = new google.maps.InfoWindow();
+
+          var marker; var
+            i;
+          var latlngbounds = new google.maps.LatLngBounds();
+          for (i = 0; i < LocationsForMap.length; i++) {
+            marker = new google.maps.Marker({
+              position: new google.maps.LatLng(LocationsForMap[i].lattitude, LocationsForMap[i].longitude),
+              map,
+              title: 'Marker',
+              anchorPoint: new google.maps.Point(0, -29),
+            });
+            google.maps.event.addListener(marker, 'click', (function (marker, i) {
+              return function () {
+                infowindow.setContent(LocationsForMap[i].location);
+                infowindow.open(map, marker);
+              };
+            }(marker, i)));
+            latlngbounds.extend(marker.position);
+          }
+
+          map.setCenter(latlngbounds.getCenter());
+          map.fitBounds(latlngbounds);
+        }
+        
       }
     },
     get_url_extension(url) {
