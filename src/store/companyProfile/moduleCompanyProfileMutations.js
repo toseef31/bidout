@@ -23,5 +23,11 @@ export default {
         state.moduleWeight = afterRemove;
       }
       
+    },
+    setSaveInfoLoading (state,payload){
+      state.saveInfoLoading = payload;
+    },
+    setKeyFactsLoading(state,payload){
+      state.keyfactsLoading = payload;
     }
 }

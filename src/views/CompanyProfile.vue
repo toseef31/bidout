@@ -45,7 +45,7 @@
                       </v-row>
                       <v-row>
                         <v-col cols="12" sm="12">
-                          <v-btn color="#0D9648" large class="text-capitalize white--text" width="176px" height="54px" @click="updateBasic">Save Info</v-btn>
+                          <v-btn color="#0D9648" large class="text-capitalize white--text" width="176px" height="54px" :loading="saveInfoLoading" @click="updateBasic">Save Info</v-btn>
                         </v-col>
                       </v-row>
                     </v-container>
@@ -206,6 +206,7 @@ export default {
     };
   },
   computed:{
+    ...mapGetters(['saveInfoLoading']),
     showSideBar(){
         return this.$store.getters.g_sideBarOpen;
     },
