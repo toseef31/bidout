@@ -342,7 +342,7 @@ export default {
     });
   }, 
   addCompanyVideos({commit,dispatch,state}, payload){
-   
+    commit('setNewsLoading',true);
     axios.post('/company/addCompanyVideo/',{'companyId': payload.companyId,'videoLinks': payload.videoLinks})
      .then(responce => {
       
@@ -363,6 +363,7 @@ export default {
           commit('setModuleWeight',data);
         }  
         dispatch("getCompany",payload.companyId)
+        commit('setNewsLoading',false)
       }
     }).catch(async(err) => {
       if(state.apiCounter === 2){
@@ -469,7 +470,7 @@ export default {
         });
   },
   addCompanyNews({commit,dispatch,state}, payload){
-    
+    commit('setNewsLoading',true);
     axios.post('/company/addCompanyNews/',{'companyId': payload.companyId,'corporateNews': payload.corporateNews})
      .then(responce => {
       
@@ -491,6 +492,7 @@ export default {
         }
         
         dispatch("getCompany",payload.companyId)
+        commit('setNewsLoading',false)
       }
     }).catch(async(err) => {
       if(state.apiCounter === 2){

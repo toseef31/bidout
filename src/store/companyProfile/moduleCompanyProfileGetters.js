@@ -22,5 +22,8 @@ export default {
    },
    keyfactsLoading (state){
       return state.keyfactsLoading;
+   },
+   newsLoading (state){
+      return state.newsLoading;
    }
 }

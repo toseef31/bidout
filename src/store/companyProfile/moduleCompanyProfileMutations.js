@@ -29,5 +29,8 @@ export default {
     },
     setKeyFactsLoading(state,payload){
       state.keyfactsLoading = payload;
+    },
+    setNewsLoading(state,payload){
+      state.newsLoading = payload;
     }
 }
