@@ -50,6 +50,7 @@ export default {
       });
   },  
   updateProfile({commit,dispatch,state}, payload){
+    commit('editProfileLoading',true);
     axios.post('/user/updateUser/'+payload.userid,{'email': payload.email,'firstName': payload.firstName,'lastName': payload.lastName,'phoneNumber': payload.phoneNumber,'title':payload.title,'timezone':payload.timezone})
      .then(responce => {
       
@@ -57,7 +58,7 @@ export default {
         axios.get('/user/getUserData/'+payload.email)
          .then(responce => {
           commit('setUser',responce.data)
-          localStorage.setItem("userData",JSON.stringify(responce.data));
+          commit('editProfileLoading',false)
         }).catch(async(err) => {
           if(state.apiCounter === 2){
             dispatch('apiSignOutAction')
@@ -86,12 +87,13 @@ export default {
       });
   },  
   changePassword({commit,dispatch,state}, payload){
-    
+    commit('setPasswordLoading',true);
     axios.post('/user/changePassword/'+payload.userid,{'currentPassword': payload.currentPassword,'newPassword': payload.newPassword})
      .then(responce => {
       
       if(responce.status === 200){
         commit('setUserImg',responce.data.messages)
+        commit('setPasswordLoading',false);
       }
     }).catch(async(err) => {
       if(state.apiCounter === 2){

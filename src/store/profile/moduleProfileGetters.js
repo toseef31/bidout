@@ -26,4 +26,10 @@ export default {
    inviteData (state) {
      return state.inviteData;
    },
+   profileLoading (state){
+      return state.profileLoading;
+   },
+   passwordLoading (state){
+      return state.passwordLoading;
+   }
 }

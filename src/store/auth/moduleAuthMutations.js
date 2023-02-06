@@ -93,5 +93,8 @@ export default {
     },
     setIsUserData (state,payload){
       state.isUserData = payload;
+    },
+    setLoginLoading (state,payload){
+      state.loginLoading = payload;
     }
 }

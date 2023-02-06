@@ -54,7 +54,7 @@
         </v-row>
         <v-row justify="center">
           <v-col cols="12">
-            <v-btn color="#0D9648" type="submit" height="56" min-width="220px" class="text-capitalize white--text font-weight-bold save-btn px-9" :disabled="!valid" large>Change Password</v-btn>
+            <v-btn color="#0D9648" type="submit" height="56" min-width="220px" class="text-capitalize white--text font-weight-bold save-btn px-9" :disabled="!valid" :loading="passwordLoading" large>Change Password</v-btn>
           </v-col>
         </v-row>
       </v-form>
@@ -62,7 +62,7 @@
   </v-row>
 </template>
 <script>
-  import { mapActions } from "vuex";
+  import { mapActions,mapGetters } from "vuex";
 export default {
   data() {
     return {
@@ -75,6 +75,7 @@ export default {
     };
   },
   computed:{
+    ...mapGetters(["passwordLoading"]),
     passRule: function() {
       if (this.newPassword === '') {
         this.successPass = false;
@@ -132,6 +133,9 @@ export default {
         newPassword: this.newPassword,
       }
       this.changePassword(data);
+      this.$refs.passForm.reset();
+      this.confirmPassword = '';
+      this.newPassword = '';
     }
   },
   mounted() {

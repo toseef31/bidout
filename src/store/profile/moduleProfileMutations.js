@@ -37,5 +37,11 @@ export default {
     },
     setInviteData(state,payload){
       state.inviteData = payload;
+    },
+    editProfileLoading(state,payload){
+      state.profileLoading = payload;
+    },
+    setPasswordLoading(state,payload){
+      state.passwordLoading = payload;
     }
 }

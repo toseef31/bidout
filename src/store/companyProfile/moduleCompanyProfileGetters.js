@@ -16,5 +16,14 @@ export default {
    },
    moduleWeight (state){
       return state.moduleWeight
+   },
+   saveInfoLoading (state){
+      return state.saveInfoLoading;
+   },
+   keyfactsLoading (state){
+      return state.keyfactsLoading;
+   },
+   newsLoading (state){
+      return state.newsLoading;
    }
 }

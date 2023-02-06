@@ -80,9 +80,9 @@
                       solo-flat class="text-capitalize"
                       :disabled="userInfo.role == 'admin' && userInfo.id == userData.id ? true : false "
                     ></v-select>
-
                     <v-btn
                       :disabled="!valid"
+                      :loading="btnLoading"
                       color="#0D9648"
                       class="mr-4 text-capitalize white--text font-weight-bold"
                       @click="validate"
@@ -117,6 +117,7 @@ export default {
     return {
       isHidden : false,
       valid: true,
+      btnLoading: false,
         name: '',
         nameRules: [
           v => !!v || 'Name is required',
@@ -150,7 +151,8 @@ export default {
     ...mapActions(['updateUser',"updateInvite"]),
     validate() {
       this.$refs.form.validate();
-      
+      this.valid = false;
+      this.btnLoading = true;
       var data = {
         firstName: this.userData.firstName,
         lastName: this.userData.lastName,

@@ -22,6 +22,7 @@ export default {
     
   signInAction({ commit }, payload) {
     // Try to sigin
+    commit('setLoginLoading',true);
     firebase.auth().signInWithEmailAndPassword(payload.email, payload.password)
 
       .then((result) => {
@@ -32,8 +33,9 @@ export default {
          .then(responce => {
           if(responce.data.status == false){
             commit('setError', 'Disabled account! You cannot login with this account');
-           
+            
             commit('showErrorAlert')
+            commit('setLoginLoading',false);
           }else{
             axios.get('/auth/addUserLoginHistory/'+responce.data.id)
               .then(responce => {
@@ -43,7 +45,7 @@ export default {
               commit('setCompany',responce.data)
             })
             commit('setUser',responce.data)
-            
+            commit('setLoginLoading',false)
             window.location.href = "/dashboard";
           }
           
