@@ -46,7 +46,7 @@
                   @ChatDatas="ChangeT($event)"
                   @callTest="openChat"
                   @membersData="memberT($event)"
-                  :conversationsIds="this.conversationId"
+                  :conversationsIds="conversationId"
                 ></conversations-section>
               </div>
             </v-col>
