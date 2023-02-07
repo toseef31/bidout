@@ -35,7 +35,7 @@
           v-if="bidDetail.bidData && bidDetail.bidData.bidDescriptions && Array.isArray(bidDetail.bidData.bidDescriptions)"
           v-for="(item, index) in bidDetail.bidData.bidDescriptions.slice(1)" :key="index">
           <span>{{ item && item.name }}:</span> {{ item && item.body }}
-          <br />
+          <br /> <br />
         </p>
       </div>
     </div>
@@ -55,7 +55,16 @@
               <v-icon size="40">mdi-domain</v-icon>
             </div>
             <div class="ml-5">
-              <div class="font-weight-bold">{{ item && item.company }}</div>
+              <div class="font-weight-bold">{{ item && item.company }}
+                <span v-if="hasOfsPremium(item)">
+                  <v-tooltip top>
+                    <template v-slot:activator="{ on, attrs }">
+                      <v-icon color="#0D9647" size="16px" v-bind="attrs" v-on="on">mdi-check-decagram</v-icon>
+                    </template>
+                    <span>Premium Service Provider</span>
+                  </v-tooltip>
+                </span>
+              </div>
               <router-link v-if="item.slug" :to="item.slug ? '/company/' + item.slug : ''"
                 class="text-decoration-underline text-body-2 profile">View profile</router-link>
             </div>
@@ -79,7 +88,7 @@
                       <v-icon v-bind="attrs" v-on="on">mdi-domain</v-icon>
                     </v-badge>
                   </template>
-                  <span>In Active</span>
+                  <span>Pending Registration</span>
                 </v-tooltip>
 
               </v-col>
@@ -374,24 +383,21 @@ export default {
       return inActive;
     },
     hasOfsPremium(supplier) {
-      if(supplier.contracts){
-        return supplier.contracts.some(contract => contract.contractType === 'ofs-premium');
+      if (supplier.contracts) {
+        return supplier.contracts.some((contract) => contract.contractType === 'ofs-premium');
       }
-      
     },
-    sortedSuppliers(suppliers){
+    sortedSuppliers(suppliers) {
       return suppliers.sort((a, b) => {
-        if(a.contracts){
-          let aHasOfsPremium = a.contracts.some(contract => contract.contractType === 'ofs-premium');
+        if (a.contracts) {
+          const aHasOfsPremium = a.contracts.some((contract) => contract.contractType === 'ofs-premium');
           if (aHasOfsPremium) {
             return -1;
           }
           return 1;
         }
-        
       });
-      
-    }
+    },
   },
   computed: {
     bidDetail() {
