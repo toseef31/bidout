@@ -364,6 +364,7 @@ export default {
     isValid() {
       return this.value && this.value.length && this.value.reduce((acc, curr) => acc && curr.status, true);
     },
+
   },
   methods: {
     ...mapActions(['submitBid', 'editSubmitBid']),
@@ -371,9 +372,17 @@ export default {
       const sizeInMB = (size / (1024 * 1024)).toFixed(2);
       return `${sizeInMB}mb`;
     },
+    allValid() {
+      for (let i = 0; i < this.value.length; i++) {
+        if (Number(this.lineItems[i].price) === Number(this.getSupplierBid.lineItems[i].price)) {
+          this.value[i].message = 'Suppliers can only lower the prices during the BidOut Phase!';
+          this.value[i].status = false;
+        }
+      }
+    },
     validatePrice(event, index) {
       if (this.isBidSubmitted && this.isBidOut) {
-        if (Number(this.getSupplierBid.lineItems[index].price) < Number(event)) {
+        if (Number(this.getSupplierBid.lineItems[index].price) <= Number(event)) {
           this.value[index].message = 'Suppliers can only lower the prices during the BidOut Phase!';
           this.value[index].status = false;
         } else {
@@ -383,10 +392,14 @@ export default {
       }
     },
     async submit(action) {
-      if (!this.isValid && action === 'edit' && this.isBidOut) {
-        this.$store.commit('setLoweringPriceAlert');
-        window.scrollTo({ top: 0, behavior: 'smooth' });
-        return;
+      if (action === 'edit' && this.isBidOut) {
+        this.allValid();
+
+        if (!this.isValid) {
+          this.$store.commit('setLoweringPriceAlert');
+          window.scrollTo({ top: 0, behavior: 'smooth' });
+          return;
+        }
       }
 
       if (action === 'submit' && this.$refs.form.validate()) {
