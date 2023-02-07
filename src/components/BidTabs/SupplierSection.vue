@@ -281,23 +281,31 @@
 						<v-card-text>
 							<h2 class="text-left mb-6 font-weight-bold">Invite New Supplier</h2>
 							<v-form ref="form" v-model="valid" lazy-validation>
-								<label class="d-block text-left font-weight-bold mb-2">First Name</label>
+								<label class="d-block text-left font-weight-bold mb-2">First Name<span class="required-class">*</span></label>
 								<v-text-field v-model="firstName" :rules="nameRules" placeholder="First Name" required
 									outlined></v-text-field>
-								<label class="d-block text-left font-weight-bold mb-2">Last Name</label>
+								<label class="d-block text-left font-weight-bold mb-2">Last Name<span class="required-class">*</span></label>
 								<v-text-field v-model="lastName" :rules="nameRules" placeholder="Last Name" required
 									outlined></v-text-field>
-								<label class="d-block text-left font-weight-bold mb-2">Company</label>
+								<label class="d-block text-left font-weight-bold mb-2">Company<span class="required-class">*</span></label>
 								<v-text-field v-model="company" :rules="companyRules" placeholder="Company Name" required
 									outlined></v-text-field>
-								<label class="d-block text-left font-weight-bold mb-2">Phone Number</label>
-								<VuePhoneNumberInput :border-radius="8" size="lg" v-model="phoneNumber" :translations="translations"
-									:loader="hasLoaderActive" :error="hasErrorActive" @update="onUpdate" />
-								<label class="d-block text-left font-weight-bold mb-2 mt-6">Email</label>
+								<label class="d-block text-left font-weight-bold mb-2">Phone Number<span class="required-class">*</span></label>
+								<VuePhoneNumberInput :border-radius="8" size="lg" 
+								error-color="#F32349"
+								valid-color="#9E9E9E"
+								v-model="phoneNumber" :translations="translations"
+								:required="true"
+									:loader="hasLoaderActive" 
+									:error="!getPhoneInfo.valid" @update="onUpdate" />
+
+									<div 
+									class="phone-class" v-if="!getPhoneInfo.valid">{{getPhoneInfo.message}}</div>
+								<label class="d-block text-left font-weight-bold mb-2 mt-6">Email<span class="required-class">*</span></label>
 								<v-text-field v-model="email" :rules="emailRules" placeholder="example@email.com" required
 									outlined></v-text-field>
 
-								<v-btn :loading="loadingInvite" :disabled="!valid" color="#0D9648"
+								<v-btn :loading="loadingInvite" :disabled="!valid || !getPhoneInfo.valid" color="#0D9648"
 									class="mr-4 text-capitalize white--text font-weight-bold" @click="validate" large height="50px"
 									min-width="220px">
 									Send Invite
@@ -328,7 +336,7 @@ export default {
 			availableSearch: ['All', 'Gulf Coast', 'Northeast', 'Rockies', 'Mid-Con', 'Permian', 'Arklatex', 'Offshore', 'Other'],
 			availableSuppl: null,
 			supplierDialog: false,
-			valid: true,
+			valid: false,
 			firstName: '',
 			lastName: '',
 			nameRules: [
@@ -352,7 +360,7 @@ export default {
 				example: 'Example',
 			},
 			hasLoaderActive: false,
-			hasErrorActive: false,
+			hasErrorActive: true,
 			results: {},
 			categories: false,
 			searchCompany: '',
@@ -363,7 +371,6 @@ export default {
 			invitedCompanies: [],
 			itembidData: [],
 			interval: '',
-			valid: false,
 			user: '',
 			parsedSelectedBasin: 'all',
 			parsedSelectedCompanyBasin: 'all',
@@ -374,6 +381,10 @@ export default {
 			filterAfter: [],
 			inviteCount: 1,
 			loadingInvite: false,
+			phoneInfo: {
+				valid: true,
+				message: ""
+			}
 		};
 	},
 	computed: {
@@ -381,6 +392,9 @@ export default {
 		allcategories() {
 			setTimeout(() => this.loading = false, 500);
 			return _.orderBy(this.$store.getters.categories, 'orderNumber', 'asc');
+		},
+		getPhoneInfo() {
+			return this.phoneInfo
 		},
 		salesRepsList() {
 			if (this.$route.name == 'EditBid') {
@@ -476,6 +490,17 @@ export default {
 			this.$emit('changetab', 'tab-3');
 		},
 		onUpdate(payload) {
+			this.phoneInfo.valid = payload.isValid
+
+			if (payload.phoneNumber && !payload.isValid) {
+				this.phoneInfo.message =  'Invalid Phone number format'
+			} 
+
+			if (!payload.phoneNumber && !payload.isValid) {
+				this.phoneInfo.message =  'Phone number is required'
+			}
+
+
 			this.results = payload.formattedNumber;
 		},
 		async validate() {
@@ -490,7 +515,7 @@ export default {
 				bidDueDate: this.$store.getters.bidData.dueDate,
 				bidDueTime: this.$store.getters.bidData.dueTime,
 			};
-			if (this.$refs.form.validate()) {
+			if (this.$refs.form.validate() && this.getPhoneInfo.valid) {
 				this.loadingInvite = true;
 				try {
 					const user = await this.inviteNewSupplier(supplier);
@@ -502,6 +527,10 @@ export default {
 					this.$refs.form.reset();
 					this.loadingInvite = false;
 					this.phoneNumber = '';
+					this.phoneInfo = {
+						valid: true,
+						message: ''
+					}
 				} catch (error) {
 					console.log(error);
 				}
