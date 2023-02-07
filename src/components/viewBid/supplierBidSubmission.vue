@@ -378,7 +378,6 @@ export default {
       return `${sizeInMB}mb`;
     },
     validatePrice(event, index) {
-      console.log(event);
       const value = event;
       const price = parseFloat(value).toFixed(2);
       this.lineItems[index].price = price;
