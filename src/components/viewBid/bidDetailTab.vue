@@ -88,7 +88,7 @@
                       <v-icon v-bind="attrs" v-on="on">mdi-domain</v-icon>
                     </v-badge>
                   </template>
-                  <span>In Active</span>
+                  <span>Pending Registration</span>
                 </v-tooltip>
 
               </v-col>
