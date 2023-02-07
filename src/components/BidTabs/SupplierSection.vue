@@ -281,19 +281,19 @@
 						<v-card-text>
 							<h2 class="text-left mb-6 font-weight-bold">Invite New Supplier</h2>
 							<v-form ref="form" v-model="valid" lazy-validation>
-								<label class="d-block text-left font-weight-bold mb-2">First Name</label>
+								<label class="d-block text-left font-weight-bold mb-2">First Name<span class="required-class">*</span></label>
 								<v-text-field v-model="firstName" :rules="nameRules" placeholder="First Name" required
 									outlined></v-text-field>
-								<label class="d-block text-left font-weight-bold mb-2">Last Name</label>
+								<label class="d-block text-left font-weight-bold mb-2">Last Name<span class="required-class">*</span></label>
 								<v-text-field v-model="lastName" :rules="nameRules" placeholder="Last Name" required
 									outlined></v-text-field>
-								<label class="d-block text-left font-weight-bold mb-2">Company</label>
+								<label class="d-block text-left font-weight-bold mb-2">Company<span class="required-class">*</span></label>
 								<v-text-field v-model="company" :rules="companyRules" placeholder="Company Name" required
 									outlined></v-text-field>
-								<label class="d-block text-left font-weight-bold mb-2">Phone Number</label>
+								<label class="d-block text-left font-weight-bold mb-2">Phone Number<span class="required-class">*</span></label>
 								<VuePhoneNumberInput :border-radius="8" size="lg" v-model="phoneNumber" :translations="translations"
 									:loader="hasLoaderActive" :error="hasErrorActive" @update="onUpdate" />
-								<label class="d-block text-left font-weight-bold mb-2 mt-6">Email</label>
+								<label class="d-block text-left font-weight-bold mb-2 mt-6">Email<span class="required-class">*</span></label>
 								<v-text-field v-model="email" :rules="emailRules" placeholder="example@email.com" required
 									outlined></v-text-field>
 
@@ -328,7 +328,7 @@ export default {
 			availableSearch: ['All', 'Gulf Coast', 'Northeast', 'Rockies', 'Mid-Con', 'Permian', 'Arklatex', 'Offshore', 'Other'],
 			availableSuppl: null,
 			supplierDialog: false,
-			valid: true,
+			valid: false,
 			firstName: '',
 			lastName: '',
 			nameRules: [
@@ -363,7 +363,6 @@ export default {
 			invitedCompanies: [],
 			itembidData: [],
 			interval: '',
-			valid: false,
 			user: '',
 			parsedSelectedBasin: 'all',
 			parsedSelectedCompanyBasin: 'all',
