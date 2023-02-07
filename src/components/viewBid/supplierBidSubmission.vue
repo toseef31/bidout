@@ -31,7 +31,6 @@
                 <div class="d-flex align-center unit-class">
                   <div class=" unit">{{ item.unit }}</div>
                   <div class="mr-2">
-
                     <v-text-field single-line class="mt-7" :rules="item.required === 'true' ? lineItemsRule : []"
                       outlined :disabled="checkTimeForLineItems" dense min="0" prefix="$" type="number"
                       @input="validatePrice($event, index)" :key="index" v-if="lineItems[index]['bid']"
@@ -364,6 +363,13 @@ export default {
     isValid() {
       return this.value && this.value.length && this.value.reduce((acc, curr) => acc && curr.status, true);
     },
+    formattedPrice() {
+      const formattedPrices = {}
+      this.lineItems.forEach((item, index) => {
+        formattedPrices[index] = parseFloat(item.price).toFixed(2);
+      })
+      return formattedPrices
+    },
   },
   methods: {
     ...mapActions(['submitBid', 'editSubmitBid']),
@@ -372,6 +378,10 @@ export default {
       return `${sizeInMB}mb`;
     },
     validatePrice(event, index) {
+      console.log(event);
+      const value = event;
+      const price = parseFloat(value).toFixed(2);
+      this.lineItems[index].price = price;
       if (this.isBidSubmitted && this.isBidOut) {
         if (Number(this.getSupplierBid.lineItems[index].price) < Number(event)) {
           this.value[index].message = 'Suppliers can only lower the prices during the BidOut Phase!';
@@ -548,6 +558,7 @@ export default {
         }
       }
     },
+    
   },
   mounted() {
     window.scrollTo({ top: 0, behavior: 'smooth' });
