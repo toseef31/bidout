@@ -221,4 +221,10 @@ export default {
   pushSalesRepsList(state,list){
     state.salesRepsList.push(list);
   },
+  setSaveBidLoading (state,payload){
+    state.saveBidLoading = payload;
+  },
+  setLoadingInvite (state,payload){
+    state.loadingInvite = payload;
+  }
 };
