@@ -607,6 +607,7 @@ export default {
   },
 
   async saveDraftBid({ commit, dispatch, state }, payload) {
+    commit('setSaveBidLoading',true);
     const config = {
       headers: {
         'Content-Type': 'multipart/form-data',
@@ -716,10 +717,13 @@ export default {
         commit('setBidSerial', res.data.serial);
         state.bidData.statusType = 'draftBid';
         commit('setDraftTime', new Date().toLocaleString());
+        commit('setSaveBidLoading',false);
       } else {
         commit('setDraftBidsList', null);
+        commit('setSaveBidLoading',false);
       }
     } catch (err) {
+      commit('setSaveBidLoading',false);
       if (state.apiCounter == 2) {
         dispatch('apiSignOutAction');
       } else if (err.response && err.response.status === 403) {
@@ -730,6 +734,7 @@ export default {
     }
   },
   async updateDraftBid({ commit, state }, payload) {
+    commit('setSaveBidLoading',true);
     const config = {
       headers: {
         'Content-Type': 'multipart/form-data',
@@ -839,10 +844,12 @@ export default {
         
         commit('setBidSerial', res.data.serial);
         commit('setDraftTime', new Date().toLocaleString());
+        commit('setSaveBidLoading',false);
       } else {
-        
+        commit('setSaveBidLoading',false);
       }
     } catch (err) {
+      commit('setSaveBidLoading',false);
       if (state.apiCounter == 2) {
         dispatch('apiSignOutAction');
       } else if (err.response && err.response.status === 403) {
@@ -853,17 +860,20 @@ export default {
     }
   },
   async inviteNewSupplier({ commit, state, dispatch }, payload) {
+    commit('setLoadingInvite',true);
     try {
       const res = await axios.post('bid/inviteSupplier/', {
         firstName: payload.firstName, lastName: payload.lastName, company: payload.company, phone: payload.phone, email: payload.email, bidTitle: payload.bidTitle, bidType: payload.bidType, bidDueDate: payload.bidDueDate, bidDueTime: payload.bidDueTime,
       });
 
       if (res.status == 200) {
+        commit('setLoadingInvite',false);
         const userData = res.data;
         return userData;
         
       }
     } catch (err) {
+      commit('setLoadingInvite',false);
       if (state.apiCounter == 2) {
         dispatch('apiSignOutAction');
       } else if (err.response && err.response.status === 403) {
@@ -1439,6 +1449,7 @@ export default {
     }
   },
   async updateBid({ commit, state }, payload) {
+    commit('setSaveBidLoading',true);
     const config = {
       headers: {
         'Content-Type': 'multipart/form-data',
@@ -1564,10 +1575,13 @@ export default {
       if (res.status == 200) {
         // commit('setDraftBidsList',null);
         commit('setDraftTime', new Date().toLocaleString());
+        commit('setSaveBidLoading',false);
       } else {
+        commit('setSaveBidLoading',false);
         // commit('setDraftBidsList',null);
       }
     } catch (err) {
+      commit('setSaveBidLoading',false);
       if (state.apiCounter == 2) {
         dispatch('apiSignOutAction');
       } else if (err.response && err.response.status === 403) {

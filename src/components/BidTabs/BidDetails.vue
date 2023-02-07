@@ -98,7 +98,7 @@
 
           <v-row justify="center">
             <v-col cols="12">
-              <v-btn color="#0D9648" height="56" class="text-capitalize white--text font-weight-bold save-btn px-9" :loading="loading" :disabled="!valid" @click="changeTab" large>Save Changes</v-btn>
+              <v-btn color="#0D9648" height="56" class="text-capitalize white--text font-weight-bold save-btn px-9" :loading="saveBidLoading" :disabled="!valid" @click="changeTab" large>Save Changes</v-btn>
             </v-col>
           </v-row>
           <template v-if="route != 'EditTemplate'">
@@ -198,7 +198,7 @@ export default {
     };
   },
   computed: {
-    ...mapGetters(['userInfo']),
+    ...mapGetters(['userInfo','saveBidLoading']),
     singleTemplate() {
       return this.$store.getters.singleTemplate;
     },
