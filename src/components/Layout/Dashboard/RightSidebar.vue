@@ -94,6 +94,8 @@
 </template>
 
 <script>
+  import VueMoment from 'vue-moment';
+  import moment from 'moment-timezone';
 import _ from 'lodash';
 import { mapActions } from "vuex";
 export default {
@@ -108,7 +110,11 @@ export default {
     },
     activities(){
       if(this.$store.getters.activities){  
-        return _.orderBy(this.$store.getters.activities.slice(0,40),'date','desc');
+        this.$store.getters.activities.map((item, index) => {
+          const timestamp = item.createdOn._seconds * 1000 + item.createdOn._nanoseconds / 1000000;
+          item.newDate = moment(timestamp).format('MM/DD/YYYY hh:mm A');
+        })
+        return _.orderBy(this.$store.getters.activities.slice(0,40),'newDate','desc');
       }else{
         return [];
       }
@@ -122,7 +128,6 @@ export default {
   },
   methods: {
     ...mapActions(["getActivities"]),
-   
   },
   async created(){
     await this.getActivities(this.$store.getters.userInfo.id);
