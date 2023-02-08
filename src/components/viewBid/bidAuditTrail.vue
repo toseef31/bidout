@@ -13,8 +13,6 @@
             <template>
               <v-list-item-avatar>
                 <v-icon v-text="'mdi-email-outline'" :class="[
-                  index === 0 ? 'icon-color' : '',
-                  index !== 0 ? 'default-color' : '',
                   'notification-icon',
                 ]">
                 </v-icon>
