@@ -126,7 +126,7 @@ export default {
   methods: {
     ...mapActions(["getActivities"]),
     istoday(date) {
-      return moment.tz(date, this.user.timezone).startOf('hour').fromNow();
+      return moment.tz(date, 'America/Chicago').startOf('hour').fromNow();
     },
   },
   async created(){
