@@ -35,7 +35,7 @@
                 </v-list-item-content>
 
                 <v-list-item-action >
-                  <v-list-item-action-text>{{istoday(item.date)}}</v-list-item-action-text>
+                  <v-list-item-action-text>{{ item.date }}</v-list-item-action-text>
                 </v-list-item-action>
               </template>
             </v-list-item>
@@ -94,15 +94,12 @@
 </template>
 
 <script>
-import VueMoment from 'vue-moment';
-import moment from 'moment-timezone';
 import _ from 'lodash';
 import { mapActions } from "vuex";
 export default {
   name : "RightSidebar",
   data() {
     return {
-     user : '',
     };
   },
   computed:{
@@ -125,9 +122,7 @@ export default {
   },
   methods: {
     ...mapActions(["getActivities"]),
-    istoday(date) {
-      return moment.tz(date, 'America/Chicago').startOf('hour').fromNow();
-    },
+   
   },
   async created(){
     await this.getActivities(this.$store.getters.userInfo.id);
@@ -136,7 +131,7 @@ export default {
     
   },
   mounted() {
-    this.user = this.$store.getters.userInfo;
+    
   }
 };
 </script>
