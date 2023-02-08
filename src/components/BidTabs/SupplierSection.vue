@@ -297,10 +297,9 @@
 								v-model="phoneNumber" :translations="translations"
 								:required="true"
 									:loader="hasLoaderActive" 
-									:error="!getPhoneInfo.valid" @update="onUpdate" />
-
+									:error="!getPhoneInfo.valid && getCounter > 1" @update="onUpdate" />
 									<div 
-									class="phone-class" v-if="!getPhoneInfo.valid">{{getPhoneInfo.message}}</div>
+									class="phone-class" v-if="!getPhoneInfo.valid && getCounter > 1">{{getPhoneInfo.message}}</div>
 								<label class="d-block text-left font-weight-bold mb-2 mt-6">Email<span class="required-class">*</span></label>
 								<v-text-field v-model="email" :rules="emailRules" placeholder="example@email.com" required
 									outlined></v-text-field>
@@ -381,6 +380,7 @@ export default {
 			filterAfter: [],
 			inviteCount: 1,
 			loadingInvite: false,
+			counter: 0,
 			phoneInfo: {
 				valid: true,
 				message: ""
@@ -468,6 +468,9 @@ export default {
 				}
 			}
 		},
+		getCounter() {
+			return this.counter
+		},
 		validat() {
 			if (this.repsInvited.length > 0) {
 				this.$emit('validation', { valid: true, supplier: '2' });
@@ -490,6 +493,7 @@ export default {
 			this.$emit('changetab', 'tab-3');
 		},
 		onUpdate(payload) {
+			this.counter++
 			this.phoneInfo.valid = payload.isValid
 
 			if (payload.phoneNumber && !payload.isValid) {
@@ -504,6 +508,13 @@ export default {
 			this.results = payload.formattedNumber;
 		},
 		async validate() {
+			if (this.results === '') {
+				this.counter += 2 
+				this.phoneInfo = {
+						valid: false,
+						message: 'Phone number is required'
+					}
+			}
 			const supplier = {
 				firstName: this.firstName,
 				lastName: this.lastName,
@@ -515,7 +526,7 @@ export default {
 				bidDueDate: this.$store.getters.bidData.dueDate,
 				bidDueTime: this.$store.getters.bidData.dueTime,
 			};
-			if (this.$refs.form.validate() && this.getPhoneInfo.valid) {
+			if (this.$refs.form.validate() && this.getPhoneInfo.valid ) {
 				this.loadingInvite = true;
 				try {
 					const user = await this.inviteNewSupplier(supplier);
@@ -531,6 +542,9 @@ export default {
 						valid: true,
 						message: ''
 					}
+					this.counter = 0
+					this.valid = false
+					this.results = ''
 				} catch (error) {
 					console.log(error);
 				}
