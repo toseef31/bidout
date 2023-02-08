@@ -379,7 +379,6 @@ export default {
 			newRepsInvited: [],
 			filterAfter: [],
 			inviteCount: 1,
-			loadingInvite: false,
 			counter: 0,
 			phoneInfo: {
 				valid: true,
@@ -388,7 +387,7 @@ export default {
 		};
 	},
 	computed: {
-		...mapGetters(['newSupplier', 'userInfo']),
+		...mapGetters(['newSupplier', 'userInfo','loadingInvite']),
 		allcategories() {
 			setTimeout(() => this.loading = false, 500);
 			return _.orderBy(this.$store.getters.categories, 'orderNumber', 'asc');
@@ -526,8 +525,8 @@ export default {
 				bidDueDate: this.$store.getters.bidData.dueDate,
 				bidDueTime: this.$store.getters.bidData.dueTime,
 			};
-			if (this.$refs.form.validate() && this.getPhoneInfo.valid ) {
-				this.loadingInvite = true;
+
+			if (this.$refs.form.validate() && this.getPhoneInfo.valid) {
 				try {
 					const user = await this.inviteNewSupplier(supplier);
 					this.supplierDialog = false;
