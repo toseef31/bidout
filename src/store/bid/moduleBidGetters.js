@@ -121,5 +121,8 @@ export default {
   },
   loadingInvite(state){
     return state.loadingInvite;
+  },
+  bidActivities(state) {
+    return state.bidActivities
   }
 };

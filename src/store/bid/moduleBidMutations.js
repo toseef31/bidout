@@ -226,5 +226,8 @@ export default {
   },
   setLoadingInvite (state,payload){
     state.loadingInvite = payload;
+  },
+  setBidActivities(state,payload) {
+    state.bidActivities = payload
   }
 };
