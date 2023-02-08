@@ -426,6 +426,8 @@ export default {
           return item.contractType == 'ofs-premium' || item.contractType == 'ofs'
         }
       })
+    }else{
+      return [];
     }
    },
    rfxContractData(){
@@ -436,6 +438,8 @@ export default {
           return item.contractType == 'rfx'
         }
       })
+    }else{
+      return [];
     }
    },
    ofsStandrdContractData(){
@@ -446,6 +450,8 @@ export default {
           return item.contractType == 'ofs'
         }
       })
+    }else{
+      return [];
     }
    },
    buttonStatus(){

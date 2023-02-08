@@ -5,10 +5,24 @@ import router from '@/router'
 import store from "../../store";
 import axios from 'axios'
 
+let isNavigating = false;
+
+function navigate(route) {
+  if (isNavigating) {
+    return;
+  }
+  isNavigating = true;
+  router.push(route)
+    .finally(() => {
+      isNavigating = false;
+    });
+}
+
 export default {
     
   signInAction({ commit }, payload) {
     // Try to sigin
+    commit('setLoginLoading',true);
     firebase.auth().signInWithEmailAndPassword(payload.email, payload.password)
 
       .then((result) => {
@@ -19,8 +33,9 @@ export default {
          .then(responce => {
           if(responce.data.status == false){
             commit('setError', 'Disabled account! You cannot login with this account');
-           
+            
             commit('showErrorAlert')
+            commit('setLoginLoading',false);
           }else{
             axios.get('/auth/addUserLoginHistory/'+responce.data.id)
               .then(responce => {
@@ -30,7 +45,7 @@ export default {
               commit('setCompany',responce.data)
             })
             commit('setUser',responce.data)
-            
+            commit('setLoginLoading',false)
             window.location.href = "/dashboard";
           }
           
@@ -38,20 +53,25 @@ export default {
         
       }, (err) => {
         commit('setPassError',"Oops! You have entered a incorrect password, try again, if you are still unsure of your password, please Reset Password")
+        commit('setLoginLoading',false)
         // commit('showErrorAlert')
       })
   },  
   getCurrentUser({commit,dispatch}){
+    commit('setIsUserData',true)
     return new Promise((resolve, reject) => {
+      
       firebase.auth().onAuthStateChanged(function(users) {
         if (users) {
           axios.get('/user/getUserData/'+users.multiFactor.user.email)
            .then(responce => {
               commit('setUser',responce.data)
+              // commit('setIsUserData',false)
               resolve(responce.data);
            })
         } else {
           dispatch('signOutAction');
+          // commit('setIsUserData',false)
           reject("User is not logged In")
         }
       });
@@ -75,9 +95,8 @@ export default {
        
         localStorage.removeItem("token");
         localStorage.removeItem("companyData");
-        router.replace({
-          name: "OFSHome"
-        });
+        
+        navigate('/');
       })
       .catch((error) => {
         commit('setError', error.message)

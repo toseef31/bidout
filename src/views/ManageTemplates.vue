@@ -148,7 +148,9 @@ export default {
         return this.$store.getters.g_activityPanel;
     },
     userDatas(){
+      if(this.$store.getters.userInfo){
         return this.$store.getters.userInfo;
+      } 
     },
     bidTemplates(){
       return this.$store.getters.bidTemplates;

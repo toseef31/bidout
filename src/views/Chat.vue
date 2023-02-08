@@ -46,6 +46,7 @@
                   @ChatDatas="ChangeT($event)"
                   @callTest="openChat"
                   @membersData="memberT($event)"
+                  :conversationsIds="conversationId"
                 ></conversations-section>
               </div>
             </v-col>
@@ -449,8 +450,36 @@ export default {
         userId: this.user.id,
       };
       this.archiveChat(archivess);
+      this.$store.commit('setSpliceToConversation',data);
       this.isChatMenu = false;
       this.chatData.group = "";
+      let chatArr = this.$store.getters.conversations;
+      chatArr.forEach((msg, index) => {
+        if(!msg.latestMessage){
+          msg.latestMessage = msg.createdAt; // add the new field
+        }
+      });
+      const convo = _.orderBy(chatArr, 'latestMessage', 'desc')[0];
+      
+      if (convo) {
+        if (convo.type == 'PRIVATE') {
+          const membr = convo.participantDetails.filter((item) => {
+            if (this.user.id != item.id) {
+              return item;
+            }
+          });
+          var grpName = membr[0].name;
+        } else {
+          var grpName = convo.groupName;
+        }
+        const obj = {
+          group : convo,
+          name : grpName,
+        };
+        this.conversationId = obj.group._id;
+        this.chatData = obj;
+        this.openChat(convo, grpName);
+      }
     },
     getText: (item) => `${item.firstName} ${item.lastName}`,
     dragfileupload(file, xhr, formData) {

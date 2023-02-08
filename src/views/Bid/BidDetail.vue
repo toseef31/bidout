@@ -610,8 +610,17 @@ export default {
     formatDate(dueDate) {
       return dueDate !== '' && dueDate !== null ? moment.tz(dueDate, 'America/Chicago').format('MM/DD/YYYY') : '';
     },
+    checkZero(item) {
+      if (Number(item) === 0) {
+        return true;
+      } return false;
+    },
+
   },
   computed: {
+    changeTime() {
+      return `${this.years}|${this.months}|${this.days}|${this.hours}|${this.minutes}|${this.seconds}`;
+    },
     bidDetail() {
       return this.$store.getters.bidViewData;
     },
@@ -718,6 +727,13 @@ export default {
   watch: {
     actualTime(val, oldVal) {
       this.compute();
+    },
+    changeTime(newVal, oldVal) {
+      const [years, months, days, hours, minutes, seconds] = newVal.split('|');
+
+      if (this.checkZero(years) && this.checkZero(months) && this.checkZero(days) && this.checkZero(hours) && this.checkZero(minutes) && this.checkZero(seconds)) {
+        this.$router.go(0);
+      }
     },
   },
 };

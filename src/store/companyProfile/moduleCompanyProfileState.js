@@ -18,5 +18,8 @@ export default {
       'weight': 8,
       'status': 'add',
     }
-  ]
+  ],
+  saveInfoLoading: false,
+  keyfactsLoading: false,
+  newsLoading: false,
 }

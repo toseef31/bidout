@@ -20,7 +20,7 @@
         <v-list-item-group v-model="selectedUser" active-class="grey--text">
           <v-list-item v-for="(list, index) in conversationsList" @click="openChat(list)" :class="{
             'grey--text v-list-item--active':
-              list._id === chatData && chatData.conversation && chatData.conversation._id,
+              list._id === conversationId,
           }" :key="index">
             <template>
               <v-img v-if="list.company && list.company.image" max-height="26.67px" max-width="100px" width="100px"

@@ -32,4 +32,6 @@ export default {
     packageValue: null,
     moduleRfxOption: null,
     moduleOfsOption: null,
+    isUserData: false,
+    loginLoading: false,
 }

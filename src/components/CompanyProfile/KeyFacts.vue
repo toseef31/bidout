@@ -41,7 +41,7 @@
         </v-row>
         <v-row>
           <v-col  cols="12" sm="12">
-            <v-btn color="#0D9648" large class="text-capitalize white--text" width="176px" height="54px" @click="addKeyFacts">Save</v-btn>
+            <v-btn color="#0D9648" large class="text-capitalize white--text" width="176px" height="54px" :loading="keyfactsLoading" @click="addKeyFacts">Save</v-btn>
           </v-col>
         </v-row>
       </v-container>
@@ -114,7 +114,7 @@
 <script>
   import VuePhoneNumberInput from 'vue-phone-number-input';
   import 'vue-phone-number-input/dist/vue-phone-number-input.css';
-  import { mapActions } from "vuex";
+  import { mapActions,mapGetters } from "vuex";
 export default {
   components: {
     VuePhoneNumberInput,
@@ -174,6 +174,7 @@ export default {
     },
   },
   computed:{
+    ...mapGetters(['keyfactsLoading']),
     companyData(){
       return this.$store.getters.companyData.companyData;
     },

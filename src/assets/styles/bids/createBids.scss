@@ -515,6 +515,16 @@
 		line-height: 25px;
 	}
 	.v-form {
+		.required-class {
+			color: #F32349;
+		}
+		.phone-class {
+			color: #ff5252;
+			font-size: 12px;
+			text-align: left;
+			margin-top: 11px;
+			padding-left: 12px;
+		}
 		label{
 			color: #0D1139;
 			font-size: 16px;

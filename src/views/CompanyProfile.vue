@@ -45,7 +45,7 @@
                       </v-row>
                       <v-row>
                         <v-col cols="12" sm="12">
-                          <v-btn color="#0D9648" large class="text-capitalize white--text" width="176px" height="54px" @click="updateBasic">Save Info</v-btn>
+                          <v-btn color="#0D9648" large class="text-capitalize white--text" width="176px" height="54px" :loading="saveInfoLoading" @click="updateBasic">Save Info</v-btn>
                         </v-col>
                       </v-row>
                     </v-container>
@@ -156,7 +156,7 @@
      </v-col>
    </v-row>
 </template>
-<script async defer src="https://maps.googleapis.com/maps/api/js?key=%VITE_GOOGLE_MAP%&libraries=places&callback=Function.prototype"></script>
+<script async defer id="map-api-script" src="https://maps.googleapis.com/maps/api/js?key=%VITE_GOOGLE_MAP%&libraries=places&callback=Function.prototype"></script>
 <script>
   import Navbar from '../components/Layout/Navbar.vue'
   import LeftSidebar from '../components/Layout/Dashboard/LeftSidebar.vue'
@@ -206,6 +206,7 @@ export default {
     };
   },
   computed:{
+    ...mapGetters(['saveInfoLoading']),
     showSideBar(){
         return this.$store.getters.g_sideBarOpen;
     },
@@ -354,24 +355,20 @@ export default {
           }
         }
       },
-      get_url_extension( url ) {
-        return url.split(/[#?]/)[0].split('.').pop().trim();
-      },
-      get_url_name( url ) {
-        return url.split('/').pop();
-      },
+      
       getSubCate(catId){
         this.getSubCategories(catId);
       },
   },
   async created(){
-    let mapScpManage = "map-api-script-company-profile";
+    let mapScpManage = "map-api-script";
     let mapAlreadyAttached = !!document.getElementById(mapScpManage);
     if(!mapAlreadyAttached){
-     let mapScript = document.createElement('script')
+      let mapScript = document.createElement('script');
+      mapScript.setAttribute("defer", "defer");
       mapScript.id = mapScpManage;
-     await mapScript.setAttribute('src', 'https://maps.googleapis.com/maps/api/js?key='+import.meta.env.VITE_GOOGLE_MAP+'&libraries=places&callback=Function.prototype')
-     document.head.appendChild(mapScript);
+      await mapScript.setAttribute('src', 'https://maps.googleapis.com/maps/api/js?key='+import.meta.env.VITE_GOOGLE_MAP+'&libraries=places&callback=Function.prototype')
+      document.head.appendChild(mapScript);
     }
     await this.getCategories();
     

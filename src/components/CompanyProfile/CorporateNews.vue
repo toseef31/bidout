@@ -24,7 +24,7 @@
       </v-row>
       <v-row>
         <v-col cols="12" sm="12" class="pb-0 pl-0 pt-0">
-          <v-btn color="#0D9648" class="text-capitalize mr-2 white--text" width="176px" height="54px" @click="addNews">Add</v-btn>
+          <v-btn color="#0D9648" class="text-capitalize mr-2 white--text" width="176px" height="54px" :loading="newsLoading" @click="addNews">Add</v-btn>
         </v-col>
       </v-row>
     </v-form>
@@ -40,7 +40,7 @@
   </v-container>
 </template>
 <script>
-  import { mapActions } from "vuex";
+  import { mapActions,mapGetters } from "vuex";
 export default {
   data() {
     return {
@@ -52,6 +52,7 @@ export default {
     };
   },
   computed:{
+    ...mapGetters(["newsLoading"]),
     companyData(){
       return this.$store.getters.companyData.companyData;
     }

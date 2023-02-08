@@ -50,7 +50,7 @@
                   >
                  <router-link to="/forgot-password" class="ml-3 font-weight-medium">Forgot password?</router-link> </v-hover>
                <div class="text-center mt-8">
-                 <v-btn class="signin-btn rounded-lg font-weight-bold text-capitalize" type="submit" color="success" :disabled="!valid" @click="login">
+                 <v-btn class="signin-btn rounded-lg font-weight-bold text-capitalize" type="submit" color="success" :disabled="!valid" :loading="loginLoading" @click="login">
                    Submit
                  </v-btn>
                </div>
@@ -69,7 +69,7 @@
 </template>
 
 <script>
-import { mapActions } from "vuex";
+import { mapActions,mapGetters } from "vuex";
 export default {
   name : "Login",
   data() {
@@ -94,6 +94,7 @@ export default {
     };
   },
   computed: {
+    ...mapGetters(['loginLoading']),
     logInError () {
       return this.$store.getters.error
     },

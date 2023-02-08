@@ -62,6 +62,7 @@
 
                     <v-btn
                       :disabled="!valid"
+                      :loading="btnLoading"
                       color="#0D9648"
                       class="mr-4 text-capitalize white--text font-weight-bold"
                       @click="validate"
@@ -99,6 +100,7 @@ export default {
     return {
       isHidden : false,
       valid: true,
+      btnLoading: false,
         firstName: '',
         lastName: '',
         nameRules: [
@@ -130,6 +132,8 @@ export default {
     
     validate() {
       this.$refs.form.validate();
+      this.valid = false;
+      this.btnLoading = true;
       var data = {
         firstName: this.firstName,
         lastName: this.lastName,
