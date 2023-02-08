@@ -102,7 +102,7 @@ export default {
   name : "RightSidebar",
   data() {
     return {
-     
+     user : '',
     };
   },
   computed:{
@@ -126,7 +126,7 @@ export default {
   methods: {
     ...mapActions(["getActivities"]),
     istoday(date) {
-      return moment(date).startOf('hour').fromNow();
+      return moment.tz(date, 'America/Chicago').startOf('hour').fromNow();
     },
   },
   async created(){
@@ -136,7 +136,7 @@ export default {
     
   },
   mounted() {
-    
+    this.user = this.$store.getters.userInfo;
   }
 };
 </script>
