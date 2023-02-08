@@ -157,13 +157,13 @@ export default {
   }, 
   getActivities({commit,dispatch,state},payload){
     
-    axios.get('/activity/getActivities/'+payload)
+    axios.get('/activity/getUserActivities/'+payload)
       .then(responce => {
         
         if(responce.status === 200){
           commit('setActivityList',responce.data)
           commit('setPageLoader', false);
-          // commit('setPageSubLoader', false);
+          
         }
     }).catch(async(err) => {
       if(state.apiCounter === 2){
