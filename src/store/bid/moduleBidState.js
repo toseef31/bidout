@@ -59,4 +59,5 @@ export default {
   entryCheckForEditBid: false,
   saveBidLoading: false,
   loadingInvite: false,
+  bidActivities: null, 
 };

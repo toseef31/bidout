@@ -498,7 +498,7 @@ export default {
     };
   },
   methods: {
-    ...mapActions(['getBidBySerial', 'deleteBid', 'bidMessageUnreadCount', 'makeIntent', 'getIntent', 'updateIntent', 'getQA', 'getAllIntent', 'getBidAllConversations']),
+    ...mapActions(['getBidBySerial', 'deleteBid', 'bidMessageUnreadCount', 'makeIntent', 'getIntent', 'updateIntent', 'getQA', 'getAllIntent', 'getBidAllConversations','getBidActivityList']),
     async reload(event) {
       if (this.getUserType === 'buyer' && event !== 'tab-4') {
         await this.getBidBySerial({
@@ -522,6 +522,12 @@ export default {
           userId: this.users.id,
           reload: false,
         });
+
+        await this.getBidActivityList({
+          bidId: this.bidDetail.bidData.id,
+          userId: this.users.id,
+          reload: false,
+        })
 
         await this.getBidAllConversations({ bidId: this.bidDetail.bidData.id, userId: this.users.id });
       } else if (this.getUserType === 'supplier' && event !== 'tab-2') {
@@ -552,6 +558,12 @@ export default {
         });
 
         await this.getBidAllConversations({ bidId: this.bidDetail.bidData.id, userId: this.users.id });
+
+        await this.getBidActivityList({
+          bidId: this.bidDetail.bidData.id,
+          userId: this.users.id,
+          reload: false,
+        })
       }
     },
     ChangeT(tab) {
@@ -723,6 +735,11 @@ export default {
       bidId: this.bidDetail.bidData.id,
       userId: this.users.id,
     });
+
+    await this.getBidActivityList({
+      bidId: this.bidDetail.bidData.id,
+      userId: this.users.id,
+    })
   },
   watch: {
     actualTime(val, oldVal) {
