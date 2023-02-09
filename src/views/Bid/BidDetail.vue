@@ -498,7 +498,7 @@ export default {
     };
   },
   methods: {
-    ...mapActions(['getBidBySerial', 'deleteBid', 'bidMessageUnreadCount', 'makeIntent', 'getIntent', 'updateIntent', 'getQA', 'getAllIntent', 'getBidAllConversations','getBidActivityList']),
+    ...mapActions(['getBidBySerial', 'deleteBid', 'bidMessageUnreadCount', 'makeIntent', 'getIntent', 'updateIntent', 'getQA', 'getAllIntent', 'getBidAllConversations', 'getBidActivityList']),
     async reload(event) {
       if (this.getUserType === 'buyer' && event !== 'tab-4') {
         await this.getBidBySerial({
@@ -527,7 +527,7 @@ export default {
           bidId: this.bidDetail.bidData.id,
           userId: this.users.id,
           reload: false,
-        })
+        });
 
         await this.getBidAllConversations({ bidId: this.bidDetail.bidData.id, userId: this.users.id });
       } else if (this.getUserType === 'supplier' && event !== 'tab-2') {
@@ -558,12 +558,6 @@ export default {
         });
 
         await this.getBidAllConversations({ bidId: this.bidDetail.bidData.id, userId: this.users.id });
-
-        await this.getBidActivityList({
-          bidId: this.bidDetail.bidData.id,
-          userId: this.users.id,
-          reload: false,
-        })
       }
     },
     ChangeT(tab) {
@@ -724,6 +718,11 @@ export default {
         companyName: this.users.company.company,
       });
 
+      await this.getBidActivityList({
+        bidId: this.bidDetail.bidData.id,
+        userId: this.users.id,
+      });
+
       this.answer = this.$store.getters.bidIntent;
     } else {
       await this.getAllIntent({
@@ -735,11 +734,6 @@ export default {
       bidId: this.bidDetail.bidData.id,
       userId: this.users.id,
     });
-
-    await this.getBidActivityList({
-      bidId: this.bidDetail.bidData.id,
-      userId: this.users.id,
-    })
   },
   watch: {
     actualTime(val, oldVal) {
