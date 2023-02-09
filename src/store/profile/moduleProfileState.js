@@ -14,4 +14,6 @@ export default {
      showErrorAlert: false
    },
    inviteData: {},
+   profileLoading: false,
+   passwordLoading: false,
 }

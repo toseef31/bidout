@@ -56,5 +56,8 @@ export default {
     unDisqualify: false,
   },
   loweringPriceAlert: false,
-  entryCheckForEditBid: false
+  entryCheckForEditBid: false,
+  saveBidLoading: false,
+  loadingInvite: false,
+  bidActivities: null, 
 };

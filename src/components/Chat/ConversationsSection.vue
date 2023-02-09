@@ -18,7 +18,8 @@
             v-model="selectedUser"
             active-class="grey--text">
             <template v-for="(conversation, index) in conversationsList">
-              <v-list-item   @click="openChat(conversation,conversation.groupName)" :key="conversation._id"  :class="{ 'grey--text v-list-item--active' : conversation._id === chatData.group._id }" v-if="conversation.type == 'GROUP'">
+              <template v-if="chatData">
+                <v-list-item   @click="openChat(conversation,conversation.groupName)" :key="conversation._id"  :class="{ 'grey--text v-list-item--active' : conversation._id ===  conversationsIds }" v-if="conversation.type == 'GROUP'">
                 <template>
                   <v-list-item-avatar>
                     <v-icon>mdi-domain</v-icon>
@@ -46,7 +47,8 @@
                     ></v-badge> -->
                 </template>
               </v-list-item>
-              <v-list-item v-if="conversation.type == 'PRIVATE' && participant.id != user.id"  v-for="participant in conversation.participantDetails" @click="openChat(conversation,participant.name)" :class="{ 'grey--text v-list-item--active' : conversation._id === chatData.group._id }" :key="participant.id" class="d-none">
+              </template>
+              <v-list-item v-if="conversation.type == 'PRIVATE' && participant.id != user.id"  v-for="participant in conversation.participantDetails" @click="openChat(conversation,participant.name)" :class="{ 'grey--text v-list-item--active' : conversation._id === conversationsIds }" :key="participant.id" class="d-none">
                 <template >
                     <v-list-item-avatar>
                       <v-avatar>
@@ -78,7 +80,7 @@
           v-model="selectedUser"
           active-class="grey--text">
           <template v-for="(conversation, index) in archiveList">
-            <v-list-item @click="openChat(conversation,conversation.groupName)" :key="conversation._id" v-if="conversation.type == 'GROUP'">
+            <v-list-item :key="conversation._id" v-if="conversation.type == 'GROUP'">
               <template>
                 <v-list-item-avatar>
                   <v-icon>mdi-domain</v-icon>
@@ -150,7 +152,7 @@ import moment from 'moment-timezone';
 import { mapActions } from 'vuex';
 
 export default {
-  props: ['searchUser'],
+  props: ['searchUser','conversationsIds'],
   data() {
     return {
       selectedUser: null,
@@ -239,8 +241,13 @@ export default {
   async created(){
     this.user = this.$store.getters.userInfo;
     this.archiveConversations(this.user.id);
-    const convo = await _.orderBy(this.$store.getters.conversations, 'latestMessage', 'desc')[0];
-    
+    let chatArr = this.$store.getters.conversations;
+    chatArr.forEach((msg, index) => {
+      if(!msg.latestMessage){
+        msg.latestMessage = msg.createdAt; // add the new field
+      }
+    });
+    const convo = await _.orderBy(chatArr, 'latestMessage', 'desc')[0];
     if (convo) {
       if (convo.type == 'PRIVATE') {
         const membr = convo.participantDetails.filter((item) => {
@@ -252,6 +259,7 @@ export default {
       } else {
         var grpName = convo.groupName;
       }
+      
       await this.openChat(convo, grpName);
     }
   },

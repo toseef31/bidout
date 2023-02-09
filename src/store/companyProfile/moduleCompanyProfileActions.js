@@ -197,11 +197,13 @@ export default {
       });
   },  
   updateBasicProfile({commit,dispatch,state}, payload){
+    commit('setSaveInfoLoading',true);
     axios.post('/company/updateBasicProfile/',{'userId': payload.userId,'companyId': payload.companyId,'profileName': payload.profileName,'profileSummary': payload.profileSummary})
      .then(responce => {
       
       if(responce.status === 200){
         dispatch("getCompany",payload.companyId)
+        commit('setSaveInfoLoading',false);
       }
     }).catch(async(err) => {
       if(state.apiCounter === 2){
@@ -340,7 +342,7 @@ export default {
     });
   }, 
   addCompanyVideos({commit,dispatch,state}, payload){
-   
+    commit('setNewsLoading',true);
     axios.post('/company/addCompanyVideo/',{'companyId': payload.companyId,'videoLinks': payload.videoLinks})
      .then(responce => {
       
@@ -361,6 +363,7 @@ export default {
           commit('setModuleWeight',data);
         }  
         dispatch("getCompany",payload.companyId)
+        commit('setNewsLoading',false)
       }
     }).catch(async(err) => {
       if(state.apiCounter === 2){
@@ -467,7 +470,7 @@ export default {
         });
   },
   addCompanyNews({commit,dispatch,state}, payload){
-    
+    commit('setNewsLoading',true);
     axios.post('/company/addCompanyNews/',{'companyId': payload.companyId,'corporateNews': payload.corporateNews})
      .then(responce => {
       
@@ -489,6 +492,7 @@ export default {
         }
         
         dispatch("getCompany",payload.companyId)
+        commit('setNewsLoading',false)
       }
     }).catch(async(err) => {
       if(state.apiCounter === 2){
@@ -504,7 +508,7 @@ export default {
       });
   },
   addCompanyFacts({commit,dispatch,state}, payload){
-    
+    commit('setKeyFactsLoading',true);
     axios.post('/company/addCompanyKeyfacts/',{'companyId':payload.companyId,'founded':payload.founded,'employees':payload.employees,'hqlocation':payload.hqLocation,'website':payload.website,'linkedin':payload.linkedin,'careers':payload.careers})
      .then(responce => {
       
@@ -516,6 +520,7 @@ export default {
         }
         commit('setModuleWeight',data);
         dispatch("getCompany",payload.companyId)
+        commit('setKeyFactsLoading',false)
       }
     }).catch(async(err) => {
       if(state.apiCounter === 2){

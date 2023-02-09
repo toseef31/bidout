@@ -118,7 +118,7 @@
                     v-if="((answers[index].answer && answers[index].answer.name || answers[index].fileName))">
                     <div class="doc-list">{{(answers[index].answer.name || answers[index].fileName)}}</div>
 
-                    <v-dialog class="dialog-class" v-model="dialog" width="320">
+                    <v-dialog class="dialog-class" v-model="dialog" width="340">
 
                       <template v-slot:activator="{ on, attrs }">
 
@@ -130,7 +130,7 @@
 
                       <v-card>
                         <v-card-title class="text-h5 justify-center grey lighten-2">
-                          Remove Attachment file
+                          Remove File Attachment?
                         </v-card-title>
                         <v-card-text class="pt-3 mb-n2">Are you sure you really want to remove this attachment
                           file?</v-card-text>
@@ -159,7 +159,7 @@
                         text-center
                       ">
                     <v-file-input :id="`uploadFileQ${index}`" @change="handleDocumentForAnswer($event, index)"
-                      :rules="fileRule" :disabled="!bidDetail.receivingBids" />
+                      :disabled="!bidDetail.receivingBids" :rules="item.required === 'true' ? fileRule : []" />
 
                     <div class="mt-1">
                       <v-icon class="mr-4">mdi-cloud-upload-outline</v-icon>Upload here
@@ -222,7 +222,7 @@
 
                       <v-card>
                         <v-card-title class="text-h5 justify-center grey lighten-2">
-                          Remove Attachment file
+                          Remove File Attachment?
                         </v-card-title>
                         <v-card-text class="pt-3 mb-n2">Are you sure you really want to remove this attachment
                           file?</v-card-text>
@@ -271,7 +271,7 @@
           class="text-capitalize white--text font-weight-bold save-button px-9" @click="submit('edit')"
           :disabled="showLoading" large>
           <v-progress-circular v-if="showLoading" indeterminate color="#0D9648"></v-progress-circular>
-          <div v-else>Edit bid</div>
+          <div v-else>Update bid</div>
         </v-btn>
       </div>
     </v-form>
@@ -364,6 +364,7 @@ export default {
     isValid() {
       return this.value && this.value.length && this.value.reduce((acc, curr) => acc && curr.status, true);
     },
+
   },
   methods: {
     ...mapActions(['submitBid', 'editSubmitBid']),
@@ -371,9 +372,17 @@ export default {
       const sizeInMB = (size / (1024 * 1024)).toFixed(2);
       return `${sizeInMB}mb`;
     },
+    allValid() {
+      for (let i = 0; i < this.value.length; i++) {
+        if (Number(this.lineItems[i].price) === Number(this.getSupplierBid.lineItems[i].price)) {
+          this.value[i].message = 'Suppliers can only lower the prices during the BidOut Phase!';
+          this.value[i].status = false;
+        }
+      }
+    },
     validatePrice(event, index) {
       if (this.isBidSubmitted && this.isBidOut) {
-        if (Number(this.getSupplierBid.lineItems[index].price) < Number(event)) {
+        if (Number(this.getSupplierBid.lineItems[index].price) <= Number(event)) {
           this.value[index].message = 'Suppliers can only lower the prices during the BidOut Phase!';
           this.value[index].status = false;
         } else {
@@ -383,10 +392,14 @@ export default {
       }
     },
     async submit(action) {
-      if (!this.isValid && action === 'edit' && this.isBidOut) {
-        this.$store.commit('setLoweringPriceAlert');
-        window.scrollTo({ top: 0, behavior: 'smooth' });
-        return;
+      if (action === 'edit' && this.isBidOut) {
+        this.allValid();
+
+        if (!this.isValid) {
+          this.$store.commit('setLoweringPriceAlert');
+          window.scrollTo({ top: 0, behavior: 'smooth' });
+          return;
+        }
       }
 
       if (action === 'submit' && this.$refs.form.validate()) {

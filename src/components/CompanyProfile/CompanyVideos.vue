@@ -6,7 +6,7 @@
         <v-text-field placeholder="Add youtube video url ..." v-model="videoLinks" single-line outlined hide-details></v-text-field>
       </v-col>
       <v-col cols="2" sm="2" class="pl-0">
-      <v-btn color="#0D9648" class="text-capitalize mr-2 white--text" width="100%" height="54px" @click="addVideos">Add Video</v-btn>
+      <v-btn color="#0D9648" class="text-capitalize mr-2 white--text" width="100%" height="54px" :loading="newsLoading" @click="addVideos">Add Video</v-btn>
       </v-col>
     </v-row>
     <v-row v-if="companyData.corporateVideos">
@@ -20,7 +20,7 @@
   </v-container>
 </template>
 <script>
-  import { mapActions } from "vuex";
+  import { mapActions,mapGetters } from "vuex";
 export default {
   data() {
     return {
@@ -29,6 +29,7 @@ export default {
     };
   },
   computed:{
+    ...mapGetters(["newsLoading"]),
     companyData(){
       return this.$store.getters.companyData.companyData;
     }

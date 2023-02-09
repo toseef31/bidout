@@ -116,4 +116,13 @@ export default {
   entryCheckForEditBid(state) {
     return state.entryCheckForEditBid;
   },
+  saveBidLoading(state){
+    return state.saveBidLoading;
+  },
+  loadingInvite(state){
+    return state.loadingInvite;
+  },
+  bidActivities(state) {
+    return state.bidActivities
+  }
 };

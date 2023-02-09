@@ -7,7 +7,7 @@
           <v-tooltip top >
             <template v-slot:activator="{ on, attrs }">
             
-             <a v-bind="attrs" class="mr-4 text-capitalize text-decoration-none export-excel" href="https://firebasestorage.googleapis.com/v0/b/bidout-dev.appspot.com/o/wordTemplates%2FlineItemsTemplate%20(2).xlsx?alt=media&token=e03e4a03-1a34-413a-81e4-4a0fbaef9f78" download width="125px"
+             <a v-bind="attrs" class="mr-4 text-capitalize text-decoration-none export-excel" href="https://firebasestorage.googleapis.com/v0/b/bidout-dev.appspot.com/o/assets%2FlineItemsTemplate.xlsx?alt=media&token=1be2f0ce-491d-4286-80e9-ca56f4641ce9" download width="125px"
               v-on="on"  icon color="#0D9648">
                <v-icon size="24" class="pl-2" color="#0d9648">mdi-information-outline
                </v-icon>

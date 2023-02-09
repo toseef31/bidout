@@ -498,7 +498,7 @@ export default {
     };
   },
   methods: {
-    ...mapActions(['getBidBySerial', 'deleteBid', 'bidMessageUnreadCount', 'makeIntent', 'getIntent', 'updateIntent', 'getQA', 'getAllIntent', 'getBidAllConversations']),
+    ...mapActions(['getBidBySerial', 'deleteBid', 'bidMessageUnreadCount', 'makeIntent', 'getIntent', 'updateIntent', 'getQA', 'getAllIntent', 'getBidAllConversations','getBidActivityList']),
     async reload(event) {
       if (this.getUserType === 'buyer' && event !== 'tab-4') {
         await this.getBidBySerial({
@@ -522,6 +522,12 @@ export default {
           userId: this.users.id,
           reload: false,
         });
+
+        await this.getBidActivityList({
+          bidId: this.bidDetail.bidData.id,
+          userId: this.users.id,
+          reload: false,
+        })
 
         await this.getBidAllConversations({ bidId: this.bidDetail.bidData.id, userId: this.users.id });
       } else if (this.getUserType === 'supplier' && event !== 'tab-2') {
@@ -552,6 +558,12 @@ export default {
         });
 
         await this.getBidAllConversations({ bidId: this.bidDetail.bidData.id, userId: this.users.id });
+
+        await this.getBidActivityList({
+          bidId: this.bidDetail.bidData.id,
+          userId: this.users.id,
+          reload: false,
+        })
       }
     },
     ChangeT(tab) {
@@ -610,8 +622,17 @@ export default {
     formatDate(dueDate) {
       return dueDate !== '' && dueDate !== null ? moment.tz(dueDate, 'America/Chicago').format('MM/DD/YYYY') : '';
     },
+    checkZero(item) {
+      if (Number(item) === 0) {
+        return true;
+      } return false;
+    },
+
   },
   computed: {
+    changeTime() {
+      return `${this.years}|${this.months}|${this.days}|${this.hours}|${this.minutes}|${this.seconds}`;
+    },
     bidDetail() {
       return this.$store.getters.bidViewData;
     },
@@ -714,10 +735,22 @@ export default {
       bidId: this.bidDetail.bidData.id,
       userId: this.users.id,
     });
+
+    await this.getBidActivityList({
+      bidId: this.bidDetail.bidData.id,
+      userId: this.users.id,
+    })
   },
   watch: {
     actualTime(val, oldVal) {
       this.compute();
+    },
+    changeTime(newVal, oldVal) {
+      const [years, months, days, hours, minutes, seconds] = newVal.split('|');
+
+      if (this.checkZero(years) && this.checkZero(months) && this.checkZero(days) && this.checkZero(hours) && this.checkZero(minutes) && this.checkZero(seconds)) {
+        this.$router.go(0);
+      }
     },
   },
 };

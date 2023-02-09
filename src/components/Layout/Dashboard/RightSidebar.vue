@@ -30,12 +30,12 @@
                   </v-icon>
                 </v-list-item-avatar>
                 <v-list-item-content>
-                  <v-list-item-title v-text="item.action"></v-list-item-title>
+                  <v-list-item-title v-text="item.message"></v-list-item-title>
 
                 </v-list-item-content>
 
                 <v-list-item-action >
-                  <v-list-item-action-text>{{istoday(item.date)}}</v-list-item-action-text>
+                  <v-list-item-action-text>{{ item.date }}</v-list-item-action-text>
                 </v-list-item-action>
               </template>
             </v-list-item>
@@ -94,15 +94,14 @@
 </template>
 
 <script>
-import VueMoment from 'vue-moment';
-import moment from 'moment-timezone';
+  import VueMoment from 'vue-moment';
+  import moment from 'moment-timezone';
 import _ from 'lodash';
 import { mapActions } from "vuex";
 export default {
   name : "RightSidebar",
   data() {
     return {
-     
     };
   },
   computed:{
@@ -111,7 +110,11 @@ export default {
     },
     activities(){
       if(this.$store.getters.activities){  
-        return _.orderBy(this.$store.getters.activities.slice(0,40),'date','desc');
+        this.$store.getters.activities.map((item, index) => {
+          const timestamp = item.createdOn._seconds * 1000 + item.createdOn._nanoseconds / 1000000;
+          item.newDate = moment(timestamp).format('MM/DD/YYYY hh:mm A');
+        })
+        return _.orderBy(this.$store.getters.activities.slice(0,40),'newDate','desc');
       }else{
         return [];
       }
@@ -125,9 +128,6 @@ export default {
   },
   methods: {
     ...mapActions(["getActivities"]),
-    istoday(date) {
-      return moment(date).startOf('hour').fromNow();
-    },
   },
   async created(){
     await this.getActivities(this.$store.getters.userInfo.id);

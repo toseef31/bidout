@@ -3,6 +3,8 @@
 </template>
 
 <script>
+import LogRocket from 'logrocket';
+import store from '@/store';
 export default {
   name: 'Settings',
   metaInfo: {
@@ -25,6 +27,24 @@ export default {
     return {
       timer: null,
     };
+  },
+  computed: {
+    userData() {
+      if(this.$store.getters.userInfo){
+        return this.$store.getters.userInfo;
+      }
+    },
+  },
+  watch: {
+    userData(user) {
+      if(user){
+        LogRocket.identify(user.id, {
+          name: `${user.firstName} ${user.lastName}`,
+          email: user.email,
+        });
+      }
+      
+    },
   },
   mounted() {
     this.timer = setInterval(() => {

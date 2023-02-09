@@ -114,7 +114,7 @@
                     >
                       <td class="text-left pl-sm-6" width="84px">{{ bid.serial }}</td>
                       <td class="text-left title-truncate">{{ bid.title }}</td>
-                      <td class="text-left" width="150px">{{ userDatas.firstName }} {{ userDatas.lastName }}</td>
+                      <td class="text-left" width="150px">{{ userDatas ? userDatas.firstName : '' }} {{ userDatas ? userDatas.lastName: '' }}</td>
                       <!-- <td class="text-left" width="50px">{{ bid.bidEntries ? bid.bidEntries : 0 }}</td> -->
                       <td class="text-left" width="145px">{{ formatDate(bid.dueDate) }} {{bid.dueTime}}</td>
                       <td class="text-left d-none d-sm-block pt-3" @click="editDraft(bid.serial)"  width="100px"><router-link to="">Edit Draft</router-link></td>

@@ -244,64 +244,66 @@ export default {
     getLocation() {
       if (this.$store.getters.publicCompany.companyData && this.$store.getters.publicCompany.companyData.companyLocations.length === 1) {
         const LocationsForMap = this.$store.getters.publicCompany.companyData.companyLocations;
-
-        const map = new google.maps.Map(document.getElementById('map'), {
-          zoom: 9,
-          center: new google.maps.LatLng(LocationsForMap[0].lattitude, LocationsForMap[0].longitude),
-          // mapTypeId: google.maps.MapTypeId.ROADMAP,
-          mapId: '2993bb26d878ba6a',
-          streetViewControl: false,
-          mapTypeControl: false,
-        });
-        const infowindow = new google.maps.InfoWindow();
-        let marker; let
-          i;
-        for (i = 0; i < LocationsForMap.length; i++) {
-          marker = new google.maps.Marker({
-            position: new google.maps.LatLng(LocationsForMap[i].lattitude, LocationsForMap[i].longitude),
-            map,
-            title: 'Marker',
-            anchorPoint: new google.maps.Point(0, -29),
+        if(LocationsForMap.length > 0){
+          const map = new google.maps.Map(document.getElementById('map'), {
+            zoom: 9,
+            center: new google.maps.LatLng(LocationsForMap[0].lattitude, LocationsForMap[0].longitude),
+            // mapTypeId: google.maps.MapTypeId.ROADMAP,
+            mapId: '2993bb26d878ba6a',
+            streetViewControl: false,
+            mapTypeControl: false,
           });
-          google.maps.event.addListener(marker, 'click', (function (marker, i) {
-            return function () {
-              infowindow.setContent(LocationsForMap[i].location);
-              infowindow.open(map, marker);
-            };
-          }(marker, i)));
+          const infowindow = new google.maps.InfoWindow();
+          let marker; let
+            i;
+          for (i = 0; i < LocationsForMap.length; i++) {
+            marker = new google.maps.Marker({
+              position: new google.maps.LatLng(LocationsForMap[i].lattitude, LocationsForMap[i].longitude),
+              map,
+              title: 'Marker',
+              anchorPoint: new google.maps.Point(0, -29),
+            });
+            google.maps.event.addListener(marker, 'click', (function (marker, i) {
+              return function () {
+                infowindow.setContent(LocationsForMap[i].location);
+                infowindow.open(map, marker);
+              };
+            }(marker, i)));
+          }
         }
       } else {
         let LocationsForMap = this.$store.getters.publicCompany.companyData.companyLocations;
-
-        let map = new google.maps.Map(document.getElementById('map'), {
-          center: new google.maps.LatLng(LocationsForMap[0].lattitude, LocationsForMap[0].longitude),
-          // mapTypeId: google.maps.MapTypeId.ROADMAP,
-          mapId: '2993bb26d878ba6a',
-          streetViewControl: false,
-          mapTypeControl: false,
-        });
-        let infowindow = new google.maps.InfoWindow();
-        let marker; let
-          i;
-        const latlngbounds = new google.maps.LatLngBounds();
-        for (i = 0; i < LocationsForMap.length; i++) {
-          marker = new google.maps.Marker({
-            position: new google.maps.LatLng(LocationsForMap[i].lattitude, LocationsForMap[i].longitude),
-            map,
-            title: 'Marker',
-            anchorPoint: new google.maps.Point(0, -29),
+        if(LocationsForMap.length > 0){
+          let map = new google.maps.Map(document.getElementById('map'), {
+            center: new google.maps.LatLng(LocationsForMap[0].lattitude, LocationsForMap[0].longitude),
+            // mapTypeId: google.maps.MapTypeId.ROADMAP,
+            mapId: '2993bb26d878ba6a',
+            streetViewControl: false,
+            mapTypeControl: false,
           });
-          google.maps.event.addListener(marker, 'click', (function (marker, i) {
-            return function () {
-              infowindow.setContent(LocationsForMap[i].location);
-              infowindow.open(map, marker);
-            };
-          }(marker, i)));
-          latlngbounds.extend(marker.position);
-        }
+          let infowindow = new google.maps.InfoWindow();
+          let marker; let
+            i;
+          const latlngbounds = new google.maps.LatLngBounds();
+          for (i = 0; i < LocationsForMap.length; i++) {
+            marker = new google.maps.Marker({
+              position: new google.maps.LatLng(LocationsForMap[i].lattitude, LocationsForMap[i].longitude),
+              map,
+              title: 'Marker',
+              anchorPoint: new google.maps.Point(0, -29),
+            });
+            google.maps.event.addListener(marker, 'click', (function (marker, i) {
+              return function () {
+                infowindow.setContent(LocationsForMap[i].location);
+                infowindow.open(map, marker);
+              };
+            }(marker, i)));
+            latlngbounds.extend(marker.position);
+          }
 
-        map.setCenter(latlngbounds.getCenter());
-        map.fitBounds(latlngbounds);
+          map.setCenter(latlngbounds.getCenter());
+          map.fitBounds(latlngbounds);
+        }
       }
     },
     get_url_extension(url) {
