@@ -22,8 +22,8 @@
               </v-list-item-content>
 
               <v-list-item-action>
-                <v-list-item-action-text>{{ item.createdOn._seconds | moment('MM/DD/YYYY') }} - {{
-                  item.createdOn._seconds | moment('hh:mma')
+                <v-list-item-action-text>{{
+                  item.newDate
                 }} </v-list-item-action-text>
               </v-list-item-action>
             </template>
