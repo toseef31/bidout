@@ -25,5 +25,8 @@ export default {
   },
   setAllLocations (state, payload){
    state.allLocations = payload
+  },
+  setLocationLoader (state, payload){
+    state.locationLoader = payload;
   }
 }
