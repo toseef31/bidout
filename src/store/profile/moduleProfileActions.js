@@ -60,6 +60,7 @@ export default {
           commit('setUser',responce.data)
           commit('editProfileLoading',false)
         }).catch(async(err) => {
+          commit('editProfileLoading',false)
           if(state.apiCounter === 2){
             dispatch('apiSignOutAction')
           }else{
@@ -74,6 +75,7 @@ export default {
       }
       
     }).catch(async(err) => {
+      commit('editProfileLoading',false);
       if(state.apiCounter === 2){
         dispatch('apiSignOutAction')
       }else{
@@ -96,6 +98,7 @@ export default {
         commit('setPasswordLoading',false);
       }
     }).catch(async(err) => {
+      commit('setPasswordLoading',false);
       if(state.apiCounter === 2){
         dispatch('apiSignOutAction')
       }else{

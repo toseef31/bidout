@@ -206,6 +206,7 @@ export default {
         commit('setSaveInfoLoading',false);
       }
     }).catch(async(err) => {
+      commit('setSaveInfoLoading',false);
       if(state.apiCounter === 2){
         
         dispatch('apiSignOutAction')
@@ -366,6 +367,7 @@ export default {
         commit('setNewsLoading',false)
       }
     }).catch(async(err) => {
+      commit('setNewsLoading',false);
       if(state.apiCounter === 2){
         
         dispatch('apiSignOutAction')
@@ -495,6 +497,7 @@ export default {
         commit('setNewsLoading',false)
       }
     }).catch(async(err) => {
+      commit('setNewsLoading',false);
       if(state.apiCounter === 2){
         dispatch('apiSignOutAction')
       }else{
@@ -523,6 +526,7 @@ export default {
         commit('setKeyFactsLoading',false)
       }
     }).catch(async(err) => {
+      commit('setKeyFactsLoading',false);
       if(state.apiCounter === 2){
         dispatch('apiSignOutAction')
       }else{
