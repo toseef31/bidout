@@ -109,7 +109,7 @@
        
    <!-- </section> -->
 </template>
-<!-- <script async defer id="map-api-script" src="https://maps.googleapis.com/maps/api/js?key=%VITE_GOOGLE_MAP%&libraries=places&callback=Function.prototype"></script> -->
+<script async defer id="map-api-script" src="https://maps.googleapis.com/maps/api/js?key=%VITE_GOOGLE_MAP%&libraries=places&callback=Function.prototype"></script>
 <script>
   import Navbar from '../components/Layout/Navbar.vue'
   import LeftSidebar from '../components/Layout/Dashboard/LeftSidebar.vue'
@@ -219,35 +219,37 @@ export default {
     ...mapActions(["pendingUserCount","getAllLocations","getBidDashboard"]),
     loadMapScript() {
       let scriptId = "map-api-script";
-    let mapAlreadyAttached = !!document.getElementById(scriptId);
-    if (typeof google === 'undefined') {
+      let mapAlreadyAttached = !!document.getElementById(scriptId);
+      if (typeof google === 'undefined') {
         if (!mapAlreadyAttached) {
-            const mapScript = document.createElement('script');
-            mapScript.id = scriptId;
-            mapScript.async = true;
-            mapScript.defer = true
-            mapScript.onload = this.getLocation
-            mapScript.src = `https://maps.googleapis.com/maps/api/js?key=${import.meta.env.VITE_GOOGLE_MAP}&libraries=places&callback=Function.prototype`;
-            document.head.appendChild(mapScript);
+          const mapScript = document.createElement('script');
+          mapScript.id = scriptId;
+          mapScript.async = true;
+          mapScript.defer = true
+          mapScript.onload = this.getLocation
+          mapScript.src = `https://maps.googleapis.com/maps/api/js?key=${import.meta.env.VITE_GOOGLE_MAP}&libraries=places&callback=Function.prototype`;
+          document.head.appendChild(mapScript);
         }
-        } else {
-            this.getLocation();
-        }
-      },
-      formatDate(dueDate) {
-        return dueDate !== '' && dueDate !== null ? moment.tz(dueDate, 'America/Chicago').format('MM/DD/YYYY') : '';
+      } else {
+          this.getLocation();
+      }
+    },
+    formatDate(dueDate) {
+      return dueDate !== '' && dueDate !== null ? moment.tz(dueDate, 'America/Chicago').format('MM/DD/YYYY') : '';
     },
     getLocation(){
       var LocationsForMap = this.locations;
       if(LocationsForMap && document.getElementById('map') != null){
-        this.map = new google.maps.Map(document.getElementById('map'), {
-          zoom: 4,
-          mapId: "2993bb26d878ba6a",
-          center: new google.maps.LatLng(LocationsForMap[0].locations[0].lattitude, LocationsForMap[0].locations[0].longitude),
-          streetViewControl: false,
-          mapTypeControl: false,
-          // mapTypeId: google.maps.MapTypeId.ROADMAP
-        });
+        if(this.map == null){
+          this.map = new google.maps.Map(document.getElementById('map'), {
+            zoom: 4,
+            mapId: "2993bb26d878ba6a",
+            center: new google.maps.LatLng(LocationsForMap[0].locations[0].lattitude, LocationsForMap[0].locations[0].longitude),
+            streetViewControl: false,
+            mapTypeControl: false,
+            // mapTypeId: google.maps.MapTypeId.ROADMAP
+          });
+        }
         var infowindow = new google.maps.InfoWindow();
 
         var marker, i,j;
@@ -294,13 +296,12 @@ export default {
   async created(){
      await this.loadMapScript();
      await this.getAllLocations().then((data) => {
-      
        this.$store.commit('setLocationLoader',false);
     });
     
   },
   async updated(){
-    
+    this.getLocation();
   },
   async beforeMount(){
     
