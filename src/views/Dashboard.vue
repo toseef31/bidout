@@ -92,7 +92,7 @@
                    </div>
                  </div>
                </div>
-               <div class="map-section map-section-full pa-1" :class="[mapClass]">
+               <div v-if="!locationLoader" class="map-section map-section-full pa-1" :class="[mapClass]">
                  <div id="map" class="map" height="415px"></div>
                </div>
              </div>
@@ -109,6 +109,7 @@
        
    <!-- </section> -->
 </template>
+<!-- <script async defer id="map-api-script" src="https://maps.googleapis.com/maps/api/js?key=%VITE_GOOGLE_MAP%&libraries=places&callback=Function.prototype"></script> -->
 <script>
   import Navbar from '../components/Layout/Navbar.vue'
   import LeftSidebar from '../components/Layout/Dashboard/LeftSidebar.vue'
@@ -136,7 +137,7 @@ export default {
     };
   },
   computed:{
-    ...mapGetters(["activities"]),
+    ...mapGetters(["activities","locationLoader"]),
     showSideBar(){
         return this.$store.getters.g_sideBarOpen;
     },
@@ -170,43 +171,43 @@ export default {
     },
     mapClass(){
       if(this.bidsList.length == '1'){
-        if(this.pendingCount > 0 && this.userDatas.role == 'admin'){
+        if(this.pendingCount > 0 && (this.userDatas && this.userDatas.role == 'admin')){
           return 'map-section-pend-1';
         }else{
           return 'map-section-1';
         }
       }else if(this.bidsList.length == '2'){
-        if(this.pendingCount > 0 && this.userDatas.role == 'admin'){
+        if(this.pendingCount > 0 && (this.userDatas && this.userDatas.role == 'admin')){
           return 'map-section-pend-2';
         }else{
           return 'map-section-2';
         }
       }else if(this.bidsList.length == '3'){
-        if(this.pendingCount > 0 && this.userDatas.role == 'admin'){
+        if(this.pendingCount > 0 && (this.userDatas && this.userDatas.role == 'admin')){
           return 'map-section-pend-3';
         }else{
           return 'map-section-3';
         }
       }else if(this.bidsList.length == '4'){
-        if(this.pendingCount > 0 && this.userDatas.role == 'admin'){
+        if(this.pendingCount > 0 && (this.userDatas && this.userDatas.role == 'admin')){
           return 'map-section-pend-4';
         }else{
           return 'map-section-4';
         }
       }else if(this.bidsList.length == '5'){
-        if(this.pendingCount > 0 && this.userDatas.role == 'admin'){
+        if(this.pendingCount > 0 && (this.userDatas && this.userDatas.role == 'admin')){
           return 'map-section-pend-5';
         }else{
           return 'map-section-5';
         }
       }else if(this.bidsList.length == '6'){
-        if(this.pendingCount > 0 && this.userDatas.role == 'admin'){
+        if(this.pendingCount > 0 && (this.userDatas && this.userDatas.role == 'admin')){
           return 'map-section-pend';
         }else{
           return 'map-section';
         }
       }else{
-        if(this.pendingCount > 0 && this.userDatas.role == 'admin'){
+        if(this.pendingCount > 0 && (this.userDatas && this.userDatas.role == 'admin')){
           return 'map-section-pend-1';
         }else{
           return 'map-section-1';
@@ -217,17 +218,20 @@ export default {
   methods: {
     ...mapActions(["pendingUserCount","getAllLocations","getBidDashboard"]),
     loadMapScript() {
-        let scriptId = "map-api-script";
-        let mapAlreadyAttached = !!document.getElementById(scriptId);
-        if(!mapAlreadyAttached){
-          let mapScript = document.createElement('script');
-          mapScript.setAttribute("defer", "defer");
-          mapScript.id = scriptId;
-          mapScript.src = 'https://maps.googleapis.com/maps/api/js?key='+import.meta.env.VITE_GOOGLE_MAP+'&libraries=places&callback=Function.prototype';
-          document.head.appendChild(mapScript);
-          mapScript.onload = () => {
-              this.getLocation();
-          }
+      let scriptId = "map-api-script";
+    let mapAlreadyAttached = !!document.getElementById(scriptId);
+    if (typeof google === 'undefined') {
+        if (!mapAlreadyAttached) {
+            const mapScript = document.createElement('script');
+            mapScript.id = scriptId;
+            mapScript.async = true;
+            mapScript.defer = true
+            mapScript.onload = this.getLocation
+            mapScript.src = `https://maps.googleapis.com/maps/api/js?key=${import.meta.env.VITE_GOOGLE_MAP}&libraries=places&callback=Function.prototype`;
+            document.head.appendChild(mapScript);
+        }
+        } else {
+            this.getLocation();
         }
       },
       formatDate(dueDate) {
@@ -235,7 +239,7 @@ export default {
     },
     getLocation(){
       var LocationsForMap = this.locations;
-      if(LocationsForMap){
+      if(LocationsForMap && document.getElementById('map') != null){
         this.map = new google.maps.Map(document.getElementById('map'), {
           zoom: 4,
           mapId: "2993bb26d878ba6a",
@@ -244,7 +248,6 @@ export default {
           mapTypeControl: false,
           // mapTypeId: google.maps.MapTypeId.ROADMAP
         });
-
         var infowindow = new google.maps.InfoWindow();
 
         var marker, i,j;
@@ -291,11 +294,13 @@ export default {
   async created(){
      await this.loadMapScript();
      await this.getAllLocations().then((data) => {
-      this.getLocation();
+      
+       this.$store.commit('setLocationLoader',false);
     });
+    
   },
   async updated(){
-
+    
   },
   async beforeMount(){
     
@@ -304,7 +309,9 @@ export default {
     document.title = "Dashboard - BidOut";
     this.users = this.$store.getters.userInfo;
     this.pendingUserCount(this.userDatas.company.id)
-    this.getBidDashboard(this.userDatas.id);
+    await this.getBidDashboard(this.userDatas.id);
+    
+    this.loadMapScript();
   }
 };
 </script>

@@ -180,12 +180,15 @@ export default {
   }, 
   
   getAllLocations({commit,dispatch}){
+    commit('setLocationLoader',true);
     return new Promise(async (resolve, reject) => {
       try{
         const res = await axios.get('/company/getCompanyLocations');
         commit('setAllLocations',res.data)
+        
         resolve(res.data);
       }catch(err){
+        commit('setLocationLoader',false);
         console.log(err);
         reject(err)
       }
