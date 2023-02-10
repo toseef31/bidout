@@ -270,6 +270,7 @@ export default {
   mounted() {
     document.title = 'Create Template - BidOut';
     this.users = this.$store.getters.userInfo;
+    this.$store.commit('setLineItemsComplete', false);
   },
 };
 </script>

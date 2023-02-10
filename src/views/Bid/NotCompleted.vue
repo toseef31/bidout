@@ -273,6 +273,7 @@ export default {
   mounted() {
     document.title = 'Create Bid - BidOut';
     this.users = this.$store.getters.userInfo;
+    this.$store.commit('setLineItemsComplete', false);
   },
 };
 </script>
