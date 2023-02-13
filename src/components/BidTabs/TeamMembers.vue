@@ -94,19 +94,19 @@ export default {
     	if (this.$store.getters.bidData != null) {
     		if (this.$route.name == 'EditBid') {
     			if (this.$store.getters.bidData.invitedTeamMembers != '') {
-    				return this.$store.getters.teamMembers.filter((el) => !this.$store.getters.bidData.invitedTeamMembers.find((team) => team.id === el.id));
+    				return this.$store.getters.teamMembers ? this.$store.getters.teamMembers.filter((el) => !this.$store.getters.bidData.invitedTeamMembers.find((team) => team.id === el.id)) : [];
     			}
     				return this.$store.getters.teamMembers;
     		}
 	    		if (this.$store.getters.bidData.invitedTeamMembers != '') {
-	    			return this.$store.getters.teamMembers.filter((el) => !this.$store.getters.bidData.invitedTeamMembers.includes(el.id));
+	    			return this.$store.getters.teamMembers ? this.$store.getters.teamMembers.filter((el) => !this.$store.getters.bidData.invitedTeamMembers.includes(el.id)) : [];
 	    		}
-	    			return this.$store.getters.teamMembers;
+	    			return this.$store.getters.teamMembers ? this.$store.getters.teamMembers : [];
     	}
 	    	if (this.searchMember) {
         return this.$store.getters.teamMembers.filter((item) => (this.searchMember.toLowerCase().split(' ').every((v) => item.firstName.toLowerCase().includes(v)) || this.searchMember.toLowerCase().split(' ').every((v) => item.lastName.toLowerCase().includes(v))));
 	    	}
-	  			return this.$store.getters.teamMembers;
+	  			return this.$store.getters.teamMembers ? this.$store.getters.teamMembers : [];
     },
     filterTeam() {
       if (this.$store.getters.bidData.invitedTeamMembers != '') {
@@ -148,12 +148,12 @@ export default {
     	this.membersAdded.push(member);
     	
     	this.newCount = this.membersAdded.length;
-  		this.$store.getters.teamMembers.splice(index, 1);
+			this.$store.commit('spliceTeamMember',index);
   		this.$store.commit('setInvitedTeamMembers', this.membersAdded);
     },
     remove(member, index) {
     	this.oldCount = this.membersAdded.length;
-	  	this.$store.getters.teamMembers.push(member);
+			this.$store.commit('pushTeamMember',member);
 	  	this.newCount = this.membersAdded.length;
       this.membersAdded.splice(index, 1);
   		this.$store.commit('setInvitedTeamMembers', this.membersAdded);
