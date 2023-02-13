@@ -242,7 +242,7 @@ export default {
   methods: {
     ...mapActions(['getPublicCompanyInfo']),
     getLocation() {
-      if (this.$store.getters.publicCompany.companyData && this.$store.getters.publicCompany.companyData.companyLocations.length === 1) {
+      if (this.$store.getters.publicCompany.companyData && this.$store.getters.supplierCompany.companyData.companyLocations && this.$store.getters.publicCompany.companyData.companyLocations.length === 1) {
         const LocationsForMap = this.$store.getters.publicCompany.companyData.companyLocations;
         if(LocationsForMap.length > 0){
           const map = new google.maps.Map(document.getElementById('map'), {
