@@ -287,7 +287,7 @@ export default {
   methods: {
     ...mapActions(['getCompanyInfo']),
     getLocation() {
-      if (this.$store.getters.supplierCompany && this.$store.getters.supplierCompany.companyData && this.$store.getters.supplierCompany.companyData.companyLocations.length == 1) {
+      if (this.$store.getters.supplierCompany && this.$store.getters.supplierCompany.companyData && this.$store.getters.supplierCompany.companyData.companyLocations && this.$store.getters.supplierCompany.companyData.companyLocations.length == 1) {
         var LocationsForMap = this.$store.getters.supplierCompany.companyData.companyLocations;
         if(LocationsForMap.length > 0){
           var map = new google.maps.Map(document.getElementById('map'), {

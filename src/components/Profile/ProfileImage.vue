@@ -4,8 +4,8 @@
 	  <div class="user-info d-flex align-center">
 	    
 	    <div size="120" class="user">
-        <v-img v-if="userDatas && userDatas.image" :src="userDatas.image" class="profile-img"></v-img>
-      	<v-img v-else :src="require('@/assets/images/user/user1.png')" class="profile-img"></v-img>
+        <v-img :src="userDatas && userDatas.image ? userDatas.image : require('@/assets/images/user/user1.png')" class="profile-img"></v-img>
+      	
         <v-icon class="icon white--text" @click="$refs.FileInput.click()">mdi-upload</v-icon>
         <input ref="FileInput" type="file" style="display: none;" @change="croppie($event)" />
       </div>

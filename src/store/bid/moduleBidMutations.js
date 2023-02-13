@@ -229,5 +229,11 @@ export default {
   },
   setBidActivities(state,payload) {
     state.bidActivities = payload
-  }
+  },
+  spliceTeamMember (state,index){
+    state.teamMembers.splice(index,1);
+  },
+  pushTeamMember (state,member){
+    state.teamMembers.push(member);
+  },
 };
