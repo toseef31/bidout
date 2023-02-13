@@ -453,13 +453,16 @@ export default {
       this.$store.commit('setSpliceToConversation',data);
       this.isChatMenu = false;
       this.chatData.group = "";
-      let chatArr = this.$store.getters.conversations;
-      chatArr.forEach((msg, index) => {
-        if(!msg.latestMessage){
-          msg.latestMessage = msg.createdAt; // add the new field
-        }
-      });
-      const convo = _.orderBy(chatArr, 'latestMessage', 'desc')[0];
+      if(this.$store.getters.conversations){
+        let chatArr = this.$store.getters.conversations;
+        chatArr.forEach((msg, index) => {
+          if(!msg.latestMessage){
+            msg.latestMessage = msg.createdAt; // add the new field
+          }
+        });
+        const convo = _.orderBy(chatArr, 'latestMessage', 'desc')[0];
+      }
+      
       
       if (convo) {
         if (convo.type == 'PRIVATE') {
