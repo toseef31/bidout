@@ -253,7 +253,7 @@ export default {
           map = new google.maps.Map(document.getElementById('map'), {
             zoom: 4,
             mapId: "2993bb26d878ba6a",
-            center: new google.maps.LatLng(LocationsForMap[0].locations[0].lattitude, LocationsForMap[0].locations[0].longitude),
+            center: new google.maps.LatLng('30.1515165', '-95.5536272'),
             streetViewControl: false,
             mapTypeControl: false,
             // mapTypeId: google.maps.MapTypeId.ROADMAP
