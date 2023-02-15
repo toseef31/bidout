@@ -49,7 +49,7 @@
 		    </div>
 		    <div class="companies-list">
 		    	{{filterTeam}}
-		      <div class="d-flex align-center justify-space-between list-company pa-4" v-for="(team,index) in membersAdded">
+		      <div class="d-flex align-center justify-space-between list-company pa-4" v-for="(team,index) in membersAdded" v-if="user.id != team.id && team.status != false">
 		        <div class="comapny-data d-flex align-center">
 		          <div class="company-img">
 		            <img v-if="!team.image" :src="require('@/assets/images/chat/chatUser.png')">
