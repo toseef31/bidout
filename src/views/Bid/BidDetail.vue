@@ -89,6 +89,7 @@
             </div>
             <div class="time pt-2 align-center">
               <v-icon small color="#0D9648"> mdi-timer-outline</v-icon>
+              {{ months }} months,
               {{ days }} days, {{ hours }} hours, {{ minutes }} min,
               {{ seconds }} sec remaining
             </div>
@@ -606,7 +607,14 @@ export default {
     },
     compute() {
       const duration = moment.duration(this.getDiffInSeconds(), 'seconds');
+
+      // console.log(duration);
+      const ms = moment.duration(this.getDiffInSeconds(), 'seconds').asMilliseconds();
+
+      console.log(ms / 86400000);
+
       this.years = duration.years() > 0 ? duration.years() : 0;
+
       this.months = duration.months() > 0 ? duration.months() : 0;
       this.days = duration.days() > 0 ? duration.days() : 0;
       this.hours = duration.hours() > 0 ? duration.hours() : 0;
@@ -682,10 +690,11 @@ export default {
   mounted() {
     document.title = 'View Bid - BidOut';
     window.scrollTo({ top: 0, behavior: 'smooth' });
-    moment.tz.setDefault('America/Chicago');
   },
   async created() {
     this.users = this.$store.getters.userInfo;
+
+    moment.tz.setDefault('America/Chicago');
     if (this.users) {
       await this.getBidBySerial({
         serial: this.$route.params.serial,
