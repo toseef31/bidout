@@ -397,13 +397,13 @@ export default {
 		},
 		salesRepsList() {
 			if (this.$route.name == 'EditBid') {
-				if (this.$store.getters.bidData.invitedSuppliers != '') {
-					return this.$store.getters.salesRepsList.filter((el) => !this.$store.getters.bidData.invitedSuppliers.find((supplier) => supplier.id === el.companyId));
+				if (this.$store.getters.bidData.invitedSuppliers != '' || this.$store.getters.bidData.invitedSuppliers != null || this.$store.getters.bidData.invitedSuppliers != undefined) {
+					return this.$store.getters.salesRepsList ? this.$store.getters.salesRepsList.filter((el) => !this.$store.getters.bidData.invitedSuppliers.find((supplier) => supplier.id === el.companyId)) : [];
 				}
 				return this.$store.getters.salesRepsList ? this.$store.getters.salesRepsList.filter((rep) => rep.company !== this.userInfo.company.company) : [];
 			}
-			if (this.$store.getters.bidData.invitedSuppliers != '') {
-				return this.$store.getters.salesRepsList.filter((el) => !this.$store.getters.bidData.invitedSuppliers.includes(el.companyId));
+			if (this.$store.getters.bidData.invitedSuppliers != '' || this.$store.getters.bidData.invitedSuppliers != null || this.$store.getters.bidData.invitedSuppliers != undefined) {
+				return this.$store.getters.salesRepsList ? this.$store.getters.salesRepsList.filter((el) => !this.$store.getters.bidData.invitedSuppliers.includes(el.companyId)) : [];
 			}
 			return this.$store.getters.salesRepsList ? this.$store.getters.salesRepsList.filter((rep) => rep.company !== this.userInfo.company.company) : [];
 		},
@@ -412,15 +412,16 @@ export default {
 		},
 		companiesList() {
 			if (this.$route.name == 'EditBid') {
-				if (this.$store.getters.bidData.invitedSuppliers != '') {
-					return this.$store.getters.companiesList.filter((el) => !this.$store.getters.bidData.invitedSuppliers.find((supplier) => supplier.id === el.objectID));
+				if (this.$store.getters.bidData.invitedSuppliers != '' || this.$store.getters.bidData.invitedSuppliers != null || this.$store.getters.bidData.invitedSuppliers != undefined) {
+					return this.$store.getters.companiesList ? this.$store.getters.companiesList.filter((el) => !this.$store.getters.bidData.invitedSuppliers.find((supplier) => supplier.id === el.objectID)) : [];
 				}
-				return this.$store.getters.companiesList ? this.$store.getters.companiesList.filter((rep) => rep.company !== this.userInfo.company.company) : [];
+					return this.$store.getters.companiesList ? this.$store.getters.companiesList.filter((rep) => rep.company !== this.userInfo.company.company) : [];
+				
 			}
-			if (this.$store.getters.bidData.invitedSuppliers != '') {
-				return this.$store.getters.companiesList.filter((el) => !this.$store.getters.bidData.invitedSuppliers.includes(el.objectID));
+			if (this.$store.getters.bidData.invitedSuppliers != '' || this.$store.getters.bidData.invitedSuppliers != null || this.$store.getters.bidData.invitedSuppliers != undefined) {
+				return this.$store.getters.companiesList ? this.$store.getters.companiesList.filter((el) => !this.$store.getters.bidData.invitedSuppliers.includes(el.objectID)) : [];
 			}
-			return this.$store.getters.companiesList;
+			return this.$store.getters.companiesList ? this.$store.getters.companiesList : [];
 		},
 		serviceCompanies() {
 			return this.$store.getters.serviceCompaniesList.sort((a, b) => {
@@ -432,10 +433,10 @@ export default {
 			});
 		},
 		filteredEntries() {
-			if (this.$store.getters.bidData.invitedSuppliers != '') {
+			if (this.$store.getters.bidData.invitedSuppliers != '' || this.$store.getters.bidData.invitedSuppliers != null || this.$store.getters.bidData.invitedSuppliers != undefined) {
 				if (this.$route.name == 'EditBid') {
-					if (this.inviteCount == 1) {
-						let inviteData = this.$store.getters.companiesList.filter((el) => this.$store.state.bid.invitedSuppliers.find((supplier) => supplier.id === el.objectID));
+					if (this.inviteCount == 1 && this.$store.getters.companiesList) {
+						let inviteData = this.$store.getters.companiesList ? this.$store.getters.companiesList.filter((el) => this.$store.state.bid.invitedSuppliers.find((supplier) => supplier.id === el.objectID)) : [];
 						this.repsInvited = inviteData.sort((a, b) => {
 							let aHasOfsPremium = a.contracts.some(contract => contract.contractType === 'ofs-premium');
 							if (aHasOfsPremium) {
@@ -444,8 +445,8 @@ export default {
 							return 1;
 						});
 					}
-				} else if (this.inviteCount == 1) {
-					let inviteData = this.$store.getters.companiesList.filter((el) => this.$store.state.bid.invitedSuppliers.includes(el.objectID));
+				} else if (this.inviteCount == 1 && this.$store.getters.companiesList) {
+					let inviteData = this.$store.getters.companiesList ? this.$store.getters.companiesList.filter((el) => this.$store.state.bid.invitedSuppliers.includes(el.objectID)) : [];
 					this.repsInvited = inviteData.sort((a, b) => {
 						let aHasOfsPremium = a.contracts.some(contract => contract.contractType === 'ofs-premium');
 						if (aHasOfsPremium) {

@@ -448,6 +448,7 @@ export default {
     this.$store.commit('setInvitedNewSuppliers', this.$store.getters.bidData.invitedNewSuppliers);
     this.$store.commit('setInvitedTeamMembers', this.$store.getters.bidData.invitedTeamMembers);
     this.$store.commit('setBidlines', this.$store.getters.bidData.lineItems);
+    this.$store.commit('setLineItemsComplete', false);
     if (this.$route.name == 'EditBid') {
       this.$store.commit('setAttachement', this.$store.getters.bidData.attachments);
     } else if (this.$store.getters.bidData.statusType == 'draftBid') {

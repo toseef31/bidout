@@ -40,12 +40,26 @@
                             <v-list-item class="py-1"
                               :key="company.objectID"
                             >
+                            
                               <v-list-item-avatar max-height="31px" max-width="88px" width="88px" tile>
                                 <v-img v-if="company.companyImage" :src="company.companyImage" height="auto"></v-img>
                                 <v-img v-else :src="`/images/companies/no-image.jpg`" height="auto"></v-img>
                               </v-list-item-avatar>
                               <v-list-item-content>
-                                <v-list-item-title class="text-left">{{company.company}}</v-list-item-title>
+                                <v-list-item-title class="text-left">{{company.company}} 
+                                  <span v-if="hasOfsPremium(company)">
+                                    <v-tooltip top>
+                                      <template v-slot:activator="{ on, attrs }">
+                                        <v-icon 
+                                          color="#0D9647" 
+                                          size="16px" 
+                                          v-bind="attrs"
+                                          v-on="on">mdi-check-decagram</v-icon>
+                                      </template>
+                                      <span>Premium Service Provider</span>
+                                    </v-tooltip> 
+                                  </span>
+                                </v-list-item-title>
                               </v-list-item-content>
                               <v-list-item-action>
                                 <v-list-item-action-text class="font-weight-bold" ><router-link :to="company.slug ? '/company/'+company.slug: '' ">View Profile</router-link></v-list-item-action-text>
@@ -141,6 +155,8 @@ export default {
   
   data() {
     return {
+      on: '',
+      attrs: '',
       searchCompany: '',
       loading: true,
       companiess: [
@@ -249,7 +265,14 @@ export default {
     },
     companies(){
       this.hideList = true;
-      return this.$store.getters.supplier;
+      return this.$store.getters.supplier.sort((a, b) => {
+        let aHasOfsPremium = a.contracts.some(contract => contract.contractType === 'ofs-premium');
+        let bHasOfsPremium = b.contracts.some(contract => contract.contractType === 'ofs-premium');
+        if (aHasOfsPremium === bHasOfsPremium) {
+          return 0;
+        }
+        return aHasOfsPremium ? -1 : 1;
+      });
     },
     premiumCompanies(){
       if(this.$store.getters.premiumCompanies){
@@ -268,13 +291,19 @@ export default {
     subCategories(subCats){
      return _.orderBy(subCats, 'orderNumber', 'asc');
     },
-    getSupplierList(){
+    searchSuppliersList(){
       if(this.searchCompany.length > 1){
         this.searchSupplier(this.searchCompany);
       }
     },
+    getSupplierList: _.debounce(function() {
+      this.searchSuppliersList();
+    }, 1000),
     viewCompany(slug,name){
       this.getCompanyInfo({'slug':slug,'name':name});
+    },
+    hasOfsPremium(supplier) {
+      return supplier.contracts.some(contract => contract.contractType === 'ofs-premium');
     },
     loader(){
       setTimeout(()=>{

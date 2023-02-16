@@ -23,8 +23,8 @@
 		          </div>
 		        </div>
 		        <div class="companies-list">
-		          <div class="d-flex align-center justify-space-between list-company pa-4" v-for="(team,index) in teamMembers" v-if="user.id != team.id">
-		            <div class="comapny-data d-flex align-center">
+		          <div class="d-flex align-center justify-space-between list-company pa-4" v-for="(team,index) in teamMembers" v-if="user.id != team.id && team.status != false">
+								<div class="comapny-data d-flex align-center">
 		              <div class="company-img">
 		                <img v-if="!team.image" :src="require('@/assets/images/chat/chatUser.png')" width="48px" height="48px">
 		                <img v-else :src="team.image" width="48px" height="48px">
@@ -49,7 +49,7 @@
 		    </div>
 		    <div class="companies-list">
 		    	{{filterTeam}}
-		      <div class="d-flex align-center justify-space-between list-company pa-4" v-for="(team,index) in membersAdded">
+		      <div class="d-flex align-center justify-space-between list-company pa-4" v-for="(team,index) in membersAdded" v-if="user.id != team.id && team.status != false">
 		        <div class="comapny-data d-flex align-center">
 		          <div class="company-img">
 		            <img v-if="!team.image" :src="require('@/assets/images/chat/chatUser.png')">
@@ -94,28 +94,28 @@ export default {
     	if (this.$store.getters.bidData != null) {
     		if (this.$route.name == 'EditBid') {
     			if (this.$store.getters.bidData.invitedTeamMembers != '') {
-    				return this.$store.getters.teamMembers.filter((el) => !this.$store.getters.bidData.invitedTeamMembers.find((team) => team.id === el.id));
+    				return this.$store.getters.teamMembers ? this.$store.getters.teamMembers.filter((el) => !this.$store.getters.bidData.invitedTeamMembers.find((team) => team.id === el.id)) : [];
     			}
     				return this.$store.getters.teamMembers;
     		}
 	    		if (this.$store.getters.bidData.invitedTeamMembers != '') {
-	    			return this.$store.getters.teamMembers.filter((el) => !this.$store.getters.bidData.invitedTeamMembers.includes(el.id));
+	    			return this.$store.getters.teamMembers ? this.$store.getters.teamMembers.filter((el) => !this.$store.getters.bidData.invitedTeamMembers.includes(el.id)) : [];
 	    		}
-	    			return this.$store.getters.teamMembers;
+	    			return this.$store.getters.teamMembers ? this.$store.getters.teamMembers : [];
     	}
 	    	if (this.searchMember) {
         return this.$store.getters.teamMembers.filter((item) => (this.searchMember.toLowerCase().split(' ').every((v) => item.firstName.toLowerCase().includes(v)) || this.searchMember.toLowerCase().split(' ').every((v) => item.lastName.toLowerCase().includes(v))));
 	    	}
-	  			return this.$store.getters.teamMembers;
+	  			return this.$store.getters.teamMembers ? this.$store.getters.teamMembers : [];
     },
     filterTeam() {
       if (this.$store.getters.bidData.invitedTeamMembers != '') {
         if (this.$route.name == 'EditBid') {
-		  		this.membersAdded = this.$store.getters.teamMembers.filter((el) => this.$store.state.bid.invitedTeamMembers.find((team) => team.id === el.id));
+		  		this.membersAdded = this.$store.getters.teamMembers ? this.$store.getters.teamMembers.filter((el) => this.$store.state.bid.invitedTeamMembers.find((team) => team.id === el.id)) : [];
         } else if (!this.$store.state.bid.invitedTeamMembers[0].id) {
-          this.membersAdded = this.$store.getters.teamMembers.filter((el) => this.$store.state.bid.invitedTeamMembers.includes(el.id));
+          this.membersAdded = this.$store.getters.teamMembers ? this.$store.getters.teamMembers.filter((el) => this.$store.state.bid.invitedTeamMembers.includes(el.id)) : [];
         } else {
-          this.membersAdded = this.$store.state.bid.invitedTeamMembers;
+          this.membersAdded = this.$store.state.bid.invitedTeamMembers ? this.$store.state.bid.invitedTeamMembers : [];
         }
       }
     },
@@ -148,12 +148,12 @@ export default {
     	this.membersAdded.push(member);
     	
     	this.newCount = this.membersAdded.length;
-  		this.$store.getters.teamMembers.splice(index, 1);
+			this.$store.commit('spliceTeamMember',index);
   		this.$store.commit('setInvitedTeamMembers', this.membersAdded);
     },
     remove(member, index) {
     	this.oldCount = this.membersAdded.length;
-	  	this.$store.getters.teamMembers.push(member);
+			this.$store.commit('pushTeamMember',member);
 	  	this.newCount = this.membersAdded.length;
       this.membersAdded.splice(index, 1);
   		this.$store.commit('setInvitedTeamMembers', this.membersAdded);
