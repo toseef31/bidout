@@ -111,11 +111,11 @@ export default {
     filterTeam() {
       if (this.$store.getters.bidData.invitedTeamMembers != '') {
         if (this.$route.name == 'EditBid') {
-		  		this.membersAdded = this.$store.getters.teamMembers.filter((el) => this.$store.state.bid.invitedTeamMembers.find((team) => team.id === el.id));
+		  		this.membersAdded = this.$store.getters.teamMembers ? this.$store.getters.teamMembers.filter((el) => this.$store.state.bid.invitedTeamMembers.find((team) => team.id === el.id)) : [];
         } else if (!this.$store.state.bid.invitedTeamMembers[0].id) {
-          this.membersAdded = this.$store.getters.teamMembers.filter((el) => this.$store.state.bid.invitedTeamMembers.includes(el.id));
+          this.membersAdded = this.$store.getters.teamMembers ? this.$store.getters.teamMembers.filter((el) => this.$store.state.bid.invitedTeamMembers.includes(el.id)) : [];
         } else {
-          this.membersAdded = this.$store.state.bid.invitedTeamMembers;
+          this.membersAdded = this.$store.state.bid.invitedTeamMembers ? this.$store.state.bid.invitedTeamMembers : [];
         }
       }
     },
