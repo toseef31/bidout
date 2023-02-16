@@ -66,7 +66,7 @@ export default {
     }
   },
   methods: {
-    ...mapActions(["updateProfileImg"]),
+    ...mapActions(["updateProfileImg",'showErrorAlert','message']),
     croppie (e) {
       var files = e.target.files || e.dataTransfer.files;
       if (!files.length) return;
@@ -115,6 +115,14 @@ export default {
             files: this.image_name,
           }
           this.updateProfileImg(data);
+          if (this.message != null) {
+            this.$toasted.show(`Something went wrong. Please try again in few moments.`, {
+              class: 'error-toast',
+              duration: 5000,
+              type: 'error',
+              position: 'top-center',
+            });
+          }
         });
       },
   },

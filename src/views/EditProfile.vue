@@ -10,6 +10,7 @@
                 <div class="editprofile-section mt-16">
                   <v-row justify="center">
                     <v-col cols="12" sm="10" md="10">
+                      {{ message }}
                       <v-form @submit.prevent="editForm" ref="form">
                         <v-row justify="center">
                           <v-col cols="12" sm="6" text="left">
@@ -219,7 +220,7 @@ export default {
     },
   },
   computed:{
-    ...mapGetters(['profileLoading']),
+    ...mapGetters(['profileLoading','showErrorAlert','message']),
     showSideBar(){
         return this.$store.getters.g_sideBarOpen;
     },
@@ -257,6 +258,14 @@ export default {
         timezone: this.userTimezone,
       }
       this.updateProfile(user);
+      if (this.message != null) {
+        this.$toasted.show(`Something went wrong. Please try again in few moments.`, {
+          class: 'error-toast',
+          duration: 5000,
+          type: 'error',
+          position: 'top-center',
+        });
+      }
     },
     history(){
       var user = {
