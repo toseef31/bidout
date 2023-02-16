@@ -107,8 +107,9 @@
 	  			.btn-col{
 	  				.add-logo{
 	  					background: #0d9648;
-					    padding: 16px 60px;
-					    width: 240px;
+					    padding: 16px 30px;
+					    width: 48%;
+							font-size: 14px;
 					    border-radius: 8px;
 	  				}
 	  				.v-btn{
@@ -211,11 +212,7 @@
 	  				font-size: 12px;
 	  			}
 	  			.corporate-video{
-	  				.col-12{
-	  					display: flex;
-	  					justify-content: space-between;
-	  					align-items: center;
-	  				}
+	  				
 	  			}
 	  			.video-col{
 	  				position: relative;
@@ -420,6 +417,22 @@
 		  			}
 		  		}
 		  		.company-form{
+						.company-logo-row{
+							.col-12{
+								img{
+									width : 100%;
+								}
+							}
+							.btn-col{
+								.add-logo{
+									width: 48% !important;
+									padding: 16px 20px !important;
+								}
+								.del-btn{
+									width: 48% !important;
+								}
+							} 
+						}
 		  			.main-label{
 		  				font-size: 16px;
 		  			}
@@ -435,11 +448,11 @@
 		  					height:  25px !important;
 		  				}
 		  				.add-logo{
-		  					
+		  					width: 48% !important;
+								padding: 16px 20px !important;
 		  				}
 		  				.del-btn{
-		  					height: 25px !important;
-		  					margin-top: 5px;
+		  					height: 56px !important;
 		  				}
 		  			}
 		  			.service-list{
@@ -454,6 +467,7 @@
 		  				.service-list{
 		  					grid-template-columns: repeat(2, 1fr);
 		  					.profile-list{
+									width: 31%;
 		  						h6,p{
 		  							font-size: 14px;
 		  						}
