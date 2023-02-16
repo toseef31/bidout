@@ -458,7 +458,6 @@ export default {
 			}
 		},
 		newSupplierFiltered() {
-			console.log('new',this.$store.getters.bidData.invitedNewSuppliers);
 			if (this.$store.getters.bidData.invitedNewSuppliers) {
 				if (this.$route.name == 'EditBid') {
 					if (this.inviteCount == 1) {
