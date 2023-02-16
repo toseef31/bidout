@@ -60,4 +60,5 @@ export default {
   saveBidLoading: false,
   loadingInvite: false,
   bidActivities: null, 
+  isEditBidChanges: false,
 };
