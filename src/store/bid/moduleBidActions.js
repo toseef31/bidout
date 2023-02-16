@@ -1570,6 +1570,7 @@ export default {
     try {
       const res = await axios.post('bid/editBid/', formData, config);
       if (res.status == 200) {
+        commit('setIsEditBidChanges',false);
         // commit('setDraftBidsList',null);
         commit('setDraftTime', new Date().toLocaleString());
         commit('setSaveBidLoading', false);

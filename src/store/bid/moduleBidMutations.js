@@ -236,4 +236,7 @@ export default {
   pushTeamMember (state,member){
     state.teamMembers.push(member);
   },
+  setIsEditBidChanges (state,payload){
+    state.isEditBidChanges = payload;
+  }
 };
