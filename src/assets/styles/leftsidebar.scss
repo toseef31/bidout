@@ -151,8 +151,10 @@
         caret-color: red;
       }
       .router-link-exact-active{
+        padding-right: 24px;
         .v-list-item__title{
           color: #0d9648;
+          padding-right: 24px;
         }
       }
     }
@@ -160,7 +162,13 @@
   .main-menu{
     .router-link-exact-active{
       border-right: 4px solid #0d9648;
+      padding-right: 24px;
     }
+    .v-list-item{
+      .mobile-badge{
+        right: 26%;
+      }
+    } 
   }
 
 }
