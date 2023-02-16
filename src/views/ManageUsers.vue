@@ -23,7 +23,7 @@
                   </div>
                 </div>
                 <div class="userlist-table mt-16">
-                  <v-alert type="success" v-show="showErrorAlert" v-if="statusMessage !== null" class="text-left" dismissible>
+                  <v-alert type="success" v-if="statusMessage !== null" class="text-left" dismissible>
                     {{ statusMessage }}
                   </v-alert>
                   <v-simple-table>
