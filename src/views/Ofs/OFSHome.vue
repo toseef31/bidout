@@ -104,8 +104,20 @@
                               <v-list-item-title
                                 
                                 class="text-left"
-                                >{{ company.company }}</v-list-item-title
-                              >
+                                >{{ company.company }}
+                                <span v-if="hasOfsPremium(company)">
+                                    <v-tooltip top>
+                                      <template v-slot:activator="{ on, attrs }">
+                                        <v-icon 
+                                          color="#0D9647" 
+                                          size="16px" 
+                                          v-bind="attrs"
+                                          v-on="on">mdi-check-decagram</v-icon>
+                                      </template>
+                                      <span>Premium Service Provider</span>
+                                    </v-tooltip> 
+                                  </span>
+                              </v-list-item-title>
                             </v-list-item-content>
                             <v-list-item-action>
                               <v-list-item-action-text
@@ -271,7 +283,7 @@ export default {
     searchCompany: _.debounce(function () {
       if (this.searchCompany < 1) {
         this.hideList = false;
-      } else {
+      }else{
         this.hideList = true;
       }
     }, 500),
@@ -283,7 +295,19 @@ export default {
     },
     companies() {
       this.hideList = true;
-      return this.$store.getters.supplier;
+      if(this.$store.getters.supplier){
+        return this.$store.getters.supplier.sort((a, b) => {
+        let aHasOfsPremium = a.contracts.some(contract => contract.contractType === 'ofs-premium');
+        let bHasOfsPremium = b.contracts.some(contract => contract.contractType === 'ofs-premium');
+          if (aHasOfsPremium === bHasOfsPremium) {
+            return 0;
+          }
+          return aHasOfsPremium ? -1 : 1;
+        });
+      }else{
+        return [];
+      }
+      
     },
     premiumCompanies() {
       return this.$store.getters.premiumCompanies;
@@ -304,12 +328,17 @@ export default {
     subCategories(subCats) {
       return _.orderBy(subCats, "orderNumber", "asc");
     },
-    getSupplierList() {
-      if (this.searchCompany.length > 1) {
+    searchSuppliersList(){
+      if(this.searchCompany.length > 1){
         this.searchSupplier(this.searchCompany);
       }
     },
-    
+    getSupplierList: _.debounce(function() {
+      this.searchSuppliersList();
+    }, 1000),
+    hasOfsPremium(supplier) {
+      return supplier.contracts.some(contract => contract.contractType === 'ofs-premium');
+    },
     loader() {
       setTimeout(() => {
         this.pageLoader = false;
