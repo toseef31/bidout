@@ -6,7 +6,7 @@
           <v-row class="mx-0">
             <v-col cols="12" sm="12" md="12" class="d-sm-block">
               <div class="manage-sections pa-4">
-                <v-alert type="success" v-show="showErrorAlert" v-if="statusMessage !== null" class="text-left" dismissible>
+                <v-alert type="success" v-if="statusMessage !== null" class="text-left" dismissible>
                   {{ statusMessage }}
                 </v-alert>
                 <div class="top-section d-flex">
