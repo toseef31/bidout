@@ -53,7 +53,7 @@ export default {
           const timestamp = item.createdOn._seconds * 1000 + item.createdOn._nanoseconds / 1000000;
           item.newDate = moment(timestamp).format('MM/DD/YYYY hh:mm A');
         });
-        return _.orderBy(this.$store.getters.bidActivities.slice(0, 40), 'newDate', 'desc');
+        return _.orderBy(this.$store.getters.bidActivities, 'newDate', 'desc');
       }
       return [];
     },
