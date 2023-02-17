@@ -217,6 +217,7 @@ export default {
          dispatch('updateBasicProfile',payload);
         }
       }
+      commit('setManageCompanyError','Something went wrong.Please try again in few moments.');
           console.log(err);
       });
   }, 
@@ -378,6 +379,7 @@ export default {
          dispatch('addCompanyVideos',payload);
         }
       }
+      commit('setManageCompanyError','Something went wrong.Please try again in few moments.');
           console.log(err);
       });
   },
@@ -507,6 +509,7 @@ export default {
          dispatch('addCompanyNews',payload);
         }
       }
+      commit('setManageCompanyError','Something went wrong.Please try again in few moments.');
           console.log(err);
       });
   },
@@ -536,6 +539,7 @@ export default {
          dispatch('addCompanyFacts',payload);
         }
       }
+      commit('setManageCompanyError','Something went wrong.Please try again in few moments.');
           console.log(err);
       });
   },

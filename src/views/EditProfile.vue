@@ -10,7 +10,6 @@
                 <div class="editprofile-section mt-16">
                   <v-row justify="center">
                     <v-col cols="12" sm="10" md="10">
-                      {{ message }}
                       <v-form @submit.prevent="editForm" ref="form">
                         <v-row justify="center">
                           <v-col cols="12" sm="6" text="left">
@@ -214,11 +213,7 @@ export default {
       saveLoading: false,
     };
   },
-  watch: {
-    searchTimezone (val) {
-      val && val !== this.userTimezone
-    },
-  },
+  
   computed:{
     ...mapGetters(['profileLoading','showErrorAlert','message']),
     showSideBar(){
@@ -239,7 +234,21 @@ export default {
     companyAdmins(){
       return this.$store.getters.companyAdmins;
     },
-    
+  },
+  watch: {
+    searchTimezone (val) {
+      val && val !== this.userTimezone
+    },
+    message(value){
+      if (value) {
+        this.$toasted.show(value, {
+          position: 'top-center',
+          duration: 3000,
+          className: 'error-toast',
+          type: 'error',
+        });
+      }
+    }
   },
   methods: {
     ...mapActions(["updateProfile","loginHistory","adminsCompany"]),
@@ -258,14 +267,6 @@ export default {
         timezone: this.userTimezone,
       }
       this.updateProfile(user);
-      if (this.message != null) {
-        this.$toasted.show(`Something went wrong. Please try again in few moments.`, {
-          class: 'error-toast',
-          duration: 5000,
-          type: 'error',
-          position: 'top-center',
-        });
-      }
     },
     history(){
       var user = {

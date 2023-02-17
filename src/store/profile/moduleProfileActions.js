@@ -14,9 +14,8 @@ export default {
       },
     };
     const formData = new FormData()
-    formData.append('files', payload.files)
-    commit('setMessage',null);
-    axios.post('/user/updateProfilePicture/',formData,config)
+    formData.append('files', payload.files);
+    axios.post('/user/updateProfilePicture/'+payload.userid,formData,config)
      .then(responce => {
       
       if(responce.status === 200){
@@ -54,9 +53,8 @@ export default {
   },  
   updateProfile({commit,dispatch,state}, payload){
     commit('editProfileLoading',true);
-    commit('setMessage',null);
     axios.post('/user/updateUser/'+payload.userid,{'email': payload.email,'firstName': payload.firstName,'lastName': payload.lastName,'phoneNumber': payload.phoneNumber,'title':payload.title,'timezone':payload.timezone})
-     .then(responce => {
+    .then(responce => {
       
       if(responce.status === 200){
         axios.get('/user/getUserData/'+payload.email)

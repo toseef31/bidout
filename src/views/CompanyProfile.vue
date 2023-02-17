@@ -206,7 +206,7 @@ export default {
     };
   },
   computed:{
-    ...mapGetters(['saveInfoLoading']),
+    ...mapGetters(['saveInfoLoading','manageCompanyError']),
     showSideBar(){
         return this.$store.getters.g_sideBarOpen;
     },
@@ -277,6 +277,18 @@ export default {
     },
     loading(){
       return this.$store.getters.pageLoader;
+    }
+  },
+  watch:{
+    manageCompanyError(message){
+      if(message){
+        this.$toasted.show(message, {
+          position: 'top-center',
+          duration: 5000,
+          className: 'error-toast',
+          type: 'error',
+        });
+      }
     }
   },
   methods: {
