@@ -156,7 +156,7 @@ export default {
       });
   }, 
   getActivities({commit,dispatch,state},payload){
-    
+    commit('setActivityList',null);
     axios.get('/activity/getUserActivities/'+payload)
       .then(responce => {
         
