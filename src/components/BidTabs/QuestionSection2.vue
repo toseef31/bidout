@@ -425,7 +425,7 @@
 <script>
 import draggable from 'vuedraggable';
 import { v4 as uuidv4 } from 'uuid';
-import { mapActions } from 'vuex';
+import { mapActions,mapGetters } from 'vuex';
 
 export default {
   name: 'QuestionSection2',
@@ -452,6 +452,9 @@ export default {
       loading: false,
     };
   },
+  computed:{
+    ...mapGetters(["isEditBidChanges"]),
+  },
   watch: {
     categories: {
       handler() {
@@ -459,6 +462,7 @@ export default {
         this.categories.forEach((cat, index) => {
           this.categories[index].order = index;
         });
+        this.$store.commit('setIsEditBidChanges',true);
       },
       deep: true,
     },
@@ -476,6 +480,7 @@ export default {
       };
       this.categories.push(data);
       this.$store.commit('setQuestions',this.categories);
+      this.$store.commit('setIsEditBidChanges',true);
       this.questionStatus = true;
     },
     createQuestion(type) {
@@ -490,21 +495,25 @@ export default {
       };
       this.categories.push(qusData);
       this.$store.commit('setQuestions',this.categories);
+      this.$store.commit('setIsEditBidChanges',true);
       this.questionStatus = true;
     },
     editCatTitle(index) {
       this.editCat = index;
       this.isCate[index] = true;
+      this.$store.commit('setIsEditBidChanges',true);
       this.questionStatus = true;
     },
     editQusTitle(index) {
       this.editQues = index;
       this.isQues[index] = true;
+      this.$store.commit('setIsEditBidChanges',true);
       this.questionStatus = true;
     },
     editSaveTitle(index) {
       this.editQues = -1;
       this.isQues[index] = false;
+      this.$store.commit('setIsEditBidChanges',true);
       this.questionStatus = true;
     },
     questionMoved(event, categoryId, questions) {
@@ -517,12 +526,14 @@ export default {
           ].order = questionIndex;
         });
         this.$store.commit('setQuestions',this.categories);
+        this.$store.commit('setIsEditBidChanges',true);
         this.questionStatus = true;
     },
     saveTitle(index) {
       this.editCat = -1;
       this.isCate[index] = false;
       this.$store.commit('setQuestions',this.categories);
+      this.$store.commit('setIsEditBidChanges',true);
       this.questionStatus = true;
     },
     addOptions(index) {
@@ -533,23 +544,28 @@ export default {
         quesIndex: index,
       });
       this.$store.commit('setQuestions',this.categories);
+      this.$store.commit('setIsEditBidChanges',true);
       this.questionStatus = true;
     },
     editLabel(index) {
       this.editLbl = index;
       this.isLbl[index] = true;
+      this.$store.commit('setIsEditBidChanges',true);
       this.questionStatus = true;
     },
     saveLabel(index) {
       this.editLbl = -1;
       this.isLbl[index] = false;
       this.$store.commit('setQuestions',this.categories);
+      this.$store.commit('setIsEditBidChanges',true);
       this.questionStatus = true;
     },
     updateQuestion() {
       this.loading = true;
       if(this.$route.name == 'EditBid'){
-        this.updateBid({ questions: this.categories });
+        if(this.isEditBidChanges == true){
+          this.updateBid({ questions: this.categories });
+        }
         this.loading = false;
       }else if(this.$route.name == 'EditTemplate'){
         this.updateTemplate({ questions: this.categories });
@@ -563,16 +579,19 @@ export default {
     deleteQuestion(index) {
       this.categories.splice(index, 1);
       this.$store.commit('setQuestions',this.categories);
+      this.$store.commit('setIsEditBidChanges',true);
       this.questionStatus = true;
     },
     deleteOption(index, optIndex) {
       this.categories[index].options.splice(optIndex, 1);
       this.$store.commit('setQuestions',this.categories);
+      this.$store.commit('setIsEditBidChanges',true);
       this.questionStatus = true;
     },
     deleteCat(index) {
       this.categories.splice(index, 1);
       this.$store.commit('setQuestions',this.categories);
+      this.$store.commit('setIsEditBidChanges',true);
       this.questionStatus = true;
     },
     updateRequired(){
@@ -582,7 +601,9 @@ export default {
       const timer = setInterval(() => {
         if(this.questionStatus == true){
           if(this.$route.name == 'EditBid'){
-            this.updateBid({ questions: this.categories });
+            if(this.isEditBidChanges == true){
+              this.updateBid({ questions: this.categories });
+            }
           }else if(this.$route.name == 'EditTemplate'){
             this.updateTemplate({ questions: this.categories });
           }else{

@@ -198,7 +198,7 @@ export default {
     };
   },
   computed: {
-    ...mapGetters(['userInfo','saveBidLoading']),
+    ...mapGetters(['userInfo','saveBidLoading','isEditBidChanges']),
     singleTemplate() {
       return this.$store.getters.singleTemplate;
     },
@@ -341,7 +341,9 @@ export default {
             }
           } else {
             if (this.$route.name == 'EditBid') {
-              await this.updateBid(bidDetails);
+              if(this.isEditBidChanges == true){
+                await this.updateBid(bidDetails);
+              }
             }
             if (!this.$store.getters.bidData.id) {
               await this.saveDraftBid(bidDetails);
@@ -387,7 +389,9 @@ export default {
             }
           } else {
             if (this.$route.name == 'EditBid') {
-              await this.updateBid(bidDetails);
+              if(this.isEditBidChanges == true){
+                await this.updateBid(bidDetails);
+              }
             }
             if (!this.$store.getters.bidData.id) {
               await this.saveDraftBid(bidDetails);
@@ -421,6 +425,7 @@ export default {
     },
     fieldUpdate() {
       this.formStatus = true;
+      this.$store.commit('setIsEditBidChanges',true);
     },
     savedraftOnInterval() {
       const timer = setInterval(() => {
