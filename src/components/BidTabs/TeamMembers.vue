@@ -75,7 +75,7 @@
 	</div>
 </template>
 <script>
-import { mapActions } from 'vuex';
+import { mapActions,mapGetters } from 'vuex';
 
 export default {
   data() {
@@ -90,6 +90,7 @@ export default {
     };
   },
   computed: {
+		...mapGetters(["isEditBidChanges"]),
     teamMembers() {
     	if (this.$store.getters.bidData != null) {
     		if (this.$route.name == 'EditBid') {
@@ -132,7 +133,9 @@ export default {
   	...mapActions(['getTeamMembers', 'getCompanyInfo', 'updateDraftBid', 'updateTemplate', 'updateBid']),
     changeTab() {
     	if (this.$route.name == 'EditBid') {
-    		this.updateBid({ invitedTeamMembers: this.membersAdded });
+				if(this.isEditBidChanges == true){
+					this.updateBid({ invitedTeamMembers: this.membersAdded });
+				}
     	} else if (this.$route.name == 'EditTemplate') {
     	  this.updateTemplate({ invitedTeamMembers: this.membersAdded });
     	} else {
@@ -149,6 +152,7 @@ export default {
     	
     	this.newCount = this.membersAdded.length;
 			this.$store.commit('spliceTeamMember',index);
+			this.$store.commit('setIsEditBidChanges',true);
   		this.$store.commit('setInvitedTeamMembers', this.membersAdded);
     },
     remove(member, index) {
@@ -156,13 +160,16 @@ export default {
 			this.$store.commit('pushTeamMember',member);
 	  	this.newCount = this.membersAdded.length;
       this.membersAdded.splice(index, 1);
+			this.$store.commit('setIsEditBidChanges',true);
   		this.$store.commit('setInvitedTeamMembers', this.membersAdded);
     },
     savedraftOnInterval() {
       const timer = setInterval(() => {
       	if (this.oldCount != this.newCount) {
       		if (this.$route.name == 'EditBid') {
-      			this.updateBid({ invitedTeamMembers: this.membersAdded });
+						if(this.isEditBidChanges == true){
+							this.updateBid({ invitedTeamMembers: this.membersAdded });
+						}
       		} else if (this.$route.name == 'EditTemplate') {
   	    	  this.updateTemplate({ invitedTeamMembers: this.membersAdded });
   	    	} else {

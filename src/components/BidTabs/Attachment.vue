@@ -94,7 +94,7 @@
   </div>
 </template>
 <script>
-import { mapActions } from "vuex";
+import { mapActions,mapGetters } from "vuex";
 
 export default {
   data() {
@@ -114,6 +114,7 @@ export default {
     };
   },
   computed: {
+    ...mapGetters(["isEditBidChanges"]),
     uploadedBy() {
       return `${this.$store.getters.userInfo.firstName} ${this.$store.getters.userInfo.lastName}`;
     },
@@ -202,6 +203,7 @@ export default {
       };
       await this.uploadBidAttach(data);
       this.isAttaching = false;
+      this.$store.commit('setIsEditBidChanges',true);
       this.attachStatus = true;
       if(this.$route.name == 'EditBid'){
         this.$store.commit('setAttachement',this.docsList);
@@ -228,6 +230,7 @@ export default {
         this.$store.commit('spliceAttachData',index);
       }
       this.$store.commit('setAttachement',this.documents);
+      this.$store.commit('setIsEditBidChanges',true);
       this.attachStatus = true;
     },
     openComment(index) {
@@ -253,7 +256,9 @@ export default {
       const timer = setInterval(() => {
         if(this.attachStatus == true){
           if(this.$route.name == 'EditBid'){
-            this.updateBid({ attachement: this.docsList });
+            if(this.isEditBidChanges == true){
+              this.updateBid({ attachement: this.docsList });
+            }
           }else if(this.$route.name == 'EditTemplate'){
             this.updateTemplate({ attachement: this.docsList });
           }else{

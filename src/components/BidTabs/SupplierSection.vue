@@ -324,7 +324,7 @@
 import VuePhoneNumberInput from 'vue-phone-number-input';
 import 'vue-phone-number-input/dist/vue-phone-number-input.css';
 import _ from 'lodash';
-import { mapActions, mapGetters } from 'vuex';
+import { mapActions, mapGetters,mapState } from 'vuex';
 
 export default {
 	components: {
@@ -387,7 +387,8 @@ export default {
 		};
 	},
 	computed: {
-		...mapGetters(['newSupplier', 'userInfo','loadingInvite']),
+		...mapGetters(['newSupplier', 'userInfo','loadingInvite','isEditBidChanges']),
+		...mapState(['isEditBidChanges']),
 		allcategories() {
 			setTimeout(() => this.loading = false, 500);
 			return _.orderBy(this.$store.getters.categories, 'orderNumber', 'asc');
@@ -484,7 +485,9 @@ export default {
 		...mapActions(['getCategories', 'getSalesReps', 'getCompanyInfo', 'searchByCompany', 'getCompanyByServices', 'saveDraftBid', 'inviteNewSupplier', 'updateDraftBid', 'updateTemplate', 'updateBid']),
 		changeTab() {
 			if (this.$route.name == 'EditBid') {
-				this.updateBid({ invitedSuppliers: this.repsInvited });
+				if(this.isEditBidChanges == true){
+					this.updateBid({ invitedSuppliers: this.repsInvited });
+				}
 			} else if (this.$route.name == 'EditTemplate') {
 				this.updateTemplate({ invitedSuppliers: this.repsInvited });
 			} else {
@@ -574,6 +577,7 @@ export default {
 			this.inviteCount = 2;
 			this.newCount = this.repsInvited.length;
 			this.$store.commit('spliceSalesRepsList', index);
+			this.$store.commit('setIsEditBidChanges',true);
 			const unique = [...new Map(this.repsInvited.map((m) => [m.company, m])).values()];
 
 			this.$store.commit('setInvitedSuppliersData', unique);
@@ -584,6 +588,7 @@ export default {
 			this.repsInvited.splice(index, 1);
 			this.inviteCount = 2;
 			this.newCount = this.repsInvited.length;
+			this.$store.commit('setIsEditBidChanges',true);
 			this.$store.commit('setInvitedSuppliersData', this.repsInvited);
 		},
 		getCompanies() {
@@ -603,6 +608,7 @@ export default {
 			this.inviteCount = 2;
 			this.newCount = this.repsInvited.length;
 			this.$store.commit('spliceCompanies', index);
+			this.$store.commit('setIsEditBidChanges',true);
 			const unique = [...new Map(this.repsInvited.map((m) => [m.company, m])).values()];
 			this.$store.commit('setInvitedSuppliersData', unique);
 		},
@@ -612,6 +618,7 @@ export default {
 			this.inviteCount = 2;
 			this.newCount = this.repsInvited.length;
 			this.$store.commit('spliceCompanies', index);
+			this.$store.commit('setIsEditBidChanges',true);
 			const unique = [...new Map(this.repsInvited.map((m) => [m.company, m])).values()];
 			this.$store.commit('setInvitedSuppliersData', unique);
 		},
@@ -621,6 +628,7 @@ export default {
 			this.inviteCount = 2;
 			this.newCount = this.repsInvited.length;
 			this.$store.commit('pushCompanies', company);
+			this.$store.commit('setIsEditBidChanges',true);
 			this.$store.commit('setInvitedSuppliersData', this.repsInvited);
 		},
 		removeNewSup(company, index) {
@@ -628,13 +636,16 @@ export default {
 			this.newRepsInvited.splice(index, 1);
 			this.inviteCount = 2;
 			this.newCount = this.newRepsInvited.length;
+			this.$store.commit('setIsEditBidChanges',true);
 			this.$store.commit('setInvitedNewSuppliers', this.newRepsInvited);
 		},
 		savedraftOnInterval() {
 			const timer = setInterval(() => {
 				if (this.oldCount != this.newCount) {
 					if (this.$route.name == 'EditBid') {
-						this.updateBid({ invitedSuppliers: this.repsInvited });
+						if(this.isEditBidChanges == true){
+							this.updateBid({ invitedSuppliers: this.repsInvited });
+						}
 					} else if (this.$route.name == 'EditTemplate') {
 						this.updateTemplate({ invitedSuppliers: this.repsInvited });
 					} else {

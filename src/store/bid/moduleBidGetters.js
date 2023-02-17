@@ -124,5 +124,8 @@ export default {
   },
   bidActivities(state) {
     return state.bidActivities
+  },
+  isEditBidChanges(state){
+    return state.isEditBidChanges;
   }
 };
