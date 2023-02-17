@@ -6,7 +6,7 @@
         <v-text-field placeholder="Add youtube video url ..." v-model="videoLinks" single-line outlined hide-details></v-text-field>
       </v-col>
       <v-col cols="2" sm="2" class="pl-0">
-      <v-btn color="#0D9648" class="text-capitalize mr-2 white--text" width="100%" height="54px" :loading="newsLoading" @click="addVideos">Add <span class="d-none">Video</span></v-btn>
+      <v-btn color="#0D9648" class="text-capitalize mr-2 white--text" width="100%" height="54px" :loading="newsLoading" @click="addVideos" :disabled="videobtn">Add <span class="d-none">Video</span></v-btn>
       </v-col>
     </v-row>
     <v-row v-if="companyData.corporateVideos">
@@ -26,6 +26,7 @@ export default {
     return {
       videoLinks: '',
       videos: [],
+      videobtn : true,
     };
   },
   computed:{
@@ -34,6 +35,15 @@ export default {
       return this.$store.getters.companyData.companyData;
     }
   },
+  watch:{
+    videoLinks(value){
+      if(value.length > 0){
+        this.videobtn = false;
+      }else{
+        this.videobtn = true;
+      }
+    }
+  },  
   methods: {
     ...mapActions(["addCompanyVideos"]),
     addVideos(){
