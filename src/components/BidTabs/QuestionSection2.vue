@@ -450,6 +450,7 @@ export default {
       multiOptions: [],
       questionStatus: false,
       loading: false,
+      isInitialized: false,
     };
   },
   computed:{
@@ -462,7 +463,12 @@ export default {
         this.categories.forEach((cat, index) => {
           this.categories[index].order = index;
         });
-        this.$store.commit('setIsEditBidChanges',true);
+        if (this.isInitialized) {
+          this.$store.commit('setIsEditBidChanges',false);
+          this.isInitialized = false;
+        }else{
+          this.$store.commit('setIsEditBidChanges',true);
+        }
       },
       deep: true,
     },
@@ -625,6 +631,7 @@ export default {
       this.categories.forEach((cat, index) => {
         cat.required == "true" ? this.categories[index].required = true : this.categories[index].required = false;
       });
+      this.isInitialized = true;
     }
     this.savedraftOnInterval();
   }

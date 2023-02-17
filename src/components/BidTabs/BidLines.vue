@@ -171,6 +171,7 @@ export default {
       ],
       enabled: true,
       dragging: false,
+      isInitialized: false,
     };
   },
   computed: {
@@ -199,11 +200,21 @@ export default {
   },
   watch: {
     bidLines: {
-      handler() {
+      handler(newValue, oldValue) {
+        console.log('inii',this.isInitialized);
         this.validate;
-        this.$store.commit('setIsEditBidChanges',true);
+        if (this.isInitialized) {
+          this.$store.commit('setIsEditBidChanges',false);
+          this.isInitialized = false;
+        }else{
+          this.$store.commit('setIsEditBidChanges',true);
+        }
+
       },
       deep: true,
+    },
+    validate: function() {
+      
     },
   },
   methods: {
@@ -333,6 +344,7 @@ export default {
       this.$emit('validation', { valid: true, items: '4' });
       this.$store.commit('setLineItemsComplete', true);
       this.$store.commit('setBidlines',this.bidLines);
+      this.isInitialized = true;
     }
     this.savedraftOnInterval();
   }

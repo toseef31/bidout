@@ -425,7 +425,6 @@ export default {
     },
     fieldUpdate() {
       this.formStatus = true;
-      this.$store.commit('setIsEditBidChanges',true);
     },
     savedraftOnInterval() {
       const timer = setInterval(() => {
