@@ -395,9 +395,15 @@ export default {
       }
     },
     parsedValue(index){
-      const value = this.lineItems[index].price;
-      const price = parseFloat(value).toFixed(2);
-      this.lineItems[index].price = price;
+      const parsedNumber = parseFloat(this.lineItems[index].price);
+      if (isNaN(parsedNumber)) {
+        this.lineItems[index].price = ''
+      }else{
+        const value = this.lineItems[index].price;
+        const price = parseFloat(value).toFixed(2);
+        this.lineItems[index].price = price;
+      }
+      
     },
     validatePrice(event, index) {
       if (this.isBidSubmitted && this.isBidOut) {
