@@ -23,7 +23,10 @@
     <v-alert type="error" v-show="showErrorDeleteAlert" class="mx-5" v-if="getUserType === 'buyer'">
       Deleting this bid was failed. Please Try again!
     </v-alert>
-
+    
+    <v-alert type="success" v-show="showSupplierAlert" class="mx-5 mt-5">
+      New suppliers have been updated and email notifications have been sent.
+      </v-alert>
     <v-card class=" bid-submitted-card" :elevation="0" v-if="isBidSubmitted && getUserType === 'supplier'">
       <div class="d-flex align-center">
         <img :src="require('@/assets/images/bids/awarded.png')" />
@@ -56,6 +59,7 @@
       <v-alert type="error" v-show="getLoweringPriceAlert" class="mx-5 mt-5">
         Suppliers can only lower the prices during the BidOut Phase!
       </v-alert>
+      
 
       <v-row class="px-5 my-5 row-title" no-gutters v-if="getUserType === 'buyer'">
         <v-col>
@@ -668,6 +672,9 @@ export default {
     },
     showBidSubmissionAlert() {
       return this.$store.getters.bidSubmissionAlert;
+    },
+    showSupplierAlert() {
+      return this.$store.getters.supplierAddAlert
     },
     isBidOut() {
       if (this.bidDetail.bidData.type === 'BidOut Process' && this.bidDetail.bidout) {

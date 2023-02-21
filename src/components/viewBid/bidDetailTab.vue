@@ -24,9 +24,9 @@
           <span>Description:</span>
           {{
             bidDetail.bidData.bidDescriptions &&
-              Array.isArray(bidDetail.bidData.bidDescriptions)
-              ? bidDetail.bidData.bidDescriptions[0].body
-              : bidDetail.bidData.bidDescriptions
+            Array.isArray(bidDetail.bidData.bidDescriptions)
+            ? bidDetail.bidData.bidDescriptions[0].body
+            : bidDetail.bidData.bidDescriptions
           }}
         </p>
         <br />
@@ -112,12 +112,12 @@
                       v-if="getCompanyIntend(item.id) === 'neither'">mdi-circle-outline</v-icon>
                   </template>
 
-                  <span v-if="getCompanyIntend(item.id) === 'not-intended'">{{ item && item.company}} does not intend to
+                  <span v-if="getCompanyIntend(item.id) === 'not-intended'">{{ item && item.company }} does not intend to
                     submit a bid</span>
-                  <span v-if="getCompanyIntend(item.id) === 'intended'">{{ item && item.company}} does intend to submit
+                  <span v-if="getCompanyIntend(item.id) === 'intended'">{{ item && item.company }} does intend to submit
                     a
                     bid</span>
-                  <span v-if="getCompanyIntend(item.id) === 'neither'">{{ item && item.company}} has not indicated if
+                  <span v-if="getCompanyIntend(item.id) === 'neither'">{{ item && item.company }} has not indicated if
                     they intend to submit a bid</span>
 
                 </v-tooltip>
@@ -134,15 +134,14 @@
                     <v-icon v-bind="attrs" v-on="on" v-if="getCompanyIntend(item.id) === 'not-intended'"
                       color="#F32349">mdi-close-circle-outline</v-icon>
                   </template>
-                  <span
-                    v-if="getSubmissionStatus(item.id) === 'sent' && getCompanyIntend(item.id) !== 'not-intended'">{{
-  item
-                    && item.company}} has sent Bid Submissions</span>
+                  <span v-if="getSubmissionStatus(item.id) === 'sent' && getCompanyIntend(item.id) !== 'not-intended'">{{
+                    item
+                    && item.company }} has sent Bid Submissions</span>
                   <span
                     v-if="getSubmissionStatus(item.id) === 'not-sent' && getCompanyIntend(item.id) !== 'not-intended'">{{
-  item
-                    && item.company}} has not sent Bid Submissions yet</span>
-                  <span v-if="getCompanyIntend(item.id) === 'not-intended'">{{ item && item.company}} doesn't want to
+                      item
+                      && item.company }} has not sent Bid Submissions yet</span>
+                  <span v-if="getCompanyIntend(item.id) === 'not-intended'">{{ item && item.company }} doesn't want to
                     sent Bid Submissions</span>
                 </v-tooltip>
               </v-col>
@@ -152,6 +151,26 @@
 
       </div>
       <div v-else class="no-data pt-3 pb-6">None</div>
+
+      <div class="text-center my-8"
+        v-if="noOfBidSubmitted > 0 && !toggleSupplier && bidDetail.receivingBids && !isBidOut"><v-btn
+          color="rgba(13, 150, 72, 0.1)" elevation="0" @click="toggleSupplier = true" height="32px" width="220px" large
+          class="text-capitalize invited-btn py-2 px-4">
+          <v-icon class="mr-1">mdi-plus</v-icon>
+          Add Additional Suppliers </v-btn>
+      </div>
+
+      <div class="new-supplier-class mx-5 mb-5 mt-16" v-if="noOfBidSubmitted > 0 && toggleSupplier">
+        <div class="d-flex justify-space-between align-center">
+          <div class="additional-title mb-4">Add Additional Suppliers</div>
+
+          <v-btn icon @click="toggleSupplier = false">
+            <v-icon size="30" color="#F32349
+                                ">mdi-close</v-icon>
+          </v-btn>
+        </div>
+        <AddSupplier />
+      </div>
     </div>
 
     <div class="px-5 pt-8 pb-10 bid-row-2">
@@ -176,8 +195,7 @@
           bidDetail.bidData.invitedTeamMembers.length > 0
         " v-for="(item, index) in bidDetail.bidData.invitedTeamMembers" :key="index"
           class="d-flex align-center flex-child">
-          <v-img v-if="item.image" max-width="100" height="auto" contain :aspect-ratio="16 / 9"
-            :src="item.image"></v-img>
+          <v-img v-if="item.image" max-width="100" height="auto" contain :aspect-ratio="16 / 9" :src="item.image"></v-img>
           <v-avatar v-else color="#0d96481a" size="62">
             <v-icon color="#0d9648" large>mdi-account-outline </v-icon>
           </v-avatar>
@@ -295,11 +313,13 @@
 
 <script>
 import moment from 'moment-timezone';
+import AddSupplier from '@/components/viewBid/addSupplier.vue';
 
 export default {
   data() {
     return {
       users: '',
+      toggleSupplier: false,
     };
   },
   methods: {
@@ -402,6 +422,15 @@ export default {
   computed: {
     bidDetail() {
       return this.$store.getters.bidViewData;
+    },
+    noOfBidSubmitted() {
+      return this.bidDetail.supplierSubmissions.length;
+    },
+    isBidOut() {
+      if (this.bidDetail.bidData.type === 'BidOut Process' && this.bidDetail.bidout) {
+        return true;
+      }
+      return false;
     },
     getBidAllIntend() {
       return this.$store.getters.bidAllIntend;
