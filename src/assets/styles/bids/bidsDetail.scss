@@ -232,6 +232,58 @@
     margin-left: -5px;
   }
 
+  .edit-bid-time {
+    margin: 100px 25px 0 25px;
+
+    .time-title {
+      font-size: 20px;
+      font-weight: 700;
+      color: #0D1139;
+    }
+
+    .v-form {
+      .input-label {
+        font-size: 16px;
+        font-weight: 700;
+      }
+
+      .v-input {
+        border-radius: 8px;
+
+        &--selection-controls {
+          &__ripple {
+            color: #0d9648 !important;
+            caret-color: #0d9648 !important;
+          }
+
+          &__input {
+            i {
+              color: #0d9648 !important;
+              caret-color: #0d9648 !important;
+            }
+          }
+        }
+
+        &__slot {
+          .v-text-field__slot {
+            input[type="date"]::-webkit-calendar-picker-indicator {
+              background: transparent;
+              bottom: 0;
+              color: transparent;
+              cursor: pointer;
+              height: auto;
+              left: 0;
+              position: absolute;
+              right: 0;
+              top: 0;
+              width: auto;
+            }
+          }
+        }
+      }
+    }
+  }
+
   .row-title {
 
     .status-sec {

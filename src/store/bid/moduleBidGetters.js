@@ -116,16 +116,19 @@ export default {
   entryCheckForEditBid(state) {
     return state.entryCheckForEditBid;
   },
-  saveBidLoading(state){
+  saveBidLoading(state) {
     return state.saveBidLoading;
   },
-  loadingInvite(state){
+  loadingInvite(state) {
     return state.loadingInvite;
   },
   bidActivities(state) {
-    return state.bidActivities
+    return state.bidActivities;
   },
-  isEditBidChanges(state){
+  isEditBidChanges(state) {
     return state.isEditBidChanges;
-  }
+  },
+  dateAlert(state) {
+    return state.dateAlert;
+  },
 };
