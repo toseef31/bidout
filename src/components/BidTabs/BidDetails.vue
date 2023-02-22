@@ -92,7 +92,7 @@
           </v-row>
           <v-row>
             <v-col cols="12" sm="12" class="text-left">
-              <v-btn color="rgba(13, 150, 72, 0.1)" rounded class="text-capitalize adtn-btn font-weight-bold" @click="add"><v-icon>mdi-plus</v-icon>Add Aditional Description</v-btn>
+              <v-btn color="rgba(13, 150, 72, 0.1)" rounded class="text-capitalize adtn-btn font-weight-bold" @click="add"><v-icon>mdi-plus</v-icon>Add Additional Description</v-btn>
             </v-col>
           </v-row>
 
