@@ -20,7 +20,7 @@
                       class="text-decoration-none"><v-icon small v-bind="attrs"
                         v-on="on">mdi-information-outline</v-icon></a>
                   </template>
-                  <span>Choose Bid Type</span>
+                  <span>More info on bid types</span>
                 </v-tooltip>
               </label>
               <v-select outlined :items="type" v-model="bidType" :rules="bidTypeRules">
@@ -55,11 +55,12 @@
               <label class="d-block text-left input-label mb-2 font-weight-bold">Q&A
                 <v-tooltip right>
                   <template v-slot:activator="{ on, attrs }">
-                  <a href="https://help.bidout.app/article/9-bidout-question-and-answers" target="_blank" class="text-decoration-none">
-                    <v-icon small v-bind="attrs" v-on="on">mdi-information-outline</v-icon>
-                  </a>
+                    <a href="https://help.bidout.app/article/9-bidout-question-and-answers" target="_blank"
+                      class="text-decoration-none">
+                      <v-icon small v-bind="attrs" v-on="on">mdi-information-outline</v-icon>
+                    </a>
                   </template>
-                  <span>Check the Q&A options</span>
+                  <span>More info on Q&A</span>
                 </v-tooltip>
               </label>
 
