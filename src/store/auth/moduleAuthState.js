@@ -34,4 +34,5 @@ export default {
     moduleOfsOption: null,
     isUserData: false,
     loginLoading: false,
+    forgetEmail : null,
 }
