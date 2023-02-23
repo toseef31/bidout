@@ -213,13 +213,9 @@ export default {
       saveLoading: false,
     };
   },
-  watch: {
-    searchTimezone (val) {
-      val && val !== this.userTimezone
-    },
-  },
+  
   computed:{
-    ...mapGetters(['profileLoading']),
+    ...mapGetters(['profileLoading','showErrorAlert','message']),
     showSideBar(){
         return this.$store.getters.g_sideBarOpen;
     },
@@ -238,7 +234,21 @@ export default {
     companyAdmins(){
       return this.$store.getters.companyAdmins;
     },
-    
+  },
+  watch: {
+    searchTimezone (val) {
+      val && val !== this.userTimezone
+    },
+    message(value){
+      if (value) {
+        this.$toasted.show(value, {
+          position: 'top-center',
+          duration: 3000,
+          className: 'error-toast',
+          type: 'error',
+        });
+      }
+    }
   },
   methods: {
     ...mapActions(["updateProfile","loginHistory","adminsCompany"]),

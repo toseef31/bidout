@@ -210,7 +210,7 @@
                   </div>
                 </div>
                 <div class="company-esg mb-16">
-                  <h1 class="mb-4 font-weight-bold">ESG Inititives</h1>
+                  <h1 class="mb-4 font-weight-bold">ESG Initiatives</h1>
                   <v-row class="mt-5">
                     <v-col cols="12" sm="4" v-for="esg in esGList">
                       <div class="esg-list text-left">

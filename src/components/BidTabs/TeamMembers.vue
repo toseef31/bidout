@@ -23,8 +23,8 @@
 		          </div>
 		        </div>
 		        <div class="companies-list">
-		          <div class="d-flex align-center justify-space-between list-company pa-4" v-for="(team,index) in teamMembers" v-if="user.id != team.id">
-		            <div class="comapny-data d-flex align-center">
+		          <div class="d-flex align-center justify-space-between list-company pa-4" v-for="(team,index) in teamMembers" v-if="user.id != team.id && team.status != false">
+								<div class="comapny-data d-flex align-center">
 		              <div class="company-img">
 		                <img v-if="!team.image" :src="require('@/assets/images/chat/chatUser.png')" width="48px" height="48px">
 		                <img v-else :src="team.image" width="48px" height="48px">
@@ -49,7 +49,7 @@
 		    </div>
 		    <div class="companies-list">
 		    	{{filterTeam}}
-		      <div class="d-flex align-center justify-space-between list-company pa-4" v-for="(team,index) in membersAdded">
+		      <div class="d-flex align-center justify-space-between list-company pa-4" v-for="(team,index) in membersAdded" v-if="user.id != team.id && team.status != false">
 		        <div class="comapny-data d-flex align-center">
 		          <div class="company-img">
 		            <img v-if="!team.image" :src="require('@/assets/images/chat/chatUser.png')">
@@ -75,7 +75,7 @@
 	</div>
 </template>
 <script>
-import { mapActions } from 'vuex';
+import { mapActions,mapGetters } from 'vuex';
 
 export default {
   data() {
@@ -90,6 +90,7 @@ export default {
     };
   },
   computed: {
+		...mapGetters(["isEditBidChanges"]),
     teamMembers() {
     	if (this.$store.getters.bidData != null) {
     		if (this.$route.name == 'EditBid') {
@@ -111,11 +112,11 @@ export default {
     filterTeam() {
       if (this.$store.getters.bidData.invitedTeamMembers != '') {
         if (this.$route.name == 'EditBid') {
-		  		this.membersAdded = this.$store.getters.teamMembers.filter((el) => this.$store.state.bid.invitedTeamMembers.find((team) => team.id === el.id));
+		  		this.membersAdded = this.$store.getters.teamMembers ? this.$store.getters.teamMembers.filter((el) => this.$store.state.bid.invitedTeamMembers.find((team) => team.id === el.id)) : [];
         } else if (!this.$store.state.bid.invitedTeamMembers[0].id) {
-          this.membersAdded = this.$store.getters.teamMembers.filter((el) => this.$store.state.bid.invitedTeamMembers.includes(el.id));
+          this.membersAdded = this.$store.getters.teamMembers ? this.$store.getters.teamMembers.filter((el) => this.$store.state.bid.invitedTeamMembers.includes(el.id)) : [];
         } else {
-          this.membersAdded = this.$store.state.bid.invitedTeamMembers;
+          this.membersAdded = this.$store.state.bid.invitedTeamMembers ? this.$store.state.bid.invitedTeamMembers : [];
         }
       }
     },
@@ -132,7 +133,9 @@ export default {
   	...mapActions(['getTeamMembers', 'getCompanyInfo', 'updateDraftBid', 'updateTemplate', 'updateBid']),
     changeTab() {
     	if (this.$route.name == 'EditBid') {
-    		this.updateBid({ invitedTeamMembers: this.membersAdded });
+				if(this.isEditBidChanges == true){
+					this.updateBid({ invitedTeamMembers: this.membersAdded });
+				}
     	} else if (this.$route.name == 'EditTemplate') {
     	  this.updateTemplate({ invitedTeamMembers: this.membersAdded });
     	} else {
@@ -149,6 +152,7 @@ export default {
     	
     	this.newCount = this.membersAdded.length;
 			this.$store.commit('spliceTeamMember',index);
+			this.$store.commit('setIsEditBidChanges',true);
   		this.$store.commit('setInvitedTeamMembers', this.membersAdded);
     },
     remove(member, index) {
@@ -156,13 +160,16 @@ export default {
 			this.$store.commit('pushTeamMember',member);
 	  	this.newCount = this.membersAdded.length;
       this.membersAdded.splice(index, 1);
+			this.$store.commit('setIsEditBidChanges',true);
   		this.$store.commit('setInvitedTeamMembers', this.membersAdded);
     },
     savedraftOnInterval() {
       const timer = setInterval(() => {
       	if (this.oldCount != this.newCount) {
       		if (this.$route.name == 'EditBid') {
-      			this.updateBid({ invitedTeamMembers: this.membersAdded });
+						if(this.isEditBidChanges == true){
+							this.updateBid({ invitedTeamMembers: this.membersAdded });
+						}
       		} else if (this.$route.name == 'EditTemplate') {
   	    	  this.updateTemplate({ invitedTeamMembers: this.membersAdded });
   	    	} else {

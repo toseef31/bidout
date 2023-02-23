@@ -8,8 +8,11 @@ export default {
    setUserStatus (state, payload){
       state.userStatus = payload
   },
-   setStatusMessage (state, payload){
-      state.statusMessage = payload
+  setStatusMessage(state, payload) {
+    state.statusMessage = payload;
+    setTimeout(() => {
+        state.statusMessage = null;
+    }, 8000);
   },
    setResponseId (state, payload){
       state.responseId = payload

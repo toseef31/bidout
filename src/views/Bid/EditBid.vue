@@ -203,7 +203,7 @@ export default {
     };
   },
   computed: {
-    ...mapGetters(['lineItemsComplete', 'bidDetailsComplete']),
+    ...mapGetters(['lineItemsComplete', 'bidDetailsComplete','isEditBidChanges']),
     showSideBar() {
       return this.$store.getters.g_sideBarOpen;
     },
@@ -270,7 +270,9 @@ export default {
       this.saveLoading = false;
     },
     async updateDraft(){
-      await this.updateBid({'supplier': this.$store.state.bid.invitedSuppliers});
+			if(this.isEditBidChanges == true){
+        await this.updateBid({'supplier': this.$store.state.bid.invitedSuppliers});
+      }
     }
   },
   async created(){
@@ -279,7 +281,7 @@ export default {
   mounted() {
     document.title = 'Create Bid - BidOut';
     this.users = this.userDatas;
-    
+    this.$store.commit('setIsEditBidChanges',false);
   },
 };
 </script>

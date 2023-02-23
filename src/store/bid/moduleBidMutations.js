@@ -145,24 +145,31 @@ export default {
   },
   setBidTitle(state, payload) {
     state.bidData.title = payload;
+    state.isEditBidChanges = true;
   },
   setBidType(state, payload) {
     state.bidData.type = payload;
+    state.isEditBidChanges = true;
   },
   setBidDueDate(state, payload) {
     state.bidData.dueDate = payload;
+    state.isEditBidChanges = true;
   },
   setBidDueTime(state, payload) {
     state.bidData.dueTime = payload;
+    state.isEditBidChanges = true;
   },
   setBidRegions(state, payload) {
     state.bidData.regions = payload;
+    state.isEditBidChanges = true;
   },
   setBidEnabled(state, payload) {
     state.bidData.qAndAEnabled = payload;
+    state.isEditBidChanges = true;
   },
   setBidDescription(state, payload) {
     state.bidData.bidDescriptions = payload;
+    state.isEditBidChanges = true;
   },
   setInvitedNewSuppliers(state, payload) {
     state.invitedNewSuppliers = payload;
@@ -236,4 +243,7 @@ export default {
   pushTeamMember (state,member){
     state.teamMembers.push(member);
   },
+  setIsEditBidChanges (state,payload){
+    state.isEditBidChanges = payload;
+  }
 };

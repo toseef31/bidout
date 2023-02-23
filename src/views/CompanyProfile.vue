@@ -53,7 +53,7 @@
                     <v-container class="pa-sm-10 pa-4">
                         <label class="d-block text-left main-label">Services Portfolio</label>
                       <v-row class="mt-5">
-                        <v-col cols="6" sm="6">
+                        <v-col cols="12" sm="6">
 
                           <label class="d-block text-center main-label mb-5">Available Services</label>
                           <div  class="service-cate">
@@ -87,7 +87,7 @@
                               </v-list>
                           </div>
                         </v-col>
-                        <v-col cols="6" sm="6">
+                        <v-col cols="12" sm="6">
                           <label class="d-block text-center main-label mb-5">Selected Services</label>
                           
                             <div class="subservice-cate service-cate">
@@ -206,7 +206,7 @@ export default {
     };
   },
   computed:{
-    ...mapGetters(['saveInfoLoading']),
+    ...mapGetters(['saveInfoLoading','manageCompanyError']),
     showSideBar(){
         return this.$store.getters.g_sideBarOpen;
     },
@@ -277,6 +277,18 @@ export default {
     },
     loading(){
       return this.$store.getters.pageLoader;
+    }
+  },
+  watch:{
+    manageCompanyError(message){
+      if(message){
+        this.$toasted.show(message, {
+          position: 'top-center',
+          duration: 5000,
+          className: 'error-toast',
+          type: 'error',
+        });
+      }
     }
   },
   methods: {

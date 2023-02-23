@@ -206,6 +206,7 @@ export default {
         commit('setSaveInfoLoading',false);
       }
     }).catch(async(err) => {
+      commit('setSaveInfoLoading',false);
       if(state.apiCounter === 2){
         
         dispatch('apiSignOutAction')
@@ -216,6 +217,7 @@ export default {
          dispatch('updateBasicProfile',payload);
         }
       }
+      commit('setManageCompanyError','Something went wrong.Please try again in few moments.');
           console.log(err);
       });
   }, 
@@ -366,6 +368,7 @@ export default {
         commit('setNewsLoading',false)
       }
     }).catch(async(err) => {
+      commit('setNewsLoading',false);
       if(state.apiCounter === 2){
         
         dispatch('apiSignOutAction')
@@ -376,6 +379,7 @@ export default {
          dispatch('addCompanyVideos',payload);
         }
       }
+      commit('setManageCompanyError','Something went wrong.Please try again in few moments.');
           console.log(err);
       });
   },
@@ -495,6 +499,7 @@ export default {
         commit('setNewsLoading',false)
       }
     }).catch(async(err) => {
+      commit('setNewsLoading',false);
       if(state.apiCounter === 2){
         dispatch('apiSignOutAction')
       }else{
@@ -504,6 +509,7 @@ export default {
          dispatch('addCompanyNews',payload);
         }
       }
+      commit('setManageCompanyError','Something went wrong.Please try again in few moments.');
           console.log(err);
       });
   },
@@ -523,6 +529,7 @@ export default {
         commit('setKeyFactsLoading',false)
       }
     }).catch(async(err) => {
+      commit('setKeyFactsLoading',false);
       if(state.apiCounter === 2){
         dispatch('apiSignOutAction')
       }else{
@@ -532,6 +539,7 @@ export default {
          dispatch('addCompanyFacts',payload);
         }
       }
+      commit('setManageCompanyError','Something went wrong.Please try again in few moments.');
           console.log(err);
       });
   },

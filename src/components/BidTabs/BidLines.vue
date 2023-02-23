@@ -127,7 +127,7 @@
 import draggable from 'vuedraggable';
 import { v4 as uuidv4 } from 'uuid';
 import * as XLSX from 'xlsx';
-import { mapActions } from 'vuex';
+import { mapActions,mapGetters } from 'vuex';
 
 export default {
   components: {
@@ -171,9 +171,11 @@ export default {
       ],
       enabled: true,
       dragging: false,
+      isInitialized: false,
     };
   },
   computed: {
+    ...mapGetters(["isEditBidChanges"]),
     draggingInfo() {
       return this.dragging ? 'under drag' : '';
     },
@@ -186,6 +188,7 @@ export default {
         this.$emit('validation', { valid: true, items: '4' });
         this.$store.commit('setLineItemsComplete', true);
         this.$store.commit('setBidlines',this.bidLines);
+        this.$store.commit('setIsEditBidChanges',true);
         this.bidLinesStatus = true;
         return this.valid;
       }else{
@@ -197,17 +200,30 @@ export default {
   },
   watch: {
     bidLines: {
-      handler() {
+      handler(newValue, oldValue) {
+        console.log('inii',this.isInitialized);
         this.validate;
+        if (this.isInitialized) {
+          this.$store.commit('setIsEditBidChanges',false);
+          this.isInitialized = false;
+        }else{
+          this.$store.commit('setIsEditBidChanges',true);
+        }
+
       },
       deep: true,
+    },
+    validate: function() {
+      
     },
   },
   methods: {
     ...mapActions(['updateDraftBid','updateTemplate','updateBid']),
     changeTab() {
       if(this.$route.name == 'EditBid'){
-        this.updateBid({ bidlines: this.bidLines });
+        if(this.isEditBidChanges == true){
+          this.updateBid({ bidlines: this.bidLines });
+        }
       }else if(this.$route.name == 'EditTemplate'){
         this.updateTemplate({ bidlines: this.bidLines });
       }else{
@@ -243,6 +259,7 @@ export default {
     },
     removeBidLine(index) {
       this.bidLines.splice(index, 1);
+      this.$store.commit('setIsEditBidChanges',true);
       this.bidLinesStatus = true;
     },
     exportF() {
@@ -288,13 +305,16 @@ export default {
         }
 
         reader.readAsBinaryString(this.file);
+        this.$store.commit('setIsEditBidChanges',true);
       }
     },
     savedraftOnInterval(){
       const timer = setInterval(() => {
         if(this.bidLinesStatus == true){
           if(this.$route.name == 'EditBid'){
-            this.updateBid({ bidlines: this.bidLines });
+            if(this.isEditBidChanges == true){
+              this.updateBid({ bidlines: this.bidLines });
+            }
           }else if(this.$route.name == 'EditTemplate'){
             this.updateTemplate({ bidlines: this.bidLines });
           }else{
@@ -324,6 +344,7 @@ export default {
       this.$emit('validation', { valid: true, items: '4' });
       this.$store.commit('setLineItemsComplete', true);
       this.$store.commit('setBidlines',this.bidLines);
+      this.isInitialized = true;
     }
     this.savedraftOnInterval();
   }

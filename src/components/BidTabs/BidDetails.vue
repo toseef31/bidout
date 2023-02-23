@@ -92,7 +92,7 @@
           </v-row>
           <v-row>
             <v-col cols="12" sm="12" class="text-left">
-              <v-btn color="rgba(13, 150, 72, 0.1)" rounded class="text-capitalize adtn-btn font-weight-bold" @click="add"><v-icon>mdi-plus</v-icon>Add Aditional Description</v-btn>
+              <v-btn color="rgba(13, 150, 72, 0.1)" rounded class="text-capitalize adtn-btn font-weight-bold" @click="add"><v-icon>mdi-plus</v-icon>Add Additional Description</v-btn>
             </v-col>
           </v-row>
 
@@ -198,7 +198,7 @@ export default {
     };
   },
   computed: {
-    ...mapGetters(['userInfo','saveBidLoading']),
+    ...mapGetters(['userInfo','saveBidLoading','isEditBidChanges']),
     singleTemplate() {
       return this.$store.getters.singleTemplate;
     },
@@ -341,7 +341,9 @@ export default {
             }
           } else {
             if (this.$route.name == 'EditBid') {
-              await this.updateBid(bidDetails);
+              if(this.isEditBidChanges == true){
+                await this.updateBid(bidDetails);
+              }
             }
             if (!this.$store.getters.bidData.id) {
               await this.saveDraftBid(bidDetails);
@@ -387,7 +389,9 @@ export default {
             }
           } else {
             if (this.$route.name == 'EditBid') {
-              await this.updateBid(bidDetails);
+              if(this.isEditBidChanges == true){
+                await this.updateBid(bidDetails);
+              }
             }
             if (!this.$store.getters.bidData.id) {
               await this.saveDraftBid(bidDetails);
@@ -448,6 +452,7 @@ export default {
     this.$store.commit('setInvitedNewSuppliers', this.$store.getters.bidData.invitedNewSuppliers);
     this.$store.commit('setInvitedTeamMembers', this.$store.getters.bidData.invitedTeamMembers);
     this.$store.commit('setBidlines', this.$store.getters.bidData.lineItems);
+    this.$store.commit('setLineItemsComplete', false);
     if (this.$route.name == 'EditBid') {
       this.$store.commit('setAttachement', this.$store.getters.bidData.attachments);
     } else if (this.$store.getters.bidData.statusType == 'draftBid') {
