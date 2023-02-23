@@ -88,6 +88,9 @@ export default {
     },
     loginLoading (state){
       return state.loginLoading;
+    },
+    forgetEmail (state){
+      return state.forgetEmail;
     }
     
 }
