@@ -42,6 +42,23 @@ const routes = [
         },
       },
       {
+        path: '/update-dueDate/:serial',
+        name: 'UpdateDueDate',
+        component: () => import('@/views/Bid/update-dueDate.vue'),
+        beforeEnter: (to, from, next) => {
+          if (store.getters.userInfo == null) {
+            store.dispatch('getCurrentUser').then((data) => {
+              next();
+            }).catch((error) => {
+              console.log(error);
+              next('/login');
+            });
+          } else {
+            next();
+          }
+        },
+      },
+      {
         path: '/create',
         name: 'CreateBid',
         component: () => import('@/views/Bid/CreateBid.vue'),

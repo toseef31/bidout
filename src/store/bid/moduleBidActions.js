@@ -1663,5 +1663,21 @@ export default {
       }
     }
   },
+  async changeBidDate({ commit,state, dispatch }, payload) {
+    try {
+      const res = await axios.post('bid/changeDueDate/', payload);
 
+      if (res.status === 200) {
+        commit('setDateAlert')
+      }
+    } catch (err) {
+      if (state.apiCounter == 2) {
+        dispatch('apiSignOutAction');
+      } else if (err.response && err.response.status === 403) {
+        await dispatch('refreshToken');
+        state.apiCounter = 2;
+        dispatch('changeBidDate', payload);
+      }
+    }
+  },
 };

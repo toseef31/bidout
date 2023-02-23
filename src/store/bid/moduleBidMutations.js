@@ -245,5 +245,11 @@ export default {
   },
   setIsEditBidChanges (state,payload){
     state.isEditBidChanges = payload;
+  },
+  setDateAlert(state) {
+    state.dateAlert = true
+    setTimeout(() => {
+      state.dateAlert = false
+    },8000)
   }
 };
