@@ -635,7 +635,7 @@ export default {
     if (state.invitedSuppliers != null) {
       for (let i = 0; i < state.invitedSuppliers.length; i++) {
         if (!state.invitedSuppliers[i].companyId && !state.invitedSuppliers[i].objectID) {
-          formData.append(`invitedSuppliers[${i}]`, state.invitedSuppliers[i]);
+          formData.append(`invitedSuppliers[${i}]`, state.invitedSuppliers[i].id);
         } else if (state.invitedSuppliers[i].companyId) {
           formData.append(`invitedSuppliers[${i}]`, state.invitedSuppliers[i].companyId);
         } else {
@@ -772,7 +772,7 @@ export default {
     if (state.invitedSuppliers != null) {
       for (let i = 0; i < state.invitedSuppliers.length; i++) {
         if (!state.invitedSuppliers[i].companyId && !state.invitedSuppliers[i].objectID) {
-          formData.append(`invitedSuppliers[${i}]`, state.invitedSuppliers[i]);
+          formData.append(`invitedSuppliers[${i}]`, state.invitedSuppliers[i].id);
         } else if (state.invitedSuppliers[i].companyId) {
           formData.append(`invitedSuppliers[${i}]`, state.invitedSuppliers[i].companyId);
         } else {
@@ -1194,7 +1194,7 @@ export default {
       if (state.invitedSuppliers) {
         for (let i = 0; i < state.invitedSuppliers.length; i++) {
           if (!state.invitedSuppliers[i].companyId && !state.invitedSuppliers[i].objectID) {
-            formData.append(`invitedSuppliers[${i}]`, state.invitedSuppliers[i]);
+            formData.append(`invitedSuppliers[${i}]`, state.invitedSuppliers[i].id);
           } else if (state.invitedSuppliers[i].companyId) {
             formData.append(`invitedSuppliers[${i}]`, state.invitedSuppliers[i].companyId);
           } else {
@@ -1207,7 +1207,7 @@ export default {
     } else if (state.invitedSuppliers != null) {
       for (let i = 0; i < state.invitedSuppliers.length; i++) {
         if (!state.invitedSuppliers[i].companyId && !state.invitedSuppliers[i].objectID) {
-          formData.append(`invitedSuppliers[${i}]`, state.invitedSuppliers[i]);
+          formData.append(`invitedSuppliers[${i}]`, state.invitedSuppliers[i].id);
         } else if (state.invitedSuppliers[i].companyId) {
           formData.append(`invitedSuppliers[${i}]`, state.invitedSuppliers[i].companyId);
         } else {
