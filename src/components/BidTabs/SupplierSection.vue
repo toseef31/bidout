@@ -388,7 +388,6 @@ export default {
 	},
 	computed: {
 		...mapGetters(['newSupplier', 'userInfo','loadingInvite','isEditBidChanges']),
-		...mapState(['isEditBidChanges']),
 		allcategories() {
 			setTimeout(() => this.loading = false, 500);
 			return _.orderBy(this.$store.getters.categories, 'orderNumber', 'asc');
