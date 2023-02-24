@@ -1,7 +1,27 @@
 <template>
     <div class="">
         <v-row class="supplier-row fill-height" no-gutters>
+            <v-col sm="3" v-if="categories" class="category-col">
+                <v-list class="pt-0">
+                    <v-list-group v-for="(category, index) in allCategories" :key="index" active-class="black--text">
+                        <template v-slot:activator>
+                            <v-list-item-content>
+                                <v-list-item-title v-text="category.name" class="text-left"></v-list-item-title>
+                            </v-list-item-content>
+                        </template>
 
+                        <v-list-item class="ml-3" v-for="(subcategory, index) in subCategories(category.subCategories)"
+                            :key="index" @click="getByCategory(subcategory.slug)">
+                            <v-list-item-content>
+
+                                <v-list-item-title class="text-left">{{ subcategory.name }}
+
+                                </v-list-item-title>
+                            </v-list-item-content>
+                        </v-list-item>
+                    </v-list-group>
+                </v-list>
+            </v-col>
             <v-col cols="12" sm="6" class="available-data">
                 <div class="d-flex justify-space-between align-center pl-4 supplier-head py-1">
                     <div>
@@ -163,27 +183,6 @@
                 </v-tabs-items>
             </v-col>
 
-            <v-col sm="3" v-if="categories" class="category-col">
-                <v-list class="pt-0">
-                    <v-list-group v-for="(category, index) in allCategories" :key="index" active-class="black--text">
-                        <template v-slot:activator>
-                            <v-list-item-content>
-                                <v-list-item-title v-text="category.name" class="text-left"></v-list-item-title>
-                            </v-list-item-content>
-                        </template>
-
-                        <v-list-item class="ml-3" v-for="(subcategory, index) in subCategories(category.subCategories)"
-                            :key="index" @click="getByCategory(subcategory.slug)">
-                            <v-list-item-content>
-
-                                <v-list-item-title class="text-left">{{ subcategory.name }}
-
-                                </v-list-item-title>
-                            </v-list-item-content>
-                        </v-list-item>
-                    </v-list-group>
-                </v-list>
-            </v-col>
             <v-col cols="12" class="invited-data available-data" :class="[categories ? 'col-sm-3' : 'col-sm-6']">
                 <div class="d-flex justify-space-between align-center pl-4 py-4 invited-head">
                     <div>
