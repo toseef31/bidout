@@ -32,8 +32,8 @@
                   <div class=" unit">{{ item.unit }}</div>
                   <div class="mr-2">
                     <v-text-field single-line class="mt-7" :rules="item.required === 'true' ? lineItemsRule : []"
-                      outlined :disabled="checkTimeForLineItems" dense min="0" prefix="$" type="number"
-                      @input="validatePrice($event, index)" :key="index" v-if="lineItems[index]['bid']"
+                      outlined :disabled="checkTimeForLineItems" dense min="0" prefix="$" type="text"
+                      @input="validatePrice($event, index)" @keypress="NumbersOnly($event,index)" @keyup="parsedValue(index)" :key="index" v-if="lineItems[index]['bid']"
                       v-model="lineItems[index]['price']" :hideDetails="getPriceError[index].message !== ''"
                       :class="{ 'error--text': getPriceError[index].message !== '' }"></v-text-field>
 
@@ -385,10 +385,27 @@ export default {
         }
       }
     },
+    NumbersOnly(evt,index) {
+      evt = (evt) ? evt : window.event;
+      var charCode = (evt.which) ? evt.which : evt.keyCode;
+      if ((charCode > 31 && (charCode < 48 || charCode > 57)) && charCode !== 46) {
+        evt.preventDefault();
+      } else {
+          return true;
+      }
+    },
+    parsedValue(index){
+      const parsedNumber = parseFloat(this.lineItems[index].price);
+      if (isNaN(parsedNumber)) {
+        this.lineItems[index].price = ''
+      }else{
+        const value = this.lineItems[index].price;
+        const price = parseFloat(value).toFixed(2);
+        this.lineItems[index].price = price;
+      }
+      
+    },
     validatePrice(event, index) {
-      const value = event;
-      const price = parseFloat(value).toFixed(2);
-      this.lineItems[index].price = price;
       if (this.isBidSubmitted && this.isBidOut) {
         if (Number(this.getSupplierBid.lineItems[index].price) <= Number(event)) {
           this.value[index].message = 'Suppliers can only lower the prices during the BidOut Phase!';

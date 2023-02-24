@@ -4,7 +4,7 @@ export default {
   },
   setSalesReps(state, payload) {
     state.salesRepsList = payload.sort((a, b) => {
-      let aHasOfsPremium = a.contracts.some(contract => contract === 'ofs-premium');
+      const aHasOfsPremium = a.contracts.some((contract) => contract === 'ofs-premium');
       if (aHasOfsPremium) {
         return -1;
       }
@@ -13,7 +13,7 @@ export default {
   },
   setCompaniesList(state, payload) {
     state.companiesList = payload.sort((a, b) => {
-      let aHasOfsPremium = a.contracts.some(contract => contract.contractType === 'ofs-premium');
+      const aHasOfsPremium = a.contracts.some((contract) => contract.contractType === 'ofs-premium');
       if (aHasOfsPremium) {
         return -1;
       }
@@ -22,7 +22,7 @@ export default {
   },
   setServiceCompanies(state, payload) {
     state.serviceCompaniesList = payload.sort((a, b) => {
-      let aHasOfsPremium = a.contracts.some(contract => contract.contractType === 'ofs-premium');
+      const aHasOfsPremium = a.contracts.some((contract) => contract.contractType === 'ofs-premium');
       if (aHasOfsPremium) {
         return -1;
       }
@@ -32,7 +32,7 @@ export default {
   setDraftBidsList(state, payload) {
     state.draftBidsList = payload;
   },
-  setBidSerial(state, payload){
+  setBidSerial(state, payload) {
     state.bidSerial = payload;
   },
   setBidsList(state, payload) {
@@ -47,8 +47,8 @@ export default {
   setAttachData(state, payload) {
     state.attachData = payload;
   },
-  spliceAttachData(state,index){
-    state.attachData.splice(index,1);
+  spliceAttachData(state, index) {
+    state.attachData.splice(index, 1);
   },
   setDraftTime(state, payload) {
     state.draftTime = payload;
@@ -216,41 +216,47 @@ export default {
   setEntryCheckForEditBid(state, payload) {
     state.entryCheckForEditBid = payload;
   },
-  spliceCompanies(state,index){
-    state.companiesList.splice(index,1);
+  spliceCompanies(state, index) {
+    state.companiesList.splice(index, 1);
   },
-  pushCompanies(state,company){
+  pushCompanies(state, company) {
     state.companiesList.push(company);
   },
-  spliceSalesRepsList(state,index){
-    state.salesRepsList.splice(index,1);
+  spliceSalesRepsList(state, index) {
+    state.salesRepsList.splice(index, 1);
   },
-  pushSalesRepsList(state,list){
+  pushSalesRepsList(state, list) {
     state.salesRepsList.push(list);
   },
-  setSaveBidLoading (state,payload){
+  setSaveBidLoading(state, payload) {
     state.saveBidLoading = payload;
   },
-  setLoadingInvite (state,payload){
+  setLoadingInvite(state, payload) {
     state.loadingInvite = payload;
   },
-  setBidActivities(state,payload) {
-    state.bidActivities = payload
+  setBidActivities(state, payload) {
+    state.bidActivities = payload;
   },
-  spliceTeamMember (state,index){
-    state.teamMembers.splice(index,1);
+  spliceTeamMember(state, index) {
+    state.teamMembers.splice(index, 1);
   },
-  pushTeamMember (state,member){
+  pushTeamMember(state, member) {
     state.teamMembers.push(member);
   },
-  setIsEditBidChanges (state,payload){
+  setIsEditBidChanges(state, payload) {
     state.isEditBidChanges = payload;
   },
   setSupplierAddAlert(state) {
     state.supplierAddAlert = true;
     setTimeout(() => {
-      state.supplierAddAlert = false
-    },8000)
-  }
+      state.supplierAddAlert = false;
+    }, 8000);
+  },
+  setDateAlert(state) {
+    state.dateAlert = true;
+    setTimeout(() => {
+      state.dateAlert = false;
+    }, 8000);
+  },
 
 };

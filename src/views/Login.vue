@@ -93,6 +93,11 @@ export default {
       errorMsg: ''
     };
   },
+  watch: {
+    email(newValue, oldValue) {
+      this.$store.commit('setForgetEmail',newValue);
+    },
+  },
   computed: {
     ...mapGetters(['loginLoading']),
     logInError () {

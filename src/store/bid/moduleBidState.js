@@ -61,5 +61,6 @@ export default {
   loadingInvite: false,
   bidActivities: null, 
   isEditBidChanges: false,
-  supplierAddAlert: false
+  supplierAddAlert: false,
+  dateAlert: false
 };

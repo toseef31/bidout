@@ -10,7 +10,9 @@
           <div><span>Bid Type:</span> {{ bidDetail.bidData.type }}</div>
           <div>
             <span>Due Date/Time:</span> {{ formatDate(bidDetail.bidData.dueDate) }} @
-            {{ bidDetail.bidData.dueTime }} CST
+            {{ bidDetail.bidData.dueTime }} CST <v-btn @click="changeDate" icon
+              v-if="bidDetail.receivingBids && !isBidOut"><v-icon color="black"
+                size="20">mdi-square-edit-outline</v-icon></v-btn>
           </div>
           <div><span>Region:</span> {{ bidDetail.bidData.regions }}</div>
           <div>
@@ -418,6 +420,9 @@ export default {
         }
       });
     },
+    changeDate() {
+      this.$router.push(`/update-dueDate/${this.$route.params.serial}`);
+    },
   },
   computed: {
     bidDetail() {
@@ -434,6 +439,12 @@ export default {
     },
     getBidAllIntend() {
       return this.$store.getters.bidAllIntend;
+    },
+    isBidOut() {
+      if (this.bidDetail.bidData.type === 'BidOut Process' && this.bidDetail.bidout) {
+        return true;
+      }
+      return false;
     },
     getAllInvitedSuppliers() {
       const { invitedNewSuppliers, invitedSuppliers } = this.bidDetail.bidData;
