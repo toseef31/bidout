@@ -73,14 +73,6 @@
 
                     <v-row>
                         <v-col cols="12" sm="4" text="left">
-                            <label class="d-block text-left input-label mb-2 font-weight-bold">Due Time </label>
-                            <v-select outlined :items="time" item-text="label" item-value="value" v-model="dueTime"
-                                :rules="dueTimeRules">
-
-                            </v-select>
-                        </v-col>
-
-                        <v-col cols="12" sm="4" text="left">
                             <label class="d-block text-left input-label mb-2 font-weight-bold">Due Date </label>
                             <v-text-field placeholder="Due Date" single-line outlined type="date" v-model="dueDate"
                                 :rules="dueDateRules"
@@ -89,6 +81,14 @@
                             </v-text-field>
 
                         </v-col>
+                        <v-col cols="12" sm="4" text="left">
+                            <label class="d-block text-left input-label mb-2 font-weight-bold">Due Time </label>
+                            <v-select outlined :items="time" item-text="label" item-value="value" v-model="dueTime"
+                                :rules="dueTimeRules">
+
+                            </v-select>
+                        </v-col>
+
                     </v-row>
 
                     <v-row>
