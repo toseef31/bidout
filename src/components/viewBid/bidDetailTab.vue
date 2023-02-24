@@ -153,6 +153,26 @@
 
       </div>
       <div v-else class="no-data pt-3 pb-6">None</div>
+
+      <div class="text-center my-8"
+        v-if="noOfBidSubmitted > 0 && !toggleSupplier && bidDetail.receivingBids && !isBidOut"><v-btn
+          color="rgba(13, 150, 72, 0.1)" elevation="0" @click="toggleSupplier = true" height="32px" width="220px" large
+          class="text-capitalize invited-btn py-2 px-4">
+          <v-icon class="mr-1">mdi-plus</v-icon>
+          Add Additional Suppliers </v-btn>
+      </div>
+
+      <div class="new-supplier-class mx-5 mb-5 mt-16" v-if="noOfBidSubmitted > 0 && toggleSupplier">
+        <div class="d-flex justify-space-between align-center">
+          <div class="additional-title mb-4">Add Additional Suppliers</div>
+
+          <v-btn icon @click="toggleSupplier = false">
+            <v-icon size="30" color="#F32349
+                                ">mdi-close</v-icon>
+          </v-btn>
+        </div>
+        <AddSupplier />
+      </div>
     </div>
 
     <div class="px-5 pt-8 pb-10 bid-row-2">
@@ -295,11 +315,13 @@
 
 <script>
 import moment from 'moment-timezone';
+import AddSupplier from '@/components/viewBid/addSupplier.vue';
 
 export default {
   data() {
     return {
       users: '',
+      toggleSupplier: false,
     };
   },
   methods: {
@@ -405,6 +427,15 @@ export default {
   computed: {
     bidDetail() {
       return this.$store.getters.bidViewData;
+    },
+    noOfBidSubmitted() {
+      return this.bidDetail.supplierSubmissions.length;
+    },
+    isBidOut() {
+      if (this.bidDetail.bidData.type === 'BidOut Process' && this.bidDetail.bidout) {
+        return true;
+      }
+      return false;
     },
     getBidAllIntend() {
       return this.$store.getters.bidAllIntend;

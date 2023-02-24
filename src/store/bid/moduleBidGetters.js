@@ -128,6 +128,9 @@ export default {
   isEditBidChanges(state) {
     return state.isEditBidChanges;
   },
+  supplierAddAlert(state) {
+    return state.supplierAddAlert
+  },
   dateAlert(state) {
     return state.dateAlert;
   },
