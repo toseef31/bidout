@@ -1680,7 +1680,7 @@ export default {
       });
 
       if (res.status === 200) {
-        dispatch('getBidBySerial', {
+        await dispatch('getBidBySerial', {
           serial: payload.serial,
           id: payload.userId,
         });

@@ -397,8 +397,6 @@ export default {
             user: '',
             parsedSelectedBasin: 'all',
             parsedSelectedCompanyBasin: 'all',
-            oldCount: '',
-            newCount: '',
             newRepsInvited: [],
             inviteCount: 1,
             counter: 0,
@@ -480,7 +478,15 @@ export default {
             const invitedNewSuppliers = [];
             this.supplierLoading = true;
 
-            this.repsInvited.forEach((el) => invitedSuppliers.push(el.objectID));
+            this.repsInvited.forEach((el) => {
+                if (el.id) {
+                    invitedSuppliers.push(el.id);
+                } else if (el.companyId) {
+                    invitedSuppliers.push(el.companyId);
+                } else {
+                    invitedSuppliers.push(el.objectID);
+                }
+            });
 
             this.newRepsInvited.forEach((el) => invitedNewSuppliers.push(el.id));
 
@@ -534,9 +540,7 @@ export default {
                 try {
                     const user = await this.inviteNewSupplier(supplier);
                     this.supplierDialog = false;
-                    this.oldCount = this.newRepsInvited.length;
                     this.newRepsInvited.push(user);
-                    this.newCount = this.newRepsInvited.length;
                     this.$store.commit('setInvitedNewSuppliers', this.newRepsInvited);
                     this.$refs.form.reset();
                     this.loadingInvite = false;
@@ -571,10 +575,8 @@ export default {
             this.getCompanyInfo({ id, name });
         },
         addReps(list, index) {
-            this.oldCount = this.repsInvited.length;
             this.repsInvited.push(list);
             this.inviteCount = 2;
-            this.newCount = this.repsInvited.length;
             this.$store.commit('spliceSalesRepsList', index);
             const unique = [...new Map(this.repsInvited.map((m) => [m.company, m])).values()];
 
@@ -582,10 +584,8 @@ export default {
         },
         removeReps(list, index) {
             this.$store.commit('pushSalesRepsList', list);
-            this.oldCount = this.repsInvited.length;
             this.repsInvited.splice(index, 1);
             this.inviteCount = 2;
-            this.newCount = this.repsInvited.length;
             this.$store.commit('setInvitedSuppliersData', this.repsInvited);
         },
         getCompanies() {
@@ -600,36 +600,28 @@ export default {
             this.getCompanyByServices(category);
         },
         addCompany(company, index) {
-            this.oldCount = this.repsInvited.length;
             this.repsInvited.push(company);
             this.inviteCount = 2;
-            this.newCount = this.repsInvited.length;
             this.$store.commit('spliceCompanies', index);
             const unique = [...new Map(this.repsInvited.map((m) => [m.company, m])).values()];
             this.$store.commit('setInvitedSuppliersData', unique);
         },
         addServiceCompany(company, index) {
-            this.oldCount = this.repsInvited.length;
             this.repsInvited.push(company);
             this.inviteCount = 2;
-            this.newCount = this.repsInvited.length;
             this.$store.commit('spliceCompanies', index);
             const unique = [...new Map(this.repsInvited.map((m) => [m.company, m])).values()];
             this.$store.commit('setInvitedSuppliersData', unique);
         },
         removeCompany(company, index) {
-            this.oldCount = this.repsInvited.length;
             this.repsInvited.splice(index, 1);
             this.inviteCount = 2;
-            this.newCount = this.repsInvited.length;
             this.$store.commit('pushCompanies', company);
             this.$store.commit('setInvitedSuppliersData', this.repsInvited);
         },
         removeNewSup(company, index) {
-            this.oldCount = this.newRepsInvited.length;
             this.newRepsInvited.splice(index, 1);
             this.inviteCount = 2;
-            this.newCount = this.newRepsInvited.length;
             this.$store.commit('setInvitedNewSuppliers', this.newRepsInvited);
         },
         hasOfsPremium(supplier) {
