@@ -232,6 +232,58 @@
     margin-left: -5px;
   }
 
+  .edit-bid-time {
+    margin: 100px 25px 0 25px;
+
+    .time-title {
+      font-size: 20px;
+      font-weight: 700;
+      color: #0D1139;
+    }
+
+    .v-form {
+      .input-label {
+        font-size: 16px;
+        font-weight: 700;
+      }
+
+      .v-input {
+        border-radius: 8px;
+
+        &--selection-controls {
+          &__ripple {
+            color: #0d9648 !important;
+            caret-color: #0d9648 !important;
+          }
+
+          &__input {
+            i {
+              color: #0d9648 !important;
+              caret-color: #0d9648 !important;
+            }
+          }
+        }
+
+        &__slot {
+          .v-text-field__slot {
+            input[type="date"]::-webkit-calendar-picker-indicator {
+              background: transparent;
+              bottom: 0;
+              color: transparent;
+              cursor: pointer;
+              height: auto;
+              left: 0;
+              position: absolute;
+              right: 0;
+              top: 0;
+              width: auto;
+            }
+          }
+        }
+      }
+    }
+  }
+
   .row-title {
 
     .status-sec {
@@ -306,6 +358,37 @@
         color: #959595;
       }
 
+      .new-supplier-class {
+        background-color: #FBFBFB;
+        padding: 24px 23px 24px 23px;
+        border-radius: 4px;
+        border: 1px solid #F1F1F1;
+
+        .send-invite-btn {
+          font-size: 20px;
+        }
+
+        .additional-title {
+          color: #0D1139;
+          font-size: 20px;
+          font-weight: 700;
+        }
+      }
+
+      .invited-btn {
+        font-size: 12px;
+        color: #0D9648;
+        font-weight: 700;
+        border-radius: 16px;
+      }
+
+      .invite-btn {
+        font-size: 18px;
+        border-radius: 8px;
+        color: #0D9648;
+        font-weight: 700;
+      }
+
       .bid-row {
         border-bottom: 1px solid #f1f1f1;
 
@@ -346,6 +429,247 @@
       .bid-row-2 {
         border-bottom: 1px solid #f1f1f1;
 
+        .supplier-row {
+          border: 1px solid #f1f1f1;
+          background-color: white;
+
+          .available-data {
+            height: calc(100vh - 342px);
+            background-color: white;
+            border-right: 1px solid #f1f1f1;
+
+            .supplier-head {
+              background-color: white;
+              border-bottom: 1px solid #f1f1f1;
+
+
+              .available-suppliers-text {
+                font-size: 16px;
+                color: #000000;
+              }
+
+              .supplier-tabs {
+                .v-tab {
+                  border-bottom: 1px solid white;
+                  background: white;
+                  color: #959595;
+                  font-size: 12px;
+
+                  &--active {
+                    border-bottom: 3px solid #0D9648;
+                  }
+                }
+              }
+            }
+
+            .available-search {
+              .v-input {
+                &__slot {
+                  min-height: 44px;
+                }
+
+                &__prepend-inner {
+                  margin-top: 14px;
+                }
+              }
+
+              .available-select {
+                width: 150px;
+                min-height: 28px;
+                font-size: 12px;
+
+                .v-input__slot {
+                  min-height: 28px;
+
+                  .v-select {
+                    &__selections {
+                      padding: 0px 0;
+                    }
+                  }
+
+                  .v-input__prepend-inner {
+                    margin-top: 4px;
+                  }
+
+                  .v-select__slot {
+                    .v-input__append-inner {
+                      margin-top: 5px;
+                    }
+                  }
+
+                  .v-select__slot {
+                    .v-input__prepend-inner {
+                      margin-top: 4px;
+                    }
+                  }
+                }
+
+              }
+            }
+
+            .companies-list {
+              overflow: auto;
+              height: calc(100vh - 454px);
+
+              .no-data-supplier {
+                color: #B8B8B8
+              }
+
+              &::-webkit-scrollbar {
+                width: 4px;
+                height: 5px;
+              }
+
+              &::-webkit-scrollbar-thumb {
+                background: #e1e1e1;
+                border: 14px solid #0d9647;
+                border-radius: 26px;
+              }
+
+              &::-webkit-scrollbar-thumb:hover {
+                background: #ffffff;
+              }
+
+              &::-webkit-scrollbar-thumb:active {
+                background: #0d9647;
+              }
+
+              &::-webkit-scrollbar-track {
+                border-radius: 42px;
+              }
+
+              &::-webkit-scrollbar-track:hover {
+                background: #666666;
+              }
+
+              &::-webkit-scrollbar-track:active {
+                background: #0d9647;
+              }
+
+              &::-webkit-scrollbar-corner {
+                background: transparent;
+              }
+
+              .list-company {
+                .company-img {
+                  .image-class {
+
+                    max-width: 100px;
+                    height: 26.67px;
+
+                  }
+
+                  .avatar-image {
+                    min-width: 100px;
+                  }
+
+                  .icon-class {
+                    width: 100px;
+                    height: 35px;
+                  }
+                }
+
+                &:nth-child(even) {
+                  background: #F4F5F7;
+                }
+
+                .company-title {
+                  p {
+                    font-size: 12px;
+                    font-weight: 600;
+                  }
+                }
+              }
+            }
+          }
+
+          .invited-data {
+
+            .invited-head {
+              background: white;
+              border-bottom: 1px solid #f1f1f1;
+            }
+
+            .companies-list {
+              height: calc(100vh - 391px);
+            }
+          }
+
+          .category-col {
+            border-right: 1px solid #F1F1F1;
+            height: calc(100vh - 342px);
+            overflow: auto;
+
+            .v-list {
+              .v-list-item__title {
+                font-size: 16px;
+                font-weight: 600;
+              }
+
+              .v-input__slot {
+                .v-icon {
+                  color: #0D9647 !important;
+                }
+              }
+
+              .v-list-group--active {
+                .v-list-group__header {
+                  .v-list-item__title {
+                    color: #0D9648;
+
+                  }
+
+                  .v-list-item__icon {
+                    color: #0D9648;
+                  }
+                }
+
+                .v-list-group__items {
+                  .v-label {
+                    font-size: 12px !important;
+                  }
+                }
+
+              }
+            }
+
+            &::-webkit-scrollbar {
+              width: 4px;
+              height: 5px;
+            }
+
+            &::-webkit-scrollbar-thumb {
+              background: #e1e1e1;
+              border: 14px solid #0d9647;
+              border-radius: 26px;
+            }
+
+            &::-webkit-scrollbar-thumb:hover {
+              background: #ffffff;
+            }
+
+            &::-webkit-scrollbar-thumb:active {
+              background: #0d9647;
+            }
+
+            &::-webkit-scrollbar-track {
+              border-radius: 42px;
+            }
+
+            &::-webkit-scrollbar-track:hover {
+              background: #666666;
+            }
+
+            &::-webkit-scrollbar-track:active {
+              background: #0d9647;
+            }
+
+            &::-webkit-scrollbar-corner {
+              background: transparent;
+            }
+          }
+        }
+
         .bid-section-2 {
           .icon-class {
             width: 100px;
@@ -370,6 +694,8 @@
             }
 
           }
+
+
 
         }
 
@@ -536,6 +862,8 @@
         text-align: center;
         color: #959595;
       }
+
+
 
       .bid-row {
         border-bottom: 1px solid #f1f1f1;
@@ -1657,6 +1985,57 @@
   }
 }
 
+.inviteSupplier-dialog {
+  h2 {
+    color: #0D1139;
+    font-size: 20px;
+    line-height: 25px;
+  }
+
+  .v-form {
+    .required-class {
+      color: #F32349;
+    }
+
+    .phone-class {
+      color: #ff5252;
+      font-size: 12px;
+      text-align: left;
+      margin-top: 11px;
+      padding-left: 12px;
+    }
+
+    label {
+      color: #0D1139;
+      font-size: 16px;
+    }
+
+    .v-input {
+      &__slot {
+        border-radius: 8px;
+      }
+    }
+
+    #MazPhoneNumberInput {
+      margin-bottom: 0 !important;
+
+      .country-selector {
+        &__input {
+          height: 56px;
+          min-height: 56px;
+        }
+      }
+
+      .input-tel {
+        &__input {
+          height: 56px;
+          min-height: 56px;
+        }
+      }
+    }
+  }
+}
+
 @media(max-width: 768px) {
 
   .alert-section {
@@ -1669,5 +2048,39 @@
       }
     }
   }
+
+  .bidDetail-tabs-section {
+    .bid-detail-tab {
+      .bid-row-2 {
+        .supplier-row {
+          .supplier-tabs {
+
+            .v-slide-group__next,
+            .v-slide-group__prev {
+              display: none !important;
+            }
+
+            .available-data {
+              .supplier-head {
+                h4 {
+                  font-size: 13px;
+                  text-align: left;
+                }
+              }
+
+              .available-search {
+                .available-select {
+                  .v-input__append-inner {
+                    margin-top: 14px;
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+
 
 }

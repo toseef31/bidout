@@ -46,7 +46,7 @@
 </template>
 
 <script>
-  import { mapActions } from "vuex";
+  import { mapActions,mapGetters } from "vuex";
 export default {
   name : "ForgotPassword",
   data() {
@@ -63,6 +63,7 @@ export default {
     };
   },
   computed: {
+    ...mapGetters(["forgetEmail"]),
     emailError () {
       return this.$store.getters.errorMessage;
     },
@@ -87,6 +88,9 @@ export default {
   },
   mounted(){
     document.title = "Forgot Password - BidOut";
+    if(this.forgetEmail != null){
+      this.email = this.forgetEmail;
+    }
   }
 };
 </script>

@@ -16,10 +16,11 @@
               <label class="d-block text-left input-label mb-2 font-weight-bold">Bid Type
                 <v-tooltip right>
                   <template v-slot:activator="{ on, attrs }">
-                    <v-icon small v-bind="attrs"
-                      v-on="on">mdi-information-outline</v-icon>
+                    <a href="https://help.bidout.app/article/8-bid-types-availeable-on-bidout" target="_blank"
+                      class="text-decoration-none"><v-icon small v-bind="attrs"
+                        v-on="on">mdi-information-outline</v-icon></a>
                   </template>
-                  <span>Choose Bid Type</span>
+                  <span>More info on bid types</span>
                 </v-tooltip>
               </label>
               <v-select outlined :items="type" v-model="bidType" :rules="bidTypeRules">
@@ -28,7 +29,8 @@
             </v-col>
             <v-col cols="12" sm="6" text="left">
               <label class="d-block text-left input-label mb-2 font-weight-bold">Due Date </label>
-              <v-text-field placeholder="Due Date" single-line outlined type="date" v-model="dueDate" :rules="dueDateRules" :min="new Date().toISOString().substr(0, 10)" append-icon="mdi-calendar">
+              <v-text-field placeholder="Due Date" single-line outlined type="date" v-model="dueDate"
+                :rules="dueDateRules" :min="new Date().toISOString().substr(0, 10)" append-icon="mdi-calendar">
               </v-text-field>
 
             </v-col>
@@ -36,7 +38,8 @@
           <v-row justify="center">
             <v-col cols="12" sm="6" text="left">
               <label class="d-block text-left input-label mb-2 font-weight-bold">Due Time </label>
-              <v-select outlined :items="time" item-text="label" item-value="value" v-model="dueTime" :rules="dueTimeRules">
+              <v-select outlined :items="time" item-text="label" item-value="value" v-model="dueTime"
+                :rules="dueTimeRules">
 
               </v-select>
             </v-col>
@@ -52,94 +55,81 @@
               <label class="d-block text-left input-label mb-2 font-weight-bold">Q&A
                 <v-tooltip right>
                   <template v-slot:activator="{ on, attrs }">
-                    <v-icon small v-bind="attrs"
-                      v-on="on">mdi-information-outline</v-icon>
+                    <a href="https://help.bidout.app/article/9-bidout-question-and-answers" target="_blank"
+                      class="text-decoration-none">
+                      <v-icon small v-bind="attrs" v-on="on">mdi-information-outline</v-icon>
+                    </a>
                   </template>
-                  <span>Check the Q&A options</span>
+                  <span>More info on Q&A</span>
                 </v-tooltip>
               </label>
 
-              <v-radio-group
-                row
-                v-model="qAndAEnabled"
-              >
-                <v-radio
-                  label="Yes"
-                  value="true" checked
-                ></v-radio>
-                <v-radio
-                  label="No"
-                  value="false"
-                ></v-radio>
+              <v-radio-group row v-model="qAndAEnabled">
+                <v-radio label="Yes" value="true" checked></v-radio>
+                <v-radio label="No" value="false"></v-radio>
               </v-radio-group>
             </v-col>
           </v-row>
 
-          <v-row justify="center" v-for="(textField, i) in bidDescriptions"
-             :key="i">
-             <v-col cols="12" sm="12" text="left" v-if="i == 0">
-               <label class="d-block text-left input-label mb-2 font-weight-bold">Bid Description</label>
-               <v-textarea placeholder="Describe here..." single-line outlined type="text" v-model="bidDescriptions[0]['body']" :rules="descRules">
-               </v-textarea>
-             </v-col>
+          <v-row justify="center" v-for="(textField, i) in bidDescriptions" :key="i">
+            <v-col cols="12" sm="12" text="left" v-if="i == 0">
+              <label class="d-block text-left input-label mb-2 font-weight-bold">Bid Description</label>
+              <v-textarea placeholder="Describe here..." single-line outlined type="text"
+                v-model="bidDescriptions[0]['body']" :rules="descRules">
+              </v-textarea>
+            </v-col>
             <v-col cols="12" sm="12" text="left" v-else>
-              <label class="d-block text-left input-label mb-2 font-weight-bold">Additional Information <v-icon color="#F32349" @click="remove(i)">mdi-trash-can-outline</v-icon></label>
+              <label class="d-block text-left input-label mb-2 font-weight-bold">Additional Information <v-icon
+                  color="#F32349" @click="remove(i)">mdi-trash-can-outline</v-icon></label>
               <v-text-field placeholder="Title" single-line outlined type="text" v-model="bidDescriptions[i]['name']">
               </v-text-field>
-              <v-textarea placeholder="Describe here" single-line outlined type="text" hide-details v-model="bidDescriptions[i]['body']">
+              <v-textarea placeholder="Describe here" single-line outlined type="text" hide-details
+                v-model="bidDescriptions[i]['body']">
               </v-textarea>
             </v-col>
           </v-row>
           <v-row>
             <v-col cols="12" sm="12" class="text-left">
-              <v-btn color="rgba(13, 150, 72, 0.1)" rounded class="text-capitalize adtn-btn font-weight-bold" @click="add"><v-icon>mdi-plus</v-icon>Add Additional Description</v-btn>
+              <v-btn color="rgba(13, 150, 72, 0.1)" rounded class="text-capitalize adtn-btn font-weight-bold"
+                @click="add"><v-icon>mdi-plus</v-icon>Add Additional Description</v-btn>
             </v-col>
           </v-row>
 
           <v-row justify="center">
             <v-col cols="12">
-              <v-btn color="#0D9648" height="56" class="text-capitalize white--text font-weight-bold save-btn px-9" :loading="saveBidLoading" :disabled="!valid" @click="changeTab" large>Save Changes</v-btn>
+              <v-btn color="#0D9648" height="56" class="text-capitalize white--text font-weight-bold save-btn px-9"
+                :loading="saveBidLoading" :disabled="!valid" @click="changeTab" large>Save Changes</v-btn>
             </v-col>
           </v-row>
           <template v-if="route != 'EditTemplate'">
             <v-row justify="center" v-if="statusType == 'draftBid'">
               <v-col cols="12">
-                <v-btn text class="text-capitalize font-weight-bold" @click="dialog = true" large>Delete Draft Bid #{{serial}}</v-btn>
+                <v-btn text class="text-capitalize font-weight-bold" @click="dialog = true" large>Delete Draft Bid
+                  #{{ serial }}</v-btn>
               </v-col>
             </v-row>
           </template>
 
-          <v-dialog
-              v-model="dialog"
-              width="500"
-            >
-              <v-card>
-                <v-card-title class="text-h5 grey lighten-2">
+          <v-dialog v-model="dialog" width="500">
+            <v-card>
+              <v-card-title class="text-h5 grey lighten-2">
+                Confirm
+              </v-card-title>
+              <v-card-text class="pt-5">
+                Are you sure you want to delete?
+              </v-card-text>
+              <v-divider></v-divider>
+              <v-card-actions>
+                <v-spacer></v-spacer>
+                <v-btn color="#F32349" outlined @click="dialog = false">
+                  Cancel
+                </v-btn>
+                <v-btn color="#0d9648" outlined @click="deleteDraft(); dialog = false">
                   Confirm
-                </v-card-title>
-                <v-card-text class="pt-5">
-                  Are you sure you want to delete?
-                </v-card-text>
-                <v-divider></v-divider>
-                <v-card-actions>
-                  <v-spacer></v-spacer>
-                  <v-btn
-                    color="#F32349"
-                    outlined
-                    @click="dialog = false"
-                  >
-                    Cancel
-                  </v-btn>
-                  <v-btn
-                    color="#0d9648"
-                    outlined
-                    @click="deleteDraft(); dialog = false"
-                  >
-                    Confirm
-                  </v-btn>
-                </v-card-actions>
-              </v-card>
-            </v-dialog>
+                </v-btn>
+              </v-card-actions>
+            </v-card>
+          </v-dialog>
         </v-container>
       </v-form>
     </v-col>
@@ -198,7 +188,7 @@ export default {
     };
   },
   computed: {
-    ...mapGetters(['userInfo','saveBidLoading','isEditBidChanges']),
+    ...mapGetters(['userInfo', 'saveBidLoading', 'isEditBidChanges']),
     singleTemplate() {
       return this.$store.getters.singleTemplate;
     },
@@ -341,7 +331,7 @@ export default {
             }
           } else {
             if (this.$route.name == 'EditBid') {
-              if(this.isEditBidChanges == true){
+              if (this.isEditBidChanges == true) {
                 await this.updateBid(bidDetails);
               }
             }
@@ -389,7 +379,7 @@ export default {
             }
           } else {
             if (this.$route.name == 'EditBid') {
-              if(this.isEditBidChanges == true){
+              if (this.isEditBidChanges == true) {
                 await this.updateBid(bidDetails);
               }
             }

@@ -96,5 +96,8 @@ export default {
     },
     setLoginLoading (state,payload){
       state.loginLoading = payload;
-    }
+    },
+    setForgetEmail (state,payload){
+      state.forgetEmail = payload;
+    } 
 }

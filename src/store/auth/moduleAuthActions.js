@@ -26,6 +26,7 @@ export default {
     firebase.auth().signInWithEmailAndPassword(payload.email, payload.password)
 
       .then((result) => {
+        commit('setForgetEmail',null)
         commit('setError', null)
         commit('setToken',result.user.multiFactor.user.accessToken);
         localStorage.setItem("token",JSON.stringify(result.user.multiFactor.user.accessToken));
@@ -139,9 +140,11 @@ export default {
       
       // if(responce.status == 200){
         commit('setEmailSuccess', 'If this account exists, a password reset email has been sent to the email address for the account.');
-    }, (err) => {
+        commit('setForgetEmail',null);
+      }, (err) => {
 
         commit('setEmailSuccess',"If this account exists, a password reset email has been sent to the email address for the account.")
+        commit('setForgetEmail',null)
       })
   },
   verifyToken({commit}, payload){

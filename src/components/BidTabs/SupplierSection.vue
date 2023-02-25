@@ -388,7 +388,6 @@ export default {
 	},
 	computed: {
 		...mapGetters(['newSupplier', 'userInfo','loadingInvite','isEditBidChanges']),
-		...mapState(['isEditBidChanges']),
 		allcategories() {
 			setTimeout(() => this.loading = false, 500);
 			return _.orderBy(this.$store.getters.categories, 'orderNumber', 'asc');
@@ -398,7 +397,7 @@ export default {
 		},
 		salesRepsList() {
 			if (this.$route.name == 'EditBid') {
-				if (this.$store.getters.bidData.invitedSuppliers != '' || this.$store.getters.bidData.invitedSuppliers != null || this.$store.getters.bidData.invitedSuppliers != undefined) {
+				if (this.$store.getters.bidData.invitedSuppliers != '' && this.$store.getters.bidData.invitedSuppliers != null && this.$store.getters.bidData.invitedSuppliers != undefined) {
 					return this.$store.getters.salesRepsList ? this.$store.getters.salesRepsList.filter((el) => !this.$store.getters.bidData.invitedSuppliers.find((supplier) => supplier.id === el.companyId)) : [];
 				}
 				return this.$store.getters.salesRepsList ? this.$store.getters.salesRepsList.filter((rep) => rep.company !== this.userInfo.company.company) : [];
@@ -413,7 +412,7 @@ export default {
 		},
 		companiesList() {
 			if (this.$route.name == 'EditBid') {
-				if (this.$store.getters.bidData.invitedSuppliers != '' || this.$store.getters.bidData.invitedSuppliers != null || this.$store.getters.bidData.invitedSuppliers != undefined) {
+				if (this.$store.getters.bidData.invitedSuppliers != '' && this.$store.getters.bidData.invitedSuppliers != null && this.$store.getters.bidData.invitedSuppliers != undefined) {
 					return this.$store.getters.companiesList ? this.$store.getters.companiesList.filter((el) => !this.$store.getters.bidData.invitedSuppliers.find((supplier) => supplier.id === el.objectID)) : [];
 				}
 					return this.$store.getters.companiesList ? this.$store.getters.companiesList.filter((rep) => rep.company !== this.userInfo.company.company) : [];
@@ -434,7 +433,7 @@ export default {
 			});
 		},
 		filteredEntries() {
-			if (this.$store.getters.bidData.invitedSuppliers != '' || this.$store.getters.bidData.invitedSuppliers != null || this.$store.getters.bidData.invitedSuppliers != undefined) {
+			if (this.$store.getters.bidData.invitedSuppliers != '' && this.$store.getters.bidData.invitedSuppliers != null && this.$store.getters.bidData.invitedSuppliers != undefined) {
 				if (this.$route.name == 'EditBid') {
 					if (this.inviteCount == 1 && this.$store.getters.companiesList) {
 						let inviteData = this.$store.getters.companiesList ? this.$store.getters.companiesList.filter((el) => this.$store.state.bid.invitedSuppliers.find((supplier) => supplier.id === el.objectID)) : [];
