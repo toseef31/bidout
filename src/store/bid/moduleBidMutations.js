@@ -207,10 +207,10 @@ export default {
       state.bidSubmissionAlert.unDisqualify = false;
     }, 8000);
   },
-  setLoweringPriceAlert(state) {
-    state.loweringPriceAlert = true;
+  setLoweringPriceAlert(state,payload) {
+    state.loweringPriceAlert = payload;
     setTimeout(() => {
-      state.loweringPriceAlert = false;
+      state.loweringPriceAlert = null;
     }, 8000);
   },
   setEntryCheckForEditBid(state, payload) {
