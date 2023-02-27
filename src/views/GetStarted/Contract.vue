@@ -40,7 +40,6 @@
                 <v-row justify="center" align="center" class="mt-0">
                   <v-col cols="12" md="8" class="pb-1">
                     <div class="white signBox">
-                      <!-- <img :src="require('@/assets/images/getStarted/sign.png')" class="py-6 mx-auto"> -->
                       <VueSignaturePad width="500px" height="130px" ref="signaturePad" />
                     </div>
                   </v-col>
