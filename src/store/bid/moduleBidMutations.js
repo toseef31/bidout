@@ -258,5 +258,10 @@ export default {
       state.dateAlert = false;
     }, 8000);
   },
-
+  setTeamMemberAddAlert(state) {
+    state.teamMemberAddAlert = true
+    setTimeout(() => {
+      state.teamMemberAddAlert = false
+    },8000)
+  }
 };

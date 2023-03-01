@@ -130,16 +130,22 @@ export default {
       );
 
       if (res.status === 200) {
-        await dispatch('getSalesReps', { query: '', basin: 'all' });
-        await dispatch('getCategories');
-        await dispatch('searchByCompany', { query: '', basin: 'all' });
         commit('setBidViewData', res.data);
-
         commit('setViewBidError', false);
         commit('setUserType', res.data.user_type);
-        commit('setInvitedSuppliersData', res.data.bidData.invitedSuppliers);
+        if (res.data.user_type === 'buyer') {
+          await dispatch('getSalesReps', { query: '', basin: 'all' });
+          await dispatch('getCategories');
+          await dispatch('searchByCompany', { query: '', basin: 'all' });
 
-        commit('setInvitedNewSuppliers', res.data.bidData.invitedNewSuppliers);
+          await dispatch('getTeamMembers', payload.company);
+
+          commit('setInvitedSuppliersData', res.data.bidData.invitedSuppliers);
+
+          commit('setInvitedNewSuppliers', res.data.bidData.invitedNewSuppliers);
+          commit('setInvitedTeamMembers', res.data.bidData.invitedTeamMembers);
+        }
+
 
         if (res.data.user_type === 'supplier' && res.data.supplierSubmissions) {
           commit('setSupplierBid', res.data.supplierSubmissions);
@@ -1044,7 +1050,7 @@ export default {
       }
     }
   },
-  async updateTemplateNote({state, dispatch }, payload) {
+  async updateTemplateNote({ state, dispatch }, payload) {
     try {
       const res = await axios.post('bid/editTemplateNote/', { templateId: payload.templateId, note: payload.note });
       if (res.status === 200) {
@@ -1725,4 +1731,34 @@ export default {
       }
     }
   },
+
+  async addTeamMemberToBid({ commit, state, dispatch }, payload) {
+    try {
+      const res = await axios.post('bid/addTeamMemberToBid/', {
+        userId: payload.userId,
+        bidId: payload.bidId,
+        teamMemberIds: payload.teamMembersIds,
+      });
+
+      if (res.status === 200) {
+        await dispatch('getBidBySerial', {
+          serial: payload.serial,
+          id: payload.userId,
+        });
+
+        commit('setTeamMemberAddAlert');
+      }
+    } catch (err) {
+      if (state.apiCounter === 2) {
+        dispatch('apiSignOutAction');
+      } else if (err.response && err.response.status === 403) {
+        await dispatch('refreshToken');
+        state.apiCounter = 2;
+        dispatch('addTeamMemberToBid', payload);
+      }
+    }
+  },
 };
+
+
+

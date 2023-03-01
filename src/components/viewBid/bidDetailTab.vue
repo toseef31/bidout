@@ -167,7 +167,7 @@
 
           <v-btn icon @click="toggleSupplier = false">
             <v-icon size="30" color="#F32349
-                                  ">mdi-close</v-icon>
+                                            ">mdi-close</v-icon>
           </v-btn>
         </div>
         <AddSupplier />
@@ -202,6 +202,25 @@
           </v-avatar>
           <span class="text--black px-4 bid-creator">{{ item && item.firstName }} {{ item && item.lastName }}</span>
         </div>
+      </div>
+
+      <div class="text-center my-8" v-if="!toggleTeam && bidDetail.receivingBids && !isBidOut"><v-btn
+          color="rgba(13, 150, 72, 0.1)" elevation="0" @click="toggleTeam = true" height="32px" width="250px" large
+          class="text-capitalize invited-btn py-2 px-4">
+          <v-icon class="mr-1">mdi-plus</v-icon>
+          Add Additional Team member </v-btn>
+      </div>
+
+      <div class="new-supplier-class mx-5 mb-5 mt-16" v-if="toggleTeam">
+        <div class="d-flex justify-space-between align-center">
+          <div class="additional-title mb-4">Add Additional Team members</div>
+
+          <v-btn icon @click="toggleTeam = false">
+            <v-icon size="30" color="#F32349
+                                            ">mdi-close</v-icon>
+          </v-btn>
+        </div>
+        <AddTeamMember />
       </div>
     </div>
 
@@ -315,13 +334,19 @@
 <script>
 import moment from 'moment-timezone';
 import AddSupplier from '@/components/viewBid/addSupplier.vue';
+import AddTeamMember from '@/components/viewBid/addTeamMember.vue';
 
 export default {
   data() {
     return {
       users: '',
       toggleSupplier: false,
+      toggleTeam: false,
     };
+  },
+  components: {
+    AddTeamMember,
+    AddSupplier,
   },
   methods: {
     size(size) {

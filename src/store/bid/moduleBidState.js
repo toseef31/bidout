@@ -62,5 +62,6 @@ export default {
   bidActivities: null, 
   isEditBidChanges: false,
   supplierAddAlert: false,
-  dateAlert: false
+  dateAlert: false,
+  teamMemberAddAlert: false
 };
