@@ -63,5 +63,7 @@ export default {
   isEditBidChanges: false,
   supplierAddAlert: false,
   dateAlert: false,
-  teamMemberAddAlert: false
+  teamMemberAddAlert: false,
+  teamMembersForBid: [],
+  teamMembersInitial: []
 };

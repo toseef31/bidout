@@ -167,7 +167,7 @@
 
           <v-btn icon @click="toggleSupplier = false">
             <v-icon size="30" color="#F32349
-                                            ">mdi-close</v-icon>
+                                                      ">mdi-close</v-icon>
           </v-btn>
         </div>
         <AddSupplier />
@@ -205,8 +205,8 @@
       </div>
 
       <div class="text-center my-8" v-if="!toggleTeam && bidDetail.receivingBids && !isBidOut"><v-btn
-          color="rgba(13, 150, 72, 0.1)" elevation="0" @click="toggleTeam = true" height="32px" width="250px" large
-          class="text-capitalize invited-btn py-2 px-4">
+          color="rgba(13, 150, 72, 0.1)" elevation="0" @click="
+            openTeam" height="32px" width="250px" large class="text-capitalize invited-btn py-2 px-4">
           <v-icon class="mr-1">mdi-plus</v-icon>
           Add Additional Team member </v-btn>
       </div>
@@ -217,7 +217,7 @@
 
           <v-btn icon @click="toggleTeam = false">
             <v-icon size="30" color="#F32349
-                                            ">mdi-close</v-icon>
+                                                      ">mdi-close</v-icon>
           </v-btn>
         </div>
         <AddTeamMember />
@@ -349,6 +349,9 @@ export default {
     AddSupplier,
   },
   methods: {
+    openTeam() {
+      this.toggleTeam = true;
+    },
     size(size) {
       const sizeInMB = (size / (1024 * 1024)).toFixed(2);
       return `${sizeInMB}mb`;

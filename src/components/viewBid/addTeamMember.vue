@@ -34,11 +34,12 @@
                             </div>
                             <div class="add-company">
                                 <v-btn color="rgba(13, 150, 72, 0.1)" tile min-width="32px" height="32" class="pa-0"
-                                    elevation="0" @click="addMember(team, index)"> <v-icon
+                                    elevation="0" @click="addMember(team)"> <v-icon
                                         color="#0D9648">mdi-plus</v-icon></v-btn>
                             </div>
                         </div>
                     </div>
+
                 </div>
             </v-col>
             <v-col cols="12" sm="6" class="invited-data available-data">
@@ -48,10 +49,9 @@
                     </div>
                 </div>
                 <div class="companies-list">
-                    {{ filterTeam }}
                     <div class="d-flex align-center justify-space-between list-company pa-4"
-                        v-for="(team, index) in membersAdded" v-if="user.id !== team.id && team.status !== false"
-                        :key="index">
+                        v-for="(team, index) in filterTeam"
+                        v-if="user.id !== team.id && team.status !== false && filterTeam.length" :key="index">
                         <div class="comapny-data d-flex align-center">
                             <div class="company-img">
                                 <img v-if="!team.image" :src="require('@/assets/images/chat/chatUser.png')">
@@ -64,14 +64,15 @@
                         </div>
                         <div class="add-company">
                             <v-btn color="rgba(243, 35, 73, 0.1)" tile min-width="32px" height="32" class="pa-0"
-                                elevation="0" @click="remove(team, index)"> <v-icon
-                                    color="#F32349">mdi-minus</v-icon></v-btn>
+                                elevation="0" @click="remove(team)"> <v-icon color="#F32349">mdi-minus</v-icon></v-btn>
                         </div>
                     </div>
+
+                    <div class="text-center mt-10 no-team-class" v-if="filterTeam.length === 0">No team member added.</div>
                 </div>
             </v-col>
         </v-row>
-        {{ hey }}
+
         <v-row justify="center" align="center" no-gutters>
             <div class="mb-n2 align-center justify-center">
                 <v-btn color="#0D9648" elevation="0" height="56px" width="220px" large :loading="getTeamLoading"
@@ -89,7 +90,6 @@ export default {
     data() {
         return {
             searchMember: '',
-            membersAdded: [],
             user: '',
             teamLoading: false,
         };
@@ -98,35 +98,26 @@ export default {
         bidDetail() {
             return this.$store.getters.bidViewData;
         },
-        hey() {
-            console.log('INV - ', this.$store.getters.teamMembers);
-            console.log('BID - ', this.bidDetail.bidData.invitedTeamMembers);
-            console.log('STATE - ', this.$store.getters.invitedTeamMembers);
-        },
         teamMembers() {
-            if (this.bidDetail.bidData !== null) {
-                if (this.bidDetail.bidData.invitedTeamMembers !== '') {
-                    if (this.searchMember) {
-                        return this.$store.getters.teamMembers.filter((item) => (this.searchMember.toLowerCase().split(' ').every((v) => item.firstName.toLowerCase().includes(v)) || this.searchMember.toLowerCase().split(' ').every((v) => item.lastName.toLowerCase().includes(v))));
-                    }
-                    console.log(this.$store.getters.teamMembers ? this.$store.getters.teamMembers.filter((el) => !this.bidDetail.bidData.invitedTeamMembers.find((team) => team.id === el.id)) : []);
-                    console.log('HHHHH');
-
-                    return this.$store.getters.teamMembers ? this.$store.getters.teamMembers.filter((el) => !this.bidDetail.bidData.invitedTeamMembers.find((team) => team.id === el.id)) : [];
+            if (this.$store.getters.teamMembersInitial !== null && this.$store.getters.teamMembersInitial !== '') {
+                if (this.searchMember) {
+                    const unique = this.$store.getters.teamMembersInitial.filter((item) => (this.searchMember.toLowerCase().split(' ').every((v) => item.firstName.toLowerCase().includes(v)) || this.searchMember.toLowerCase().split(' ').every((v) => item.lastName.toLowerCase().includes(v))));
+                    return [...new Map(unique.map((item) => [item.id, item])).values()];
                 }
-                return this.$store.getters.teamMembers;
+                const unique = this.$store.getters.teamMembersInitial ? this.$store.getters.teamMembersInitial.filter((el) => !this.$store.getters.teamMembersForBid.find((team) => team.id === el.id)) : [];
+
+                return [...new Map(unique.map((item) => [item.id, item])).values()];
             }
             if (this.searchMember) {
-                return this.$store.getters.teamMembers.filter((item) => (this.searchMember.toLowerCase().split(' ').every((v) => item.firstName.toLowerCase().includes(v)) || this.searchMember.toLowerCase().split(' ').every((v) => item.lastName.toLowerCase().includes(v))));
+                const unique = this.$store.getters.teamMembersInitial.filter((item) => (this.searchMember.toLowerCase().split(' ').every((v) => item.firstName.toLowerCase().includes(v)) || this.searchMember.toLowerCase().split(' ').every((v) => item.lastName.toLowerCase().includes(v))));
+                return [...new Map(unique.map((item) => [item.id, item])).values()];
             }
             return this.$store.getters.teamMembers ? this.$store.getters.teamMembers : [];
         },
         filterTeam() {
-            if (this.bidDetail.bidData.invitedTeamMembers !== '') {
-                this.membersAdded = this.$store.getters.teamMembers ? this.$store.getters.teamMembers.filter((el) => this.$store.getters.invitedTeamMembers.find((team) => team.id === el.id)) : [];
+            const unique = this.$store.getters.teamMembersForBid;
 
-                console.log('MM - ', this.membersAdded);
-            }
+            return unique !== '' && unique !== null && unique !== undefined ? [...new Map(unique.map((item) => [item.id, item])).values()] : [];
         },
         getTeamLoading() {
             return this.teamLoading;
@@ -135,34 +126,34 @@ export default {
     methods: {
         ...mapActions(['addTeamMemberToBid']),
         async saveTeam() {
-            const teamIds = [];
+            let teamIds = [];
             this.teamLoading = true;
 
-            this.membersAdded.forEach((el) => teamIds.push(el.id));
+            this.$store.getters.teamMembersForBid.forEach((el) => teamIds.push(el.id));
+
+            teamIds = [...new Set(teamIds)];
 
             await this.addTeamMemberToBid({
                 userId: this.user.id,
                 bidId: this.bidDetail.bidData.id,
                 teamMembersIds: teamIds,
                 serial: this.$route.params.serial,
+                company: this.user.company.company,
             });
 
             this.teamLoading = false;
 
             window.scrollTo({ top: 0, behavior: 'smooth' });
         },
-        addMember(member, index) {
-            this.membersAdded.push(member);
+        addMember(member) {
+            this.$store.commit('spliceTeamMembersInitial', member.id);
 
-            this.$store.commit('spliceTeamMember', index);
-
-            this.$store.commit('setInvitedTeamMembers', this.membersAdded);
+            this.$store.commit('pushTeamMembersForBid', member);
         },
-        remove(member, index) {
-            this.$store.commit('pushTeamMember', member);
-            this.membersAdded.splice(index, 1);
+        remove(member) {
+            this.$store.commit('pushTeamMembersInitial', member);
 
-            this.$store.commit('setInvitedTeamMembers', this.membersAdded);
+            this.$store.commit('spliceTeamMembersForBid', member.id);
         },
     },
     mounted() {

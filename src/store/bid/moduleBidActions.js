@@ -9,6 +9,7 @@ export default {
       const res = await axios.get(`company/getTeamMembers/${payload}`);
       if (res.status === 200) {
         commit('setTeamMembers', res.data);
+        commit('setTeamMembersInitial',res.data)
         commit('setPageLoader', false);
       } else {
         commit('setTeamMembers', null);
@@ -143,9 +144,8 @@ export default {
           commit('setInvitedSuppliersData', res.data.bidData.invitedSuppliers);
 
           commit('setInvitedNewSuppliers', res.data.bidData.invitedNewSuppliers);
-          commit('setInvitedTeamMembers', res.data.bidData.invitedTeamMembers);
+          commit('setTeamMembersForBid', res.data.bidData.invitedTeamMembers);
         }
-
 
         if (res.data.user_type === 'supplier' && res.data.supplierSubmissions) {
           commit('setSupplierBid', res.data.supplierSubmissions);
@@ -1744,6 +1744,7 @@ export default {
         await dispatch('getBidBySerial', {
           serial: payload.serial,
           id: payload.userId,
+          company: payload.company
         });
 
         commit('setTeamMemberAddAlert');

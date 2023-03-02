@@ -140,4 +140,10 @@ export default {
   invitedTeamMembers(state) {
     return state.invitedTeamMembers;
   },
+  teamMembersForBid(state) {
+    return state.teamMembersForBid
+  },
+  teamMembersInitial(state) {
+    return state.teamMembersInitial
+  }
 };
