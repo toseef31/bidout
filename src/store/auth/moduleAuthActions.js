@@ -53,7 +53,7 @@ export default {
               commit('setError', error.response.data);
             }
             if (error.response.status === 401) {
-              commit('setError', 'Please try again after refreshing the page');
+              commit('setError', 'Please try again after few moments.');
             }
             commit('setLoginLoading', false);
           });
