@@ -48,6 +48,14 @@ export default {
               commit('setLoginLoading', false);
               window.location.href = '/dashboard';
             }
+          }, (error) => {
+            if (error.response.status === 404) {
+              commit('setError', error.response.data);
+            }
+            if (error.response.status === 401) {
+              commit('setError', 'Please try again after refreshing the page');
+            }
+            commit('setLoginLoading', false);
           });
       }, (err) => {
         commit('setPassError', 'Oops! You have entered a incorrect password, try again, if you are still unsure of your password, please Reset Password');

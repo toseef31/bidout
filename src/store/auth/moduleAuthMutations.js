@@ -15,9 +15,15 @@ export default {
   },
   setError(state, payload) {
     state.error = payload;
+    setTimeout(() => {
+      state.error = null;
+    }, 5000);
   },
   setPassError(state, payload) {
     state.passError = payload;
+    setTimeout(() => {
+      state.passError = null;
+    }, 5000);
   },
   showErrorAlert(state) {
     state.alerts.showErrorAlert = true;
