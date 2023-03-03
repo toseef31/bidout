@@ -304,6 +304,7 @@ export default {
         dispatch('getBidBySerial', {
           id: payload.userId,
           serial: payload.serial,
+          company: payload.company
         });
         commit('setAwardAlert');
       }
@@ -329,6 +330,7 @@ export default {
         dispatch('getBidBySerial', {
           id: payload.userId,
           serial: payload.serial,
+          company: payload.company
         });
         commit('setDisqualifyAlert');
       }
@@ -354,6 +356,7 @@ export default {
         dispatch('getBidBySerial', {
           id: payload.userId,
           serial: payload.serial,
+          company: payload.company
         });
         commit('setUnAwardAlert');
       }
@@ -378,6 +381,7 @@ export default {
         dispatch('getBidBySerial', {
           id: payload.userId,
           serial: payload.serial,
+          company: payload.company
         });
         commit('setUnDisqualifyAlert');
       }
@@ -1700,6 +1704,7 @@ export default {
         await dispatch('getBidBySerial', {
           serial: payload.serial,
           id: payload.userId,
+          company: payload.company
         });
 
         commit('setSupplierAddAlert');

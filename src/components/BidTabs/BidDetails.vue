@@ -151,14 +151,14 @@ export default {
       ],
       dueDateRules: [
         (v) => !!v || 'Due date is required',
-        (v) => {
-          const currentDate = moment.tz('America/Chicago');
-          const momentDueDate = moment.tz(v, 'America/Chicago');
+        // (v) => {
+        //   const currentDate = moment.tz('America/Chicago');
+        //   const momentDueDate = moment.tz(v, 'America/Chicago');
 
-          if (moment(momentDueDate).isBefore(currentDate)) return 'Due Date cannot be today or in the past';
+        //   if (moment(momentDueDate).isBefore(currentDate)) return 'Due Date cannot be today or in the past';
 
-          return true;
-        },
+        //   return true;
+        // },
       ],
       dueTimeRules: [
         (v) => !!v || 'Please select due time',
@@ -172,6 +172,7 @@ export default {
       showAdditional: false,
       type: ['RFP', 'RFI', 'BidOut Process'],
       time: [
+        { label: '8am CST', value: '8am' },
         { label: '1pm CST', value: '1pm' },
         { label: '2pm CST', value: '2pm' },
         { label: '3pm CST', value: '3pm' },
@@ -435,9 +436,9 @@ export default {
   mounted() {
     this.route = this.$route.name;
 
-    if (this.$store.getters.entryCheckForEditBid) {
-      this.$router.push('/view-bids');
-    }
+    // if (this.$store.getters.entryCheckForEditBid) {
+    //   this.$router.push('/view-bids');
+    // }
     this.$store.commit('setInvitedSuppliersData', this.$store.getters.bidData.invitedSuppliers);
     this.$store.commit('setInvitedNewSuppliers', this.$store.getters.bidData.invitedNewSuppliers);
     this.$store.commit('setInvitedTeamMembers', this.$store.getters.bidData.invitedTeamMembers);
