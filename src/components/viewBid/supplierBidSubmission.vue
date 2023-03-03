@@ -31,11 +31,21 @@
                 <div class="d-flex align-center unit-class">
                   <div class=" unit">{{ item.unit }}</div>
                   <div class="mr-2">
-                    <v-text-field single-line class="mt-7" :rules="item.required === 'true' ? lineItemsRule : []"
-                      outlined :disabled="checkTimeForLineItems" dense min="0" prefix="$" type="text"
-                      @input="validatePrice($event, index)" @keypress="NumbersOnly($event,index)" @keyup="parsedValue(index)" :key="index" v-if="lineItems[index]['bid']"
-                      v-model="lineItems[index]['price']" :hideDetails="getPriceError[index].message !== ''"
-                      :class="{ 'error--text': getPriceError[index].message !== '' }"></v-text-field>
+                    <v-text-field v-model="lineItems[index]['price']"
+                    single-line class="mt-7"
+                    outlined :disabled="checkTimeForLineItems" dense
+                    prefix="$"
+                    type="text"
+                    :key="index"
+                    :rules="item.required === 'true' ? lineItemsRule : []"
+                    @input="validatePrice($event, index)"
+                    @keypress="NumbersOnly($event,index)"
+                    @blur="formatNumber(index)"
+                    v-if="lineItems[index]['bid']"
+                    :class="{ 'error--text': getPriceError[index].message !== '' }"
+                    :hideDetails="getPriceError[index].message !== ''"
+                    >
+                    </v-text-field>
 
                     <div v-else class="no-bid d-flex align-center">No bids
                     </div>
@@ -364,11 +374,11 @@ export default {
       return this.value && this.value.length && this.value.reduce((acc, curr) => acc && curr.status, true);
     },
     formattedPrice() {
-      const formattedPrices = {}
+      const formattedPrices = {};
       this.lineItems.forEach((item, index) => {
         formattedPrices[index] = parseFloat(item.price).toFixed(2);
-      })
-      return formattedPrices
+      });
+      return formattedPrices;
     },
   },
   methods: {
@@ -391,21 +401,27 @@ export default {
       if ((charCode > 31 && (charCode < 48 || charCode > 57)) && charCode !== 46) {
         evt.preventDefault();
       } else {
-          return true;
+        return true;
       }
     },
-    parsedValue(index){
-      const parsedNumber = parseFloat(this.lineItems[index].price);
-      if (isNaN(parsedNumber)) {
-        this.lineItems[index].price = ''
-      }else{
-        const value = this.lineItems[index].price;
-        const price = parseFloat(value).toFixed(2);
-        this.lineItems[index].price = price;
+    addCommas(num) {
+      return num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+    },
+    removeNonNumeric(num) {
+      num = num.replace(/[^\d.]/g, '');
+      const decimalIndex = num.indexOf('.');
+      if (decimalIndex !== -1) {
+        const decimalSubstring = num.substring(decimalIndex + 1);
+        if (decimalSubstring.length > 2) {
+          num = num.substring(0, decimalIndex + 3);
+        }
       }
-      
+      return num;
     },
     validatePrice(event, index) {
+      if (!isNaN(event)) {
+        this.lineItems[index].price = this.addCommas(this.removeNonNumeric(event));
+      }
       if (this.isBidSubmitted && this.isBidOut) {
         if (Number(this.getSupplierBid.lineItems[index].price) <= Number(event)) {
           this.value[index].message = 'Suppliers can only lower the prices during the BidOut Phase!';
@@ -415,6 +431,9 @@ export default {
           this.value[index].status = true;
         }
       }
+    },
+    formatNumber(index) {
+      this.lineItems[index].price = parseFloat(this.removeNonNumeric(this.lineItems[index].price)).toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 });
     },
     async submit(action) {
       if (action === 'edit' && this.isBidOut) {
@@ -586,7 +605,6 @@ export default {
         }
       }
     },
-    
   },
   mounted() {
     window.scrollTo({ top: 0, behavior: 'smooth' });
