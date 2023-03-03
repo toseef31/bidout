@@ -278,8 +278,17 @@ export default {
     state.teamMembersForBid.push(member);
   },
   spliceTeamMembersForBid(state, member) {
+    state.teamMembersForBid = [
+      ...new Map(
+        state.teamMembersForBid.map((item) => [item.id, item])
+      ).values(),
+    ];
+
     const index = state.teamMembersForBid.findIndex((el) => el.id === member);
-    state.teamMembersForBid.splice(index, 1);
+
+    if (index !== -1) {
+      state.teamMembersForBid.splice(index, 1);
+    }
   },
   setTeamMembersInitial(state, payload) {
     state.teamMembersInitial = payload;
@@ -287,7 +296,9 @@ export default {
   spliceTeamMembersInitial(state, member) {
     const index = state.teamMembersInitial.findIndex((el) => el.id === member);
 
-    state.teamMembersInitial.splice(index, 1);
+    if (index !== -1) {
+      state.teamMembersInitial.splice(index, 1);
+    }
   },
   pushTeamMembersInitial(state, member) {
     state.teamMembersInitial.push(member);

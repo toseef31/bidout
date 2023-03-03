@@ -151,9 +151,8 @@ export default {
             this.$store.commit('pushTeamMembersForBid', member);
         },
         remove(member) {
-            this.$store.commit('pushTeamMembersInitial', member);
-
             this.$store.commit('spliceTeamMembersForBid', member.id);
+            this.$store.commit('pushTeamMembersInitial', member);
         },
     },
     mounted() {
