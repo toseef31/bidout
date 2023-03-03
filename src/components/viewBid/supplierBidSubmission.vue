@@ -433,7 +433,11 @@ export default {
       }
     },
     formatNumber(index) {
-      this.lineItems[index].price = parseFloat(this.removeNonNumeric(this.lineItems[index].price)).toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+      if (this.lineItems[index].price) {
+        this.lineItems[index].price = parseFloat(this.removeNonNumeric(this.lineItems[index].price)).toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+      } else {
+        this.lineItems[index].price = '';
+      }
     },
     async submit(action) {
       if (action === 'edit' && this.isBidOut) {
@@ -448,7 +452,10 @@ export default {
 
       if (action === 'submit' && this.$refs.form.validate()) {
         this.loading = true;
-
+        this.lineItems.map((item, index) => {
+          item.price = item.price.split('.')[0].replace(/[,\.]/g, '');
+          return item;
+        });
         const lineItemsA = this.lineItems;
         const answersA = this.answers;
 
@@ -472,7 +479,10 @@ export default {
         this.$store.commit('removeSupplierAttachment');
       } else if (action === 'edit' && this.$refs.form.validate() && this.isValid) {
         this.loading = true;
-
+        this.lineItems.map((item, index) => {
+          item.price = item.price.split('.')[0].replace(/[,\.]/g, '');
+          return item;
+        });
         const lineItemsA = this.lineItems;
         const supplierAttachmentA = this.supplierDocList.map((el) => el.attachment);
 
@@ -557,7 +567,7 @@ export default {
 
       for (let i = 0; i < bidData.lineItems.length; i++) {
         this.lineItems.push({
-          price: this.getSupplierBid.lineItems[i].price,
+          price: parseFloat(this.removeNonNumeric(this.getSupplierBid.lineItems[i].price)).toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 }),
           bid: this.getSupplierBid.lineItems[i].price !== 'NO_BID',
           id: this.getSupplierBid.lineItems[i].id,
           quantity: this.getSupplierBid.lineItems[i].Qty,
