@@ -49,13 +49,6 @@
 
                     <div v-else class="no-bid d-flex align-center">No bids
                     </div>
-                    <!-- <v-text-field single-line class="mt-7" :rules="item.required === 'true' ? lineItemsRule : []"
-                      outlined :disabled="checkTimeForLineItems" dense min="0" prefix="$" type="text"
-                      @input="validatePrice($event, index)" @keypress="NumbersOnly($event,index)" @keyup="parsedValue(index)" :key="index" v-if="lineItems[index]['bid']"
-                      v-model="lineItems[index]['price']" :hideDetails="getPriceError[index].message !== ''"
-                      :class="{ 'error--text': getPriceError[index].message !== '' }"></v-text-field>
-
-                    <div v-else class="no-bid d-flex align-center">No bids</div> -->
 
                     <div class="price-error" v-if="!getPriceError[index].status">{{ getPriceError[index].message }}
                     </div>
