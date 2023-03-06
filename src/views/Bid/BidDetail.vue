@@ -21,7 +21,7 @@
 
   <v-col v-else class="pl-0 pr-3 pb-0 pt-0 bid-detail-module  ">
     <v-alert type="error" v-show="showErrorDeleteAlert" class="mx-5" v-if="getUserType === 'buyer'">
-      Deleting this bid was failed. Please Try again!
+      Deleting this bid has failed. Please try again!
     </v-alert>
 
     <v-alert type="success" v-show="showSupplierAlert" class="mx-5 mt-5">
@@ -739,15 +739,15 @@ export default {
         companyName: this.users.company.company,
       });
 
-      await this.getBidActivityList({
-        bidId: this.bidDetail.bidData.id,
-        userId: this.users.id,
-      });
-
       this.answer = this.$store.getters.bidIntent;
     } else {
       await this.getAllIntent({
         bidId: this.bidDetail.bidData.id,
+      });
+
+      await this.getBidActivityList({
+        bidId: this.bidDetail.bidData.id,
+        userId: this.users.id,
       });
     }
 
@@ -757,10 +757,10 @@ export default {
     });
   },
   watch: {
-    actualTime(val, oldVal) {
+    actualTime() {
       this.compute();
     },
-    changeTime(newVal, oldVal) {
+    changeTime(newVal) {
       const [years, months, days, hours, minutes, seconds] = newVal.split('|');
 
       if (this.checkZero(years) && this.checkZero(months) && this.checkZero(days) && this.checkZero(hours) && this.checkZero(minutes) && this.checkZero(seconds)) {
