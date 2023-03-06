@@ -64,8 +64,8 @@
       <v-alert type="success" v-show="showBidSubmissionAlert.unDisqualify" class="mx-5 mt-5">
         You have been Un-disqualified a company successfully!
       </v-alert>
-      <v-alert type="error" v-show="getLoweringPriceAlert" class="mx-5 mt-5">
-        Suppliers can only lower the prices during the BidOut Phase!
+      <v-alert type="error" v-show="getLoweringPriceAlert !== null" class="mx-5 mt-5">
+      {{ getLoweringPriceAlert }}
       </v-alert>
 
       <v-row class="px-5 my-5 row-title" no-gutters v-if="getUserType === 'buyer'">
