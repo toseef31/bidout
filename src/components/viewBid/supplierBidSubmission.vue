@@ -484,7 +484,6 @@ export default {
           item.price = item.price.replace(/,/g, '');
           return item;
         });
-        console.log('line item', this.lineItems);
         const lineItemsA = this.lineItems;
         const supplierAttachmentA = this.supplierDocList.map((el) => el.attachment);
 
