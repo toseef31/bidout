@@ -49,6 +49,13 @@
 
                     <div v-else class="no-bid d-flex align-center">No bids
                     </div>
+                    <!-- <v-text-field single-line class="mt-7" :rules="item.required === 'true' ? lineItemsRule : []"
+                      outlined :disabled="checkTimeForLineItems" dense min="0" prefix="$" type="text"
+                      @input="validatePrice($event, index)" @keypress="NumbersOnly($event,index)" @keyup="parsedValue(index)" :key="index" v-if="lineItems[index]['bid']"
+                      v-model="lineItems[index]['price']" :hideDetails="getPriceError[index].message !== ''"
+                      :class="{ 'error--text': getPriceError[index].message !== '' }"></v-text-field>
+
+                    <div v-else class="no-bid d-flex align-center">No bids</div> -->
 
                     <div class="price-error" v-if="!getPriceError[index].status">{{ getPriceError[index].message }}
                     </div>
@@ -409,13 +416,6 @@ export default {
     },
     removeNonNumeric(num) {
       num = num.replace(/[^\d.]/g, '');
-      const decimalIndex = num.indexOf('.');
-      if (decimalIndex !== -1) {
-        const decimalSubstring = num.substring(decimalIndex + 1);
-        if (decimalSubstring.length > 2) {
-          num = num.substring(0, decimalIndex + 3);
-        }
-      }
       return num;
     },
     validatePrice(event, index) {
@@ -434,8 +434,8 @@ export default {
     },
     formatNumber(index) {
       if (this.lineItems[index].price) {
-        let numericValue = parseFloat(this.removeNonNumeric(this.lineItems[index].price));
-        this.lineItems[index].price = numericValue.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,');
+        let formatValue = `${Number(`${Math.round(`${this.removeNonNumeric(this.lineItems[index].price)}e${2}`)}e-${2}`).toFixed(2)}`;
+        this.lineItems[index].price = formatValue.replace(/\d(?=(\d{3})+\.)/g, '$&,');
       } else {
         this.lineItems[index].price = '';
       }
@@ -454,7 +454,11 @@ export default {
       if (action === 'submit' && this.$refs.form.validate()) {
         this.loading = true;
         this.lineItems.map((item, index) => {
-          item.price = item.price.replace(/,/g, '');
+          if (item.price != null) {
+            item.price = item.price.replace(/,/g, '');
+          } else {
+            item.price = '';
+          }
           return item;
         });
         const lineItemsA = this.lineItems;
@@ -481,7 +485,11 @@ export default {
       } else if (action === 'edit' && this.$refs.form.validate() && this.isValid) {
         this.loading = true;
         this.lineItems.map((item, index) => {
-          item.price = item.price.replace(/,/g, '');
+          if (item.price != null) {
+            item.price = item.price.replace(/,/g, '');
+          } else {
+            item.price = '';
+          }
           return item;
         });
         const lineItemsA = this.lineItems;
@@ -568,7 +576,7 @@ export default {
 
       for (let i = 0; i < bidData.lineItems.length; i++) {
         this.lineItems.push({
-          price: parseFloat(this.removeNonNumeric(this.getSupplierBid.lineItems[i].price)).toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 }),
+          price: this.getSupplierBid.lineItems[i].price ? parseFloat(this.removeNonNumeric(this.getSupplierBid.lineItems[i].price)).toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 }) : '',
           bid: this.getSupplierBid.lineItems[i].price !== 'NO_BID',
           id: this.getSupplierBid.lineItems[i].id,
           quantity: this.getSupplierBid.lineItems[i].Qty,
