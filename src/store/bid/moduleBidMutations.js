@@ -4,7 +4,9 @@ export default {
   },
   setSalesReps(state, payload) {
     state.salesRepsList = payload.sort((a, b) => {
-      const aHasOfsPremium = a.contracts.some((contract) => contract === 'ofs-premium');
+      const aHasOfsPremium = a.contracts.some(
+        (contract) => contract === "ofs-premium"
+      );
       if (aHasOfsPremium) {
         return -1;
       }
@@ -13,7 +15,9 @@ export default {
   },
   setCompaniesList(state, payload) {
     state.companiesList = payload.sort((a, b) => {
-      const aHasOfsPremium = a.contracts.some((contract) => contract.contractType === 'ofs-premium');
+      const aHasOfsPremium = a.contracts.some(
+        (contract) => contract.contractType === "ofs-premium"
+      );
       if (aHasOfsPremium) {
         return -1;
       }
@@ -22,7 +26,9 @@ export default {
   },
   setServiceCompanies(state, payload) {
     state.serviceCompaniesList = payload.sort((a, b) => {
-      const aHasOfsPremium = a.contracts.some((contract) => contract.contractType === 'ofs-premium');
+      const aHasOfsPremium = a.contracts.some(
+        (contract) => contract.contractType === "ofs-premium"
+      );
       if (aHasOfsPremium) {
         return -1;
       }
@@ -115,9 +121,10 @@ export default {
   },
   setSupplierAttachment(state, payload) {
     state.supplierAttachment.push(payload);
-    state.supplierAttachment = state.supplierAttachment.filter((value, index, self) => index === self.findIndex((t) => (
-      t.fileName === value.fileName
-    )));
+    state.supplierAttachment = state.supplierAttachment.filter(
+      (value, index, self) =>
+        index === self.findIndex((t) => t.fileName === value.fileName)
+    );
   },
   removeSupplierAttachment(state) {
     state.supplierAttachment = [];
@@ -258,5 +265,42 @@ export default {
       state.dateAlert = false;
     }, 8000);
   },
+  setTeamMemberAddAlert(state) {
+    state.teamMemberAddAlert = true;
+    setTimeout(() => {
+      state.teamMemberAddAlert = false;
+    }, 8000);
+  },
+  setTeamMembersForBid(state, payload) {
+    state.teamMembersForBid.push(...payload);
+  },
+  pushTeamMembersForBid(state, member) {
+    state.teamMembersForBid.push(member);
+  },
+  spliceTeamMembersForBid(state, member) {
+    state.teamMembersForBid = [
+      ...new Map(
+        state.teamMembersForBid.map((item) => [item.id, item])
+      ).values(),
+    ];
 
+    const index = state.teamMembersForBid.findIndex((el) => el.id === member);
+
+    if (index !== -1) {
+      state.teamMembersForBid.splice(index, 1);
+    }
+  },
+  setTeamMembersInitial(state, payload) {
+    state.teamMembersInitial = payload;
+  },
+  spliceTeamMembersInitial(state, member) {
+    const index = state.teamMembersInitial.findIndex((el) => el.id === member);
+
+    if (index !== -1) {
+      state.teamMembersInitial.splice(index, 1);
+    }
+  },
+  pushTeamMembersInitial(state, member) {
+    state.teamMembersInitial.push(member);
+  },
 };

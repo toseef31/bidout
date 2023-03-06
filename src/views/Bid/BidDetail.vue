@@ -23,10 +23,13 @@
     <v-alert type="error" v-show="showErrorDeleteAlert" class="mx-5" v-if="getUserType === 'buyer'">
       Deleting this bid was failed. Please Try again!
     </v-alert>
-    
+
     <v-alert type="success" v-show="showSupplierAlert" class="mx-5 mt-5">
       New suppliers have been updated and email notifications have been sent.
-      </v-alert>
+    </v-alert>
+    <v-alert type="success" v-show="getTeamMemberAddAlert" class="mx-5 mt-5">
+      New team members have been added to the bid.
+    </v-alert>
 
     <v-alert type="success" v-show="getDateAlert" class="mx-5">
       You've successfully updated the due date and time, and email notifications were sent to all invited suppliers.
@@ -64,7 +67,6 @@
       <v-alert type="error" v-show="getLoweringPriceAlert" class="mx-5 mt-5">
         Suppliers can only lower the prices during the BidOut Phase!
       </v-alert>
-      
 
       <v-row class="px-5 my-5 row-title" no-gutters v-if="getUserType === 'buyer'">
         <v-col>
@@ -511,6 +513,7 @@ export default {
           serial: this.$route.params.serial,
           id: this.users.id,
           reload: false,
+          company: this.users.company.company,
         });
 
         await this.bidMessageUnreadCount({
@@ -541,6 +544,7 @@ export default {
           serial: this.$route.params.serial,
           id: this.users.id,
           reload: false,
+          company: this.users.company.company,
         });
 
         await this.bidMessageUnreadCount({
@@ -676,7 +680,7 @@ export default {
       return this.$store.getters.bidSubmissionAlert;
     },
     showSupplierAlert() {
-      return this.$store.getters.supplierAddAlert
+      return this.$store.getters.supplierAddAlert;
     },
     isBidOut() {
       if (this.bidDetail.bidData.type === 'BidOut Process' && this.bidDetail.bidout) {
@@ -690,6 +694,9 @@ export default {
     getDateAlert() {
       return this.$store.getters.dateAlert;
     },
+    getTeamMemberAddAlert() {
+      return this.$store.getters.teamMemberAddAlert;
+    },
   },
   mounted() {
     document.title = 'View Bid - BidOut';
@@ -698,10 +705,12 @@ export default {
   },
   async created() {
     this.users = this.$store.getters.userInfo;
+
     if (this.users) {
       await this.getBidBySerial({
         serial: this.$route.params.serial,
         id: this.users.id,
+        company: this.users.company.company,
       });
     } else {
       this.$router.push('/login');
