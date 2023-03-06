@@ -434,7 +434,8 @@ export default {
     },
     formatNumber(index) {
       if (this.lineItems[index].price) {
-        this.lineItems[index].price = parseFloat(this.removeNonNumeric(this.lineItems[index].price)).toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+        let numericValue = parseFloat(this.removeNonNumeric(this.lineItems[index].price));
+        this.lineItems[index].price = numericValue.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,');
       } else {
         this.lineItems[index].price = '';
       }
@@ -453,7 +454,7 @@ export default {
       if (action === 'submit' && this.$refs.form.validate()) {
         this.loading = true;
         this.lineItems.map((item, index) => {
-          item.price = item.price.split('.')[0].replace(/[,\.]/g, '');
+          item.price = item.price.replace(/,/g, '');
           return item;
         });
         const lineItemsA = this.lineItems;
@@ -480,9 +481,10 @@ export default {
       } else if (action === 'edit' && this.$refs.form.validate() && this.isValid) {
         this.loading = true;
         this.lineItems.map((item, index) => {
-          item.price = item.price.split('.')[0].replace(/[,\.]/g, '');
+          item.price = item.price.replace(/,/g, '');
           return item;
         });
+        console.log('line item', this.lineItems);
         const lineItemsA = this.lineItems;
         const supplierAttachmentA = this.supplierDocList.map((el) => el.attachment);
 
