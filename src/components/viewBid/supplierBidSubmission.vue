@@ -47,6 +47,7 @@
                     >
                     </v-text-field>
 
+
                     <div v-else class="no-bid d-flex align-center">No bids
                     </div>
 
@@ -83,7 +84,7 @@
 
       <div class=" bid-row-3 pb-2" v-if="bidDetail.bidData.questions && bidDetail.bidData.questions.length">
         <div class="question-section-title" v-if="bidDetail.bidData.lineItems &&
-        bidDetail.bidData.lineItems.length > 0">
+          bidDetail.bidData.lineItems.length > 0">
           <span class="title-detail px-4">Buyer Questions</span>
         </div>
         <div v-else>
@@ -114,9 +115,8 @@
                     color="#0d9648" checked v-for="(select, selectIndex) in item.options" :key="select.id"></v-radio>
                 </v-radio-group>
 
-                <v-text-field v-if="item.questionType === 'textfield'"
-                  :rules="item.required === 'true' ? answerRule : []" outlined :disabled="!bidDetail.receivingBids"
-                  v-model="answers[index]['answer']"></v-text-field>
+                <v-text-field v-if="item.questionType === 'textfield'" :rules="item.required === 'true' ? answerRule : []"
+                  outlined :disabled="!bidDetail.receivingBids" v-model="answers[index]['answer']"></v-text-field>
 
                 <v-textarea v-if="item.questionType === 'textarea'" outlined auto-grow
                   :disabled="!bidDetail.receivingBids" rows="3" row-height="25"
@@ -125,7 +125,7 @@
                 <div class="upload-attach" v-if="item.questionType === 'uploadFile'">
                   <div class="d-flex justify-space-between align-center"
                     v-if="((answers[index].answer && answers[index].answer.name || answers[index].fileName))">
-                    <div class="doc-list">{{(answers[index].answer.name || answers[index].fileName)}}</div>
+                    <div class="doc-list">{{ (answers[index].answer.name || answers[index].fileName) }}</div>
 
                     <v-dialog class="dialog-class" v-model="dialog" width="340">
 
@@ -161,12 +161,12 @@
                   </div>
 
                   <label :for="`uploadFileQ${index}`" v-else class="
-                        upload-file
-                       pa-4
-                        d-block
-                        font-weight-medium
-                        text-center
-                      ">
+                                                    upload-file
+                                                   pa-4
+                                                    d-block
+                                                    font-weight-medium
+                                                    text-center
+                                                  ">
                     <v-file-input :id="`uploadFileQ${index}`" @change="handleDocumentForAnswer($event, index)"
                       :disabled="!bidDetail.receivingBids" :rules="item.required === 'true' ? fileRule : []" />
 
@@ -214,7 +214,7 @@
                   <td class="text-left">
                     {{
                       doc.uploadedAt
-                        | moment("MM/DD/YYYY")
+                      | moment("MM/DD/YYYY")
                     }}
                   </td>
                   <td class="text-left delete-class text-decoration-underline" v-if="bidDetail.receivingBids"
@@ -286,7 +286,6 @@
     </v-form>
 
   </v-col>
-
 </template>
 
 <script>
@@ -389,15 +388,15 @@ export default {
     },
     allValid() {
       for (let i = 0; i < this.value.length; i++) {
-        if (Number(this.lineItems[i].price) === Number(this.getSupplierBid.lineItems[i].price)) {
+        if (Number(this.lineItems[i].price) > Number(this.getSupplierBid.lineItems[i].price)) {
           this.value[i].message = 'Suppliers can only lower the prices during the BidOut Phase!';
           this.value[i].status = false;
         }
       }
     },
-    NumbersOnly(evt,index) {
-      evt = (evt) ? evt : window.event;
-      var charCode = (evt.which) ? evt.which : evt.keyCode;
+    NumbersOnly(evt) {
+      evt = (evt) || window.event;
+      const charCode = (evt.which) ? evt.which : evt.keyCode;
       if ((charCode > 31 && (charCode < 48 || charCode > 57)) && charCode !== 46) {
         evt.preventDefault();
       } else {
@@ -416,7 +415,7 @@ export default {
         this.lineItems[index].price = this.addCommas(this.removeNonNumeric(event));
       }
       if (this.isBidSubmitted && this.isBidOut) {
-        if (Number(this.getSupplierBid.lineItems[index].price) <= Number(event)) {
+        if (Number(this.getSupplierBid.lineItems[index].price) < Number(event)) {
           this.value[index].message = 'Suppliers can only lower the prices during the BidOut Phase!';
           this.value[index].status = false;
         } else {
@@ -433,12 +432,31 @@ export default {
         this.lineItems[index].price = '';
       }
     },
+    isValidForTheSame() {
+      let counter = 0;
+      for (let i = 0; i < this.value.length; i++) {
+        if (Number(this.lineItems[i].price) === Number(this.getSupplierBid.lineItems[i].price)) {
+          counter++;
+        }
+      }
+
+      if (counter === this.value.length) {
+        return false;
+      }
+      return true;
+    },
     async submit(action) {
       if (action === 'edit' && this.isBidOut) {
         this.allValid();
 
         if (!this.isValid) {
-          this.$store.commit('setLoweringPriceAlert');
+          this.$store.commit('setLoweringPriceAlert', '   Suppliers can only lower the prices during the BidOut Phase!');
+          window.scrollTo({ top: 0, behavior: 'smooth' });
+          return;
+        }
+
+        if (!this.isValidForTheSame()) {
+          this.$store.commit('setLoweringPriceAlert', 'Suppliers need to decrease at least one line item!');
           window.scrollTo({ top: 0, behavior: 'smooth' });
           return;
         }

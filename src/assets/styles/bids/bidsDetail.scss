@@ -511,6 +511,11 @@
               overflow: auto;
               height: calc(100vh - 454px);
 
+              .no-team-class {
+                font-size: 14px;
+                color: #959595;
+              }
+
               .no-data-supplier {
                 color: #B8B8B8
               }

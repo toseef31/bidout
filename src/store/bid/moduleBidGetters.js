@@ -129,9 +129,21 @@ export default {
     return state.isEditBidChanges;
   },
   supplierAddAlert(state) {
-    return state.supplierAddAlert
+    return state.supplierAddAlert;
   },
   dateAlert(state) {
     return state.dateAlert;
   },
+  teamMemberAddAlert(state) {
+    return state.teamMemberAddAlert;
+  },
+  invitedTeamMembers(state) {
+    return state.invitedTeamMembers;
+  },
+  teamMembersForBid(state) {
+    return state.teamMembersForBid
+  },
+  teamMembersInitial(state) {
+    return state.teamMembersInitial
+  }
 };
