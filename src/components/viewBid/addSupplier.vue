@@ -495,6 +495,7 @@ export default {
                 invitedSuppliers,
                 invitedNewSuppliers,
                 serial: this.bidDetail.bidData.serial,
+                company: this.user.company.company,
             });
 
             this.supplierLoading = false;

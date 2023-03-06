@@ -27,6 +27,9 @@
     <v-alert type="success" v-show="showSupplierAlert" class="mx-5 mt-5">
       New suppliers have been updated and email notifications have been sent.
     </v-alert>
+    <v-alert type="success" v-show="getTeamMemberAddAlert" class="mx-5 mt-5">
+      New team members have been added to the bid.
+    </v-alert>
 
     <v-alert type="success" v-show="getDateAlert" class="mx-5">
       You've successfully updated the due date and time, and email notifications were sent to all invited suppliers.
@@ -510,6 +513,7 @@ export default {
           serial: this.$route.params.serial,
           id: this.users.id,
           reload: false,
+          company: this.users.company.company,
         });
 
         await this.bidMessageUnreadCount({
@@ -540,6 +544,7 @@ export default {
           serial: this.$route.params.serial,
           id: this.users.id,
           reload: false,
+          company: this.users.company.company,
         });
 
         await this.bidMessageUnreadCount({
@@ -689,6 +694,9 @@ export default {
     getDateAlert() {
       return this.$store.getters.dateAlert;
     },
+    getTeamMemberAddAlert() {
+      return this.$store.getters.teamMemberAddAlert;
+    },
   },
   mounted() {
     document.title = 'View Bid - BidOut';
@@ -697,10 +705,12 @@ export default {
   },
   async created() {
     this.users = this.$store.getters.userInfo;
+
     if (this.users) {
       await this.getBidBySerial({
         serial: this.$route.params.serial,
         id: this.users.id,
+        company: this.users.company.company,
       });
     } else {
       this.$router.push('/login');
