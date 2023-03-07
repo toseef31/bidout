@@ -237,7 +237,7 @@
 </div>
 
 <div v-else class="text-center q-title-detail ">
-  Buyer has configured this bid to not allow any Q&Aa.
+  Buyer has configured this bid to not allow any Q&A.
 </div>
   </v-col>
 </template>
