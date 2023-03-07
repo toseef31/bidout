@@ -175,12 +175,12 @@
                   </div>
 
                   <label :for="`uploadFileQ${index}`" v-else class="
-                                                                                                    upload-file
-                                                                                                   pa-4
-                                                                                                    d-block
-                                                                                                    font-weight-medium
-                                                                                                    text-center
-                                                                                                  ">
+                                                                                                      upload-file
+                                                                                                     pa-4
+                                                                                                      d-block
+                                                                                                      font-weight-medium
+                                                                                                      text-center
+                                                                                                    ">
                     <v-file-input :id="`uploadFileQ${index}`" @change="handleDocumentForAnswer($event, index)"
                       :disabled="!bidDetail.receivingBids" :rules="item.required === 'true' ? fileRule : []" />
 
@@ -426,7 +426,7 @@ export default {
       return num;
     },
     validatePrice(event, index) {
-      if (!isNaN(event)) {
+      if (!Number.isNaN(event)) {
         this.lineItems[index].price = this.addCommas(this.removeNonNumeric(event));
       }
       if (this.isBidSubmitted && this.isBidOut) {
@@ -690,7 +690,7 @@ export default {
 
           for (let i = 0; i < data.length; i++) {
             this.lineItems[i] = {
-              price: data[i].Price ? parseFloat(this.removeNonNumeric(data[i].Price)).toLocaleString(undefined, {
+              price: data[i].Price ? parseFloat(this.removeNonNumeric(data[i].Price.toString())).toLocaleString(undefined, {
                 minimumFractionDigits: 2, maximumFractionDigits: 2,
               }) : '',
               bid: data[i].Price !== 'NO_BID',
