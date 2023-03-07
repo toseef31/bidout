@@ -3,7 +3,7 @@
      <v-row class="signin">
        <v-col cols="12" md="6" class="left">
           <div class="form-section mb-15">
-            <div class="logo mb-15">
+            <div class="logo mb-lg-15" :class="[passwordError != null ? 'mb-0' : 'mb-9']">
               <router-link to="/"><img :src="require('@/assets/images/logo.png')" width="100%"></router-link>
             </div>
             <v-alert type="error" v-if="logInError != null">
