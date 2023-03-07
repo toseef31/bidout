@@ -31,12 +31,22 @@
                 <div class="d-flex align-center unit-class">
                   <div class=" unit">{{ item.unit }}</div>
                   <div class="mr-2">
-                    <v-text-field single-line class="mt-7" :rules="item.required === 'true' ? lineItemsRule : []" outlined
-                      :disabled="checkTimeForLineItems" dense min="0" prefix="$" type="text"
-                      @input="validatePrice($event, index)" @keypress="NumbersOnly($event, index)"
-                      @keyup="parsedValue(index)" :key="index" v-if="lineItems[index]['bid']"
-                      v-model="lineItems[index]['price']" :hideDetails="getPriceError[index].message !== ''"
-                      :class="{ 'error--text': getPriceError[index].message !== '' }"></v-text-field>
+                    <v-text-field v-model="lineItems[index]['price']"
+                    single-line class="mt-7"
+                    outlined :disabled="checkTimeForLineItems" dense
+                    prefix="$"
+                    type="text"
+                    :key="index"
+                    :rules="item.required === 'true' ? lineItemsRule : []"
+                    @input="validatePrice($event, index)"
+                    @keypress="NumbersOnly($event,index)"
+                    @blur="formatNumber(index)"
+                    v-if="lineItems[index]['bid']"
+                    :class="{ 'error--text': getPriceError[index].message !== '' }"
+                    :hideDetails="getPriceError[index].message !== ''"
+                    >
+                    </v-text-field>
+
 
                     <div v-else class="no-bid d-flex align-center">No bids
                     </div>
@@ -393,17 +403,17 @@ export default {
         return true;
       }
     },
-    parsedValue(index) {
-      const parsedNumber = parseFloat(this.lineItems[index].price);
-      if (Number.isNaN(parsedNumber)) {
-        this.lineItems[index].price = '';
-      } else {
-        const value = this.lineItems[index].price;
-        const price = parseFloat(value).toFixed(2);
-        this.lineItems[index].price = price;
-      }
+    addCommas(num) {
+      return num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+    },
+    removeNonNumeric(num) {
+      num = num.replace(/[^\d.]/g, '');
+      return num;
     },
     validatePrice(event, index) {
+      if (!isNaN(event)) {
+        this.lineItems[index].price = this.addCommas(this.removeNonNumeric(event));
+      }
       if (this.isBidSubmitted && this.isBidOut) {
         if (Number(this.getSupplierBid.lineItems[index].price) < Number(event)) {
           this.value[index].message = 'Suppliers can only lower the prices during the BidOut Phase!';
@@ -412,6 +422,14 @@ export default {
           this.value[index].message = '';
           this.value[index].status = true;
         }
+      }
+    },
+    formatNumber(index) {
+      if (this.lineItems[index].price) {
+        let formatValue = `${Number(`${Math.round(`${this.removeNonNumeric(this.lineItems[index].price)}e${2}`)}e-${2}`).toFixed(2)}`;
+        this.lineItems[index].price = formatValue.replace(/\d(?=(\d{3})+\.)/g, '$&,');
+      } else {
+        this.lineItems[index].price = '';
       }
     },
     isValidForTheSame() {
@@ -446,7 +464,14 @@ export default {
 
       if (action === 'submit' && this.$refs.form.validate()) {
         this.loading = true;
-
+        this.lineItems.map((item, index) => {
+          if (item.price != null) {
+            item.price = item.price.replace(/,/g, '');
+          } else {
+            item.price = '';
+          }
+          return item;
+        });
         const lineItemsA = this.lineItems;
         const answersA = this.answers;
 
@@ -470,7 +495,14 @@ export default {
         this.$store.commit('removeSupplierAttachment');
       } else if (action === 'edit' && this.$refs.form.validate() && this.isValid) {
         this.loading = true;
-
+        this.lineItems.map((item, index) => {
+          if (item.price != null) {
+            item.price = item.price.replace(/,/g, '');
+          } else {
+            item.price = '';
+          }
+          return item;
+        });
         const lineItemsA = this.lineItems;
         const supplierAttachmentA = this.supplierDocList.map((el) => el.attachment);
 
@@ -555,7 +587,7 @@ export default {
 
       for (let i = 0; i < bidData.lineItems.length; i++) {
         this.lineItems.push({
-          price: this.getSupplierBid.lineItems[i].price,
+          price: this.getSupplierBid.lineItems[i].price ? parseFloat(this.removeNonNumeric(this.getSupplierBid.lineItems[i].price)).toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 }) : '',
           bid: this.getSupplierBid.lineItems[i].price !== 'NO_BID',
           id: this.getSupplierBid.lineItems[i].id,
           quantity: this.getSupplierBid.lineItems[i].Qty,
@@ -603,7 +635,6 @@ export default {
         }
       }
     },
-
   },
   mounted() {
     window.scrollTo({ top: 0, behavior: 'smooth' });
