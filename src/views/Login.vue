@@ -6,7 +6,7 @@
             <div class="logo mb-lg-15" :class="[passwordError != null ? 'mb-0' : 'mb-9']">
               <router-link to="/"><img :src="require('@/assets/images/logo.png')" width="100%"></router-link>
             </div>
-            <v-alert type="error" size="14px" v-show="showErrorAlert" v-if="logInError != ''">
+            <v-alert type="error" v-if="logInError != null">
               {{ logInError }}
             </v-alert>
 
@@ -96,7 +96,7 @@ export default {
   },
   watch: {
     email(newValue, oldValue) {
-      this.$store.commit('setForgetEmail',newValue);
+      this.$store.commit('setForgetEmail', newValue);
     },
   },
   computed: {
@@ -114,7 +114,7 @@ export default {
       return this.$store.getters.showSuccessAlert;
     },
     successMessage() {
-      return this.$store.getters.successMessage
+      return this.$store.getters.successMessage;
     },
   },
   methods: {
