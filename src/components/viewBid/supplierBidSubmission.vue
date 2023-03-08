@@ -175,12 +175,12 @@
                   </div>
 
                   <label :for="`uploadFileQ${index}`" v-else class="
-                                                                                                      upload-file
-                                                                                                     pa-4
-                                                                                                      d-block
-                                                                                                      font-weight-medium
-                                                                                                      text-center
-                                                                                                    ">
+                                                                                                            upload-file
+                                                                                                           pa-4
+                                                                                                            d-block
+                                                                                                            font-weight-medium
+                                                                                                            text-center
+                                                                                                          ">
                     <v-file-input :id="`uploadFileQ${index}`" @change="handleDocumentForAnswer($event, index)"
                       :disabled="!bidDetail.receivingBids" :rules="item.required === 'true' ? fileRule : []" />
 
@@ -426,7 +426,7 @@ export default {
       return num;
     },
     validatePrice(event, index) {
-      if (!Number.isNaN(event)) {
+      if (!isNaN(event)) {
         this.lineItems[index].price = this.addCommas(this.removeNonNumeric(event));
       }
       if (this.isBidSubmitted && this.isBidOut) {
@@ -442,7 +442,9 @@ export default {
     formatNumber(index) {
       if (this.lineItems[index].price) {
         const formatValue = `${Number(`${Math.round(`${this.removeNonNumeric(this.lineItems[index].price)}e${2}`)}e-${2}`).toFixed(2)}`;
-        this.lineItems[index].price = formatValue.replace(/\d(?=(\d{3})+\.)/g, '$&,');
+
+        const afterFormat = formatValue.replace(/\d(?=(\d{3})+\.)/g, '$&,');
+        this.lineItems[index].price = isNaN(afterFormat) ? '' : afterFormat;
       } else {
         this.lineItems[index].price = '';
       }
