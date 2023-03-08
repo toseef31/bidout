@@ -99,7 +99,7 @@ export default {
         localStorage.removeItem('token');
         localStorage.removeItem('companyData');
 
-        navigate('/');
+        navigate('/login');
       })
       .catch((error) => {
         commit('setError', error.message);
