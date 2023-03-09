@@ -174,13 +174,14 @@
 
                   </div>
 
-                  <label :for="`uploadFileQ${index}`" v-else class="
-                                                                                                            upload-file
-                                                                                                           pa-4
-                                                                                                            d-block
-                                                                                                            font-weight-medium
-                                                                                                            text-center
-                                                                                                          ">
+                  <label :for="`uploadFileQ${index}`" v-else
+                    class="
+                                                                                                                                  upload-file
+                                                                                                                                 pa-4
+                                                                                                                                  d-block
+                                                                                                                                  font-weight-medium
+                                                                                                                                  text-center
+                                                                                                                                ">
                     <v-file-input :id="`uploadFileQ${index}`" @change="handleDocumentForAnswer($event, index)"
                       :disabled="!bidDetail.receivingBids" :rules="item.required === 'true' ? fileRule : []" />
 
@@ -444,7 +445,7 @@ export default {
         const formatValue = `${Number(`${Math.round(`${this.removeNonNumeric(this.lineItems[index].price)}e${2}`)}e-${2}`).toFixed(2)}`;
 
         const afterFormat = formatValue.replace(/\d(?=(\d{3})+\.)/g, '$&,');
-        this.lineItems[index].price = isNaN(afterFormat) ? '' : afterFormat;
+        this.lineItems[index].price = afterFormat === 'NaN' ? '' : afterFormat;
       } else {
         this.lineItems[index].price = '';
       }
@@ -683,6 +684,8 @@ export default {
       if (file) {
         const reader = new FileReader();
 
+        this.lineItems = [];
+
         reader.onload = (e) => {
           const bstr = e.target.result;
           const wb = XLSX.read(bstr, { type: 'binary' });
@@ -691,15 +694,17 @@ export default {
           const data = XLSX.utils.sheet_to_json(ws, { header: 0, skipHeader: true });
 
           for (let i = 0; i < data.length; i++) {
-            this.lineItems[i] = {
+            this.lineItems.push({
               price: data[i].Price ? parseFloat(this.removeNonNumeric(data[i].Price.toString())).toLocaleString(undefined, {
+                minimumFractionDigits: 2, maximumFractionDigits: 2,
+              }) === 'NaN' ? '' : parseFloat(this.removeNonNumeric(data[i].Price.toString())).toLocaleString(undefined, {
                 minimumFractionDigits: 2, maximumFractionDigits: 2,
               }) : '',
               bid: data[i].Price !== 'NO_BID',
               id: this.bidDetail.bidData.lineItems[i].id,
               quantity: data[i].QTY,
               required: data[i].Required,
-            };
+            });
 
             this.value.push({
               message: '',
