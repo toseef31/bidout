@@ -176,12 +176,12 @@
 
                   <label :for="`uploadFileQ${index}`" v-else
                     class="
-                                                                                                                                  upload-file
-                                                                                                                                 pa-4
-                                                                                                                                  d-block
-                                                                                                                                  font-weight-medium
-                                                                                                                                  text-center
-                                                                                                                                ">
+                                                                                                                                        upload-file
+                                                                                                                                       pa-4
+                                                                                                                                        d-block
+                                                                                                                                        font-weight-medium
+                                                                                                                                        text-center
+                                                                                                                                      ">
                     <v-file-input :id="`uploadFileQ${index}`" @change="handleDocumentForAnswer($event, index)"
                       :disabled="!bidDetail.receivingBids" :rules="item.required === 'true' ? fileRule : []" />
 
@@ -715,6 +715,8 @@ export default {
 
         reader.readAsBinaryString(file);
       }
+
+      event.target.value = '';
     },
 
   },
