@@ -288,6 +288,12 @@ export default {
           const ws = wb.Sheets[wsname];
           const data = XLSX.utils.sheet_to_json(ws, { header: 0,skipHeader:true });
           for (let i = 0; i < data.length; i++) {
+            let quantityValue = 0;
+            if (data[i].Quantity < 0) {
+              quantityValue = 0;
+            } else {
+              quantityValue = data[i].Quantity;
+            }
             this.bidLines.push({
               id: uuidv4(),
               type: 'USD',
@@ -295,7 +301,7 @@ export default {
               units: ['Gallon', 'Liter'],
               description: data[i].Description,
               unit: data[i].Unit,
-              quantity: data[i].Quantity,
+              quantity: quantityValue,
               buyerComment: data[i].BuyerComment,
               switch1: '',
               required: ((data[i].Required == 'Yes') ? true : false),
