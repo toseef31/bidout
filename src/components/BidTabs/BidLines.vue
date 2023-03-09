@@ -70,7 +70,7 @@
           <v-col md="2" class="px-0">
             <div class="mr-2 bid-item">
               <label class="d-block input-label text-left" v-if="index === 0">QTY</label>
-              <v-text-field placeholder="Quantity" height="31px" single-line outlined  hide-details v-model="bidLines[index]['quantity']" type="number" min="0">
+              <v-text-field placeholder="Quantity" height="31px" single-line outlined  hide-details v-model="bidLines[index]['quantity']" type="number" min="0" @keypress="NumbersOnly($event,index)">
               </v-text-field>
             </div>
           </v-col>
@@ -288,9 +288,9 @@ export default {
           const ws = wb.Sheets[wsname];
           const data = XLSX.utils.sheet_to_json(ws, { header: 0,skipHeader:true });
           for (let i = 0; i < data.length; i++) {
-            let quantityValue = 0;
+            let quantityValue = 1;
             if (data[i].Quantity < 0) {
-              quantityValue = 0;
+              quantityValue = 1;
             } else {
               quantityValue = data[i].Quantity;
             }
@@ -310,7 +310,16 @@ export default {
         }
 
         reader.readAsBinaryString(this.file);
-        this.$store.commit('setIsEditBidChanges',true);
+        this.$store.commit('setIsEditBidChanges', true);
+      }
+    },
+    NumbersOnly(evt) {
+      evt = (evt) || window.event;
+      const charCode = (evt.which) ? evt.which : evt.keyCode;
+      if ((charCode > 31 && (charCode < 48 || charCode > 57)) && charCode !== 46) {
+        evt.preventDefault();
+      } else {
+        return true;
       }
     },
     savedraftOnInterval() {
