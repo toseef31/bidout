@@ -70,7 +70,7 @@
           <v-col md="2" class="px-0">
             <div class="mr-2 bid-item">
               <label class="d-block input-label text-left" v-if="index === 0">QTY</label>
-              <v-text-field placeholder="Quantity" height="31px" single-line outlined  hide-details v-model="bidLines[index]['quantity']" type="number" min="0" @keypress="NumbersOnly($event,index)">
+              <v-text-field placeholder="Quantity" height="31px" single-line outlined  hide-details v-model="bidLines[index]['quantity']" type="text" @keypress="NumbersOnly($event,index)" @paste="onPaste">
               </v-text-field>
             </div>
           </v-col>
@@ -201,7 +201,6 @@ export default {
   watch: {
     bidLines: {
       handler(newValue, oldValue) {
-        console.log('inii',this.isInitialized);
         // eslint-disable-next-line no-unused-expressions
         this.validate;
         if (this.isInitialized) {
@@ -320,6 +319,13 @@ export default {
         evt.preventDefault();
       } else {
         return true;
+      }
+    },
+    onPaste(event) {
+      // eslint-disable-next-line no-undef
+      let num = event.clipboardData.getData('Text');
+      if (num < 0) {
+        event.preventDefault();
       }
     },
     savedraftOnInterval() {
