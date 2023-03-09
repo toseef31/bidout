@@ -6,7 +6,6 @@
         <div>
           <v-tooltip top >
             <template v-slot:activator="{ on, attrs }">
-            
              <a v-bind="attrs" class="mr-4 text-capitalize text-decoration-none export-excel" href="https://firebasestorage.googleapis.com/v0/b/bidout-dev.appspot.com/o/assets%2FlineItemsTemplate.xlsx?alt=media&token=1be2f0ce-491d-4286-80e9-ca56f4641ce9" download width="125px"
               v-on="on"  icon color="#0D9648">
                <v-icon size="24" class="pl-2" color="#0d9648">mdi-information-outline
@@ -71,7 +70,7 @@
           <v-col md="2" class="px-0">
             <div class="mr-2 bid-item">
               <label class="d-block input-label text-left" v-if="index === 0">QTY</label>
-              <v-text-field placeholder="Quantity" height="31px" single-line outlined  hide-details v-model="bidLines[index]['quantity']" type="number">
+              <v-text-field placeholder="Quantity" height="31px" single-line outlined  hide-details v-model="bidLines[index]['quantity']" type="number" min="0">
               </v-text-field>
             </div>
           </v-col>
@@ -136,7 +135,7 @@ export default {
   data() {
     return {
       on: '',
-      attrs:'',
+      attrs: '',
       availableSearch: ['All', 'Company'],
       availableSuppl: null,
       inputType: ['USD'],
@@ -175,23 +174,24 @@ export default {
     };
   },
   computed: {
-    ...mapGetters(["isEditBidChanges"]),
+    ...mapGetters(['isEditBidChanges']),
     draggingInfo() {
       return this.dragging ? 'under drag' : '';
     },
+    // eslint-disable-next-line consistent-return, vue/return-in-computed-property
     validate() {
-      if(this.$store.getters.bidData.lineItems != ""){
+      if (this.$store.getters.bidData.lineItems != '') {
         this.$emit('validation', { valid: true, items: '4' });
         this.$store.commit('setLineItemsComplete', true);
-        this.$store.commit('setBidlines',this.bidLines);
-      }else if (this.bidLines.length > 0 && this.bidLines.filter((item) => item.required === true && item.description && item.quantity).length > 0) {
+        this.$store.commit('setBidlines', this.bidLines);
+      } else if (this.bidLines.length > 0 && this.bidLines.filter((item) => item.required === true && item.description && item.quantity).length > 0) {
         this.$emit('validation', { valid: true, items: '4' });
         this.$store.commit('setLineItemsComplete', true);
-        this.$store.commit('setBidlines',this.bidLines);
-        this.$store.commit('setIsEditBidChanges',true);
+        this.$store.commit('setBidlines', this.bidLines);
+        this.$store.commit('setIsEditBidChanges', true);
         this.bidLinesStatus = true;
         return this.valid;
-      }else{
+      } else {
         this.$emit('validation', { valid: false, items: '4' });
         this.$store.commit('setLineItemsComplete', false);
         return this.valid;
@@ -202,31 +202,30 @@ export default {
     bidLines: {
       handler(newValue, oldValue) {
         console.log('inii',this.isInitialized);
+        // eslint-disable-next-line no-unused-expressions
         this.validate;
         if (this.isInitialized) {
-          this.$store.commit('setIsEditBidChanges',false);
+          this.$store.commit('setIsEditBidChanges', false);
           this.isInitialized = false;
-        }else{
-          this.$store.commit('setIsEditBidChanges',true);
+        } else {
+          this.$store.commit('setIsEditBidChanges', true);
         }
-
       },
       deep: true,
     },
     validate: function() {
-      
     },
   },
   methods: {
     ...mapActions(['updateDraftBid','updateTemplate','updateBid']),
     changeTab() {
-      if(this.$route.name == 'EditBid'){
-        if(this.isEditBidChanges == true){
+      if (this.$route.name === 'EditBid') {
+        if (this.isEditBidChanges === true) {
           this.updateBid({ bidlines: this.bidLines });
         }
-      }else if(this.$route.name == 'EditTemplate'){
+      } else if (this.$route.name === 'EditTemplate') {
         this.updateTemplate({ bidlines: this.bidLines });
-      }else{
+      } else {
         this.updateDraftBid({ bidlines: this.bidLines });
       }
       this.$emit('changetab', 'tab-5');
@@ -308,45 +307,44 @@ export default {
         this.$store.commit('setIsEditBidChanges',true);
       }
     },
-    savedraftOnInterval(){
+    savedraftOnInterval() {
       const timer = setInterval(() => {
-        if(this.bidLinesStatus == true){
-          if(this.$route.name == 'EditBid'){
-            if(this.isEditBidChanges == true){
+        if (this.bidLinesStatus === true) {
+          if (this.$route.name === 'EditBid') {
+            if (this.isEditBidChanges === true) {
               this.updateBid({ bidlines: this.bidLines });
             }
-          }else if(this.$route.name == 'EditTemplate'){
+          } else if (this.$route.name === 'EditTemplate') {
             this.updateTemplate({ bidlines: this.bidLines });
-          }else{
+          } else {
             this.updateDraftBid({ bidlines: this.bidLines });
           }
           this.bidLinesStatus = false;
         }
       }, 60000);
 
-      this.$once("hook:beforeDestroy", () => {
+      this.$once('hook:beforeDestroy', () => {
         clearInterval(timer);
       });
     },
   },
-  mounted(){
-    if(this.$store.getters.bidData.lineItems != ""){
+  mounted() {
+    if (this.$store.getters.bidData.lineItems !== '') {
       this.bidLines = this.$store.getters.bidData.lineItems;
       this.bidLines = JSON.parse(JSON.stringify(this.bidLines.map((item, index) => {
-      if(item.required == "true"){
-        item.required = true;
-      }else{
-        item.required = false;
-      }
-      return item;
+        if (item.required === 'true') {
+          item.required = true;
+        } else {
+          item.required = false;
+        }
+        return item;
       })));
-      
       this.$emit('validation', { valid: true, items: '4' });
       this.$store.commit('setLineItemsComplete', true);
       this.$store.commit('setBidlines',this.bidLines);
       this.isInitialized = true;
     }
     this.savedraftOnInterval();
-  }
+  },
 };
 </script>
