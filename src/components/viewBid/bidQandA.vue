@@ -144,7 +144,7 @@
     </div>
   </div>
 
-    <div class="text-center q-title-detail " v-if="(getUserType === 'buyer' && getQAndA.length === 0)">There are currently not any questions, which have been asked by suppliers. Once suppliers as a question this tab will be populated.</div>
+    <div class="text-center q-title-detail " v-if="(getUserType === 'buyer' && getQAndA.length === 0)">There are currently not any questions, which have been asked by suppliers. Once suppliers ask a question this tab will be populated.</div>
 
     <div class="px-6 main-section" v-if="getUserType === 'supplier'">
         <span class="title-detail" v-if="bidDetail.receivingBids">Ask a question</span>
