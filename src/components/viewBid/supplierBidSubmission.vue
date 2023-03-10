@@ -713,7 +713,7 @@ export default {
               });
             }
           } else {
-            this.$toasted.show('The format of the Excel import must remain the same expect for the price inputs!', {
+            this.$toasted.show('The format of the Excel import must remain the same except for the price inputs!', {
               class: 'error-toast',
               type: 'error',
               duration: 7000,
