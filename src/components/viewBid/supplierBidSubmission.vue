@@ -1,5 +1,28 @@
 <template>
   <v-col class="my-7 pa-0 bid-submission-tab" align="start">
+    <div class="text-right">
+      <v-tooltip top>
+        <template v-slot:activator="{ on, attrs }">
+
+          <v-btn v-bind="attrs" class="mr-7 text-capitalize text-decoration-none export-excel" v-on="on" icon
+            @click="downloadTemplate" color="#0D9648">
+            <v-icon size="24" color="#0d9648">mdi-information-outline
+            </v-icon>
+          </v-btn>
+        </template>
+        <span>Click here to download the <strong> Price excel template</strong></span>
+      </v-tooltip>
+      <v-tooltip top>
+        <template v-slot:activator="{ on, attrs }">
+          <label class="import-excel btn" for="import" v-bind="attrs" v-on="on">
+            Import <v-icon size="30" color="#0d9648">mdi-microsoft-excel</v-icon>
+            <input type="file" id="import" class="d-none" accept=".xlsx, .xls, .csv" @change="importPrice" />
+          </label>
+        </template>
+        <span>Import the <strong>Excel Template</strong> to upload line items price</span>
+      </v-tooltip>
+    </div>
+
     <v-form @submit.prevent="submit" ref="form" v-model="valid" lazy-validation>
       <div class="title-line" v-if="
         bidDetail.bidData &&
@@ -31,22 +54,13 @@
                 <div class="d-flex align-center unit-class">
                   <div class=" unit">{{ item.unit }}</div>
                   <div class="mr-2">
-                    <v-text-field v-model="lineItems[index]['price']"
-                    single-line class="mt-7"
-                    outlined :disabled="checkTimeForLineItems" dense
-                    prefix="$"
-                    type="text"
-                    :key="index"
-                    :rules="item.required === 'true' ? lineItemsRule : []"
-                    @input="validatePrice($event, index)"
-                    @keypress="NumbersOnly($event,index)"
-                    @blur="formatNumber(index)"
-                    v-if="lineItems[index]['bid']"
-                    :class="{ 'error--text': getPriceError[index].message !== '' }"
-                    :hideDetails="getPriceError[index].message !== ''"
-                    >
+                    <v-text-field v-model="lineItems[index]['price']" single-line class="mt-7" outlined
+                      :disabled="checkTimeForLineItems" dense prefix="$" type="text" :key="index"
+                      :rules="item.required === 'true' ? lineItemsRule : []" @input="validatePrice($event, index)"
+                      @keypress="NumbersOnly($event, index)" @blur="formatNumber(index)" v-if="lineItems[index]['bid']"
+                      :class="{ 'error--text': getPriceError[index].message !== '' }"
+                      :hideDetails="getPriceError[index].message !== ''">
                     </v-text-field>
-
 
                     <div v-else class="no-bid d-flex align-center">No bids
                     </div>
@@ -160,13 +174,14 @@
 
                   </div>
 
-                  <label :for="`uploadFileQ${index}`" v-else class="
-                                                    upload-file
-                                                   pa-4
-                                                    d-block
-                                                    font-weight-medium
-                                                    text-center
-                                                  ">
+                  <label :for="`uploadFileQ${index}`" v-else
+                    class="
+                                                                                                                                        upload-file
+                                                                                                                                       pa-4
+                                                                                                                                        d-block
+                                                                                                                                        font-weight-medium
+                                                                                                                                        text-center
+                                                                                                                                      ">
                     <v-file-input :id="`uploadFileQ${index}`" @change="handleDocumentForAnswer($event, index)"
                       :disabled="!bidDetail.receivingBids" :rules="item.required === 'true' ? fileRule : []" />
 
@@ -290,6 +305,7 @@
 
 <script>
 import { mapActions } from 'vuex';
+import * as XLSX from 'xlsx';
 
 export default {
   data() {
@@ -426,8 +442,10 @@ export default {
     },
     formatNumber(index) {
       if (this.lineItems[index].price) {
-        let formatValue = `${Number(`${Math.round(`${this.removeNonNumeric(this.lineItems[index].price)}e${2}`)}e-${2}`).toFixed(2)}`;
-        this.lineItems[index].price = formatValue.replace(/\d(?=(\d{3})+\.)/g, '$&,');
+        const formatValue = `${Number(`${Math.round(`${this.removeNonNumeric(this.lineItems[index].price)}e${2}`)}e-${2}`).toFixed(2)}`;
+
+        const afterFormat = formatValue.replace(/\d(?=(\d{3})+\.)/g, '$&,');
+        this.lineItems[index].price = afterFormat === 'NaN' ? '' : afterFormat;
       } else {
         this.lineItems[index].price = '';
       }
@@ -635,6 +653,72 @@ export default {
         }
       }
     },
+    downloadTemplate() {
+      const header = ['Line Item Description', 'Unit of measure', 'Price', 'Input type', 'QTY', 'Required', 'Buyer Comments'];
+
+      const dataD = [];
+
+      this.bidDetail.bidData.lineItems.forEach((el, index) => {
+        dataD.push([el.description]);
+        dataD[index].push([el.unit]);
+        dataD[index].push([]);
+
+        dataD[index].push([el.inputType]);
+        dataD[index].push([el.quantity]);
+        dataD[index].push([el.required === 'true' ? 'Yes' : 'No']);
+        dataD[index].push([el.buyerComment]);
+      });
+
+      dataD.unshift(header);
+
+      const data = XLSX.utils.aoa_to_sheet(dataD);
+
+      const wb = XLSX.utils.book_new();
+      XLSX.utils.book_append_sheet(wb, data, 'data');
+
+      XLSX.writeFile(wb, `${this.bidDetail.bidData.title}'s Price template.xlsx`);
+    },
+    importPrice(event) {
+      const file = event.target.files ? event.target.files[0] : null;
+
+      if (file) {
+        const reader = new FileReader();
+
+        this.lineItems = [];
+
+        reader.onload = (e) => {
+          const bstr = e.target.result;
+          const wb = XLSX.read(bstr, { type: 'binary' });
+          const wsName = wb.SheetNames[0];
+          const ws = wb.Sheets[wsName];
+          const data = XLSX.utils.sheet_to_json(ws, { header: 0, skipHeader: true });
+
+          for (let i = 0; i < data.length; i++) {
+            this.lineItems.push({
+              price: data[i].Price ? parseFloat(this.removeNonNumeric(data[i].Price.toString())).toLocaleString(undefined, {
+                minimumFractionDigits: 2, maximumFractionDigits: 2,
+              }) === 'NaN' ? '' : parseFloat(this.removeNonNumeric(data[i].Price.toString())).toLocaleString(undefined, {
+                minimumFractionDigits: 2, maximumFractionDigits: 2,
+              }) : '',
+              bid: data[i].Price !== 'NO_BID',
+              id: this.bidDetail.bidData.lineItems[i].id,
+              quantity: data[i].QTY,
+              required: data[i].Required,
+            });
+
+            this.value.push({
+              message: '',
+              status: true,
+            });
+          }
+        };
+
+        reader.readAsBinaryString(file);
+      }
+
+      event.target.value = '';
+    },
+
   },
   mounted() {
     window.scrollTo({ top: 0, behavior: 'smooth' });
