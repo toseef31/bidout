@@ -293,6 +293,15 @@
 				.bidline-tab{
 					.bidline-section{
 						.bidline-list{
+							.new--text{
+								.v-input__control{
+									.v-input__slot{
+										fieldset{
+											border-color: red;
+										}
+									}
+								}
+							}
 							.v-input{
 								font-size: 12px;
 								color: #0D1139;

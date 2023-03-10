@@ -70,7 +70,15 @@
           <v-col md="2" class="px-0">
             <div class="mr-2 bid-item">
               <label class="d-block input-label text-left" v-if="index === 0">QTY</label>
-              <v-text-field placeholder="Quantity" height="31px" single-line outlined  hide-details v-model="bidLines[index]['quantity']" type="text" @keypress="NumbersOnly($event,index)" @paste="onPaste">
+              <v-text-field placeholder="Quantity" height="31px" :class="{ 'new--text': bidLines[index]['quantity'] === '' }"
+              hide-details
+              single-line outlined
+              v-model="bidLines[index]['quantity']"
+              type="text"
+              required
+              @keypress="NumbersOnly($event,index)"
+              @input="validateNumber($event,index)"
+              @blur="formatNumber(index)" @keyup="removeExtra(index)" @paste="onPaste">
               </v-text-field>
             </div>
           </v-col>
@@ -250,6 +258,7 @@ export default {
       console.log(`Future index: ${e.draggedContext.futureIndex}`);
     },
     isLetterOrNumber(e) {
+      console.log('e', e);
       const char = String.fromCharCode(e.keyCode);
       if (/^[0-9]+$/.test(char)) return true;
       e.preventDefault();
@@ -287,11 +296,20 @@ export default {
           const ws = wb.Sheets[wsname];
           const data = XLSX.utils.sheet_to_json(ws, { header: 0,skipHeader:true });
           for (let i = 0; i < data.length; i++) {
-            let quantityValue = 1;
-            if (data[i].Quantity < 0) {
-              quantityValue = 1;
-            } else {
+            let quantityValue = 0;
+            let error = '';
+            if (/^[0-9]+$/.test(data[i].Quantity)) {
               quantityValue = data[i].Quantity;
+            } else {
+              const string = String(data[i].Quantity);
+              const formatQuantity = string.replace(/[^0-9]/g, '');
+              console.log('hyy', formatQuantity);
+              if (formatQuantity === '') {
+                error = 'please enter valid quantity';
+              } else {
+                error = '';
+              }
+              quantityValue = formatQuantity;
             }
             this.bidLines.push({
               id: uuidv4(),
@@ -302,6 +320,7 @@ export default {
               unit: data[i].Unit,
               quantity: quantityValue,
               buyerComment: data[i].BuyerComment,
+              error,
               switch1: '',
               required: ((data[i].Required == 'Yes') ? true : false),
             });
@@ -311,6 +330,7 @@ export default {
         reader.readAsBinaryString(this.file);
         this.$store.commit('setIsEditBidChanges', true);
       }
+      event.target.value = '';
     },
     NumbersOnly(evt) {
       evt = (evt) || window.event;
@@ -321,11 +341,39 @@ export default {
         return true;
       }
     },
+    removeNonNumeric(num) {
+      num = num.replace(/[^0-9]/g, '');
+      return num;
+    },
     onPaste(event) {
       // eslint-disable-next-line no-undef
       let num = event.clipboardData.getData('Text');
-      if (num < 0) {
+      let nmbrs = num.replace(/[^0-9]/g, '');
+      if (!nmbrs) {
         event.preventDefault();
+      } else {
+        return true;
+      }
+    },
+    validateNumber(event, index) {
+      if (!isNaN(event)) {
+        this.bidLines[index].quantity = this.removeNonNumeric(event);
+      }
+    },
+    formatNumber(index) {
+      if (this.bidLines[index].quantity) {
+        let formatValue = parseInt(this.removeNonNumeric(this.bidLines[index].quantity), 10);
+        this.bidLines[index].quantity = formatValue;
+      } else {
+        this.bidLines[index].quantity = '';
+      }
+    },
+    removeExtra(index) {
+      if (this.bidLines[index].quantity) {
+        let formatValue = parseInt(this.removeNonNumeric(this.bidLines[index].quantity), 10);
+        this.bidLines[index].quantity = formatValue;
+      } else {
+        this.bidLines[index].quantity = '';
       }
     },
     savedraftOnInterval() {
