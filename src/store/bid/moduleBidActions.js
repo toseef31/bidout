@@ -443,6 +443,13 @@ export default {
         });
       }
     } catch (err) {
+      if (err.response && err.response.status === 400 && err.response.data.message === 'Please add a price for all required items') {
+        commit('setBidSubmissionValidationAlert','Please add a price for all required line items')
+      }
+
+      if (err.response && err.response.status === 400 && err.response.data.message === 'Please add a valid price for all items') {
+        commit('setBidSubmissionValidationAlert','Please add a valid price for all line items')
+      }
       if (state.apiCounter === 2) {
         dispatch('apiSignOutAction');
       } else if (err.response && err.response.status === 403) {
@@ -509,6 +516,13 @@ export default {
         commit('setAlertEditBidSubmissionSuccess');
       }
     } catch (err) {
+      if (err.response && err.response.status === 400 && err.response.data.message === 'Please add a price for all required items') {
+        commit('setBidSubmissionValidationAlert','Please add a price for all required line items')
+      }
+
+      if (err.response && err.response.status === 400 && err.response.data.message === 'Please add a valid price for all items') {
+        commit('setBidSubmissionValidationAlert','Please add a valid price for all line items')
+      }
       if (state.apiCounter === 2) {
         dispatch('apiSignOutAction');
       } else if (err.response && err.response.status === 403) {
