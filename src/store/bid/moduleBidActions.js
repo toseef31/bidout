@@ -1543,7 +1543,7 @@ export default {
     } else {
       formData.append('invitedNewSuppliers', '');
     }
-    if (state.invitedTeamMembers !== '') {
+    if (state.invitedTeamMembers !== '' && state.invitedTeamMembers && state.invitedTeamMembers.length > 0) {
       for (let t = 0; t < state.invitedTeamMembers.length; t++) {
         if (!state.invitedTeamMembers[t].id) {
           formData.append(`invitedTeamMembers[${t}]`, state.invitedTeamMembers[t]);
@@ -1552,7 +1552,7 @@ export default {
         }
       }
     } else {
-      formData.append('invitedTeamMembers', '');
+      formData.append('invitedTeamMembers', []);
     }
 
     if (state.bidlines !== '') {
