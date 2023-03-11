@@ -176,12 +176,12 @@
 
                   <label :for="`uploadFileQ${index}`" v-else
                     class="
-                                                                                                                                          upload-file
-                                                                                                                                         pa-4
-                                                                                                                                          d-block
-                                                                                                                                          font-weight-medium
-                                                                                                                                          text-center
-                                                                                                                                        ">
+                                                                                                                                            upload-file
+                                                                                                                                           pa-4
+                                                                                                                                            d-block
+                                                                                                                                            font-weight-medium
+                                                                                                                                            text-center
+                                                                                                                                          ">
                     <v-file-input :id="`uploadFileQ${index}`" @change="handleDocumentForAnswer($event, index)"
                       :disabled="!bidDetail.receivingBids" :rules="item.required === 'true' ? fileRule : []" />
 
@@ -686,8 +686,6 @@ export default {
       if (file) {
         const reader = new FileReader();
 
-        this.lineItems = [];
-
         reader.onload = (e) => {
           const bstr = e.target.result;
           const wb = XLSX.read(bstr, { type: 'binary' });
@@ -695,22 +693,33 @@ export default {
           const ws = wb.Sheets[wsName];
           const data = XLSX.utils.sheet_to_json(ws, { header: 0, skipHeader: true });
 
-          for (let i = 0; i < data.length; i++) {
-            this.lineItems.push({
-              price: data[i].Price ? parseFloat(this.removeNonNumeric(data[i].Price.toString())).toLocaleString(undefined, {
-                minimumFractionDigits: 2, maximumFractionDigits: 2,
-              }) === 'NaN' ? '' : parseFloat(this.removeNonNumeric(data[i].Price.toString())).toLocaleString(undefined, {
-                minimumFractionDigits: 2, maximumFractionDigits: 2,
-              }) : '',
-              bid: data[i].Price !== 'NO_BID',
-              id: this.bidDetail.bidData.lineItems[i].id,
-              quantity: data[i].QTY,
-              required: data[i].Required,
-            });
+          if (data.length === this.bidDetail.bidData.lineItems.length) {
+            this.lineItems = [];
 
-            this.value.push({
-              message: '',
-              status: true,
+            for (let i = 0; i < data.length; i++) {
+              this.lineItems.push({
+                price: data[i].Price ? parseFloat(this.removeNonNumeric(data[i].Price.toString())).toLocaleString(undefined, {
+                  minimumFractionDigits: 2, maximumFractionDigits: 2,
+                }) === 'NaN' ? '' : parseFloat(this.removeNonNumeric(data[i].Price.toString())).toLocaleString(undefined, {
+                  minimumFractionDigits: 2, maximumFractionDigits: 2,
+                }) : '',
+                bid: data[i].Price !== 'NO_BID',
+                id: this.bidDetail.bidData.lineItems[i].id,
+                quantity: this.bidDetail.bidData.lineItems[i].quantity,
+                required: this.bidDetail.bidData.lineItems[i].required,
+              });
+
+              this.value.push({
+                message: '',
+                status: true,
+              });
+            }
+          } else {
+            this.$toasted.show('The format of the Excel import must remain the same except for the price inputs!', {
+              class: 'error-toast',
+              type: 'error',
+              duration: 7000,
+              position: 'top-center',
             });
           }
         };
