@@ -1,5 +1,28 @@
 <template>
   <v-col class="my-7 pa-0 bid-submission-tab" align="start">
+    <div class="text-right">
+      <v-tooltip top>
+        <template v-slot:activator="{ on, attrs }">
+
+          <v-btn v-bind="attrs" class="mr-7 text-capitalize text-decoration-none export-excel" v-on="on" icon
+            @click="downloadTemplate" color="#0D9648">
+            <v-icon size="24" color="#0d9648">mdi-information-outline
+            </v-icon>
+          </v-btn>
+        </template>
+        <span>Click here to download the <strong> Price excel template</strong></span>
+      </v-tooltip>
+      <v-tooltip top>
+        <template v-slot:activator="{ on, attrs }">
+          <label class="import-excel btn" for="import" v-bind="attrs" v-on="on">
+            Import <v-icon size="30" color="#0d9648">mdi-microsoft-excel</v-icon>
+            <input type="file" id="import" class="d-none" accept=".xlsx, .xls, .csv" @change="importPrice" />
+          </label>
+        </template>
+        <span>Import the <strong>Excel Template</strong> to upload line items price</span>
+      </v-tooltip>
+    </div>
+
     <v-form @submit.prevent="submit" ref="form" v-model="valid" lazy-validation>
       <div class="title-line" v-if="
         bidDetail.bidData &&
@@ -31,11 +54,13 @@
                 <div class="d-flex align-center unit-class">
                   <div class=" unit">{{ item.unit }}</div>
                   <div class="mr-2">
-                    <v-text-field single-line class="mt-7" :rules="item.required === 'true' ? lineItemsRule : []"
-                      outlined :disabled="checkTimeForLineItems" dense min="0" prefix="$" type="text"
-                      @input="validatePrice($event, index)" @keypress="NumbersOnly($event,index)" @keyup="parsedValue(index)" :key="index" v-if="lineItems[index]['bid']"
-                      v-model="lineItems[index]['price']" :hideDetails="getPriceError[index].message !== ''"
-                      :class="{ 'error--text': getPriceError[index].message !== '' }"></v-text-field>
+                    <v-text-field v-model="lineItems[index]['price']" single-line class="mt-7" outlined
+                      :disabled="checkTimeForLineItems" dense prefix="$" type="text" :key="index"
+                      :rules="item.required === 'true' ? lineItemsRule : []" @input="validatePrice($event, index)"
+                      @keypress="NumbersOnly($event, index)" @blur="formatNumber(index)" v-if="lineItems[index]['bid']"
+                      :class="{ 'error--text': getPriceError[index].message !== '' }"
+                      :hideDetails="getPriceError[index].message !== ''">
+                    </v-text-field>
 
                     <div v-else class="no-bid d-flex align-center">No bids
                     </div>
@@ -73,7 +98,7 @@
 
       <div class=" bid-row-3 pb-2" v-if="bidDetail.bidData.questions && bidDetail.bidData.questions.length">
         <div class="question-section-title" v-if="bidDetail.bidData.lineItems &&
-        bidDetail.bidData.lineItems.length > 0">
+          bidDetail.bidData.lineItems.length > 0">
           <span class="title-detail px-4">Buyer Questions</span>
         </div>
         <div v-else>
@@ -104,9 +129,8 @@
                     color="#0d9648" checked v-for="(select, selectIndex) in item.options" :key="select.id"></v-radio>
                 </v-radio-group>
 
-                <v-text-field v-if="item.questionType === 'textfield'"
-                  :rules="item.required === 'true' ? answerRule : []" outlined :disabled="!bidDetail.receivingBids"
-                  v-model="answers[index]['answer']"></v-text-field>
+                <v-text-field v-if="item.questionType === 'textfield'" :rules="item.required === 'true' ? answerRule : []"
+                  outlined :disabled="!bidDetail.receivingBids" v-model="answers[index]['answer']"></v-text-field>
 
                 <v-textarea v-if="item.questionType === 'textarea'" outlined auto-grow
                   :disabled="!bidDetail.receivingBids" rows="3" row-height="25"
@@ -115,7 +139,7 @@
                 <div class="upload-attach" v-if="item.questionType === 'uploadFile'">
                   <div class="d-flex justify-space-between align-center"
                     v-if="((answers[index].answer && answers[index].answer.name || answers[index].fileName))">
-                    <div class="doc-list">{{(answers[index].answer.name || answers[index].fileName)}}</div>
+                    <div class="doc-list">{{ (answers[index].answer.name || answers[index].fileName) }}</div>
 
                     <v-dialog class="dialog-class" v-model="dialog" width="340">
 
@@ -150,13 +174,14 @@
 
                   </div>
 
-                  <label :for="`uploadFileQ${index}`" v-else class="
-                        upload-file
-                       pa-4
-                        d-block
-                        font-weight-medium
-                        text-center
-                      ">
+                  <label :for="`uploadFileQ${index}`" v-else
+                    class="
+                                                                                                                                                              upload-file
+                                                                                                                                                             pa-4
+                                                                                                                                                              d-block
+                                                                                                                                                              font-weight-medium
+                                                                                                                                                              text-center
+                                                                                                                                                            ">
                     <v-file-input :id="`uploadFileQ${index}`" @change="handleDocumentForAnswer($event, index)"
                       :disabled="!bidDetail.receivingBids" :rules="item.required === 'true' ? fileRule : []" />
 
@@ -204,7 +229,7 @@
                   <td class="text-left">
                     {{
                       doc.uploadedAt
-                        | moment("MM/DD/YYYY")
+                      | moment("MM/DD/YYYY")
                     }}
                   </td>
                   <td class="text-left delete-class text-decoration-underline" v-if="bidDetail.receivingBids"
@@ -276,11 +301,11 @@
     </v-form>
 
   </v-col>
-
 </template>
 
 <script>
 import { mapActions } from 'vuex';
+import * as XLSX from 'xlsx';
 
 export default {
   data() {
@@ -364,11 +389,11 @@ export default {
       return this.value && this.value.length && this.value.reduce((acc, curr) => acc && curr.status, true);
     },
     formattedPrice() {
-      const formattedPrices = {}
+      const formattedPrices = {};
       this.lineItems.forEach((item, index) => {
         formattedPrices[index] = parseFloat(item.price).toFixed(2);
-      })
-      return formattedPrices
+      });
+      return formattedPrices;
     },
   },
   methods: {
@@ -379,35 +404,34 @@ export default {
     },
     allValid() {
       for (let i = 0; i < this.value.length; i++) {
-        if (Number(this.lineItems[i].price) === Number(this.getSupplierBid.lineItems[i].price)) {
+        if (Number(this.lineItems[i].price) > Number(this.getSupplierBid.lineItems[i].price)) {
           this.value[i].message = 'Suppliers can only lower the prices during the BidOut Phase!';
           this.value[i].status = false;
         }
       }
     },
-    NumbersOnly(evt,index) {
-      evt = (evt) ? evt : window.event;
-      var charCode = (evt.which) ? evt.which : evt.keyCode;
+    NumbersOnly(evt) {
+      evt = (evt) || window.event;
+      const charCode = (evt.which) ? evt.which : evt.keyCode;
       if ((charCode > 31 && (charCode < 48 || charCode > 57)) && charCode !== 46) {
         evt.preventDefault();
       } else {
-          return true;
+        return true;
       }
     },
-    parsedValue(index){
-      const parsedNumber = parseFloat(this.lineItems[index].price);
-      if (isNaN(parsedNumber)) {
-        this.lineItems[index].price = ''
-      }else{
-        const value = this.lineItems[index].price;
-        const price = parseFloat(value).toFixed(2);
-        this.lineItems[index].price = price;
-      }
-      
+    addCommas(num) {
+      return num.toString().replace(/\B(?=(\d{3})+(?!\d)\.?)/g, '');
+    },
+    removeNonNumeric(num) {
+      num = num.replace(/[^\d.]/g, '');
+      return num;
     },
     validatePrice(event, index) {
+      if (!isNaN(event) && this.lineItems[index].bid) {
+        this.lineItems[index].price = this.addCommas(this.removeNonNumeric(event));
+      }
       if (this.isBidSubmitted && this.isBidOut) {
-        if (Number(this.getSupplierBid.lineItems[index].price) <= Number(event)) {
+        if (Number(this.getSupplierBid.lineItems[index].price) < Number(event)) {
           this.value[index].message = 'Suppliers can only lower the prices during the BidOut Phase!';
           this.value[index].status = false;
         } else {
@@ -416,12 +440,41 @@ export default {
         }
       }
     },
+    formatNumber(index) {
+      if (this.lineItems[index].price) {
+        const formatValue = `${Number(`${Math.round(`${this.removeNonNumeric(this.lineItems[index].price)}e${2}`)}e-${2}`).toFixed(2)}`;
+
+        const afterFormat = formatValue.replace(/\d(?=(\d{3})+\.)/g, '$&,');
+        this.lineItems[index].price = afterFormat === 'NaN' ? '' : afterFormat;
+      } else {
+        this.lineItems[index].price = '';
+      }
+    },
+    isValidForTheSame() {
+      let counter = 0;
+      for (let i = 0; i < this.value.length; i++) {
+        if (Number(this.lineItems[i].price) === Number(this.getSupplierBid.lineItems[i].price)) {
+          counter++;
+        }
+      }
+
+      if (counter === this.value.length) {
+        return false;
+      }
+      return true;
+    },
     async submit(action) {
       if (action === 'edit' && this.isBidOut) {
         this.allValid();
 
         if (!this.isValid) {
-          this.$store.commit('setLoweringPriceAlert');
+          this.$store.commit('setLoweringPriceAlert', '   Suppliers can only lower the prices during the BidOut Phase!');
+          window.scrollTo({ top: 0, behavior: 'smooth' });
+          return;
+        }
+
+        if (!this.isValidForTheSame()) {
+          this.$store.commit('setLoweringPriceAlert', 'Suppliers need to decrease at least one line item!');
           window.scrollTo({ top: 0, behavior: 'smooth' });
           return;
         }
@@ -429,13 +482,16 @@ export default {
 
       if (action === 'submit' && this.$refs.form.validate()) {
         this.loading = true;
-
+        this.lineItems.map((item, index) => {
+          if (item.price != null) {
+            item.price = item.price.replace(/,/g, '');
+          } else {
+            item.price = '';
+          }
+          return item;
+        });
         const lineItemsA = this.lineItems;
         const answersA = this.answers;
-
-        lineItemsA.forEach((el) => delete el.bid);
-
-        answersA.forEach((el) => delete el.category);
 
         await this.submitBid({
           userId: this.user.id,
@@ -453,11 +509,16 @@ export default {
         this.$store.commit('removeSupplierAttachment');
       } else if (action === 'edit' && this.$refs.form.validate() && this.isValid) {
         this.loading = true;
-
+        this.lineItems.map((item, index) => {
+          if (item.price != null) {
+            item.price = item.price.replace(/,/g, '');
+          } else {
+            item.price = '';
+          }
+          return item;
+        });
         const lineItemsA = this.lineItems;
         const supplierAttachmentA = this.supplierDocList.map((el) => el.attachment);
-
-        lineItemsA.forEach((el) => delete el.bid);
 
         await this.editSubmitBid({
           userId: this.user.id,
@@ -473,6 +534,8 @@ export default {
 
         this.loading = false;
       }
+
+      window.scrollTo({ top: 0, behavior: 'smooth' });
     },
     handleDocumentForAnswer(event, index) {
       this.answers[index].answer = event;
@@ -535,10 +598,15 @@ export default {
     },
     initializeForEdit() {
       const { bidData } = this.bidDetail;
-
+      let updatePrice;
       for (let i = 0; i < bidData.lineItems.length; i++) {
+        if (this.getSupplierBid.lineItems[i].price === 'NO_BID') {
+          updatePrice = this.getSupplierBid.lineItems[i].price;
+        } else {
+          updatePrice = this.getSupplierBid.lineItems[i].price ? parseFloat(this.removeNonNumeric(this.getSupplierBid.lineItems[i].price)).toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 }) : '';
+        }
         this.lineItems.push({
-          price: this.getSupplierBid.lineItems[i].price,
+          price: updatePrice,
           bid: this.getSupplierBid.lineItems[i].price !== 'NO_BID',
           id: this.getSupplierBid.lineItems[i].id,
           quantity: this.getSupplierBid.lineItems[i].Qty,
@@ -586,7 +654,81 @@ export default {
         }
       }
     },
-    
+    downloadTemplate() {
+      const header = ['Line Item Description', 'Unit of measure', 'Price', 'Input type', 'QTY', 'Required', 'Buyer Comments'];
+
+      const dataD = [];
+
+      this.bidDetail.bidData.lineItems.forEach((el, index) => {
+        dataD.push([el.description]);
+        dataD[index].push([el.unit]);
+        dataD[index].push([]);
+
+        dataD[index].push([el.inputType]);
+        dataD[index].push([el.quantity]);
+        dataD[index].push([el.required === 'true' ? 'Yes' : 'No']);
+        dataD[index].push([el.buyerComment]);
+      });
+
+      dataD.unshift(header);
+
+      const data = XLSX.utils.aoa_to_sheet(dataD);
+
+      const wb = XLSX.utils.book_new();
+      XLSX.utils.book_append_sheet(wb, data, 'data');
+
+      XLSX.writeFile(wb, `${this.bidDetail.bidData.title}'s Price template.xlsx`);
+    },
+    importPrice(event) {
+      const file = event.target.files ? event.target.files[0] : null;
+
+      if (file) {
+        const reader = new FileReader();
+
+        reader.onload = (e) => {
+          const bstr = e.target.result;
+          const wb = XLSX.read(bstr, { type: 'binary' });
+          const wsName = wb.SheetNames[0];
+          const ws = wb.Sheets[wsName];
+          const data = XLSX.utils.sheet_to_json(ws, { header: 0, skipHeader: true });
+
+          if (data.length === this.bidDetail.bidData.lineItems.length) {
+            this.lineItems = [];
+
+            for (let i = 0; i < data.length; i++) {
+              this.lineItems.push({
+                price: data[i].Price ? parseFloat(this.removeNonNumeric(data[i].Price.toString())).toLocaleString(undefined, {
+                  minimumFractionDigits: 2, maximumFractionDigits: 2,
+                }) === 'NaN' ? '' : parseFloat(this.removeNonNumeric(data[i].Price.toString())).toLocaleString(undefined, {
+                  minimumFractionDigits: 2, maximumFractionDigits: 2,
+                }) : '',
+                bid: data[i].Price !== 'NO_BID',
+                id: this.bidDetail.bidData.lineItems[i].id,
+                quantity: this.bidDetail.bidData.lineItems[i].quantity,
+                required: this.bidDetail.bidData.lineItems[i].required,
+              });
+
+              this.value.push({
+                message: '',
+                status: true,
+              });
+            }
+          } else {
+            this.$toasted.show('The format of the Excel import must remain the same except for the price inputs!', {
+              class: 'error-toast',
+              type: 'error',
+              duration: 7000,
+              position: 'top-center',
+            });
+          }
+        };
+
+        reader.readAsBinaryString(file);
+      }
+
+      event.target.value = '';
+    },
+
   },
   mounted() {
     window.scrollTo({ top: 0, behavior: 'smooth' });

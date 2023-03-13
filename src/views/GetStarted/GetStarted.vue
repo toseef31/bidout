@@ -24,7 +24,6 @@
           <v-row justify="center">
             <v-col cols="12" md="9">
               <div class="tabs-head pa-6">
-                
                 <h4 class="text-left mb-4 font-weight-bold">Choose an option</h4>
                 <template>
                   <v-tabs optional
@@ -39,9 +38,6 @@
                   </v-tabs>
                 </template>
               </div>
-              <v-alert type="error" class="text-left" v-show="showErrorAlert" v-if="companyMsg != ''">
-                {{ companyMsg }}
-              </v-alert>
               <v-tabs-items v-model="currentItem">
                 <v-tab-item>
                   <v-form @submit.prevent="buyerRequest" ref="form" v-model="buyerValid">
@@ -51,7 +47,7 @@
                           <label class="d-block text-left input-label mb-2 font-weight-bold">Company Name</label>
                           <v-text-field placeholder="Company name" single-line outlined type="text" v-model="buyer.companyName" :rules="buyer.companyNameRule"
                             required>
-                            <span class="d-block red--text text-left">{{companyMsg}}</span>
+                            <span class="d-block red--text text-left" v-if="companyMsg">{{companyMsg}}</span>
                           </v-text-field>
                         </v-col>
                       </v-row>
@@ -68,9 +64,7 @@
                           <label class="d-block text-left input-label mb-2 font-weight-bold">Company HQ Country</label>
                           <!-- <v-select :items="countries" outlined v-model="companyHqCountry" placeholder="Select"></v-select> -->
                           <country-select v-model="country" :country="country" topCountry="US" className="countrySelect" placeholder="Select Country" />
-                            
                         </v-col>
-                        
                         <v-col cols="12" sm="6" text="left">
                           <label class="d-block text-left input-label mb-2 font-weight-bold">Company HQ State</label>
                           <!-- <v-select outlined placeholder="Select" v-model="companyHqState"></v-select> -->
@@ -170,9 +164,9 @@
                           <v-text-field prepend-inner-icon="search" placeholder="Company name" single-line outlined type="text" v-model="company" @keyup="getSupplierList" :rules="companyRule" clearable>
                           </v-text-field>
                           <input type="hidden" v-model="companyId">
-                          <template v-if="hideList == true"> 
+                          <template v-if="hideList == true">
                             <v-list class="company-list" v-if="suppliers != ''">
-                              <template v-for="(item, index) in suppliers">
+                              <template v-for="(item) in suppliers">
                                 <v-list-item
                                   :key="item.title"
                                 >
@@ -263,7 +257,7 @@
                         </v-col>
                         <v-col cols="12" sm="12" text="left" class="pb-0">
                           <label class="d-block text-left input-label mb-2 font-weight-bold">Confirm Password</label>
-                          <v-text-field placeholder="Confirm Password" single-line outlined type="password" v-model="confirmPassword":rules="[required, min6, matchingPasswords ]">
+                          <v-text-field placeholder="Confirm Password" single-line outlined type="password" v-model="confirmPassword" :rules="[required, min6, matchingPasswords ]">
                             <template v-slot:append>
                               <v-icon
                                 v-if="successPass1"
@@ -281,7 +275,7 @@
                       </v-row>
                       <v-row justify="center" class="mt-10">
                         <v-col cols="12" md="3">
-                          <v-btn color="#0D9647" large dense width="100%" height="56" class="font-weight-bold white--text text-capitalize" type="submit" 
+                          <v-btn color="#0D9647" large dense width="100%" height="56" class="font-weight-bold white--text text-capitalize" type="submit"
                           :loading="loading"
                           :disabled="!supplierValid">Next <v-icon class="pl-2" color="#fff">mdi-arrow-right-circle</v-icon></v-btn>
                         </v-col>
@@ -315,7 +309,7 @@
   import _ from 'lodash';
   import VuePhoneNumberInput from 'vue-phone-number-input';
   import 'vue-phone-number-input/dist/vue-phone-number-input.css';
-  import { mapActions } from "vuex";
+  import { mapActions, mapGetters } from "vuex";
 export default {
   name : "GetStarted",
   components: {
@@ -323,7 +317,6 @@ export default {
     Footer,
     VuePhoneNumberInput,
   },
-  
   data() {
     return {
       isActivity : false,
@@ -455,8 +448,21 @@ export default {
 
       this.loader = null
     },
+    companyError(message){
+      if(message){
+        this.$toasted.show(message, {
+          position: 'top-center',
+          duration: 5000,
+          className: 'error-toast',
+          type: 'error',
+        });
+        this.password = '';
+        this.confirmPassword = '';
+      }
+    }
   },
   computed:{
+    ...mapGetters(['companyError']),
     activityPanel(){
         return this.$store.getters.g_activityPanel;
     },
@@ -597,20 +603,15 @@ export default {
       }
     },
     companyList(title,id){
-      
       this.company = title;
       this.companyId = id;
-      
       setTimeout(() => this.hideList = false, 1000);
       this.hideList = false;
       this.companyInfo = false;
     },
-    
   },
   mounted() {
     document.title = "Get Started - BidOut"
-    
-    
   }
 };
 </script>

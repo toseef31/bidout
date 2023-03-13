@@ -1,6 +1,7 @@
 import Base from '@/components/Layout/Base.vue';
-import router from '@/router'
+// eslint-disable-next-line import/no-cycle
 import store from '@/store';
+
 const routes = [
   {
     path: '',
@@ -9,30 +10,26 @@ const routes = [
       {
         path: '/',
         name: 'OFSHome',
-        component: () => import('@/views/Ofs/OFSHome.vue'),
+        component: () => import('@/views/Login.vue'),
         beforeEnter: (to, from, next) => {
-          if(store.getters.userInfo == null) {
+          if (store.getters.userInfo == null) {
             store.dispatch('getCurrentUser').then((data) => {
-              next('/dashboard');
+              next();
             }).catch((error) => {
               console.log(error);
-              next();
+              next('/login');
             });
-          }else{
-            next();
-            
           }
-          
-        }
+        },
       },
       {
         path: '/ofs-directory/:slug',
         name: 'CategoryName',
         component: () => import('@/views/Ofs/CategoryListing.vue'),
         beforeEnter: (to, from, next) => {
-          if(store.getters.userInfo == null) {
-              next();
-          }else{
+          if (store.getters.userInfo == null) {
+            next();
+          } else {
             store.dispatch('getCurrentUser').then((data) => {
               next('/dashboard');
             }).catch((error) => {
@@ -40,17 +37,16 @@ const routes = [
               next();
             });
           }
-        }
+        },
       },
       {
         path: '/ofs-directory/:slug/:name',
         name: 'CategoryListing',
         component: () => import('@/views/Ofs/CategoryListing.vue'),
         beforeEnter: (to, from, next) => {
-          if(store.getters.userInfo == null) {
-              
-              next();
-          }else{
+          if (store.getters.userInfo == null) {
+            next();
+          } else {
             store.dispatch('getCurrentUser').then((data) => {
               next('/dashboard');
             }).catch((error) => {
@@ -58,17 +54,16 @@ const routes = [
               next();
             });
           }
-        }
+        },
       },
       {
         path: '/company-profiles/:name',
         name: 'CompanyProfiles',
         component: () => import('@/views/Ofs/ViewCompany.vue'),
         beforeEnter: (to, from, next) => {
-          if(store.getters.userInfo == null) {
-              
-              next();
-          }else{
+          if (store.getters.userInfo == null) {
+            next();
+          } else {
             store.dispatch('getCurrentUser').then((data) => {
               next('/dashboard');
             }).catch((error) => {
@@ -76,16 +71,16 @@ const routes = [
               next();
             });
           }
-        }
+        },
       },
       {
         path: '/subcompany-profile',
         name: 'SubCompanyProfile',
         component: () => import('@/views/Ofs/SubCompany.vue'),
         beforeEnter: (to, from, next) => {
-          if(store.getters.userInfo == null) {
+          if (store.getters.userInfo == null) {
             next();
-          }else{
+          } else {
             store.dispatch('getCurrentUser').then((data) => {
               next('/dashboard');
             }).catch((error) => {
@@ -93,7 +88,7 @@ const routes = [
               next();
             });
           }
-        }
+        },
       },
     ],
   },

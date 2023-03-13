@@ -9,6 +9,7 @@ export default {
       const res = await axios.get(`company/getTeamMembers/${payload}`);
       if (res.status === 200) {
         commit('setTeamMembers', res.data);
+        commit('setTeamMembersInitial',res.data)
         commit('setPageLoader', false);
       } else {
         commit('setTeamMembers', null);
@@ -130,16 +131,21 @@ export default {
       );
 
       if (res.status === 200) {
-        await dispatch('getSalesReps', { query: '', basin: 'all' });
-        await dispatch('getCategories');
-        await dispatch('searchByCompany', { query: '', basin: 'all' });
         commit('setBidViewData', res.data);
-
         commit('setViewBidError', false);
         commit('setUserType', res.data.user_type);
-        commit('setInvitedSuppliersData', res.data.bidData.invitedSuppliers);
+        if (res.data.user_type === 'buyer') {
+          await dispatch('getSalesReps', { query: '', basin: 'all' });
+          await dispatch('getCategories');
+          await dispatch('searchByCompany', { query: '', basin: 'all' });
 
-        commit('setInvitedNewSuppliers', res.data.bidData.invitedNewSuppliers);
+          await dispatch('getTeamMembers', payload.company);
+
+          commit('setInvitedSuppliersData', res.data.bidData.invitedSuppliers);
+
+          commit('setInvitedNewSuppliers', res.data.bidData.invitedNewSuppliers);
+          commit('setTeamMembersForBid', res.data.bidData.invitedTeamMembers);
+        }
 
         if (res.data.user_type === 'supplier' && res.data.supplierSubmissions) {
           commit('setSupplierBid', res.data.supplierSubmissions);
@@ -298,6 +304,7 @@ export default {
         dispatch('getBidBySerial', {
           id: payload.userId,
           serial: payload.serial,
+          company: payload.company
         });
         commit('setAwardAlert');
       }
@@ -323,6 +330,7 @@ export default {
         dispatch('getBidBySerial', {
           id: payload.userId,
           serial: payload.serial,
+          company: payload.company
         });
         commit('setDisqualifyAlert');
       }
@@ -348,6 +356,7 @@ export default {
         dispatch('getBidBySerial', {
           id: payload.userId,
           serial: payload.serial,
+          company: payload.company
         });
         commit('setUnAwardAlert');
       }
@@ -372,6 +381,7 @@ export default {
         dispatch('getBidBySerial', {
           id: payload.userId,
           serial: payload.serial,
+          company: payload.company
         });
         commit('setUnDisqualifyAlert');
       }
@@ -433,6 +443,13 @@ export default {
         });
       }
     } catch (err) {
+      if (err.response && err.response.status === 400 && err.response.data.message === 'Please add a price for all required items') {
+        commit('setBidSubmissionValidationAlert','Please add a price for all required line items')
+      }
+
+      if (err.response && err.response.status === 400 && err.response.data.message === 'Please add a valid price for all items') {
+        commit('setBidSubmissionValidationAlert','Please add a valid price or click the "X" button that you are no-biding for each line item')
+      }
       if (state.apiCounter === 2) {
         dispatch('apiSignOutAction');
       } else if (err.response && err.response.status === 403) {
@@ -499,6 +516,13 @@ export default {
         commit('setAlertEditBidSubmissionSuccess');
       }
     } catch (err) {
+      if (err.response && err.response.status === 400 && err.response.data.message === 'Please add a price for all required items') {
+        commit('setBidSubmissionValidationAlert','Please add a price for all required line items')
+      }
+
+      if (err.response && err.response.status === 400 && err.response.data.message === 'Please add a valid price for all items') {
+        commit('setBidSubmissionValidationAlert','Please add a valid price or click the "X" button that you are no-biding for each line item')
+      }
       if (state.apiCounter === 2) {
         dispatch('apiSignOutAction');
       } else if (err.response && err.response.status === 403) {
@@ -1044,7 +1068,7 @@ export default {
       }
     }
   },
-  async updateTemplateNote({state, dispatch }, payload) {
+  async updateTemplateNote({ state, dispatch }, payload) {
     try {
       const res = await axios.post('bid/editTemplateNote/', { templateId: payload.templateId, note: payload.note });
       if (res.status === 200) {
@@ -1694,6 +1718,7 @@ export default {
         await dispatch('getBidBySerial', {
           serial: payload.serial,
           id: payload.userId,
+          company: payload.company
         });
 
         commit('setSupplierAddAlert');
@@ -1725,4 +1750,35 @@ export default {
       }
     }
   },
+
+  async addTeamMemberToBid({ commit, state, dispatch }, payload) {
+    try {
+      const res = await axios.post('bid/addTeamMemberToBid/', {
+        userId: payload.userId,
+        bidId: payload.bidId,
+        teamMemberIds: payload.teamMembersIds,
+      });
+
+      if (res.status === 200) {
+        await dispatch('getBidBySerial', {
+          serial: payload.serial,
+          id: payload.userId,
+          company: payload.company
+        });
+
+        commit('setTeamMemberAddAlert');
+      }
+    } catch (err) {
+      if (state.apiCounter === 2) {
+        dispatch('apiSignOutAction');
+      } else if (err.response && err.response.status === 403) {
+        await dispatch('refreshToken');
+        state.apiCounter = 2;
+        dispatch('addTeamMemberToBid', payload);
+      }
+    }
+  },
 };
+
+
+

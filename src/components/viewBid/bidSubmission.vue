@@ -387,6 +387,7 @@ export default {
         userId: this.user.id,
         bidId: this.bidDetail.bidData.id,
         serial: this.$route.params.serial,
+        company: this.user.company.company
       });
 
       this.loadings[index].load = false;
@@ -401,6 +402,7 @@ export default {
         userId: this.user.id,
         bidId: this.bidDetail.bidData.id,
         serial: this.$route.params.serial,
+        company: this.user.company.company
       });
 
       this.loadings[index].load = false;
@@ -415,6 +417,7 @@ export default {
         userId: this.user.id,
         bidId: this.bidDetail.bidData.id,
         serial: this.$route.params.serial,
+        company: this.user.company.company
       });
 
       this.loadings[index].load = false;
@@ -429,6 +432,7 @@ export default {
         userId: this.user.id,
         bidId: this.bidDetail.bidData.id,
         serial: this.$route.params.serial,
+        company: this.user.company.company
       });
 
       this.loadings[index].load = false;
