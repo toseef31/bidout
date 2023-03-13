@@ -3,7 +3,8 @@ export default {
     return state.validate;
   },
   teamMembers(state) {
-    return state.teamMembers;
+    return [...new Set(state.teamMembers)];
+    // return state.teamMembers;
   },
   salesRepsList(state) {
     return state.salesRepsList;
