@@ -176,12 +176,12 @@
 
                   <label :for="`uploadFileQ${index}`" v-else
                     class="
-                                                                                                                                            upload-file
-                                                                                                                                           pa-4
-                                                                                                                                            d-block
-                                                                                                                                            font-weight-medium
-                                                                                                                                            text-center
-                                                                                                                                          ">
+                                                                                                                                                              upload-file
+                                                                                                                                                             pa-4
+                                                                                                                                                              d-block
+                                                                                                                                                              font-weight-medium
+                                                                                                                                                              text-center
+                                                                                                                                                            ">
                     <v-file-input :id="`uploadFileQ${index}`" @change="handleDocumentForAnswer($event, index)"
                       :disabled="!bidDetail.receivingBids" :rules="item.required === 'true' ? fileRule : []" />
 
@@ -427,7 +427,7 @@ export default {
       return num;
     },
     validatePrice(event, index) {
-      if (!isNaN(event)) {
+      if (!isNaN(event) && this.lineItems[index].bid) {
         this.lineItems[index].price = this.addCommas(this.removeNonNumeric(event));
       }
       if (this.isBidSubmitted && this.isBidOut) {
@@ -493,10 +493,6 @@ export default {
         const lineItemsA = this.lineItems;
         const answersA = this.answers;
 
-        lineItemsA.forEach((el) => delete el.bid);
-
-        answersA.forEach((el) => delete el.category);
-
         await this.submitBid({
           userId: this.user.id,
           companyId: this.user.company.id,
@@ -523,8 +519,6 @@ export default {
         });
         const lineItemsA = this.lineItems;
         const supplierAttachmentA = this.supplierDocList.map((el) => el.attachment);
-
-        lineItemsA.forEach((el) => delete el.bid);
 
         await this.editSubmitBid({
           userId: this.user.id,
@@ -604,10 +598,15 @@ export default {
     },
     initializeForEdit() {
       const { bidData } = this.bidDetail;
-
+      let updatePrice;
       for (let i = 0; i < bidData.lineItems.length; i++) {
+        if (this.getSupplierBid.lineItems[i].price === 'NO_BID') {
+          updatePrice = this.getSupplierBid.lineItems[i].price;
+        } else {
+          updatePrice = this.getSupplierBid.lineItems[i].price ? parseFloat(this.removeNonNumeric(this.getSupplierBid.lineItems[i].price)).toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 }) : '';
+        }
         this.lineItems.push({
-          price: this.getSupplierBid.lineItems[i].price ? parseFloat(this.removeNonNumeric(this.getSupplierBid.lineItems[i].price)).toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 }) : '',
+          price: updatePrice,
           bid: this.getSupplierBid.lineItems[i].price !== 'NO_BID',
           id: this.getSupplierBid.lineItems[i].id,
           quantity: this.getSupplierBid.lineItems[i].Qty,
