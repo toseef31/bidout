@@ -420,7 +420,7 @@ export default {
       }
     },
     addCommas(num) {
-      return num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+      return num.toString().replace(/\B(?=(\d{3})+(?!\d)\.?)/g, '');
     },
     removeNonNumeric(num) {
       num = num.replace(/[^\d.]/g, '');
