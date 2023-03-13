@@ -6,7 +6,6 @@
         <div>
           <v-tooltip top >
             <template v-slot:activator="{ on, attrs }">
-            
              <a v-bind="attrs" class="mr-4 text-capitalize text-decoration-none export-excel" href="https://firebasestorage.googleapis.com/v0/b/bidout-dev.appspot.com/o/assets%2FlineItemsTemplate.xlsx?alt=media&token=1be2f0ce-491d-4286-80e9-ca56f4641ce9" download width="125px"
               v-on="on"  icon color="#0D9648">
                <v-icon size="24" class="pl-2" color="#0d9648">mdi-information-outline
@@ -71,7 +70,15 @@
           <v-col md="2" class="px-0">
             <div class="mr-2 bid-item">
               <label class="d-block input-label text-left" v-if="index === 0">QTY</label>
-              <v-text-field placeholder="Quantity" height="31px" single-line outlined  hide-details v-model="bidLines[index]['quantity']" type="number">
+              <v-text-field placeholder="Quantity" height="31px" :class="{ 'new--text': bidLines[index]['quantity'] === '' }"
+              hide-details
+              single-line outlined
+              v-model="bidLines[index]['quantity']"
+              type="text"
+              required
+              @keypress="NumbersOnly($event,index)"
+              @input="validateNumber($event,index)"
+              @blur="formatNumber(index)" @keyup="removeExtra(index)" @paste="onPaste">
               </v-text-field>
             </div>
           </v-col>
@@ -136,7 +143,7 @@ export default {
   data() {
     return {
       on: '',
-      attrs:'',
+      attrs: '',
       availableSearch: ['All', 'Company'],
       availableSuppl: null,
       inputType: ['USD'],
@@ -175,23 +182,24 @@ export default {
     };
   },
   computed: {
-    ...mapGetters(["isEditBidChanges"]),
+    ...mapGetters(['isEditBidChanges']),
     draggingInfo() {
       return this.dragging ? 'under drag' : '';
     },
+    // eslint-disable-next-line consistent-return, vue/return-in-computed-property
     validate() {
-      if(this.$store.getters.bidData.lineItems != ""){
+      if (this.$store.getters.bidData.lineItems != '') {
         this.$emit('validation', { valid: true, items: '4' });
         this.$store.commit('setLineItemsComplete', true);
-        this.$store.commit('setBidlines',this.bidLines);
-      }else if (this.bidLines.length > 0 && this.bidLines.filter((item) => item.required === true && item.description && item.quantity).length > 0) {
+        this.$store.commit('setBidlines', this.bidLines);
+      } else if (this.bidLines.length > 0 && this.bidLines.filter((item) => item.required === true && item.description && item.quantity).length > 0) {
         this.$emit('validation', { valid: true, items: '4' });
         this.$store.commit('setLineItemsComplete', true);
-        this.$store.commit('setBidlines',this.bidLines);
-        this.$store.commit('setIsEditBidChanges',true);
+        this.$store.commit('setBidlines', this.bidLines);
+        this.$store.commit('setIsEditBidChanges', true);
         this.bidLinesStatus = true;
         return this.valid;
-      }else{
+      } else {
         this.$emit('validation', { valid: false, items: '4' });
         this.$store.commit('setLineItemsComplete', false);
         return this.valid;
@@ -201,32 +209,30 @@ export default {
   watch: {
     bidLines: {
       handler(newValue, oldValue) {
-        console.log('inii',this.isInitialized);
+        // eslint-disable-next-line no-unused-expressions
         this.validate;
         if (this.isInitialized) {
-          this.$store.commit('setIsEditBidChanges',false);
+          this.$store.commit('setIsEditBidChanges', false);
           this.isInitialized = false;
-        }else{
-          this.$store.commit('setIsEditBidChanges',true);
+        } else {
+          this.$store.commit('setIsEditBidChanges', true);
         }
-
       },
       deep: true,
     },
     validate: function() {
-      
     },
   },
   methods: {
     ...mapActions(['updateDraftBid','updateTemplate','updateBid']),
     changeTab() {
-      if(this.$route.name == 'EditBid'){
-        if(this.isEditBidChanges == true){
+      if (this.$route.name === 'EditBid') {
+        if (this.isEditBidChanges === true) {
           this.updateBid({ bidlines: this.bidLines });
         }
-      }else if(this.$route.name == 'EditTemplate'){
+      } else if (this.$route.name === 'EditTemplate') {
         this.updateTemplate({ bidlines: this.bidLines });
-      }else{
+      } else {
         this.updateDraftBid({ bidlines: this.bidLines });
       }
       this.$emit('changetab', 'tab-5');
@@ -252,6 +258,7 @@ export default {
       console.log(`Future index: ${e.draggedContext.futureIndex}`);
     },
     isLetterOrNumber(e) {
+      console.log('e', e);
       const char = String.fromCharCode(e.keyCode);
       if (/^[0-9]+$/.test(char)) return true;
       e.preventDefault();
@@ -289,6 +296,21 @@ export default {
           const ws = wb.Sheets[wsname];
           const data = XLSX.utils.sheet_to_json(ws, { header: 0,skipHeader:true });
           for (let i = 0; i < data.length; i++) {
+            let quantityValue = 0;
+            let error = '';
+            if (/^[0-9]+$/.test(data[i].Quantity)) {
+              quantityValue = data[i].Quantity;
+            } else {
+              const string = String(data[i].Quantity);
+              const formatQuantity = string.replace(/[^0-9]/g, '');
+              console.log('hyy', formatQuantity);
+              if (formatQuantity === '') {
+                error = 'please enter valid quantity';
+              } else {
+                error = '';
+              }
+              quantityValue = formatQuantity;
+            }
             this.bidLines.push({
               id: uuidv4(),
               type: 'USD',
@@ -296,8 +318,9 @@ export default {
               units: ['Gallon', 'Liter'],
               description: data[i].Description,
               unit: data[i].Unit,
-              quantity: data[i].Quantity,
+              quantity: quantityValue,
               buyerComment: data[i].BuyerComment,
+              error,
               switch1: '',
               required: ((data[i].Required == 'Yes') ? true : false),
             });
@@ -305,48 +328,92 @@ export default {
         }
 
         reader.readAsBinaryString(this.file);
-        this.$store.commit('setIsEditBidChanges',true);
+        this.$store.commit('setIsEditBidChanges', true);
+      }
+      event.target.value = '';
+    },
+    NumbersOnly(evt) {
+      evt = (evt) || window.event;
+      const charCode = (evt.which) ? evt.which : evt.keyCode;
+      if ((charCode > 31 && (charCode < 48 || charCode > 57)) && charCode !== 46) {
+        evt.preventDefault();
+      } else {
+        return true;
       }
     },
-    savedraftOnInterval(){
+    removeNonNumeric(num) {
+      num = num.replace(/[^0-9]/g, '');
+      return num;
+    },
+    onPaste(event) {
+      // eslint-disable-next-line no-undef
+      let num = event.clipboardData.getData('Text');
+      let nmbrs = num.replace(/[^0-9]/g, '');
+      if (!nmbrs) {
+        event.preventDefault();
+      } else {
+        return true;
+      }
+    },
+    validateNumber(event, index) {
+      if (!isNaN(event)) {
+        this.bidLines[index].quantity = this.removeNonNumeric(event);
+      }
+    },
+    formatNumber(index) {
+      if (this.bidLines[index].quantity) {
+        let formatValue = parseInt(this.removeNonNumeric(this.bidLines[index].quantity), 10);
+        this.bidLines[index].quantity = formatValue;
+      } else {
+        this.bidLines[index].quantity = '';
+      }
+    },
+    removeExtra(index) {
+      if (this.bidLines[index].quantity) {
+        let formatValue = parseInt(this.removeNonNumeric(this.bidLines[index].quantity), 10);
+        this.bidLines[index].quantity = formatValue;
+      } else {
+        this.bidLines[index].quantity = '';
+      }
+    },
+    savedraftOnInterval() {
       const timer = setInterval(() => {
-        if(this.bidLinesStatus == true){
-          if(this.$route.name == 'EditBid'){
-            if(this.isEditBidChanges == true){
+        if (this.bidLinesStatus === true) {
+          if (this.$route.name === 'EditBid') {
+            if (this.isEditBidChanges === true) {
               this.updateBid({ bidlines: this.bidLines });
             }
-          }else if(this.$route.name == 'EditTemplate'){
+          } else if (this.$route.name === 'EditTemplate') {
             this.updateTemplate({ bidlines: this.bidLines });
-          }else{
+          } else {
             this.updateDraftBid({ bidlines: this.bidLines });
           }
           this.bidLinesStatus = false;
         }
       }, 60000);
 
-      this.$once("hook:beforeDestroy", () => {
+      this.$once('hook:beforeDestroy', () => {
         clearInterval(timer);
       });
     },
   },
-  mounted(){
-    if(this.$store.getters.bidData.lineItems != ""){
+  mounted() {
+    if (this.$store.getters.bidData.lineItems !== '') {
       this.bidLines = this.$store.getters.bidData.lineItems;
       this.bidLines = JSON.parse(JSON.stringify(this.bidLines.map((item, index) => {
-      if(item.required == "true"){
-        item.required = true;
-      }else{
-        item.required = false;
-      }
-      return item;
+        if (item.required === 'true') {
+          item.required = true;
+        } else {
+          item.required = false;
+        }
+        return item;
       })));
-      
       this.$emit('validation', { valid: true, items: '4' });
       this.$store.commit('setLineItemsComplete', true);
       this.$store.commit('setBidlines',this.bidLines);
       this.isInitialized = true;
     }
     this.savedraftOnInterval();
-  }
+  },
 };
 </script>
