@@ -134,6 +134,8 @@ export default {
         commit('setBidViewData', res.data);
         commit('setViewBidError', false);
         commit('setUserType', res.data.user_type);
+        console.log('bid Data',res.data.bidData);
+        commit('setTeamMembersForBid', []);
         if (res.data.user_type === 'buyer') {
           await dispatch('getSalesReps', { query: '', basin: 'all' });
           await dispatch('getCategories');
