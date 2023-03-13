@@ -44,7 +44,7 @@
                   v-if="template.companyId == userDatas.company.id">
                   <td class="text-left pl-6">{{ template.title }}</td>
                   <td class="text-left">{{ template.type }}</td>
-                  <td class="text-left">{{ formatDate(template.createdAt) }}</td>
+                  <td class="text-left">{{ formatDate(template.createdAt._seconds, template.createdAt._nanoseconds) }}</td>
                   <td class="text-left">{{ template.userName ? template.userName : 'No name' }}</td>
                   <td class="text-left">
                     <div class="">
@@ -141,8 +141,10 @@ export default {
   },
   methods: {
     ...mapActions(['getBidTemplates', 'deleteTemplate', 'updateTemplateNote', 'getEditTemplate']),
-    formatDate(dueDate) {
-      return dueDate !== '' && dueDate !== null ? moment.tz(dueDate, 'America/Chicago').format('MM/DD/YYYY') : '';
+    formatDate(item, item2) {
+      const date = moment(item * 1000 + item2 / 1000000).tz('America/Chicago').format('MM/DD/YYYY');
+
+      return date;
     },
     openConfirm(id, index) {
       this.dialog = true;
