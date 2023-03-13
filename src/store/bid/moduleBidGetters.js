@@ -145,5 +145,8 @@ export default {
   },
   teamMembersInitial(state) {
     return state.teamMembersInitial
+  },
+  bidSubmissionValidationAlert(state) {
+    return state.bidSubmissionValidationAlert
   }
 };

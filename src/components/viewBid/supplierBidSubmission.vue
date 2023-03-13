@@ -176,12 +176,12 @@
 
                   <label :for="`uploadFileQ${index}`" v-else
                     class="
-                                                                                                                                                                upload-file
-                                                                                                                                                               pa-4
-                                                                                                                                                                d-block
-                                                                                                                                                                font-weight-medium
-                                                                                                                                                                text-center
-                                                                                                                                                              ">
+                                                                                                                                            upload-file
+                                                                                                                                           pa-4
+                                                                                                                                            d-block
+                                                                                                                                            font-weight-medium
+                                                                                                                                            text-center
+                                                                                                                                          ">
                     <v-file-input :id="`uploadFileQ${index}`" @change="handleDocumentForAnswer($event, index)"
                       :disabled="!bidDetail.receivingBids" :rules="item.required === 'true' ? fileRule : []" />
 
@@ -540,6 +540,8 @@ export default {
 
         this.loading = false;
       }
+
+      window.scrollTo({ top: 0, behavior: 'smooth' });
     },
     handleDocumentForAnswer(event, index) {
       this.answers[index].answer = event;

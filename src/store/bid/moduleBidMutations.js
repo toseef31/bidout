@@ -303,4 +303,10 @@ export default {
   pushTeamMembersInitial(state, member) {
     state.teamMembersInitial.push(member);
   },
+  setBidSubmissionValidationAlert(state,payload) {
+    state.bidSubmissionValidationAlert = payload
+    setTimeout(() => {
+      state.bidSubmissionValidationAlert = null;
+    }, 8000);
+  }
 };

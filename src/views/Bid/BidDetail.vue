@@ -65,7 +65,11 @@
         You have been Un-disqualified a company successfully!
       </v-alert>
       <v-alert type="error" v-show="getLoweringPriceAlert !== null" class="mx-5 mt-5">
-      {{ getLoweringPriceAlert }}
+        {{ getLoweringPriceAlert }}
+      </v-alert>
+
+      <v-alert type="error" v-show="getBidSubmissionValidationAlert !== null" class="mx-5 mt-5">
+        {{ getBidSubmissionValidationAlert }}
       </v-alert>
 
       <v-row class="px-5 my-5 row-title" no-gutters v-if="getUserType === 'buyer'">
@@ -696,6 +700,9 @@ export default {
     },
     getTeamMemberAddAlert() {
       return this.$store.getters.teamMemberAddAlert;
+    },
+    getBidSubmissionValidationAlert() {
+      return this.$store.getters.bidSubmissionValidationAlert;
     },
   },
   mounted() {
