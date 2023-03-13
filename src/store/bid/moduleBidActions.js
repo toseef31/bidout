@@ -448,7 +448,7 @@ export default {
       }
 
       if (err.response && err.response.status === 400 && err.response.data.message === 'Please add a valid price for all items') {
-        commit('setBidSubmissionValidationAlert','Please add a valid price for all line items')
+        commit('setBidSubmissionValidationAlert','Please add a valid price or click the "X" button that you are no-biding for each line item')
       }
       if (state.apiCounter === 2) {
         dispatch('apiSignOutAction');
