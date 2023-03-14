@@ -44,26 +44,27 @@
                   v-if="template.companyId == userDatas.company.id">
                   <td class="text-left pl-6">{{ template.title }}</td>
                   <td class="text-left">{{ template.type }}</td>
-                  <td class="text-left">{{ formatDate(template.createdAt._seconds, template.createdAt._nanoseconds) }}</td>
+                  <td class="text-left">{{ formatDate(template.createdAt._seconds, template.createdAt._nanoseconds) }}
+                  </td>
                   <td class="text-left">{{ template.userName ? template.userName : 'No name' }}</td>
                   <td class="text-left">
-                    <div class="">
-                      <div v-if="edit === index && isEdit" class="d-flex edit-comment align-center">
-                        <v-text-field outlined height="30px" width="150px" hide-details
-                          v-model="bidTemplates[index]['note']"></v-text-field>
-                        <v-btn icon><v-icon color="#0D9648" @click="saveNote(template, index)">
-                            mdi-content-save
-                          </v-icon></v-btn>
 
-                      </div>
-                      <div v-else class="d-flex justify-space-between">
-                        {{ template.note }}
-                        <img :src="require('@/assets/images/bids/chatdots.png')" class="mr-3" width="24px" height="24px"
-                          @click="openNote(index)" />
-                      </div>
+                    <div v-if="edit === index && isEdit" class="d-flex edit-comment align-center">
+                      <v-text-field outlined height="30px" width="150px" hide-details
+                        v-model="bidTemplates[index]['note']"></v-text-field>
+                      <v-btn icon><v-icon color="#0D9648" @click="saveNote(template, index)">
+                          mdi-content-save
+                        </v-icon></v-btn>
+
+                    </div>
+                    <div v-else class="d-flex justify-space-between">
+                      {{ template.note }}
 
                     </div>
                   </td>
+
+                  <td> <img v-if="!isEdit || edit !== index" :src="require('@/assets/images/bids/chatdots.png')"
+                      class="mr-3" width="24px" height="24px" @click="openNote(index)" /></td>
                   <td class="text-left pr-6">
                     <v-icon color="#0D9648" class="mr-4" @click="editDraft(template.id)">mdi-pencil-outline</v-icon>
                     <v-icon color="#F32349" @click="openConfirm(template.id, index)">mdi-trash-can-outline</v-icon>
