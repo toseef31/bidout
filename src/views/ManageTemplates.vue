@@ -57,7 +57,7 @@
                         </v-icon></v-btn>
 
                     </div>
-                    <div v-else class="d-flex justify-space-between">
+                    <div v-else class="d-flex justify-space-between text-truncate" style="width: 400px;">
                       {{ template.note }}
 
                     </div>
