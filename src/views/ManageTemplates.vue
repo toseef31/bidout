@@ -63,9 +63,9 @@
                     </div>
                   </td>
 
-                  <td> <img v-if="!isEdit || edit !== index" :src="require('@/assets/images/bids/chatdots.png')"
-                      class="mr-3" width="24px" height="24px" @click="openNote(index)" /></td>
                   <td class="text-left pr-6">
+                    <v-icon v-if="!isEdit || edit !== index" class="mr-4" color="#0D9648"
+                      @click="openNote(index)">mdi-message-processing-outline </v-icon>
                     <v-icon color="#0D9648" class="mr-4" @click="editDraft(template.id)">mdi-pencil-outline</v-icon>
                     <v-icon color="#F32349" @click="openConfirm(template.id, index)">mdi-trash-can-outline</v-icon>
                   </td>
