@@ -58,7 +58,7 @@ export default {
             commit('setLoginLoading', false);
           });
       }, (err) => {
-        commit('setPassError', 'Oops! You have entered a incorrect password, try again, if you are still unsure of your password, please Reset Password');
+        commit('setPassError', 'Oops! You have entered an incorrect email or password, Please try again, if you are still unsure of your password, please Reset Password');
         commit('setLoginLoading', false);
         // commit('showErrorAlert')
       });
