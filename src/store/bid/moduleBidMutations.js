@@ -5,7 +5,7 @@ export default {
   setSalesReps(state, payload) {
     state.salesRepsList = payload.sort((a, b) => {
       const aHasOfsPremium = a.contracts.some(
-        (contract) => contract === "ofs-premium"
+        (contract) => contract === 'ofs-premium'
       );
       if (aHasOfsPremium) {
         return -1;
@@ -16,7 +16,7 @@ export default {
   setCompaniesList(state, payload) {
     state.companiesList = payload.sort((a, b) => {
       const aHasOfsPremium = a.contracts.some(
-        (contract) => contract.contractType === "ofs-premium"
+        (contract) => contract.contractType === 'ofs-premium'
       );
       if (aHasOfsPremium) {
         return -1;
@@ -27,7 +27,7 @@ export default {
   setServiceCompanies(state, payload) {
     state.serviceCompaniesList = payload.sort((a, b) => {
       const aHasOfsPremium = a.contracts.some(
-        (contract) => contract.contractType === "ofs-premium"
+        (contract) => contract.contractType === 'ofs-premium'
       );
       if (aHasOfsPremium) {
         return -1;
@@ -272,7 +272,7 @@ export default {
     }, 8000);
   },
   setTeamMembersForBid(state, payload) {
-    state.teamMembersForBid.push(...payload);
+    state.teamMembersForBid = payload;
   },
   pushTeamMembersForBid(state, member) {
     state.teamMembersForBid.push(member);
