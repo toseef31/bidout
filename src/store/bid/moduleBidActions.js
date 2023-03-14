@@ -134,7 +134,6 @@ export default {
         commit('setBidViewData', res.data);
         commit('setViewBidError', false);
         commit('setUserType', res.data.user_type);
-        console.log('bid Data',res.data.bidData);
         commit('setTeamMembersForBid', []);
         if (res.data.user_type === 'buyer') {
           await dispatch('getSalesReps', { query: '', basin: 'all' });
@@ -146,7 +145,9 @@ export default {
           commit('setInvitedSuppliersData', res.data.bidData.invitedSuppliers);
 
           commit('setInvitedNewSuppliers', res.data.bidData.invitedNewSuppliers);
-          commit('setTeamMembersForBid', res.data.bidData.invitedTeamMembers);
+
+          
+          commit('setTeamMembersForBid',Array.isArray (res.data.bidData.invitedTeamMembers) ? res.data.bidData.invitedTeamMembers : []);
         }
 
         if (res.data.user_type === 'supplier' && res.data.supplierSubmissions) {
