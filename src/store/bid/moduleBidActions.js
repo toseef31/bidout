@@ -134,7 +134,6 @@ export default {
         commit('setBidViewData', res.data);
         commit('setViewBidError', false);
         commit('setUserType', res.data.user_type);
-        console.log('bid Data',res.data.bidData);
         commit('setTeamMembersForBid', []);
         if (res.data.user_type === 'buyer') {
           await dispatch('getSalesReps', { query: '', basin: 'all' });
@@ -306,7 +305,7 @@ export default {
         dispatch('getBidBySerial', {
           id: payload.userId,
           serial: payload.serial,
-          company: payload.company
+          company: payload.company,
         });
         commit('setAwardAlert');
       }
@@ -332,7 +331,7 @@ export default {
         dispatch('getBidBySerial', {
           id: payload.userId,
           serial: payload.serial,
-          company: payload.company
+          company: payload.company,
         });
         commit('setDisqualifyAlert');
       }
@@ -358,7 +357,7 @@ export default {
         dispatch('getBidBySerial', {
           id: payload.userId,
           serial: payload.serial,
-          company: payload.company
+          company: payload.company,
         });
         commit('setUnAwardAlert');
       }
@@ -383,7 +382,7 @@ export default {
         dispatch('getBidBySerial', {
           id: payload.userId,
           serial: payload.serial,
-          company: payload.company
+          company: payload.company,
         });
         commit('setUnDisqualifyAlert');
       }
@@ -446,11 +445,11 @@ export default {
       }
     } catch (err) {
       if (err.response && err.response.status === 400 && err.response.data.message === 'Please add a price for all required items') {
-        commit('setBidSubmissionValidationAlert','Please add a price for all required line items')
+        commit('setBidSubmissionValidationAlert', 'Please add a price for all required line items');
       }
 
       if (err.response && err.response.status === 400 && err.response.data.message === 'Please add a valid price for all items') {
-        commit('setBidSubmissionValidationAlert','Please add a valid price or click the "X" button that you are no-biding for each line item')
+        commit('setBidSubmissionValidationAlert', 'Please add a valid price or click the "X" button that you are no-biding for each line item');
       }
       if (state.apiCounter === 2) {
         dispatch('apiSignOutAction');
@@ -519,11 +518,11 @@ export default {
       }
     } catch (err) {
       if (err.response && err.response.status === 400 && err.response.data.message === 'Please add a price for all required items') {
-        commit('setBidSubmissionValidationAlert','Please add a price for all required line items')
+        commit('setBidSubmissionValidationAlert', 'Please add a price for all required line items');
       }
 
       if (err.response && err.response.status === 400 && err.response.data.message === 'Please add a valid price for all items') {
-        commit('setBidSubmissionValidationAlert','Please add a valid price or click the "X" button that you are no-biding for each line item')
+        commit('setBidSubmissionValidationAlert', 'Please add a valid price or click the "X" button that you are no-biding for each line item')
       }
       if (state.apiCounter === 2) {
         dispatch('apiSignOutAction');
@@ -913,7 +912,12 @@ export default {
 
       if (res.status === 200) {
         commit('setLoadingInvite', false);
-        const userData = res.data;
+        let userData = '';
+        if (res.data.message) {
+          userData = res.data.user;
+        } else {
+          userData = res.data;
+        }
         return userData;
       }
     } catch (err) {
@@ -1720,7 +1724,7 @@ export default {
         await dispatch('getBidBySerial', {
           serial: payload.serial,
           id: payload.userId,
-          company: payload.company
+          company: payload.company,
         });
 
         commit('setSupplierAddAlert');
