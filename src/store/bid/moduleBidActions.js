@@ -144,6 +144,8 @@ export default {
           commit('setInvitedSuppliersData', res.data.bidData.invitedSuppliers);
 
           commit('setInvitedNewSuppliers', res.data.bidData.invitedNewSuppliers);
+
+          commit('setTeamMembersForBid', res.data.bidData.invitedTeamMembers);
         }
 
         if (res.data.user_type === 'supplier' && res.data.supplierSubmissions) {

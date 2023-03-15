@@ -354,8 +354,6 @@ export default {
   },
   methods: {
     openTeam() {
-      this.$store.commit('setTeamMembersForBid', this.bidDetail.bidData.invitedTeamMembers);
-
       this.toggleTeam = true;
     },
     size(size) {
