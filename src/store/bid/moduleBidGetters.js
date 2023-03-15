@@ -142,12 +142,12 @@ export default {
     return state.invitedTeamMembers;
   },
   teamMembersForBid(state) {
-    return state.teamMembersForBid
+    return state.teamMembersForBid;
   },
   teamMembersInitial(state) {
-    return state.teamMembersInitial
+    return state.teamMembersInitial;
   },
   bidSubmissionValidationAlert(state) {
-    return state.bidSubmissionValidationAlert
-  }
+    return state.bidSubmissionValidationAlert;
+  },
 };

@@ -5,7 +5,7 @@ export default {
   setSalesReps(state, payload) {
     state.salesRepsList = payload.sort((a, b) => {
       const aHasOfsPremium = a.contracts.some(
-        (contract) => contract === 'ofs-premium'
+        (contract) => contract === "ofs-premium"
       );
       if (aHasOfsPremium) {
         return -1;
@@ -16,7 +16,7 @@ export default {
   setCompaniesList(state, payload) {
     state.companiesList = payload.sort((a, b) => {
       const aHasOfsPremium = a.contracts.some(
-        (contract) => contract.contractType === 'ofs-premium'
+        (contract) => contract.contractType === "ofs-premium"
       );
       if (aHasOfsPremium) {
         return -1;
@@ -27,7 +27,7 @@ export default {
   setServiceCompanies(state, payload) {
     state.serviceCompaniesList = payload.sort((a, b) => {
       const aHasOfsPremium = a.contracts.some(
-        (contract) => contract.contractType === 'ofs-premium'
+        (contract) => contract.contractType === "ofs-premium"
       );
       if (aHasOfsPremium) {
         return -1;
@@ -214,7 +214,7 @@ export default {
       state.bidSubmissionAlert.unDisqualify = false;
     }, 8000);
   },
-  setLoweringPriceAlert(state,payload) {
+  setLoweringPriceAlert(state, payload) {
     state.loweringPriceAlert = payload;
     setTimeout(() => {
       state.loweringPriceAlert = null;
@@ -272,7 +272,8 @@ export default {
     }, 8000);
   },
   setTeamMembersForBid(state, payload) {
-    state.teamMembersForBid = payload;
+    state.teamMembersForBid = [];
+    Array.isArray(payload) ? state.teamMembersForBid.push(...payload) : [];
   },
   pushTeamMembersForBid(state, member) {
     state.teamMembersForBid.push(member);
@@ -303,10 +304,10 @@ export default {
   pushTeamMembersInitial(state, member) {
     state.teamMembersInitial.push(member);
   },
-  setBidSubmissionValidationAlert(state,payload) {
-    state.bidSubmissionValidationAlert = payload
+  setBidSubmissionValidationAlert(state, payload) {
+    state.bidSubmissionValidationAlert = payload;
     setTimeout(() => {
       state.bidSubmissionValidationAlert = null;
     }, 8000);
-  }
+  },
 };

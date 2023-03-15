@@ -167,7 +167,7 @@
 
           <v-btn icon @click="toggleSupplier = false">
             <v-icon size="30" color="#F32349
-                                                                      ">mdi-close</v-icon>
+                                                                              ">mdi-close</v-icon>
           </v-btn>
         </div>
         <AddSupplier />
@@ -196,8 +196,7 @@
         </div>
 
         <div v-if="
-          bidDetail.bidData &&
-          bidDetail.bidData.invitedTeamMembers &&
+          bidDetail.bidData && bidDetail.bidData.invitedTeamMembers &&
           bidDetail.bidData.invitedTeamMembers.length > 0
         " v-for="(item, index) in bidDetail.bidData.invitedTeamMembers" :key="index"
           class="d-flex align-center flex-child">
@@ -222,7 +221,7 @@
 
           <v-btn icon @click="toggleTeam = false">
             <v-icon size="30" color="#F32349
-                                                                      ">mdi-close</v-icon>
+                                                                              ">mdi-close</v-icon>
           </v-btn>
         </div>
         <AddTeamMember />
@@ -355,6 +354,8 @@ export default {
   },
   methods: {
     openTeam() {
+      this.$store.commit('setTeamMembersForBid', this.bidDetail.bidData.invitedTeamMembers);
+
       this.toggleTeam = true;
     },
     size(size) {
