@@ -48,7 +48,10 @@
                   <td class="text-left">{{ formatDate(template.createdAt._seconds, template.createdAt._nanoseconds) }}
                   </td>
                   <td class="text-left">{{ template.userName ? template.userName : 'No name' }}</td>
-                  <td class="text-left">{{ template.note ? template.note : 'Note not added yet.' }}</td>
+                  <td class="text-left">
+                    <div class="text-truncate" style="width: 400px;">{{ template.note ? template.note : 'Note not added
+                    yet.' }}</div>
+                  </td>
                   <td class="text-left pr-6">
 
                     <v-btn color="#0D9648" elevation="0" class="white--text text-capitalize"
