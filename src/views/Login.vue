@@ -84,7 +84,7 @@ export default {
       password: '',
       passwordRules: [
         v => !!v || 'Password is required',
-        v => (v && v.length >= 6) || 'Password must be more than 6 characters',
+        v => (v && v.length >= 6) || 'Password must be at least 6 characters',
       ],
       showPass: false,
       xhrRequest: false,
