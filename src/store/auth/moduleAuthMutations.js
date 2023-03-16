@@ -17,7 +17,7 @@ export default {
     state.error = payload;
     setTimeout(() => {
       state.error = null;
-    }, 5000);
+    }, 7000);
   },
   setPassError(state, payload) {
     state.passError = payload;
@@ -31,7 +31,7 @@ export default {
       state.alerts.showErrorAlert = false;
       state.companyError = null;
       state.error = null;
-    }, 5000);
+    }, 7000);
   },
   showSuccessAlert(state) {
     state.alerts.showSuccessAlert = true;
