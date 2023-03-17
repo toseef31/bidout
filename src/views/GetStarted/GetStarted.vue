@@ -63,12 +63,12 @@
                         <v-col cols="12" sm="6" text="left" class="pb-0">
                           <label class="d-block text-left input-label mb-2 font-weight-bold">Company HQ Country</label>
                           <!-- <v-select :items="countries" outlined v-model="companyHqCountry" placeholder="Select"></v-select> -->
-                          <country-select v-model="country" :country="country" topCountry="US" className="countrySelect" placeholder="Select Country" />
+                          <country-select v-model="country" :country="country" topCountry="US" className="countrySelect" :disablePlaceholder="true" placeholder="Select Country" />
                         </v-col>
                         <v-col cols="12" sm="6" text="left">
                           <label class="d-block text-left input-label mb-2 font-weight-bold">Company HQ State</label>
                           <!-- <v-select outlined placeholder="Select" v-model="companyHqState"></v-select> -->
-                          <region-select v-model="region" :country="country" :region="region" className="countrySelect" />
+                          <region-select v-model="region" :country="country" :region="region" :disablePlaceholder="true" className="countrySelect" />
                         </v-col>
                         <v-col cols="12" sm="6" text="left">
                           <label class="d-block text-left input-label mb-2 font-weight-bold">Company HQ City</label>
@@ -191,12 +191,12 @@
                         <v-col cols="12" sm="6" text="left">
                           <label class="d-block text-left input-label mb-2 font-weight-bold">Company HQ Country</label>
                           <!-- <v-select :items="countries" outlined v-model="companyHqCountry" placeholder="Select"></v-select> -->
-                          <country-select v-model="country" :country="country" topCountry="US" className="countrySelect" placeholder="Select Country" />
+                          <country-select v-model="country" :country="country" topCountry="US" className="countrySelect" :disablePlaceholder="true" placeholder="Select Country" />
                         </v-col>
                         <v-col cols="12" sm="6" text="left">
                           <label class="d-block text-left input-label mb-2 font-weight-bold">Company HQ State</label>
                           <!-- <v-select outlined placeholder="Select" v-model="companyHqState"></v-select> -->
-                          <region-select v-model="region" :country="country" :region="region" className="countrySelect" />
+                          <region-select v-model="region" :country="country" :region="region" :disablePlaceholder="true" className="countrySelect" />
                         </v-col>
                         <v-col cols="12" sm="6" text="left" class="pb-0">
                           <label class="d-block text-left input-label mb-2 font-weight-bold">Company HQ City</label>
