@@ -46,7 +46,7 @@
                                 <v-img v-else :src="`/images/companies/no-image.jpg`" height="auto"></v-img>
                               </v-list-item-avatar>
                               <v-list-item-content>
-                                <v-list-item-title class="text-left">{{company.company}} 
+                                <div class="text-left">{{company.company}} 
                                   <span v-if="hasOfsPremium(company)">
                                     <v-tooltip top>
                                       <template v-slot:activator="{ on, attrs }">
@@ -59,7 +59,7 @@
                                       <span>Premium Service Provider</span>
                                     </v-tooltip> 
                                   </span>
-                                </v-list-item-title>
+                                </div>
                               </v-list-item-content>
                               <v-list-item-action>
                                 <v-list-item-action-text class="font-weight-bold" ><router-link :to="company.slug ? '/company/'+company.slug: '' ">View Profile</router-link></v-list-item-action-text>

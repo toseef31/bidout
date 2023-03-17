@@ -60,8 +60,10 @@
                           </thead>
                           <tbody>
                             <tr v-for="company in allcompanies" :key="company.id">
-                              <td class="pl-4 text-truncate" style="width: 300px">
-                                <router-link class="text-decoration-none" :to="company.slug ? '/company/'+company.slug: '' ">{{ company.company }}
+                              <td class="pl-4" style="width: 300px">
+                                <router-link class="text-decoration-none d-flex" :to="company.slug ? '/company/'+company.slug: '' ">
+                                <div class="text-truncate pr-1"> {{ company.company }}</div>
+                               
                                   <span v-if="hasOfsPremium(company)">
                                     <v-tooltip top>
                                       <template v-slot:activator="{ on, attrs }">
