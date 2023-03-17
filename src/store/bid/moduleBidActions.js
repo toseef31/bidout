@@ -1538,7 +1538,7 @@ export default {
       }
     }
 
-    if (state.invitedSuppliers !== '') {
+    if (state.invitedSuppliers !== '' && state.invitedSuppliers && state.invitedSuppliers.length > 0) {
       for (let i = 0; i < state.invitedSuppliers.length; i++) {
         if (state.invitedSuppliers[i].id) {
           formData.append(`invitedSuppliers[${i}]`, state.invitedSuppliers[i].id);
@@ -1549,7 +1549,7 @@ export default {
         }
       }
     } else {
-      formData.append('invitedSuppliers', '');
+      formData.append('invitedSuppliers', []);
     }
     if (state.invitedNewSuppliers != null) {
       for (let i = 0; i < state.invitedNewSuppliers.length; i++) {
