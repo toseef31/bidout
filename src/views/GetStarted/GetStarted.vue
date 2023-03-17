@@ -399,9 +399,11 @@ export default {
       email: '',
       buyerEmailRule: [
         v => !!v || 'Email is required',
+        v => /^\w+([.+_-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,3})+$/.test(v) || 'E-mail must be valid',
       ],
       supplierEmailRule: [
         v => !!v || 'Email is required',
+        v => /^\w+([.+_-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,3})+$/.test(v) || 'E-mail must be valid',
       ],
       company: '',
       companyRule: [
