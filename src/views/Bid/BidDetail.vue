@@ -59,10 +59,10 @@
         You have disqualified a company successfully!
       </v-alert>
       <v-alert type="success" v-show="showBidSubmissionAlert.unAward" class="mx-5 mt-5">
-        You have Un-awarded a company successfully!
+        You have un-awarded a company successfully!
       </v-alert>
       <v-alert type="success" v-show="showBidSubmissionAlert.unDisqualify" class="mx-5 mt-5">
-        You have Un-disqualified a company successfully!
+        You have un-disqualified a company successfully!
       </v-alert>
       <v-alert type="error" v-show="getLoweringPriceAlert !== null" class="mx-5 mt-5">
         {{ getLoweringPriceAlert }}
