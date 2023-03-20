@@ -198,7 +198,7 @@
 									</div>
 									<div class="company-title text-left pl-4">
 										<h4>{{ company.company }}
-											<span v-if="hasOfsPremiumReps(company)">
+											<span v-if="hasOfsPremium(company)">
 												<v-tooltip top>
 													<template v-slot:activator="{ on, attrs }">
 														<v-icon color="#0D9647" size="16px" v-bind="attrs"
@@ -676,6 +676,7 @@ export default {
       });
     },
     hasOfsPremium(supplier) {
+		console.log(supplier)
       return supplier.contracts.some((contract) => contract.contractType === 'ofs-premium');
     },
     hasOfsPremiumReps(supplier) {
