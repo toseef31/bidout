@@ -11,8 +11,8 @@
 							</v-list-item-content>
 						</template>
 
-						<v-list-item class="ml-3" v-for="subcategry in subCategories(category.subCategories)" :key="subcategry.name"
-							@click="getByCategory(subcategry.slug)">
+						<v-list-item class="ml-3" v-for="subcategry in subCategories(category.subCategories)"
+							:key="subcategry.name" @click="getByCategory(subcategry.slug)">
 							<v-list-item-content>
 								<v-list-item-title v-text="subcategry.name" class="text-left"></v-list-item-title>
 							</v-list-item-content>
@@ -27,9 +27,11 @@
 					</div>
 					<div>
 						<v-tabs class="supplier-tabs" hide-slider v-model="availableSuppl">
-							<v-tab class="text-capitalize font-weight-bold" href="#companyName" @click="hideCategories">Company
+							<v-tab class="text-capitalize font-weight-bold" href="#companyName"
+								@click="hideCategories">Company
 								Name</v-tab>
-							<v-tab class="text-capitalize font-weight-bold" href="#salesRep" @click="hideCategories">Sales Rep</v-tab>
+							<v-tab class="text-capitalize font-weight-bold" href="#salesRep" @click="hideCategories">Sales
+								Rep</v-tab>
 							<v-tab class="text-capitalize font-weight-bold" href="#serviceCategory"
 								@click="categories = !categories">Service Category</v-tab>
 						</v-tabs>
@@ -40,8 +42,8 @@
 						<div class="available-search d-flex justify-space-between align-center mt-5 px-4">
 							<div>
 								<input type="hidden" name="" :value="validat">
-								<v-text-field type="text" hide-details outlined placeholder="Search" prepend-inner-icon="mdi-magnify"
-									v-model="companySearch" @keyup="getCompanies">
+								<v-text-field type="text" hide-details outlined placeholder="Search"
+									prepend-inner-icon="mdi-magnify" v-model="companySearch" @keyup="getCompanies">
 								</v-text-field>
 							</div>
 							<div class="d-flex align-center">
@@ -66,7 +68,8 @@
 											<span v-if="hasOfsPremium(company)">
 												<v-tooltip top>
 													<template v-slot:activator="{ on, attrs }">
-														<v-icon color="#0D9647" size="16px" v-bind="attrs" v-on="on">mdi-check-decagram</v-icon>
+														<v-icon color="#0D9647" size="16px" v-bind="attrs"
+															v-on="on">mdi-check-decagram</v-icon>
 													</template>
 													<span>Premium Service Provider</span>
 												</v-tooltip>
@@ -77,8 +80,9 @@
 									</div>
 								</div>
 								<div class="add-company">
-									<v-btn color="rgba(13, 150, 72, 0.1)" tile min-width="32px" height="32" class="pa-0" elevation="0"
-										@click="addCompany(company, index)"> <v-icon color="#0D9648">mdi-plus</v-icon></v-btn>
+									<v-btn color="rgba(13, 150, 72, 0.1)" tile min-width="32px" height="32" class="pa-0"
+										elevation="0" @click="addCompany(company, index)"> <v-icon
+											color="#0D9648">mdi-plus</v-icon></v-btn>
 								</div>
 							</div>
 						</div>
@@ -86,14 +90,15 @@
 					<v-tab-item value="salesRep">
 						<div class="available-search d-flex justify-space-between align-center mt-5 px-4">
 							<div>
-								<v-text-field type="text" hide-details outlined placeholder="Search" prepend-inner-icon="mdi-magnify"
-									v-model="searchCompany" @keyup="getSales">
+								<v-text-field type="text" hide-details outlined placeholder="Search"
+									prepend-inner-icon="mdi-magnify" v-model="searchCompany" @keyup="getSales">
 								</v-text-field>
 							</div>
 							<div class="d-flex align-center">
 								<label class="input-label black--text pr-2 font-weight-bold">Basin</label>
 								<v-select rounded hide-details outlined class="available-select text-capitalize"
-									:items="availableSearch" width="150px" v-model="basinFilter" @change="getSales"></v-select>
+									:items="availableSearch" width="150px" v-model="basinFilter"
+									@change="getSales"></v-select>
 							</div>
 						</div>
 						<div class="companies-list">
@@ -110,7 +115,8 @@
 											<span v-if="hasOfsPremiumReps(list)">
 												<v-tooltip top>
 													<template v-slot:activator="{ on, attrs }">
-														<v-icon color="#0D9647" size="14px" v-bind="attrs" v-on="on">mdi-check-decagram</v-icon>
+														<v-icon color="#0D9647" size="14px" v-bind="attrs"
+															v-on="on">mdi-check-decagram</v-icon>
 													</template>
 													<span>Premium Service Provider</span>
 												</v-tooltip>
@@ -119,8 +125,9 @@
 									</div>
 								</div>
 								<div class="add-company">
-									<v-btn color="rgba(13, 150, 72, 0.1)" tile min-width="32px" height="32" class="pa-0" elevation="0"
-										@click="addReps(list, index)"> <v-icon color="#0D9648">mdi-plus</v-icon></v-btn>
+									<v-btn color="rgba(13, 150, 72, 0.1)" tile min-width="32px" height="32" class="pa-0"
+										elevation="0" @click="addReps(list, index)"> <v-icon
+											color="#0D9648">mdi-plus</v-icon></v-btn>
 								</div>
 							</div>
 						</div>
@@ -146,7 +153,8 @@
 												<span v-if="hasOfsPremium(company)">
 													<v-tooltip top>
 														<template v-slot:activator="{ on, attrs }">
-															<v-icon color="#0D9647" size="16px" v-bind="attrs" v-on="on">mdi-check-decagram</v-icon>
+															<v-icon color="#0D9647" size="16px" v-bind="attrs"
+																v-on="on">mdi-check-decagram</v-icon>
 														</template>
 														<span>Premium Service Provider</span>
 													</v-tooltip>
@@ -157,8 +165,9 @@
 										</div>
 									</div>
 									<div class="add-company">
-										<v-btn color="rgba(13, 150, 72, 0.1)" tile min-width="32px" height="32" class="pa-0" elevation="0"
-											@click="addServiceCompany(company, index)"> <v-icon color="#0D9648">mdi-plus</v-icon></v-btn>
+										<v-btn color="rgba(13, 150, 72, 0.1)" tile min-width="32px" height="32" class="pa-0"
+											elevation="0" @click="addServiceCompany(company, index)"> <v-icon
+												color="#0D9648">mdi-plus</v-icon></v-btn>
 									</div>
 								</div>
 							</div>
@@ -177,7 +186,8 @@
 					<div class="companies-list">
 
 						<template v-for="(company, index) in repsInvited">
-							<div class="d-flex align-center justify-space-between list-company pa-4" v-if="!company.companyId">
+							<div class="d-flex align-center justify-space-between list-company pa-4"
+								v-if="!company.companyId">
 								<div class="comapny-data d-flex align-center">
 									<div class="company-img">
 										<img v-if="company.image" class="image-class" :src="company.image" />
@@ -188,10 +198,11 @@
 									</div>
 									<div class="company-title text-left pl-4">
 										<h4>{{ company.company }}
-											<span v-if="hasOfsPremium(company)">
+											<span v-if="hasOfsPremiumReps(company)">
 												<v-tooltip top>
 													<template v-slot:activator="{ on, attrs }">
-														<v-icon color="#0D9647" size="16px" v-bind="attrs" v-on="on">mdi-check-decagram</v-icon>
+														<v-icon color="#0D9647" size="16px" v-bind="attrs"
+															v-on="on">mdi-check-decagram</v-icon>
 													</template>
 													<span>Premium Service Provider</span>
 												</v-tooltip>
@@ -202,11 +213,13 @@
 									</div>
 								</div>
 								<div class="add-company">
-									<v-btn color="rgba(243, 35, 73, 0.1)" tile min-width="32px" height="32" class="pa-0" elevation="0"
-										@click="removeCompany(company, index)"> <v-icon color="#F32349">mdi-minus</v-icon></v-btn>
+									<v-btn color="rgba(243, 35, 73, 0.1)" tile min-width="32px" height="32" class="pa-0"
+										elevation="0" @click="removeCompany(company, index)"> <v-icon
+											color="#F32349">mdi-minus</v-icon></v-btn>
 								</div>
 							</div>
-							<div class="d-flex align-center justify-space-between list-company pa-4" v-if="company.companyId">
+							<div class="d-flex align-center justify-space-between list-company pa-4"
+								v-if="company.companyId">
 								<div class="comapny-data d-flex align-center">
 									<div class="company-img">
 										<div class="avatar-image" v-if="!company.image">
@@ -219,10 +232,11 @@
 									<div class="company-title text-left pl-4">
 										<h4>{{ company.firstName }} {{ company.lastName }}</h4>
 										<p class="mb-0">{{ company.company }}
-											<span v-if="hasOfsPremium(company)">
+											<span v-if="hasOfsPremiumReps(company)">
 												<v-tooltip top>
 													<template v-slot:activator="{ on, attrs }">
-														<v-icon color="#0D9647" size="14px" v-bind="attrs" v-on="on">mdi-check-decagram</v-icon>
+														<v-icon color="#0D9647" size="14px" v-bind="attrs"
+															v-on="on">mdi-check-decagram</v-icon>
 													</template>
 													<span>Premium Service Provider</span>
 												</v-tooltip>
@@ -231,8 +245,9 @@
 									</div>
 								</div>
 								<div class="add-company">
-									<v-btn color="rgba(243, 35, 73, 0.1)" tile min-width="32px" height="32" class="pa-0" elevation="0"
-										@click="removeReps(company, index)"> <v-icon color="#F32349">mdi-minus</v-icon></v-btn>
+									<v-btn color="rgba(243, 35, 73, 0.1)" tile min-width="32px" height="32" class="pa-0"
+										elevation="0" @click="removeReps(company, index)"> <v-icon
+											color="#F32349">mdi-minus</v-icon></v-btn>
 								</div>
 							</div>
 						</template>
@@ -253,8 +268,9 @@
 									</div>
 								</div>
 								<div class="add-company">
-									<v-btn color="rgba(243, 35, 73, 0.1)" tile min-width="32px" height="32" class="pa-0" elevation="0"
-										@click="removeNewSup(company, index)"> <v-icon color="#F32349">mdi-minus</v-icon></v-btn>
+									<v-btn color="rgba(243, 35, 73, 0.1)" tile min-width="32px" height="32" class="pa-0"
+										elevation="0" @click="removeNewSup(company, index)"> <v-icon
+											color="#F32349">mdi-minus</v-icon></v-btn>
 								</div>
 							</div>
 						</template>
@@ -269,7 +285,8 @@
 					<template v-slot:activator="{ on, attrs }">
 
 						<v-btn color="rgba(13, 150, 72, 0.1)" elevation="0" height="56px" width="220px" large
-							class="text-capitalize font-weight-bold mt-5 mb-5 invite-btn mr-5" v-bind="attrs" v-on="on">Invite New
+							class="text-capitalize font-weight-bold mt-5 mb-5 invite-btn mr-5" v-bind="attrs"
+							v-on="on">Invite New
 							Supplier </v-btn>
 					</template>
 
@@ -281,32 +298,34 @@
 						<v-card-text>
 							<h2 class="text-left mb-6 font-weight-bold">Invite New Supplier</h2>
 							<v-form ref="form" v-model="valid" lazy-validation>
-								<label class="d-block text-left font-weight-bold mb-2">First Name<span class="required-class">*</span></label>
+								<label class="d-block text-left font-weight-bold mb-2">First Name<span
+										class="required-class">*</span></label>
 								<v-text-field v-model="firstName" :rules="nameRules" placeholder="First Name" required
 									outlined></v-text-field>
-								<label class="d-block text-left font-weight-bold mb-2">Last Name<span class="required-class">*</span></label>
+								<label class="d-block text-left font-weight-bold mb-2">Last Name<span
+										class="required-class">*</span></label>
 								<v-text-field v-model="lastName" :rules="nameRules" placeholder="Last Name" required
 									outlined></v-text-field>
-								<label class="d-block text-left font-weight-bold mb-2">Company<span class="required-class">*</span></label>
+								<label class="d-block text-left font-weight-bold mb-2">Company<span
+										class="required-class">*</span></label>
 								<v-text-field v-model="company" :rules="companyRules" placeholder="Company Name" required
 									outlined></v-text-field>
-								<label class="d-block text-left font-weight-bold mb-2">Phone Number<span class="required-class">*</span></label>
-								<VuePhoneNumberInput :border-radius="8" size="lg" 
-								error-color="#F32349"
-								valid-color="#9E9E9E"
-								v-model="phoneNumber" :translations="translations"
-								:required="true"
-									:loader="hasLoaderActive" 
+								<label class="d-block text-left font-weight-bold mb-2">Phone Number<span
+										class="required-class">*</span></label>
+								<VuePhoneNumberInput :border-radius="8" size="lg" error-color="#F32349"
+									valid-color="#9E9E9E" v-model="phoneNumber" :translations="translations"
+									:required="true" :loader="hasLoaderActive"
 									:error="!getPhoneInfo.valid && getCounter > 1" @update="onUpdate" />
-									<div 
-									class="phone-class" v-if="!getPhoneInfo.valid && getCounter > 1">{{getPhoneInfo.message}}</div>
-								<label class="d-block text-left font-weight-bold mb-2 mt-6">Email<span class="required-class">*</span></label>
+								<div class="phone-class" v-if="!getPhoneInfo.valid && getCounter > 1">
+									{{ getPhoneInfo.message }}</div>
+								<label class="d-block text-left font-weight-bold mb-2 mt-6">Email<span
+										class="required-class">*</span></label>
 								<v-text-field v-model="email" :rules="emailRules" placeholder="example@email.com" required
 									outlined></v-text-field>
 
 								<v-btn :loading="loadingInvite" :disabled="!valid || !getPhoneInfo.valid" color="#0D9648"
-									class="mr-4 text-capitalize white--text font-weight-bold" @click="validate" large height="50px"
-									min-width="220px">
+									class="mr-4 text-capitalize white--text font-weight-bold" @click="validate" large
+									height="50px" min-width="220px">
 									Send Invite
 								</v-btn>
 							</v-form>
@@ -324,7 +343,7 @@
 import VuePhoneNumberInput from 'vue-phone-number-input';
 import 'vue-phone-number-input/dist/vue-phone-number-input.css';
 import _ from 'lodash';
-import { mapActions, mapGetters,mapState } from 'vuex';
+import { mapActions, mapGetters, mapState } from 'vuex';
 
 export default {
 	components: {
@@ -382,30 +401,46 @@ export default {
 			counter: 0,
 			phoneInfo: {
 				valid: true,
-				message: ""
-			}
+				message: '',
+			},
 		};
 	},
 	computed: {
-		...mapGetters(['newSupplier', 'userInfo','loadingInvite','isEditBidChanges']),
+		...mapGetters(['newSupplier', 'userInfo', 'loadingInvite', 'isEditBidChanges']),
 		allcategories() {
 			setTimeout(() => this.loading = false, 500);
 			return _.orderBy(this.$store.getters.categories, 'orderNumber', 'asc');
 		},
 		getPhoneInfo() {
-			return this.phoneInfo
+			return this.phoneInfo;
 		},
 		salesRepsList() {
 			if (this.$route.name == 'EditBid') {
 				if (this.$store.getters.bidData.invitedSuppliers != '' && this.$store.getters.bidData.invitedSuppliers != null && this.$store.getters.bidData.invitedSuppliers != undefined) {
-					return this.$store.getters.salesRepsList ? this.$store.getters.salesRepsList.filter((el) => !this.$store.getters.bidData.invitedSuppliers.find((supplier) => supplier.id === el.companyId)) : [];
+					return this.$store.getters.salesRepsList ? this.$store.getters.salesRepsList.filter((el) => !this.$store.getters.bidData.invitedSuppliers.find((supplier) => supplier.id === el.companyId) && !this.repsInvited.find((item) => {
+                    if (item.id) return el.companyId === item.id;
+                    if (item.companyId) return el.companyId === item.companyId;
+                    return el.companyId === item.objectID;
+                })) : [];
 				}
-				return this.$store.getters.salesRepsList ? this.$store.getters.salesRepsList.filter((rep) => rep.company !== this.userInfo.company.company) : [];
+				return this.$store.getters.salesRepsList ? this.$store.getters.salesRepsList.filter((rep) => rep.company !== this.userInfo.company.company && !this.repsInvited.find((item) => {
+                if (item.id) return rep.companyId === item.id;
+                if (item.companyId) return rep.companyId === item.companyId;
+                return rep.companyId === item.objectID;
+            })) : [];
 			}
 			if (this.$store.getters.bidData.invitedSuppliers != '' || this.$store.getters.bidData.invitedSuppliers != null || this.$store.getters.bidData.invitedSuppliers != undefined) {
-				return this.$store.getters.salesRepsList ? this.$store.getters.salesRepsList.filter((el) => !this.$store.getters.bidData.invitedSuppliers.includes(el.companyId)) : [];
+				return this.$store.getters.salesRepsList ? this.$store.getters.salesRepsList.filter((el) => !this.$store.getters.bidData.invitedSuppliers.includes(el.companyId) && !this.repsInvited.find((item) => {
+                    if (item.id) return el.companyId === item.id;
+                    if (item.companyId) return el.companyId === item.companyId;
+                    return el.companyId === item.objectID;
+                })) : [];
 			}
-			return this.$store.getters.salesRepsList ? this.$store.getters.salesRepsList.filter((rep) => rep.company !== this.userInfo.company.company) : [];
+			return this.$store.getters.salesRepsList ? this.$store.getters.salesRepsList.filter((rep) => rep.company !== this.userInfo.company.company && !this.repsInvited.find((item) => {
+                if (item.id) return rep.companyId === item.id;
+                if (item.companyId) return rep.companyId === item.companyId;
+                return rep.companyId === item.objectID;
+            })) : [];
 		},
 		itemBidId() {
 			return this.$store.getters.itemBidData;
@@ -413,19 +448,53 @@ export default {
 		companiesList() {
 			if (this.$route.name == 'EditBid') {
 				if (this.$store.getters.bidData.invitedSuppliers != '' && this.$store.getters.bidData.invitedSuppliers != null && this.$store.getters.bidData.invitedSuppliers != undefined) {
-					return this.$store.getters.companiesList ? this.$store.getters.companiesList.filter((el) => !this.$store.getters.bidData.invitedSuppliers.find((supplier) => supplier.id === el.objectID)) : [];
+					return this.$store.getters.companiesList ? this.$store.getters.companiesList.filter((el) => !this.$store.getters.bidData.invitedSuppliers.find((supplier) => supplier.id === el.objectID) && !this.repsInvited.find((item) => {
+						if (el.objectID) {
+                        if (item.id) return el.objectID === item.id;
+                        if (item.companyId) return el.objectID === item.companyId;
+                        return el.objectID === item.objectID;
+                    } if (el.id) {
+                        if (item.id) return el.id === item.id;
+                        if (item.companyId) return el.id === item.companyId;
+                        return el.id === item.objectID;
+                    }
+
+					}))  : [];
 				}
-					return this.$store.getters.companiesList ? this.$store.getters.companiesList.filter((rep) => rep.company !== this.userInfo.company.company) : [];
-				
+
+				return this.$store.getters.companiesList ? this.$store.getters.companiesList.filter((rep) => rep.company !== this.userInfo.company.company && !this.repsInvited.find((item) => {
+						if (rep.objectID) {
+                        if (item.id) return rep.objectID === item.id;
+                        if (item.companyId) return rep.objectID === item.companyId;
+                        return rep.objectID === item.objectID;
+                    } if (rep.id) {
+                        if (item.id) return rep.id === item.id;
+                        if (item.companyId) return rep.id === item.companyId;
+                        return rep.id === item.objectID;
+                    }
+
+					})) : [];
 			}
 			if (this.$store.getters.bidData.invitedSuppliers != '' || this.$store.getters.bidData.invitedSuppliers != null || this.$store.getters.bidData.invitedSuppliers != undefined) {
-				return this.$store.getters.companiesList ? this.$store.getters.companiesList.filter((el) => !this.$store.getters.bidData.invitedSuppliers.includes(el.objectID)) : [];
+				const editSupplier = this.$store.getters.companiesList ? this.$store.getters.companiesList.filter((el) => !this.$store.getters.bidData.invitedSuppliers.includes(el.objectID)) : [];
+
+				return editSupplier ? editSupplier.filter((el) => !this.repsInvited.find((item) => {
+					if (el.objectID) {
+                        if (item.id) return el.objectID === item.id;
+                        if (item.companyId) return el.objectID === item.companyId;
+                        return el.objectID === item.objectID;
+                    } if (el.id) {
+                        if (item.id) return el.id === item.id;
+                        if (item.companyId) return el.id === item.companyId;
+                        return el.id === item.objectID;
+                    }
+				})) : []
 			}
 			return this.$store.getters.companiesList ? this.$store.getters.companiesList : [];
 		},
 		serviceCompanies() {
 			return this.$store.getters.serviceCompaniesList.sort((a, b) => {
-				let aHasOfsPremium = a.contracts.some(contract => contract.contractType === 'ofs-premium');
+				const aHasOfsPremium = a.contracts.some((contract) => contract.contractType === 'ofs-premium');
 				if (aHasOfsPremium) {
 					return -1;
 				}
@@ -436,9 +505,9 @@ export default {
 			if (this.$store.getters.bidData.invitedSuppliers != '' && this.$store.getters.bidData.invitedSuppliers != null && this.$store.getters.bidData.invitedSuppliers != undefined) {
 				if (this.$route.name == 'EditBid') {
 					if (this.inviteCount == 1 && this.$store.getters.companiesList) {
-						let inviteData = this.$store.getters.companiesList ? this.$store.getters.companiesList.filter((el) => this.$store.state.bid.invitedSuppliers.find((supplier) => supplier.id === el.objectID)) : [];
+						const inviteData = this.$store.getters.companiesList ? this.$store.getters.companiesList.filter((el) => this.$store.state.bid.invitedSuppliers.find((supplier) => supplier.id === el.objectID)) : [];
 						this.repsInvited = inviteData.sort((a, b) => {
-							let aHasOfsPremium = a.contracts.some(contract => contract.contractType === 'ofs-premium');
+							const aHasOfsPremium = a.contracts.some((contract) => contract.contractType === 'ofs-premium');
 							if (aHasOfsPremium) {
 								return -1;
 							}
@@ -446,9 +515,9 @@ export default {
 						});
 					}
 				} else if (this.inviteCount == 1 && this.$store.getters.companiesList) {
-					let inviteData = this.$store.getters.companiesList ? this.$store.getters.companiesList.filter((el) => this.$store.state.bid.invitedSuppliers.includes(el.objectID)) : [];
+					const inviteData = this.$store.getters.companiesList ? this.$store.getters.companiesList.filter((el) => this.$store.state.bid.invitedSuppliers.includes(el.objectID)) : [];
 					this.repsInvited = inviteData.sort((a, b) => {
-						let aHasOfsPremium = a.contracts.some(contract => contract.contractType === 'ofs-premium');
+						const aHasOfsPremium = a.contracts.some((contract) => contract.contractType === 'ofs-premium');
 						if (aHasOfsPremium) {
 							return -1;
 						}
@@ -469,7 +538,7 @@ export default {
 			}
 		},
 		getCounter() {
-			return this.counter
+			return this.counter;
 		},
 		validat() {
 			if (this.repsInvited.length > 0) {
@@ -484,7 +553,7 @@ export default {
 		...mapActions(['getCategories', 'getSalesReps', 'getCompanyInfo', 'searchByCompany', 'getCompanyByServices', 'saveDraftBid', 'inviteNewSupplier', 'updateDraftBid', 'updateTemplate', 'updateBid']),
 		changeTab() {
 			if (this.$route.name == 'EditBid') {
-				if(this.isEditBidChanges == true){
+				if (this.isEditBidChanges == true) {
 					this.updateBid({ invitedSuppliers: this.repsInvited });
 				}
 			} else if (this.$route.name == 'EditTemplate') {
@@ -495,27 +564,26 @@ export default {
 			this.$emit('changetab', 'tab-3');
 		},
 		onUpdate(payload) {
-			this.counter++
-			this.phoneInfo.valid = payload.isValid
+			this.counter++;
+			this.phoneInfo.valid = payload.isValid;
 
 			if (payload.phoneNumber && !payload.isValid) {
-				this.phoneInfo.message =  'Invalid Phone number format'
-			} 
-
-			if (!payload.phoneNumber && !payload.isValid) {
-				this.phoneInfo.message =  'Phone number is required'
+				this.phoneInfo.message = 'Invalid Phone number format';
 			}
 
+			if (!payload.phoneNumber && !payload.isValid) {
+				this.phoneInfo.message = 'Phone number is required';
+			}
 
 			this.results = payload.formattedNumber;
 		},
 		async validate() {
 			if (this.results === '') {
-				this.counter += 2 
+				this.counter += 2;
 				this.phoneInfo = {
-						valid: false,
-						message: 'Phone number is required'
-					}
+					valid: false,
+					message: 'Phone number is required',
+				};
 			}
 			const supplier = {
 				firstName: this.firstName,
@@ -542,11 +610,11 @@ export default {
 					this.phoneNumber = '';
 					this.phoneInfo = {
 						valid: true,
-						message: ''
-					}
-					this.counter = 0
-					this.valid = false
-					this.results = ''
+						message: '',
+					};
+					this.counter = 0;
+					this.valid = false;
+					this.results = '';
 				} catch (error) {
 					console.log(error);
 				}
@@ -570,13 +638,12 @@ export default {
 			this.getCompanyInfo({ id, name });
 		},
 		addReps(list, index) {
-
 			this.oldCount = this.repsInvited.length;
 			this.repsInvited.push(list);
 			this.inviteCount = 2;
 			this.newCount = this.repsInvited.length;
 			this.$store.commit('spliceSalesRepsList', index);
-			this.$store.commit('setIsEditBidChanges',true);
+			this.$store.commit('setIsEditBidChanges', true);
 			const unique = [...new Map(this.repsInvited.map((m) => [m.company, m])).values()];
 
 			this.$store.commit('setInvitedSuppliersData', unique);
@@ -587,7 +654,7 @@ export default {
 			this.repsInvited.splice(index, 1);
 			this.inviteCount = 2;
 			this.newCount = this.repsInvited.length;
-			this.$store.commit('setIsEditBidChanges',true);
+			this.$store.commit('setIsEditBidChanges', true);
 			this.$store.commit('setInvitedSuppliersData', this.repsInvited);
 		},
 		getCompanies() {
@@ -607,7 +674,7 @@ export default {
 			this.inviteCount = 2;
 			this.newCount = this.repsInvited.length;
 			this.$store.commit('spliceCompanies', index);
-			this.$store.commit('setIsEditBidChanges',true);
+			this.$store.commit('setIsEditBidChanges', true);
 			const unique = [...new Map(this.repsInvited.map((m) => [m.company, m])).values()];
 			this.$store.commit('setInvitedSuppliersData', unique);
 		},
@@ -617,7 +684,7 @@ export default {
 			this.inviteCount = 2;
 			this.newCount = this.repsInvited.length;
 			this.$store.commit('spliceCompanies', index);
-			this.$store.commit('setIsEditBidChanges',true);
+			this.$store.commit('setIsEditBidChanges', true);
 			const unique = [...new Map(this.repsInvited.map((m) => [m.company, m])).values()];
 			this.$store.commit('setInvitedSuppliersData', unique);
 		},
@@ -627,7 +694,7 @@ export default {
 			this.inviteCount = 2;
 			this.newCount = this.repsInvited.length;
 			this.$store.commit('pushCompanies', company);
-			this.$store.commit('setIsEditBidChanges',true);
+			this.$store.commit('setIsEditBidChanges', true);
 			this.$store.commit('setInvitedSuppliersData', this.repsInvited);
 		},
 		removeNewSup(company, index) {
@@ -635,14 +702,14 @@ export default {
 			this.newRepsInvited.splice(index, 1);
 			this.inviteCount = 2;
 			this.newCount = this.newRepsInvited.length;
-			this.$store.commit('setIsEditBidChanges',true);
+			this.$store.commit('setIsEditBidChanges', true);
 			this.$store.commit('setInvitedNewSuppliers', this.newRepsInvited);
 		},
 		savedraftOnInterval() {
 			const timer = setInterval(() => {
 				if (this.oldCount != this.newCount) {
 					if (this.$route.name == 'EditBid') {
-						if(this.isEditBidChanges == true){
+						if (this.isEditBidChanges == true) {
 							this.updateBid({ invitedSuppliers: this.repsInvited });
 						}
 					} else if (this.$route.name == 'EditTemplate') {
@@ -659,10 +726,10 @@ export default {
 			});
 		},
 		hasOfsPremium(supplier) {
-			return supplier.contracts.some(contract => contract.contractType === 'ofs-premium');
+			return supplier.contracts.some((contract) => contract.contractType === 'ofs-premium');
 		},
 		hasOfsPremiumReps(supplier) {
-			return supplier.contracts.some(contract => contract === 'ofs-premium');
+			return supplier.contracts.some((contract) => contract === 'ofs-premium');
 		},
 	},
 	beforeMount() {

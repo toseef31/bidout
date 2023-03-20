@@ -35,7 +35,7 @@
                             <v-tab class="text-capitalize font-weight-bold" href="#salesRep" @click="hideCategories">Sales
                                 Rep</v-tab>
                             <v-tab class="text-capitalize font-weight-bold" href="#serviceCategory"
-                                @click="categories = !categories">Service Category</v-tab>
+                                @click="companySearch = ''; categories = !categories; ">Service Category</v-tab>
                         </v-tabs>
                     </div>
                 </div>
@@ -240,7 +240,7 @@
                                     <div class="company-title text-left pl-4">
                                         <h4>{{ company.firstName }} {{ company.lastName }}</h4>
                                         <p class="mb-0">{{ company.company }}
-                                            <span v-if="hasOfsPremium(company)">
+                                            <span v-if="hasOfsPremiumReps(company)">
                                                 <v-tooltip top>
                                                     <template v-slot:activator="{ on, attrs }">
                                                         <v-icon color="#0D9647" size="14px" v-bind="attrs"
@@ -423,15 +423,52 @@ export default {
         },
         salesRepsList() {
             if (this.bidDetail.bidData.invitedSuppliers !== '' && this.bidDetail.bidData.invitedSuppliers !== null && this.bidDetail.bidData.invitedSuppliers !== undefined) {
-                return this.$store.getters.salesRepsList ? this.$store.getters.salesRepsList.filter((el) => !this.bidDetail.bidData.invitedSuppliers.find((supplier) => supplier.id === el.companyId)) : [];
+                const returnValue = this.$store.getters.salesRepsList ? this.$store.getters.salesRepsList.filter((el) => !this.bidDetail.bidData.invitedSuppliers.find((supplier) => supplier.id === el.companyId)) : [];
+
+                return returnValue ? returnValue.filter((el) => !this.repsInvited.find((item) => {
+                    if (item.id) return el.companyId === item.id;
+                    if (item.companyId) return el.companyId === item.companyId;
+                    return el.companyId === item.objectID;
+                })) : [];
             }
-            return this.$store.getters.salesRepsList ? this.$store.getters.salesRepsList.filter((rep) => rep.company !== this.userInfo.company.company) : [];
+            const otherValue = this.$store.getters.salesRepsList ? this.$store.getters.salesRepsList.filter((rep) => rep.company !== this.userInfo.company.company) : [];
+
+            return otherValue ? otherValue.filter((el) => !this.repsInvited.find((item) => {
+                if (item.id) return el.companyId === item.id;
+                if (item.companyId) return el.companyId === item.companyId;
+                return el.companyId === item.objectID;
+            })) : [];
         },
         companiesList() {
             if (this.bidDetail.bidData.invitedSuppliers !== '' && this.bidDetail.bidData.invitedSuppliers !== null && this.bidDetail.bidData.invitedSuppliers !== undefined) {
-                return this.$store.getters.companiesList ? this.$store.getters.companiesList.filter((el) => !this.bidDetail.bidData.invitedSuppliers.find((supplier) => supplier.id === el.objectID)) : [];
+                const returnValue = this.$store.getters.companiesList ? this.$store.getters.companiesList.filter((el) => !this.bidDetail.bidData.invitedSuppliers.find((supplier) => supplier.id === el.objectID)) : [];
+
+                return returnValue ? returnValue.filter((el) => !this.repsInvited.find((item) => {
+                    if (el.objectID) {
+                        if (item.id) return el.objectID === item.id;
+                        if (item.companyId) return el.objectID === item.companyId;
+                        return el.objectID === item.objectID;
+                    } if (el.id) {
+                        if (item.id) return el.id === item.id;
+                        if (item.companyId) return el.id === item.companyId;
+                        return el.id === item.objectID;
+                    }
+                })) : [];
             }
-            return this.$store.getters.companiesList ? this.$store.getters.companiesList.filter((rep) => rep.company !== this.userInfo.company.company) : [];
+
+            const otherValue = this.$store.getters.companiesList ? this.$store.getters.companiesList.filter((rep) => rep.company !== this.userInfo.company.company) : [];
+
+            return otherValue ? otherValue.filter((el) => !this.repsInvited.find((item) => {
+                if (el.objectID) {
+                    if (item.id) return el.objectID === item.id;
+                    if (item.companyId) return el.objectID === item.companyId;
+                    return el.objectID === item.objectID;
+                } if (el.id) {
+                    if (item.id) return el.id === item.id;
+                    if (item.companyId) return el.id === item.companyId;
+                    return el.id === item.objectID;
+                }
+            })) : [];
         },
         serviceCompanies() {
             return this.$store.getters.serviceCompaniesList.sort((a, b) => {
@@ -648,9 +685,6 @@ export default {
     },
     beforeMount() {
         this.user = this.$store.getters.userInfo;
-        // this.getCategories();
-        // this.getSales();
-        // this.getCompanies();
     },
     mounted() {
         this.filteredEntries;
