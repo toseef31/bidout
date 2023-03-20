@@ -676,7 +676,6 @@ export default {
       });
     },
     hasOfsPremium(supplier) {
-		console.log(supplier)
       return supplier.contracts.some((contract) => contract.contractType === 'ofs-premium');
     },
     hasOfsPremiumReps(supplier) {
