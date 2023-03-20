@@ -343,405 +343,355 @@
 import VuePhoneNumberInput from 'vue-phone-number-input';
 import 'vue-phone-number-input/dist/vue-phone-number-input.css';
 import _ from 'lodash';
-import { mapActions, mapGetters, mapState } from 'vuex';
+import { mapActions, mapGetters } from 'vuex';
 
 export default {
-	components: {
-		VuePhoneNumberInput,
-	},
-	data() {
-		return {
-			availableSearch: ['All', 'Gulf Coast', 'Northeast', 'Rockies', 'Mid-Con', 'Permian', 'Arklatex', 'Offshore', 'Other'],
-			availableSuppl: null,
-			supplierDialog: false,
-			valid: false,
-			firstName: '',
-			lastName: '',
-			nameRules: [
-				(v) => !!v || 'Name is required',
-			],
-			company: '',
-			companyRules: [
-				(v) => !!v || 'Company name is required',
-			],
-			email: '',
-			emailRules: [
-				(v) => !!v || 'E-mail is required',
-				(v) => /.+@.+\..+/.test(v) || 'E-mail must be valid',
-			],
-			phoneNumber: '',
-			defaultCountry: 'US',
-			translations: {
-				countrySelectorLabel: 'Country Code',
-				countrySelectorError: 'Choose country',
-				phoneNumberLabel: 'Phone Number',
-				example: 'Example',
-			},
-			hasLoaderActive: false,
-			hasErrorActive: true,
-			results: {},
-			categories: false,
-			searchCompany: '',
-			basinFilter: 'All',
-			repsInvited: [],
-			companySearch: '',
-			companyBasin: 'All',
-			invitedCompanies: [],
-			itembidData: [],
-			interval: '',
-			user: '',
-			parsedSelectedBasin: 'all',
-			parsedSelectedCompanyBasin: 'all',
-			oldCount: '',
-			newCount: '',
-			filterData: [],
-			newRepsInvited: [],
-			filterAfter: [],
-			inviteCount: 1,
-			counter: 0,
-			phoneInfo: {
-				valid: true,
-				message: '',
-			},
-		};
-	},
-	computed: {
-		...mapGetters(['newSupplier', 'userInfo', 'loadingInvite', 'isEditBidChanges']),
-		allcategories() {
-			setTimeout(() => this.loading = false, 500);
-			return _.orderBy(this.$store.getters.categories, 'orderNumber', 'asc');
-		},
-		getPhoneInfo() {
-			return this.phoneInfo;
-		},
-		salesRepsList() {
-			if (this.$route.name == 'EditBid') {
-				if (this.$store.getters.bidData.invitedSuppliers != '' && this.$store.getters.bidData.invitedSuppliers != null && this.$store.getters.bidData.invitedSuppliers != undefined) {
-					return this.$store.getters.salesRepsList ? this.$store.getters.salesRepsList.filter((el) => !this.$store.getters.bidData.invitedSuppliers.find((supplier) => supplier.id === el.companyId) && !this.repsInvited.find((item) => {
-                    if (item.id) return el.companyId === item.id;
-                    if (item.companyId) return el.companyId === item.companyId;
-                    return el.companyId === item.objectID;
-                })) : [];
-				}
-				return this.$store.getters.salesRepsList ? this.$store.getters.salesRepsList.filter((rep) => rep.company !== this.userInfo.company.company && !this.repsInvited.find((item) => {
-                if (item.id) return rep.companyId === item.id;
-                if (item.companyId) return rep.companyId === item.companyId;
-                return rep.companyId === item.objectID;
-            })) : [];
-			}
-			if (this.$store.getters.bidData.invitedSuppliers != '' || this.$store.getters.bidData.invitedSuppliers != null || this.$store.getters.bidData.invitedSuppliers != undefined) {
-				return this.$store.getters.salesRepsList ? this.$store.getters.salesRepsList.filter((el) => !this.$store.getters.bidData.invitedSuppliers.includes(el.companyId) && !this.repsInvited.find((item) => {
-                    if (item.id) return el.companyId === item.id;
-                    if (item.companyId) return el.companyId === item.companyId;
-                    return el.companyId === item.objectID;
-                })) : [];
-			}
-			return this.$store.getters.salesRepsList ? this.$store.getters.salesRepsList.filter((rep) => rep.company !== this.userInfo.company.company && !this.repsInvited.find((item) => {
-                if (item.id) return rep.companyId === item.id;
-                if (item.companyId) return rep.companyId === item.companyId;
-                return rep.companyId === item.objectID;
-            })) : [];
-		},
-		itemBidId() {
-			return this.$store.getters.itemBidData;
-		},
-		companiesList() {
-			if (this.$route.name == 'EditBid') {
-				if (this.$store.getters.bidData.invitedSuppliers != '' && this.$store.getters.bidData.invitedSuppliers != null && this.$store.getters.bidData.invitedSuppliers != undefined) {
-					return this.$store.getters.companiesList ? this.$store.getters.companiesList.filter((el) => !this.$store.getters.bidData.invitedSuppliers.find((supplier) => supplier.id === el.objectID) && !this.repsInvited.find((item) => {
-						if (el.objectID) {
-                        if (item.id) return el.objectID === item.id;
-                        if (item.companyId) return el.objectID === item.companyId;
-                        return el.objectID === item.objectID;
-                    } if (el.id) {
-                        if (item.id) return el.id === item.id;
-                        if (item.companyId) return el.id === item.companyId;
-                        return el.id === item.objectID;
-                    }
+  components: {
+    VuePhoneNumberInput,
+  },
+  data() {
+    return {
+      availableSearch: ['All', 'Gulf Coast', 'Northeast', 'Rockies', 'Mid-Con', 'Permian', 'Arklatex', 'Offshore', 'Other'],
+      availableSuppl: null,
+      supplierDialog: false,
+      valid: false,
+      firstName: '',
+      lastName: '',
+      nameRules: [
+        (v) => !!v || 'Name is required',
+      ],
+      company: '',
+      companyRules: [
+        (v) => !!v || 'Company name is required',
+      ],
+      email: '',
+      emailRules: [
+        (v) => !!v || 'E-mail is required',
+        (v) => /.+@.+\..+/.test(v) || 'E-mail must be valid',
+      ],
+      phoneNumber: '',
+      defaultCountry: 'US',
+      translations: {
+        countrySelectorLabel: 'Country Code',
+        countrySelectorError: 'Choose country',
+        phoneNumberLabel: 'Phone Number',
+        example: 'Example',
+      },
+      hasLoaderActive: false,
+      results: {},
+      categories: false,
+      searchCompany: '',
+      basinFilter: 'All',
+      repsInvited: [],
+      companySearch: '',
+      companyBasin: 'All',
+      itembidData: [],
+      interval: '',
+      user: '',
+      parsedSelectedBasin: 'all',
+      parsedSelectedCompanyBasin: 'all',
+      oldCount: '',
+      newCount: '',
+      newRepsInvited: [],
+      inviteCount: 1,
+      counter: 0,
+      phoneInfo: {
+        valid: true,
+        message: '',
+      },
+    };
+  },
+  computed: {
+    ...mapGetters(['newSupplier', 'userInfo', 'loadingInvite', 'isEditBidChanges']),
+    allcategories() {
+      setTimeout(() => this.loading = false, 500);
+      return _.orderBy(this.$store.getters.categories, 'orderNumber', 'asc');
+    },
+    getPhoneInfo() {
+      return this.phoneInfo;
+    },
+    salesRepsList() {
+      const unique = this.$store.getters.salesRepsList ? this.$store.getters.salesRepsList.filter((el) => !this.repsInvited.find((item) => {
+        if (item.id) return el.companyId === item.id;
+        if (item.companyId) return el.companyId === item.companyId;
+        return el.companyId === item.objectID;
+      }) && el.company !== this.userInfo.company.company) : [];
 
-					}))  : [];
-				}
+      return [...new Map(unique.map((item) => [item.companyId, item])).values()];
+    },
+   
+    itemBidId() {
+      return this.$store.getters.itemBidData;
+    },
+    companiesList() {
+      let idType = '';
+      const unique = this.$store.getters.companiesList ? this.$store.getters.companiesList.filter((el) => !this.repsInvited.find((item) => {
+        if (el.objectID) {
+          idType = 'objectID';
+          if (item.id) return el.objectID === item.id;
+          if (item.companyId) return el.objectID === item.companyId;
+          return el.objectID === item.objectID;
+        } if (el.id) {
+          idType = 'id';
+          if (item.id) return el.id === item.id;
+          if (item.companyId) return el.id === item.companyId;
+          return el.id === item.objectID;
+        }
+      }) && el.company !== this.userInfo.company.company) : [];
 
-				return this.$store.getters.companiesList ? this.$store.getters.companiesList.filter((rep) => rep.company !== this.userInfo.company.company && !this.repsInvited.find((item) => {
-						if (rep.objectID) {
-                        if (item.id) return rep.objectID === item.id;
-                        if (item.companyId) return rep.objectID === item.companyId;
-                        return rep.objectID === item.objectID;
-                    } if (rep.id) {
-                        if (item.id) return rep.id === item.id;
-                        if (item.companyId) return rep.id === item.companyId;
-                        return rep.id === item.objectID;
-                    }
+      return idType === 'id' ? [...new Map(unique.map((item) => [item.id, item])).values()] : [...new Map(unique.map((item) => [item.objectID, item])).values()];
+    },
 
-					})) : [];
-			}
-			if (this.$store.getters.bidData.invitedSuppliers != '' || this.$store.getters.bidData.invitedSuppliers != null || this.$store.getters.bidData.invitedSuppliers != undefined) {
-				const editSupplier = this.$store.getters.companiesList ? this.$store.getters.companiesList.filter((el) => !this.$store.getters.bidData.invitedSuppliers.includes(el.objectID)) : [];
+    serviceCompanies() {
+      return this.$store.getters.serviceCompaniesList.sort((a, b) => {
+        const aHasOfsPremium = a.contracts.some((contract) => contract.contractType === 'ofs-premium');
+        if (aHasOfsPremium) {
+          return -1;
+        }
+        return 1;
+      });
+    },
+    filteredEntries() {
+      if (this.$store.getters.bidData.invitedSuppliers != '' && this.$store.getters.bidData.invitedSuppliers != null && this.$store.getters.bidData.invitedSuppliers != undefined) {
+        if (this.$route.name == 'EditBid') {
+          if (this.inviteCount == 1 && this.$store.getters.companiesList) {
+            const inviteData = this.$store.getters.companiesList ? this.$store.getters.companiesList.filter((el) => this.$store.state.bid.invitedSuppliers.find((supplier) => supplier.id === el.objectID)) : [];
+            this.repsInvited = inviteData.sort((a, b) => {
+              const aHasOfsPremium = a.contracts.some((contract) => contract.contractType === 'ofs-premium');
+              if (aHasOfsPremium) {
+                return -1;
+              }
+              return 1;
+            });
+          }
+        } else if (this.inviteCount == 1 && this.$store.getters.companiesList) {
+          const inviteData = this.$store.getters.companiesList ? this.$store.getters.companiesList.filter((el) => this.$store.state.bid.invitedSuppliers.includes(el.objectID)) : [];
+          this.repsInvited = inviteData.sort((a, b) => {
+            const aHasOfsPremium = a.contracts.some((contract) => contract.contractType === 'ofs-premium');
+            if (aHasOfsPremium) {
+              return -1;
+            }
+            return 1;
+          });
+        }
+      }
+    },
+    newSupplierFiltered() {
+      if (this.$store.getters.bidData.invitedNewSuppliers) {
+        if (this.$route.name == 'EditBid') {
+          if (this.inviteCount == 1) {
+            this.newRepsInvited = this.$store.state.bid.invitedNewSuppliers;
+          }
+        } else if (this.inviteCount == 1) {
+          this.newRepsInvited = this.$store.state.bid.invitedNewSuppliers;
+        }
+      }
+    },
+    getCounter() {
+      return this.counter;
+    },
+    validat() {
+      if (this.repsInvited.length > 0) {
+        this.$emit('validation', { valid: true, supplier: '2' });
+        return this.valid;
+      }
+      this.$emit('validation', { valid: false, supplier: '2' });
+      return this.valid;
+    },
+  },
+  methods: {
+    ...mapActions(['getCategories', 'getSalesReps', 'getCompanyInfo', 'searchByCompany', 'getCompanyByServices', 'saveDraftBid', 'inviteNewSupplier', 'updateDraftBid', 'updateTemplate', 'updateBid']),
+    changeTab() {
+      if (this.$route.name == 'EditBid') {
+        if (this.isEditBidChanges == true) {
+          this.updateBid({ invitedSuppliers: this.repsInvited });
+        }
+      } else if (this.$route.name == 'EditTemplate') {
+        this.updateTemplate({ invitedSuppliers: this.repsInvited });
+      } else {
+        this.updateDraftBid({ invitedSuppliers: this.repsInvited });
+      }
+      this.$emit('changetab', 'tab-3');
+    },
+    onUpdate(payload) {
+      this.counter++;
+      this.phoneInfo.valid = payload.isValid;
 
-				return editSupplier ? editSupplier.filter((el) => !this.repsInvited.find((item) => {
-					if (el.objectID) {
-                        if (item.id) return el.objectID === item.id;
-                        if (item.companyId) return el.objectID === item.companyId;
-                        return el.objectID === item.objectID;
-                    } if (el.id) {
-                        if (item.id) return el.id === item.id;
-                        if (item.companyId) return el.id === item.companyId;
-                        return el.id === item.objectID;
-                    }
-				})) : []
-			}
-			return this.$store.getters.companiesList ? this.$store.getters.companiesList : [];
-		},
-		serviceCompanies() {
-			return this.$store.getters.serviceCompaniesList.sort((a, b) => {
-				const aHasOfsPremium = a.contracts.some((contract) => contract.contractType === 'ofs-premium');
-				if (aHasOfsPremium) {
-					return -1;
-				}
-				return 1;
-			});
-		},
-		filteredEntries() {
-			if (this.$store.getters.bidData.invitedSuppliers != '' && this.$store.getters.bidData.invitedSuppliers != null && this.$store.getters.bidData.invitedSuppliers != undefined) {
-				if (this.$route.name == 'EditBid') {
-					if (this.inviteCount == 1 && this.$store.getters.companiesList) {
-						const inviteData = this.$store.getters.companiesList ? this.$store.getters.companiesList.filter((el) => this.$store.state.bid.invitedSuppliers.find((supplier) => supplier.id === el.objectID)) : [];
-						this.repsInvited = inviteData.sort((a, b) => {
-							const aHasOfsPremium = a.contracts.some((contract) => contract.contractType === 'ofs-premium');
-							if (aHasOfsPremium) {
-								return -1;
-							}
-							return 1;
-						});
-					}
-				} else if (this.inviteCount == 1 && this.$store.getters.companiesList) {
-					const inviteData = this.$store.getters.companiesList ? this.$store.getters.companiesList.filter((el) => this.$store.state.bid.invitedSuppliers.includes(el.objectID)) : [];
-					this.repsInvited = inviteData.sort((a, b) => {
-						const aHasOfsPremium = a.contracts.some((contract) => contract.contractType === 'ofs-premium');
-						if (aHasOfsPremium) {
-							return -1;
-						}
-						return 1;
-					});
-				}
-			}
-		},
-		newSupplierFiltered() {
-			if (this.$store.getters.bidData.invitedNewSuppliers) {
-				if (this.$route.name == 'EditBid') {
-					if (this.inviteCount == 1) {
-						this.newRepsInvited = this.$store.state.bid.invitedNewSuppliers;
-					}
-				} else if (this.inviteCount == 1) {
-					this.newRepsInvited = this.$store.state.bid.invitedNewSuppliers;
-				}
-			}
-		},
-		getCounter() {
-			return this.counter;
-		},
-		validat() {
-			if (this.repsInvited.length > 0) {
-				this.$emit('validation', { valid: true, supplier: '2' });
-				return this.valid;
-			}
-			this.$emit('validation', { valid: false, supplier: '2' });
-			return this.valid;
-		},
-	},
-	methods: {
-		...mapActions(['getCategories', 'getSalesReps', 'getCompanyInfo', 'searchByCompany', 'getCompanyByServices', 'saveDraftBid', 'inviteNewSupplier', 'updateDraftBid', 'updateTemplate', 'updateBid']),
-		changeTab() {
-			if (this.$route.name == 'EditBid') {
-				if (this.isEditBidChanges == true) {
-					this.updateBid({ invitedSuppliers: this.repsInvited });
-				}
-			} else if (this.$route.name == 'EditTemplate') {
-				this.updateTemplate({ invitedSuppliers: this.repsInvited });
-			} else {
-				this.updateDraftBid({ invitedSuppliers: this.repsInvited });
-			}
-			this.$emit('changetab', 'tab-3');
-		},
-		onUpdate(payload) {
-			this.counter++;
-			this.phoneInfo.valid = payload.isValid;
+      if (payload.phoneNumber && !payload.isValid) {
+        this.phoneInfo.message = 'Invalid Phone number format';
+      }
 
-			if (payload.phoneNumber && !payload.isValid) {
-				this.phoneInfo.message = 'Invalid Phone number format';
-			}
+      if (!payload.phoneNumber && !payload.isValid) {
+        this.phoneInfo.message = 'Phone number is required';
+      }
 
-			if (!payload.phoneNumber && !payload.isValid) {
-				this.phoneInfo.message = 'Phone number is required';
-			}
+      this.results = payload.formattedNumber;
+    },
+    async validate() {
+      if (this.results === '') {
+        this.counter += 2;
+        this.phoneInfo = {
+          valid: false,
+          message: 'Phone number is required',
+        };
+      }
+      const supplier = {
+        firstName: this.firstName,
+        lastName: this.lastName,
+        company: this.company,
+        phone: this.results,
+        email: this.email,
+        bidTitle: this.$store.getters.bidData.title,
+        bidType: this.$store.getters.bidData.type,
+        bidDueDate: this.$store.getters.bidData.dueDate,
+        bidDueTime: this.$store.getters.bidData.dueTime,
+      };
 
-			this.results = payload.formattedNumber;
-		},
-		async validate() {
-			if (this.results === '') {
-				this.counter += 2;
-				this.phoneInfo = {
-					valid: false,
-					message: 'Phone number is required',
-				};
-			}
-			const supplier = {
-				firstName: this.firstName,
-				lastName: this.lastName,
-				company: this.company,
-				phone: this.results,
-				email: this.email,
-				bidTitle: this.$store.getters.bidData.title,
-				bidType: this.$store.getters.bidData.type,
-				bidDueDate: this.$store.getters.bidData.dueDate,
-				bidDueTime: this.$store.getters.bidData.dueTime,
-			};
+      if (this.$refs.form.validate() && this.getPhoneInfo.valid) {
+        try {
+          const user = await this.inviteNewSupplier(supplier);
+          this.supplierDialog = false;
+          this.oldCount = this.newRepsInvited.length;
+          this.newRepsInvited.push(user);
+          this.newCount = this.newRepsInvited.length;
+          this.$store.commit('setInvitedNewSuppliers', this.newRepsInvited);
+          this.$refs.form.reset();
+          this.loadingInvite = false;
+          this.phoneNumber = '';
+          this.phoneInfo = {
+            valid: true,
+            message: '',
+          };
+          this.counter = 0;
+          this.valid = false;
+          this.results = '';
+        } catch (error) {
+          console.log(error);
+        }
+      }
+    },
+    hideCategories() {
+      this.categories = false;
+    },
+    subCategories(subCats) {
+      return _.orderBy(subCats, 'orderNumber', 'asc');
+    },
+    getSales() {
+      if (this.basinFilter === 'All') {
+        this.parsedSelectedBasin = 'all';
+      } else {
+        this.parsedSelectedBasin = this.basinFilter;
+      }
+      this.getSalesReps({ query: this.searchCompany, basin: this.parsedSelectedBasin });
+    },
+    viewCompany(id, name) {
+      this.getCompanyInfo({ id, name });
+    },
+    addReps(list, index) {
+      this.oldCount = this.repsInvited.length;
+      this.repsInvited.push(list);
+      this.inviteCount = 2;
+      this.newCount = this.repsInvited.length;
+      this.$store.commit('spliceSalesRepsList', index);
+      this.$store.commit('setIsEditBidChanges', true);
+      const unique = [...new Map(this.repsInvited.map((m) => [m.company, m])).values()];
 
-			if (this.$refs.form.validate() && this.getPhoneInfo.valid) {
-				try {
-					const user = await this.inviteNewSupplier(supplier);
-					this.supplierDialog = false;
-					this.oldCount = this.newRepsInvited.length;
-					this.newRepsInvited.push(user);
-					this.newCount = this.newRepsInvited.length;
-					this.$store.commit('setInvitedNewSuppliers', this.newRepsInvited);
-					this.$refs.form.reset();
-					this.loadingInvite = false;
-					this.phoneNumber = '';
-					this.phoneInfo = {
-						valid: true,
-						message: '',
-					};
-					this.counter = 0;
-					this.valid = false;
-					this.results = '';
-				} catch (error) {
-					console.log(error);
-				}
-			}
-		},
-		hideCategories() {
-			this.categories = false;
-		},
-		subCategories(subCats) {
-			return _.orderBy(subCats, 'orderNumber', 'asc');
-		},
-		getSales() {
-			if (this.basinFilter === 'All') {
-				this.parsedSelectedBasin = 'all';
-			} else {
-				this.parsedSelectedBasin = this.basinFilter;
-			}
-			this.getSalesReps({ query: this.searchCompany, basin: this.parsedSelectedBasin });
-		},
-		viewCompany(id, name) {
-			this.getCompanyInfo({ id, name });
-		},
-		addReps(list, index) {
-			this.oldCount = this.repsInvited.length;
-			this.repsInvited.push(list);
-			this.inviteCount = 2;
-			this.newCount = this.repsInvited.length;
-			this.$store.commit('spliceSalesRepsList', index);
-			this.$store.commit('setIsEditBidChanges', true);
-			const unique = [...new Map(this.repsInvited.map((m) => [m.company, m])).values()];
+      this.$store.commit('setInvitedSuppliersData', unique);
+    },
+    removeReps(list, index) {
+      this.$store.commit('pushSalesRepsList', list);
+      this.oldCount = this.repsInvited.length;
+      this.repsInvited.splice(index, 1);
+      this.inviteCount = 2;
+      this.newCount = this.repsInvited.length;
+      this.$store.commit('setIsEditBidChanges', true);
+      this.$store.commit('setInvitedSuppliersData', this.repsInvited);
+    },
+    getCompanies() {
+      if (this.companyBasin === 'All') {
+        this.parsedSelectedCompanyBasin = 'all';
+      } else {
+        this.parsedSelectedCompanyBasin = this.companyBasin;
+      }
+      this.searchByCompany({ query: this.companySearch, basin: this.parsedSelectedCompanyBasin });
+    },
+    getByCategory(category) {
+      this.getCompanyByServices(category);
+    },
+    addCompany(company, index) {
+      this.oldCount = this.repsInvited.length;
+      this.repsInvited.push(company);
+      this.inviteCount = 2;
+      this.newCount = this.repsInvited.length;
+      this.$store.commit('spliceCompanies', index);
+      this.$store.commit('setIsEditBidChanges', true);
+      const unique = [...new Map(this.repsInvited.map((m) => [m.company, m])).values()];
+      this.$store.commit('setInvitedSuppliersData', unique);
+    },
+    addServiceCompany(company, index) {
+      this.oldCount = this.repsInvited.length;
+      this.repsInvited.push(company);
+      this.inviteCount = 2;
+      this.newCount = this.repsInvited.length;
+      this.$store.commit('spliceCompanies', index);
+      this.$store.commit('setIsEditBidChanges', true);
+      const unique = [...new Map(this.repsInvited.map((m) => [m.company, m])).values()];
+      this.$store.commit('setInvitedSuppliersData', unique);
+    },
+    removeCompany(company, index) {
+      this.oldCount = this.repsInvited.length;
+      this.repsInvited.splice(index, 1);
+      this.inviteCount = 2;
+      this.newCount = this.repsInvited.length;
+      this.$store.commit('pushCompanies', company);
+      this.$store.commit('setIsEditBidChanges', true);
+      this.$store.commit('setInvitedSuppliersData', this.repsInvited);
+    },
+    removeNewSup(company, index) {
+      this.oldCount = this.newRepsInvited.length;
+      this.newRepsInvited.splice(index, 1);
+      this.inviteCount = 2;
+      this.newCount = this.newRepsInvited.length;
+      this.$store.commit('setIsEditBidChanges', true);
+      this.$store.commit('setInvitedNewSuppliers', this.newRepsInvited);
+    },
+    savedraftOnInterval() {
+      const timer = setInterval(() => {
+        if (this.oldCount != this.newCount) {
+          if (this.$route.name == 'EditBid') {
+            if (this.isEditBidChanges == true) {
+              this.updateBid({ invitedSuppliers: this.repsInvited });
+            }
+          } else if (this.$route.name == 'EditTemplate') {
+            this.updateTemplate({ invitedSuppliers: this.repsInvited });
+          } else {
+            this.updateDraftBid({ invitedSuppliers: this.repsInvited });
+          }
+          this.oldCount = this.newCount;
+        }
+      }, 60000);
 
-			this.$store.commit('setInvitedSuppliersData', unique);
-		},
-		removeReps(list, index) {
-			this.$store.commit('pushSalesRepsList', list);
-			this.oldCount = this.repsInvited.length;
-			this.repsInvited.splice(index, 1);
-			this.inviteCount = 2;
-			this.newCount = this.repsInvited.length;
-			this.$store.commit('setIsEditBidChanges', true);
-			this.$store.commit('setInvitedSuppliersData', this.repsInvited);
-		},
-		getCompanies() {
-			if (this.companyBasin === 'All') {
-				this.parsedSelectedCompanyBasin = 'all';
-			} else {
-				this.parsedSelectedCompanyBasin = this.companyBasin;
-			}
-			this.searchByCompany({ query: this.companySearch, basin: this.parsedSelectedCompanyBasin });
-		},
-		getByCategory(category) {
-			this.getCompanyByServices(category);
-		},
-		addCompany(company, index) {
-			this.oldCount = this.repsInvited.length;
-			this.repsInvited.push(company);
-			this.inviteCount = 2;
-			this.newCount = this.repsInvited.length;
-			this.$store.commit('spliceCompanies', index);
-			this.$store.commit('setIsEditBidChanges', true);
-			const unique = [...new Map(this.repsInvited.map((m) => [m.company, m])).values()];
-			this.$store.commit('setInvitedSuppliersData', unique);
-		},
-		addServiceCompany(company, index) {
-			this.oldCount = this.repsInvited.length;
-			this.repsInvited.push(company);
-			this.inviteCount = 2;
-			this.newCount = this.repsInvited.length;
-			this.$store.commit('spliceCompanies', index);
-			this.$store.commit('setIsEditBidChanges', true);
-			const unique = [...new Map(this.repsInvited.map((m) => [m.company, m])).values()];
-			this.$store.commit('setInvitedSuppliersData', unique);
-		},
-		removeCompany(company, index) {
-			this.oldCount = this.repsInvited.length;
-			this.repsInvited.splice(index, 1);
-			this.inviteCount = 2;
-			this.newCount = this.repsInvited.length;
-			this.$store.commit('pushCompanies', company);
-			this.$store.commit('setIsEditBidChanges', true);
-			this.$store.commit('setInvitedSuppliersData', this.repsInvited);
-		},
-		removeNewSup(company, index) {
-			this.oldCount = this.newRepsInvited.length;
-			this.newRepsInvited.splice(index, 1);
-			this.inviteCount = 2;
-			this.newCount = this.newRepsInvited.length;
-			this.$store.commit('setIsEditBidChanges', true);
-			this.$store.commit('setInvitedNewSuppliers', this.newRepsInvited);
-		},
-		savedraftOnInterval() {
-			const timer = setInterval(() => {
-				if (this.oldCount != this.newCount) {
-					if (this.$route.name == 'EditBid') {
-						if (this.isEditBidChanges == true) {
-							this.updateBid({ invitedSuppliers: this.repsInvited });
-						}
-					} else if (this.$route.name == 'EditTemplate') {
-						this.updateTemplate({ invitedSuppliers: this.repsInvited });
-					} else {
-						this.updateDraftBid({ invitedSuppliers: this.repsInvited });
-					}
-					this.oldCount = this.newCount;
-				}
-			}, 60000);
-
-			this.$once('hook:beforeDestroy', () => {
-				clearInterval(timer);
-			});
-		},
-		hasOfsPremium(supplier) {
-			return supplier.contracts.some((contract) => contract.contractType === 'ofs-premium');
-		},
-		hasOfsPremiumReps(supplier) {
-			return supplier.contracts.some((contract) => contract === 'ofs-premium');
-		},
-	},
-	beforeMount() {
-		this.user = this.$store.getters.userInfo;
-		this.getCategories();
-		this.getSales();
-		this.getCompanies();
-	},
-	mounted() {
-		this.savedraftOnInterval();
-		this.filteredEntries;
-		this.newSupplierFiltered;
-	},
+      this.$once('hook:beforeDestroy', () => {
+        clearInterval(timer);
+      });
+    },
+    hasOfsPremium(supplier) {
+      return supplier.contracts.some((contract) => contract.contractType === 'ofs-premium');
+    },
+    hasOfsPremiumReps(supplier) {
+      return supplier.contracts.some((contract) => contract === 'ofs-premium');
+    },
+  },
+  beforeMount() {
+    this.user = this.$store.getters.userInfo;
+    this.getCategories();
+    this.getSales();
+    this.getCompanies();
+  },
+  mounted() {
+    this.savedraftOnInterval();
+    this.filteredEntries;
+    this.newSupplierFiltered;
+  },
 };
 </script>
