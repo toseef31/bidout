@@ -270,7 +270,7 @@ export default {
       hasErrorActive: false,
       results: {},
       emailRules: [
-        (v) => /.+@.+\..+/.test(v) || 'E-mail must be valid',
+        (v) => /^\w+([.+_-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,3})+$/.test(v) || 'E-mail must be valid',
       ],
       phoneInfo: {
         valid: true,
