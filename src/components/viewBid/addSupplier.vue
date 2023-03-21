@@ -35,7 +35,7 @@
                             <v-tab class="text-capitalize font-weight-bold" href="#salesRep" @click="hideCategories">Sales
                                 Rep</v-tab>
                             <v-tab class="text-capitalize font-weight-bold" href="#serviceCategory"
-                                @click="categories = !categories">Service Category</v-tab>
+                                @click="companySearch = ''; categories = !categories; ">Service Category</v-tab>
                         </v-tabs>
                     </div>
                 </div>
@@ -240,7 +240,7 @@
                                     <div class="company-title text-left pl-4">
                                         <h4>{{ company.firstName }} {{ company.lastName }}</h4>
                                         <p class="mb-0">{{ company.company }}
-                                            <span v-if="hasOfsPremium(company)">
+                                            <span v-if="hasOfsPremiumReps(company)">
                                                 <v-tooltip top>
                                                     <template v-slot:activator="{ on, attrs }">
                                                         <v-icon color="#0D9647" size="14px" v-bind="attrs"
@@ -422,16 +422,31 @@ export default {
       return this.$store.getters.bidViewData;
     },
     salesRepsList() {
-      if (this.bidDetail.bidData.invitedSuppliers !== '' && this.bidDetail.bidData.invitedSuppliers !== null && this.bidDetail.bidData.invitedSuppliers !== undefined) {
-        return this.$store.getters.salesRepsList ? this.$store.getters.salesRepsList.filter((el) => !this.bidDetail.bidData.invitedSuppliers.find((supplier) => supplier.id === el.companyId)) : [];
-      }
-      return this.$store.getters.salesRepsList ? this.$store.getters.salesRepsList.filter((rep) => rep.company !== this.userInfo.company.company) : [];
+      const unique =  this.$store.getters.salesRepsList ? this.$store.getters.salesRepsList.filter((el) => !this.repsInvited.find((item) => {
+        if (item.id) return el.companyId === item.id;
+        if (item.companyId) return el.companyId === item.companyId;
+        return el.companyId === item.objectID;
+      }) && el.company !== this.user.company.company) : [];
+
+      return [...new Map(unique.map((item) => [item.companyId, item])).values()]
     },
     companiesList() {
-      if (this.bidDetail.bidData.invitedSuppliers !== '' && this.bidDetail.bidData.invitedSuppliers !== null && this.bidDetail.bidData.invitedSuppliers !== undefined) {
-        return this.$store.getters.companiesList ? this.$store.getters.companiesList.filter((el) => !this.bidDetail.bidData.invitedSuppliers.find((supplier) => supplier.id === el.objectID)) : [];
-      }
-      return this.$store.getters.companiesList ? this.$store.getters.companiesList.filter((rep) => rep.company !== this.userInfo.company.company) : [];
+      let idType = '';
+      const unique = this.$store.getters.companiesList ? this.$store.getters.companiesList.filter((el) => !this.repsInvited.find((item) => {
+        if (el.objectID) {
+          idType = 'objectID';
+          if (item.id) return el.objectID === item.id;
+          if (item.companyId) return el.objectID === item.companyId;
+          return el.objectID === item.objectID;
+        } if (el.id) {
+          idType = 'id';
+          if (item.id) return el.id === item.id;
+          if (item.companyId) return el.id === item.companyId;
+          return el.id === item.objectID;
+        }
+      }) && el.company !== this.user.company.company) : [];
+
+      return idType === 'id' ? [...new Map(unique.map((item) => [item.id, item])).values()] : [...new Map(unique.map((item) => [item.objectID, item])).values()];
     },
     serviceCompanies() {
       return this.$store.getters.serviceCompaniesList.sort((a, b) => {
@@ -648,9 +663,6 @@ export default {
   },
   beforeMount() {
     this.user = this.$store.getters.userInfo;
-    // this.getCategories();
-    // this.getSales();
-    // this.getCompanies();
   },
   mounted() {
     this.filteredEntries;
