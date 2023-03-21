@@ -11,7 +11,7 @@
             </v-alert>
 
             <v-alert type="error" v-if="passwordError != null">
-              Oops! You have entered a incorrect password, try again, if you are still unsure of your password, please <router-link to="/forgot-password" class="white--text">Reset Password</router-link>
+              Oops! You have entered an incorrect email or password, Please try again, if you are still unsure of your password, please <router-link to="/forgot-password" class="white--text">Reset Password</router-link>
             </v-alert>
             <v-alert type="success" v-show="showSuccessAlert" v-if="successMessage != ''">
               {{ successMessage }}
@@ -60,12 +60,17 @@
           <div class="bottom-section">
             <p class="center font-weight-bold">Don't have account yet? <router-link to="/get-started">Join BidOut</router-link></p>
           </div>
-       </v-col>
-       <v-col cols="12" md="6" class="right d-none d-md-block">
-         <v-img :src="require('@/assets/images/sideBanner.png')" width="100%" height="100%"></v-img>
-       </v-col>
-     </v-row>
-   </section>
+          
+      </v-col>
+      <v-col cols="12" md="6" class="right d-none d-md-block">
+        <v-img
+          :src="require('@/assets/images/sideBanner.png')"
+          width="100%"
+          height="100%"
+        ></v-img>
+      </v-col>
+    </v-row>
+  </section>
 </template>
 
 <script>
@@ -78,13 +83,13 @@ export default {
       valid: true,
       email: this.$store.getters.resetEmail,
       emailRules: [
-        v => !!v || 'E-mail is required',
-        v => /.+@.+\..+/.test(v) || 'E-mail must be valid',
+        (v) => !!v || 'E-mail is required',
+        (v) => /^\w+([.+_-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,3})+$/.test(v) || 'E-mail must be valid',
       ],
       password: '',
       passwordRules: [
         v => !!v || 'Password is required',
-        v => (v && v.length >= 6) || 'Password must be more than 6 characters',
+        v => (v && v.length >= 6) || 'Password must be at least 6 characters',
       ],
       showPass: false,
       xhrRequest: false,
@@ -138,6 +143,4 @@ export default {
   },
 };
 </script>
-<style scoped lang="scss">
-
-</style>
+<style scoped lang="scss"></style>

@@ -83,58 +83,56 @@
   </v-row>
 </template>
 <script>
-  import Navbar from '../components/Layout/Navbar.vue'
-  import LeftSidebar from '../components/Layout/Dashboard/LeftSidebar.vue'
-  import RightSidebar from '../components/Layout/Dashboard/RightSidebar.vue'
-  import axios from 'axios'
-  import { mapActions, mapState } from "vuex";
+import { mapActions } from 'vuex';
+import Navbar from '../components/Layout/Navbar.vue';
+import LeftSidebar from '../components/Layout/Dashboard/LeftSidebar.vue';
+import RightSidebar from '../components/Layout/Dashboard/RightSidebar.vue';
+
 export default {
-  name : "ManageUsers",
+  name: 'ManageUsers',
   components: {
     Navbar,
     LeftSidebar,
     RightSidebar
   },
-  
   data() {
     return {
-      isHidden : false,
+      isHidden: false,
       valid: true,
       btnLoading: false,
-        firstName: '',
-        lastName: '',
-        nameRules: [
-          v => !!v || 'Name is required',
-        ],
-        email: '',
-        emailRules: [
-          v => !!v || 'E-mail is required',
-          v => /.+@.+\..+/.test(v) || 'E-mail must be valid',
-        ],
-        select: null,
-        items: [
-          {value: 'admin', label: 'Administrator'},
-          {value:'user', label: 'User'},
-        ],
-        user: '',
+      firstName: '',
+      lastName: '',
+      nameRules: [
+        (v) => !!v || 'Name is required',
+      ],
+      email: '',
+      emailRules: [
+        (v) => !!v || 'E-mail is required',
+        (v) => /^\w+([.+_-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,3})+$/.test(v) || 'E-mail must be valid',
+      ],
+      select: null,
+      items: [
+        { value: 'admin', label: 'Administrator' },
+        { value: 'user', label: 'User' },
+      ],
+      user: '',
     };
   },
-  computed:{
-    showSideBar(){
-        return this.$store.getters.g_sideBarOpen;
+  computed: {
+    showSideBar() {
+      return this.$store.getters.g_sideBarOpen;
     },
-    activityPanel(){
-        return this.$store.getters.g_activityPanel;
+    activityPanel() {
+      return this.$store.getters.g_activityPanel;
     },
   },
   methods: {
-    ...mapActions(["inviteUser"]),
-    
+    ...mapActions(['inviteUser']),
     validate() {
       this.$refs.form.validate();
       this.valid = false;
       this.btnLoading = true;
-      var data = {
+      const data = {
         firstName: this.firstName,
         lastName: this.lastName,
         email: this.email,
@@ -147,9 +145,9 @@ export default {
     },
   },
   mounted() {
-    document.title = "Add Users - BidOut";
+    document.title = 'Add Users - BidOut';
     this.user = this.$store.getters.userInfo;
-  }
+  },
 };
 </script>
 <style scoped lang="scss">

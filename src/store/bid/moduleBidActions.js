@@ -134,6 +134,7 @@ export default {
         commit('setBidViewData', res.data);
         commit('setViewBidError', false);
         commit('setUserType', res.data.user_type);
+        commit('setTeamMembersForBid', []);
         if (res.data.user_type === 'buyer') {
           await dispatch('getSalesReps', { query: '', basin: 'all' });
           await dispatch('getCategories');
@@ -1538,7 +1539,7 @@ export default {
       }
     }
 
-    if (state.invitedSuppliers !== '') {
+    if (state.invitedSuppliers !== '' && state.invitedSuppliers && state.invitedSuppliers.length > 0) {
       for (let i = 0; i < state.invitedSuppliers.length; i++) {
         if (state.invitedSuppliers[i].id) {
           formData.append(`invitedSuppliers[${i}]`, state.invitedSuppliers[i].id);
@@ -1549,7 +1550,7 @@ export default {
         }
       }
     } else {
-      formData.append('invitedSuppliers', '');
+      formData.append('invitedSuppliers', []);
     }
     if (state.invitedNewSuppliers != null) {
       for (let i = 0; i < state.invitedNewSuppliers.length; i++) {
@@ -1587,8 +1588,7 @@ export default {
     } else {
       formData.append('lineItems', '');
     }
-
-    if (state.attachement !== '') {
+    if (state.attachement !== '' && state.attachement && state.attachement.length > 0) {
       for (let i = 0; i < state.attachement.length; i++) {
         formData.append(`attachments[${i}][fileName]`, state.attachement[i].fileName);
         formData.append(`attachments[${i}][fileSize]`, state.attachement[i].fileSize);
@@ -1599,7 +1599,7 @@ export default {
         formData.append(`attachments[${i}][id]`, state.attachement[i].id);
       }
     } else {
-      formData.append('attachments', '');
+      formData.append('attachments', []);
     }
 
     if (state.questions !== '') {
