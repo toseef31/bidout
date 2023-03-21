@@ -9,7 +9,7 @@ export default {
       const res = await axios.get(`company/getTeamMembers/${payload}`);
       if (res.status === 200) {
         commit('setTeamMembers', res.data);
-        commit('setTeamMembersInitial',res.data)
+        commit('setTeamMembersInitial', res.data);
         commit('setPageLoader', false);
       } else {
         commit('setTeamMembers', null);
@@ -145,6 +145,7 @@ export default {
           commit('setInvitedSuppliersData', res.data.bidData.invitedSuppliers);
 
           commit('setInvitedNewSuppliers', res.data.bidData.invitedNewSuppliers);
+
           commit('setTeamMembersForBid', res.data.bidData.invitedTeamMembers);
         }
 
@@ -305,7 +306,7 @@ export default {
         dispatch('getBidBySerial', {
           id: payload.userId,
           serial: payload.serial,
-          company: payload.company
+          company: payload.company,
         });
         commit('setAwardAlert');
       }
@@ -331,7 +332,7 @@ export default {
         dispatch('getBidBySerial', {
           id: payload.userId,
           serial: payload.serial,
-          company: payload.company
+          company: payload.company,
         });
         commit('setDisqualifyAlert');
       }
@@ -357,7 +358,7 @@ export default {
         dispatch('getBidBySerial', {
           id: payload.userId,
           serial: payload.serial,
-          company: payload.company
+          company: payload.company,
         });
         commit('setUnAwardAlert');
       }
@@ -382,7 +383,7 @@ export default {
         dispatch('getBidBySerial', {
           id: payload.userId,
           serial: payload.serial,
-          company: payload.company
+          company: payload.company,
         });
         commit('setUnDisqualifyAlert');
       }
@@ -445,11 +446,11 @@ export default {
       }
     } catch (err) {
       if (err.response && err.response.status === 400 && err.response.data.message === 'Please add a price for all required items') {
-        commit('setBidSubmissionValidationAlert','Please add a price for all required line items')
+        commit('setBidSubmissionValidationAlert', 'Please add a price for all required line items');
       }
 
       if (err.response && err.response.status === 400 && err.response.data.message === 'Please add a valid price for all items') {
-        commit('setBidSubmissionValidationAlert','Please add a valid price or click the "X" button that you are no-biding for each line item')
+        commit('setBidSubmissionValidationAlert', 'Please add a valid price or click the "X" button that you are no-biding for each line item');
       }
       if (state.apiCounter === 2) {
         dispatch('apiSignOutAction');
@@ -518,11 +519,11 @@ export default {
       }
     } catch (err) {
       if (err.response && err.response.status === 400 && err.response.data.message === 'Please add a price for all required items') {
-        commit('setBidSubmissionValidationAlert','Please add a price for all required line items')
+        commit('setBidSubmissionValidationAlert', 'Please add a price for all required line items');
       }
 
       if (err.response && err.response.status === 400 && err.response.data.message === 'Please add a valid price for all items') {
-        commit('setBidSubmissionValidationAlert','Please add a valid price or click the "X" button that you are no-biding for each line item')
+        commit('setBidSubmissionValidationAlert', 'Please add a valid price or click the "X" button that you are no-biding for each line item');
       }
       if (state.apiCounter === 2) {
         dispatch('apiSignOutAction');
@@ -1718,7 +1719,7 @@ export default {
         await dispatch('getBidBySerial', {
           serial: payload.serial,
           id: payload.userId,
-          company: payload.company
+          company: payload.company,
         });
 
         commit('setSupplierAddAlert');
@@ -1763,7 +1764,7 @@ export default {
         await dispatch('getBidBySerial', {
           serial: payload.serial,
           id: payload.userId,
-          company: payload.company
+          company: payload.company,
         });
 
         commit('setTeamMemberAddAlert');
@@ -1779,6 +1780,3 @@ export default {
     }
   },
 };
-
-
-

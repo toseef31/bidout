@@ -167,7 +167,7 @@
 
           <v-btn icon @click="toggleSupplier = false">
             <v-icon size="30" color="#F32349
-                                                      ">mdi-close</v-icon>
+                                                                              ">mdi-close</v-icon>
           </v-btn>
         </div>
         <AddSupplier />
@@ -184,23 +184,27 @@
           <v-avatar v-else color="#0d96481a" size="62">
             <v-icon color="#0d9648" large>mdi-account-outline </v-icon>
           </v-avatar>
-          <span class="text--black px-4  bid-creator">{{ bidDetail.bidData.userId.firstName }} {{
+          <span v-if="bidDetail.bidData.userId.image" class="text--black pr-4  bid-creator">{{
+            bidDetail.bidData.userId.firstName }} {{
+    bidDetail.bidData.userId.lastName
+  }}</span>
+
+          <span v-else class="text--black px-4  bid-creator">{{ bidDetail.bidData.userId.firstName }} {{
             bidDetail.bidData.userId.lastName
           }}</span>
           <span class="bid-creator-title">Bid Creator</span>
         </div>
 
         <div v-if="
-          bidDetail.bidData &&
-          bidDetail.bidData.invitedTeamMembers &&
+          bidDetail.bidData && bidDetail.bidData.invitedTeamMembers &&
           bidDetail.bidData.invitedTeamMembers.length > 0
         " v-for="(item, index) in bidDetail.bidData.invitedTeamMembers" :key="index"
           class="d-flex align-center flex-child">
           <v-img v-if="item.image" max-width="100" height="auto" contain :aspect-ratio="16 / 9" :src="item.image"></v-img>
-          <v-avatar v-else color="#0d96481a" size="62">
+          <v-avatar v-else color="#0d96481a" size="62" class="ml-5">
             <v-icon color="#0d9648" large>mdi-account-outline </v-icon>
           </v-avatar>
-          <span class="text--black px-4 bid-creator">{{ item && item.firstName }} {{ item && item.lastName }}</span>
+          <span class="text--black px-5 bid-creator">{{ item && item.firstName }} {{ item && item.lastName }}</span>
         </div>
       </div>
 
@@ -217,7 +221,7 @@
 
           <v-btn icon @click="toggleTeam = false">
             <v-icon size="30" color="#F32349
-                                                      ">mdi-close</v-icon>
+                                                                              ">mdi-close</v-icon>
           </v-btn>
         </div>
         <AddTeamMember />
