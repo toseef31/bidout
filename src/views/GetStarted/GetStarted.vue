@@ -91,7 +91,7 @@
                         <v-col cols="12" sm="12" text="left" class="pb-0">
                           <label class="d-block text-left input-label mb-2 font-weight-bold">Email Address</label>
                           <v-text-field placeholder="example@email.com" single-line outlined type="email" v-model="email" @keyup="emailCheck()" :rules="buyerEmailRule"></v-text-field>
-                          <span class="d-block red--text text-left mt-n4" v-if="emailMsg">{{emailMsg}}</span>
+                          <span class="d-block red--text text-left mt-n4" v-if="emailMsg && email">{{emailMsg}}</span>
                         </v-col>
                         <v-col cols="12" sm="12" text="left" class="pb-0">
                           <label class="d-block text-left input-label mb-2 font-weight-bold">Title</label>
@@ -219,7 +219,7 @@
                         <v-col cols="12" sm="12" text="left" class="pb-0">
                           <label class="d-block text-left input-label mb-2 font-weight-bold">Email Address</label>
                           <v-text-field placeholder="example@email.com" single-line outlined type="email" v-model="email" @keyup="emailCheck()" :rules="supplierEmailRule"></v-text-field>
-                          <span class="d-block red--text text-left mt-n4" v-if="emailMsg">{{emailMsg}}</span>
+                          <span class="d-block red--text text-left mt-n4" v-if="emailMsg && email">{{emailMsg}}</span>
                         </v-col>
                         <v-col cols="12" sm="12" text="left" class="pb-0">
                           <label class="d-block text-left input-label mb-2 font-weight-bold">Title</label>
