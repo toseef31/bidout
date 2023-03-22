@@ -181,7 +181,7 @@ export default {
       axios.post('/user/checkIfUserWithEmailExists', { email: payload })
         .then((responce) => {
           if (responce.data.exists === true) {
-            commit('setEmailExistSuccess', 'Email aleardy Exists! Please try different one');
+            commit('setEmailExistSuccess', 'Email already Exists! Please try different one');
           } else {
             commit('setEmailExistSuccess', '');
           }
@@ -196,7 +196,7 @@ export default {
       axios.post('/user/checkIfUserWithEmailExists', { email: payload.email })
         .then((responce) => {
           if (responce.data.exists === true) {
-            commit('setEmailExistSuccess', 'Email aleardy Exists! Please try different one');
+            commit('setEmailExistSuccess', 'Email already Exists! Please try different one');
             commit('setCompanyError', 'Email already Exists! Please try different one');
             commit('showErrorAlert');
           } else if (payload.id) {
