@@ -212,7 +212,7 @@
 											Profile</router-link>
 									</div>
 								</div>
-								<div class="add-company">
+								<div class="add-company" v-if="checkIntent(company.objectID) !== 'intended'">
 									<v-btn color="rgba(243, 35, 73, 0.1)" tile min-width="32px" height="32" class="pa-0"
 										elevation="0" @click="removeCompany(company, index)"> <v-icon
 											color="#F32349">mdi-minus</v-icon></v-btn>
@@ -244,7 +244,7 @@
 										</p>
 									</div>
 								</div>
-								<div class="add-company">
+								<div class="add-company" v-if="checkIntent(company.objectID) !== 'intended'">
 									<v-btn color="rgba(243, 35, 73, 0.1)" tile min-width="32px" height="32" class="pa-0"
 										elevation="0" @click="removeReps(company, index)"> <v-icon
 											color="#F32349">mdi-minus</v-icon></v-btn>
@@ -267,7 +267,7 @@
 
 									</div>
 								</div>
-								<div class="add-company">
+								<div class="add-company" v-if="checkIntent(company.objectID) !== 'intended'">
 									<v-btn color="rgba(243, 35, 73, 0.1)" tile min-width="32px" height="32" class="pa-0"
 										elevation="0" @click="removeNewSup(company, index)"> <v-icon
 											color="#F32349">mdi-minus</v-icon></v-btn>
@@ -490,6 +490,9 @@ export default {
     getCounter() {
       return this.counter;
     },
+    getBidAllIntend() {
+      return this.$store.getters.bidAllIntend;
+    },
     validat() {
       if (this.repsInvited.length > 0) {
         this.$emit('validation', { valid: true, supplier: '2' });
@@ -680,6 +683,22 @@ export default {
     },
     hasOfsPremiumReps(supplier) {
       return supplier.contracts.some((contract) => contract === 'ofs-premium');
+    },
+    checkIntent(id) {
+      let result = 'neither';
+      const intent = this.getBidAllIntend;
+
+      if (intent && id) {
+        intent.forEach((el) => {
+          if (el.companyId === id && el.answer === 'true') {
+            result = 'intended';
+          }
+          if (el.companyId === id && el.answer === 'false') {
+            result = 'not-intended';
+          }
+        });
+      }
+      return result;
     },
   },
   beforeMount() {
