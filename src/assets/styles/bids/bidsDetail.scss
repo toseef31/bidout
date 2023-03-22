@@ -343,6 +343,7 @@
       .v-tab {
         font-size: 16px;
         border-bottom: 1px solid #b8b8b8;
+        max-width: 100%;
 
         &--active {
           background: rgba(13, 150, 72, 0.1);
