@@ -90,8 +90,8 @@
                         </v-col>
                         <v-col cols="12" sm="12" text="left" class="pb-0">
                           <label class="d-block text-left input-label mb-2 font-weight-bold">Email Address</label>
-                          <v-text-field placeholder="example@email.com" single-line outlined type="email" v-model="email" @keyup="emailCheck()" :rules="buyerEmailRule"></v-text-field>
-                          <span class="d-block red--text text-left mt-n4" v-if="emailMsg && email">{{emailMsg}}</span>
+                          <v-text-field placeholder="example@email.com" single-line outlined type="email" v-model="email" @keyup="emailCheck()" @keydown="emailCheck()"></v-text-field>
+                          <span class="d-block red--text text-left mt-n4" v-if="emailError"><small>{{emailError}}</small></span>
                         </v-col>
                         <v-col cols="12" sm="12" text="left" class="pb-0">
                           <label class="d-block text-left input-label mb-2 font-weight-bold">Title</label>
@@ -218,8 +218,8 @@
                         </v-col>
                         <v-col cols="12" sm="12" text="left" class="pb-0">
                           <label class="d-block text-left input-label mb-2 font-weight-bold">Email Address</label>
-                          <v-text-field placeholder="example@email.com" single-line outlined type="email" v-model="email" @keyup="emailCheck()" :rules="supplierEmailRule"></v-text-field>
-                          <span class="d-block red--text text-left mt-n4" v-if="emailMsg && email">{{emailMsg}}</span>
+                          <v-text-field placeholder="example@email.com" single-line outlined type="email" v-model="email" @keyup="emailCheck()"></v-text-field>
+                          <span class="d-block red--text text-left mt-n4" v-if="emailError"><small>{{emailError}}</small></span>
                         </v-col>
                         <v-col cols="12" sm="12" text="left" class="pb-0">
                           <label class="d-block text-left input-label mb-2 font-weight-bold">Title</label>
@@ -512,6 +512,17 @@ export default {
     companyMsg(){
       return this.$store.getters.companyError;
     },
+    emailError() {
+      if (!this.email) {
+        return "Email is required";
+      } else if (!this.email.match(/^\w+([.+_-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,3})+$/)) {
+        return "Email is not valid";
+      } else if (this.emailMsg) {
+        return this.emailMsg;
+      } else {
+        return "";
+      }
+    }
   },
   methods: {
     ...mapActions(["supplierSignUpAction","searchSupplier","checkEmail","buyerSignUpAction","getIpAddress"]),
@@ -581,7 +592,12 @@ export default {
       }
     },
     emailCheck(){
-      this.checkEmail(this.email);
+      const testemail = /^\w+([.+_-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,3})+$/.test(this.email);
+      if(testemail === true){
+        this.checkEmail(this.email);
+      }else if(this.email.length < 2){
+        this.$store.commit('setEmailExistSuccess', '');
+      }
     },
     required: function(value) {
       if (value) {
