@@ -33,7 +33,7 @@
                     v-model="docsList[index]['comment']"></v-text-field><v-checkbox color="#0D9648"
                     @change="saveComment(doc)"></v-checkbox>
                 </div>
-                <span v-else>{{ doc.comment }}</span>
+                <span v-else>{{ doc.comment !== 'undefined' ? doc.comment : '' }}</span>
               </td>
               <td class="text-left">{{ size(doc.fileSize) }}</td>
               <td class="text-left">{{ doc.uploadedBy }}</td>
@@ -116,6 +116,10 @@ export default {
             }
             this.$store.commit('setAttachement', null);
             this.$store.commit('setAttachement', this.documents);
+
+            this.documents && this.documents.forEach((el) => {
+              el.comment === 'undefined' ? el.comment = '' : '';
+            });
             return this.documents;
           }
           return this.$store.getters.attachData;
@@ -138,6 +142,11 @@ export default {
           }
           this.$store.commit('setAttachement', null);
           this.$store.commit('setAttachement', this.documents);
+
+          this.documents&& this.documents.forEach((el) => {
+            el.comment === 'undefined' ? el.comment = '' : '';
+          });
+
           return this.documents;
         }
         return this.$store.getters.attachData;
