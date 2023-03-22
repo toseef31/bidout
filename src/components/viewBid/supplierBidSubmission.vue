@@ -176,12 +176,12 @@
 
                   <label :for="`uploadFileQ${index}`" v-else
                     class="
-                                                                                                                                                              upload-file
-                                                                                                                                                             pa-4
-                                                                                                                                                              d-block
-                                                                                                                                                              font-weight-medium
-                                                                                                                                                              text-center
-                                                                                                                                                            ">
+                                                                                                                                                                upload-file
+                                                                                                                                                               pa-4
+                                                                                                                                                                d-block
+                                                                                                                                                                font-weight-medium
+                                                                                                                                                                text-center
+                                                                                                                                                              ">
                     <v-file-input :id="`uploadFileQ${index}`" @change="handleDocumentForAnswer($event, index)"
                       :disabled="!bidDetail.receivingBids" :rules="item.required === 'true' ? fileRule : []" />
 
@@ -221,7 +221,11 @@
               <tbody>
                 <tr v-for="(doc, index) in supplierDocList" :key="index">
                   <td class="text-left">
-                    <img :src="require('@/assets/images/bids/FilePdf.png')" />
+                    <img :src="require('@/assets/images/bids/FilePdf.png')"
+                      v-if="checkFileType(doc.fileName) === 'pdf'" />
+                    <img :src="require('@/assets/images/bids/FileDoc.png')"
+                      v-else-if="checkFileType(doc.fileName) === 'docx'" />
+                    <v-icon color="#0D1139" v-else>mdi-file-document</v-icon>
                   </td>
                   <td class="text-left">{{ doc.fileName }}</td>
                   <td class="text-left">{{ size(doc.fileSize) }} </td>
@@ -401,6 +405,10 @@ export default {
     size(size) {
       const sizeInMB = (size / (1024 * 1024)).toFixed(2);
       return `${sizeInMB}mb`;
+    },
+
+    checkFileType(file) {
+      return file.substring(file.lastIndexOf('.') + 1);
     },
     allValid() {
       for (let i = 0; i < this.value.length; i++) {
