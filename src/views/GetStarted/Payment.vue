@@ -484,7 +484,7 @@ export default {
     document.title = 'Payment - BidOut';
     this.maskCardNumber();
   },
-}
+};
 </script>
 <style scoped lang="scss">
 
