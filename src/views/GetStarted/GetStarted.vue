@@ -91,7 +91,7 @@
                         <v-col cols="12" sm="12" text="left" class="pb-0">
                           <label class="d-block text-left input-label mb-2 font-weight-bold">Email Address</label>
                           <v-text-field placeholder="example@email.com" single-line outlined type="email" v-model="email" @keyup="emailCheck()" @keydown="emailCheck()"></v-text-field>
-                          <span class="d-block red--text text-left mt-n4" v-if="emailError"><small>{{emailError}}</small></span>
+                          <span class="d-block red--text text-left mt-n4" v-if="emailError" v-html="emailError"></span>
                         </v-col>
                         <v-col cols="12" sm="12" text="left" class="pb-0">
                           <label class="d-block text-left input-label mb-2 font-weight-bold">Title</label>
@@ -219,7 +219,7 @@
                         <v-col cols="12" sm="12" text="left" class="pb-0">
                           <label class="d-block text-left input-label mb-2 font-weight-bold">Email Address</label>
                           <v-text-field placeholder="example@email.com" single-line outlined type="email" v-model="email" @keyup="emailCheck()"></v-text-field>
-                          <span class="d-block red--text text-left mt-n4" v-if="emailError"><small>{{emailError}}</small></span>
+                          <span class="d-block red--text text-left mt-n4" v-if="emailError" v-html="emailError"></span>
                         </v-col>
                         <v-col cols="12" sm="12" text="left" class="pb-0">
                           <label class="d-block text-left input-label mb-2 font-weight-bold">Title</label>
@@ -524,7 +524,7 @@ export default {
       } else if (this.emailMsg) {
         this.buyerValid = false;
         this.supplierValid = false;
-        return this.emailMsg;
+        return `Email already exists! Please <a href="/login">login</a> to access your account.`;
       } else {
         this.buyerValid = true;
         this.supplierValid = true;
