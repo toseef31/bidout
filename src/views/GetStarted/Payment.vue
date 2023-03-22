@@ -60,11 +60,11 @@
                       </v-col>
                       <v-col cols="12" sm="6" text="left">
                         <label class="d-block text-left input-label mb-2 font-weight-bold">Expiration Month</label>
-                        <v-text-field placeholder="MM" v-model="expiryMonth" maxlength="2" single-line outlined type="text" :rules="[() => !!expiryMonth || 'This field is required']"></v-text-field>
+                        <v-text-field v-number-only placeholder="MM" v-model="expiryMonth" maxlength="2" @paste="onPaste" single-line outlined type="text" :rules="[() => !!expiryMonth || 'This field is required']"></v-text-field>
                       </v-col>
                       <v-col cols="12" sm="6" text="left">
                         <label class="d-block text-left input-label mb-2 font-weight-bold">Expiration Year</label>
-                        <v-text-field placeholder="YY" v-model="expiryYear" maxlength="2" single-line outlined type="text" :rules="[() => !!expiryYear || 'This field is required']"></v-text-field>
+                        <v-text-field v-number-only placeholder="YY" v-model="expiryYear" maxlength="2" @paste="onPaste" single-line outlined type="text" :rules="[() => !!expiryYear || 'This field is required']"></v-text-field>
                       </v-col>
                       <v-col cols="12" sm="6" text="left">
                         <label class="d-block text-left input-label mb-2 font-weight-bold">CVV</label>
@@ -75,7 +75,7 @@
                             v-model="formData.cardCvv"
                             @input="changeCvv"
                             data-card-field
-                            autocomplete="off"
+                            autocomplete="off" @paste="onPaste"
                             :rules="[() => !!formData.cardCvv || 'This field is required']"></v-text-field>
                       </v-col>
                       <v-col cols="12" sm="6" text="left">
@@ -396,6 +396,16 @@ export default {
         this.maskCardNumber();
       } else {
         this.unMaskCardNumber();
+      }
+    },
+    onPaste(event) {
+      // eslint-disable-next-line no-undef
+      const num = event.clipboardData.getData('Text');
+      const nmbrs = num.replace(/[^0-9]/g, '');
+      if (!nmbrs) {
+        event.preventDefault();
+      } else {
+        return true;
       }
     },
     payment(type) {
