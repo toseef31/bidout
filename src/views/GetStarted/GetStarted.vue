@@ -40,7 +40,7 @@
               </div>
               <v-tabs-items v-model="currentItem">
                 <v-tab-item>
-                  <v-form @submit.prevent="buyerRequest" ref="form" v-model="buyerValid">
+                  <v-form @submit.prevent="buyerRequest" ref="buyerForm" v-model="buyerValid">
                     <v-container>
                       <v-row class="mt-8 bg-light">
                         <v-col cols="12" sm="12" text="left" class="pa-6 pb-3">
@@ -514,12 +514,20 @@ export default {
     },
     emailError() {
       if (!this.email) {
+        this.buyerValid = false;
+        this.supplierValid = false;
         return "Email is required";
       } else if (!this.email.match(/^\w+([.+_-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,3})+$/)) {
+        this.buyerValid = false;
+        this.supplierValid = false;
         return "Email is not valid";
       } else if (this.emailMsg) {
+        this.buyerValid = false;
+        this.supplierValid = false;
         return this.emailMsg;
       } else {
+        this.buyerValid = true;
+        this.supplierValid = true;
         return "";
       }
     }
@@ -533,41 +541,43 @@ export default {
       this.results2 = payload.formattedNumber
     },
     registerRequest() {
-      if(this.companyId){
-        var supplierData = {
-          id: this.companyId,
-          companyName: this.company,
-          firstName: this.supplier.firstName,
-          lastName: this.supplier.lastName,
-          email: this.email,
-          phoneNumber: this.results2,
-          title: this.supplier.title,
-          password: this.password
+      if(this.$refs.form.validate() && this.emailError === ''){
+        if(this.companyId){
+          var supplierData = {
+            id: this.companyId,
+            companyName: this.company,
+            firstName: this.supplier.firstName,
+            lastName: this.supplier.lastName,
+            email: this.email,
+            phoneNumber: this.results2,
+            title: this.supplier.title,
+            password: this.password
+          }
+        }else{
+          var supplierData = {
+            company: this.company,
+            companyHq: this.supplier.companyHq,
+            companyHq2: this.supplier.companyHq2,
+            companyHqCountry: this.country,
+            companyHqState: this.region,
+            companyHqCity: this.supplier.companyHqCity,
+            companyHqZip: this.supplier.companyHqZip,
+            firstName: this.supplier.firstName,
+            lastName: this.supplier.lastName,
+            email: this.email,
+            phoneNumber: this.results2,
+            title: this.supplier.title,
+            password: this.password
+          }
         }
-      }else{
-        var supplierData = {
-          company: this.company,
-          companyHq: this.supplier.companyHq,
-          companyHq2: this.supplier.companyHq2,
-          companyHqCountry: this.country,
-          companyHqState: this.region,
-          companyHqCity: this.supplier.companyHqCity,
-          companyHqZip: this.supplier.companyHqZip,
-          firstName: this.supplier.firstName,
-          lastName: this.supplier.lastName,
-          email: this.email,
-          phoneNumber: this.results2,
-          title: this.supplier.title,
-          password: this.password
-        }
+        this.supplierSignUpAction(supplierData);
+        this.loader = 'loading';
+        this.supplierValid = false;
       }
-      this.supplierSignUpAction(supplierData);
-      this.loader = 'loading';
-      this.supplierValid = false;
     },
     buyerRequest() {
-      // this.$refs.buyerForm.validate();
-      var buyerData = {
+      if(this.$refs.buyerForm.validate() && this.emailError === ''){
+        var buyerData = {
         company: this.buyer.companyName,
         companyHq: this.buyer.companyHq,
         companyHq2: this.buyer.companyHq2,
@@ -585,6 +595,7 @@ export default {
       this.buyerSignUpAction(buyerData);
       this.loader = 'loading';
       this.buyerValid = false;
+      }
     },
     getSupplierList(){
       if(this.company.length > 2){
