@@ -523,7 +523,7 @@ export default {
       }
 
       if (err.response && err.response.status === 400 && err.response.data.message === 'Please add a valid price for all items') {
-        commit('setBidSubmissionValidationAlert', 'Please add a valid price or click the "X" button that you are no-biding for each line item');
+        commit('setBidSubmissionValidationAlert', 'Please add a valid price or click the "X" button that you are no-biding for each line item')
       }
       if (state.apiCounter === 2) {
         dispatch('apiSignOutAction');
@@ -913,7 +913,12 @@ export default {
 
       if (res.status === 200) {
         commit('setLoadingInvite', false);
-        const userData = res.data;
+        let userData = '';
+        if (res.data.message) {
+          userData = res.data.user;
+        } else {
+          userData = res.data;
+        }
         return userData;
       }
     } catch (err) {
