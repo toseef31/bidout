@@ -311,7 +311,7 @@ export default {
     },
   },
   methods: {
-    ...mapActions(['saveDraftBid', 'updateDraftBid', 'deleteDraftBid', 'saveTemplateBid', 'updateTemplate', 'updateBid']),
+    ...mapActions(['saveDraftBid', 'updateDraftBid', 'deleteDraftBid', 'saveTemplateBid', 'updateTemplate', 'updateBid','getAllIntent']),
     async changeTab() {
       if (this.$store.getters.bidData != null) {
         const bidDetails = {
@@ -432,8 +432,13 @@ export default {
       this.deleteDraftBid({ draftId: this.$store.getters.bidData.id });
     },
   },
-  mounted() {
+  async mounted() {
     this.route = this.$route.name;
+
+    await this.getAllIntent({
+      bidId: this.$store.getters.bidData.id,
+      reload: false,
+    });
 
     if (this.$store.getters.entryCheckForEditBid) {
       this.$router.push('/view-bids');

@@ -66,5 +66,5 @@ export default {
   teamMemberAddAlert: false,
   teamMembersForBid: [],
   teamMembersInitial: [],
-  bidSubmissionValidationAlert: null
+  bidSubmissionValidationAlert: null,
 };

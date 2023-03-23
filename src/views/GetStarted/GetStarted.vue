@@ -40,7 +40,7 @@
               </div>
               <v-tabs-items v-model="currentItem">
                 <v-tab-item>
-                  <v-form @submit.prevent="buyerRequest" ref="form" v-model="buyerValid">
+                  <v-form @submit.prevent="buyerRequest" ref="buyerForm" v-model="buyerValid">
                     <v-container>
                       <v-row class="mt-8 bg-light">
                         <v-col cols="12" sm="12" text="left" class="pa-6 pb-3">
@@ -63,12 +63,12 @@
                         <v-col cols="12" sm="6" text="left" class="pb-0">
                           <label class="d-block text-left input-label mb-2 font-weight-bold">Company HQ Country</label>
                           <!-- <v-select :items="countries" outlined v-model="companyHqCountry" placeholder="Select"></v-select> -->
-                          <country-select v-model="country" :country="country" topCountry="US" className="countrySelect" placeholder="Select Country" />
+                          <country-select v-model="country" :country="country" topCountry="US" className="countrySelect" :disablePlaceholder="true" placeholder="Select Country" />
                         </v-col>
                         <v-col cols="12" sm="6" text="left">
                           <label class="d-block text-left input-label mb-2 font-weight-bold">Company HQ State</label>
                           <!-- <v-select outlined placeholder="Select" v-model="companyHqState"></v-select> -->
-                          <region-select v-model="region" :country="country" :region="region" className="countrySelect" />
+                          <region-select v-model="region" :country="country" :region="region" :disablePlaceholder="true" className="countrySelect" />
                         </v-col>
                         <v-col cols="12" sm="6" text="left">
                           <label class="d-block text-left input-label mb-2 font-weight-bold">Company HQ City</label>
@@ -90,8 +90,8 @@
                         </v-col>
                         <v-col cols="12" sm="12" text="left" class="pb-0">
                           <label class="d-block text-left input-label mb-2 font-weight-bold">Email Address</label>
-                          <v-text-field placeholder="example@email.com" single-line outlined type="email" v-model="email" @keyup="emailCheck()" :rules="buyerEmailRule"></v-text-field>
-                          <span class="d-block red--text text-left mt-n4" v-if="emailMsg">{{emailMsg}}</span>
+                          <v-text-field placeholder="example@email.com" single-line outlined type="email" v-model="email" @keyup="emailCheck()" @keydown="emailCheck()"></v-text-field>
+                          <span class="d-block red--text text-left mt-n4" v-if="emailError" v-html="emailError"></span>
                         </v-col>
                         <v-col cols="12" sm="12" text="left" class="pb-0">
                           <label class="d-block text-left input-label mb-2 font-weight-bold">Title</label>
@@ -191,12 +191,12 @@
                         <v-col cols="12" sm="6" text="left">
                           <label class="d-block text-left input-label mb-2 font-weight-bold">Company HQ Country</label>
                           <!-- <v-select :items="countries" outlined v-model="companyHqCountry" placeholder="Select"></v-select> -->
-                          <country-select v-model="country" :country="country" topCountry="US" className="countrySelect" placeholder="Select Country" />
+                          <country-select v-model="country" :country="country" topCountry="US" className="countrySelect" :disablePlaceholder="true" placeholder="Select Country" />
                         </v-col>
                         <v-col cols="12" sm="6" text="left">
                           <label class="d-block text-left input-label mb-2 font-weight-bold">Company HQ State</label>
                           <!-- <v-select outlined placeholder="Select" v-model="companyHqState"></v-select> -->
-                          <region-select v-model="region" :country="country" :region="region" className="countrySelect" />
+                          <region-select v-model="region" :country="country" :region="region" :disablePlaceholder="true" className="countrySelect" />
                         </v-col>
                         <v-col cols="12" sm="6" text="left" class="pb-0">
                           <label class="d-block text-left input-label mb-2 font-weight-bold">Company HQ City</label>
@@ -218,8 +218,8 @@
                         </v-col>
                         <v-col cols="12" sm="12" text="left" class="pb-0">
                           <label class="d-block text-left input-label mb-2 font-weight-bold">Email Address</label>
-                          <v-text-field placeholder="example@email.com" single-line outlined type="email" v-model="email" @keyup="emailCheck()" :rules="supplierEmailRule"></v-text-field>
-                          <span class="d-block red--text text-left mt-n4" v-if="emailMsg">{{emailMsg}}</span>
+                          <v-text-field placeholder="example@email.com" single-line outlined type="email" v-model="email" @keyup="emailCheck()"></v-text-field>
+                          <span class="d-block red--text text-left mt-n4" v-if="emailError" v-html="emailError"></span>
                         </v-col>
                         <v-col cols="12" sm="12" text="left" class="pb-0">
                           <label class="d-block text-left input-label mb-2 font-weight-bold">Title</label>
@@ -399,9 +399,11 @@ export default {
       email: '',
       buyerEmailRule: [
         v => !!v || 'Email is required',
+        v => /^\w+([.+_-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,3})+$/.test(v) || 'E-mail must be valid',
       ],
       supplierEmailRule: [
         v => !!v || 'Email is required',
+        v => /^\w+([.+_-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,3})+$/.test(v) || 'E-mail must be valid',
       ],
       company: '',
       companyRule: [
@@ -510,6 +512,25 @@ export default {
     companyMsg(){
       return this.$store.getters.companyError;
     },
+    emailError() {
+      if (!this.email) {
+        this.buyerValid = false;
+        this.supplierValid = false;
+        return "Email is required";
+      } else if (!this.email.match(/^\w+([.+_-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,3})+$/)) {
+        this.buyerValid = false;
+        this.supplierValid = false;
+        return "Email is not valid";
+      } else if (this.emailMsg) {
+        this.buyerValid = false;
+        this.supplierValid = false;
+        return `Email already exists! Please <a href="/login">login</a> to access your account.`;
+      } else {
+        this.buyerValid = true;
+        this.supplierValid = true;
+        return "";
+      }
+    }
   },
   methods: {
     ...mapActions(["supplierSignUpAction","searchSupplier","checkEmail","buyerSignUpAction","getIpAddress"]),
@@ -520,41 +541,43 @@ export default {
       this.results2 = payload.formattedNumber
     },
     registerRequest() {
-      if(this.companyId){
-        var supplierData = {
-          id: this.companyId,
-          companyName: this.company,
-          firstName: this.supplier.firstName,
-          lastName: this.supplier.lastName,
-          email: this.email,
-          phoneNumber: this.results2,
-          title: this.supplier.title,
-          password: this.password
+      if(this.$refs.form.validate() && this.emailError === ''){
+        if(this.companyId){
+          var supplierData = {
+            id: this.companyId,
+            companyName: this.company,
+            firstName: this.supplier.firstName,
+            lastName: this.supplier.lastName,
+            email: this.email,
+            phoneNumber: this.results2,
+            title: this.supplier.title,
+            password: this.password
+          }
+        }else{
+          var supplierData = {
+            company: this.company,
+            companyHq: this.supplier.companyHq,
+            companyHq2: this.supplier.companyHq2,
+            companyHqCountry: this.country,
+            companyHqState: this.region,
+            companyHqCity: this.supplier.companyHqCity,
+            companyHqZip: this.supplier.companyHqZip,
+            firstName: this.supplier.firstName,
+            lastName: this.supplier.lastName,
+            email: this.email,
+            phoneNumber: this.results2,
+            title: this.supplier.title,
+            password: this.password
+          }
         }
-      }else{
-        var supplierData = {
-          company: this.company,
-          companyHq: this.supplier.companyHq,
-          companyHq2: this.supplier.companyHq2,
-          companyHqCountry: this.country,
-          companyHqState: this.region,
-          companyHqCity: this.supplier.companyHqCity,
-          companyHqZip: this.supplier.companyHqZip,
-          firstName: this.supplier.firstName,
-          lastName: this.supplier.lastName,
-          email: this.email,
-          phoneNumber: this.results2,
-          title: this.supplier.title,
-          password: this.password
-        }
+        this.supplierSignUpAction(supplierData);
+        this.loader = 'loading';
+        this.supplierValid = false;
       }
-      this.supplierSignUpAction(supplierData);
-      this.loader = 'loading';
-      this.supplierValid = false;
     },
     buyerRequest() {
-      // this.$refs.buyerForm.validate();
-      var buyerData = {
+      if(this.$refs.buyerForm.validate() && this.emailError === ''){
+        var buyerData = {
         company: this.buyer.companyName,
         companyHq: this.buyer.companyHq,
         companyHq2: this.buyer.companyHq2,
@@ -572,6 +595,7 @@ export default {
       this.buyerSignUpAction(buyerData);
       this.loader = 'loading';
       this.buyerValid = false;
+      }
     },
     getSupplierList(){
       if(this.company.length > 2){
@@ -579,7 +603,12 @@ export default {
       }
     },
     emailCheck(){
-      this.checkEmail(this.email);
+      const testemail = /^\w+([.+_-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,3})+$/.test(this.email);
+      if(testemail === true){
+        this.checkEmail(this.email);
+      }else if(this.email.length < 2){
+        this.$store.commit('setEmailExistSuccess', '');
+      }
     },
     required: function(value) {
       if (value) {
@@ -592,7 +621,7 @@ export default {
       if (value.length >= 6) {
         return true;
       } else {
-        return 'Password should have more than 6 characters.';
+        return 'Password must be at least 6 characters.';
       }
     },
     matchingPasswords: function() {

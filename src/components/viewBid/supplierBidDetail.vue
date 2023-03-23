@@ -37,9 +37,9 @@
           <v-col md="2" class="text-right mr-1 title-desc">Description:</v-col>
           <v-col class="title-brief bid-desc"> {{
             bidDetail.bidData.bidDescriptions &&
-              Array.isArray(bidDetail.bidData.bidDescriptions)
-              ? bidDetail.bidData.bidDescriptions[0].body
-              : bidDetail.bidData.bidDescriptions
+            Array.isArray(bidDetail.bidData.bidDescriptions)
+            ? bidDetail.bidData.bidDescriptions[0].body
+            : bidDetail.bidData.bidDescriptions
           }}</v-col>
         </v-row>
         <br />
@@ -87,8 +87,7 @@
           bidDetail.bidData.invitedTeamMembers.length > 0
         " v-for="(item, index) in bidDetail.bidData.invitedTeamMembers" :key="index"
           class="d-flex align-center flex-child">
-          <v-img v-if="item.image" max-width="100" height="auto" contain :aspect-ratio="16 / 9"
-            :src="item.image"></v-img>
+          <v-img v-if="item.image" max-width="100" height="auto" contain :aspect-ratio="16 / 9" :src="item.image"></v-img>
           <v-avatar v-else color="#0d96481a" size="62">
             <v-icon color="#0d9648" large>mdi-account-outline </v-icon>
           </v-avatar>
@@ -169,7 +168,10 @@
             <tbody>
               <tr v-for="(doc, index) in bidDetail.bidData.attachments" :key="index">
                 <td class="text-left">
-                  <img :src="require('@/assets/images/bids/FilePdf.png')" />
+                  <img :src="require('@/assets/images/bids/FilePdf.png')" v-if="checkFileType(doc.fileName) === 'pdf'" />
+                  <img :src="require('@/assets/images/bids/FileDoc.png')"
+                    v-else-if="checkFileType(doc.fileName) === 'docx'" />
+                  <v-icon color="#0D1139" v-else>mdi-file-document</v-icon>
                 </td>
                 <td class="text-left doc-class"><a :href="doc.url" target="_blank" class="text-decoration-none">{{
                   doc.fileName
@@ -229,6 +231,9 @@ export default {
     },
     formatDate(dueDate) {
       return dueDate !== '' && dueDate !== null ? moment.tz(dueDate, 'America/Chicago').format('MM/DD/YYYY') : '';
+    },
+    checkFileType(file) {
+      return file.substring(file.lastIndexOf('.') + 1);
     },
   },
   computed: {

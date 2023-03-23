@@ -5,7 +5,7 @@ export default {
   setSalesReps(state, payload) {
     state.salesRepsList = payload.sort((a, b) => {
       const aHasOfsPremium = a.contracts.some(
-        (contract) => contract === 'ofs-premium'
+        (contract) => contract === 'ofs-premium',
       );
       if (aHasOfsPremium) {
         return -1;
@@ -16,7 +16,7 @@ export default {
   setCompaniesList(state, payload) {
     state.companiesList = payload.sort((a, b) => {
       const aHasOfsPremium = a.contracts.some(
-        (contract) => contract.contractType === 'ofs-premium'
+        (contract) => contract.contractType === 'ofs-premium',
       );
       if (aHasOfsPremium) {
         return -1;
@@ -27,7 +27,7 @@ export default {
   setServiceCompanies(state, payload) {
     state.serviceCompaniesList = payload.sort((a, b) => {
       const aHasOfsPremium = a.contracts.some(
-        (contract) => contract.contractType === 'ofs-premium'
+        (contract) => contract.contractType === 'ofs-premium',
       );
       if (aHasOfsPremium) {
         return -1;
@@ -53,8 +53,11 @@ export default {
   setAttachData(state, payload) {
     state.attachData = payload;
   },
-  spliceAttachData(state, index) {
-    state.attachData.splice(index, 1);
+  spliceAttachData(state, id) {
+    const indexToRemove = state.attachData.findIndex((obj) => obj.id === id);
+    if (indexToRemove !== -1) {
+      state.attachData = null;
+    }
   },
   setDraftTime(state, payload) {
     state.draftTime = payload;
@@ -122,8 +125,7 @@ export default {
   setSupplierAttachment(state, payload) {
     state.supplierAttachment.push(payload);
     state.supplierAttachment = state.supplierAttachment.filter(
-      (value, index, self) =>
-        index === self.findIndex((t) => t.fileName === value.fileName)
+      (value, index, self) => index === self.findIndex((t) => t.fileName === value.fileName),
     );
   },
   removeSupplierAttachment(state) {
@@ -214,7 +216,7 @@ export default {
       state.bidSubmissionAlert.unDisqualify = false;
     }, 8000);
   },
-  setLoweringPriceAlert(state,payload) {
+  setLoweringPriceAlert(state, payload) {
     state.loweringPriceAlert = payload;
     setTimeout(() => {
       state.loweringPriceAlert = null;
@@ -272,7 +274,8 @@ export default {
     }, 8000);
   },
   setTeamMembersForBid(state, payload) {
-    state.teamMembersForBid = payload;
+    state.teamMembersForBid = [];
+    Array.isArray(payload) ? state.teamMembersForBid.push(...payload) : [];
   },
   pushTeamMembersForBid(state, member) {
     state.teamMembersForBid.push(member);
@@ -280,7 +283,7 @@ export default {
   spliceTeamMembersForBid(state, member) {
     state.teamMembersForBid = [
       ...new Map(
-        state.teamMembersForBid.map((item) => [item.id, item])
+        state.teamMembersForBid.map((item) => [item.id, item]),
       ).values(),
     ];
 
@@ -303,10 +306,10 @@ export default {
   pushTeamMembersInitial(state, member) {
     state.teamMembersInitial.push(member);
   },
-  setBidSubmissionValidationAlert(state,payload) {
-    state.bidSubmissionValidationAlert = payload
+  setBidSubmissionValidationAlert(state, payload) {
+    state.bidSubmissionValidationAlert = payload;
     setTimeout(() => {
       state.bidSubmissionValidationAlert = null;
     }, 8000);
-  }
+  },
 };

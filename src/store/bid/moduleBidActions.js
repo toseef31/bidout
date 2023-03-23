@@ -9,7 +9,7 @@ export default {
       const res = await axios.get(`company/getTeamMembers/${payload}`);
       if (res.status === 200) {
         commit('setTeamMembers', res.data);
-        commit('setTeamMembersInitial',res.data)
+        commit('setTeamMembersInitial', res.data);
         commit('setPageLoader', false);
       } else {
         commit('setTeamMembers', null);
@@ -145,6 +145,7 @@ export default {
           commit('setInvitedSuppliersData', res.data.bidData.invitedSuppliers);
 
           commit('setInvitedNewSuppliers', res.data.bidData.invitedNewSuppliers);
+
           commit('setTeamMembersForBid', res.data.bidData.invitedTeamMembers);
         }
 
@@ -1543,7 +1544,7 @@ export default {
       }
     }
 
-    if (state.invitedSuppliers !== '') {
+    if (state.invitedSuppliers !== '' && state.invitedSuppliers && state.invitedSuppliers.length > 0) {
       for (let i = 0; i < state.invitedSuppliers.length; i++) {
         if (state.invitedSuppliers[i].id) {
           formData.append(`invitedSuppliers[${i}]`, state.invitedSuppliers[i].id);
@@ -1554,7 +1555,7 @@ export default {
         }
       }
     } else {
-      formData.append('invitedSuppliers', '');
+      formData.append('invitedSuppliers', []);
     }
     if (state.invitedNewSuppliers != null) {
       for (let i = 0; i < state.invitedNewSuppliers.length; i++) {
@@ -1592,8 +1593,7 @@ export default {
     } else {
       formData.append('lineItems', '');
     }
-
-    if (state.attachement !== '') {
+    if (state.attachement !== '' && state.attachement && state.attachement.length > 0) {
       for (let i = 0; i < state.attachement.length; i++) {
         formData.append(`attachments[${i}][fileName]`, state.attachement[i].fileName);
         formData.append(`attachments[${i}][fileSize]`, state.attachement[i].fileSize);
@@ -1604,7 +1604,7 @@ export default {
         formData.append(`attachments[${i}][id]`, state.attachement[i].id);
       }
     } else {
-      formData.append('attachments', '');
+      formData.append('attachments', []);
     }
 
     if (state.questions !== '') {
@@ -1769,7 +1769,7 @@ export default {
         await dispatch('getBidBySerial', {
           serial: payload.serial,
           id: payload.userId,
-          company: payload.company
+          company: payload.company,
         });
 
         commit('setTeamMemberAddAlert');
@@ -1785,6 +1785,3 @@ export default {
     }
   },
 };
-
-
-
