@@ -2,9 +2,7 @@
   <div>
     <v-row class="supplier-row fill-height" no-gutters>
       <v-col cols="12" sm="6" class="available-data">
-        <div
-          class="d-flex justify-space-between align-center pl-4 pa-3 supplier-head"
-        >
+        <div class="d-flex justify-space-between align-center pl-4 pa-3 supplier-head">
           <div>
             <h4 class="mb-0 black--text font-weight-bold">
               Invite Team Members
@@ -15,32 +13,18 @@
         <div>
           <div class="available-search mt-5 px-4">
             <div>
-              <v-text-field
-                type="text"
-                hide-details
-                outlined
-                placeholder="Search"
-                prepend-inner-icon="mdi-magnify"
-                v-model="searchMember"
-              >
+              <v-text-field type="text" hide-details outlined placeholder="Search" prepend-inner-icon="mdi-magnify"
+                v-model="searchMember">
               </v-text-field>
             </div>
           </div>
           <div class="companies-list">
-            <div
-              class="d-flex align-center justify-space-between list-company pa-4"
-              v-for="(team, index) in teamMembers"
-              v-if="user.id !== team.id && team.status !== false"
-              :key="index"
-            >
+            <div class="d-flex align-center justify-space-between list-company pa-4" v-for="(team, index) in teamMembers"
+              v-if="user.id !== team.id && team.status !== false" :key="index">
               <div class="comapny-data d-flex align-center">
                 <div class="company-img">
-                  <img
-                    v-if="!team.image"
-                    :src="require('@/assets/images/chat/chatUser.png')"
-                    width="48px"
-                    height="48px"
-                  />
+                  <img v-if="!team.image" :src="require('@/assets/images/chat/chatUser.png')" width="48px"
+                    height="48px" />
                   <img v-else :src="team.image" width="48px" height="48px" />
                 </div>
                 <div class="company-title text-left pl-4">
@@ -49,45 +33,28 @@
                 </div>
               </div>
               <div class="add-company">
-                <v-btn
-                  color="rgba(13, 150, 72, 0.1)"
-                  tile
-                  min-width="32px"
-                  height="32"
-                  class="pa-0"
-                  elevation="0"
-                  @click="addMember(team)"
-                >
-                  <v-icon color="#0D9648">mdi-plus</v-icon></v-btn
-                >
+                <v-btn color="rgba(13, 150, 72, 0.1)" tile min-width="32px" height="32" class="pa-0" elevation="0"
+                  @click="addMember(team)">
+                  <v-icon color="#0D9648">mdi-plus</v-icon></v-btn>
               </div>
             </div>
           </div>
         </div>
       </v-col>
       <v-col cols="12" sm="6" class="invited-data available-data">
-        <div
-          class="d-flex justify-space-between align-center pl-4 py-3 invited-head"
-        >
+        <div class="d-flex justify-space-between align-center pl-4 py-3 invited-head">
           <div>
             <h4 class="mb-0 black--text font-weight-bold">Added</h4>
           </div>
         </div>
         <div class="companies-list">
-          <div
-            class="d-flex align-center justify-space-between list-company pa-4"
-            v-for="(team, index) in filterTeam"
+          <div class="d-flex align-center justify-space-between list-company pa-4" v-for="(team, index) in filterTeam"
             v-if="
               user.id !== team.id && team.status !== false && filterTeam.length
-            "
-            :key="index"
-          >
+            " :key="index">
             <div class="comapny-data d-flex align-center">
               <div class="company-img">
-                <img
-                  v-if="!team.image"
-                  :src="require('@/assets/images/chat/chatUser.png')"
-                />
+                <img v-if="!team.image" :src="require('@/assets/images/chat/chatUser.png')" />
                 <img v-else :src="team.image" width="48px" height="48px" />
               </div>
               <div class="company-title text-left pl-4">
@@ -96,24 +63,13 @@
               </div>
             </div>
             <div class="add-company">
-              <v-btn
-                color="rgba(243, 35, 73, 0.1)"
-                tile
-                min-width="32px"
-                height="32"
-                class="pa-0"
-                elevation="0"
-                @click="remove(team)"
-              >
-                <v-icon color="#F32349">mdi-minus</v-icon></v-btn
-              >
+              <v-btn color="rgba(243, 35, 73, 0.1)" tile min-width="32px" height="32" class="pa-0" elevation="0"
+                @click="remove(team)">
+                <v-icon color="#F32349">mdi-minus</v-icon></v-btn>
             </div>
           </div>
 
-          <div
-            class="text-center mt-10 no-team-class"
-            v-if="filterTeam.length === 0"
-          >
+          <div class="text-center mt-10 no-team-class" v-if="filterTeam.length === 0">
             No team member added.
           </div>
         </div>
@@ -122,18 +78,9 @@
 
     <v-row justify="center" align="center" no-gutters>
       <div class="mb-n2 align-center justify-center">
-        <v-btn
-          color="#0D9648"
-          elevation="0"
-          height="56px"
-          width="220px"
-          large
-          :loading="getTeamLoading"
-          :disabled="getTeamLoading"
-          class="white--text text-capitalize font-weight-bold mt-6 mb-5 save-btn"
-          @click="saveTeam"
-          >Save Changes</v-btn
-        >
+        <v-btn color="#0D9648" elevation="0" height="56px" width="220px" large :loading="getTeamLoading"
+          :disabled="getTeamLoading" class="white--text text-capitalize font-weight-bold mt-6 mb-5 save-btn"
+          @click="saveTeam">Save Changes</v-btn>
       </div>
     </v-row>
   </div>
@@ -155,45 +102,42 @@ export default {
     },
     teamMembers() {
       if (
-        this.$store.getters.teamMembersInitial !== null &&
-        this.$store.getters.teamMembersInitial !== ''
+        this.$store.getters.teamMembersInitial !== null
+        && this.$store.getters.teamMembersInitial !== ''
       ) {
         if (this.searchMember) {
           const unique = this.$store.getters.teamMembersInitial.filter(
-            (item) =>
-              this.searchMember
+            (item) => this.searchMember
+              .toLowerCase()
+              .split(' ')
+              .every((v) => item.firstName.toLowerCase().includes(v))
+              || this.searchMember
                 .toLowerCase()
                 .split(' ')
-                .every((v) => item.firstName.toLowerCase().includes(v)) ||
-              this.searchMember
-                .toLowerCase()
-                .split(' ')
-                .every((v) => item.lastName.toLowerCase().includes(v))
+                .every((v) => item.lastName.toLowerCase().includes(v)),
           );
           return [...new Map(unique.map((item) => [item.id, item])).values()];
         }
         const unique = this.$store.getters.teamMembersInitial
           ? this.$store.getters.teamMembersInitial.filter(
-              (el) =>
-                !this.$store.getters.teamMembersForBid.find(
-                  (team) => team.id === el.id,
-                )
-            )
+            (el) => !this.$store.getters.teamMembersForBid.find(
+              (team) => team.id === el.id,
+            ),
+          )
           : [];
 
         return [...new Map(unique.map((item) => [item.id, item])).values()];
       }
       if (this.searchMember) {
         const unique = this.$store.getters.teamMembersInitial.filter(
-          (item) =>
-            this.searchMember
+          (item) => this.searchMember
+            .toLowerCase()
+            .split(' ')
+            .every((v) => item.firstName.toLowerCase().includes(v))
+            || this.searchMember
               .toLowerCase()
               .split(' ')
-              .every((v) => item.firstName.toLowerCase().includes(v)) ||
-            this.searchMember
-              .toLowerCase()
-              .split(' ')
-              .every((v) => item.lastName.toLowerCase().includes(v))
+              .every((v) => item.lastName.toLowerCase().includes(v)),
         );
         return [...new Map(unique.map((item) => [item.id, item])).values()];
       }
@@ -218,9 +162,7 @@ export default {
       let teamIds = [];
       this.teamLoading = true;
 
-      this.$store.getters.teamMembersForBid.forEach((el) =>
-        teamIds.push(el.id)
-      );
+      this.$store.getters.teamMembersForBid.forEach((el) => teamIds.push(el.id));
 
       teamIds = [...new Set(teamIds)];
 

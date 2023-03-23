@@ -274,7 +274,8 @@ export default {
     }, 8000);
   },
   setTeamMembersForBid(state, payload) {
-    state.teamMembersForBid = payload;
+    state.teamMembersForBid = [];
+    Array.isArray(payload) ? state.teamMembersForBid.push(...payload) : [];
   },
   pushTeamMembersForBid(state, member) {
     state.teamMembersForBid.push(member);

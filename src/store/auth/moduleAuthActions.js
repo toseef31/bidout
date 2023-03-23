@@ -57,8 +57,14 @@ export default {
             }
             commit('setLoginLoading', false);
           });
-      }, (err) => {
-        commit('setPassError', 'Oops! You have entered an incorrect email or password, Please try again, if you are still unsure of your password, please Reset Password');
+      }).catch((error) => {
+        if (error.code === 'auth/too-many-requests') {
+          commit('setPassError', null);
+          commit('setError', 'Access to this account has been temporarily disabled due to many failed login attempts. You can immediately restore it by resetting your password or you can try again later.');
+        } else {
+          commit('setError', null);
+          commit('setPassError', 'Oops! You have entered an incorrect email or password, Please try again, if you are still unsure of your password, please Reset Password');
+        }
         commit('setLoginLoading', false);
         // commit('showErrorAlert')
       });
@@ -175,7 +181,7 @@ export default {
       axios.post('/user/checkIfUserWithEmailExists', { email: payload })
         .then((responce) => {
           if (responce.data.exists === true) {
-            commit('setEmailExistSuccess', 'Email aleardy Exists! Please try different one');
+            commit('setEmailExistSuccess', 'Email already Exists! Please try different one');
           } else {
             commit('setEmailExistSuccess', '');
           }
@@ -190,7 +196,7 @@ export default {
       axios.post('/user/checkIfUserWithEmailExists', { email: payload.email })
         .then((responce) => {
           if (responce.data.exists === true) {
-            commit('setEmailExistSuccess', 'Email aleardy Exists! Please try different one');
+            commit('setEmailExistSuccess', 'Email already Exists! Please try different one');
             commit('setCompanyError', 'Email already Exists! Please try different one');
             commit('showErrorAlert');
           } else if (payload.id) {

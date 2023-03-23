@@ -28,7 +28,7 @@
       New suppliers have been updated and email notifications have been sent.
     </v-alert>
     <v-alert type="success" v-show="getTeamMemberAddAlert" class="mx-5 mt-5">
-      New team members have been added to the bid.
+      Team members have been successfully updated.
     </v-alert>
 
     <v-alert type="success" v-show="getDateAlert" class="mx-5">
