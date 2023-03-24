@@ -1484,6 +1484,7 @@ export default {
         dispatch('getCategories');
         dispatch('searchByCompany', { query: '', basin: 'all' });
         commit('setBidData', res.data.bidData);
+        commit('setUserType', res.data.user_type);
 
         if (res.data.supplierSubmissions
           && res.data.supplierSubmissions
