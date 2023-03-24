@@ -28,7 +28,7 @@
       New suppliers have been updated and email notifications have been sent.
     </v-alert>
     <v-alert type="success" v-show="getTeamMemberAddAlert" class="mx-5 mt-5">
-      New team members have been added to the bid.
+      Team members have been successfully updated.
     </v-alert>
 
     <v-alert type="success" v-show="getDateAlert" class="mx-5">
@@ -52,17 +52,17 @@
       </v-alert>
 
       <v-alert type="success" v-show="showBidSubmissionAlert.award" class="mx-5 mt-5">
-        You have been awarded a company successfully!
+        You have awarded a company successfully!
       </v-alert>
 
       <v-alert type="success" v-show="showBidSubmissionAlert.disqualify" class="mx-5 mt-5">
-        You have been disqualified a company successfully!
+        You have disqualified a company successfully!
       </v-alert>
       <v-alert type="success" v-show="showBidSubmissionAlert.unAward" class="mx-5 mt-5">
-        You have been Un-awarded a company successfully!
+        You have un-awarded a company successfully!
       </v-alert>
       <v-alert type="success" v-show="showBidSubmissionAlert.unDisqualify" class="mx-5 mt-5">
-        You have been Un-disqualified a company successfully!
+        You have un-disqualified a company successfully!
       </v-alert>
       <v-alert type="error" v-show="getLoweringPriceAlert !== null" class="mx-5 mt-5">
         {{ getLoweringPriceAlert }}

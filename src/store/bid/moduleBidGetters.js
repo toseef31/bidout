@@ -3,7 +3,8 @@ export default {
     return state.validate;
   },
   teamMembers(state) {
-    return state.teamMembers;
+    return [...new Set(state.teamMembers)];
+    // return state.teamMembers;
   },
   salesRepsList(state) {
     return state.salesRepsList;
@@ -141,12 +142,12 @@ export default {
     return state.invitedTeamMembers;
   },
   teamMembersForBid(state) {
-    return state.teamMembersForBid
+    return state.teamMembersForBid;
   },
   teamMembersInitial(state) {
-    return state.teamMembersInitial
+    return state.teamMembersInitial;
   },
   bidSubmissionValidationAlert(state) {
-    return state.bidSubmissionValidationAlert
-  }
+    return state.bidSubmissionValidationAlert;
+  },
 };

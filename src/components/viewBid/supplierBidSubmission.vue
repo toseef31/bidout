@@ -176,12 +176,12 @@
 
                   <label :for="`uploadFileQ${index}`" v-else
                     class="
-                                                                                                                                                              upload-file
-                                                                                                                                                             pa-4
-                                                                                                                                                              d-block
-                                                                                                                                                              font-weight-medium
-                                                                                                                                                              text-center
-                                                                                                                                                            ">
+                                                                                                                                                                          upload-file
+                                                                                                                                                                         pa-4
+                                                                                                                                                                          d-block
+                                                                                                                                                                          font-weight-medium
+                                                                                                                                                                          text-center
+                                                                                                                                                                        ">
                     <v-file-input :id="`uploadFileQ${index}`" @change="handleDocumentForAnswer($event, index)"
                       :disabled="!bidDetail.receivingBids" :rules="item.required === 'true' ? fileRule : []" />
 
@@ -199,7 +199,7 @@
       <div class="bid-row-3 pt-8 pb-11" v-if="checkTime">
         <div class="title-detail px-4">Supplier Attachments</div>
 
-        <v-row no-gutters align="center" class="px-4 mt-7" v-if="bidDetail.receivingBids">
+        <v-row no-gutters align="center" class="px-4 mt-7" v-if="checkForUpload">
           <v-col cols="12" sm="12" md="12">
             <div class="upload-attach text-center">
               <label for="uploadFile" class="upload-file pa-6 d-block font-weight-medium text-center">
@@ -221,7 +221,11 @@
               <tbody>
                 <tr v-for="(doc, index) in supplierDocList" :key="index">
                   <td class="text-left">
-                    <img :src="require('@/assets/images/bids/FilePdf.png')" />
+                    <img :src="require('@/assets/images/bids/FilePdf.png')"
+                      v-if="checkFileType(doc.fileName) === 'pdf'" />
+                    <img :src="require('@/assets/images/bids/FileDoc.png')"
+                      v-else-if="checkFileType(doc.fileName) === 'docx'" />
+                    <v-icon color="#0D1139" v-else>mdi-file-document</v-icon>
                   </td>
                   <td class="text-left">{{ doc.fileName }}</td>
                   <td class="text-left">{{ size(doc.fileSize) }} </td>
@@ -232,14 +236,14 @@
                       | moment("MM/DD/YYYY")
                     }}
                   </td>
-                  <td class="text-left delete-class text-decoration-underline" v-if="bidDetail.receivingBids"
+                  <td class="text-left delete-class text-decoration-underline" v-if="checkForUpload"
                     @click="deleteAttach(index)">
 
-                    <v-dialog class="dialog-class" v-model="dialogT" width="320">
+                    <v-dialog class="dialog-class" v-model="dialogT" width="330">
 
                       <template v-slot:activator="{ on, attrs }">
 
-                        <v-btn v-on="on" v-bind="attrs" text v-if="bidDetail.receivingBids" :ripple="false">
+                        <v-btn v-on="on" v-bind="attrs" text v-if="checkForUpload" :ripple="false">
                           Delete
                         </v-btn>
                       </template>
@@ -276,7 +280,7 @@
         <div class="title-detail px-4">Supplier Notes</div>
 
         <div class="px-4 pt-6"><v-textarea v-model="supplierNote" value="Please submit your notes here" hideDetails
-            outlined auto-grow rows="6" row-height="25" :disabled="!bidDetail.receivingBids"></v-textarea></div>
+            outlined auto-grow rows="6" row-height="25" :disabled="!checkForUpload"></v-textarea></div>
 
       </div>
 
@@ -351,6 +355,12 @@ export default {
     isBidSubmitted() {
       return this.$store.getters.isBidSubmitted;
     },
+    checkForUpload() {
+      if (this.isBidOut) return true;
+      if (this.bidDetail.receivingBids) return true;
+
+      return false;
+    },
     isBidOut() {
       if (this.bidDetail.bidData.type === 'BidOut Process' && this.bidDetail.bidout) {
         return true;
@@ -358,7 +368,7 @@ export default {
       return false;
     },
     checkTime() {
-      if (this.isBidOut && this.supplierDocList && this.supplierDocList.length) return true;
+      if (this.isBidOut) return true;
       if (!this.isBidOut && this.bidDetail.receivingBids) return true;
       if (!this.isBidOut && !this.bidDetail.receivingBids && this.supplierDocList && this.supplierDocList.length) return true;
 
@@ -401,6 +411,10 @@ export default {
     size(size) {
       const sizeInMB = (size / (1024 * 1024)).toFixed(2);
       return `${sizeInMB}mb`;
+    },
+
+    checkFileType(file) {
+      return file.substring(file.lastIndexOf('.') + 1);
     },
     allValid() {
       for (let i = 0; i < this.value.length; i++) {
@@ -509,7 +523,7 @@ export default {
         this.$store.commit('removeSupplierAttachment');
       } else if (action === 'edit' && this.$refs.form.validate() && this.isValid) {
         this.loading = true;
-        this.lineItems.map((item, index) => {
+        this.lineItems.map((item) => {
           if (item.price != null) {
             item.price = item.price.replace(/,/g, '');
           } else {

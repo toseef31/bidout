@@ -9,7 +9,7 @@ const routes = [
     children: [
       {
         path: '/',
-        name: 'OFSHome',
+        name: 'Home',
         component: () => import('@/views/Login.vue'),
         beforeEnter: (to, from, next) => {
           if (store.getters.userInfo == null) {
@@ -22,77 +22,8 @@ const routes = [
           }
         },
       },
-      {
-        path: '/ofs-directory/:slug',
-        name: 'CategoryName',
-        component: () => import('@/views/Ofs/CategoryListing.vue'),
-        beforeEnter: (to, from, next) => {
-          if (store.getters.userInfo == null) {
-            next();
-          } else {
-            store.dispatch('getCurrentUser').then((data) => {
-              next('/dashboard');
-            }).catch((error) => {
-              console.log(error);
-              next();
-            });
-          }
-        },
-      },
-      {
-        path: '/ofs-directory/:slug/:name',
-        name: 'CategoryListing',
-        component: () => import('@/views/Ofs/CategoryListing.vue'),
-        beforeEnter: (to, from, next) => {
-          if (store.getters.userInfo == null) {
-            next();
-          } else {
-            store.dispatch('getCurrentUser').then((data) => {
-              next('/dashboard');
-            }).catch((error) => {
-              console.log(error);
-              next();
-            });
-          }
-        },
-      },
-      {
-        path: '/company-profiles/:name',
-        name: 'CompanyProfiles',
-        component: () => import('@/views/Ofs/ViewCompany.vue'),
-        beforeEnter: (to, from, next) => {
-          if (store.getters.userInfo == null) {
-            next();
-          } else {
-            store.dispatch('getCurrentUser').then((data) => {
-              next('/dashboard');
-            }).catch((error) => {
-              console.log(error);
-              next();
-            });
-          }
-        },
-      },
-      {
-        path: '/subcompany-profile',
-        name: 'SubCompanyProfile',
-        component: () => import('@/views/Ofs/SubCompany.vue'),
-        beforeEnter: (to, from, next) => {
-          if (store.getters.userInfo == null) {
-            next();
-          } else {
-            store.dispatch('getCurrentUser').then((data) => {
-              next('/dashboard');
-            }).catch((error) => {
-              console.log(error);
-              next();
-            });
-          }
-        },
-      },
     ],
   },
 ];
-
 
 export default routes;
