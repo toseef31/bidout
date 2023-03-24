@@ -98,7 +98,12 @@
                 <td class="text-left bid-note" v-if="item.supplierAttachments && item.supplierAttachments.length">
                   <div class="pb-4  d-inline-flex pr-10"
                     v-for="(doc, attIndex) in bidDetail.supplierSubmissions[aIndex].supplierAttachments" :key="attIndex">
-                    <img :src="require('@/assets/images/bids/FilePdf.png')" width="32" height="24" class="pr-2" />
+
+                    <img :src="require('@/assets/images/bids/FilePdf.png')"
+                      v-if="checkFileType(doc.fileName) === 'pdf'" class="pr-2"/>
+                    <img :src="require('@/assets/images/bids/FileDoc.png')"
+                      v-else-if="checkFileType(doc.fileName) === 'docx'" class="pr-2"/>
+                    <v-icon color="#0D1139" v-else class="pr-2">mdi-file-document</v-icon>
 
                     <a target="_blank" class="text-decoration-none" :href="doc.attachment
                     ">{{ doc.fileName }}</a>
@@ -128,7 +133,12 @@
                 </td>
                 <td class="text-left" v-if="ans.answers[qIndex].answer !== 'null' && item.questionType === 'uploadFile'">
                   <div class="pb-4 d-inline-flex">
-                    <v-img :src="require('@/assets/images/bids/FilePdf.png')" contain width="32" height="24" />
+                    <img :src="require('@/assets/images/bids/FilePdf.png')"
+                      v-if="checkFileType(ans.answers[qIndex].fileName) === 'pdf'" />
+                    <img :src="require('@/assets/images/bids/FileDoc.png')"
+                      v-else-if="checkFileType(ans.answers[qIndex].fileName) === 'docx'" />
+                    <v-icon color="#0D1139" v-else>mdi-file-document</v-icon>
+
                     <a target="_blank" class="text-decoration-none pl-2" :href="ans.answers[qIndex].answer
                     ">{{ ans.answers[qIndex].fileName }}</a>
 
@@ -250,6 +260,9 @@ export default {
   },
   methods: {
     ...mapActions(['awardCompany', 'rejectCompany', 'UnAwardCompany', 'UnDisqualifyCompany']),
+    checkFileType(file) {
+      return file.substring(file.lastIndexOf('.') + 1);
+    },
     exportF() {
       const header = this.bidDetail.supplierSubmissions.map((el) => el.company);
 
