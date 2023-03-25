@@ -97,16 +97,16 @@
         </v-col>
 
         <v-col class="status-sec mx-auto">
-          <v-sheet class="py-2 px-4 bid-status-card text-left" rounded="lg" height="119" width="300"
+          <v-sheet class="py-2 px-4 bid-status-card text-left" rounded="lg" height="119" width="310"
             v-if="bidDetail.receivingBids && !isBidOut">
             <div class="status">
               Status: Receiving Bids
             </div>
             <div class="time pt-2 align-center">
               <v-icon small color="#0D9648"> mdi-timer-outline</v-icon>
-              {{ months }} months,
-              {{ days }} days, {{ hours }} hours, {{ minutes }} min,
-              {{ seconds }} sec remaining
+              {{ months > 0 ? `${months} months,` : '' }}
+              {{ days }} days, {{ hours }} hours, {{ minutes }} min
+              {{ months === 0 ? `, ${seconds} sec` : '' }} remaining
             </div>
 
             <v-divider color="#0D9648"></v-divider>
@@ -115,7 +115,7 @@
             </div>
           </v-sheet>
 
-          <v-sheet class="py-2 px-4 bid-status-card text-left" rounded="lg" height="119" width="300"
+          <v-sheet class="py-2 px-4 bid-status-card text-left" rounded="lg" height="119" width="310"
             v-if="!bidDetail.receivingBids && isBidOut">
 
             <div class="status">
@@ -123,8 +123,9 @@
             </div>
             <div class="time pt-2 align-center">
               <v-icon small color="#0D9648"> mdi-timer-outline</v-icon>
-              {{ days }} days, {{ hours }} hours, {{ minutes }} min,
-              {{ seconds }} sec remaining
+              {{ months > 0 ? `${months} months,` : '' }}
+              {{ days }} days, {{ hours }} hours, {{ minutes }} min
+              {{ months === 0 ? `, ${seconds} sec` : '' }} remaining
             </div>
 
             <v-divider color="#0D9648"></v-divider>
@@ -283,15 +284,16 @@
         </v-col>
 
         <v-col cols="auto">
-          <v-sheet class="py-2 px-4 bid-status-card text-left" rounded="lg" height="119" width="300"
+          <v-sheet class="py-2 px-4 bid-status-card text-left" rounded="lg" height="119" width="310"
             v-if="bidDetail.receivingBids && !isBidOut">
             <div class="status">
               Status: Receiving Bids
             </div>
             <div class="time pt-2 align-center">
               <v-icon small color="#0D9648"> mdi-timer-outline</v-icon>
-              {{ days }} days, {{ hours }} hours, {{ minutes }} min,
-              {{ seconds }} sec remaining
+              {{ months > 0 ? `${months} months,` : '' }}
+              {{ days }} days, {{ hours }} hours, {{ minutes }} min
+              {{ months === 0 ? `, ${seconds} sec` : '' }} remaining
             </div>
 
             <v-divider color="#0D9648"></v-divider>
@@ -304,15 +306,16 @@
             </div>
           </v-sheet>
 
-          <v-sheet class="py-2 px-4 bid-status-card text-left" rounded="lg" height="119" width="300"
+          <v-sheet class="py-2 px-4 bid-status-card text-left" rounded="lg" height="119" width="310"
             v-if="!bidDetail.receivingBids && isBidOut">
             <div class="status">
               Status: BidOut Phase
             </div>
             <div class="time pt-2 align-center">
               <v-icon small color="#0D9648"> mdi-timer-outline</v-icon>
-              {{ days }} days, {{ hours }} hours, {{ minutes }} min,
-              {{ seconds }} sec remaining
+              {{ months > 0 ? `${months} months,` : '' }}
+              {{ days }} days, {{ hours }} hours, {{ minutes }} min
+              {{ months === 0 ? `, ${seconds} sec` : '' }} remaining
             </div>
 
             <v-divider color="#0D9648"></v-divider>
@@ -622,11 +625,6 @@ export default {
     compute() {
       const duration = moment.duration(this.getDiffInSeconds(), 'seconds');
 
-      // console.log(duration);
-      const ms = moment.duration(this.getDiffInSeconds(), 'seconds').asMilliseconds();
-
-      console.log(ms / 86400000);
-
       this.years = duration.years() > 0 ? duration.years() : 0;
 
       this.months = duration.months() > 0 ? duration.months() : 0;
@@ -643,7 +641,6 @@ export default {
         return true;
       } return false;
     },
-
   },
   computed: {
     changeTime() {
@@ -714,6 +711,8 @@ export default {
     },
   },
   mounted() {
+    moment.tz.setDefault('America/Chicago');
+
     document.title = 'View Bid - BidOut';
     window.scrollTo({ top: 0, behavior: 'smooth' });
   },
