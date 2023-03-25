@@ -434,11 +434,14 @@ export default {
   },
   async mounted() {
     this.route = this.$route.name;
-
-    await this.getAllIntent({
+    
+    if (this.$route.name === 'EditBid') {
+      await this.getAllIntent({
       bidId: this.$store.getters.bidData.id,
       reload: false,
     });
+    }
+
 
     if (this.$store.getters.entryCheckForEditBid) {
       this.$router.push('/view-bids');
