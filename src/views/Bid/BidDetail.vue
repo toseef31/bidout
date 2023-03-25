@@ -21,7 +21,18 @@
 
   <v-col v-else class="pl-0 pr-3 pb-0 pt-0 bid-detail-module  ">
     <v-alert type="error" v-show="showErrorDeleteAlert" class="mx-5" v-if="getUserType === 'buyer'">
-      Deleting this bid was failed. Please Try again!
+      Deleting this bid has failed. Please try again!
+    </v-alert>
+
+    <v-alert type="success" v-show="showSupplierAlert" class="mx-5 mt-5">
+      New suppliers have been updated and email notifications have been sent.
+    </v-alert>
+    <v-alert type="success" v-show="getTeamMemberAddAlert" class="mx-5 mt-5">
+      Team members have been successfully updated.
+    </v-alert>
+
+    <v-alert type="success" v-show="getDateAlert" class="mx-5">
+      You've successfully updated the due date and time, and email notifications were sent to all invited suppliers.
     </v-alert>
 
     <v-card class=" bid-submitted-card" :elevation="0" v-if="isBidSubmitted && getUserType === 'supplier'">
@@ -41,20 +52,24 @@
       </v-alert>
 
       <v-alert type="success" v-show="showBidSubmissionAlert.award" class="mx-5 mt-5">
-        You have been awarded a company successfully!
+        You have awarded a company successfully!
       </v-alert>
 
       <v-alert type="success" v-show="showBidSubmissionAlert.disqualify" class="mx-5 mt-5">
-        You have been disqualified a company successfully!
+        You have disqualified a company successfully!
       </v-alert>
       <v-alert type="success" v-show="showBidSubmissionAlert.unAward" class="mx-5 mt-5">
-        You have been Un-awarded a company successfully!
+        You have un-awarded a company successfully!
       </v-alert>
       <v-alert type="success" v-show="showBidSubmissionAlert.unDisqualify" class="mx-5 mt-5">
-        You have been Un-disqualified a company successfully!
+        You have un-disqualified a company successfully!
       </v-alert>
-      <v-alert type="error" v-show="getLoweringPriceAlert" class="mx-5 mt-5">
-        Suppliers can only lower the prices during the BidOut Phase!
+      <v-alert type="error" v-show="getLoweringPriceAlert !== null" class="mx-5 mt-5">
+        {{ getLoweringPriceAlert }}
+      </v-alert>
+
+      <v-alert type="error" v-show="getBidSubmissionValidationAlert !== null" class="mx-5 mt-5">
+        {{ getBidSubmissionValidationAlert }}
       </v-alert>
 
       <v-row class="px-5 my-5 row-title" no-gutters v-if="getUserType === 'buyer'">
@@ -281,8 +296,8 @@
 
             <v-divider color="#0D9648"></v-divider>
             <div class="bid-number">
-              {{ showIntent === null && !isBidSubmitted ? 'Please specify your intend to bid' : ''}}
-              {{ showIntent === false || showIntent === 'false' ? 'Bid Submission is not allowed' : ''}}
+              {{ showIntent === null && !isBidSubmitted ? 'Please specify your intend to bid' : '' }}
+              {{ showIntent === false || showIntent === 'false' ? 'Bid Submission is not allowed' : '' }}
               <div v-if="showIntent === true || showIntent === 'true' && !isBidSubmitted" @click="ChangeT('tab-2')">
                 Submit Bid</div>
               <div @click="ChangeT('tab-2')" v-if="isBidSubmitted">Bid Submitted</div>
@@ -302,11 +317,11 @@
 
             <v-divider color="#0D9648"></v-divider>
             <div class="bid-number">
-              {{ showIntent === null && !isBidSubmitted && !isBidOut ? 'Please specify your intend to bid' : ''}}
+              {{ showIntent === null && !isBidSubmitted && !isBidOut ? 'Please specify your intend to bid' : '' }}
               {{ showIntent === null && isBidOut ? 'Bid Submission is not allowed' : '' }}
-              {{ showIntent === false || showIntent === 'false' ? 'Bid Submission is not allowed' : ''}}
+              {{ showIntent === false || showIntent === 'false' ? 'Bid Submission is not allowed' : '' }}
               {{ showIntent === true || showIntent === 'true' && !isBidSubmitted && isBidOut ? 'Bid Submission is not
-              allowed' : ''}}
+                            allowed' : ''}}
               <div v-if="showIntent === true || showIntent === 'true' && !isBidSubmitted && !isBidOut"
                 @click="ChangeT('tab-2')">
                 Submit Bid</div>
@@ -322,7 +337,7 @@
             <div class="award-status" v-if="bidDetail.user_status === 'rejected'">Status: Not Awarded</div>
             <v-divider class="mt-3" color="#b489251c"></v-divider>
             <div class="award-bid-number">
-              <div @click="ChangeT('tab-2')">{{ isBidSubmitted? 'Bid Submitted': 'Bid is not Submitted' }} </div>
+              <div @click="ChangeT('tab-2')">{{ isBidSubmitted ? 'Bid Submitted' : 'Bid is not Submitted' }} </div>
             </div>
           </v-sheet>
           <v-sheet class="py-2 px-5 text-left bid-status-card" rounded="lg" height="85" width="290"
@@ -339,8 +354,7 @@
       </v-row>
 
       <div class="bidDetail-tabs-section mt-7" v-if="getUserType === 'buyer'">
-        <v-tabs v-model="currentItem" class="bids-tabs" fixed-tabs hide-slider :mobile-breakpoint="767"
-          @change="reload">
+        <v-tabs v-model="currentItem" class="bids-tabs" fixed-tabs hide-slider :mobile-breakpoint="767" @change="reload">
           <v-tab v-for="item in tabs" :key="item.value" :href="'#tab-' + item.value"
             class="text-capitalize black--text font-weight-bold">
             {{ item.text }}
@@ -377,8 +391,7 @@
         </v-tabs-items>
       </div>
       <div v-else class="bidDetail-tabs-section mt-7">
-        <v-tabs v-model="currentItem" class="bids-tabs" fixed-tabs hide-slider :mobile-breakpoint="767"
-          @change="reload">
+        <v-tabs v-model="currentItem" class="bids-tabs" fixed-tabs hide-slider :mobile-breakpoint="767" @change="reload">
           <v-tab v-for="item in tabsSupplier" :key="item.value" :href="'#tab-' + item.value"
             class="text-capitalize black--text font-weight-bold">
             {{ item.text }}
@@ -410,7 +423,6 @@
       </div>
     </v-card>
   </v-col>
-
 </template>
 
 <script>
@@ -506,6 +518,7 @@ export default {
           serial: this.$route.params.serial,
           id: this.users.id,
           reload: false,
+          company: this.users.company.company,
         });
 
         await this.bidMessageUnreadCount({
@@ -536,6 +549,7 @@ export default {
           serial: this.$route.params.serial,
           id: this.users.id,
           reload: false,
+          company: this.users.company.company,
         });
 
         await this.bidMessageUnreadCount({
@@ -677,6 +691,9 @@ export default {
     showBidSubmissionAlert() {
       return this.$store.getters.bidSubmissionAlert;
     },
+    showSupplierAlert() {
+      return this.$store.getters.supplierAddAlert;
+    },
     isBidOut() {
       if (this.bidDetail.bidData.type === 'BidOut Process' && this.bidDetail.bidout) {
         return true;
@@ -686,6 +703,15 @@ export default {
     getLoweringPriceAlert() {
       return this.$store.getters.loweringPriceAlert;
     },
+    getDateAlert() {
+      return this.$store.getters.dateAlert;
+    },
+    getTeamMemberAddAlert() {
+      return this.$store.getters.teamMemberAddAlert;
+    },
+    getBidSubmissionValidationAlert() {
+      return this.$store.getters.bidSubmissionValidationAlert;
+    },
   },
   mounted() {
     document.title = 'View Bid - BidOut';
@@ -694,11 +720,11 @@ export default {
   async created() {
     this.users = this.$store.getters.userInfo;
 
-    moment.tz.setDefault('America/Chicago');
     if (this.users) {
       await this.getBidBySerial({
         serial: this.$route.params.serial,
         id: this.users.id,
+        company: this.users.company.company,
       });
     } else {
       this.$router.push('/login');
@@ -727,15 +753,15 @@ export default {
         companyName: this.users.company.company,
       });
 
-      await this.getBidActivityList({
-        bidId: this.bidDetail.bidData.id,
-        userId: this.users.id,
-      });
-
       this.answer = this.$store.getters.bidIntent;
     } else {
       await this.getAllIntent({
         bidId: this.bidDetail.bidData.id,
+      });
+
+      await this.getBidActivityList({
+        bidId: this.bidDetail.bidData.id,
+        userId: this.users.id,
       });
     }
 
@@ -745,10 +771,10 @@ export default {
     });
   },
   watch: {
-    actualTime(val, oldVal) {
+    actualTime() {
       this.compute();
     },
-    changeTime(newVal, oldVal) {
+    changeTime(newVal) {
       const [years, months, days, hours, minutes, seconds] = newVal.split('|');
 
       if (this.checkZero(years) && this.checkZero(months) && this.checkZero(days) && this.checkZero(hours) && this.checkZero(minutes) && this.checkZero(seconds)) {
@@ -759,6 +785,4 @@ export default {
 };
 </script>
 
-<style lang="scss">
-
-</style>
+<style lang="scss"></style>

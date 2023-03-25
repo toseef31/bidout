@@ -39,7 +39,7 @@
               <v-list-item-action>
                 <v-list-item-action-text>{{
                   list.latestMessage ? istoday(list.latestMessage) :
-                    istoday(list.updatedAt)
+                  istoday(list.updatedAt)
                 }}</v-list-item-action-text>
               </v-list-item-action>
             </template>
@@ -101,8 +101,7 @@
                           v-if="get_url_extension(message.attachment) == 'pdf'"><v-img
                             :src="require('@/assets/images/chat/pdf.jpg')" max-height="50px" max-width="50px"
                             class="mt-2"></v-img></a>
-                        <v-img v-else :src="message.attachment" max-height="125px" max-width="245px"
-                          class="mt-2"></v-img>
+                        <v-img v-else :src="message.attachment" max-height="125px" max-width="245px" class="mt-2"></v-img>
                       </template>
                       <v-list-item-subtitle class="text--primary">{{
                         message.content

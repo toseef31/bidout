@@ -63,7 +63,7 @@
                   Not submitted
                 </td>
                 <td v-else-if="submission.postBidoutPrice
-                === null">
+                  === null">
                   Not submitted
                 </td>
                 <td v-else>
@@ -97,8 +97,7 @@
               <template v-for="(item, aIndex) in bidDetail.supplierSubmissions">
                 <td class="text-left bid-note" v-if="item.supplierAttachments && item.supplierAttachments.length">
                   <div class="pb-4  d-inline-flex pr-10"
-                    v-for="(doc, attIndex) in bidDetail.supplierSubmissions[aIndex].supplierAttachments"
-                    :key="attIndex">
+                    v-for="(doc, attIndex) in bidDetail.supplierSubmissions[aIndex].supplierAttachments" :key="attIndex">
                     <img :src="require('@/assets/images/bids/FilePdf.png')" width="32" height="24" class="pr-2" />
 
                     <a target="_blank" class="text-decoration-none" :href="doc.attachment
@@ -111,12 +110,12 @@
               </template>
             </tr>
 
-            <tr v-if="question.length && bidDetail.supplierSubmissions.length">
+            <tr v-if="bidDetail.bidData.questions.length && bidDetail.supplierSubmissions.length">
               <div class="title-detail-supplier mt-10 mb-5">Supplier Answers</div>
             </tr>
 
-            <tr v-for="(item, qIndex) in question" :key="qIndex + item.questionId"
-              v-if="question.length && bidDetail.supplierSubmissions.length">
+            <tr v-for="(item, qIndex) in bidDetail.bidData.questions" :key="qIndex + item.id"
+              v-if="bidDetail.bidData.questions.length && bidDetail.supplierSubmissions.length">
               <td class="text-left" v-if="item.type !== 'category'"> {{ item.title }}</td>
 
               <template v-for="(ans) in answers">
@@ -127,8 +126,7 @@
                   v-if="ans.answers[qIndex].answer !== 'null' && item.questionType === 'textfield' || item.questionType === 'textarea'">
                   {{ ans.answers[qIndex].answer }}
                 </td>
-                <td class="text-left"
-                  v-if="ans.answers[qIndex].answer !== 'null' && item.questionType === 'uploadFile'">
+                <td class="text-left" v-if="ans.answers[qIndex].answer !== 'null' && item.questionType === 'uploadFile'">
                   <div class="pb-4 d-inline-flex">
                     <v-img :src="require('@/assets/images/bids/FilePdf.png')" contain width="32" height="24" />
                     <a target="_blank" class="text-decoration-none pl-2" :href="ans.answers[qIndex].answer
@@ -147,8 +145,7 @@
               <td class="text-left"></td>
               <template v-for="(item, index) in bidDetail.supplierSubmissions">
                 <td class="text-left">
-                  <div class="d-flex flex-column"
-                    v-if="!checkAwardee(item.companyId) && !checkRejectee(item.companyId)">
+                  <div class="d-flex flex-column" v-if="!checkAwardee(item.companyId) && !checkRejectee(item.companyId)">
                     <v-btn @click="award(item.companyId, index, 'award')" color="#0d9648" depressed
                       :disabled="showLoading[index].load && showLoading[index].action === 'award'">
                       <v-progress-circular v-if="showLoading[index].load && showLoading[index].action === 'award'"
@@ -156,8 +153,8 @@
                       <div v-else>Award Bid</div>
 
                     </v-btn>
-                    <v-btn @click="disqualify(item.companyId, index, 'disqualify')" color="#F03F20" depressed
-                      class="mt-2" :disabled="showLoading[index].load && showLoading[index].action === 'disqualify'">
+                    <v-btn @click="disqualify(item.companyId, index, 'disqualify')" color="#F03F20" depressed class="mt-2"
+                      :disabled="showLoading[index].load && showLoading[index].action === 'disqualify'">
 
                       <v-progress-circular v-if="showLoading[index].load && showLoading[index].action === 'disqualify'"
                         indeterminate :width="3" size="25" color="#F03F20"></v-progress-circular>
@@ -191,7 +188,7 @@
             <tr class="action-button-class"
               v-if="!isBidOut && !bidDetail.receivingBids && bidDetail.supplierSubmissions.length && bidDetail.bidData.awardees && (bidDetail.bidData.awardees.length || bidDetail.bidData.rejectees && bidDetail.bidData.rejectees.length)">
               <td class="text-left"></td>
-              <template v-for="(item, index) in bidDetail.supplierSubmissions">
+              <template v-for="(item) in bidDetail.supplierSubmissions">
                 <td class="text-left">
                   <div class=" action d-flex align-center" color="white" height="56" rounded width="190"
                     v-if="checkRejectee(item.companyId)">
@@ -240,25 +237,6 @@ export default {
         });
       }
       return this.$store.getters.bidViewData;
-    },
-    question() {
-      const ques = Array.isArray(this.bidDetail.bidData.questions) ? this.bidDetail.bidData.questions : [];
-      this.answers = this.bidDetail.supplierSubmissions;
-      const keys = [];
-
-      ques.forEach((el, index) => {
-        if (el.type === 'category') {
-          keys.push(index);
-        }
-      });
-
-      keys.forEach((el) => ques.splice(el, 1));
-
-      this.answers.forEach((el, index, self) => {
-        keys.forEach((item) => self[index].answers.splice(item, 1));
-      });
-
-      return ques;
     },
     showLoading() {
       return this.loadings;
@@ -329,22 +307,25 @@ export default {
 
       dataD = this.spacer(dataD, index);
 
-      if (this.question.length) {
-        this.question.forEach((el, qInd) => {
-          dataD.push([el.title]);
-          const fI = this.indexOfArray([el.title], dataD);
-          this.answers.forEach((list) => {
-            if (el.questionType === 'checkbox') {
-              dataD[fI].push(list.answers[qInd].answer);
-            } else if (el.questionType === 'uploadFile') {
-              dataD[fI].push(`${list.answers[qInd].fileName}`);
-            } else if (list.answers[qInd].answer === 'null') {
-              dataD[fI].push('None');
-            } else {
-              dataD[fI].push(`${list.answers[qInd].answer}`);
-            }
-          });
-          dataD = this.spacer(dataD, fI);
+      if (this.bidDetail.bidData.questions.length) {
+        this.bidDetail.bidData.questions.forEach((el, qInd) => {
+          if (el.type !== 'category') {
+            dataD.push([el.title]);
+            const fI = this.indexOfArray([el.title], dataD);
+            this.answers.forEach((list) => {
+              if (el.questionType === 'checkbox') {
+                if (list.answers[qInd].answer === 'null') dataD[fI].push('None');
+                else dataD[fI].push(list.answers[qInd].answer);
+              } else if (el.questionType === 'uploadFile') {
+                dataD[fI].push(`${list.answers[qInd].fileName}`);
+              } else if (list.answers[qInd].answer === 'null') {
+                dataD[fI].push('None');
+              } else {
+                dataD[fI].push(`${list.answers[qInd].answer}`);
+              }
+            });
+            dataD = this.spacer(dataD, fI);
+          }
         });
       }
 
@@ -406,6 +387,7 @@ export default {
         userId: this.user.id,
         bidId: this.bidDetail.bidData.id,
         serial: this.$route.params.serial,
+        company: this.user.company.company
       });
 
       this.loadings[index].load = false;
@@ -420,6 +402,7 @@ export default {
         userId: this.user.id,
         bidId: this.bidDetail.bidData.id,
         serial: this.$route.params.serial,
+        company: this.user.company.company
       });
 
       this.loadings[index].load = false;
@@ -434,6 +417,7 @@ export default {
         userId: this.user.id,
         bidId: this.bidDetail.bidData.id,
         serial: this.$route.params.serial,
+        company: this.user.company.company
       });
 
       this.loadings[index].load = false;
@@ -448,6 +432,7 @@ export default {
         userId: this.user.id,
         bidId: this.bidDetail.bidData.id,
         serial: this.$route.params.serial,
+        company: this.user.company.company
       });
 
       this.loadings[index].load = false;
@@ -461,6 +446,10 @@ export default {
   mounted() {
     window.scrollTo({ top: 0, behavior: 'smooth' });
     this.user = this.$store.getters.userInfo;
+
+    if (Array.isArray(this.bidDetail.bidData.questions)) {
+      this.answers = this.bidDetail.supplierSubmissions;
+    }
   },
 };
 </script>

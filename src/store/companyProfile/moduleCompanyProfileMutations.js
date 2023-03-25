@@ -32,5 +32,11 @@ export default {
     },
     setNewsLoading(state,payload){
       state.newsLoading = payload;
+    },
+    setManageCompanyError(state, message) {
+      state.manageCompanyError = message
+      setTimeout(() => {
+        state.manageCompanyError = null
+      }, 5000) 
     }
 }

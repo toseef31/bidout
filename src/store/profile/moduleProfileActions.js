@@ -14,7 +14,7 @@ export default {
       },
     };
     const formData = new FormData()
-    formData.append('files', payload.files)
+    formData.append('files', payload.files);
     axios.post('/user/updateProfilePicture/'+payload.userid,formData,config)
      .then(responce => {
       
@@ -37,6 +37,8 @@ export default {
         });
       }
     }).catch(async(err) => {
+      commit('setMessage','Something went wrong, Please try again in few moments.');
+      commit('showErrorAlert');
       if(state.apiCounter === 2){
         dispatch('apiSignOutAction')
       }else{
@@ -52,7 +54,7 @@ export default {
   updateProfile({commit,dispatch,state}, payload){
     commit('editProfileLoading',true);
     axios.post('/user/updateUser/'+payload.userid,{'email': payload.email,'firstName': payload.firstName,'lastName': payload.lastName,'phoneNumber': payload.phoneNumber,'title':payload.title,'timezone':payload.timezone})
-     .then(responce => {
+    .then(responce => {
       
       if(responce.status === 200){
         axios.get('/user/getUserData/'+payload.email)
@@ -60,6 +62,7 @@ export default {
           commit('setUser',responce.data)
           commit('editProfileLoading',false)
         }).catch(async(err) => {
+          commit('editProfileLoading',false)
           if(state.apiCounter === 2){
             dispatch('apiSignOutAction')
           }else{
@@ -74,6 +77,9 @@ export default {
       }
       
     }).catch(async(err) => {
+      commit('setMessage','Something went wrong, Please try again in few moments.');
+      commit('showErrorAlert');
+      commit('editProfileLoading',false);
       if(state.apiCounter === 2){
         dispatch('apiSignOutAction')
       }else{
@@ -96,6 +102,7 @@ export default {
         commit('setPasswordLoading',false);
       }
     }).catch(async(err) => {
+      commit('setPasswordLoading',false);
       if(state.apiCounter === 2){
         dispatch('apiSignOutAction')
       }else{

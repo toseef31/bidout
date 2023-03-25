@@ -25,5 +25,8 @@ export default {
    },
    newsLoading (state){
       return state.newsLoading;
+   },
+   manageCompanyError (state){
+      return state.manageCompanyError;
    }
 }

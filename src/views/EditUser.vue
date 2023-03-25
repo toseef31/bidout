@@ -54,7 +54,7 @@
                     <label class="d-block text-left font-weight-bold mb-2">Privileges
                       <v-tooltip right v-if="userInfo.role == 'admin' && userInfo.id == userData.id">
                         <template v-slot:activator="{ on, attrs }">
-                          <v-icon small 
+                          <v-icon small
                             v-bind="attrs"
                             v-on="on">mdi-information-outline</v-icon>
                         </template>
@@ -62,7 +62,7 @@
                       </v-tooltip>
                       <v-tooltip right v-else>
                         <template v-slot:activator="{ on, attrs }">
-                          <v-icon small 
+                          <v-icon small
                             v-bind="attrs"
                             v-on="on">mdi-information-outline</v-icon>
                         </template>
@@ -103,72 +103,72 @@
  </v-row>
 </template>
 <script>
-  import Navbar from '../components/Layout/Navbar.vue'
-  import LeftSidebar from '../components/Layout/Dashboard/LeftSidebar.vue'
-  import { mapActions,mapState,mapGetters } from "vuex";
+import { mapActions, mapState, mapGetters } from 'vuex';
+import Navbar from '../components/Layout/Navbar.vue';
+import LeftSidebar from '../components/Layout/Dashboard/LeftSidebar.vue';
+
 export default {
-  name : "EditUser",
+  name: 'EditUser',
   components: {
     Navbar,
     LeftSidebar,
   },
-  
   data() {
     return {
-      isHidden : false,
+      isHidden: false,
       valid: true,
       btnLoading: false,
-        name: '',
-        nameRules: [
-          v => !!v || 'Name is required',
-        ],
-        email: '',
-        emailRules: [
-          v => !!v || 'E-mail is required',
-          v => /.+@.+\..+/.test(v) || 'E-mail must be valid',
-        ],
-        role: this.$store.getters.userData.role,
-        items: [
-          {value: 'admin', label: 'Administrator'},
-          {value:'user', label: 'User'},
-        ],
+      name: '',
+      nameRules: [
+        (v) => !!v || 'Name is required',
+      ],
+      email: '',
+      emailRules: [
+        (v) => !!v || 'E-mail is required',
+        (v) => /^\w+([.+_-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,3})+$/.test(v) || 'E-mail must be valid',
+      ],
+      role: this.$store.getters.userData.role,
+      items: [
+        { value: 'admin', label: 'Administrator' },
+        { value: 'user', label: 'User' },
+      ],
     };
   },
-  computed:{
-    ...mapState(["userData"]),
-    ...mapGetters(["userInfo"]),
-    showSideBar(){
-        return this.$store.getters.g_sideBarOpen;
+  computed: {
+    ...mapState(['userData']),
+    ...mapGetters(['userInfo']),
+    showSideBar() {
+      return this.$store.getters.g_sideBarOpen;
     },
-    activityPanel(){
-        return this.$store.getters.g_activityPanel;
+    activityPanel() {
+      return this.$store.getters.g_activityPanel;
     },
-    userData(){
+    userData() {
       return this.$store.getters.userData.user;
-    }
+    },
   },
   methods: {
-    ...mapActions(['updateUser',"updateInvite"]),
+    ...mapActions(['updateUser','updateInvite']),
     validate() {
       this.$refs.form.validate();
       this.valid = false;
       this.btnLoading = true;
-      var data = {
+      const data = {
         firstName: this.userData.firstName,
         lastName: this.userData.lastName,
         role: this.userData.role,
-        id: this.userData.id
+        id: this.userData.id,
       }
-      if(this.$store.getters.userData.type == 'general'){
+      if (this.$store.getters.userData.type === 'general') {
         this.updateUser(data);
-      }else{
+      } else {
         this.updateInvite(data);
       }
     },
   },
   mounted() {
-    document.title = "Update User - BidOut";
-  }
+    document.title = 'Update User - BidOut';
+  },
 };
 </script>
 <style scoped lang="scss">

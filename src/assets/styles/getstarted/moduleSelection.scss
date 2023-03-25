@@ -7,11 +7,6 @@
 	.v-form{
 		.create-bid{
 			border: 2px solid #F4F5F7;
-			.v-input--switch{
-				.v-input--switch__track {
-				  
-				}
-			}
 			.v-input--is-label-active{
 				color: #0D9648 !important;
 				opacity: 1;
@@ -54,6 +49,10 @@
 		overflow-x: hidden;
 		overflow-y: auto;
 	}
+	.signBox{
+		box-shadow: 1px 1px 6px 3px #ddd;
+		border-radius: 4px;
+	}
 }
 .inviation-module{
 		flex: 0 0 100%;
@@ -64,6 +63,14 @@
 		.create-bid{
 			h1{
 				font-size: 19px;
+			}
+		}
+		.signBox{
+			div{
+				width: 100% !important;
+				canvas{
+					width: 100% !important;
+				}
 			}
 		}
 	}

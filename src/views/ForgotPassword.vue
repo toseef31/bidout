@@ -14,7 +14,7 @@
             </v-alert>
              <v-form @submit.prevent="forgetPassword" ref="form" class="login-form" v-model="valid"
               lazy-validation>
-               <label class="font-weight-bold">Email</label> 
+               <label class="font-weight-bold">Email</label>
                  <v-text-field
                    v-model="email"
                    :rules="emailRules"
@@ -46,14 +46,15 @@
 </template>
 
 <script>
-  import { mapActions } from "vuex";
+import { mapActions, mapGetters } from 'vuex';
+
 export default {
-  name : "ForgotPassword",
+  name: 'ForgotPassword',
   data() {
     return {
       valid: true,
       loading: false,
-      email: "",
+      email: '',
       emailRules: [
         v => !!v || 'E-mail is required',
         v => /.+@.+\..+/.test(v) || 'E-mail must be valid',
@@ -63,18 +64,21 @@ export default {
     };
   },
   computed: {
-    emailError () {
+    ...mapGetters(['forgetEmail']),
+    emailError() {
       return this.$store.getters.errorMessage;
     },
-    emailSucess () {
-      if(this.$store.getters.successMessage){
+    emailSucess() {
+      if (this.$store.getters.successMessage) {
         this.loading = false;
       }
-      return this.$store.getters.successMessage
+      // eslint-disable-next-line vue/no-side-effects-in-computed-properties
+      this.loading = false;
+      return this.$store.getters.successMessage;
     },
   },
   methods: {
-    ...mapActions(["forgotEmail"]),
+    ...mapActions(['forgotEmail']),
     reset() {
       this.$refs.form.validate();
       const { email } = this;
@@ -83,11 +87,14 @@ export default {
       this.forgotEmail({ 'email': this.email});
       this.loading = true;
       this.$refs.form.reset();
+    },
+  },
+  mounted() {
+    document.title = 'Forgot Password - BidOut';
+    if (this.forgetEmail != null) {
+      this.email = this.forgetEmail;
     }
   },
-  mounted(){
-    document.title = "Forgot Password - BidOut";
-  }
 };
 </script>
 <style scoped lang="scss">

@@ -4,7 +4,9 @@ export default {
   },
   setSalesReps(state, payload) {
     state.salesRepsList = payload.sort((a, b) => {
-      let aHasOfsPremium = a.contracts.some(contract => contract === 'ofs-premium');
+      const aHasOfsPremium = a.contracts.some(
+        (contract) => contract === 'ofs-premium',
+      );
       if (aHasOfsPremium) {
         return -1;
       }
@@ -13,7 +15,9 @@ export default {
   },
   setCompaniesList(state, payload) {
     state.companiesList = payload.sort((a, b) => {
-      let aHasOfsPremium = a.contracts.some(contract => contract.contractType === 'ofs-premium');
+      const aHasOfsPremium = a.contracts.some(
+        (contract) => contract.contractType === 'ofs-premium',
+      );
       if (aHasOfsPremium) {
         return -1;
       }
@@ -22,7 +26,9 @@ export default {
   },
   setServiceCompanies(state, payload) {
     state.serviceCompaniesList = payload.sort((a, b) => {
-      let aHasOfsPremium = a.contracts.some(contract => contract.contractType === 'ofs-premium');
+      const aHasOfsPremium = a.contracts.some(
+        (contract) => contract.contractType === 'ofs-premium',
+      );
       if (aHasOfsPremium) {
         return -1;
       }
@@ -32,7 +38,7 @@ export default {
   setDraftBidsList(state, payload) {
     state.draftBidsList = payload;
   },
-  setBidSerial(state, payload){
+  setBidSerial(state, payload) {
     state.bidSerial = payload;
   },
   setBidsList(state, payload) {
@@ -47,8 +53,11 @@ export default {
   setAttachData(state, payload) {
     state.attachData = payload;
   },
-  spliceAttachData(state,index){
-    state.attachData.splice(index,1);
+  spliceAttachData(state, id) {
+    const indexToRemove = state.attachData.findIndex((obj) => obj.id === id);
+    if (indexToRemove !== -1) {
+      state.attachData = null;
+    }
   },
   setDraftTime(state, payload) {
     state.draftTime = payload;
@@ -115,9 +124,9 @@ export default {
   },
   setSupplierAttachment(state, payload) {
     state.supplierAttachment.push(payload);
-    state.supplierAttachment = state.supplierAttachment.filter((value, index, self) => index === self.findIndex((t) => (
-      t.fileName === value.fileName
-    )));
+    state.supplierAttachment = state.supplierAttachment.filter(
+      (value, index, self) => index === self.findIndex((t) => t.fileName === value.fileName),
+    );
   },
   removeSupplierAttachment(state) {
     state.supplierAttachment = [];
@@ -145,24 +154,31 @@ export default {
   },
   setBidTitle(state, payload) {
     state.bidData.title = payload;
+    state.isEditBidChanges = true;
   },
   setBidType(state, payload) {
     state.bidData.type = payload;
+    state.isEditBidChanges = true;
   },
   setBidDueDate(state, payload) {
     state.bidData.dueDate = payload;
+    state.isEditBidChanges = true;
   },
   setBidDueTime(state, payload) {
     state.bidData.dueTime = payload;
+    state.isEditBidChanges = true;
   },
   setBidRegions(state, payload) {
     state.bidData.regions = payload;
+    state.isEditBidChanges = true;
   },
   setBidEnabled(state, payload) {
     state.bidData.qAndAEnabled = payload;
+    state.isEditBidChanges = true;
   },
   setBidDescription(state, payload) {
     state.bidData.bidDescriptions = payload;
+    state.isEditBidChanges = true;
   },
   setInvitedNewSuppliers(state, payload) {
     state.invitedNewSuppliers = payload;
@@ -200,40 +216,100 @@ export default {
       state.bidSubmissionAlert.unDisqualify = false;
     }, 8000);
   },
-  setLoweringPriceAlert(state) {
-    state.loweringPriceAlert = true;
+  setLoweringPriceAlert(state, payload) {
+    state.loweringPriceAlert = payload;
     setTimeout(() => {
-      state.loweringPriceAlert = false;
+      state.loweringPriceAlert = null;
     }, 8000);
   },
   setEntryCheckForEditBid(state, payload) {
     state.entryCheckForEditBid = payload;
   },
-  spliceCompanies(state,index){
-    state.companiesList.splice(index,1);
+  spliceCompanies(state, index) {
+    state.companiesList.splice(index, 1);
   },
-  pushCompanies(state,company){
+  pushCompanies(state, company) {
     state.companiesList.push(company);
   },
-  spliceSalesRepsList(state,index){
-    state.salesRepsList.splice(index,1);
+  spliceSalesRepsList(state, index) {
+    state.salesRepsList.splice(index, 1);
   },
-  pushSalesRepsList(state,list){
+  pushSalesRepsList(state, list) {
     state.salesRepsList.push(list);
   },
-  setSaveBidLoading (state,payload){
+  setSaveBidLoading(state, payload) {
     state.saveBidLoading = payload;
   },
-  setLoadingInvite (state,payload){
+  setLoadingInvite(state, payload) {
     state.loadingInvite = payload;
   },
-  setBidActivities(state,payload) {
-    state.bidActivities = payload
+  setBidActivities(state, payload) {
+    state.bidActivities = payload;
   },
-  spliceTeamMember (state,index){
-    state.teamMembers.splice(index,1);
+  spliceTeamMember(state, index) {
+    state.teamMembers.splice(index, 1);
   },
-  pushTeamMember (state,member){
+  pushTeamMember(state, member) {
     state.teamMembers.push(member);
+  },
+  setIsEditBidChanges(state, payload) {
+    state.isEditBidChanges = payload;
+  },
+  setSupplierAddAlert(state) {
+    state.supplierAddAlert = true;
+    setTimeout(() => {
+      state.supplierAddAlert = false;
+    }, 8000);
+  },
+  setDateAlert(state) {
+    state.dateAlert = true;
+    setTimeout(() => {
+      state.dateAlert = false;
+    }, 8000);
+  },
+  setTeamMemberAddAlert(state) {
+    state.teamMemberAddAlert = true;
+    setTimeout(() => {
+      state.teamMemberAddAlert = false;
+    }, 8000);
+  },
+  setTeamMembersForBid(state, payload) {
+    state.teamMembersForBid = [];
+    Array.isArray(payload) ? state.teamMembersForBid.push(...payload) : [];
+  },
+  pushTeamMembersForBid(state, member) {
+    state.teamMembersForBid.push(member);
+  },
+  spliceTeamMembersForBid(state, member) {
+    state.teamMembersForBid = [
+      ...new Map(
+        state.teamMembersForBid.map((item) => [item.id, item]),
+      ).values(),
+    ];
+
+    const index = state.teamMembersForBid.findIndex((el) => el.id === member);
+
+    if (index !== -1) {
+      state.teamMembersForBid.splice(index, 1);
+    }
+  },
+  setTeamMembersInitial(state, payload) {
+    state.teamMembersInitial = payload;
+  },
+  spliceTeamMembersInitial(state, member) {
+    const index = state.teamMembersInitial.findIndex((el) => el.id === member);
+
+    if (index !== -1) {
+      state.teamMembersInitial.splice(index, 1);
+    }
+  },
+  pushTeamMembersInitial(state, member) {
+    state.teamMembersInitial.push(member);
+  },
+  setBidSubmissionValidationAlert(state, payload) {
+    state.bidSubmissionValidationAlert = payload;
+    setTimeout(() => {
+      state.bidSubmissionValidationAlert = null;
+    }, 8000);
   },
 };

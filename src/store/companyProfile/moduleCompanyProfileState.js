@@ -22,4 +22,5 @@ export default {
   saveInfoLoading: false,
   keyfactsLoading: false,
   newsLoading: false,
+  manageCompanyError : null,
 }

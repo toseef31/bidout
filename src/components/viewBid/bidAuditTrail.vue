@@ -38,14 +38,8 @@
 
 <script>
 import moment from 'moment-timezone';
-import _ from 'lodash';
 
 export default {
-  data() {
-    return {
-
-    };
-  },
   computed: {
     getBidActivityList() {
       if (this.$store.getters.bidActivities) {
@@ -53,7 +47,10 @@ export default {
           const timestamp = item.createdOn._seconds * 1000 + item.createdOn._nanoseconds / 1000000;
           item.newDate = moment(timestamp).format('MM/DD/YYYY hh:mm A');
         });
-        return _.orderBy(this.$store.getters.bidActivities.slice(0, 40), 'newDate', 'desc');
+        // eslint-disable-next-line vue/no-side-effects-in-computed-properties
+        const sorted = this.$store.getters.bidActivities.sort((a, b) => (moment(b.newDate, 'MM/DD/YYYY hh:mm A').isBefore(moment(a.newDate, 'MM/DD/YYYY hh:mm A')) ? -1 : 1));
+
+        return sorted;
       }
       return [];
     },

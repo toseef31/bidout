@@ -12,7 +12,7 @@
         >
           <v-list-item
             v-for="(item, i) in items"
-            :key="i"
+            :key="i" @click="redirectLink(item)"
           >
             <v-list-item-icon class="mr-6 mt-3">
               <router-link :to="'/'+item.link" class="text-decoration-none">
@@ -52,7 +52,7 @@
             <template v-for="(child,index) in item.items"
               >
                 <v-list-item
-                   v-if="userDatas && userDatas.role == 'admin' && (index === 0) "
+                   v-if="userDatas && userDatas.role == 'admin' && (index === 0) " @click="redirectLink(child)"
                 >
                     <v-list-item-icon class="mr-6 mt-3" v-show="!showSideBar">
                       <router-link :to="'/'+child.link" class="text-decoration-none"><v-icon v-text="child.icon"></v-icon></router-link>
@@ -65,7 +65,7 @@
                 </v-list-item>
 
                 <v-list-item
-                   v-if="index === 1 || index === 2"
+                   v-if="index === 1 || index === 2" @click="redirectLink(child)"
                 >
                   <v-list-item-icon class="mr-6 mt-3" v-show="!showSideBar">
                     <router-link :to="'/'+child.link" class="text-decoration-none"><v-icon v-text="child.icon"></v-icon></router-link>
@@ -80,7 +80,7 @@
             </template>
 
               <template v-if="checkIfCompanyOfs()">
-                <v-list-item
+                <v-list-item @click="redirectCompany"
 
                 >
                     <template>
@@ -107,13 +107,13 @@
             color="primary"
             class="px-0"
           >
-            <v-list-item>
+            <v-list-item @click="signout">
               <v-list-item-icon class="mr-6 mt-3">
                 <v-icon color="#959595">mdi-logout {{showSideBar}}</v-icon>
               </v-list-item-icon>
 
               <v-list-item-content class="text-left py-1" v-show="showSideBar">
-                <v-list-item-title class="font-weight-bold"  @click="signout">Logout</v-list-item-title>
+                <v-list-item-title class="font-weight-bold">Logout</v-list-item-title>
               </v-list-item-content>
             </v-list-item>
           </v-list-item-group>
@@ -209,6 +209,12 @@ export default {
       }
       return false;
     },
+    redirectLink(item){
+      this.$router.push('/'+ item.link).catch(()=>{});
+    },
+    redirectCompany(){
+      this.$router.push('/company-profile').catch(()=>{});
+    }
   },
   mounted() {
     this.userId = this.$store.getters.userInfo.id;
