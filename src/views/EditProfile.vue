@@ -1,13 +1,9 @@
 <template>
   <v-row class="profile-module pa-0 ma-0">
-    <v-col
-      class="pa-0 pr-sm-3"
-      :class="[
-        showSideBar ? 'col-md-12 col-12 col-sm-12' : 'mid-content-collapse',
-        activityPanel ? 'd-sm-block' : 'd-md-block',
-      ]"
-      v-show="!activityPanel"
-    >
+    <v-col class="pa-0 pr-sm-3" :class="[
+      showSideBar ? 'col-md-12 col-12 col-sm-12' : 'mid-content-collapse',
+      activityPanel ? 'd-sm-block' : 'd-md-block',
+    ]" v-show="!activityPanel">
       <div class="mid-content mb-2">
         <div class="content-section">
           <v-row class="mx-0" justify="center" no-gutters>
@@ -19,75 +15,41 @@
                     <v-col cols="12" sm="10" md="10">
                       <v-form @submit.prevent="editForm" ref="form">
                         <v-row justify="center">
-                          <v-col cols="12" sm="6" text="left">
-                            <label
-                              class="d-block text-left input-label mb-2 font-weight-bold"
-                              >First Name</label
-                            >
-                            <v-text-field
-                              placeholder="First Name"
-                              v-model="firstName"
-                              single-line
-                              outlined
-                              type="text"
-                              hide-details
-                            >
+                          <v-col cols="12" sm="6" text="left" class="pb-0">
+                            <label class="d-block text-left input-label mb-2 font-weight-bold">First Name</label>
+                            <v-text-field placeholder="First Name" v-model="firstName" single-line outlined type="text"
+                              required :rules="firstNameRule">
                             </v-text-field>
                           </v-col>
-                          <v-col cols="12" sm="6" text="left">
-                            <label
-                              class="d-block text-left input-label mb-2 font-weight-bold"
-                              >Last Name
+                          <v-col cols="12" sm="6" text="left" class="pb-0">
+                            <label class="d-block text-left input-label mb-2 font-weight-bold">Last Name
                             </label>
-                            <v-text-field
-                              placeholder="Last Name"
-                              v-model="lastName"
-                              single-line
-                              outlined
-                              type="text"
-                              hide-details
-                            >
+                            <v-text-field placeholder="Last Name" v-model="lastName" single-line outlined type="text"
+                              required :rules="lastNameRule">
                             </v-text-field>
                           </v-col>
                         </v-row>
                         <v-row justify="center">
-                          <v-col cols="12" sm="6" text="left">
-                            <label
-                              class="d-block text-left input-label mb-2 font-weight-bold"
-                              >Title
+                          <v-col cols="12" sm="6" text="left" class="pb-0">
+                            <label class="d-block text-left input-label mb-2 font-weight-bold">Title
                             </label>
-                            <v-text-field
-                              placeholder="Title"
-                              v-model="title"
-                              single-line
-                              outlined
-                              type="text"
-                              hide-details
-                            >
+                            <v-text-field placeholder="Title" v-model="title" single-line outlined type="text">
                             </v-text-field>
                           </v-col>
-                          <v-col cols="12" sm="6" text="left">
-                            <label
-                              class="d-block text-left input-label mb-2 font-weight-bold"
-                              >Mobile Number
+                          <v-col cols="12" sm="6" text="left" class="pb-0">
+                            <label class="d-block text-left input-label mb-2 font-weight-bold">Mobile Number
                             </label>
-                            <VuePhoneNumberInput
-                              :border-radius="8"
-                              size="lg"
-                              v-model="mobileNumber"
-                              :translations="translations"
-                              :loader="hasLoaderActive"
-                              :error="hasErrorActive"
-                              class="mb-2"
-                              @update="onUpdate"
-                            />
+                            <VuePhoneNumberInput :border-radius="8" size="lg" v-model="mobileNumber"
+                              :translations="translations" :loader="hasLoaderActive"
+                              :error="!getPhoneInfo.valid && getCounter > 1" class="mb-2" error-color="#F32349"
+                              valid-color="#9E9E9E" @update="onUpdate" />
+                            <div class="phone-class" v-if="!getPhoneInfo.valid && getCounter > 1">
+                              {{ getPhoneInfo.message }}</div>
                           </v-col>
                         </v-row>
                         <v-row justify="center">
                           <v-col cols="12" sm="12" text="left">
-                            <label
-                              class="d-block text-left input-label mb-2 font-weight-bold"
-                              >Email Address
+                            <label class="d-block text-left input-label mb-2 font-weight-bold">Email Address
                               <v-tooltip right>
                                 <template v-slot:activator="{ on, attrs }">
                                   <v-icon small v-bind="attrs" v-on="on">
@@ -98,51 +60,26 @@
                               </v-tooltip>
                             </label>
 
-                            <v-text-field
-                              placeholder="Email Address"
-                              single-line
-                              outlined
-                              type="email"
-                              v-model="email"
-                              hide-details
-                              readonly
-                            >
+                            <v-text-field placeholder="Email Address" single-line outlined type="email" v-model="email"
+                              hide-details readonly>
                             </v-text-field>
                           </v-col>
                         </v-row>
                         <v-row justify="center">
                           <v-col cols="12" sm="12" text="left">
-                            <label
-                              class="d-block text-left input-label mb-2 font-weight-bold"
-                              >Timezone
+                            <label class="d-block text-left input-label mb-2 font-weight-bold">Timezone
                             </label>
 
-                            <v-autocomplete
-                              v-model="userTimezone"
-                              :items="timezone"
-                              :search-input.sync="searchTimezone"
-                              item-text="label"
-                              item-value="tzCode"
-                              flat
-                              auto-select-first
-                              hide-details
-                              outlined
-                            ></v-autocomplete>
+                            <v-autocomplete v-model="userTimezone" :items="timezone" :search-input.sync="searchTimezone"
+                              item-text="label" item-value="tzCode" flat auto-select-first hide-details
+                              outlined></v-autocomplete>
                           </v-col>
                         </v-row>
                         <v-row justify="center">
                           <v-col cols="12">
-                            <v-btn
-                              color="#0D9648"
-                              type="submit"
-                              height="56"
-                              min-width="220px"
-                              class="text-capitalize white--text font-weight-bold save-btn px-9"
-                              :loading="profileLoading"
-                              :disabled="profileLoading"
-                              large
-                              >Save</v-btn
-                            >
+                            <v-btn color="#0D9648" type="submit" height="56" min-width="220px"
+                              class="text-capitalize white--text font-weight-bold save-btn px-9" :loading="profileLoading"
+                              :disabled="profileLoading || !getPhoneInfo.valid" large>Save</v-btn>
                           </v-col>
                         </v-row>
                       </v-form>
@@ -184,8 +121,7 @@
                                 <td class="text-left">
                                   <span v-if="admins.phoneNumber">{{
                                     admins.phoneNumber
-                                  }}</span
-                                  ><span v-else>Not Provided</span>
+                                  }}</span><span v-else>Not Provided</span>
                                 </td>
                               </tr>
                             </template>
@@ -212,7 +148,7 @@
                       <v-simple-table>
                         <template v-slot:default>
                           <tbody>
-                            <tr v-for="(history,index) in historyData" :key="index">
+                            <tr v-for="(history, index) in historyData" :key="index">
                               <td class="text-left">
                                 {{ time(history.date, userTimezone) }}
                               </td>
@@ -239,7 +175,6 @@
 import { mapActions, mapGetters } from 'vuex';
 import VuePhoneNumberInput from 'vue-phone-number-input';
 import timezones from 'timezones-list';
-import VueMoment from 'vue-moment';
 import moment from 'moment-timezone';
 import _ from 'lodash';
 import ProfileImage from '../components/Profile/ProfileImage.vue';
@@ -259,27 +194,33 @@ export default {
   data() {
     return {
       timezone: timezones,
-      isHidden: false,
       firstName: this.$store.getters.userInfo.firstName,
       lastName: this.$store.getters.userInfo.lastName,
       title: this.$store.getters.userInfo.title,
-      mobileNumber: this.$store.getters.userInfo.phoneNumber,
+      mobileNumber: typeof this.$store.getters.userInfo.phoneNumber === 'string' ? this.$store.getters.userInfo.phoneNumber : '',
       email: this.$store.getters.userInfo.email,
       userTimezone: this.$store.getters.userInfo.timezone,
       searchTimezone: null,
-      defaultCountry: 'US',
       translations: {
         countrySelectorLabel: 'Country Code',
         countrySelectorError: 'Choose country',
         phoneNumberLabel: 'Phone Number',
         example: 'Example',
       },
+      firstNameRule: [
+        (v) => !!v || 'First name is required',
+      ],
+      lastNameRule: [
+        (v) => !!v || 'Last name is required',
+      ],
       hasLoaderActive: false,
-      hasErrorActive: false,
       results: {},
-      twoFactor: true,
-      timee: '',
       saveLoading: false,
+      counter: 0,
+      phoneInfo: {
+        valid: true,
+        message: '',
+      },
     };
   },
 
@@ -305,6 +246,12 @@ export default {
     companyAdmins() {
       return this.$store.getters.companyAdmins;
     },
+    getPhoneInfo() {
+      return this.phoneInfo;
+    },
+    getCounter() {
+      return this.counter;
+    },
   },
   watch: {
     searchTimezone(val) {
@@ -325,20 +272,40 @@ export default {
   methods: {
     ...mapActions(['updateProfile', 'loginHistory', 'adminsCompany']),
     onUpdate(payload) {
+      this.counter++;
+      this.phoneInfo.valid = payload.isValid;
+
+      if (payload.phoneNumber && !payload.isValid) {
+        this.phoneInfo.message = 'Invalid Phone number format';
+      }
+
+      if (!payload.phoneNumber && !payload.isValid) {
+        this.phoneInfo.message = 'Phone number is required';
+      }
       this.results = payload.formattedNumber;
     },
     editForm() {
+      if (this.results === '') {
+        this.counter += 2;
+        this.phoneInfo = {
+          valid: false,
+          message: 'Phone number is required',
+        };
+      }
       this.mobileNumber = this.results;
-      const user = {
-        firstName: this.firstName,
-        lastName: this.lastName,
-        email: this.email,
-        phoneNumber: this.mobileNumber,
-        title: this.title,
-        userid: this.$store.getters.userInfo.id,
-        timezone: this.userTimezone,
-      };
-      this.updateProfile(user);
+
+      if (this.$refs.form.validate() && this.getPhoneInfo.valid) {
+        const user = {
+          firstName: this.firstName,
+          lastName: this.lastName,
+          email: this.email,
+          phoneNumber: this.mobileNumber,
+          title: this.title,
+          userid: this.$store.getters.userInfo.id,
+          timezone: this.userTimezone,
+        };
+        this.updateProfile(user);
+      }
     },
     history() {
       const user = {
