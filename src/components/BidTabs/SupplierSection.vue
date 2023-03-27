@@ -408,35 +408,38 @@ export default {
     companiesList() {
       let idType = '';
       let unique;
-      if (this.repsInvited.length) {
-        unique = this.$store.getters.companiesList ? this.$store.getters.companiesList.filter((el) => !this.repsInvited.find((item) => {
+
+      if (this.$store.getters.companiesList && this.$store.getters.companiesList.length) {
+        if (this.repsInvited.length) {
+          unique = this.$store.getters.companiesList ? this.$store.getters.companiesList.filter((el) => !this.repsInvited.find((item) => {
+            if (el.objectID) {
+              idType = 'objectID';
+              if (item.id) return el.objectID === item.id;
+              if (item.companyId) return el.objectID === item.companyId;
+              return el.objectID === item.objectID;
+            } if (el.id) {
+              idType = 'id';
+              if (item.id) return el.id === item.id;
+              if (item.companyId) return el.id === item.companyId;
+              return el.id === item.objectID;
+            }
+          }) && el.company !== this.userInfo.company.company) : [];
+
+          return idType === 'id' ? [...new Map(unique.map((item) => [item.id, item])).values()] : [...new Map(unique.map((item) => [item.objectID, item])).values()];
+        }
+        this.$store.getters.companiesList.forEach((el) => {
           if (el.objectID) {
             idType = 'objectID';
-            if (item.id) return el.objectID === item.id;
-            if (item.companyId) return el.objectID === item.companyId;
-            return el.objectID === item.objectID;
           } if (el.id) {
             idType = 'id';
-            if (item.id) return el.id === item.id;
-            if (item.companyId) return el.id === item.companyId;
-            return el.id === item.objectID;
           }
-        }) && el.company !== this.userInfo.company.company) : [];
+        });
 
-        return idType === 'id' ? [...new Map(unique.map((item) => [item.id, item])).values()] : [...new Map(unique.map((item) => [item.objectID, item])).values()];
+        return idType === 'id' ? [...new Map(this.$store.getters.companiesList.map((item) => [item.id, item])).values()] : [...new Map(this.$store.getters.companiesList.map((item) => [item.objectID, item])).values()];
       }
 
-      this.$store.getters.companiesList.forEach((el) => {
-        if (el.objectID) {
-          idType = 'objectID';
-        } if (el.id) {
-          idType = 'id';
-        }
-      });
-
-      return idType === 'id' ? [...new Map(this.$store.getters.companiesList.map((item) => [item.id, item])).values()] : [...new Map(this.$store.getters.companiesList.map((item) => [item.objectID, item])).values()];
+      return [];
     },
-
     serviceCompanies() {
       return this.$store.getters.serviceCompaniesList.sort((a, b) => {
         const aHasOfsPremium = a.contracts.some((contract) => contract.contractType === 'ofs-premium');
