@@ -197,7 +197,7 @@ export default {
       firstName: this.$store.getters.userInfo.firstName,
       lastName: this.$store.getters.userInfo.lastName,
       title: this.$store.getters.userInfo.title,
-      mobileNumber: typeof this.$store.getters.userInfo.phoneNumber === 'string' ? this.$store.getters.userInfo.phoneNumber : '',
+      mobileNumber: this.$store.getters.userInfo.phoneNumber === 'string' ? this.$store.getters.userInfo.phoneNumber : '',
       email: this.$store.getters.userInfo.email,
       userTimezone: this.$store.getters.userInfo.timezone,
       searchTimezone: null,
@@ -285,16 +285,17 @@ export default {
       this.results = payload.formattedNumber;
     },
     editForm() {
-      if (this.results === '') {
+      if (this.results === '' && this.results === undefined) {
         this.counter += 2;
         this.phoneInfo = {
           valid: false,
           message: 'Phone number is required',
         };
       }
-      this.mobileNumber = this.results;
 
       if (this.$refs.form.validate() && this.getPhoneInfo.valid) {
+        this.mobileNumber = this.results;
+
         const user = {
           firstName: this.firstName,
           lastName: this.lastName,
