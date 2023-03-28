@@ -29,7 +29,7 @@
           </div>
           <div>
             <v-tabs class="supplier-tabs" hide-slider v-model="availableSuppl">
-              <v-tab class="text-capitalize font-weight-bold" href="#companyName" @click="hideCategories">Company
+              <v-tab class="text-capitalize font-weight-bold" href="#companyName" @click="hideCategories('name')">Company
                 Name</v-tab>
               <v-tab class="text-capitalize font-weight-bold" href="#salesRep" @click="hideCategories">Sales
                 Rep</v-tab>
@@ -570,8 +570,9 @@ export default {
         }
       }
     },
-    hideCategories() {
+    hideCategories(name) {
       this.categories = false;
+      if (name) this.getCompanies();
     },
     subCategories(subCats) {
       return _.orderBy(subCats, 'orderNumber', 'asc');
