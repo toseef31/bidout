@@ -74,18 +74,16 @@
           <v-row justify="center" v-for="(textField, i) in bidDescriptions" :key="i">
             <v-col cols="12" sm="12" text="left" v-if="i == 0">
               <label class="d-block text-left input-label mb-2 font-weight-bold">Bid Description</label>
-              <v-textarea placeholder="Describe here..." single-line outlined type="text"
-                v-model="bidDescriptions[0]['body']" :rules="descRules">
-              </v-textarea>
+              <vue-editor v-model="bidDescriptions[0]['body']" @blur="validateDesc" @keypress="validateDesc"
+              @keyup="validateDesc" :editor-toolbar="customToolbar" />
+              <span v-if="validDesc === false && bidDescriptions[0]['body'].length == 0" class="red--text d-block text-left mt-2">Description is required.</span>
             </v-col>
             <v-col cols="12" sm="12" text="left" v-else>
               <label class="d-block text-left input-label mb-2 font-weight-bold">Additional Information <v-icon
                   color="#F32349" @click="remove(i)">mdi-trash-can-outline</v-icon></label>
               <v-text-field placeholder="Title" single-line outlined type="text" v-model="bidDescriptions[i]['name']">
               </v-text-field>
-              <v-textarea placeholder="Describe here" single-line outlined type="text" hide-details
-                v-model="bidDescriptions[i]['body']">
-              </v-textarea>
+              <vue-editor v-model="bidDescriptions[i]['body']" :editor-toolbar="customToolbar" />
             </v-col>
           </v-row>
           <v-row>
@@ -98,7 +96,7 @@
           <v-row justify="center">
             <v-col cols="12">
               <v-btn color="#0D9648" height="56" class="text-capitalize white--text font-weight-bold save-btn px-9"
-                :loading="saveBidLoading" :disabled="!valid" @click="changeTab" large>Save Changes</v-btn>
+                :loading="saveBidLoading" :disabled="!valid || validDesc === false" @click="changeTab" large>Save Changes</v-btn>
             </v-col>
           </v-row>
           <template v-if="route != 'EditTemplate'">
@@ -138,8 +136,12 @@
 <script>
 import { mapActions, mapGetters } from 'vuex';
 import moment from 'moment-timezone';
+import { VueEditor } from 'vue2-editor';
 
 export default {
+  components: {
+    VueEditor,
+  },
   data() {
     return {
       valid: true,
@@ -185,6 +187,12 @@ export default {
       route: '',
       isTemplate: false,
       loading: false,
+      validDesc: null,
+      customToolbar: [
+        ['bold', 'italic', 'underline'],
+        [{ list: 'ordered' }, { list: 'bullet' }],
+        ['link'],
+      ],
     };
   },
   computed: {
@@ -304,10 +312,18 @@ export default {
       this.$store.commit('setBidDetailsComplete', this.valid);
       return this.valid;
     },
+    contentRules() {
+      return [
+        (v) => !!v || 'Description is required',
+      ];
+    },
   },
   watch: {
     date() {
       this.dueDate = this.formatDate(this.date);
+    },
+    bidDescriptions() {
+      console.log('vall');
     },
   },
   methods: {
@@ -430,6 +446,13 @@ export default {
     },
     deleteDraft() {
       this.deleteDraftBid({ draftId: this.$store.getters.bidData.id });
+    },
+    validateDesc() {
+      if (this.bidDescriptions[0].body.length > 0) {
+        this.validDesc = true;
+      } else {
+        this.validDesc = false;
+      }
     },
   },
   async mounted() {
