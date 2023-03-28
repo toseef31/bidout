@@ -96,7 +96,7 @@
           <v-row justify="center">
             <v-col cols="12">
               <v-btn color="#0D9648" height="56" class="text-capitalize white--text font-weight-bold save-btn px-9"
-                :loading="saveBidLoading" :disabled="!valid || validDesc === false" @click="changeTab" large>Save Changes</v-btn>
+                :loading="saveBidLoading" :disabled="!enableSaveButton" @click="changeTab" large>Save Changes</v-btn>
             </v-col>
           </v-row>
           <template v-if="route != 'EditTemplate'">
@@ -317,13 +317,23 @@ export default {
         (v) => !!v || 'Description is required',
       ];
     },
+    enableSaveButton() {
+      return this.valid && this.validDesc;
+    },
   },
   watch: {
     date() {
       this.dueDate = this.formatDate(this.date);
     },
-    bidDescriptions() {
-      console.log('vall');
+    bidDescriptions: {
+      handler() {
+        if (this.bidDescriptions[0].body.trim() === '') {
+          this.validDesc = false;
+        } else {
+          this.validDesc = true;
+        }
+      },
+      deep: true,
     },
   },
   methods: {
@@ -448,11 +458,7 @@ export default {
       this.deleteDraftBid({ draftId: this.$store.getters.bidData.id });
     },
     validateDesc() {
-      if (this.bidDescriptions[0].body.length > 0) {
-        this.validDesc = true;
-      } else {
-        this.validDesc = false;
-      }
+      this.validDesc = this.bidDescriptions[0].body.length > 0;
     },
   },
   async mounted() {
