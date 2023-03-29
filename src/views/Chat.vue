@@ -203,7 +203,7 @@
                             </v-list-item-content>
                             <v-list-item-action class="mt-n6">
                               <v-list-item-action-text>{{
-                                istoday(message.updatedAt)
+                                istoday(message.createdAt)
                               }}</v-list-item-action-text>
                             </v-list-item-action>
                           </template>

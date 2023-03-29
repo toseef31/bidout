@@ -1484,6 +1484,7 @@ export default {
         dispatch('getCategories');
         dispatch('searchByCompany', { query: '', basin: 'all' });
         commit('setBidData', res.data.bidData);
+        commit('setUserType', res.data.user_type);
 
         if (res.data.supplierSubmissions
           && res.data.supplierSubmissions
@@ -1505,7 +1506,7 @@ export default {
       }
     }
   },
-  async updateBid({ commit, state, dispatch }, payload) {
+  async updateBid({ commit, state, dispatch,rootState }, payload) {
     commit('setSaveBidLoading', true);
     const config = {
       headers: {
@@ -1534,7 +1535,7 @@ export default {
     formData.append('userId', state.bidData.userId.id);
     formData.append('companyId', state.bidData.companyId);
     formData.append('company', state.bidData.company);
-    // formData.append('serial', state.bidSerial);
+    formData.append('editedByUserId',rootState.auth.userInfo.id)
 
     formData.append('bidDescriptions[0][body]', state.bidData.bidDescriptions[0].body);
     if (state.bidData.bidDescriptions.length > 1) {
@@ -1626,6 +1627,7 @@ export default {
     } else {
       formData.append('questions', '');
     }
+
     try {
       const res = await axios.post('bid/editBid/', formData, config);
       if (res.status === 200) {
