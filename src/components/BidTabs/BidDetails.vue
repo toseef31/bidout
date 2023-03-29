@@ -192,6 +192,9 @@ export default {
     singleTemplate() {
       return this.$store.getters.singleTemplate;
     },
+    getUserType() {
+      return this.$store.getters.userType;
+    },
     title: {
       get() {
         if (this.$store.getters.bidData != null) {
@@ -438,6 +441,10 @@ export default {
   async mounted() {
     this.route = this.$route.name;
     
+    if (this.getUserType === 'supplier') {
+      this.$router.push('/view-bids');
+    }
+
     if (this.$route.name === 'EditBid') {
       await this.getAllIntent({
       bidId: this.$store.getters.bidData.id,
