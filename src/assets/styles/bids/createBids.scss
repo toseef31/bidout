@@ -126,7 +126,11 @@
 							font-size: 16px;
 							border-radius: 8px;
 						}
-
+						.quillWrapper{
+							.ql-toolbar{
+								text-align: left;
+							}
+						}
 					}
 				}
 				.supplier-row{
