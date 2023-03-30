@@ -627,7 +627,7 @@ export default {
       this.repsInvited.push(company);
       this.inviteCount = 2;
       this.newCount = this.repsInvited.length;
-      this.$store.commit('spliceCompanies', index);
+      this.$store.commit('spliceCompanies', company);
       this.$store.commit('setIsEditBidChanges', true);
       const unique = [...new Map(this.repsInvited.map((m) => [m.company, m])).values()];
       this.$store.commit('setInvitedSuppliersData', unique);
@@ -637,7 +637,7 @@ export default {
       this.repsInvited.push(company);
       this.inviteCount = 2;
       this.newCount = this.repsInvited.length;
-      this.$store.commit('spliceCompanies', index);
+      this.$store.commit('spliceCompanies', company);
       this.$store.commit('setIsEditBidChanges', true);
       const unique = [...new Map(this.repsInvited.map((m) => [m.company, m])).values()];
       this.$store.commit('setInvitedSuppliersData', unique);
