@@ -95,7 +95,7 @@ export default {
   },
   mounted() {
     document.title = "Confirmation - BidOut"
-    this.loginRequest();
+   // this.loginRequest();
   }
 };
 </script>

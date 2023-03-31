@@ -26,6 +26,28 @@
 
 	}
 
+	.name-class {
+		margin-top: -20px;
+		margin-left: 10px;
+
+		.v-input .v-input__control .v-input__slot {
+			background: #F4F5F7 !important;
+		}
+	}
+
+	.existing-company {
+		background: rgba(13, 150, 71, 0.2);
+		border-left: 4px solid #0D9647;
+		width: 100%;
+
+		h1 {
+			font-size: 16px;
+			font-weight: 500;
+		}
+
+	}
+
+
 	.tabs-head {
 		background: #F4F5F7;
 
@@ -218,9 +240,32 @@
 			font-size: 21px;
 			font-weight: 500;
 		}
+
+		.existing-title {
+			font-size: 24px;
+			font-weight: 500;
+			color: #0D1139;
+			line-height: 30.12px;
+		}
+
+		.alert-title {
+			font-size: 24px;
+			color: #0D1139;
+			font-weight: 700;
+		}
+
+		.alert-sub-title {
+			font-size: 24px;
+			color: #0D1139;
+			font-weight: 500;
+			margin-top: 1px;
+		}
+
 	}
 
 	.confirm-box {
+		margin-top: 140px;
+
 		h1 {
 			color: #989C9A;
 		}

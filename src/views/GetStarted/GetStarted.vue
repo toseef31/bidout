@@ -16,7 +16,7 @@
       <v-main>
         <v-row justify="center">
           <v-col cols="12" md="9">
-            <div class="tabs-head px-6 pb-6 pt-7 mt-4">
+            <div class="tabs-head mt-4 px-9 py-8">
               <h4 class="text-left mb-4 font-weight-bold">Choose an option</h4>
               <template>
                 <v-tabs optional v-model="currentItem" centered hide-slider grow height="56">
@@ -33,7 +33,7 @@
                 <v-form @submit.prevent="buyerRequest" ref="buyerForm" v-model="buyerValid">
                   <v-container>
 
-                    <v-row class="mt-8 bg-light pa-3">
+                    <v-row class="mt-8 bg-light pa-6">
                       <v-col cols="12" sm="12" text="left" class="pb-0">
                         <label class="d-block text-left input-label mb-2 font-weight-bold">First Name</label>
                         <v-text-field placeholder="First Name" single-line outlined type="text" color="#ffffff"
@@ -44,14 +44,6 @@
                         <v-text-field placeholder="Last Name" single-line outlined type="text" v-model="buyer.lastName"
                           :rules="buyer.lastNameRule"></v-text-field>
                       </v-col>
-
-                      <!-- <v-col cols="12" sm="12" text="left" class=" pb-0">
-                        <label class="d-block text-left input-label mb-2 font-weight-bold">Company Name</label>
-                        <v-text-field placeholder="Company name" single-line outlined type="text"
-                          v-model="buyer.companyName" :rules="buyer.companyNameRule" required>
-                          <span class="d-block red--text text-left" v-if="companyMsg">{{ companyMsg }}</span>
-                        </v-text-field>
-                      </v-col> -->
 
                       <v-col cols="12" sm="12" text="left" class="pb-3">
                         <label class="d-block text-left input-label mb-2 font-weight-bold">Company Name</label>
@@ -108,8 +100,8 @@
               <v-tab-item>
                 <v-form @submit.prevent="registerRequest" ref="form" v-model="supplierValid">
                   <v-container>
-                    <v-row class="mt-8 bg-light">
-                      <v-col cols="12" sm="12" text="left" class="pa-6 pb-3">
+                    <v-row class="mt-8 bg-light px-6 py-4 ">
+                      <v-col cols="12" sm="12" text="left" class=" ">
                         <label class="d-block text-left input-label mb-2 font-weight-bold">Company Name</label>
                         <v-text-field prepend-inner-icon="search" placeholder="Company name" single-line outlined
                           type="text" v-model="company" @keyup="getSupplierList" :rules="companyRule" clearable>
@@ -128,9 +120,30 @@
                             </template>
                           </v-list>
                         </template>
+
                       </v-col>
+
+                      <div class="name-class pb-3">
+                        <v-checkbox v-model="isToken" color="#0D9648" hide-details>
+                          <template v-slot:label>
+                            <div>
+                              I have an invite token
+                            </div>
+                          </template>
+                        </v-checkbox>
+                      </div>
+
                     </v-row>
-                    <v-row class="mt-12 bg-light pa-3" v-if="companyInfo">
+
+                    <v-row class="mt-12">
+                      <div class="existing-company pa-6 text-left">
+                        <h1>This is an existing company, filling out the form will send a
+                          request to add you to the existing company.</h1>
+
+                      </div>
+
+                    </v-row>
+                    <v-row class="mt-12 bg-light px-6 py-4" v-if="companyInfo">
                       <v-col cols="12" sm="12" text="left" class="pb-0">
                         <label class="d-block text-left input-label mb-2 font-weight-bold">Company HQ Address 1</label>
                         <v-text-field placeholder="Company HQ Address 1" single-line outlined type="text"
@@ -164,7 +177,7 @@
                           v-model="supplier.companyHqZip" :rules="supplier.companyHqZipRule"></v-text-field>
                       </v-col>
                     </v-row>
-                    <v-row class="mt-12 bg-light pa-3">
+                    <v-row class="mt-12 bg-light px-6 py-4">
                       <v-col cols="12" sm="12" text="left" class="pb-0">
                         <label class="d-block text-left input-label mb-2 font-weight-bold">First Name</label>
                         <v-text-field placeholder="First Name" single-line outlined type="text" color="#ffffff"
@@ -179,25 +192,24 @@
                         <label class="d-block text-left input-label mb-2 font-weight-bold">Email Address</label>
                         <v-text-field placeholder="example@email.com" single-line outlined type="email" v-model="email"
                           @keyup="emailCheck()"></v-text-field>
-                        <span class="d-block red--text text-left mt-n4" v-if="emailError" v-html="emailError"></span>
+                        <span class="d-block email-error-text text-left mt-n4" v-if="emailError">{{ emailError }}</span>
                       </v-col>
                       <v-col cols="12" sm="12" text="left" class="pb-0">
                         <label class="d-block text-left input-label mb-2 font-weight-bold">Title</label>
                         <v-text-field placeholder="Title" single-line outlined type="text" v-model="supplier.title"
                           :rules="supplier.titleRule"></v-text-field>
                       </v-col>
-                      <v-col cols="12" sm="12" text="left">
+                      <v-col cols="12" sm="12" text="left" class="pb-8">
                         <label class="d-block text-left input-label mb-2 font-weight-bold">Direct Phone Number</label>
 
-                        <VuePhoneNumberInput :border-radius="8" size="lg" v-model="supplier.phoneNumber"
-                          :translations="translations" :loader="hasLoaderActive"
-                          :error="!getPhoneInfo.valid && getCounter > 1" error-color="#9E9E9E" valid-color="#9E9E9E"
-                          class="mb-2" :required="true" @update="onUpdate2" />
+                        <VuePhoneNumberInput :border-radius="0" size="md" v-model="supplier.phoneNumber"
+                          :translations="translations" :error="!getPhoneInfo.valid && getCounter > 1"
+                          error-color="#B8B8B8" valid-color="#B8B8B8" class="mb-2" :required="true" @update="onUpdate2" />
                         <div class="phone-class" v-if="!getPhoneInfo.valid && getCounter > 1">
                           {{ getPhoneInfo.message }}</div>
                       </v-col>
                     </v-row>
-                    <v-row class="mt-12 bg-light pa-3">
+                    <v-row class="mt-12 bg-light px-6 py-4">
                       <v-col cols="12" sm="12" text="left" class="pb-0">
                         <label class="d-block text-left input-label mb-2 font-weight-bold">Password</label>
                         <v-text-field placeholder="Password" single-line outlined type="password" color="#ffffff"
@@ -233,8 +245,9 @@
             </v-tabs-items>
           </v-col>
         </v-row>
+        <Contract />
         <v-row justify="center">
-          <v-col cols="12" md="8">
+          <v-col cols="12" md="9">
             <div class="getStart-box pa-6 text-left">
               <h1 class="mb-3 font-weight-bold">Get Started Today for Free!</h1>
               <div class="d-flex align-start">
@@ -253,6 +266,11 @@
 <script>
   import NavbarBeforeLogin from '../../components/Layout/NavbarBeforeLogin.vue'
   import Footer from '../../components/Layout/Footer.vue'
+  import ConfirmationBuyer from '@/components/SignUp/confirmation-buyer.vue'
+  import ExistingConfirmation from '@/components/SignUp/confirmation-existing.vue'
+  import ConfirmationSupplier from '@/components/SignUp/confirmation-supplier.vue'
+  import ModuleSelection from '@/components/SignUp/module-selection.vue'
+  import Contract from '@/components/SignUp/contract.vue'
   import _ from 'lodash';
   import VuePhoneNumberInput from 'vue-phone-number-input';
   import 'vue-phone-number-input/dist/vue-phone-number-input.css';
@@ -264,6 +282,11 @@ export default {
     NavbarBeforeLogin,
     Footer,
     VuePhoneNumberInput,
+    ConfirmationBuyer,
+    ExistingConfirmation,
+    ConfirmationSupplier,
+    ModuleSelection,
+    Contract
   },
   data() {
     return {
@@ -353,7 +376,6 @@ export default {
         phoneNumberLabel: 'Phone Number',
         example: 'Example'
       },
-      hasLoaderActive: false,
       hasErrorActive: false,
       results: {},
       results2: {},
@@ -362,6 +384,7 @@ export default {
         valid: true,
         message: '',
       },
+      isToken:false
     };
   },
   watch:{
@@ -381,21 +404,8 @@ export default {
 
       this.loader = null
     },
-    // companyError(message){
-    //   if(message){
-    //     this.$toasted.show(message, {
-    //       position: 'top-center',
-    //       duration: 5000,
-    //       className: 'error-toast',
-    //       type: 'error',
-    //     });
-    //     this.password = '';
-    //     this.confirmPassword = '';
-    //   }
-    // }
   },
   computed:{
-   // ...mapGetters(['companyError']),
     activityPanel(){
         return this.$store.getters.g_activityPanel;
     },
@@ -449,9 +459,6 @@ export default {
     showErrorAlert(){
      return this.$store.getters.showErrorAlert;
     },
-    // companyMsg(){
-    //   return this.$store.getters.companyError;
-    // },
     emailError() {
       if (!this.email) {
         this.buyerValid = false;
