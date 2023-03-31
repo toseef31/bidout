@@ -188,11 +188,12 @@
 </template>
 <script>
 import { mapActions, mapGetters } from 'vuex';
+import _ from 'lodash';
+import moment from 'moment-timezone';
+
 import Navbar from '../../components/Layout/Navbar.vue';
 import LeftSidebar from '../../components/Layout/Dashboard/LeftSidebar.vue';
 import RightSidebar from '../../components/Layout/Dashboard/RightSidebar.vue';
-import _ from 'lodash'
-import moment from 'moment-timezone';
 
 export default {
   name: 'ViewBids',

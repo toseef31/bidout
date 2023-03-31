@@ -411,8 +411,16 @@
           font-size: 16px;
           font-weight: 400;
 
-          span {
+          span:first-child {
             font-weight: 700;
+          }
+          .ql-editor{
+            ul{
+              padding-left: 0;
+            }
+            ol{
+              padding-left: 0;
+            }
           }
         }
 
@@ -421,7 +429,7 @@
           font-size: 16px;
           font-weight: 400;
 
-          span {
+          span:first-child {
             font-weight: 700;
             white-space: nowrap;
           }

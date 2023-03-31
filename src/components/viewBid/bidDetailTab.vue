@@ -24,7 +24,7 @@
 
         <p class="bid-desc d-flex">
           <span>Description:</span>
-          <span class="pl-2 font-weight-regular" v-html="bidDetail.bidData.bidDescriptions &&
+          <span class="pl-2 font-weight-regular ql-editor pa-0" v-html="bidDetail.bidData.bidDescriptions &&
             Array.isArray(bidDetail.bidData.bidDescriptions)
             ? bidDetail.bidData.bidDescriptions[0].body
             : bidDetail.bidData.bidDescriptions"></span>
@@ -35,7 +35,7 @@
           v-if="bidDetail.bidData && bidDetail.bidData.bidDescriptions && Array.isArray(bidDetail.bidData.bidDescriptions)"
           v-for="(item, index) in bidDetail.bidData.bidDescriptions.slice(1)" :key="index">
           <span>{{ item && item.name }}:</span>
-          <div class="pl-3 font-weight-regular" v-html="item && item.body"></div>
+          <div class="pl-3 font-weight-regular ql-editor pa-0" v-html="item && item.body"></div>
           <br /> <br />
       </div>
       </div>
