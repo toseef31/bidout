@@ -39,10 +39,21 @@
                           <v-col cols="12" sm="6" text="left" class="pb-0">
                             <label class="d-block text-left input-label mb-2 font-weight-bold">Mobile Number
                             </label>
-                            <VuePhoneNumberInput :border-radius="8" size="lg" v-model="mobileNumber"
-                              :translations="translations" :loader="hasLoaderActive"
-                              :error="!getPhoneInfo.valid && getCounter > 1" class="mb-2" error-color="#F32349"
-                              valid-color="#9E9E9E" @update="onUpdate" />
+
+                            <vue-tel-input defaultCountry="+1" :autoDefaultCountry="false" :autoFormat="false"
+                              :dropdownOptions="{
+                                showDialCodeInSelection: true,
+                                showFlags: true,
+                                width: ' max-content'
+                              }" :inputOptions="{
+  required: true,
+  showDialCode: false,
+  maxlength: 15,
+  placeholder: 'Phone number',
+
+                              }" model="national" :validCharactersOnly="true" :styleClasses="{'phone-main-class': true, }" v-model="mobileNumber"
+                              @validate="onUpdate"></vue-tel-input>
+
                             <div class="phone-class" v-if="!getPhoneInfo.valid && getCounter > 1">
                               {{ getPhoneInfo.message }}</div>
                           </v-col>
@@ -173,14 +184,13 @@
 </template>
 <script>
 import { mapActions, mapGetters } from 'vuex';
-import VuePhoneNumberInput from 'vue-phone-number-input';
 import timezones from 'timezones-list';
 import moment from 'moment-timezone';
+import { VueTelInput } from 'vue-tel-input';
 import _ from 'lodash';
 import ProfileImage from '../components/Profile/ProfileImage.vue';
 import ChangePassword from '../components/Profile/ChangePassword.vue';
 import Notifications from '../components/Profile/Notifications.vue';
-import 'vue-phone-number-input/dist/vue-phone-number-input.css';
 
 export default {
   name: 'EditProfile',
@@ -188,16 +198,17 @@ export default {
     ProfileImage,
     ChangePassword,
     Notifications,
-    VuePhoneNumberInput,
+    VueTelInput,
   },
 
   data() {
     return {
+      valueD: '',
       timezone: timezones,
       firstName: this.$store.getters.userInfo.firstName,
       lastName: this.$store.getters.userInfo.lastName,
       title: this.$store.getters.userInfo.title,
-      mobileNumber: this.$store.getters.userInfo.phoneNumber === 'string' ? this.$store.getters.userInfo.phoneNumber : '',
+      mobileNumber: '',
       email: this.$store.getters.userInfo.email,
       userTimezone: this.$store.getters.userInfo.timezone,
       searchTimezone: null,
@@ -273,16 +284,16 @@ export default {
     ...mapActions(['updateProfile', 'loginHistory', 'adminsCompany']),
     onUpdate(payload) {
       this.counter++;
-      this.phoneInfo.valid = payload.isValid;
+      this.phoneInfo.valid = payload.valid;
 
-      if (payload.phoneNumber && !payload.isValid) {
+      if (payload.number && !payload.valid) {
         this.phoneInfo.message = 'Invalid Phone number format';
       }
 
-      if (!payload.phoneNumber && !payload.isValid) {
+      if (!payload.number && !payload.valid) {
         this.phoneInfo.message = 'Phone number is required';
       }
-      this.results = payload.formattedNumber;
+      this.results = payload.number;
     },
     editForm() {
       if (this.results === '' && this.results === undefined) {
@@ -333,5 +344,10 @@ export default {
       this.userTimezone = 'America/Chicago';
     }
   },
+  created() {
+    this.mobileNumber = typeof this.$store.getters.userInfo.phoneNumber === 'string' ? this.$store.getters.userInfo.phoneNumber : '';
+  },
 };
 </script>
+
+<style src="vue-tel-input/dist/vue-tel-input.css"></style>
