@@ -40,7 +40,7 @@
                             <label class="d-block text-left input-label mb-2 font-weight-bold">Mobile Number
                             </label>
 
-                            <vue-tel-input defaultCountry="+1" :autoDefaultCountry="false" :autoFormat="false"
+                            <vue-tel-input defaultCountry="US" :autoDefaultCountry="false" :autoFormat="false"
                               :dropdownOptions="{
                                 showDialCodeInSelection: true,
                                 showFlags: true,
@@ -51,8 +51,8 @@
   maxlength: 15,
   placeholder: 'Phone number',
 
-                              }" model="national" :validCharactersOnly="true" :styleClasses="{'phone-main-class': true, }" v-model="mobileNumber"
-                              @validate="onUpdate"></vue-tel-input>
+}" model="auto" :validCharactersOnly="true" :styleClasses="{ 'phone-main-class': true, }"
+                              v-model="mobileNumber" @validate="onUpdate"></vue-tel-input>
 
                             <div class="phone-class" v-if="!getPhoneInfo.valid && getCounter > 1">
                               {{ getPhoneInfo.message }}</div>

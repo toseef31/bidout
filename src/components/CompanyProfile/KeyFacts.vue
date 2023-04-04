@@ -85,7 +85,7 @@
               <label class="d-block text-left input-label mb-2 "
                 :class="{ 'mt-n2': getPhoneInfo.message !== '', 'mt-n6': getPhoneInfo.message === '' }">Phone
                 Number</label>
-              <vue-tel-input defaultCountry="+1" :autoDefaultCountry="false" :autoFormat="false" :dropdownOptions="{
+              <vue-tel-input defaultCountry="US" :autoDefaultCountry="false" :autoFormat="false" :dropdownOptions="{
                 showDialCodeInSelection: true,
                 showFlags: true,
                 width: ' max-content'
@@ -94,7 +94,7 @@
   maxlength: 15,
   placeholder: 'Phone number',
 
-}" model="national" :validCharactersOnly="true" :styleClasses="{ 'phone-main-class': true }" v-model="contactPhoneNo"
+}" model="auto" :validCharactersOnly="true" :styleClasses="{ 'phone-main-class': true }" v-model="contactPhoneNo"
                 @validate="onUpdate"></vue-tel-input>
               <div class="phone-class">
                 {{ getPhoneInfo.message }}</div>
