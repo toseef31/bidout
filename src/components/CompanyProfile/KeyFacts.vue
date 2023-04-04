@@ -83,7 +83,7 @@
 
             <div>
               <label class="d-block text-left input-label mb-2 "
-                :class="{ 'mt-n2': getPhoneInfo.message !== '', 'mt-n6': getPhoneInfo.message === '' }">Phone
+                :class="{ 'space-error-class': getPhoneInfo.message !== '', 'space-class': getPhoneInfo.message === '' }">Phone
                 Number</label>
               <vue-tel-input defaultCountry="US" :autoDefaultCountry="false" :autoFormat="false" :dropdownOptions="{
                 showDialCodeInSelection: true,
@@ -96,7 +96,7 @@
 
 }" model="auto" :validCharactersOnly="true" :styleClasses="{ 'phone-main-class': true }" v-model="contactPhoneNo"
                 @validate="onUpdate"></vue-tel-input>
-              <div class="phone-class">
+              <div class="phone-class" v-show="!getPhoneInfo.valid && getCounter > 1">
                 {{ getPhoneInfo.message }}</div>
             </div>
 
@@ -152,7 +152,7 @@ export default {
       contactEmail: '',
       contactEmailRule: [
         (v) => !!v || 'E-mail is required',
-        (v) => /.+@.+/.test(v) || 'E-mail must be valid',
+        (v) => /^\w+([.+_-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,3})+$/.test(v) || 'E-mail must be valid',
       ],
       contactRole: '',
       contactPhoneNo: '',
@@ -172,6 +172,7 @@ export default {
         valid: true,
         message: '',
       },
+      toggleError: false,
     };
   },
   watch: {
@@ -220,9 +221,10 @@ export default {
 
       if (payload.number && !payload.valid) {
         this.phoneInfo.message = 'Invalid Phone number format';
+      } else {
+        this.phoneInfo.message = '';
+        this.results = payload.number;
       }
-
-      this.results = payload.number;
     },
     getHqLocation() {
       this.mapOption = {
@@ -317,24 +319,29 @@ export default {
       this.addCompanyFacts(data);
     },
     addContacts() {
-      this.$refs.contactForm.validate();
-      if (this.$store.getters.companyData.companyData.accountContacts) {
-        this.accountContacts = this.$store.getters.companyData.companyData.accountContacts;
+      if (this.$refs.contactForm.validate()) {
+        if (this.$store.getters.companyData.companyData.accountContacts) {
+          this.accountContacts = this.$store.getters.companyData.companyData.accountContacts;
+        }
+        const data = {
+          name: this.contactName,
+          email: this.contactEmail,
+          position: this.contactRole,
+          phoneNo: this.results,
+        };
+        this.accountContacts.push(data);
+        this.addCompanyContacts({ companyId: this.$store.getters.userInfo.company.id, accountContacts: this.accountContacts });
       }
-      const data = {
-        name: this.contactName,
-        email: this.contactEmail,
-        position: this.contactRole,
-        phoneNo: this.results,
-      };
-      this.accountContacts.push(data);
-      this.addCompanyContacts({ companyId: this.$store.getters.userInfo.company.id, accountContacts: this.accountContacts });
 
+      this.$refs.contactForm.reset();
       this.contactName = '';
       this.contactEmail = '';
       this.contactRole = '';
       this.contactPhoneNo = '';
       this.results = '';
+      this.phoneInfo.message = '';
+      this.phoneInfo.valid = true;
+      this.counter = 0;
     },
     deleteContact(index) {
       if (this.$store.getters.companyData.companyData.accountContacts) {

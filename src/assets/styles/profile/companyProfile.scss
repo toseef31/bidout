@@ -109,6 +109,13 @@
 						padding-left: 12px;
 					}
 
+					.space-class {
+						margin-top: -30px;
+					}
+					.space-error-class {
+						margin-top: -6px;
+					}
+
 					.phone-error-class {
 						.vue-tel-input:focus-within {
 							border: 2px solid red;
