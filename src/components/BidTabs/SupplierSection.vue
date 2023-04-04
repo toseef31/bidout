@@ -536,50 +536,52 @@ export default {
         this.phoneInfo.message = 'Phone number is required';
       }
 
-      this.results = payload.formattedNumber;
+      this.results = payload.number;
     },
     async validate() {
-      if (this.results === '') {
+      if (this.results === '' && this.results === undefined) {
         this.counter += 2;
         this.phoneInfo = {
           valid: false,
           message: 'Phone number is required',
         };
       }
-      const supplier = {
-        firstName: this.firstName,
-        lastName: this.lastName,
-        company: this.company,
-        phone: this.results,
-        email: this.email,
-        bidTitle: this.$store.getters.bidData.title,
-        bidType: this.$store.getters.bidData.type,
-        bidDueDate: this.$store.getters.bidData.dueDate,
-        bidDueTime: this.$store.getters.bidData.dueTime,
-      };
 
-      if (this.$refs.form.validate() && this.getPhoneInfo.valid) {
-        try {
-          const user = await this.inviteNewSupplier(supplier);
-          this.supplierDialog = false;
-          this.oldCount = this.newRepsInvited.length;
-          this.newRepsInvited.push(user);
-          this.newCount = this.newRepsInvited.length;
-          this.$store.commit('setInvitedNewSuppliers', this.newRepsInvited);
-          this.$refs.form.reset();
-          this.loadingInvite = false;
-          this.phoneNumber = '';
-          this.phoneInfo = {
-            valid: true,
-            message: '',
-          };
-          this.counter = 0;
-          this.valid = false;
-          this.results = '';
-        } catch (error) {
-          console.log(error);
-        }
-      }
+      console.log(this.results)
+      // const supplier = {
+      //   firstName: this.firstName,
+      //   lastName: this.lastName,
+      //   company: this.company,
+      //   phone: this.results,
+      //   email: this.email,
+      //   bidTitle: this.$store.getters.bidData.title,
+      //   bidType: this.$store.getters.bidData.type,
+      //   bidDueDate: this.$store.getters.bidData.dueDate,
+      //   bidDueTime: this.$store.getters.bidData.dueTime,
+      // };
+
+      // if (this.$refs.form.validate() && this.getPhoneInfo.valid) {
+      //   try {
+      //     const user = await this.inviteNewSupplier(supplier);
+      //     this.supplierDialog = false;
+      //     this.oldCount = this.newRepsInvited.length;
+      //     this.newRepsInvited.push(user);
+      //     this.newCount = this.newRepsInvited.length;
+      //     this.$store.commit('setInvitedNewSuppliers', this.newRepsInvited);
+      //     this.$refs.form.reset();
+      //     this.loadingInvite = false;
+      //     this.phoneNumber = '';
+      //     this.phoneInfo = {
+      //       valid: true,
+      //       message: '',
+      //     };
+      //     this.counter = 0;
+      //     this.valid = false;
+      //     this.results = '';
+      //   } catch (error) {
+      //     console.log(error);
+      //   }
+      // }
     },
     hideCategories(name) {
       this.categories = false;

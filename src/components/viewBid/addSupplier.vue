@@ -539,7 +539,7 @@ export default {
       this.results = payload.number;
     },
     async validate() {
-      if (this.results === '') {
+      if (this.results === '' && this.results === undefined) {
         this.counter += 2;
         this.phoneInfo = {
           valid: false,
