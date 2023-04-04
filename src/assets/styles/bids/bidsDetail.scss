@@ -394,6 +394,9 @@
         border-bottom: 1px solid #f1f1f1;
 
         .title-desc {
+          .v-btn--icon.v-size--default {
+            height: 20px !important;
+          }
 
           div {
             font-size: 16px;
