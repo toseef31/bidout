@@ -35,19 +35,21 @@
         <br />
         <v-row>
           <v-col md="2" class="text-right mr-1 title-desc">Description:</v-col>
-          <v-col class="title-brief bid-desc"> {{
-            bidDetail.bidData.bidDescriptions &&
+          <v-col class="title-brief bid-desc"> 
+            <div v-html="bidDetail.bidData.bidDescriptions &&
             Array.isArray(bidDetail.bidData.bidDescriptions)
             ? bidDetail.bidData.bidDescriptions[0].body
-            : bidDetail.bidData.bidDescriptions
-          }}</v-col>
+            : bidDetail.bidData.bidDescriptions"></div>
+          </v-col>
         </v-row>
         <br />
         <v-row
           v-if="bidDetail.bidData && bidDetail.bidData.bidDescriptions && Array.isArray(bidDetail.bidData.bidDescriptions)"
           v-for="(item, index) in bidDetail.bidData.bidDescriptions.slice(1)" :key="index">
           <v-col md="2" class="text-right mr-1 title-desc">{{ item && item.name }}:</v-col>
-          <v-col class="title-brief bid-desc"> {{ item && item.body }}</v-col>
+          <v-col class="title-brief bid-desc"> 
+            <div v-html="item && item.body"></div>
+          </v-col>
         </v-row>
 
       </div>

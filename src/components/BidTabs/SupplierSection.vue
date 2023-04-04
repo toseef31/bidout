@@ -27,7 +27,7 @@
           </div>
           <div>
             <v-tabs class="supplier-tabs" hide-slider v-model="availableSuppl">
-              <v-tab class="text-capitalize font-weight-bold" href="#companyName" @click="hideCategories">Company
+              <v-tab class="text-capitalize font-weight-bold" href="#companyName" @click="hideCategories('name')">Company
                 Name</v-tab>
               <v-tab class="text-capitalize font-weight-bold" href="#salesRep" @click="hideCategories">Sales
                 Rep</v-tab>
@@ -416,23 +416,40 @@ export default {
     },
     companiesList() {
       let idType = '';
-      const unique = this.$store.getters.companiesList ? this.$store.getters.companiesList.filter((el) => !this.repsInvited.find((item) => {
-        if (el.objectID) {
-          idType = 'objectID';
-          if (item.id) return el.objectID === item.id;
-          if (item.companyId) return el.objectID === item.companyId;
-          return el.objectID === item.objectID;
-        } if (el.id) {
-          idType = 'id';
-          if (item.id) return el.id === item.id;
-          if (item.companyId) return el.id === item.companyId;
-          return el.id === item.objectID;
+      let unique;
+
+      if (this.$store.getters.companiesList && this.$store.getters.companiesList.length) {
+        if (this.repsInvited.length) {
+          unique = this.$store.getters.companiesList ? this.$store.getters.companiesList.filter((el) => !this.repsInvited.find((item) => {
+            if (el.objectID) {
+              idType = 'objectID';
+              if (item.id) return el.objectID === item.id;
+              if (item.companyId) return el.objectID === item.companyId;
+              return el.objectID === item.objectID;
+            } if (el.id) {
+              idType = 'id';
+              if (item.id) return el.id === item.id;
+              if (item.companyId) return el.id === item.companyId;
+              return el.id === item.objectID;
+            }
+          }) && el.company !== this.userInfo.company.company) : [];
+
+          return idType === 'id' ? [...new Map(unique.map((item) => [item.id, item])).values()] : [...new Map(unique.map((item) => [item.objectID, item])).values()];
         }
-      }) && el.company !== this.userInfo.company.company) : [];
 
-      return idType === 'id' ? [...new Map(unique.map((item) => [item.id, item])).values()] : [...new Map(unique.map((item) => [item.objectID, item])).values()];
+        this.$store.getters.companiesList.forEach((el) => {
+          if (el.objectID) {
+            idType = 'objectID';
+          } if (el.id) {
+            idType = 'id';
+          }
+        });
+
+        return idType === 'id' ? [...new Map(this.$store.getters.companiesList.map((item) => [item.id, item])).values()] : [...new Map(this.$store.getters.companiesList.map((item) => [item.objectID, item])).values()];
+      }
+
+      return [];
     },
-
     serviceCompanies() {
       return this.$store.getters.serviceCompaniesList.sort((a, b) => {
         const aHasOfsPremium = a.contracts.some((contract) => contract.contractType === 'ofs-premium');
@@ -564,8 +581,10 @@ export default {
         }
       }
     },
-    hideCategories() {
+    hideCategories(name) {
       this.categories = false;
+
+      if (name) this.getCompanies();
     },
     subCategories(subCats) {
       return _.orderBy(subCats, 'orderNumber', 'asc');
@@ -617,7 +636,7 @@ export default {
       this.repsInvited.push(company);
       this.inviteCount = 2;
       this.newCount = this.repsInvited.length;
-      this.$store.commit('spliceCompanies', index);
+      this.$store.commit('spliceCompanies', company);
       this.$store.commit('setIsEditBidChanges', true);
       const unique = [...new Map(this.repsInvited.map((m) => [m.company, m])).values()];
       this.$store.commit('setInvitedSuppliersData', unique);
@@ -627,7 +646,7 @@ export default {
       this.repsInvited.push(company);
       this.inviteCount = 2;
       this.newCount = this.repsInvited.length;
-      this.$store.commit('spliceCompanies', index);
+      this.$store.commit('spliceCompanies', company);
       this.$store.commit('setIsEditBidChanges', true);
       const unique = [...new Map(this.repsInvited.map((m) => [m.company, m])).values()];
       this.$store.commit('setInvitedSuppliersData', unique);
