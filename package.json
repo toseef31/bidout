@@ -45,6 +45,7 @@
     "yarn": "^1.22.19"
   },
   "devDependencies": {
+    "@types/vue2-editor": "^2.6.1",
     "eslint": "7.32.0",
     "eslint-config-airbnb-base": "^14.2.1",
     "eslint-import-resolver-alias": "^1.1.2",

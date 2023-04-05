@@ -252,7 +252,7 @@
               <td class="text-left">{{ item.inputType }}</td>
               <td class="text-left">{{ item.quantity }}</td>
               <td class="text-left">
-                {{ item.buyerComment }}
+                {{ item.buyerComment === 'undefined' || item.buyerComment === '' ? '' : item.buyerComment }}
               </td>
             </tr>
           </tbody>
