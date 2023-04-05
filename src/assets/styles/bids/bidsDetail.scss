@@ -1381,6 +1381,10 @@
             font-size: 15px;
             font-weight: 400;
             line-height: 20px;
+            white-space: normal;
+          }
+          .v-list-item__action{
+            align-self: self-start;
           }
         }
 
