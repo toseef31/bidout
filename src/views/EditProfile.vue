@@ -51,8 +51,8 @@
   maxlength: 15,
   placeholder: 'Phone number',
 
-}" model="auto" :validCharactersOnly="true" :styleClasses="{ 'phone-main-class': true, }"
-                              v-model="mobileNumber" @validate="onUpdate"></vue-tel-input>
+}" model="national" :validCharactersOnly="true" :styleClasses="{ 'phone-main-class': true, }" v-model="mobileNumber"
+                              @validate="onUpdate"></vue-tel-input>
 
                             <div class="phone-class" v-if="!getPhoneInfo.valid && getCounter > 1">
                               {{ getPhoneInfo.message }}</div>
@@ -263,6 +263,7 @@ export default {
     getCounter() {
       return this.counter;
     },
+
   },
   watch: {
     searchTimezone(val) {
@@ -293,7 +294,11 @@ export default {
       if (!payload.number && !payload.valid) {
         this.phoneInfo.message = 'Phone number is required';
       }
-      this.results = payload.number;
+
+      if (payload.number && payload.valid) {
+        this.results = payload.number;
+        this.mobileNumber = payload.nationalNumber;
+      }
     },
     editForm() {
       if (this.results === '' && this.results === undefined) {
@@ -305,13 +310,11 @@ export default {
       }
 
       if (this.$refs.form.validate() && this.getPhoneInfo.valid) {
-        this.mobileNumber = this.results;
-
         const user = {
           firstName: this.firstName,
           lastName: this.lastName,
           email: this.email,
-          phoneNumber: this.mobileNumber,
+          phoneNumber: this.results,
           title: this.title,
           userid: this.$store.getters.userInfo.id,
           timezone: this.userTimezone,

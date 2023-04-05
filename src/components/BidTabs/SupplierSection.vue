@@ -306,7 +306,7 @@
   maxlength: 15,
   placeholder: 'Phone number',
 
-}" model="auto" :validCharactersOnly="true" :styleClasses="{ 'phone-main-class': true }" v-model="phoneNumber"
+}" model="national" :validCharactersOnly="true" :styleClasses="{ 'phone-main-class': true }" v-model="phoneNumber"
                   @validate="onUpdate"></vue-tel-input>
                 <div class="phone-class" v-if="!getPhoneInfo.valid && getCounter > 1">
                   {{ getPhoneInfo.message }}</div>
@@ -536,7 +536,10 @@ export default {
         this.phoneInfo.message = 'Phone number is required';
       }
 
-      this.results = payload.number;
+      if (payload.number && payload.valid) {
+        this.phoneNumber = payload.nationalNumber;
+        this.results = payload.number;
+      }
     },
     async validate() {
       if (this.results === '' && this.results === undefined) {

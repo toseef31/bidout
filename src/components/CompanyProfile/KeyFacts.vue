@@ -94,7 +94,7 @@
   maxlength: 15,
   placeholder: 'Phone number',
 
-}" model="auto" :validCharactersOnly="true" :styleClasses="{ 'phone-main-class': true }" v-model="contactPhoneNo"
+}" model="national" :validCharactersOnly="true" :styleClasses="{ 'phone-main-class': true }" v-model="contactPhoneNo"
                 @validate="onUpdate"></vue-tel-input>
               <div class="phone-class" v-show="!getPhoneInfo.valid && getCounter > 1">
                 {{ getPhoneInfo.message }}</div>
@@ -224,6 +224,7 @@ export default {
       } else {
         this.phoneInfo.message = '';
         this.results = payload.number;
+        this.contactPhoneNo = payload.nationalNumber;
       }
     },
     getHqLocation() {
