@@ -189,13 +189,46 @@
                                     class="mt-2"
                                   ></v-img
                                 ></a>
-                                <v-img
-                                  v-else
-                                  :src="message.attachment"
-                                  max-height="125px"
-                                  max-width="245px"
-                                  class="mt-2"
-                                ></v-img>
+                                <a
+                                  :href="message.attachment"
+                                  target="_blank"
+                                  v-else-if="get_url_extension(message.attachment) == 'xlsx' || get_url_extension(message.attachment) == 'xls' || get_url_extension(message.attachment) == 'csv'">
+                                  <v-img
+                                  :src="require('@/assets/images/chat/excel.png')"
+                                  max-height="50px"
+                                  max-width="50px"
+                                  class="mt-2"></v-img>
+                                </a>
+                                <a
+                                  :href="message.attachment"
+                                  target="_blank"
+                                  v-else-if="get_url_extension(message.attachment) == 'doc' || get_url_extension(message.attachment) == 'docx' || get_url_extension(message.attachment) == 'txt'">
+                                  <v-img
+                                  :src="require('@/assets/images/chat/doc.png')"
+                                  max-height="50px"
+                                  max-width="50px"
+                                  class="mt-2"></v-img>
+                                </a>
+                                <a
+                                  :href="message.attachment"
+                                  target="_blank"
+                                  v-else-if="get_url_extension(message.attachment) == 'ppt' || get_url_extension(message.attachment) == 'pptx'">
+                                  <v-img
+                                  :src="require('@/assets/images/chat/ppt.png')"
+                                  max-height="50px"
+                                  max-width="50px"
+                                  class="mt-2"></v-img>
+                                </a>
+                                <a
+                                  :href="message.attachment"
+                                  target="_blank" v-else>
+                                  <v-img
+                                    :src="message.attachment"
+                                    max-height="125px"
+                                    max-width="245px"
+                                    class="mt-2"
+                                  ></v-img>
+                                </a>
                               </template>
                               <v-list-item-subtitle class="text--primary">{{
                                 message.content
