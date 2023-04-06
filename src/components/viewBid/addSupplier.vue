@@ -288,7 +288,8 @@
 
             <v-card-text>
               <h2 class="text-left mb-6 font-weight-bold">Invite New Supplier</h2>
-              <v-form ref="form" v-model="valid" lazy-validation>
+              <v-form ref="form" v-model="valid" lazy-validation
+                :class="{ 'phone-error-class': !getPhoneInfo.valid && getCounter > 1, 'phone-valid-class': getPhoneInfo.valid }">
                 <label class="d-block text-left font-weight-bold mb-2">First Name<span
                     class="required-class">*</span></label>
                 <v-text-field v-model="firstName" :rules="nameRules" placeholder="First Name" required
@@ -303,9 +304,18 @@
                   outlined></v-text-field>
                 <label class="d-block text-left font-weight-bold mb-2">Phone Number<span
                     class="required-class">*</span></label>
-                <VuePhoneNumberInput :border-radius="8" size="lg" error-color="#F32349" valid-color="#9E9E9E"
-                  v-model="phoneNumber" :translations="translations" :required="true" :loader="hasLoaderActive"
-                  :error="!getPhoneInfo.valid && getCounter > 1" @update="onUpdate" />
+                <vue-tel-input defaultCountry="US" :autoDefaultCountry="false" :autoFormat="false" :dropdownOptions="{
+                  showDialCodeInSelection: true,
+                  showFlags: true,
+                  width: ' max-content'
+                }" :inputOptions="{
+  required: true,
+  showDialCode: false,
+  maxlength: 15,
+  placeholder: 'Phone number',
+
+}" model="national" :validCharactersOnly="true" :styleClasses="{ 'phone-main-class': true }" v-model="phoneNumber"
+                  @validate="onUpdate"></vue-tel-input>
                 <div class="phone-class" v-if="!getPhoneInfo.valid && getCounter > 1">
                   {{ getPhoneInfo.message }}</div>
                 <label class="d-block text-left font-weight-bold mb-2 mt-6">Email<span
@@ -331,14 +341,13 @@
   </div>
 </template>
 <script>
-import VuePhoneNumberInput from 'vue-phone-number-input';
-import 'vue-phone-number-input/dist/vue-phone-number-input.css';
+import { VueTelInput } from 'vue-tel-input';
 import _ from 'lodash';
 import { mapActions, mapGetters } from 'vuex';
 
 export default {
   components: {
-    VuePhoneNumberInput,
+    VueTelInput,
   },
   data() {
     return {
@@ -517,20 +526,23 @@ export default {
     },
     onUpdate(payload) {
       this.counter++;
-      this.phoneInfo.valid = payload.isValid;
+      this.phoneInfo.valid = payload.valid;
 
-      if (payload.phoneNumber && !payload.isValid) {
+      if (payload.number && !payload.valid) {
         this.phoneInfo.message = 'Invalid Phone number format';
       }
 
-      if (!payload.phoneNumber && !payload.isValid) {
+      if (!payload.number && !payload.valid) {
         this.phoneInfo.message = 'Phone number is required';
       }
 
-      this.results = payload.formattedNumber;
+      if (payload.number && payload.valid) {
+        this.phoneNumber = payload.nationalNumber;
+        this.results = payload.number;
+      }
     },
     async validate() {
-      if (this.results === '') {
+      if (this.results === '' && this.results === undefined) {
         this.counter += 2;
         this.phoneInfo = {
           valid: false,
@@ -616,14 +628,14 @@ export default {
     addCompany(company, index) {
       this.repsInvited.push(company);
       this.inviteCount = 2;
-      this.$store.commit('spliceCompanies', index);
+      this.$store.commit('spliceCompanies', company);
       const unique = [...new Map(this.repsInvited.map((m) => [m.company, m])).values()];
       this.$store.commit('setInvitedSuppliersData', unique);
     },
     addServiceCompany(company, index) {
       this.repsInvited.push(company);
       this.inviteCount = 2;
-      this.$store.commit('spliceCompanies', index);
+      this.$store.commit('spliceCompanies', company);
       const unique = [...new Map(this.repsInvited.map((m) => [m.company, m])).values()];
       this.$store.commit('setInvitedSuppliersData', unique);
     },
@@ -669,3 +681,5 @@ export default {
   },
 };
 </script>
+
+<style src="vue-tel-input/dist/vue-tel-input.css"></style>

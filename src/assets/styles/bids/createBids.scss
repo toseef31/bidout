@@ -293,6 +293,8 @@
 					  background: transparent;
 					}
 					}
+
+					
 				}
 				.bidline-tab{
 					.bidline-section{
@@ -527,7 +529,66 @@
 		font-size: 20px;
 		line-height: 25px;
 	}
+	.phone-error-class {
+		.vue-tel-input:focus-within {
+		  border: 2px solid red;
+		}
+	
+		.vue-tel-input {
+		  border: 2px solid red
+		}
+	  }
+	
+	  .phone-valid-class {
+		.vue-tel-input:focus-within {
+		  border: 2px solid #1976d2
+		}
+	  }
 	.v-form {
+		.phone-main-class {
+			height: 56px;
+			border-radius: 8px;
+			box-shadow: none;
+	  
+			.vti__dropdown {
+			  padding-right: 15px;
+			  border-right: 1px solid #9E9E9E;
+	  
+			  .vti__selection {
+				column-gap: 6px;
+			  }
+	  
+			  .vti__selection .vti__country-code {
+				color: #201B1B;
+				font-weight: 500;
+				font-size: 14px;
+	  
+			  }
+			}
+	  
+			ul {
+			  padding-left: 0;
+			}
+	  
+			.vti__dropdown-list.below {
+			  top: 55px;
+			  box-shadow: rgba(200, 200, 200, 0.7) 0px 0px 0px 0.125rem;
+			  border: 1px solid transparent;
+			  border-radius: 8px;
+	  
+			}
+	  
+			.vti__dropdown-item {
+			  padding: 4px 7px;
+			  font-size: 13px;
+	  
+			  strong {
+				padding-left: 5px;
+				font-weight: 400;
+			  }
+	  
+			}
+		  }
 		.required-class {
 			color: #F32349;
 		}
@@ -535,7 +596,7 @@
 			color: #ff5252;
 			font-size: 12px;
 			text-align: left;
-			margin-top: 11px;
+			margin-top: 6px;
 			padding-left: 12px;
 		}
 		label{
@@ -545,21 +606,6 @@
 		.v-input{
 			&__slot{
 				border-radius: 8px;
-			}
-		}
-		#MazPhoneNumberInput{
-			margin-bottom: 0!important;
-			.country-selector{
-				&__input{
-					height: 56px;
-					min-height: 56px;
-				}
-			}
-			.input-tel{
-				&__input{
-					height: 56px;
-					min-height: 56px;
-				}
 			}
 		}
 	}
