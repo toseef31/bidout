@@ -8,7 +8,7 @@
         <div class="title-desc">
           <div><span>Bid Title:</span> {{ bidDetail.bidData.title }}</div>
           <div><span>Bid Type:</span> {{ bidDetail.bidData.type }}</div>
-          <div>
+          <div class="d-flex align-center">
             <span>Due Date/Time:</span> {{ formatDate(bidDetail.bidData.dueDate) }} @
             {{ bidDetail.bidData.dueTime }} CST <v-btn @click="changeDate" icon
               v-if="bidDetail.receivingBids && !isBidOut"><v-icon color="black"
@@ -166,7 +166,7 @@
 
           <v-btn icon @click="toggleSupplier = false">
             <v-icon size="30" color="#F32349
-                                                                                ">mdi-close</v-icon>
+                                                                                      ">mdi-close</v-icon>
           </v-btn>
         </div>
         <AddSupplier />
@@ -220,7 +220,7 @@
 
           <v-btn icon @click="toggleTeam = false">
             <v-icon size="30" color="#F32349
-                                                                                ">mdi-close</v-icon>
+                                                                                      ">mdi-close</v-icon>
           </v-btn>
         </div>
         <AddTeamMember />
@@ -252,7 +252,7 @@
               <td class="text-left">{{ item.inputType }}</td>
               <td class="text-left">{{ item.quantity }}</td>
               <td class="text-left">
-                {{ item.buyerComment }}
+                {{ item.buyerComment === 'undefined' || item.buyerComment === '' ? '' : item.buyerComment }}
               </td>
             </tr>
           </tbody>

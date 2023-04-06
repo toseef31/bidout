@@ -84,8 +84,18 @@
                 Bid: <span class="serial">#{{ bidDetail.bidData.serial }}</span>
               </div>
               <div>
-                Due Date/Time: {{ formatDate(bidDetail.bidData.dueDate) }} @
-                {{ bidDetail.bidData.dueTime }} CST
+                <div v-if="bidDetail.bidData.type === 'BidOut Process'"> BidOut Start Date: {{
+                  formatBidOutStartDate(bidDetail.bidData.dueDate, bidDetail.bidData.dueTime) }} CST &nbsp;
+                  {{ formatDate(bidDetail.bidData.dueDate) }} @
+                  {{ bidDetail.bidData.dueTime }} CST <a class="text-decoration-none ml-1" target="_blank"
+                    href=" https://help.bidout.app/article/7-bidout-process-explain"><v-icon color="black"
+                      size="18">mdi-information-outline</v-icon></a></div>
+                <div v-else>Bid Start Date: {{
+                  formatStartDate(bidDetail.bidData.createdAt._seconds, bidDetail.bidData.createdAt._nanoseconds) }} CST
+                  &nbsp; Bid End Date: {{
+                    formatDate(bidDetail.bidData.dueDate) }} @
+                  {{ bidDetail.bidData.dueTime }} CST</div>
+
               </div>
               <div>
                 Created by: <strong>{{ bidDetail.bidData.company }}</strong>, {{ bidDetail.bidData.userId.firstName }}
@@ -262,8 +272,18 @@
                 Bid: <span class="serial">#{{ bidDetail.bidData.serial }}</span>
               </div>
               <div>
-                Due Date/Time: {{ formatDate(bidDetail.bidData.dueDate) }} @
-                {{ bidDetail.bidData.dueTime }} CST
+                <div v-if="bidDetail.bidData.type === 'BidOut Process'"> BidOut Start Date: {{
+                  formatBidOutStartDate(bidDetail.bidData.dueDate, bidDetail.bidData.dueTime) }} CST &nbsp;
+                  {{ formatDate(bidDetail.bidData.dueDate) }} @
+                  {{ bidDetail.bidData.dueTime }} CST <a class="text-decoration-none ml-1" target="_blank"
+                    href=" https://help.bidout.app/article/7-bidout-process-explain"><v-icon color="black"
+                      size="18">mdi-information-outline</v-icon></a></div>
+                <div v-else>Bid Start Date: {{
+                  formatStartDate(bidDetail.bidData.createdAt._seconds, bidDetail.bidData.createdAt._nanoseconds) }} CST
+                  &nbsp; Bid End Date: {{
+                    formatDate(bidDetail.bidData.dueDate) }} @
+                  {{ bidDetail.bidData.dueTime }} CST</div>
+
               </div>
               <div>
                 Created by: <strong>{{ bidDetail.bidData.company }}</strong>, {{ bidDetail.bidData.userId.firstName }}
@@ -553,35 +573,6 @@ export default {
         });
 
         await this.getBidAllConversations({ bidId: this.bidDetail.bidData.id, userId: this.users.id });
-      } else if (this.getUserType === 'supplier' && event !== 'tab-2') {
-        await this.getBidBySerial({
-          serial: this.$route.params.serial,
-          id: this.users.id,
-          reload: false,
-          company: this.users.company.company,
-        });
-
-        await this.bidMessageUnreadCount({
-          userId: this.users.id,
-          bidId: this.bidDetail.bidData.id,
-        });
-
-        await this.getIntent({
-          companyId: this.users.company.id,
-          bidId: this.bidDetail.bidData.id,
-          companyName: this.users.company.company,
-          reload: false,
-        });
-
-        this.answer = this.$store.getters.bidIntent;
-
-        await this.getQA({
-          bidId: this.bidDetail.bidData.id,
-          userId: this.users.id,
-          reload: false,
-        });
-
-        await this.getBidAllConversations({ bidId: this.bidDetail.bidData.id, userId: this.users.id });
       }
     },
     ChangeT(tab) {
@@ -646,6 +637,22 @@ export default {
       if (Number(item) === 0) {
         return true;
       } return false;
+    },
+    formatStartDate(item, item2) {
+      const date = moment(item * 1000 + item2 / 1000000).tz('America/Chicago').format('MM/DD/YYYY ha');
+
+      return date;
+    },
+    formatBidOutStartDate(item, item2) {
+      const momentTime = moment(item2, ['h:mm:ss A ']).format('HH:mm:ss');
+
+      const stringDate = `${item}T${momentTime}`;
+
+      let momentDueDate = moment.tz(stringDate, 'America/Chicago');
+
+      momentDueDate = momentDueDate.subtract(4, 'hours');
+
+      return moment.tz(momentDueDate, 'America/Chicago').format('MM/DD/YYYY ha');
     },
   },
   computed: {

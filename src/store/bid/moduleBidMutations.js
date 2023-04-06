@@ -225,8 +225,19 @@ export default {
   setEntryCheckForEditBid(state, payload) {
     state.entryCheckForEditBid = payload;
   },
-  spliceCompanies(state, index) {
-    state.companiesList.splice(index, 1);
+  spliceCompanies(state, company) {
+    if (company.id) {
+      const index = state.companiesList.findIndex((item) => item.id === company.id);
+      if (index !== -1) {
+        state.companiesList.splice(index, 1);
+      }
+    }
+    if (company.objectID) {
+      const index = state.companiesList.findIndex((item) => item.objectID === company.objectID);
+      if (index !== -1) {
+        state.companiesList.splice(index, 1);
+      }
+    }
   },
   pushCompanies(state, company) {
     state.companiesList.push(company);

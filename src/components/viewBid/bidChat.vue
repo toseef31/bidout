@@ -107,7 +107,7 @@
                         message.content
                       }}</v-list-item-subtitle>
                     </v-list-item-content>
-                    <v-list-item-action class="mt-n6">
+                    <v-list-item-action>
                       <v-list-item-action-text>{{
                         istoday(message.updatedAt)
                       }}</v-list-item-action-text>
