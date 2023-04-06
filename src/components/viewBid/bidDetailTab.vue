@@ -29,14 +29,14 @@
             ? bidDetail.bidData.bidDescriptions[0].body
             : bidDetail.bidData.bidDescriptions"></span>
         </p>
-        <br />
+        <br>
 
         <div class="bid-headline"
           v-if="bidDetail.bidData && bidDetail.bidData.bidDescriptions && Array.isArray(bidDetail.bidData.bidDescriptions)"
           v-for="(item, index) in bidDetail.bidData.bidDescriptions.slice(1)" :key="index">
           <span>{{ item && item.name }}:</span>
           <div class="font-weight-regular ql-editor pa-0" v-html="item && item.body"></div>
-          <br /> <br />
+          <br>
       </div>
       </div>
     </div>
