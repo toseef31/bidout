@@ -567,35 +567,6 @@ export default {
         });
 
         await this.getBidAllConversations({ bidId: this.bidDetail.bidData.id, userId: this.users.id });
-      } else if (this.getUserType === 'supplier' && event !== 'tab-2') {
-        await this.getBidBySerial({
-          serial: this.$route.params.serial,
-          id: this.users.id,
-          reload: false,
-          company: this.users.company.company,
-        });
-
-        await this.bidMessageUnreadCount({
-          userId: this.users.id,
-          bidId: this.bidDetail.bidData.id,
-        });
-
-        await this.getIntent({
-          companyId: this.users.company.id,
-          bidId: this.bidDetail.bidData.id,
-          companyName: this.users.company.company,
-          reload: false,
-        });
-
-        this.answer = this.$store.getters.bidIntent;
-
-        await this.getQA({
-          bidId: this.bidDetail.bidData.id,
-          userId: this.users.id,
-          reload: false,
-        });
-
-        await this.getBidAllConversations({ bidId: this.bidDetail.bidData.id, userId: this.users.id });
       }
     },
     ChangeT(tab) {
