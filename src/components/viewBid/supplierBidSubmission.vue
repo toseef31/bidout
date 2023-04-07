@@ -176,12 +176,12 @@
 
                   <label :for="`uploadFileQ${index}`" v-else
                     class="
-                                                                                                                                                                                                                            upload-file
-                                                                                                                                                                                                                           pa-4
-                                                                                                                                                                                                                            d-block
-                                                                                                                                                                                                                            font-weight-medium
-                                                                                                                                                                                                                            text-center
-                                                                                                                                                                                                                          ">
+                                                                                                                                                                                                                                    upload-file
+                                                                                                                                                                                                                                   pa-4
+                                                                                                                                                                                                                                    d-block
+                                                                                                                                                                                                                                    font-weight-medium
+                                                                                                                                                                                                                                    text-center
+                                                                                                                                                                                                                                  ">
                     <v-file-input :id="`uploadFileQ${index}`" @change="handleDocumentForAnswer($event, index)"
                       :disabled="!bidDetail.receivingBids" :rules="item.required === 'true' ? fileRule : []" />
 
@@ -232,8 +232,7 @@
 
                   <td class="text-left">
                     {{
-
-                      formatDate(doc.uploadedAt._seconds, doc.uploadedAt._nanoseconds)
+                      formatDate(doc.uploadedAt)
                     }}
                   </td>
                   <td class="text-left delete-class text-decoration-underline" v-if="checkForUpload">
@@ -414,9 +413,13 @@ export default {
       const sizeInMB = (size / (1024 * 1024)).toFixed(2);
       return `${sizeInMB}mb`;
     },
-    formatDate(item, item2) {
-      const date = moment(item * 1000 + item2 / 1000000).tz('America/Chicago').format('MM/DD/YYYY');
+    formatDate(item) {
+      if (item._seconds && item._nanoseconds) {
+        const date = moment(item._seconds * 1000 + item._nanoseconds / 1000000).tz('America/Chicago').format('MM/DD/YYYY');
 
+        return date;
+      }
+      const date = moment(item).tz('America/Chicago').format('MM/DD/YYYY');
       return date;
     },
     checkFileType(file) {
@@ -538,7 +541,6 @@ export default {
           return item;
         });
         const lineItemsA = this.lineItems;
-        
 
         await this.editSubmitBid({
           userId: this.user.id,
