@@ -482,7 +482,15 @@ export default {
 
     if (payload.supplierAttachments) {
       for (let i = 0; i < payload.supplierAttachments.length; i++) {
-        formData.append(`supplierAttachments[${i}]`, payload.supplierAttachments[i]);
+        if (payload.supplierAttachments[i].newAttach) {
+          formData.append(`supplierAttachments[${i}]`, payload.supplierAttachments[i].attachment);
+        } else {
+          formData.append(`supplierAttachments[${i}][attachment]`, payload.supplierAttachments[i].attachment);
+          formData.append(`supplierAttachments[${i}][fileName]`, payload.supplierAttachments[i].fileName);
+          formData.append(`supplierAttachments[${i}][fileSize]`, payload.supplierAttachments[i].fileSize);
+          formData.append(`supplierAttachments[${i}][uploadedAt][_seconds]`, payload.supplierAttachments[i].uploadedAt._seconds);
+          formData.append(`supplierAttachments[${i}][uploadedAt][_nanoseconds]`, payload.supplierAttachments[i].uploadedAt._nanoseconds);
+        }       
       }
     }
 
