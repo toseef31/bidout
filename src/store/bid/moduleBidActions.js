@@ -26,7 +26,7 @@ export default {
   },
   async getSalesReps({ commit, dispatch, state }, payload) {
     try {
-      const res = await axios.post('company/getSalesReps/', { query: payload.query, basin: payload.basin });
+      const res = await axios.get('company/getSalesReps/', { query: payload.query, basin: payload.basin });
 
       if (res.status === 200) {
         commit('setSalesReps', res.data);
@@ -125,6 +125,7 @@ export default {
       commit('setPageLoader', true);
     }
     try {
+      console.log("PAYLOAAD", payload)
       commit('removeSupplierAttachment');
       const res = await axios.get(
         `bid/getBidBySerial/${payload.serial}/${payload.id}`,
@@ -232,6 +233,7 @@ export default {
       commit('setPageLoader', true);
     }
     try {
+      console.log("intend payload", payload)
       const res = await axios.get(`intend/getAllIntends/${payload.bidId}`);
 
       if (res.status === 200) {
@@ -434,7 +436,7 @@ export default {
       }
     }
     try {
-      const res = await axios.post('bidSubmission/submitBid/', formData, config);
+      const res = await axios.post('bid/submitBid/', formData, config);
 
       if (res.status === 200) {
         commit('setIsBidSubmitted', true);
@@ -507,7 +509,7 @@ export default {
       }
     }
     try {
-      const res = await axios.post('bidSubmission/editSubmitBid/', formData, config);
+      const res = await axios.post('bid/editSubmitBid/', formData, config);
 
       if (res.status === 200) {
         commit('removeSupplierAttachment');
@@ -542,7 +544,7 @@ export default {
       commit('setPageLoader', true);
     }
     try {
-      const res = await axios.get(`bidSubmission/getQA/${payload.bidId}/${payload.userId}`);
+      const res = await axios.get(`bid/getQA/${payload.bidId}/${payload.userId}`);
 
       if (res.status === 200) {
         commit('setQAndA', res.data);
@@ -574,7 +576,7 @@ export default {
 
   async askQuestion({ commit, dispatch, state }, payload) {
     try {
-      const res = await axios.post('bidSubmission/questionAsked/', {
+      const res = await axios.post('bid/questionAsked/', {
         question: payload.question,
         userId: payload.userId,
         companyId: payload.companyId,
@@ -597,7 +599,7 @@ export default {
 
   async answerQuestion({ commit, dispatch, state }, payload) {
     try {
-      const res = await axios.post('bidSubmission/questionAnswer/', {
+      const res = await axios.post('bid/questionAnswer/', {
         answer: payload.answer,
         userId: payload.userId,
         questionId: payload.questionId,
@@ -620,7 +622,7 @@ export default {
 
   async editAnswer({ commit, dispatch, state }, payload) {
     try {
-      const res = await axios.post('bidSubmission/editAnswer/', {
+      const res = await axios.post('bid/editAnswer/', {
         answer: payload.answer,
         questionId: payload.questionId,
       });
@@ -699,7 +701,7 @@ export default {
       let lineItemsindex = 0;
       for (let i = 0; i < state.bidlines.length; i++) {
         if (state.bidlines[i].description !== '' && state.bidlines[i].quantity !== '') {
-          formData.append(`lineItems[${lineItemsindex}][id]`, state.bidlines[i].id);
+          formData.append(`lineItems[${lineItemsindex}][id]`, state.bidlines[i]._id);
           formData.append(`lineItems[${lineItemsindex}][description]`, state.bidlines[i].description);
           formData.append(`lineItems[${lineItemsindex}][unit]`, state.bidlines[i].unit);
           formData.append(`lineItems[${lineItemsindex}][inputType]`, state.bidlines[i].inputType);
@@ -723,13 +725,13 @@ export default {
         formData.append(`attachment[${i}][url]`, state.attachement[i].url);
         formData.append(`attachment[${i}][uploadedAt]`, state.attachement[i].uploadedAt);
         formData.append(`attachment[${i}][comment]`, state.attachement[i].comment);
-        formData.append(`attachment[${i}][id]`, state.attachement[i].id);
+        formData.append(`attachment[${i}][id]`, state.attachement[i]._id);
       }
     }
 
     if (state.questions != null) {
       for (let i = 0; i < state.questions.length; i++) {
-        formData.append(`questions[${i}][id]`, state.questions[i].id);
+        formData.append(`questions[${i}][id]`, state.questions[i]._id);
         formData.append(`questions[${i}][order]`, state.questions[i].order);
         formData.append(`questions[${i}][title]`, state.questions[i].title);
         formData.append(`questions[${i}][type]`, state.questions[i].type);
@@ -737,7 +739,7 @@ export default {
         formData.append(`questions[${i}][required]`, state.questions[i].required);
         if (state.questions[i].options) {
           for (let j = 0; j < state.questions[i].options.length; j++) {
-            formData.append(`questions[${i}][options][${j}][id]`, state.questions[i].options[j].id);
+            formData.append(`questions[${i}][options][${j}][id]`, state.questions[i].options[j]._id);
             formData.append(`questions[${i}][options][${j}][label]`, state.questions[i].options[j].label);
             formData.append(`questions[${i}][options][${j}][title]`, state.questions[i].options[j].title);
           }
@@ -754,7 +756,7 @@ export default {
         dispatch('getSalesReps', { query: '', basin: 'all' });
         dispatch('getCategories');
         dispatch('searchByCompany', { query: '', basin: 'all' });
-        commit('setDraftBidsList', res.data.id);
+        commit('setDraftBidsList', res.data._id);
         commit('setBidSerial', res.data.serial);
         state.bidData.statusType = 'draftBid';
         commit('setDraftTime', new Date().toLocaleString());
@@ -787,8 +789,8 @@ export default {
     };
     const formData = new FormData();
 
-    if (state.bidData.id) {
-      commit('setDraftBidsList', state.bidData.id);
+    if (state.bidData._id) {
+      commit('setDraftBidsList', state.bidData._id);
       commit('setBidSerial', state.bidData.serial);
     }
     formData.append('title', state.bidData.title);
@@ -811,10 +813,11 @@ export default {
     }
 
     if (state.invitedSuppliers != null) {
+      alert("invited not null")
       for (let i = 0; i < state.invitedSuppliers.length; i++) {
         if (Array.isArray(state.invitedSuppliers) && state.invitedSuppliers.length > 0 && typeof state.invitedSuppliers[0] === 'object') {
           if (!state.invitedSuppliers[i].companyId && !state.invitedSuppliers[i].objectID) {
-            formData.append(`invitedSuppliers[${i}]`, state.invitedSuppliers[i].id);
+            formData.append(`invitedSuppliers[${i}]`, state.invitedSuppliers[i]._id);
           } else if (state.invitedSuppliers[i].companyId) {
             formData.append(`invitedSuppliers[${i}]`, state.invitedSuppliers[i].companyId);
           } else {
@@ -827,15 +830,15 @@ export default {
     }
     if (state.invitedNewSuppliers != null) {
       for (let i = 0; i < state.invitedNewSuppliers.length; i++) {
-        formData.append(`invitedNewSuppliers[${i}]`, state.invitedNewSuppliers[i].id);
+        formData.append(`invitedNewSuppliers[${i}]`, state.invitedNewSuppliers[i]._id);
       }
     }
     if (state.invitedTeamMembers != null) {
       for (let t = 0; t < state.invitedTeamMembers.length; t++) {
-        if (!state.invitedTeamMembers[t].id) {
+        if (!state.invitedTeamMembers[t]._id) {
           formData.append(`invitedTeamMembers[${t}]`, state.invitedTeamMembers[t]);
         } else {
-          formData.append(`invitedTeamMembers[${t}]`, state.invitedTeamMembers[t].id);
+          formData.append(`invitedTeamMembers[${t}]`, state.invitedTeamMembers[t]._id);
         }
       }
     }
@@ -844,7 +847,7 @@ export default {
       let lineItemsindex = 0;
       for (let i = 0; i < state.bidlines.length; i++) {
         if (state.bidlines[i].description !== '' && state.bidlines[i].quantity !== '') {
-          formData.append(`lineItems[${lineItemsindex}][id]`, state.bidlines[i].id);
+          formData.append(`lineItems[${lineItemsindex}][id]`, state.bidlines[i]._id);
           formData.append(`lineItems[${lineItemsindex}][description]`, state.bidlines[i].description);
           formData.append(`lineItems[${lineItemsindex}][unit]`, state.bidlines[i].unit);
           formData.append(`lineItems[${lineItemsindex}][inputType]`, state.bidlines[i].inputType);
@@ -868,21 +871,21 @@ export default {
         formData.append(`attachment[${i}][url]`, state.attachement[i].url);
         formData.append(`attachment[${i}][uploadedAt]`, state.attachement[i].uploadedAt);
         formData.append(`attachment[${i}][comment]`, state.attachement[i].comment);
-        formData.append(`attachment[${i}][id]`, state.attachement[i].id);
+        formData.append(`attachment[${i}][id]`, state.attachement[i]._id);
       }
     }
 
     if (state.questions != null) {
       for (let i = 0; i < state.questions.length; i++) {
-        formData.append(`questions[${i}][id]`, state.questions[i].id);
+        formData.append(`questions[${i}][id]`, state.questions[i]._id);
         formData.append(`questions[${i}][order]`, state.questions[i].order);
         formData.append(`questions[${i}][title]`, state.questions[i].title);
         formData.append(`questions[${i}][type]`, state.questions[i].type);
         formData.append(`questions[${i}][questionType]`, state.questions[i].questionType);
-        formData.append(`questions[${i}][required]`, state.questions[i].required);
+        formData.append(`questions[${i}][required]`, state.questions[i].required ? state.questions[i].required : false);
         if (state.questions[i].options) {
           for (let j = 0; j < state.questions[i].options.length; j++) {
-            formData.append(`questions[${i}][options][${j}][id]`, state.questions[i].options[j].id);
+            formData.append(`questions[${i}][options][${j}][id]`, state.questions[i].options[j]._id);
             formData.append(`questions[${i}][options][${j}][label]`, state.questions[i].options[j].label);
             formData.append(`questions[${i}][options][${j}][title]`, state.questions[i].options[j].title);
           }
@@ -966,8 +969,9 @@ export default {
         commit('setBidRegions', '');
         commit('setBidEnabled', '');
         commit('setIsEditBidChanges', false);
+        state.bidData.lastSerial = res.data.serial;
         state.bidData.serial = '';
-        state.bidData.id = '';
+      //  state.bidData._id = '';
         state.bidData.status = '';
         state.bidData.statusType = '';
         commit('setBidDescription', [{ body: '' }]);
@@ -1056,7 +1060,7 @@ export default {
         commit('setBidRegions', '');
         commit('setBidEnabled', '');
         state.bidData.serial = '';
-        state.bidData.id = '';
+        state.bidData._id = '';
         state.bidData.status = '';
         state.bidData.statusType = '';
         commit('setBidDescription', [{ body: '' }]);
@@ -1167,7 +1171,7 @@ export default {
         dispatch('getSalesReps', { query: '', basin: 'all' });
         dispatch('getCategories');
         dispatch('searchByCompany', { query: '', basin: 'all' });
-        commit('setDraftBidsList', res.data.id);
+        commit('setDraftBidsList', res.data._id);
         state.bidData.status = 'templateCreate';
         state.bidData.statusType = 'template';
         commit('setDraftTime', new Date().toLocaleString());
@@ -1223,9 +1227,9 @@ export default {
     };
     const formData = new FormData();
 
-    if (state.bidData.id) {
-      // state.draftBidsList = state.bidData.id;
-      commit('setDraftBidsList', state.bidData.id);
+    if (state.bidData._id) {
+      // state.draftBidsList = state.bidData._id;
+      commit('setDraftBidsList', state.bidData._id);
     }
     formData.append('templateId', state.draftBidsList);
     formData.append('title', state.bidData.title);
@@ -1251,7 +1255,7 @@ export default {
       if (state.invitedSuppliers) {
         for (let i = 0; i < state.invitedSuppliers.length; i++) {
           if (!state.invitedSuppliers[i].companyId && !state.invitedSuppliers[i].objectID) {
-            formData.append(`invitedSuppliers[${i}]`, state.invitedSuppliers[i].id);
+            formData.append(`invitedSuppliers[${i}]`, state.invitedSuppliers[i]._id);
           } else if (state.invitedSuppliers[i].companyId) {
             formData.append(`invitedSuppliers[${i}]`, state.invitedSuppliers[i].companyId);
           } else {
@@ -1264,7 +1268,7 @@ export default {
     } else if (state.invitedSuppliers != null) {
       for (let i = 0; i < state.invitedSuppliers.length; i++) {
         if (!state.invitedSuppliers[i].companyId && !state.invitedSuppliers[i].objectID) {
-          formData.append(`invitedSuppliers[${i}]`, state.invitedSuppliers[i].id);
+          formData.append(`invitedSuppliers[${i}]`, state.invitedSuppliers[i]._id);
         } else if (state.invitedSuppliers[i].companyId) {
           formData.append(`invitedSuppliers[${i}]`, state.invitedSuppliers[i].companyId);
         } else {
@@ -1277,10 +1281,10 @@ export default {
     if (state.bidData.status === 'templateCreate') {
       if (state.invitedTeamMembers) {
         for (let t = 0; t < state.invitedTeamMembers.length; t++) {
-          if (!state.invitedTeamMembers[t].id) {
+          if (!state.invitedTeamMembers[t]._id) {
             formData.append(`invitedTeamMembers[${t}]`, state.invitedTeamMembers[t]);
           } else {
-            formData.append(`invitedTeamMembers[${t}]`, state.invitedTeamMembers[t].id);
+            formData.append(`invitedTeamMembers[${t}]`, state.invitedTeamMembers[t]._id);
           }
         }
       } else {
@@ -1288,10 +1292,10 @@ export default {
       }
     } else if (state.invitedTeamMembers != null) {
       for (let t = 0; t < state.invitedTeamMembers.length; t++) {
-        if (!state.invitedTeamMembers[t].id) {
+        if (!state.invitedTeamMembers[t]._id) {
           formData.append(`invitedTeamMembers[${t}]`, state.invitedTeamMembers[t]);
         } else {
-          formData.append(`invitedTeamMembers[${t}]`, state.invitedTeamMembers[t].id);
+          formData.append(`invitedTeamMembers[${t}]`, state.invitedTeamMembers[t]._id);
         }
       }
     } else {
@@ -1303,7 +1307,7 @@ export default {
         let lineItemsindex = 0;
         for (let i = 0; i < state.bidlines.length; i++) {
           if (state.bidlines[i].description !== '' && state.bidlines[i].quantity !== '') {
-            formData.append(`lineItems[${lineItemsindex}][id]`, state.bidlines[i].id);
+            formData.append(`lineItems[${lineItemsindex}][id]`, state.bidlines[i]._id);
             formData.append(`lineItems[${lineItemsindex}][description]`, state.bidlines[i].description);
             formData.append(`lineItems[${lineItemsindex}][unit]`, state.bidlines[i].unit);
             formData.append(`lineItems[${lineItemsindex}][inputType]`, state.bidlines[i].inputType);
@@ -1324,7 +1328,7 @@ export default {
       let lineItemsindex = 0;
       for (let i = 0; i < state.bidlines.length; i++) {
         if (state.bidlines[i].description !== '' && state.bidlines[i].quantity !== '') {
-          formData.append(`lineItems[${lineItemsindex}][id]`, state.bidlines[i].id);
+          formData.append(`lineItems[${lineItemsindex}][id]`, state.bidlines[i]._id);
           formData.append(`lineItems[${lineItemsindex}][description]`, state.bidlines[i].description);
           formData.append(`lineItems[${lineItemsindex}][unit]`, state.bidlines[i].unit);
           formData.append(`lineItems[${lineItemsindex}][inputType]`, state.bidlines[i].inputType);
@@ -1351,7 +1355,7 @@ export default {
           formData.append(`attachment[${i}][url]`, state.attachement[i].url);
           formData.append(`attachment[${i}][uploadedAt]`, state.attachement[i].uploadedAt);
           formData.append(`attachment[${i}][comment]`, state.attachement[i].comment);
-          formData.append(`attachment[${i}][id]`, state.attachement[i].id);
+          formData.append(`attachment[${i}][id]`, state.attachement[i]._id);
         }
       } else {
         formData.append('attachment', '');

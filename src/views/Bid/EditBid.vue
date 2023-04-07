@@ -276,10 +276,10 @@ export default {
     }
   },
   async created(){
-    await this.getUpdateBid({id: this.$store.getters.userInfo.id, serial:this.$route.params.serial, company: this.$store.getters.userInfo.company.company})
+    await this.getUpdateBid({id: this.$store.getters.userInfo._id, serial:this.$route.params.serial, company: this.$store.getters.userInfo.company})
   },
   mounted() {
-    document.title = 'Create Bid - BidOut';
+    document.title = 'Edit Bid - BidOut';
     this.users = this.userDatas;
     this.$store.commit('setIsEditBidChanges',false);
   },

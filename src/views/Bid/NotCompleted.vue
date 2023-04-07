@@ -257,8 +257,8 @@ export default {
       this.publishLoading = true;
       try {
         const serial = await this.$store.dispatch('publishBid');
-        
-        this.$router.push(`/view-bids/${serial}?new=true`);
+        console.log("meu serial e", this.$store.getters.bidData)
+        this.$router.push(`/view-bids/${this.$store.getters.bidData.lastSerial}?new=true`);
         this.$store.commit('setDraftBidsList', null);
         this.publishLoading = false;
       } catch (error) {

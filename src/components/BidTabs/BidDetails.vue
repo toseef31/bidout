@@ -345,10 +345,10 @@ export default {
     async changeTab() {
       if (this.$store.getters.bidData != null) {
         const bidDetails = {
-          userId: this.userInfo.id,
+          userId: this.userInfo._id,
           userName: `${this.userInfo.firstName} ${this.userInfo.lastName}`,
-          companyId: this.userInfo.company.id,
-          company: this.userInfo.company.company,
+          companyId: this.userInfo.companyId,
+          company: this.userInfo.company,
         };
         if (this.$refs.form.validate()) {
           this.valid = true;
@@ -378,10 +378,10 @@ export default {
         }
       } else {
         const bidDetails = {
-          userId: this.userInfo.id,
+          userId: this.userInfo._id,
           userName: `${this.userInfo.firstName} ${this.userInfo.lastName}`,
-          companyId: this.userInfo.company.id,
-          company: this.userInfo.company.company,
+          companyId: this.userInfo.companyId,
+          company: this.userInfo.company,
         };
         if (this.$route.name === 'EditTemplate') {
           await this.saveTemplateBid(bidDetails);
@@ -393,10 +393,10 @@ export default {
     async savedraft() {
       if (this.$store.getters.bidData != null) {
         const bidDetails = {
-          userId: this.userInfo.id,
+          userId: this.userInfo._id,
           userName: `${this.userInfo.firstName} ${this.userInfo.lastName}`,
-          companyId: this.userInfo.company.id,
-          company: this.userInfo.company.company,
+          companyId: this.userInfo.companyId,
+          company: this.userInfo.company,
         };
         if (this.$store.getters.bidData.id && this.$store.getters.bidData.statusType === 'templateBid') {
           await this.saveDraftBid(bidDetails);
@@ -427,10 +427,10 @@ export default {
         }
       } else {
         const bidDetails = {
-          userId: this.userInfo.id,
+          userId: this.userInfo._id,
           userName: `${this.userInfo.firstName} ${this.userInfo.lastName}`,
-          companyId: this.userInfo.company.id,
-          company: this.userInfo.company.company,
+          companyId: this.userInfo.companyId,
+          company: this.userInfo.company,
         };
         if (this.$route.name === 'EditTemplate') {
           await this.saveTemplateBid(bidDetails);
@@ -477,7 +477,7 @@ export default {
 
     if (this.$route.name === 'EditBid') {
       await this.getAllIntent({
-      bidId: this.$store.getters.bidData.id,
+      bidId: this.$store.getters.bidData._id,
       reload: false,
     });
     }

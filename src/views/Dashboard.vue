@@ -319,8 +319,8 @@ export default {
   async mounted() {
     document.title = "Dashboard - BidOut";
     this.users = this.$store.getters.userInfo;
-    this.pendingUserCount(this.userDatas.company.id)
-    await this.getBidDashboard(this.userDatas.id);
+    this.pendingUserCount(this.userDatas.companyId)
+    await this.getBidDashboard(this.userDatas._id);
     this.loadMapScript();
   }
 };
