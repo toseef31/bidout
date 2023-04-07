@@ -219,6 +219,23 @@
                                   max-width="50px"
                                   class="mt-2"></v-img>
                                 </a>
+                                <a :href="message.attachment" 
+                                  target="_blank"
+                                  v-else-if="get_url_extension(message.attachment) == 'zip' || get_url_extension(message.attachment) == 'rar' || get_url_extension(message.attachment) == 'tar' || get_url_extension(message.attachment) == '7z' || get_url_extension(message.attachment) == 'gz'"><v-img
+                                  :src="require('@/assets/images/chat/zip.png')" 
+                                  max-height="50px" 
+                                  max-width="50px"
+                                  class="mt-2"></v-img>
+                                </a>
+                                <video class="chat-video"
+                                  v-else-if="get_url_extension(message.attachment) == 'mp4' || get_url_extension(message.attachment) == 'webm' || get_url_extension(message.attachment) == 'mov' || get_url_extension(message.attachment) == 'avi'"
+                                  :src="message.attachment"
+                                  :autoplay="false"
+                                  :controls="true"
+                                  :loop="true"
+                                  height="300"
+                                  :style="{ width: '500px' }"
+                                ></video>
                                 <a
                                   :href="message.attachment"
                                   target="_blank" v-else>
