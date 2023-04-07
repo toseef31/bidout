@@ -459,6 +459,12 @@ import SupplierBidDetail from '@/components/viewBid/supplierBidDetail.vue';
 import SupplierBidSubmission from '@/components/viewBid/supplierBidSubmission.vue';
 import moment from 'moment-timezone';
 import { mapActions } from 'vuex';
+import 'vue2-editor/dist/vue2-editor.css';
+
+/* Import the Quill styles you want */
+import 'quill/dist/quill.core.css';
+import 'quill/dist/quill.bubble.css';
+import 'quill/dist/quill.snow.css';
 
 export default {
   name: 'BidDetail',
@@ -561,35 +567,6 @@ export default {
         });
 
         await this.getBidActivityList({
-          bidId: this.bidDetail.bidData.id,
-          userId: this.users.id,
-          reload: false,
-        });
-
-        await this.getBidAllConversations({ bidId: this.bidDetail.bidData.id, userId: this.users.id });
-      } else if (this.getUserType === 'supplier' && event !== 'tab-2') {
-        await this.getBidBySerial({
-          serial: this.$route.params.serial,
-          id: this.users.id,
-          reload: false,
-          company: this.users.company.company,
-        });
-
-        await this.bidMessageUnreadCount({
-          userId: this.users.id,
-          bidId: this.bidDetail.bidData.id,
-        });
-
-        await this.getIntent({
-          companyId: this.users.company.id,
-          bidId: this.bidDetail.bidData.id,
-          companyName: this.users.company.company,
-          reload: false,
-        });
-
-        this.answer = this.$store.getters.bidIntent;
-
-        await this.getQA({
           bidId: this.bidDetail.bidData.id,
           userId: this.users.id,
           reload: false,

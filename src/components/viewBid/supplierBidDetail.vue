@@ -36,7 +36,7 @@
         <v-row>
           <v-col md="2" class="text-right mr-1 title-desc">Description:</v-col>
           <v-col class="title-brief bid-desc"> 
-            <div v-html="bidDetail.bidData.bidDescriptions &&
+            <div class="ql-editor pa-0" v-html="bidDetail.bidData.bidDescriptions &&
             Array.isArray(bidDetail.bidData.bidDescriptions)
             ? bidDetail.bidData.bidDescriptions[0].body
             : bidDetail.bidData.bidDescriptions"></div>
@@ -48,7 +48,7 @@
           v-for="(item, index) in bidDetail.bidData.bidDescriptions.slice(1)" :key="index">
           <v-col md="2" class="text-right mr-1 title-desc">{{ item && item.name }}:</v-col>
           <v-col class="title-brief bid-desc"> 
-            <div v-html="item && item.body"></div>
+            <div class="ql-editor pa-0" v-html="item && item.body"></div>
           </v-col>
         </v-row>
 
