@@ -262,7 +262,7 @@
                 </div>
                 <div class="add-company" v-if="checkIntent(company.objectID) !== 'intended'">
                   <v-btn color="rgba(243, 35, 73, 0.1)" tile min-width="32px" height="32" class="pa-0" elevation="0"
-                    @click="removeNewSup(company, index)"> <v-icon color="#F32349">mdi-minus</v-icon></v-btn>
+                    @click="removeNewSup(index)"> <v-icon color="#F32349">mdi-minus</v-icon></v-btn>
                 </div>
               </div>
             </template>
@@ -475,6 +475,26 @@ export default {
             }
             return 1;
           });
+
+          let idType = '';
+
+          this.repsInvited.forEach((el) => {
+            if (el.objectID) {
+              idType = 'objectID';
+            } else if (el.id) {
+              idType = 'id';
+            } else {
+              idType = 'companyId';
+            }
+          });
+
+          if (idType === 'objectID') {
+            this.repsInvited = [...new Map(this.repsInvited.map((item) => [item.objectID, item])).values()];
+          } else if (idType === 'id') {
+            this.repsInvited = [...new Map(this.repsInvited.map((item) => [item.id, item])).values()];
+          } else {
+            this.repsInvited = [...new Map(this.repsInvited.map((item) => [item.companyId, item])).values()];
+          }
         }
       }
     },
@@ -645,7 +665,7 @@ export default {
       this.$store.commit('pushCompanies', company);
       this.$store.commit('setInvitedSuppliersData', this.repsInvited);
     },
-    removeNewSup(company, index) {
+    removeNewSup(index) {
       this.newRepsInvited.splice(index, 1);
       this.inviteCount = 2;
       this.$store.commit('setInvitedNewSuppliers', this.newRepsInvited);
