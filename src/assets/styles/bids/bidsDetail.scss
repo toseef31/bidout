@@ -409,6 +409,11 @@
             }
           }
         }
+        .supplier-desc{
+          .ql-editor{
+            min-height: auto;
+          }
+        }
 
         .bid-desc {
           margin-top: -5px;
@@ -419,6 +424,7 @@
             font-weight: 700;
           }
           .ql-editor{
+            min-height: auto;
             ul{
               padding-left: 0;
             }
@@ -910,7 +916,11 @@
         .bid-desc {
           line-height: 28px;
         }
-
+        .supplier-desc{
+          .ql-editor{
+            min-height: auto;
+          }
+        }
       }
 
       .supplier-attachment {

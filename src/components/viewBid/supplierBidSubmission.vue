@@ -176,12 +176,12 @@
 
                   <label :for="`uploadFileQ${index}`" v-else
                     class="
-                                                                                                                                                                                                                                    upload-file
-                                                                                                                                                                                                                                   pa-4
-                                                                                                                                                                                                                                    d-block
-                                                                                                                                                                                                                                    font-weight-medium
-                                                                                                                                                                                                                                    text-center
-                                                                                                                                                                                                                                  ">
+                                                                                                                                                                                                                                                    upload-file
+                                                                                                                                                                                                                                                   pa-4
+                                                                                                                                                                                                                                                    d-block
+                                                                                                                                                                                                                                                    font-weight-medium
+                                                                                                                                                                                                                                                    text-center
+                                                                                                                                                                                                                                                  ">
                     <v-file-input :id="`uploadFileQ${index}`" @change="handleDocumentForAnswer($event, index)"
                       :disabled="!bidDetail.receivingBids" :rules="item.required === 'true' ? fileRule : []" />
 
@@ -237,7 +237,7 @@
                   </td>
                   <td class="text-left delete-class text-decoration-underline" v-if="checkForUpload">
 
-                    <v-dialog class="dialog-class" v-model="dialogT" width="330">
+                    <v-dialog class="dialog-class" v-model="getDialogT[index].open" width="330">
 
                       <template v-slot:activator="{ on, attrs }">
 
@@ -257,10 +257,10 @@
                         <v-card-actions>
                           <v-spacer></v-spacer>
 
-                          <v-btn color="#0d9648" outlined @click="dialogT = false">
+                          <v-btn color="#0d9648" outlined @click="dialogT[deletedFileI].open = false;">
                             Cancel
                           </v-btn>
-                          <v-btn color="#F32349" outlined @click="dialogT = false; deleteAttach()">
+                          <v-btn color="#F32349" outlined @click="dialogT[deletedFileI].open = false; deleteAttach()">
                             Agree
                           </v-btn>
                         </v-card-actions>
@@ -318,7 +318,7 @@ export default {
       intent: 'true',
       loading: false,
       dialog: false,
-      dialogT: false,
+      dialogT: [],
       valid: true,
       deletedFileI: null,
       supplierNote: '',
@@ -405,6 +405,9 @@ export default {
         formattedPrices[index] = parseFloat(item.price).toFixed(2);
       });
       return formattedPrices;
+    },
+    getDialogT() {
+      return this.dialogT;
     },
   },
   methods: {
@@ -572,10 +575,14 @@ export default {
         uploadedAt: new Date(),
         newAttach: true,
       });
+      this.dialogT.push({
+        open: false,
+      });
     },
 
     deleteAttach() {
       this.$store.state.bid.supplierAttachment.splice(this.deletedFileI, 1);
+      this.dialogT.splice(this.deletedFileI, 1);
     },
     removeQuesDoc(index) {
       this.answers[index].answer = null;
@@ -648,6 +655,10 @@ export default {
           fileSize: this.getSupplierBid.supplierAttachments[i].fileSize,
           attachment: this.getSupplierBid.supplierAttachments[i].attachment,
           uploadedAt: this.getSupplierBid.supplierAttachments[i].uploadedAt,
+        });
+
+        this.dialogT.push({
+          open: false,
         });
       }
 
