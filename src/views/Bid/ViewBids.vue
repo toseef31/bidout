@@ -225,6 +225,7 @@ export default {
     },
     draftBidsList() {
       if (this.$store.getters.draftBidsList) {
+        console.log("this.$store.getters.draftBidsList",)
         if (this.searchBid && this.tabVal == '1') {
           return _.orderBy(this.$store.getters.draftBidsList.filter((item) => {
               return this.searchBid
@@ -240,6 +241,7 @@ export default {
       }
     },
     openBids(){
+      console.log("OS OPEN BIDS E OQ PAISAO",this.$store.getters.bidsList )
       if (this.$store.getters.bidsList.length > 0) {
         if (this.searchBid && this.tabVal == '1') {
           return _.orderBy(this.$store.getters.bidsList.filter((item) => {
@@ -289,7 +291,6 @@ export default {
   methods: {
     ...mapActions(['getDraftBids', 'getBidsLists','getDraftBySerial']),
     editDraft(serial){
-      console.log("============aa", this.$store.getters.userInfo)
       this.getDraftBySerial({serial,company:this.$store.getters.userInfo.company});
     },
     checkIfUserIsSupplier(bid) {
