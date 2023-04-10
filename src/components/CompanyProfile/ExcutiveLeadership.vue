@@ -84,7 +84,7 @@
             <v-icon color="#F32349" class="pa-1 white"  @click="deleteExcutive(excutive)">mdi-trash-can-outline</v-icon>
             <v-img :src="excutive.profilePicture" width="173"></v-img>
             <h6>{{excutive.name}}</h6>
-            <p>{{excutive.role}}</p>
+            <p class="mb-1">{{excutive.role}}</p>
             <a v-if="excutive.linkedin" class="text-decoration-none" target="_blank" :href="excutive.linkedin">
               <v-icon color="#013D3A">mdi-linkedin</v-icon>
             </a>
@@ -203,7 +203,7 @@ export default {
      
       const head = Date.now().toString();
       const tail = Math.random().toString().substr(2);
-      let order = this.$store.getters.companyData.companyData.executiveLeadership.length;
+      let order = this.$store.getters.companyData.companyData.executiveLeadership ? this.$store.getters.companyData.companyData.executiveLeadership.length : 0;
       var leader = {
         profilePicture : this.croppieProfile,
         name: this.excutiveName,
@@ -236,7 +236,7 @@ export default {
       const indexOfObject = this.companyData.executiveLeadership.findIndex(object => {
         return object.id === esgData.id;
       });
-      console.log(indexOfObject);
+      
       this.companyData.executiveLeadership.splice(indexOfObject, 1);
       this.deleteCompanyExcutive(data);
     },

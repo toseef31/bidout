@@ -3,7 +3,8 @@ export default {
     return state.validate;
   },
   teamMembers(state) {
-    return state.teamMembers;
+    return [...new Set(state.teamMembers)];
+    // return state.teamMembers;
   },
   salesRepsList(state) {
     return state.salesRepsList;
@@ -112,5 +113,41 @@ export default {
   },
   loweringPriceAlert(state) {
     return state.loweringPriceAlert;
+  },
+  entryCheckForEditBid(state) {
+    return state.entryCheckForEditBid;
+  },
+  saveBidLoading(state) {
+    return state.saveBidLoading;
+  },
+  loadingInvite(state) {
+    return state.loadingInvite;
+  },
+  bidActivities(state) {
+    return state.bidActivities;
+  },
+  isEditBidChanges(state) {
+    return state.isEditBidChanges;
+  },
+  supplierAddAlert(state) {
+    return state.supplierAddAlert;
+  },
+  dateAlert(state) {
+    return state.dateAlert;
+  },
+  teamMemberAddAlert(state) {
+    return state.teamMemberAddAlert;
+  },
+  invitedTeamMembers(state) {
+    return state.invitedTeamMembers;
+  },
+  teamMembersForBid(state) {
+    return state.teamMembersForBid;
+  },
+  teamMembersInitial(state) {
+    return state.teamMembersInitial;
+  },
+  bidSubmissionValidationAlert(state) {
+    return state.bidSubmissionValidationAlert;
   },
 };

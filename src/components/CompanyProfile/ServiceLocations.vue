@@ -2,7 +2,6 @@
   <v-container class="pa-sm-10 pa-4">
     <label class="d-block text-left main-label">Services Location</label>
     <div class="pac-card" id="pac-card">
-      
       <div id="pac-container">
         <v-row>
           <v-col cols="10" sm="10">
@@ -18,14 +17,14 @@
 
       <v-row>
         <v-col cols="12" sm="12">
-          <div id="map"class="map" style="height:400px"></div>
+          <div id="map" class="map" style="height:400px"></div>
         </v-col>
       </v-row>
     </div>
     <v-row>
       <v-col cols="12" sm="12">
         <v-row>
-          <v-col cols="12" class="-list text-left pt-2"  v-for="(location,index) in companyData.companyLocations">
+          <v-col cols="12" class="-list text-left pt-2"  v-for="(location,index) in companyData.companyLocations" :key="index">
             <div  class="d-flex justify-space-between">
             <label>
               <span>
@@ -45,8 +44,9 @@
   </v-container>
 </template>
 <script>
-  import _ from 'lodash';
-  import { mapActions } from "vuex";
+import _ from 'lodash';
+import { mapActions } from 'vuex';
+
 export default {
   data() {
     return {
@@ -55,38 +55,37 @@ export default {
       map: '',
       lat: '',
       lng: '',
-      address: "",
+      address: '',
       loading: false,
       loader: null,
     };
   },
-  computed:{
-    companyData(){
+  computed: {
+    companyData() {
       return this.$store.getters.companyData.companyData;
-    }
+    },
   },
-  watch:{
-    address: _.debounce(function(){
+  watch: {
+    address: _.debounce(function() {
       const autocomplete = new google.maps.places.Autocomplete(this.address);
-    },500),
+    }, 500),
   },
   methods: {
-    ...mapActions(["addCompanyLocation","deleteCompanyLocation"]),
-    getLocation(){
-     
-        if(this.$store.getters.companyData.companyData.companyLocations && this.$store.getters.companyData.companyData.companyLocations.length > 0){
+    ...mapActions(['addCompanyLocation', 'deleteCompanyLocation']),
+    getLocation() {
+      if (this.$store.getters.companyData.companyData.companyLocations && this.$store.getters.companyData.companyData.companyLocations && this.$store.getters.companyData.companyData.companyLocations.length > 0) {
         var lat = this.$store.getters.companyData.companyData.companyLocations[0].lattitude;
-      }else{
+      } else {
         var lat = 29.721085;
       }
-      if(this.$store.getters.companyData.companyData.companyLocations && this.$store.getters.companyData.companyData.companyLocations.length > 0){
+      if (this.$store.getters.companyData.companyData.companyLocations && this.$store.getters.companyData.companyData.companyLocations && this.$store.getters.companyData.companyData.companyLocations.length > 0) {
         var lng = this.$store.getters.companyData.companyData.companyLocations[0].longitude;
-      }else{
+      } else {
         var lng = -95.342049;
       }
-      if(this.$store.getters.companyData.companyData.companyLocations && this.$store.getters.companyData.companyData.companyLocations.length > 0){
+      if (this.$store.getters.companyData.companyData.companyLocations && this.$store.getters.companyData.companyData.companyLocations && this.$store.getters.companyData.companyData.companyLocations.length > 0) {
         var LocationsForMap = this.$store.getters.companyData.companyData.companyLocations;
-      }else{
+      } else {
         var LocationsForMap = [
           {
             lattitude: 29.721085,
@@ -96,17 +95,20 @@ export default {
         ];
       }
 
-     if(this.$store.getters.companyData.companyData.companyLocations.length == 1){
-          var map = new google.maps.Map(document.getElementById('map'), {
-            zoom: 9,
-            center: new google.maps.LatLng(LocationsForMap[0].lattitude, LocationsForMap[0].longitude),
-            mapTypeId: google.maps.MapTypeId.ROADMAP
-          });
+      if (this.$store.getters.companyData.companyData.companyLocations && this.$store.getters.companyData.companyData.companyLocations.length === 1) {
+        var map = new google.maps.Map(document.getElementById('map'), {
+          zoom: 9,
+          center: new google.maps.LatLng(LocationsForMap[0].lattitude, LocationsForMap[0].longitude),
+          // mapTypeId: google.maps.MapTypeId.ROADMAP,
+          mapId: "2993bb26d878ba6a",
+          streetViewControl: false,
+          mapTypeControl: false,
+        });
 
           var infowindow = new google.maps.InfoWindow();
           var marker, i;
-      
-            for (i = 0; i < LocationsForMap.length; i++) {  
+
+            for (i = 0; i < LocationsForMap.length; i++) {
             marker = new google.maps.Marker({
 
               position: new google.maps.LatLng(LocationsForMap[i].lattitude, LocationsForMap[i].longitude),
@@ -125,10 +127,13 @@ export default {
           } 
           
           }
-     else if(this.$store.getters.companyData.companyData.companyLocations.length > 1){
+     else if (this.$store.getters.companyData.companyData.companyLocations && this.$store.getters.companyData.companyData.companyLocations.length > 1){
       var map = new google.maps.Map(document.getElementById('map'), {
         center: new google.maps.LatLng(LocationsForMap[0].lattitude, LocationsForMap[0].longitude),
-        mapTypeId: google.maps.MapTypeId.ROADMAP
+        // mapTypeId: google.maps.MapTypeId.ROADMAP,
+        mapId: "2993bb26d878ba6a",
+        streetViewControl: false,
+        mapTypeControl: false,
       });
 
       var infowindow = new google.maps.InfoWindow();
@@ -159,112 +164,98 @@ export default {
             map.fitBounds(latlngbounds);
           
           }else{
-             var map = new google.maps.Map(document.getElementById('map'), {
-              zoom: 4,
-              center: new google.maps.LatLng(LocationsForMap[0].lattitude, LocationsForMap[0].longitude),
-              mapTypeId: google.maps.MapTypeId.ROADMAP
-            });
+            var map = new google.maps.Map(document.getElementById('map'), {
+            zoom: 4,
+            center: new google.maps.LatLng(LocationsForMap[0].lattitude, LocationsForMap[0].longitude),
+            // mapTypeId: google.maps.MapTypeId.ROADMAP,
+            mapId: "2993bb26d878ba6a",
+            streetViewControl: false,
+            mapTypeControl: false,
+          });
 
-            var infowindow = new google.maps.InfoWindow();
-            var marker, i;
-            for (i = 0; i < LocationsForMap.length; i++) {  
-            marker = new google.maps.Marker({
-              map: map,
-              title: 'Marker',
-              anchorPoint: new google.maps.Point(0, -29),
-            });
-            
-            google.maps.event.addListener(marker, 'click', (function(marker, i) {
-              return function() {
-                infowindow.setContent(LocationsForMap[i].location);
-                infowindow.open(map, marker);
-              }
-            })(marker, i));
-          }
-          }
-    
+          var infowindow = new google.maps.InfoWindow();
+          var marker, i;
+        for (i = 0; i < LocationsForMap.length; i++) {
+          marker = new google.maps.Marker({
+            map: map,
+            title: 'Marker',
+            anchorPoint: new google.maps.Point(0, -29),
+          });
 
+          google.maps.event.addListener(marker, 'click', (function(marker, i) {
+            return function() {
+              infowindow.setContent(LocationsForMap[i].location);
+              infowindow.open(map, marker);
+            }
+          })(marker, i));
+        }
+      }
 
-        // [START maps_places_autocomplete_creation]
-        const center = { lat: lat, lng: lng };
-        // Create a bounding box with sides ~10km away from the center point
-        const defaultBounds = {
-          north: center.lat + 0.1,
-          south: center.lat - 0.1,
-          east: center.lng + 0.1,
-          west: center.lng - 0.1,
-        };
-        const input = document.getElementById("pac-input");
+      const center = { lat: lat, lng: lng };
+      // Create a bounding box with sides ~10km away from the center point
+      const defaultBounds = {
+        north: center.lat + 0.1,
+        south: center.lat - 0.1,
+        east: center.lng + 0.1,
+        west: center.lng - 0.1,
+      };
+      const input = document.getElementById('pac-input');
 
+      const options = {
+        bounds: defaultBounds,
+        fields: ['address_components', 'geometry', 'icon', 'name', 'formatted_address'],
+        strictBounds: false,
+        types: ['address'],
+      };
+      const autocomplete = new google.maps.places.Autocomplete(input, options);
 
-        const options = {
-          bounds: defaultBounds,
-          fields: ["address_components", "geometry", "icon", "name","formatted_address"],
-          strictBounds: false,
-          types: ["address"],
-        };
-        const autocomplete = new google.maps.places.Autocomplete(input, options);
-        
+      const southwest = { lat: 5.6108, lng: 136.589326 };
+      const northeast = { lat: 61.179287, lng: 2.64325 };
+      const newBounds = new google.maps.LatLngBounds(southwest, northeast);
 
-        // [END maps_places_autocomplete_countries_multiple]
-        // [START maps_places_autocomplete_setbounds]
-        const southwest = { lat: 5.6108, lng: 136.589326 };
-        const northeast = { lat: 61.179287, lng: 2.64325 };
-        const newBounds = new google.maps.LatLngBounds(southwest, northeast);
+      autocomplete.setBounds(newBounds);
 
-        autocomplete.setBounds(newBounds);
-        
-        autocomplete.addListener("place_changed", () => {
-          marker.setVisible(true);
+      autocomplete.addListener('place_changed', () => {
+        marker.setVisible(true);
 
-          const place = autocomplete.getPlace();
-          if (!place.geometry || !place.geometry.location) {
-            // User entered the name of a Place that was not suggested and
-            // pressed the Enter key, or the Place Details request failed.
-            window.alert("No details available for input: '" + place.name + "'");
-            return;
-          }
+        const place = autocomplete.getPlace();
+        if (!place.geometry || !place.geometry.location) {
+          // eslint-disable-next-line no-alert
+          window.alert(`No details available for input: '${place.name}'`);
+          return;
+        }
 
-          // If the place has a geometry, then present it on a map.
-          if (place.geometry.viewport) {
-            map.fitBounds(place.geometry.viewport);
-            // map.setZoom(2);
-          } else {
-            map.setCenter(place.geometry.location);
-            map.setZoom(2); // Why 17? Because it looks good.
-          }
+        // If the place has a geometry, then present it on a map.
+        if (place.geometry.viewport) {
+          map.fitBounds(place.geometry.viewport);
+          // map.setZoom(2);
+        } else {
+          map.setCenter(place.geometry.location);
+          map.setZoom(2);
+        }
 
-          marker.setPosition(place.geometry.location);
-          marker.setVisible(true);
+        marker.setPosition(place.geometry.location);
+        marker.setVisible(true);
 
-          let address = "";
+        let address = '';
 
-          if (place.address_components) {
-            address = [
-              (place.address_components[0] &&
-                place.address_components[0].short_name) ||
-                "",
-              (place.address_components[1] &&
-                place.address_components[1].short_name) ||
-                "",
-              (place.address_components[2] &&
-                place.address_components[2].short_name) ||
-                "",
-              (place.address_components[3] &&
-                place.address_components[3].short_name) ||
-                "",
-            ].join(" ");
-          }
-          this.lat = place.geometry.location.lat();
-          this.lng = place.geometry.location.lng();
-          this.address = document.getElementById("pac-input").value;
-        });
-      
+        if (place.address_components) {
+          address = [
+            (place.address_components[0] && place.address_components[0].short_name) || '',
+            (place.address_components[1] && place.address_components[1].short_name) || '',
+            (place.address_components[2] && place.address_components[2].short_name) || '',
+            (place.address_components[3] && place.address_components[3].short_name) || '',
+          ].join(' ');
+        }
+        this.lat = place.geometry.location.lat();
+        this.lng = place.geometry.location.lng();
+        this.address = document.getElementById('pac-input').value;
+      });
     },
-    addLocation(){
+    addLocation() {
       const head = Date.now().toString();
       const tail = Math.random().toString().substr(2);
-      var data = {
+      const data = {
         id: head + tail,
         companyId: this.$store.getters.userInfo.company.id,
         location: this.address,
@@ -275,34 +266,32 @@ export default {
       this.loader = 'loading';
       this.loading = true;
       setTimeout(() => {
-        this.loading = false,
-        document.getElementById("pac-input").value = '';
+        this.loading = false;
+        if (document.getElementById('pac-input')) {
+          document.getElementById('pac-input').value = '';
+        }
         this.getLocation();
-      }, 5000)
+      }, 5000);
     },
-    deleteLocation(data,indexing){
-      var data = {
+    deleteLocation(data,indexing) {
+      const locData = {
         id: data.id,
         companyId: this.$store.getters.userInfo.company.id,
         location: data.location,
         lat: data.lattitude,
         long: data.longitude,
-      }
-      console.log(this.companyData.companyLocations);
-      const indexOfObject = this.companyData.companyLocations.findIndex(object => {
-        return object.id === data.id;
-      });
+      };
 
-      console.log(indexOfObject);
+      const indexOfObject = this.companyData.companyLocations.findIndex((object) => object.id === data.id);
 
       this.companyData.companyLocations.splice(indexOfObject, 1);
-    
-      this.deleteCompanyLocation(data);
+
+      this.deleteCompanyLocation(locData);
       this.getLocation();
     },
   },
   mounted() {
     this.getLocation();
-  } 
+  },
 };
 </script>

@@ -4,15 +4,15 @@
 .left-sidebar{
 	background-color: #fff !important;
 	position: relative !important;
-	flex: 0 0 22% !important;
-	max-width: 22% !important;
-	height: calc(100vh - 96px) !important;
+	flex: 0 0 20em !important;
+	max-width: 20em !important;
+	height: calc(100vh - 105px) !important;
 	position: sticky !important;
-	top: 92px;
+	top: 104px;
 }
 .toggleLeft-sidebar{
-	flex: 0 0 5% !important;
-  	max-width: 5% !important;
+	flex: 0 0 5em !important;
+  	max-width: 5em !important;
   ::v-deep .v-list-group .v-list-group__header .v-list-item__icon.v-list-group__header__append-icon{
   	margin-left: -22px;
   	min-width: 0px;
@@ -123,6 +123,26 @@
 		}
 	}
 }
+@media(max-width: 1285px) and (min-width: 1160px){
+  .left-sidebar{
+    flex: 0 0 18em !important;
+    max-width: 18em !important;
+  }
+	.toggleLeft-sidebar {
+    flex: 0 0 5em !important;
+    max-width: 5em !important;
+	}
+}
+@media (min-width:770px) and (max-width:1160px) {
+  .left-sidebar{
+    flex: 0 0 15em !important;
+    max-width: 15em !important;
+  }
+	.toggleLeft-sidebar {
+    flex: 0 0 5em !important;
+    max-width: 5em !important;
+	}
+}
 @media (min-width: 769px) {
 	
 }
@@ -158,4 +178,7 @@
 	padding: 10px 20px !important;
 	border-radius: 4px !important;
 	box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25) !important;
+}
+.toasted .primary.error, .toasted.toasted-primary.error {
+    background: #f44336 !important;
 }

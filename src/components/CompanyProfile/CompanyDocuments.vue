@@ -67,7 +67,7 @@ export default {
       this.file = event.target.files[0];
       this.fileName = this.file.name;
       this.fileExt =  this.fileName.split('.').pop();
-      // this.previewDoc();
+      
       if(this.$store.getters.companyData.companyData.corporateDocuments){
         this.documents = this.$store.getters.companyData.companyData.corporateDocuments;
       }
@@ -125,9 +125,6 @@ export default {
     },
     get_url_extension( url ) {
       return url.split(/[#?]/)[0].split('.').pop().trim();
-    },
-    get_url_name( url ) {
-      return url.split('/').pop();
     },
   },
   mounted() {

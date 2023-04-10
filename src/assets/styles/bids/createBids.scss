@@ -1,12 +1,10 @@
 .createBid-module{
-	flex: 0 0 78%;
-    max-width: 78%;
 	.mid-content{
 		flex: 0 0 100%;
-    max-width: 100%;
-    z-index: 2;
-    padding-left: 0 !important;
-    padding-bottom: 0 !important;
+	max-width: 100%;
+	z-index: 2;
+	padding-left: 0 !important;
+	padding-bottom: 0 !important;
 		.content-section{
 			background: #FFFFFF;
 			border: 1px solid #B8B8B8;
@@ -49,8 +47,8 @@
 							}
 						}
 						tr:nth-of-type(even) {
-					   	background-color: #F1F1F1;
-					 	}
+						background-color: #F1F1F1;
+						}
 					}
 				}
 			}
@@ -107,15 +105,15 @@
 								.v-text-field__slot{
 									input[type="date"]::-webkit-calendar-picker-indicator{
 										background: transparent;
-								    bottom: 0;
-								    color: transparent;
-								    cursor: pointer;
-								    height: auto;
-								    left: 0;
-								    position: absolute;
-								    right: 0;
-								    top: 0;
-								    width: auto;
+									bottom: 0;
+									color: transparent;
+									cursor: pointer;
+									height: auto;
+									left: 0;
+									position: absolute;
+									right: 0;
+									top: 0;
+									width: auto;
 									}
 								}
 							}
@@ -128,14 +126,18 @@
 							font-size: 16px;
 							border-radius: 8px;
 						}
-
+						.quillWrapper{
+							.ql-toolbar{
+								text-align: left;
+							}
+						}
 					}
 				}
 				.supplier-row{
 					border-bottom: 1px solid #B8B8B8;
 					.available-data{
 						border-right: 1px solid #B8B8B8;
-						min-height: 70vh;
+						height: calc(100vh - 342px);
 						.supplier-head{
 							background: #FBFBFB;
 							.supplier-tabs{
@@ -187,8 +189,9 @@
 							}
 						}
 						.companies-list{
-							height: 420px;
+							/*height: 420px;*/
 							overflow: auto;
+							height: calc(100vh - 454px);
 							&::-webkit-scrollbar {
 							  width: 4px;
 							  height: 5px;
@@ -219,6 +222,23 @@
 							  background: transparent;
 							}
 							.list-company{
+								.company-img {
+									.image-class {
+									
+										max-width: 100px;
+										height: 26.67px;
+										
+									}
+
+									.avatar-image {
+										min-width: 100px;
+									}
+
+									.icon-class {
+										width: 100px;
+										height: 35px;
+									}
+								}
 								&:nth-child(even){
 									background: #F4F5F7;
 								}
@@ -236,51 +256,62 @@
 							background: #FBFBFB;
 						}
 						.companies-list{
-							height: 485px;
+							height: calc(100vh - 391px);
 						}
 					}
 					.category-col{
 						border-right: 1px solid #bbbbbb;
-						height: 533px;
-				    overflow: auto;
-				    &::-webkit-scrollbar {
-				      width: 4px;
-				      height: 5px;
-				    }
-				    &::-webkit-scrollbar-thumb {
-				      background: #e1e1e1;
-				      border: 14px solid #0d9647;
-				      border-radius: 26px;
-				    }
-				    &::-webkit-scrollbar-thumb:hover {
-				      background: #ffffff;
-				    }
-				    &::-webkit-scrollbar-thumb:active {
-				      background: #0d9647;
-				    }
-				    &::-webkit-scrollbar-track {
-				      /*background: #666666;*/
-				      /*border: 36px solid #e3e3e3;*/
-				      border-radius: 42px;
-				    }
-				    &::-webkit-scrollbar-track:hover {
-				      background: #666666;
-				    }
-				    &::-webkit-scrollbar-track:active {
-				      background: #0d9647;
-				    }
-				    &::-webkit-scrollbar-corner {
-				      background: transparent;
-				    }
+						height: calc(100vh - 342px);
+					overflow: auto;
+					&::-webkit-scrollbar {
+					  width: 4px;
+					  height: 5px;
 					}
+					&::-webkit-scrollbar-thumb {
+					  background: #e1e1e1;
+					  border: 14px solid #0d9647;
+					  border-radius: 26px;
+					}
+					&::-webkit-scrollbar-thumb:hover {
+					  background: #ffffff;
+					}
+					&::-webkit-scrollbar-thumb:active {
+					  background: #0d9647;
+					}
+					&::-webkit-scrollbar-track {
+					  /*background: #666666;*/
+					  /*border: 36px solid #e3e3e3;*/
+					  border-radius: 42px;
+					}
+					&::-webkit-scrollbar-track:hover {
+					  background: #666666;
+					}
+					&::-webkit-scrollbar-track:active {
+					  background: #0d9647;
+					}
+					&::-webkit-scrollbar-corner {
+					  background: transparent;
+					}
+					}
+
+					
 				}
 				.bidline-tab{
 					.bidline-section{
 						.bidline-list{
+							.new--text{
+								.v-input__control{
+									.v-input__slot{
+										fieldset{
+											border-color: red;
+										}
+									}
+								}
+							}
 							.v-input{
 								font-size: 12px;
 								color: #0D1139;
-						    font-weight: 600;
+							font-weight: 600;
 								&__slot{
 									min-height: 34px;
 									height: 34px;
@@ -317,6 +348,19 @@
 									color: #0D9648 !important;
 								}
 							}
+						}
+						.import-excel{
+							width: 20px;
+					    margin-right: 15px;
+			        color: #0d9648;
+			        padding: 8px 4px;
+			        border-radius: 10px;
+			        cursor: pointer;
+						}
+						.export-excel{
+/*							border: 1px solid;*/
+/*							border-radius: 10px;*/
+							color: #0d9648;
 						}
 					}
 					.v-btn{
@@ -475,8 +519,8 @@
 		}
 	}
 	.mid-content-collapse{
-		flex: 0 0 95%;
-	  max-width: 95%;
+		flex: 0 0 100%;
+	  max-width: 100%;
 	}
 }
 .inviteSupplier-dialog{
@@ -485,7 +529,76 @@
 		font-size: 20px;
 		line-height: 25px;
 	}
+	.phone-error-class {
+		.vue-tel-input:focus-within {
+		  border: 2px solid red;
+		}
+	
+		.vue-tel-input {
+		  border: 2px solid red
+		}
+	  }
+	
+	  .phone-valid-class {
+		.vue-tel-input:focus-within {
+		  border: 2px solid #1976d2
+		}
+	  }
 	.v-form {
+		.phone-main-class {
+			height: 56px;
+			border-radius: 8px;
+			box-shadow: none;
+	  
+			.vti__dropdown {
+			  padding-right: 15px;
+			  border-right: 1px solid #9E9E9E;
+	  
+			  .vti__selection {
+				column-gap: 6px;
+			  }
+	  
+			  .vti__selection .vti__country-code {
+				color: #201B1B;
+				font-weight: 500;
+				font-size: 14px;
+	  
+			  }
+			}
+	  
+			ul {
+			  padding-left: 0;
+			}
+	  
+			.vti__dropdown-list.below {
+			  top: 55px;
+			  box-shadow: rgba(200, 200, 200, 0.7) 0px 0px 0px 0.125rem;
+			  border: 1px solid transparent;
+			  border-radius: 8px;
+	  
+			}
+	  
+			.vti__dropdown-item {
+			  padding: 4px 7px;
+			  font-size: 13px;
+	  
+			  strong {
+				padding-left: 5px;
+				font-weight: 400;
+			  }
+	  
+			}
+		  }
+		.required-class {
+			color: #F32349;
+		}
+		.phone-class {
+			color: #ff5252;
+			font-size: 12px;
+			text-align: left;
+			margin-top: 6px;
+			padding-left: 12px;
+		}
 		label{
 			color: #0D1139;
 			font-size: 16px;
@@ -495,172 +608,157 @@
 				border-radius: 8px;
 			}
 		}
-		#MazPhoneNumberInput{
-			margin-bottom: 0!important;
-			.country-selector{
-				&__input{
-					height: 56px;
-					min-height: 56px;
-				}
-			}
-			.input-tel{
-				&__input{
-					height: 56px;
-					min-height: 56px;
-				}
-			}
-		}
 	}
 }
 @media (max-width: 768px) {
 	.createBid-module{
 		flex: 0 0 100%;
-    max-width: 100%;
+	max-width: 100%;
 		.mid-content {
 			flex: 0 0 100%;
-	  	max-width: 100%;
-	  	.content-section{
-	  		border: 0px;
-	  		padding: 0;
-	  		.template-table{
-	  			table{
-	  				thead{
-	  					tr{
-	  						th{
-	  							font-size: 12px;
-	  						}
-	  					}
-	  				}
-	  				tbody{
-	  					tr{
-	  						td{
-	  							font-size: 12px;
-	  						}
-	  					}
-	  				}
-	  			}
-	  		}
-	  		.not-completd-title{
-	  			border-left: 4px solid #0D9648;
-	  			.col-12{
-	  				margin-bottom: 12px;
-	  				margin-top: 10px;
-	  				h3{
-	  					font-size: 16px;
-	  				}
-	  			}
-	  			.preview-text{
-	  				a{
-	  					font-size: 12px;
-	  					.v-icon{
-	  						font-size: 18px;
-	  					}
-	  				}
-	  			}
-	  			.auto-text{
-	  				color: #959595;
-	  				font-size: 12px;
-	  				text-align: left;
-	  			}
-	  			.publish-btn{
-	  				font-size: 14px;
-	  				font-weight: 700;
-	  				width: 165px !important;
-				    height: 35px !important;
-	  			}
-	  		}
-	  		.bids-tabs{
-	  			.v-slide-group__next, .v-slide-group__prev{
-	  				display: none !important;
-	  			}
-	  		}
-	  		.supplier-tabs{
-	  			.v-slide-group__next, .v-slide-group__prev{
-	  				display: none !important;
-	  			}
-	  			.available-data{
-	  				.supplier-head{
-	  					h4{
-	  						font-size: 13px;
-	  						text-align: left;
-	  					}
-	  				}
-	  				.available-search{
-	  					.available-select{
-	  						/*.v-input__control{*/
-	  							.v-input__append-inner{
-	  								margin-top: 14px;
-	  							}
-	  						/*}*/
-	  					}
-	  				}
-	  			}
-	  		}
-	  	}
-	  	.bidline-tab{
-	  		.bidline-section{
-	  			.bidline-list{
-	  				display: block !important;
-	  				.bid-item:not(last-child){
-	  					margin-bottom: 5px;
-	  				}
-	  			}
-	  		}
-	  	}
-	  	.attachment-tab{
-	  		.attachment-list{
-	  			table{
-	  				thead{
-	  					tr{
-	  						th{
-	  							font-size: 13px !important;
-	  						}
-	  					}
-	  				}
-	  				tbody{
-	  					tr{
-	  						td{
-	  							font-size: 12px !important;
-	  						}
-	  					}
-	  				}
-	  			}
-	  		}
-	  	}
-	  	.attachment-tab{
-	  		.attach-btn{
-	  			font-size: 18px !important;
-	  			height: 45px !important;
-	  		}
-	  	}
-	  	.question-tab{
-	  		.add-question{
-	  			font-size: 14px !important;
-	  			height: 44px !important;
-	  		}
-	  		.question-header{
-	  			display: block !important;
-	  			.question-title{
-	  				margin-bottom: 8px;
-	  			}
-	  		}
-	  		.question-body{
-	  			.v-expansion-panel-content__wrap{
-	  				padding: 0 10px 16px;
-	  				p{
-	  					text-align: left;
-	  					font-size: 12px;
-	  				}
-	  				.question-subbody{
-	  					display: block !important;
-	  				}
-	  			}
-	  		}
-	  	}
-  		.save-btn{
-  			height: 45px !important;
-  			font-size: 15px !important;
-  		}
+		max-width: 100%;
+		.content-section{
+			border: 0px;
+			padding: 0;
+			.template-table{
+				table{
+					thead{
+						tr{
+							th{
+								font-size: 12px;
+							}
+						}
+					}
+					tbody{
+						tr{
+							td{
+								font-size: 12px;
+							}
+						}
+					}
+				}
+			}
+			.not-completd-title{
+				border-left: 4px solid #0D9648;
+				.col-12{
+					margin-bottom: 12px;
+					margin-top: 10px;
+					h3{
+						font-size: 16px;
+					}
+				}
+				.preview-text{
+					a{
+						font-size: 12px;
+						.v-icon{
+							font-size: 18px;
+						}
+					}
+				}
+				.auto-text{
+					color: #959595;
+					font-size: 12px;
+					text-align: left;
+				}
+				.publish-btn{
+					font-size: 14px;
+					font-weight: 700;
+					width: 165px !important;
+					height: 35px !important;
+				}
+			}
+			.bids-tabs{
+				.v-slide-group__next, .v-slide-group__prev{
+					display: none !important;
+				}
+			}
+			.supplier-tabs{
+				.v-slide-group__next, .v-slide-group__prev{
+					display: none !important;
+				}
+				.available-data{
+					.supplier-head{
+						h4{
+							font-size: 13px;
+							text-align: left;
+						}
+					}
+					.available-search{
+						.available-select{
+							/*.v-input__control{*/
+								.v-input__append-inner{
+									margin-top: 14px;
+								}
+							/*}*/
+						}
+					}
+				}
+			}
+		}
+		.bidline-tab{
+			.bidline-section{
+				.bidline-list{
+					display: block !important;
+					.bid-item:not(last-child){
+						margin-bottom: 5px;
+					}
+				}
+			}
+		}
+		.attachment-tab{
+			.attachment-list{
+				table{
+					thead{
+						tr{
+							th{
+								font-size: 13px !important;
+							}
+						}
+					}
+					tbody{
+						tr{
+							td{
+								font-size: 12px !important;
+							}
+						}
+					}
+				}
+			}
+		}
+		.attachment-tab{
+			.attach-btn{
+				font-size: 18px !important;
+				height: 45px !important;
+			}
+		}
+		.question-tab{
+			.add-question{
+				font-size: 14px !important;
+				height: 44px !important;
+			}
+			.question-header{
+				display: block !important;
+				.question-title{
+					margin-bottom: 8px;
+				}
+			}
+			.question-body{
+				.v-expansion-panel-content__wrap{
+					padding: 0 10px 16px;
+					p{
+						text-align: left;
+						font-size: 12px;
+					}
+					.question-subbody{
+						display: block !important;
+					}
+				}
+			}
+		}
+		.save-btn{
+			height: 45px !important;
+			font-size: 15px !important;
+		}
 		}
 	}
 }

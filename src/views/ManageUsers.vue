@@ -1,6 +1,6 @@
 <template>
-  
-   <v-col class="manage-users pa-0 pa-sm-3 pl-sm-0" :class="[ showSideBar ? 'col-md-9 col-12 col-sm-9' : 'mid-content-collapse', activityPanel ? 'd-sm-block' : 'd-md-block']" v-show="!activityPanel">
+  <v-row class="manage-users pa-0 ma-0">
+   <v-col class="pa-0 pr-sm-3" :class="[ showSideBar ? 'col-md-12 col-12 col-sm-12' : 'mid-content-collapse', activityPanel ? 'd-sm-block' : 'd-md-block']" v-show="!activityPanel">
       <div class="mid-content">
         <div class="content-section">
           <v-row class="mx-0">
@@ -23,7 +23,7 @@
                   </div>
                 </div>
                 <div class="userlist-table mt-16">
-                  <v-alert type="success" v-show="showErrorAlert" v-if="statusMessage !== null" class="text-left" dismissible>
+                  <v-alert type="success" v-if="statusMessage !== null" class="text-left" dismissible>
                     {{ statusMessage }}
                   </v-alert>
                   <v-simple-table>
@@ -94,9 +94,9 @@
                               <v-icon>mdi-square-edit-outline</v-icon>
                             Edit Details</v-btn>
                            
-                            <!-- <v-btn depressed color="transparent" class="text-capitalize" @click="disable(user.id)">
-                              <v-icon color="#F32349">mdi-window-close</v-icon>
-                            Disable </v-btn> -->
+                            <v-btn depressed color="transparent" class="text-capitalize edit-btn">
+                              <v-icon>mdi-check</v-icon>
+                            Invited </v-btn>
 
                           </td>
                         </tr>
@@ -128,7 +128,8 @@
           </v-row>
         </div>
       </div>
-   </v-col>
+    </v-col>
+  </v-row>
 </template>
 <script>
   import Navbar from '../components/Layout/Navbar.vue'

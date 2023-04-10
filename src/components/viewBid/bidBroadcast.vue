@@ -16,7 +16,7 @@
       <div class="broadcast-desc">
         This Bid Broadcast sends a notice to all invited service providers
         (regardless of their bid status) to both their emails and via internal
-        Bidout chat system.
+        BidOut chat system.
       </div>
 
       <v-textarea

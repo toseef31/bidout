@@ -1,6 +1,6 @@
 <template>
-
-   <v-col class="createBid-module pa-0 pa-sm-3 pl-sm-0 pb-sm-0" :class="[ showSideBar ? 'col-md-9 col-12 col-sm-7' : 'mid-content-collapse', activityPanel ? 'd-sm-block' : 'd-md-block']" v-show="!activityPanel">
+  <v-row class="createBid-module pa-0 ma-0">
+    <v-col class="pa-0 pr-sm-3" :class="[ showSideBar ? 'col-md-12 col-12 col-sm-12' : 'mid-content-collapse', activityPanel ? 'd-sm-block' : 'd-md-block']" v-show="!activityPanel">
       <div class="mid-content">
         <div class="content-section fill-height d-flex align-center">
           <v-row align="center" justify="center" class="fill-height mx-0">
@@ -34,7 +34,8 @@
           </v-row>
         </div>
       </div>
-   </v-col>
+    </v-col>
+  </v-row>
 </template>
 <script>
 export default {
@@ -68,6 +69,7 @@ export default {
       this.$store.state.bid.bidData.attachments = '';
       this.$store.state.bid.bidData.attachment = '';
       this.$store.state.bid.bidData.invitedSuppliers = '';
+      this.$store.state.bid.bidData.invitedNewSuppliers = '';
       this.$store.state.bid.bidData.invitedTeamMembers = '';
       this.$store.state.bid.bidData.lineItems = '';
       this.$store.state.bid.bidData.questions = '';
@@ -81,6 +83,7 @@ export default {
       this.$store.commit('setBidDescription', [{ body: '' }]);
       this.$store.commit('setInvitedTeamMembers', null);
       this.$store.commit('setInvitedSuppliersData', null);
+      this.$store.commit('setInvitedNewSuppliers', null);
       this.$store.commit('setBidlines', null);
       this.$store.commit('setAttachement', null);
       this.$store.commit('setAttachData', null);
@@ -93,7 +96,7 @@ export default {
   },
   mounted() {
     document.title = 'Create Bid - BidOut';
-    this.users = JSON.parse(localStorage.getItem('userData')).user;
+    this.users = this.$store.getters.userInfo;
   },
 };
 </script>

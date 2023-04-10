@@ -28,15 +28,18 @@
                   <h4 class="mb-2">RPF Platform - Create Bids</h4>
                   <h1 class="mb-8">Execute Contract</h1>
                 </div>
-                  <vue-pdf-embed class="white text-left pa-4 font-weight-medium mb-5 contract-section"
-                      ref="pdfRef"
-                      :source="pdfSource"
-                    />
-                
+                <vue-pdf-embed class="white text-left pa-4 font-weight-medium mb-5 contract-section"
+                    ref="pdfRef"
+                    :source="pdfSource"
+                  />
                 <v-row justify="center" align="center">
+                  <v-col cols="12" md="12" class="pb-1">
+                    <p class="text-left mb-0 font-weight-medium">Please sign here:</p>
+                  </v-col>
+                </v-row>
+                <v-row justify="center" align="center" class="mt-0">
                   <v-col cols="12" md="8" class="pb-1">
-                    <div class="white">
-                      <!-- <img :src="require('@/assets/images/getStarted/sign.png')" class="py-6 mx-auto"> -->
+                    <div class="white signBox">
                       <VueSignaturePad width="500px" height="130px" ref="signaturePad" />
                     </div>
                   </v-col>
@@ -119,14 +122,24 @@ export default {
    },
    contractData(){
     return this.$store.getters.contractData;
-   }
+   },
+  
   },
+ 
   methods: {
     ...mapActions(["getIpAddress","signAgreement"]),
+    
     sign() {
       const { isEmpty, data } = this.$refs.signaturePad.saveSignature();
-      
-      var agreement = {
+      if(isEmpty){
+        this.$toasted.show(`Please sign the contract to proceed.`, {
+          class: 'error-toast',
+          duration: 5000,
+          type: 'error',
+          position: 'top-center',
+        });
+      }else{
+        var agreement = {
         contractType : this.$store.getters.contractData.contractType,
         fileName : this.$store.getters.contractData.fileName,
         sign: data,
@@ -138,6 +151,8 @@ export default {
       this.signAgreement(agreement);
       this.loading = 'loading';
       this.disable = true;
+      }
+      
     },
     undo() {
       this.$refs.signaturePad.undoSignature();

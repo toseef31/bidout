@@ -3,13 +3,13 @@
     <v-main>
       <section class="section-container fill-height">
         <Navbar></Navbar>
-        <v-row class="mx-0">
+        <div class="mx-0 d-flex">
           <v-col :class="[ showSideBar ? 'col-12' : 'toggleLeft-sidebar']" class="left-sidebar pr-1">
             <LeftSidebar></LeftSidebar>
           </v-col>
           
           <router-view :key="$route.path" />
-        </v-row>
+        </div>
       </section>
     </v-main>
   </v-app>

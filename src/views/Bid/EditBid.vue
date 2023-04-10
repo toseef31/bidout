@@ -1,145 +1,147 @@
 <template>
-  <div class="createBid-module content-section fill-height d-flex justify-center align-center"  v-if="loading">
-    <v-progress-circular :width="3" color="green" indeterminate ></v-progress-circular>
-  </div>
-  <v-col
-    class="createBid-module pa-0 pa-sm-3 pl-sm-0"
-    :class="[
-      showSideBar ? 'col-md-9 col-12 col-sm-7' : 'mid-content-collapse',
-      activityPanel ? 'd-sm-block' : 'd-md-block',
-    ]"
-    v-show="!activityPanel" v-else
-  >
-    <div class="mid-content">
-      <div class="content-section fill-height pa-0">
-        <v-row
-          align="center"
-          justify="space-between"
-          no-gutters
-          class="px-2 px-sm-6 my-4 not-completd-title"
-        >
-          <v-col cols="12" md="5" class="text-left">
-            <div class="d-flex align-center">
-              <h3 class="pl-1 mr-4">{{ bidTitle }}</h3>
-              <!-- <p class="preview-text mb-0 ml-3">
-                  <a href="" class="text-decoration-none"><v-icon color="#0D9648" class="pr-2">mdi-open-in-new</v-icon>Preview Bid in Supplier View</a>
-                </p> -->
-            </div>
-          </v-col>
-          <v-col cols="12" md="7" class="text-right">
-            <div class="d-flex align-center justify-end">
-              <!-- <p class="mb-0 mr-4 auto-text" v-if="draftTime">
-                <strong>Autosaved Draft:</strong> {{ draftTime }}
-              </p> -->
-              <v-btn
-                color="#0D9648"
-                :disabled="!bidDetailsComplete || !lineItemsComplete ? true : false"
-                class="white--text text-capitalize publish-btn"
-                width="250px"
-                height="52px"
-                large
-                @click="publishBid"
-              >
-                Save Bid
-              </v-btn>
-            </div>
-          </v-col>
-        </v-row>
-        <div class="bidtabs-section">
-          <v-tabs
-            v-model="currentItem"
-            class="bids-tabs"
-            fixed-tabs
-            hide-slider
-           
+  <v-row class="createBid-module pa-0 ma-0">
+    <v-col  class="pa-0 pr-sm-3"
+      :class="[
+        showSideBar ? 'col-md-12 col-12 col-sm-12' : 'mid-content-collapse',
+        activityPanel ? 'd-sm-block' : 'd-md-block',
+      ]"
+      v-show="!activityPanel"
+    >
+      <div class="mid-content">
+        <div class="content-section fill-height pa-0 d-flex align-center justify-center" v-if="loading">
+          <v-progress-circular :width="3" color="green" indeterminate ></v-progress-circular>
+        </div>
+        <div class="content-section fill-height pa-0" v-else>
+          <v-row
+            align="center"
+            justify="space-between"
+            no-gutters
+            class="px-2 px-sm-6 my-4 not-completd-title"
           >
-            <v-tab
-              v-for="(item, index) in tabs"
-              :key="item.value"
-              :href="'#tab-' + item.value"
-              class="text-capitalize black--text font-weight-bold"
-              @click="updateDraft"
-            >
-              {{ item.text }} {{ item.index }}
-
-              <template v-if="index === 0">
-                <v-icon
-                  small
-                  right
-                  v-if="validate == true && value == item.value"
+            <v-col cols="12" md="5" class="text-left">
+              <div class="d-flex align-center">
+                <h3 class="pl-1 mr-4">{{ bidTitle }}</h3>
+                <!-- <p class="preview-text mb-0 ml-3">
+                    <a href="" class="text-decoration-none"><v-icon color="#0D9648" class="pr-2">mdi-open-in-new</v-icon>Preview Bid in Supplier View</a>
+                  </p> -->
+              </div>
+            </v-col>
+            <v-col cols="12" md="7" class="text-right">
+              <div class="d-flex align-center justify-end">
+                <!-- <p class="mb-0 mr-4 auto-text" v-if="draftTime">
+                  <strong>Autosaved Draft:</strong> {{ draftTime }}
+                </p> -->
+                <v-btn
                   color="#0D9648"
-                  >mdi-check-circle-outline</v-icon
+                  :disabled="!bidDetailsComplete || !lineItemsComplete ? true : false"
+                  class="white--text text-capitalize publish-btn"
+                  width="250px"
+                  height="52px"
+                  large
+                  @click="publishBid"
+                  :loading="saveLoading"
                 >
-                <v-icon right small color="#F32349" v-else>
-                  {{ item.icon }}
-                </v-icon>
-              </template>
-
-              <template v-if="index === 3">
-                <v-icon
-                  small
-                  right
-                  v-if="itemsValid == true && itemsValue == item.value"
-                  color="#0D9648"
-                  >mdi-check-circle-outline</v-icon
-                >
-                <v-icon right small color="#F32349" v-else>
-                  {{ item.icon }}
-                </v-icon>
-              </template>
-            </v-tab>
-          </v-tabs>
-          <v-tabs-items v-model="currentItem">
-            <v-tab-item value="tab-1">
-              <edit-bid-details
-                @changetab="ChangeT($event)"
-                @validation="validateValue($event)"
-              ></edit-bid-details>
-            </v-tab-item>
-            <v-tab-item value="tab-2">
-              <EditSupplierSection
-                @changetab="ChangeT($event)"
-                @validation="validateSupplier($event)"
-              ></EditSupplierSection>
-            </v-tab-item>
-            <v-tab-item value="tab-3">
-              <edit-team-members
-                @changetab="ChangeT($event)"
-                @validation="validateTeam($event)"
-              ></edit-team-members>
-            </v-tab-item>
-            <v-tab-item
-
-              value="tab-4"
-              class="bidline-tab"
+                  Save Bid
+                </v-btn>
+              </div>
+            </v-col>
+          </v-row>
+          <div class="bidtabs-section">
+            <v-tabs
+              v-model="currentItem"
+              class="bids-tabs"
+              fixed-tabs
+              hide-slider
+             
             >
-              <edit-bid-lines
-                @changetab="ChangeT($event)"
-                @validation="validateItems($event)"
-              ></edit-bid-lines>
-            </v-tab-item>
-            <v-tab-item
+              <v-tab
+                v-for="(item, index) in tabs"
+                :key="item.value"
+                :href="'#tab-' + item.value"
+                class="text-capitalize black--text font-weight-bold"
+                @click="updateDraft"
+              >
+                {{ item.text }} {{ item.index }}
 
-              value="tab-5"
-              class="attachment-tab mt-5"
-            >
-              <edit-attachment
-                @changetab="ChangeT($event)"
-                @validation="validateAttachment($event)"
-              ></edit-attachment>
-            </v-tab-item>
-            <v-tab-item
+                <template v-if="index === 0">
+                  <v-icon
+                    small
+                    right
+                    v-if="validate == true && value == item.value"
+                    color="#0D9648"
+                    >mdi-check-circle-outline</v-icon
+                  >
+                  <v-icon right small color="#F32349" v-else>
+                    {{ item.icon }}
+                  </v-icon>
+                </template>
 
-              value="tab-6"
-              class="question-tab mt-5"
-            >
-              <edit-question-section2></edit-question-section2>
-            </v-tab-item>
-          </v-tabs-items>
+                <template v-if="index === 3">
+                  <v-icon
+                    small
+                    right
+                    v-if="itemsValid == true && itemsValue == item.value"
+                    color="#0D9648"
+                    >mdi-check-circle-outline</v-icon
+                  >
+                  <v-icon right small color="#F32349" v-else>
+                    {{ item.icon }}
+                  </v-icon>
+                </template>
+              </v-tab>
+            </v-tabs>
+            <v-tabs-items v-model="currentItem">
+              <v-tab-item value="tab-1">
+                <edit-bid-details
+                  @changetab="ChangeT($event)"
+                  @validation="validateValue($event)"
+                ></edit-bid-details>
+              </v-tab-item>
+              <v-tab-item value="tab-2">
+                <EditSupplierSection
+                  @changetab="ChangeT($event)"
+                  @validation="validateSupplier($event)"
+                ></EditSupplierSection>
+              </v-tab-item>
+              <v-tab-item value="tab-3">
+                <edit-team-members
+                  @changetab="ChangeT($event)"
+                  @validation="validateTeam($event)"
+                ></edit-team-members>
+              </v-tab-item>
+              <v-tab-item
+
+                value="tab-4"
+                class="bidline-tab"
+              >
+                <edit-bid-lines
+                  @changetab="ChangeT($event)"
+                  @validation="validateItems($event)"
+                ></edit-bid-lines>
+              </v-tab-item>
+              <v-tab-item
+
+                value="tab-5"
+                class="attachment-tab mt-5"
+              >
+                <edit-attachment
+                  @changetab="ChangeT($event)"
+                  @validation="validateAttachment($event)"
+                ></edit-attachment>
+              </v-tab-item>
+              <v-tab-item
+
+                value="tab-6"
+                class="question-tab mt-5"
+              >
+                <edit-question-section2></edit-question-section2>
+              </v-tab-item>
+            </v-tabs-items>
+          </div>
         </div>
       </div>
-    </div>
-  </v-col>
+    </v-col>
+  </v-row>
 </template>
 <script>
 import { mapGetters, mapActions,mapState } from 'vuex';
@@ -197,10 +199,11 @@ export default {
       attachValue: '',
       questionValid: '',
       questionValue: '',
+      saveLoading: false,
     };
   },
   computed: {
-    ...mapGetters(['lineItemsComplete', 'bidDetailsComplete']),
+    ...mapGetters(['lineItemsComplete', 'bidDetailsComplete','isEditBidChanges']),
     showSideBar() {
       return this.$store.getters.g_sideBarOpen;
     },
@@ -238,7 +241,6 @@ export default {
       this.bidTitle = event.bidTitle;
     },
     validateSupplier(event) {
-      console.log(event);
       this.supplierValid = event.valid;
       this.supplierValue = event.supplier;
     },
@@ -251,22 +253,26 @@ export default {
       this.itemsValue = event.items;
     },
     validateAttachment(event) {
-      console.log(event);
+     
       this.attachValid = event.valid;
       this.attachValue = event.attach;
     },
     async publishBid() {
+      this.saveLoading = true;
       try {
         await this.publishUpdateBid({serial:this.$route.params.serial});
         this.$router.push(`/view-bids/${this.$route.params.serial}`);
         this.$store.commit('setDraftBidsList', null);
-        // this.$store.commit('setBidData', null);
+        
       } catch (error) {
         console.log(error);
       }
+      this.saveLoading = false;
     },
     async updateDraft(){
-      await this.updateBid({'supplier': this.$store.state.bid.invitedSuppliers});
+			if(this.isEditBidChanges == true){
+        await this.updateBid({'supplier': this.$store.state.bid.invitedSuppliers});
+      }
     }
   },
   async created(){
@@ -275,8 +281,7 @@ export default {
   mounted() {
     document.title = 'Create Bid - BidOut';
     this.users = this.userDatas;
-    console.log(this.$route.params.serial,'ddd',this.userDatas.id)
-    
+    this.$store.commit('setIsEditBidChanges',false);
   },
 };
 </script>

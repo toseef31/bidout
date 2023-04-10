@@ -3,10 +3,12 @@
 </template>
 
 <script>
+import LogRocket from 'logrocket';
+import store from '@/store';
 export default {
   name: 'Settings',
   metaInfo: {
-    // title: 'BidOut – Oil & Gas Procurement Platform',
+    
     meta: [
       {
         vmid: 'title',
@@ -26,17 +28,28 @@ export default {
       timer: null,
     };
   },
+  computed: {
+    userData() {
+      if(this.$store.getters.userInfo){
+        return this.$store.getters.userInfo;
+      }
+    },
+  },
+  watch: {
+    userData(user) {
+      if(user){
+        LogRocket.identify(user.id, {
+          name: `${user.firstName} ${user.lastName}`,
+          email: user.email,
+        });
+      }
+      
+    },
+  },
   mounted() {
     this.timer = setInterval(() => {
       this.$store.dispatch('refreshToken');
     }, 3480000);
-    // window.addEventListener('beforeunload', () => { 
-    //   localStorage.setItem('userData', JSON.stringify(this.$store.state.auth.userInfo)); 
-    // });
-    // window.addEventListener('load', (event) => {
-    //   this.$store.state.auth.userInfo = JSON.parse(localStorage.getItem('userData'));
-    //   localStorage.removeItem('userData');
-    // });
   },
   beforeDestroy() {
     clearInterval(this.timer);

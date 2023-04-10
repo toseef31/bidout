@@ -261,7 +261,7 @@
         hasErrorActive: false,
         results: {},
         emailRules: [
-          v => /.+@.+\..+/.test(v) || 'E-mail must be valid',
+          v => /^\w+([.+_-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,3})+$/.test(v) || 'E-mail must be valid',
         ],
       }
     },
@@ -429,7 +429,7 @@
           email: this.email,
           phone: this.results,
         }
-        console.log(data);
+        
         this.savePaymentsNet30(data);
         this.loading = 'loading';
         this.disable = true;

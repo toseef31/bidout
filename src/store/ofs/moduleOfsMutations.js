@@ -1,29 +1,41 @@
 export default {
-  setCatgeoryList (state, payload){
-    state.categories = payload
+  setCatgeoryList(state, payload) {
+    state.categories = payload;
   },
-  setCompanies(state, payload){
-    state.serviceCompanies = payload
+  setCompanies(state, payload) {
+    state.serviceCompanies = payload.sort((a, b) => {
+      let aHasOfsPremium = a.contracts.some(contract => contract.contractType === 'ofs-premium');
+      if (aHasOfsPremium) {
+        return -1;
+      }
+      return 1;
+    });
   },
-  setPremiumList(state, payload){
-    state.premiumCompanies = payload
+  setServiceCategory(state, payload) {
+    state.serviceCategory = payload;
   },
-  setPublicCompany(state, payload){
-    state.publicCompany = payload
+  setPremiumList(state, payload) {
+    state.premiumCompanies = payload;
   },
-  setSupplierCompany(state, payload){
-    state.supplierCompany = payload
+  setPublicCompany(state, payload) {
+    state.publicCompany = payload;
   },
-  setPageTitle(state, payload){
-    state.pageTitle = payload
+  setSupplierCompany(state, payload) {
+    state.supplierCompany = payload;
   },
-  setPageDescription(state, payload){
-    state.pageDescription = payload
+  setPageTitle(state, payload) {
+    state.pageTitle = payload;
   },
-  setLoader(state, payload){
-    state.innerLoader = payload
+  setPageDescription(state, payload) {
+    state.pageDescription = payload;
   },
-  setOrderStatus(state, payload){
-    state.orderStatus = payload
+  setLoader(state, payload) {
+    state.innerLoader = payload;
   },
-}
+  setOrderStatus(state, payload) {
+    state.orderStatus = payload;
+  },
+  setOfsLoader(state, payload) {
+    state.ofsLoader = payload;
+  },
+};

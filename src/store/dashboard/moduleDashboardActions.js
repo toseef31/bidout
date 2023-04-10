@@ -15,7 +15,7 @@ export default {
       if(state.apiCounter === 2){
         dispatch('apiSignOutAction')
       }else{
-        if(err.response.status === 403){
+        if(err.response && err.response.status === 403){
          await dispatch('refreshToken');
          state.apiCounter = 2;
          dispatch('pendingUserCount',payload);
@@ -35,7 +35,7 @@ export default {
       if(state.apiCounter === 2){
         dispatch('apiSignOutAction')
       }else{
-        if(err.response.status === 403){
+        if(err.response && err.response.status === 403){
          await dispatch('refreshToken');
          state.apiCounter = 2;
          dispatch('getPendingList',payload);
@@ -45,9 +45,9 @@ export default {
       });
   },
   manageUsers({commit,dispatch,state},payload){
-    axios.get('/company/getUsersByCompany/'+ payload)
+    const name = decodeURIComponent(payload);
+    axios.get('/company/getUsersByCompany/'+ name)
       .then(responce => {
-        console.log(responce.data);
         if(responce.status === 200){
           commit('getUsersList',responce.data)
         }
@@ -55,7 +55,7 @@ export default {
       if(state.apiCounter === 2){
         dispatch('apiSignOutAction')
       }else{
-        if(err.response.status === 403){
+        if(err.response && err.response.status === 403){
          await dispatch('refreshToken');
          state.apiCounter = 2;
          dispatch('manageUsers',payload);
@@ -75,7 +75,7 @@ export default {
         if(state.apiCounter === 2){
           dispatch('apiSignOutAction')
         }else{
-          if(err.response.status === 403){
+          if(err.response && err.response.status === 403){
            await dispatch('refreshToken');
            state.apiCounter = 2;
            dispatch('getInvitedList',payload);
@@ -99,7 +99,7 @@ export default {
       if(state.apiCounter === 2){
         dispatch('apiSignOutAction')
       }else{
-        if(err.response.status === 403){
+        if(err.response && err.response.status === 403){
          await dispatch('refreshToken');
          state.apiCounter = 2;
          dispatch('disableUser',payload);
@@ -123,7 +123,7 @@ export default {
       if(state.apiCounter === 2){
         dispatch('apiSignOutAction')
       }else{
-        if(err.response.status === 403){
+        if(err.response && err.response.status === 403){
          await dispatch('refreshToken');
          state.apiCounter = 2;
          dispatch('enableUser',payload);
@@ -146,7 +146,7 @@ export default {
       if(state.apiCounter === 2){
         dispatch('apiSignOutAction')
       }else{
-        if(err.response.status === 403){
+        if(err.response && err.response.status === 403){
          await dispatch('refreshToken');
          state.apiCounter = 2;
          dispatch('acceptPendingUser',payload);
@@ -156,19 +156,20 @@ export default {
       });
   }, 
   getActivities({commit,dispatch,state},payload){
-    
-    axios.get('/activity/getActivities/'+payload)
+    commit('setActivityList',null);
+    axios.get('/activity/getUserActivities/'+payload)
       .then(responce => {
         
         if(responce.status === 200){
           commit('setActivityList',responce.data)
           commit('setPageLoader', false);
+          
         }
     }).catch(async(err) => {
       if(state.apiCounter === 2){
         dispatch('apiSignOutAction')
       }else{
-        if(err.response.status === 403){
+        if(err.response && err.response.status === 403){
          await dispatch('refreshToken');
          state.apiCounter = 2;
          dispatch('getActivities',payload);
@@ -177,15 +178,21 @@ export default {
           console.log(err);
       })
   }, 
-  async getAllLocations({commit},payload){
-    // commit('setPageLoader',true)
-    try{
-      const res = await axios.get('/company/getCompanyLocations');
-      commit('setAllLocations',res.data)
-      // commit('setPageLoader',false)
-    }catch(err){
-      console.log(err);
-    }  
+  
+  getAllLocations({commit,dispatch}){
+    commit('setLocationLoader',true);
+    return new Promise(async (resolve, reject) => {
+      try{
+        const res = await axios.get('/company/getCompanyLocations');
+        commit('setAllLocations',res.data)
+        
+        resolve(res.data);
+      }catch(err){
+        commit('setLocationLoader',false);
+        console.log(err);
+        reject(err)
+      }
+    });
   }, 
   async getBidDashboard({commit,dispatch}, payload){
     var config = {
@@ -194,11 +201,12 @@ export default {
       },
     };
     commit('setPageLoader',true)
+    commit('setPageSubLoader',true)
     try{
       const res = await axios.get('bid/getBidList/'+payload,config);
         commit('setBidsList',res.data);
         await dispatch('getActivities',payload);
-        // commit('setPageLoader',false);
+        commit('setPageSubLoader',false);
     }catch(err){
       console.log(err);
     }

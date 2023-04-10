@@ -220,7 +220,7 @@ export default {
     addChat: _.debounce(function(){
       if(this.addChat < 1){
         this.hideList = false;
-        // this.companyInfo = true;
+        
       }else{
         this.hideList = true;
       }
@@ -228,7 +228,7 @@ export default {
     addMember: _.debounce(function(){
       if(this.addMember < 1){
         this.hideMemberList = false;
-        // this.companyInfo = true;
+        
       }else{
         this.hideMemberList = true;
       }
@@ -304,7 +304,7 @@ export default {
         type: 'PRIVATE',
         groupName: '',
       }
-      console.log(data);
+     
       this.createConversation(data);
       this.startChatDialog = false;
       this.isAddUser = false;

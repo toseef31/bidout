@@ -1,12 +1,12 @@
-import router from "@/router";
-import axios from "axios";
+import router from '@/router';
+import axios from 'axios';
 
 export default {
   getCategories({ commit }) {
     axios
-      .get("/serviceCategory/getAllCategories")
+      .get('/serviceCategory/getAllCategories')
       .then((responce) => {
-        commit("setCatgeoryList", responce.data);
+        commit('setCatgeoryList', responce.data);
       })
       .catch((err) => {
         console.log(err);
@@ -21,7 +21,7 @@ export default {
           data: responce.data,
           name: payload.service,
         };
-        commit("setCompanies", data);
+        commit('setCompanies', data);
         // router.replace(`/ofs-directory/${payload.slug}/${payload.subSlug}`);
       })
       .catch((err) => {
@@ -39,7 +39,7 @@ export default {
           name: payload.service,
           slug: payload.slug,
         };
-        commit("setCompanies", data);
+        commit('setCompanies', data);
       })
       .catch((err) => {
         console.log(err);
@@ -55,7 +55,7 @@ export default {
           name: payload.name,
           id: payload.id,
         };
-        commit("setCompanies", data);
+        commit('setCompanies', data);
       })
       .catch((err) => {
         console.log(err);
@@ -71,7 +71,7 @@ export default {
           name: payload.name,
           id: payload.id,
         };
-        commit("setCompanies", data);
+        commit('setCompanies', data);
         router.replace(`/ofs-directory/${payload.slug}`);
       })
       .catch((err) => {
@@ -79,16 +79,20 @@ export default {
       });
   },
   getCompanyByBasin({ commit }, payload) {
+    commit('setOfsLoader', true);
     axios
       .get(`/company/getCompanyByBasin/${payload.basin}/${payload.slug}`)
       .then((responce) => {
         const data = {
           data: responce.data,
         };
-        commit("setCompanies", data);
+        commit('setCompanies', responce.data.companies);
+        commit('setServiceCategory', responce.data.category);
+        commit('setOfsLoader', false);
       })
       .catch((err) => {
         console.log(err);
+        commit('setOfsLoader', false);
       });
   },
   getCompanyInfo({ commit }, payload) {
@@ -96,8 +100,8 @@ export default {
     axios
       .get(`/company/getCompanyBySlug/${payload.slug}`)
       .then((responce) => {
-        commit("setSupplierCompany", responce.data);
-        commit('setPageTitle', responce.data.companyData.company+' - '+responce.data.companyData.companyHq+' - BidOut Profile');
+        commit('setSupplierCompany', responce.data);
+        commit('setPageTitle', `${responce.data.companyData.company} - ${responce.data.companyData.companyHq} - BidOut Profile`);
         commit('setPageDescription', responce.data.companyData.overview);
         commit('setPageLoader', false);
       })
@@ -110,8 +114,8 @@ export default {
     axios
       .get(`/company/getCompanyBySlug/${payload.slug}`)
       .then((responce) => {
-        commit("setPublicCompany", responce.data);
-        commit('setPageTitle', responce.data.companyData.company+' - '+responce.data.companyData.companyHq+' - BidOut Profile');
+        commit('setPublicCompany', responce.data);
+        commit('setPageTitle', `${responce.data.companyData.company} - ${responce.data.companyData.companyHq} - BidOut Profile`);
         commit('setPageDescription', responce.data.companyData.overview);
         commit('setPageLoader', false);
       })
@@ -121,9 +125,9 @@ export default {
   },
   getPremiumCompanies({ commit }, payload) {
     axios
-      .get("admin/getPremiumCompanies")
+      .get('admin/getPremiumCompanies')
       .then((responce) => {
-        commit("setPremiumList", responce.data);
+        commit('setPremiumList', responce.data);
       })
       .catch((err) => {
         console.log(err);
@@ -133,27 +137,27 @@ export default {
     axios
       .get(`/ofs/searchSuppliers/${payload}`)
       .then((responce) => {
-        commit("setCompanies", responce.data.hits);
+        commit('setCompanies', responce.data.hits);
       })
       .catch((err) => {
         console.log(err);
       });
   },
-  async placeOrder({commit, dispatch,state}, payload){
+  async placeOrder({ commit, dispatch, state }, payload) {
     try {
-      const res = await axios.post('order/placeOrder',{
-        'companyId': payload.companyId,
-        'companyName': payload.companyName,
-        'content': payload.content,
-        'buyerId': payload.buyerId,
-      }); 
-       if(res.status == 200){
-        router.replace(`/confirm-order/${payload.slug}`)
-        commit('setOrderStatus',true);
-       }else{
-        commit('setOrderStatus',false);
-       }
-     }catch(err){
+      const res = await axios.post('order/placeOrder', {
+        companyId: payload.companyId,
+        companyName: payload.companyName,
+        content: payload.content,
+        buyerId: payload.buyerId,
+      });
+      if (res.status == 200) {
+        router.replace(`/confirm-order/${payload.slug}`);
+        commit('setOrderStatus', true);
+      } else {
+        commit('setOrderStatus', false);
+      }
+    } catch (err) {
       console.log(err);
     }
   },

@@ -1,6 +1,6 @@
 .dashboard-module{
-	flex: 0 0 78%;
-	max-width: 78%;
+	/*flex: 0 0 78%;
+	max-width: 78%;*/
 	min-height: calc(100vh - 110px);
 	.mid-content{
 		flex: 0 0 100%;
@@ -36,6 +36,9 @@
 				border: 1px solid #F2F2F2;
 			}
 			.bids-table {
+				.v-data-table__wrapper{
+					/*height: 336px;*/
+				}
 				table tbody tr:nth-of-type(even) {
 			   	background-color: #F2F2F2;
 			 	}
@@ -43,9 +46,6 @@
 			   	color: #959595;
 			    font-weight: 600;
 			    font-size: 14px;
-			    &:nth-child(4){
-			    	width: 150px;
-			    }
 			 	}
 				table tbody tr td {
 			   	color: #0D1139;
@@ -59,7 +59,7 @@
 			 	tbody{
 			 		tr{
 			 			.title-truncate{
-			 				min-width: 268px;
+			 				min-width: 180px;
 			 				max-width: 268px;
 	 				    white-space: nowrap;
 	 				    overflow: hidden;
@@ -67,19 +67,16 @@
 			 			}
 			 			td{
 			 				border-bottom: 0 !important;
+			 				height: 36px;
 			 				&:nth-child(1){
 			 					min-width: 68px;
 			 					max-width: 68px;
 			 				}
 			 				&:nth-child(3){
-			 					min-width: 60px;
-			 					max-width: 60px;
+			 					min-width: 141px;
+			 					max-width: 145px;
 			 				}
 			 				&:nth-child(4){
-			 					min-width: 150px;
-			 					max-width: 150px;
-			 				}
-			 				&:nth-child(5){
 			 					min-width: 75px;
 			 				}
 			 			}
@@ -112,20 +109,89 @@
 		.map-section{
 			border: 1px solid #B8B8B8;
 	    border-radius: 8px;
+	    /*height: 415px;
+	    min-height: calc(100vh - 309px);*/
+	    height: 142px;
+    	min-height: calc(100vh - 455px);
 	    .map{
-	    	height: 415px;
+	    	height: 100%;
 	    }
 	    img{
 	    	height: 100%;
 	    }
 		}
+    .map-section-pend{
+      min-height: calc(100vh - 535px);
+    }
+		.map-section-1{
+			min-height: calc(100vh - 275px);
+		}
+    .map-section-pend-1{
+      min-height: calc(100vh - 355px);
+    }
+		.map-section-2{
+			min-height: calc(100vh - 311px);
+		}
+    .map-section-pend-2{
+      min-height: calc(100vh - 391px);
+    }
+		.map-section-3{
+			min-height: calc(100vh - 347px);
+		}
+    .map-section-pend-3{
+      min-height: calc(100vh - 427px);
+    }
+		.map-section-4{
+			min-height: calc(100vh - 383px);
+		}
+    .map-section-pend-4{
+      min-height: calc(100vh - 463px);
+    }
+		.map-section-5{
+			min-height: calc(100vh - 420px);
+		}
+    .map-section-pend-5{
+      min-height: calc(100vh - 500px);
+    }
 	}
 	.mid-content-collapse{
-			flex: 0 0 67%;
-		  max-width: 67%;
+			flex: 0 0 100%;
+		  max-width: 100%;
 	}
 	.v-select__selection--comma{
 		color: #fff;
+	}
+	.right-col{
+		flex: 0 0 20em !important;
+		max-width: 20em !important;
+		height: calc(100vh - 104px) !important;
+	}
+	.mobile-right-col{
+		flex: 0 0 100%;
+	  max-width: 100%;
+	}
+}
+@media(max-width: 1285px) and (min-width: 1160px){
+  .dashboard-module{
+    .right-col{
+			flex: 0 0 18em !important;
+			max-width: 18em !important;
+		}
+  }
+}
+@media (min-width:950px) and (max-width:1160px) {
+  .dashboard-module{
+    .right-col{
+			flex: 0 0 15em !important;
+			max-width: 15em !important;
+		}
+	}
+}
+@media (min-width:769px) and (max-width:949px) {
+  .dashboard-module{
+    .right-col{
+    	display: none;
+		}
 	}
 }
 @media (max-width: 768px) {
@@ -146,6 +212,15 @@
 				border: 0;
 				border-radius:0;
 			}
+			.bids-table {
+				.v-data-table__wrapper{
+					height: auto !important;
+				}
+			}
+		}
+		.right-col{
+			flex: 0 0 100% !important;
+			max-width: 100% !important;
 		}
 	}
 	/*.activity-section{

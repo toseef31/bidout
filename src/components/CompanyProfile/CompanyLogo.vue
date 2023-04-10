@@ -1,7 +1,7 @@
 <template>
   <v-container class="pa-sm-10 pa-4">
-    <v-row>
-      <v-col cols="8" sm="6" class="pt-10 text-left">
+    <v-row class="company-logo-row">
+      <v-col cols="12" sm="6" class="pt-10 text-left">
         <label class="d-block text-left input-label">Company's Logo</label>
         
         <v-dialog
@@ -13,7 +13,7 @@
               Crop Image
             </v-card-title>
             <v-card-text>
-              <vue-croppie ref="croppieRef" :showZoomer="true" :enableOrientation="true" :enableResize="false" :boundary="{ width: 600, height: 350}" :viewport="{ width:450, height:120, 'type':'square' }">
+              <vue-croppie ref="croppieRef" :showZoomer="true" :enableOrientation="true" :enableResize="false" :enforceBoundary="false" :boundary="{ width: 600, height: 350}" :viewport="{ width:450, height:120, 'type':'square' }">
               </vue-croppie>
             </v-card-text>
 
@@ -35,7 +35,7 @@
         <!-- the result -->
         <img :src="companyData.image">
       </v-col>
-      <v-col cols="4" sm="6" class="pt-10 mt-4 btn-col pl-0 d-flex align-center justify-end">
+      <v-col cols="12" sm="6" class="pt-sm-10 mt-sm-4 btn-col pl-0 d-flex align-center justify-end">
         <label for="logo-input" class="text-capitalize mr-2 white--text add-logo d-flex align-center font-weight-bold justify-center">Add Image
           <input type="file" accept="image/*" class="logo-input d-none" id="logo-input" @change="croppie($event)">
         </label>
@@ -67,7 +67,7 @@ export default {
     ...mapActions(["companyProfileImg"]),
     croppie (e) {
       var files = e.target.files || e.dataTransfer.files;
-      // alert(files);
+      
       if (!files.length) return;
       this.logoName = files[0].name;
       this.dialog = true;

@@ -18,6 +18,7 @@
     "material-design-icons": "^3.0.1",
     "moment-timezone": "^0.5.37",
     "timezones-list": "^3.0.1",
+    "unplugin-vue-components": "^0.22.9",
     "uuid": "^9.0.0",
     "vite-plugin-vue2": "^1.4.0",
     "vue": "^2.6.12",
@@ -34,21 +35,24 @@
     "vue-router": "^3.5.2",
     "vue-signature-pad": "2.0.5",
     "vue-slick-carousel": "^1.0.6",
+    "vue-tel-input": "^5.12.0",
     "vue-toasted": "^1.1.28",
     "vue2-dropzone": "^3.6.0",
+    "vue2-editor": "^2.10.3",
     "vuedraggable": "^2.24.3",
     "vuetify": "^2.5.8",
     "vuex": "^3.6.2",
+    "xlsx": "^0.18.5",
     "yarn": "^1.22.19"
   },
   "devDependencies": {
+    "@types/vue2-editor": "^2.6.1",
     "eslint": "7.32.0",
     "eslint-config-airbnb-base": "^14.2.1",
     "eslint-import-resolver-alias": "^1.1.2",
     "eslint-plugin-import": "^2.24.2",
     "eslint-plugin-vue": "7.16.0",
     "sass": "1.32.13",
-    "unplugin-vue-components": "^0.22.9",
     "vite": "^2.6.13",
     "vue-template-compiler": "^2.6.14"
   }

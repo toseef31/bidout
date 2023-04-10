@@ -1,64 +1,54 @@
 <template>
   <v-row fill-height align="center" class="loading-chat" v-if="isLoading">
     <v-col cols="12">
-      <v-progress-circular
-        :width="3"
-        color="green"
-        indeterminate
-      ></v-progress-circular>
+      <v-progress-circular :width="3" color="green" indeterminate></v-progress-circular>
     </v-col>
   </v-row>
   <v-row class="bid-chat-row mt-2" fill-height no-gutters v-else>
 
-    <div v-if="conversationsList.length ===0 && getUserType === 'buyer'" class="text-center c-title-detail">There are currently no suppliers included on this bid, please <router-link to="#" class="text-decoration-underline">edit this bid </router-link> to add suppliers to begin chat conversations. </div>
+    <div v-if="conversationsList.length === 0 && getUserType === 'buyer'" class="text-center c-title-detail">There are
+      currently no suppliers included on this bid, please <router-link to="#" class="text-decoration-underline">edit
+        this bid </router-link> to add suppliers to begin chat conversations. </div>
 
-    <div v-if="conversationsList.length ===0 && getUserType === 'supplier'" class="text-center c-title-detail">
+    <div v-if="conversationsList.length === 0 && getUserType === 'supplier'" class="text-center c-title-detail">
       Only the buyer can initiate chat message, once initiated by the buyer,
-you will be able to see the message here.
+      you will be able to see the message here.
     </div>
 
-    <v-col v-if="conversationsList.length > 0" cols="12" sm="5" md="5" class="available-data" >
+    <v-col v-if="conversationsList && conversationsList.length > 0" cols="12" sm="5" md="5" class="available-data">
       <v-list two-line class="pb-0">
-      <v-list-item-group v-model="selectedUser" active-class="grey--text">
-        <v-list-item
-          v-for="(list, index) in conversationsList"
-          @click="openChat(list)"
-          :class="{
+        <v-list-item-group v-model="selectedUser" active-class="grey--text">
+          <v-list-item v-for="(list, index) in conversationsList" @click="openChat(list)" :class="{
             'grey--text v-list-item--active':
-              list._id === chatData.conversation._id,
-          }"
-          :key="index"
-        >
-          <template>
-            <img
-              v-if="list.company && list.company.image"
-              width="88"
-              height="auto"
-              class="img-class"
-              :src=" list.company.image"
-            />
-            <v-list-item-icon v-else align-center>
-              <v-icon size="40">mdi-domain</v-icon>
-            </v-list-item-icon>
-            <v-list-item-content align-center>
-              <v-list-item-title v-text="(list.name || list.company.company.split('|||')[0])"></v-list-item-title>
-              <v-list-item-subtitle>
-                <router-link :to="list.company && list.company.slug ? '/company/'+list.company.slug: ''" class="text-decoration-underline"
-                  >View Profile</router-link
-                ></v-list-item-subtitle
-              >
-            </v-list-item-content>
+              list._id === conversationId,
+          }" :key="index">
+            <template>
+              <v-img v-if="list.company && list.company.image" max-height="26.67px" max-width="100px" width="100px"
+                :src="list.company.image" />
+              <div v-else class="icon-class">
+                <v-icon size="40">mdi-domain</v-icon>
+              </div>
 
-            <v-list-item-action>
-                    <v-list-item-action-text>{{list.latestMessage ? istoday(list.latestMessage) : istoday(list.updatedAt)}}</v-list-item-action-text>
-                  </v-list-item-action>
-          </template>
-        </v-list-item>
-      </v-list-item-group>
-    </v-list>
+              <v-list-item-content align-center>
+                <v-list-item-title v-text="getName(list)"></v-list-item-title>
+                <v-list-item-subtitle v-if="checkIfCompanyOfs(list.company)">
+                  <router-link :to="list.company && list.company.slug ? '/company/' + list.company.slug : ''"
+                    class="text-decoration-underline">View Profile</router-link></v-list-item-subtitle>
+              </v-list-item-content>
+
+              <v-list-item-action>
+                <v-list-item-action-text>{{
+                  list.latestMessage ? istoday(list.latestMessage) :
+                  istoday(list.updatedAt)
+                }}</v-list-item-action-text>
+              </v-list-item-action>
+            </template>
+          </v-list-item>
+        </v-list-item-group>
+      </v-list>
     </v-col>
 
-    <v-col cols="12" sm="7" md="7" v-if="conversationsList.length !==0" class="d-sm-block">
+    <v-col cols="12" sm="7" md="7" v-if="conversationsList.length !== 0" class="d-sm-block">
       <div class="message-area">
         <div class="msg-header px-5 pb-5">
           <v-row align="center">
@@ -66,22 +56,18 @@ you will be able to see the message here.
               <div class="company-title text-left" v-if="chatData">
                 <h4>{{ getConversationName(chatData.conversation) }}</h4>
 
-                <p class="mb-0">
-                  <router-link :to="(chatData.conversation.company && chatData.conversation.company.slug ? '/company/'+ chatData.conversation.company.slug: '')" class="text-decoration-underline">View Profile</router-link>
+                <p class="mb-0" v-if="checkIfCompanyOfs(chatData.conversation.company)">
+                  <router-link
+                    :to="(chatData.conversation.company && chatData.conversation.company.slug ? '/company/' + chatData.conversation.company.slug : '')"
+                    class="text-decoration-underline">View Profile</router-link>
                 </p>
               </div>
             </v-col>
             <v-col cols="12" md="6">
               <div class="msg-options d-flex mt-2 justify-end">
                 <div class="search">
-                  <v-text-field
-                    v-model="searchMessage"
-                    type="text"
-                    align-center
-                    outlined
-                    class="pt-0 mt-0"
-                    placeholder="Search this conversation"
-                  >
+                  <v-text-field v-model="searchMessage" type="text" align-center outlined class="pt-0 mt-0"
+                    placeholder="Search this conversation">
                     <template v-slot:prepend>
                       <v-icon>mdi-magnify</v-icon>
                     </template>
@@ -97,24 +83,11 @@ you will be able to see the message here.
           </v-row>
         </div>
         <div class="messages-section" ref="messagesSection">
-          <vue-dropzone
-            ref="myVueDropzone"
-            :class="{ dropzoneActive: uploadDrag }"
-            @ondragleave="dragLeave(event)"
-            id="dropzone"
-            @vdropzone-success="afterComplete"
-            v-on:vdropzone-sending="dragfileupload"
-            :options="dropzoneOptions"
-            @dragstart="startDrag($event, item)"
-            acceptedFiles="image/*,application/pdf"
-          >
+          <vue-dropzone ref="myVueDropzone" :class="{ dropzoneActive: uploadDrag }" @ondragleave="dragLeave(event)"
+            id="dropzone" @vdropzone-success="afterComplete" v-on:vdropzone-sending="dragfileupload"
+            :options="dropzoneOptions" @dragstart="startDrag($event, item)" acceptedFiles="image/*,application/pdf">
           </vue-dropzone>
-          <v-list
-            two-line
-            class="own-user message-list"
-            v-for="message in messagesList"
-            :key="message._id"
-          >
+          <v-list two-line class="own-user message-list" v-for="message in messagesList" :key="message._id">
             <v-list-item-group>
               <template>
                 <v-list-item class="text-left px-5" active-class="white--text">
@@ -124,30 +97,44 @@ you will be able to see the message here.
                         message.sender.name
                       }}</v-list-item-title>
                       <template v-if="message.attachment">
-                        <a
-                          :href="message.attachment"
-                          target="_blank"
-                          v-if="get_url_extension(message.attachment) == 'pdf'"
-                          ><v-img
-                            :src="require('@/assets/images/chat/pdf.jpg')"
-                            max-height="50px"
-                            max-width="50px"
-                            class="mt-2"
-                          ></v-img
-                        ></a>
-                        <v-img
-                          v-else
-                          :src="message.attachment"
-                          max-height="125px"
-                          max-width="245px"
-                          class="mt-2"
-                        ></v-img>
+                        <a :href="message.attachment" target="_blank"
+                          v-if="get_url_extension(message.attachment) == 'pdf'"><v-img
+                            :src="require('@/assets/images/chat/pdf.jpg')" max-height="50px" max-width="50px"
+                            class="mt-2"></v-img></a>
+                        <a :href="message.attachment" target="_blank"
+                          v-else-if="get_url_extension(message.attachment) == 'xlsx' || get_url_extension(message.attachment) == 'xls' || get_url_extension(message.attachment) == 'csv'"><v-img
+                            :src="require('@/assets/images/chat/excel.png')" max-height="50px" max-width="50px"
+                            class="mt-2"></v-img></a>
+                        <a :href="message.attachment" target="_blank"
+                          v-else-if="get_url_extension(message.attachment) == 'doc' || get_url_extension(message.attachment) == 'docx' || get_url_extension(message.attachment) == 'txt'"><v-img
+                            :src="require('@/assets/images/chat/doc.png')" max-height="50px" max-width="50px"
+                            class="mt-2"></v-img></a>
+                        <a :href="message.attachment" target="_blank"
+                          v-else-if="get_url_extension(message.attachment) == 'ppt' || get_url_extension(message.attachment) == 'pptx'"><v-img
+                            :src="require('@/assets/images/chat/ppt.png')" max-height="50px" max-width="50px"
+                            class="mt-2"></v-img></a>
+                        <a :href="message.attachment" target="_blank"
+                          v-else-if="get_url_extension(message.attachment) == 'zip' || get_url_extension(message.attachment) == 'rar' || get_url_extension(message.attachment) == 'tar' || get_url_extension(message.attachment) == '7z' || get_url_extension(message.attachment) == 'gz'"><v-img
+                            :src="require('@/assets/images/chat/zip.png')" max-height="50px" max-width="50px"
+                            class="mt-2"></v-img></a>
+                        <video class="chat-video"
+                          v-else-if="get_url_extension(message.attachment) == 'mp4' || get_url_extension(message.attachment) == 'webm' || get_url_extension(message.attachment) == 'mov' || get_url_extension(message.attachment) == 'avi'"
+                            :src="message.attachment"
+                            :autoplay="false"
+                            :controls="true"
+                            :loop="true"
+                            height="300"
+                            :style="{ width: '500px' }"
+                          ></video>
+                        <a :href="message.attachment" target="_blank" v-else>
+                          <v-img :src="message.attachment" max-height="125px" max-width="245px" class="mt-2"></v-img>
+                        </a>
                       </template>
                       <v-list-item-subtitle class="text--primary">{{
                         message.content
                       }}</v-list-item-subtitle>
                     </v-list-item-content>
-                    <v-list-item-action class="mt-n6">
+                    <v-list-item-action>
                       <v-list-item-action-text>{{
                         istoday(message.updatedAt)
                       }}</v-list-item-action-text>
@@ -163,43 +150,17 @@ you will be able to see the message here.
           <v-row>
             <v-col cols="12" sm="10" md="10">
               <div class="msg-text-box">
-                <v-textarea
-                  solo
-                  name="input-7-4"
-                  placeholder="Message here ..."
-                  rows="3"
-                  v-model="message"
-                  @keyup.enter="messageSend"
-                ></v-textarea>
+                <v-textarea solo name="input-7-4" placeholder="Message here ..." rows="3" v-model="message"
+                  @keyup.enter="messageSend"></v-textarea>
               </div>
             </v-col>
             <v-col cols="12" sm="2" md="2">
               <div class="msg-send-btn mb-2">
-                <v-btn
-                  block
-                  tile
-                  height="43px"
-                  color="#0D9648"
-                  @click="messageSend"
-                  >Send</v-btn
-                >
-                <label
-                  for="attach-file"
-                  class="mt-2 attach-btn d-flex justify-center align-center"
-                >
-                  <input
-                    id="attach-file"
-                    type="file"
-                    class="d-none"
-                    truncate-length="8"
-                    ref="msgFile"
-                    @change="fileUpload"
-                  />
-                  <v-img
-                    :src="require('@/assets/images/chat/attach.png')"
-                    max-width="28px"
-                    height="32px"
-                  ></v-img>
+                <v-btn block tile height="43px" color="#0D9648" @click="messageSend">Send</v-btn>
+                <label for="attach-file" class="mt-2 attach-btn d-flex justify-center align-center">
+                  <input id="attach-file" type="file" class="d-none" truncate-length="8" ref="msgFile"
+                    @change="fileUpload" />
+                  <v-img :src="require('@/assets/images/chat/attach.png')" max-width="28px" height="32px"></v-img>
                 </label>
               </div>
             </v-col>
@@ -260,20 +221,13 @@ export default {
       return this.pageLoading;
     },
     conversationsList() {
-      const bidConvo = this.$store.getters.bidConversations;
-
-      const name = [];
-
-      for (let i = 0; i < bidConvo.length; i++) {
-        name[i] = bidConvo[i].name && bidConvo[i].name.split('|||').find((el) => el.trim() !== this.user.company.company);
-
-        bidConvo[i].name = name[i] && name[i].trim();
-      }
-      return _.orderBy(
-        bidConvo,
-        'latestMessage',
-        'desc',
-      );
+      if (this.$store.getters.bidConversations) {
+        return _.orderBy(
+          this.$store.getters.bidConversations,
+          'latestMessage',
+          'desc',
+        );
+      } return [];
     },
     getUserType() {
       return this.$store.getters.userType;
@@ -281,12 +235,13 @@ export default {
   },
   methods: {
     ...mapActions(['getAllMessages', 'lastMessageRead', 'sendMessage', 'getBidAllConversations']),
-
+    getName(conversation) {
+      return conversation.name.split('|||').find((el) => el.trim() !== this.user.company.company);
+    },
     openChat(conversation) {
       this.chatData = {
         conversation,
       };
-
       this.conversationId = conversation._id;
       const ids = {
         userId: this.user.id,
@@ -397,13 +352,18 @@ export default {
       }
       return conversation.name;
     },
+    checkIfCompanyOfs(company) {
+      if (company && company.contracts) {
+        return company.contracts.find((contract) => contract.contractType === 'ofs' || contract.contractType === 'ofs-premium');
+      }
+      return false;
+    },
   },
-  beforeMount() {
+  async created() {
     this.user = this.$store.getters.userInfo;
     this.bidId = this.$store.getters.bidViewData.bidData.id;
-  },
-  async mounted() {
-    await this.getBidAllConversations(this.bidId);
+    await this.getBidAllConversations({ bidId: this.bidId, userId: this.user.id });
+
     this.pageLoading = false;
     const convo = await _.orderBy(
       this.$store.getters.bidConversations,
@@ -414,26 +374,6 @@ export default {
     if (convo) {
       await this.openChat(convo);
     }
-
-    document.addEventListener('dragenter', (e) => {
-      if (
-        e.target.className == 'message-area'
-        || e.target.className == 'messages-section'
-        || e.target.className == 'v-list-item__content'
-        || e.target.className == 'v-list-item__title'
-        || e.target.className
-          == 'v-list own-user message-list v-sheet theme--light v-list--two-line'
-        || e.target.className == 'v-item-group theme--light v-list-item-group'
-        || e.target.className == 'message-send-area'
-        || e.target.className == 'row'
-        || e.target.className == 'col-sm-10 col-md-10 col-12'
-        || e.target.className == 'msg-text-box'
-      ) {
-        document.getElementById('dropzone').style.display = 'block';
-      } else {
-        document.getElementById('dropzone').style.display = 'none';
-      }
-    });
   },
 };
 </script>

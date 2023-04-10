@@ -1,6 +1,7 @@
 export default {
    categories: [], 
    serviceCompanies: [], 
+   serviceCategory: [], 
    premiumCompanies:null,
    publicCompany: null,
    supplierCompany: null,
@@ -8,4 +9,5 @@ export default {
    pageDescription: null,
    innerLoader: false,
    orderStatus: false,
+   ofsLoader: false
 }

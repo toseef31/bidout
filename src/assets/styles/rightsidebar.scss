@@ -4,6 +4,9 @@
     border-radius: 8px;
     background-color: #fff;
     padding-bottom: 6px;
+    min-height: 108px;
+    max-height: calc(100vh - 297px) !important;
+    overflow: hidden;
     .title{
       flex-direction: row;
       align-items: center;
@@ -20,15 +23,26 @@
       .notification-icon{
         background-color: #F2F2F2;
         color: lightgrey;
-        font-size: 19px;
+        font-size: 17px;
         padding: 0 0;
       } 
       .v-list-item__title{
-        font-size: 12px;
+        font-size: 10px;
         line-height: 15px;
         display: flex;
         align-items: center;
         color: #000000;
+      }
+      .v-list-item__action{
+        
+        &-text{
+          font-size: 9px;
+        }
+      }
+      .v-list-item__avatar{
+        height: 30px !important;
+        min-width: 30px !important;
+        width: 30px !important;
       }
       .v-list-item--link:before{
         background-color: transparent;
@@ -54,11 +68,10 @@
   .social-section{
     background: rgba(53, 120, 177, 0.1);
     border-radius: 8px;
-    height: 106px;
     .social-text{
       font-weight: 800;
-      font-size: 19px;
-      line-height: 24px;
+      font-size: 18px;
+      line-height: 20px;
       color: #0D1139;
     }
     .follow-btn{
@@ -74,6 +87,12 @@
       line-height: 20px;
       color: #fff;
       width: 100%;
+    }
+  }
+  .calendly-section{
+    
+    .v-image{
+      border-radius: 8px;
     }
   }
 }
@@ -93,7 +112,7 @@
         margin: 0 0;
         .social-text{
           font-weight: 800;
-          font-size: 24px;
+          font-size: 20px;
           line-height: 26px
         }
         .follow-btn{
@@ -107,6 +126,9 @@
       .row:first-child{
         border-bottom: 1px solid #919191;
       }
+    }
+    .calendly-section{
+      margin: 0 0px 0 10px;
     }
   }
 }

@@ -61,5 +61,12 @@ export default {
   },
   setsearchConv(state,payload){
     state.searchConv = payload;
+  },
+  setChatRefreshToken(state,payload){
+    state.chatRefreshToken = payload;
+  },
+  setSpliceToConversation(state,id){
+    const index = state.conversations.findIndex(item => item._id === id);
+    state.conversations.splice(index, 1);
   }
 };

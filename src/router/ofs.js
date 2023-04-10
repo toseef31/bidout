@@ -1,4 +1,7 @@
 import Base from '@/components/Layout/Base.vue';
+// eslint-disable-next-line import/no-cycle
+import store from '@/store';
+
 const routes = [
   {
     path: '',
@@ -6,71 +9,21 @@ const routes = [
     children: [
       {
         path: '/',
-        name: 'OFSHome',
-        component: () => import('@/views/Ofs/OFSHome.vue'),
+        name: 'Home',
+        component: () => import('@/views/Login.vue'),
         beforeEnter: (to, from, next) => {
-          if(localStorage.getItem("userData") == null) {
-              
+          if (store.getters.userInfo == null) {
+            store.dispatch('getCurrentUser').then((data) => {
               next();
-          }else{
-            next('/dashboard');
+            }).catch((error) => {
+              console.log(error);
+              next('/login');
+            });
           }
-        }
-      },
-      {
-        path: '/ofs-directory/:slug',
-        name: 'CategoryName',
-        component: () => import('@/views/Ofs/CategoryListing.vue'),
-        beforeEnter: (to, from, next) => {
-          if(localStorage.getItem("userData") == null) {
-              
-              next();
-          }else{
-            next('/dashboard');
-          }
-        }
-      },
-      {
-        path: '/ofs-directory/:slug/:name',
-        name: 'CategoryListing',
-        component: () => import('@/views/Ofs/CategoryListing.vue'),
-        beforeEnter: (to, from, next) => {
-          if(localStorage.getItem("userData") == null) {
-              
-              next();
-          }else{
-            next('/dashboard');
-          }
-        }
-      },
-      {
-        path: '/company-profiles/:name',
-        name: 'CompanyProfiles',
-        component: () => import('@/views/Ofs/ViewCompany.vue'),
-        beforeEnter: (to, from, next) => {
-          if(localStorage.getItem("userData") == null) {
-              
-              next();
-          }else{
-            next('/dashboard');
-          }
-        }
-      },
-      {
-        path: '/subcompany-profile',
-        name: 'SubCompanyProfile',
-        component: () => import('@/views/Ofs/SubCompany.vue'),
-        beforeEnter: (to, from, next) => {
-          if(localStorage.getItem("userData") == null) {
-            next();
-          }else{
-            next('/dashboard');
-          }
-        }
+        },
       },
     ],
   },
 ];
-
 
 export default routes;

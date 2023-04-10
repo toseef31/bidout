@@ -14,7 +14,7 @@
             </v-alert>
              <v-form @submit.prevent="forgetPassword" ref="form" class="login-form" v-model="valid"
               lazy-validation>
-               <label class="font-weight-bold">Email</label> 
+               <label class="font-weight-bold">Email</label>
                  <v-text-field
                    v-model="email"
                    :rules="emailRules"
@@ -27,7 +27,7 @@
                    background-color="white"
                  ></v-text-field>
                <div class="text-center">
-                 <v-btn class="signin-btn rounded-lg text-capitalize font-weight-bold"  type="submit" color="success" :disabled="!valid" @click="reset">
+                 <v-btn class="reset-btn rounded-lg text-capitalize font-weight-bold white--text" color="#0D9648"  type="submit" :disabled="loading" :loading="loading" @click="reset">
                    Request Reset Password Link
                  </v-btn>
                </div>
@@ -46,13 +46,15 @@
 </template>
 
 <script>
-  import { mapActions } from "vuex";
+import { mapActions, mapGetters } from 'vuex';
+
 export default {
-  name : "ForgotPassword",
+  name: 'ForgotPassword',
   data() {
     return {
       valid: true,
-      email: "",
+      loading: false,
+      email: '',
       emailRules: [
         v => !!v || 'E-mail is required',
         v => /.+@.+\..+/.test(v) || 'E-mail must be valid',
@@ -62,27 +64,37 @@ export default {
     };
   },
   computed: {
-    emailError () {
-      return this.$store.getters.errorMessage
+    ...mapGetters(['forgetEmail']),
+    emailError() {
+      return this.$store.getters.errorMessage;
     },
-    emailSucess () {
-      return this.$store.getters.successMessage
+    emailSucess() {
+      if (this.$store.getters.successMessage) {
+        this.loading = false;
+      }
+      // eslint-disable-next-line vue/no-side-effects-in-computed-properties
+      this.loading = false;
+      return this.$store.getters.successMessage;
     },
   },
   methods: {
-    ...mapActions(["forgotEmail"]),
+    ...mapActions(['forgotEmail']),
     reset() {
       this.$refs.form.validate();
       const { email } = this;
-      console.log(email + "logged in")
     },
     forgetPassword() {
       this.forgotEmail({ 'email': this.email});
+      this.loading = true;
+      this.$refs.form.reset();
+    },
+  },
+  mounted() {
+    document.title = 'Forgot Password - BidOut';
+    if (this.forgetEmail != null) {
+      this.email = this.forgetEmail;
     }
   },
-  mounted(){
-    document.title = "Forgot Password - BidOut";
-  }
 };
 </script>
 <style scoped lang="scss">

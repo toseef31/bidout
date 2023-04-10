@@ -23,6 +23,11 @@
 						font-weight: 400;
 					}
 				}
+				.contact-email{
+					a{
+						word-break: break-all;
+					}
+				}
 			}
 			.v-btn{
 				font-size: 10px;
@@ -108,14 +113,16 @@
 						font-size: 16px;
 						line-height: 20px;
 						color: #013D3A;
-						margin-top: 16px;
+						margin-top: 8px;
 						margin-bottom: 8px;
 					}
 					p{
 						font-weight: 500;
-						font-size: 16px;
+						font-size: 14px;
 						line-height: 20px;
 						color: #013D3A;
+						height: 40px;
+                  		overflow: hidden;
 					}
 				}
 			}
