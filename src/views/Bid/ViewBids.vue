@@ -117,7 +117,7 @@
                       <td class="text-left" width="150px">{{ userDatas ? userDatas.firstName : '' }} {{ userDatas ? userDatas.lastName: '' }}</td>
                       <!-- <td class="text-left" width="50px">{{ bid.bidEntries ? bid.bidEntries : 0 }}</td> -->
                       <td class="text-left" width="145px">{{ formatDate(bid.dueDate) }} {{bid.dueTime}}</td>
-                      <td class="text-left d-none d-sm-block pt-3"   @click="editDraft(bid.serial) width="100px"><router-link to="">Edit Draft</router-link></td>
+                      <td class="text-left d-none d-sm-block pt-3"   @click="editDraft(bid.serial)" width="100px"><router-link to="">Edit Draft</router-link></td>
                       <td class="text-left d-flex d-sm-none align-center" @click="editDraft(bid.serial)">
                         <span class=""><v-icon>mdi-square-edit-outline</v-icon></span> 
                       </td>

@@ -234,7 +234,7 @@ export default {
     }
     try {
       console.log("intend payload", payload)
-      const res = await axios.get(`intend/getAllIntends/${payload.bidId}`);
+      const res = await axios.get(`v2/intend/getAllIntends/${payload.bidId}`);
 
       if (res.status === 200) {
         commit('setAllIntend', res.data);
@@ -667,8 +667,8 @@ export default {
     formData.append('companyId', payload.companyId);
     formData.append('company', payload.company);
 
-    if (state.invitedSuppliers != null) {
-      for (let i = 0; i < state.invitedSuppliers.length; i++) {
+    if (state.invitedSuppliers?.length > 0) {
+      for (let i = 0; i < state.invitedSuppliers?.length; i++) {
         if (Array.isArray(state.invitedSuppliers) && state.invitedSuppliers.length > 0 && typeof state.invitedSuppliers[0] === 'object') {
           if (!state.invitedSuppliers[i].companyId && !state.invitedSuppliers[i].objectID) {
             formData.append(`invitedSuppliers[${i}]`, state.invitedSuppliers[i].id);
@@ -682,12 +682,12 @@ export default {
         }
       }
     }
-    if (state.invitedNewSuppliers != null) {
+    if (state.invitedNewSuppliers?.length > 0) {
       for (let i = 0; i < state.invitedNewSuppliers.length; i++) {
         formData.append(`invitedNewSuppliers[${i}]`, state.invitedNewSuppliers[i].id);
       }
     }
-    if (state.invitedTeamMembers != null) {
+    if (state.invitedTeamMembers?.length > 0) {
       for (let t = 0; t < state.invitedTeamMembers.length; t++) {
         if (!state.invitedTeamMembers[t].id) {
           formData.append(`invitedTeamMembers[${t}]`, state.invitedTeamMembers[t]);
@@ -697,7 +697,7 @@ export default {
       }
     }
 
-    if (state.bidlines != null) {
+    if (state.bidlines?.length > 0) {
       let lineItemsindex = 0;
       for (let i = 0; i < state.bidlines.length; i++) {
         if (state.bidlines[i].description !== '' && state.bidlines[i].quantity !== '') {
@@ -717,7 +717,7 @@ export default {
       }
     }
 
-    if (state.attachement != null) {
+    if (state.attachement?.length > 0) {
       for (let i = 0; i < state.attachement.length; i++) {
         formData.append(`attachment[${i}][fileName]`, state.attachement[i].fileName);
         formData.append(`attachment[${i}][fileSize]`, state.attachement[i].fileSize);
@@ -729,7 +729,7 @@ export default {
       }
     }
 
-    if (state.questions != null) {
+    if (state.questions?.length > 0) {
       for (let i = 0; i < state.questions.length; i++) {
         formData.append(`questions[${i}][id]`, state.questions[i]._id);
         formData.append(`questions[${i}][order]`, state.questions[i].order);
@@ -790,7 +790,6 @@ export default {
     const formData = new FormData();
 
     if (state.bidData._id) {
-      console.log("AAAAAAAAAAAAAAA BUCETA")
       commit('setDraftBidsList', state.bidData._id);
       commit('setBidSerial', state.bidData.serial);
     }
@@ -806,17 +805,17 @@ export default {
     formData.append('serial', state.bidSerial);
 
     formData.append('bidDescriptions[0][body]', state.bidData.bidDescriptions[0].body);
-    if (state.bidData.bidDescriptions.length > 1) {
+    if (state.bidData.bidDescriptions?.length > 1) {
       for (let d = 1; d < state.bidData.bidDescriptions.length; d++) {
         formData.append(`bidDescriptions[${d}][name]`, state.bidData.bidDescriptions[d].name);
         formData.append(`bidDescriptions[${d}][body]`, state.bidData.bidDescriptions[d].body);
       }
     }
 
-    if (state.invitedSuppliers != null) {
+    if (state.invitedSuppliers?.length > 0) {
       alert("invited not null")
       for (let i = 0; i < state.invitedSuppliers.length; i++) {
-        if (Array.isArray(state.invitedSuppliers) && state.invitedSuppliers.length > 0 && typeof state.invitedSuppliers[0] === 'object') {
+        if (Array.isArray(state.invitedSuppliers) && state.invitedSuppliers?.length > 0 && typeof state.invitedSuppliers[0] === 'object') {
           if (!state.invitedSuppliers[i].companyId && !state.invitedSuppliers[i].objectID) {
             formData.append(`invitedSuppliers[${i}]`, state.invitedSuppliers[i]._id);
           } else if (state.invitedSuppliers[i].companyId) {
@@ -829,12 +828,12 @@ export default {
         }
       }
     }
-    if (state.invitedNewSuppliers != null) {
+    if (state.invitedNewSuppliers?.length > 0) {
       for (let i = 0; i < state.invitedNewSuppliers.length; i++) {
         formData.append(`invitedNewSuppliers[${i}]`, state.invitedNewSuppliers[i]._id);
       }
     }
-    if (state.invitedTeamMembers != null) {
+    if (state.invitedTeamMembers.length > 0) {
       for (let t = 0; t < state.invitedTeamMembers.length; t++) {
         if (!state.invitedTeamMembers[t]._id) {
           formData.append(`invitedTeamMembers[${t}]`, state.invitedTeamMembers[t]);
@@ -844,7 +843,7 @@ export default {
       }
     }
 
-    if (state.bidlines != null) {
+    if (state.bidlines.length > 0) {
       let lineItemsindex = 0;
       for (let i = 0; i < state.bidlines.length; i++) {
         if (state.bidlines[i].description !== '' && state.bidlines[i].quantity !== '') {
@@ -864,7 +863,7 @@ export default {
       }
     }
 
-    if (state.attachement != null) {
+    if (state.attachement?.length > 0) {
       for (let i = 0; i < state.attachement.length; i++) {
         formData.append(`attachment[${i}][fileName]`, state.attachement[i].fileName);
         formData.append(`attachment[${i}][fileSize]`, state.attachement[i].fileSize);
@@ -876,7 +875,7 @@ export default {
       }
     }
 
-    if (state.questions != null) {
+    if (state.questions?.length > 0) {
       for (let i = 0; i < state.questions.length; i++) {
         formData.append(`questions[${i}][id]`, state.questions[i]._id);
         formData.append(`questions[${i}][order]`, state.questions[i].order);
@@ -885,7 +884,7 @@ export default {
         formData.append(`questions[${i}][questionType]`, state.questions[i].questionType);
         formData.append(`questions[${i}][required]`, state.questions[i].required ? state.questions[i].required : false);
         if (state.questions[i].options) {
-          for (let j = 0; j < state.questions[i].options.length; j++) {
+          for (let j = 0; j < state.questions[i].options?.length; j++) {
             formData.append(`questions[${i}][options][${j}][id]`, state.questions[i].options[j]._id);
             formData.append(`questions[${i}][options][${j}][label]`, state.questions[i].options[j].label);
             formData.append(`questions[${i}][options][${j}][title]`, state.questions[i].options[j].title);
@@ -899,7 +898,7 @@ export default {
         commit('setIsEditBidChanges', false);
         commit('setBidSerial', res.data.serial);
         commit('setDraftTime', new Date().toLocaleString());
-        commit('setDraftBidsList', null);
+        //commit('setDraftBidsList', null);
         commit('setSaveBidLoading', false);
       } else {
         commit('setSaveBidLoading', false);
@@ -1203,7 +1202,7 @@ export default {
         dispatch('getSalesReps', { query: '', basin: 'all' });
         dispatch('getCategories');
         dispatch('searchByCompany', { query: '', basin: 'all' });
-        // commit('setDraftBidData', res.data);
+         commit('setDraftBidData', res.data);
         commit('setIsEditBidChanges', false);
         commit('setBidData', res.data);
         commit('setPageLoader', false);
@@ -1268,7 +1267,7 @@ export default {
       } else {
         formData.append('invitedSuppliers', '');
       }
-    } else if (state.invitedSuppliers != null) {
+    } else if (state.invitedSuppliers.length > 0) {
       for (let i = 0; i < state.invitedSuppliers.length; i++) {
         if (!state.invitedSuppliers[i].companyId && !state.invitedSuppliers[i].objectID) {
           formData.append(`invitedSuppliers[${i}]`, state.invitedSuppliers[i]._id);
@@ -1293,7 +1292,7 @@ export default {
       } else {
         formData.append('invitedTeamMembers', '');
       }
-    } else if (state.invitedTeamMembers != null) {
+    } else if (state.invitedTeamMembers.length > 0) {
       for (let t = 0; t < state.invitedTeamMembers.length; t++) {
         if (!state.invitedTeamMembers[t]._id) {
           formData.append(`invitedTeamMembers[${t}]`, state.invitedTeamMembers[t]);
@@ -1327,7 +1326,7 @@ export default {
       } else {
         formData.append('lineItems', '');
       }
-    } else if (state.bidlines != null) {
+    } else if (state.bidlines.length > 0) {
       let lineItemsindex = 0;
       for (let i = 0; i < state.bidlines.length; i++) {
         if (state.bidlines[i].description !== '' && state.bidlines[i].quantity !== '') {
@@ -1363,7 +1362,7 @@ export default {
       } else {
         formData.append('attachment', '');
       }
-    } else if (state.attachement != null) {
+    } else if (state.attachement.length > 0) {
       for (let i = 0; i < state.attachement.length; i++) {
         formData.append(`attachment[${i}][fileName]`, state.attachement[i].fileName);
         formData.append(`attachment[${i}][fileSize]`, state.attachement[i].fileSize);
@@ -1397,7 +1396,7 @@ export default {
       } else {
         formData.append('questions', '');
       }
-    } else if (state.questions != null) {
+    } else if (state.questions.length > 0) {
       for (let i = 0; i < state.questions.length; i++) {
         formData.append(`questions[${i}][id]`, state.questions[i].id);
         formData.append(`questions[${i}][order]`, state.questions[i].order);
@@ -1581,7 +1580,7 @@ export default {
     } else {
       formData.append('invitedSuppliers', []);
     }
-    if (state.invitedNewSuppliers != null) {
+    if (state.invitedNewSuppliers.length > 0) {
       for (let i = 0; i < state.invitedNewSuppliers.length; i++) {
         formData.append(`invitedNewSuppliers[${i}]`, state.invitedNewSuppliers[i].id);
       }
@@ -1723,7 +1722,7 @@ export default {
       commit('setPageLoader', true);
     }
     try {
-      const res = await axios.get(`/activity/getBidActivities/${payload.bidId}/${payload.userId}`);
+      const res = await axios.get(`/v2/activity/getBidActivities/${payload.bidId}/${payload.userId}`);
 
       if (res.status === 200) {
         commit('setBidActivities', res.data);
