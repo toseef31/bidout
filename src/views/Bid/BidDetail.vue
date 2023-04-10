@@ -84,8 +84,8 @@
                 Bid: <span class="serial">#{{ bidDetail.bidData.serial }}</span>
               </div>
               <div>
-                <div v-if="bidDetail.bidData.type === 'BidOut Process'"> BidOut Start Date: {{
-                  formatBidOutStartDate(bidDetail.bidData.dueDate, bidDetail.bidData.dueTime) }} CST &nbsp;
+                <div v-if="bidDetail.bidData.type === 'BidOut Process'"> BidOut Period Start: {{
+                  formatBidOutStartDate(bidDetail.bidData.dueDate, bidDetail.bidData.dueTime) }} CST, BidOut Period End:
                   {{ formatDate(bidDetail.bidData.dueDate) }} @
                   {{ bidDetail.bidData.dueTime }} CST <a class="text-decoration-none ml-1" target="_blank"
                     href=" https://help.bidout.app/article/7-bidout-process-explain"><v-icon color="black"
@@ -272,8 +272,8 @@
                 Bid: <span class="serial">#{{ bidDetail.bidData.serial }}</span>
               </div>
               <div>
-                <div v-if="bidDetail.bidData.type === 'BidOut Process'"> BidOut Start Date: {{
-                  formatBidOutStartDate(bidDetail.bidData.dueDate, bidDetail.bidData.dueTime) }} CST &nbsp;
+                <div v-if="bidDetail.bidData.type === 'BidOut Process'"> BidOut Period Start: {{
+                  formatBidOutStartDate(bidDetail.bidData.dueDate, bidDetail.bidData.dueTime) }} CST, BidOut Period End:
                   {{ formatDate(bidDetail.bidData.dueDate) }} @
                   {{ bidDetail.bidData.dueTime }} CST <a class="text-decoration-none ml-1" target="_blank"
                     href=" https://help.bidout.app/article/7-bidout-process-explain"><v-icon color="black"
