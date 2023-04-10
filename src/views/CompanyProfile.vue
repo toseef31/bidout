@@ -277,7 +277,11 @@ export default {
     },
     loading(){
       return this.$store.getters.pageLoader;
-    }
+    },
+    loadingBasic(){
+      return this.$store.getters.loadingBasic;
+    },
+    
   },
   watch:{
     manageCompanyError(message){
@@ -294,14 +298,22 @@ export default {
   methods: {
     ...mapActions(["getCompany","getCategories","getSubCategories","updateBasicProfile","addCompanyService","addCompanyBasins"]),
     ...mapMutations(["setBasinLoading"]),
-      updateBasic(){
+      async updateBasic(){
         var data = {
           companyId: this.$store.getters.userInfo.company.id,
           userId: this.$store.getters.userInfo.id,
           profileName: this.profileName,
           profileSummary: this.profileSummary,
         }
-        this.updateBasicProfile(data);
+        await this.updateBasicProfile(data);
+        if(this.$store.state.companyProfile.basicError){
+          return this.$toasted.show(`Error! Something went wrong please try again`, {
+            class: 'error-toast',
+            type : 'error',
+            duration: 5000,
+            position: 'top-center',
+          });
+        }
       },
       getAllCategories(){
         this.getCategories();

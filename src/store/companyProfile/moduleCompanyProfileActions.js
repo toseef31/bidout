@@ -111,7 +111,6 @@ export default {
         commit('setCompany',responce.data)
         commit('setBasinLoading',false)
         commit('setPageLoader',false)
-
       }
      
     }).catch(async(err) => {
@@ -215,6 +214,9 @@ export default {
          await dispatch('refreshToken');
          state.apiCounter = 2;
          dispatch('updateBasicProfile',payload);
+        }
+        if(err.response.status === 400){
+          state.basicError = true;
         }
       }
       commit('setManageCompanyError','Something went wrong.Please try again in few moments.');
