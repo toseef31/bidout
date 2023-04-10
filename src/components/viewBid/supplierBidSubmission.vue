@@ -89,7 +89,7 @@
                 {{ item.required === 'true' ? 'Yes' : 'No' }}
               </td>
               <td class="text-left">
-                {{ item.buyerComment }}
+                {{ item.buyerComment === 'undefined' || item.buyerComment === '' ? '' : item.buyerComment }}
               </td>
             </tr>
           </tbody>
@@ -176,12 +176,12 @@
 
                   <label :for="`uploadFileQ${index}`" v-else
                     class="
-                                                                                                                                                                          upload-file
-                                                                                                                                                                         pa-4
-                                                                                                                                                                          d-block
-                                                                                                                                                                          font-weight-medium
-                                                                                                                                                                          text-center
-                                                                                                                                                                        ">
+                                                                                                                                                                                                                                                    upload-file
+                                                                                                                                                                                                                                                   pa-4
+                                                                                                                                                                                                                                                    d-block
+                                                                                                                                                                                                                                                    font-weight-medium
+                                                                                                                                                                                                                                                    text-center
+                                                                                                                                                                                                                                                  ">
                     <v-file-input :id="`uploadFileQ${index}`" @change="handleDocumentForAnswer($event, index)"
                       :disabled="!bidDetail.receivingBids" :rules="item.required === 'true' ? fileRule : []" />
 
@@ -232,18 +232,17 @@
 
                   <td class="text-left">
                     {{
-                      doc.uploadedAt
-                      | moment("MM/DD/YYYY")
+                      formatDate(doc.uploadedAt)
                     }}
                   </td>
-                  <td class="text-left delete-class text-decoration-underline" v-if="checkForUpload"
-                    @click="deleteAttach(index)">
+                  <td class="text-left delete-class text-decoration-underline" v-if="checkForUpload">
 
-                    <v-dialog class="dialog-class" v-model="dialogT" width="330">
+                    <v-dialog class="dialog-class" v-model="getDialogT[index].open" width="330">
 
                       <template v-slot:activator="{ on, attrs }">
 
-                        <v-btn v-on="on" v-bind="attrs" text v-if="checkForUpload" :ripple="false">
+                        <v-btn v-on="on" v-bind="attrs" text v-if="checkForUpload" @click="deletedFileI = index"
+                          :ripple="false">
                           Delete
                         </v-btn>
                       </template>
@@ -258,10 +257,10 @@
                         <v-card-actions>
                           <v-spacer></v-spacer>
 
-                          <v-btn color="#0d9648" outlined @click="dialogT = false">
+                          <v-btn color="#0d9648" outlined @click="dialogT[deletedFileI].open = false;">
                             Cancel
                           </v-btn>
-                          <v-btn color="#F32349" outlined @click="dialogT = false; deleteAttach(index)">
+                          <v-btn color="#F32349" outlined @click="dialogT[deletedFileI].open = false; deleteAttach()">
                             Agree
                           </v-btn>
                         </v-card-actions>
@@ -310,6 +309,7 @@
 <script>
 import { mapActions } from 'vuex';
 import * as XLSX from 'xlsx';
+import moment from 'moment-timezone';
 
 export default {
   data() {
@@ -318,8 +318,9 @@ export default {
       intent: 'true',
       loading: false,
       dialog: false,
-      dialogT: false,
+      dialogT: [],
       valid: true,
+      deletedFileI: null,
       supplierNote: '',
       file: '',
       answers: [],
@@ -405,6 +406,9 @@ export default {
       });
       return formattedPrices;
     },
+    getDialogT() {
+      return this.dialogT;
+    },
   },
   methods: {
     ...mapActions(['submitBid', 'editSubmitBid']),
@@ -412,7 +416,15 @@ export default {
       const sizeInMB = (size / (1024 * 1024)).toFixed(2);
       return `${sizeInMB}mb`;
     },
+    formatDate(item) {
+      if (item._seconds && item._nanoseconds) {
+        const date = moment(item._seconds * 1000 + item._nanoseconds / 1000000).tz('America/Chicago').format('MM/DD/YYYY');
 
+        return date;
+      }
+      const date = moment(item).tz('America/Chicago').format('MM/DD/YYYY');
+      return date;
+    },
     checkFileType(file) {
       return file.substring(file.lastIndexOf('.') + 1);
     },
@@ -496,7 +508,7 @@ export default {
 
       if (action === 'submit' && this.$refs.form.validate()) {
         this.loading = true;
-        this.lineItems.map((item, index) => {
+        this.lineItems.map((item) => {
           if (item.price != null) {
             item.price = item.price.replace(/,/g, '');
           } else {
@@ -532,14 +544,13 @@ export default {
           return item;
         });
         const lineItemsA = this.lineItems;
-        const supplierAttachmentA = this.supplierDocList.map((el) => el.attachment);
 
         await this.editSubmitBid({
           userId: this.user.id,
           companyId: this.user.company.id,
           bidId: this.bidDetail.bidData.id,
           supplierNote: this.supplierNote,
-          supplierAttachments: supplierAttachmentA,
+          supplierAttachments: this.supplierDocList,
           lineItems: lineItemsA,
           answers: this.answers,
           submitBidId: this.getSupplierBid.id,
@@ -561,12 +572,17 @@ export default {
         fileName: this.file.name,
         fileSize: this.file.size,
         attachment: this.file,
-        uploadedAt: Date.now(),
+        uploadedAt: new Date(),
+        newAttach: true,
+      });
+      this.dialogT.push({
+        open: false,
       });
     },
 
-    deleteAttach(index) {
-      this.$store.state.bid.supplierAttachment.splice(index, 1);
+    deleteAttach() {
+      this.$store.state.bid.supplierAttachment.splice(this.deletedFileI, 1);
+      this.dialogT.splice(this.deletedFileI, 1);
     },
     removeQuesDoc(index) {
       this.answers[index].answer = null;
@@ -638,7 +654,11 @@ export default {
           fileName: this.getSupplierBid.supplierAttachments[i].fileName,
           fileSize: this.getSupplierBid.supplierAttachments[i].fileSize,
           attachment: this.getSupplierBid.supplierAttachments[i].attachment,
-          uploadedAt: this.getSupplierBid.supplierAttachments[i].uploadedAt._seconds,
+          uploadedAt: this.getSupplierBid.supplierAttachments[i].uploadedAt,
+        });
+
+        this.dialogT.push({
+          open: false,
         });
       }
 

@@ -35,19 +35,21 @@
         <br />
         <v-row>
           <v-col md="2" class="text-right mr-1 title-desc">Description:</v-col>
-          <v-col class="title-brief bid-desc"> {{
-            bidDetail.bidData.bidDescriptions &&
+          <v-col class="title-brief bid-desc supplier-desc"> 
+            <div class="ql-editor pa-0" v-html="bidDetail.bidData.bidDescriptions &&
             Array.isArray(bidDetail.bidData.bidDescriptions)
             ? bidDetail.bidData.bidDescriptions[0].body
-            : bidDetail.bidData.bidDescriptions
-          }}</v-col>
+            : bidDetail.bidData.bidDescriptions"></div>
+          </v-col>
         </v-row>
         <br />
         <v-row
           v-if="bidDetail.bidData && bidDetail.bidData.bidDescriptions && Array.isArray(bidDetail.bidData.bidDescriptions)"
           v-for="(item, index) in bidDetail.bidData.bidDescriptions.slice(1)" :key="index">
           <v-col md="2" class="text-right mr-1 title-desc">{{ item && item.name }}:</v-col>
-          <v-col class="title-brief bid-desc"> {{ item && item.body }}</v-col>
+          <v-col class="title-brief bid-desc supplier-desc"> 
+            <div class="ql-editor pa-0" v-html="item && item.body"></div>
+          </v-col>
         </v-row>
 
       </div>
@@ -136,7 +138,7 @@
               <td class="text-left">{{ item.inputType }}</td>
               <td class="text-left">{{ item.quantity }}</td>
               <td class="text-left">
-                {{ item.buyerComment }}
+                {{ item.buyerComment === 'undefined' || item.buyerComment === '' ? '' : item.buyerComment }}
               </td>
             </tr>
           </tbody>
