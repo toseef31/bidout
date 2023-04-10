@@ -41,7 +41,7 @@
 
               <tbody>
                 <tr v-for="(template, index) in bidTemplates" class="py-4 px-6"
-                  v-if="template.companyId == userDatas.company.id">
+                  v-if="template.companyId == userDatas.companyId">
                   <td class="text-left pl-6">{{ template.title }}</td>
                   <td class="text-left">{{ template.type }}</td>
                   <td class="text-left">{{ formatDate(template.createdAt._seconds, template.createdAt._nanoseconds) }}
@@ -66,8 +66,8 @@
                   <td class="text-left pr-6">
                     <v-icon v-if="!isEdit || edit !== index" class="mr-4" color="#0D9648"
                       @click="openNote(index)">mdi-message-processing-outline </v-icon>
-                    <v-icon color="#0D9648" class="mr-4" @click="editDraft(template.id)">mdi-pencil-outline</v-icon>
-                    <v-icon color="#F32349" @click="openConfirm(template.id, index)">mdi-trash-can-outline</v-icon>
+                    <v-icon color="#0D9648" class="mr-4" @click="editDraft(template._id)">mdi-pencil-outline</v-icon>
+                    <v-icon color="#F32349" @click="openConfirm(template._id, index)">mdi-trash-can-outline</v-icon>
                   </td>
                 </tr>
                 <v-dialog v-model="dialog" width="500">
@@ -164,10 +164,10 @@ export default {
     saveNote(template, index) {
       this.isEdit = false;
       this.editIcon[index] = true;
-      this.updateTemplateNote({ templateId: template.id, note: template.note });
+      this.updateTemplateNote({ templateId: template._id, note: template.note });
     },
     editDraft(id) {
-      this.getEditTemplate({ id, company: this.$store.getters.userInfo.company.company });
+      this.getEditTemplate({ id, company: this.$store.getters.userInfo.company });
     },
     createTem() {
       this.$store.state.bid.bidData.serial = '';

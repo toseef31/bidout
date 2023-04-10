@@ -30,7 +30,7 @@ export default {
         commit('setError', null);
         commit('setToken', result.user.multiFactor.user.accessToken);
         localStorage.setItem('token', JSON.stringify(result.user.multiFactor.user.accessToken));
-        axios.get(`/user/getUserData/${result.user.multiFactor.user.email}`)
+        axios.get(`v2/user/getUserData/${result.user.multiFactor.user.email}`)
           .then((responce) => {
             if (responce.data.status === false) {
               commit('setError', 'Disabled account! You cannot login with this account');
@@ -74,7 +74,7 @@ export default {
     return new Promise((resolve, reject) => {
       firebase.auth().onAuthStateChanged((users) => {
         if (users) {
-          axios.get(`/user/getUserData/${users.multiFactor.user.email}`)
+          axios.get(`v2/user/getUserData/${users.multiFactor.user.email}`)
             .then((responce) => {
               commit('setUser', responce.data);
               resolve(responce.data);
@@ -178,7 +178,7 @@ export default {
   checkEmail({ commit }, payload) {
     // Try to sigin
     if (payload.indexOf('@') !== -1) {
-      axios.post('/user/checkIfUserWithEmailExists', { email: payload })
+      axios.post('v2/user/checkIfUserWithEmailExists', { email: payload })
         .then((responce) => {
           if (responce.data.exists === true) {
             commit('setEmailExistSuccess', 'Email already Exists! Please try different one');
@@ -193,14 +193,14 @@ export default {
   supplierSignUpAction({ commit }, payload) {
     // Try to sigin
     if (payload.email.indexOf('@') !== -1) {
-      axios.post('/user/checkIfUserWithEmailExists', { email: payload.email })
+      axios.post('v2/user/checkIfUserWithEmailExists', { email: payload.email })
         .then((responce) => {
           if (responce.data.exists === true) {
             commit('setEmailExistSuccess', 'Email already Exists! Please try different one');
             commit('setCompanyError', 'Email already Exists! Please try different one');
             commit('showErrorAlert');
           } else if (payload.id) {
-            axios.post('/ofs/queueSupplierUser', {
+            axios.post('/v2/ofs/queueSupplierUser', {
               id: payload.id, email: payload.email, firstName: payload.firstName, lastName: payload.lastName, phoneNumber: payload.phoneNumber, title: payload.title, password: payload.password,
             })
               .then((responce) => {
@@ -220,14 +220,14 @@ export default {
                 console.log(err);
               });
           } else {
-            axios.post('/ofs/createCompany', {
+            axios.post('/v2/ofs/createCompany', {
               company: payload.company, companyHq: payload.companyHq, companyHq2: payload.companyHq2, companyHqCountry: payload.companyHqCountry, companyHqState: payload.companyHqState, companyHqCity: payload.companyHqCity, companyHqZip: payload.companyHqZip,
             })
               .then((responce) => {
                 commit('setCompanyId', responce.data.data.companyId);
                 localStorage.setItem('companyId', JSON.stringify(responce.data.companyId));
                 if (responce.status === 200) {
-                  axios.post('/ofs/createUser', {
+                  axios.post('/v2/ofs/createUser', {
                     company: payload.company, firstName: payload.firstName, lastName: payload.lastName, email: payload.email, phoneNumber: payload.phoneNumber, title: payload.title, password: payload.password, companyId: responce.data.data.companyId,
                   })
                     .then((responce) => {
@@ -267,7 +267,7 @@ export default {
   },
 
   searchSupplier({ commit }, payload) {
-    axios.get(`/ofs/searchSuppliers/${payload}`)
+    axios.get(`/v2/ofs/searchSuppliers/${payload}`)
       .then((responce) => {
         commit('setSupplierList', responce.data);
       }).catch((err) => {
@@ -278,21 +278,21 @@ export default {
   buyerSignUpAction({ commit }, payload) {
     // Try to sigin
     if (payload.email.indexOf('@') !== -1) {
-      axios.post('/user/checkIfUserWithEmailExists', { email: payload.email })
+      axios.post('/v2/user/checkIfUserWithEmailExists', { email: payload.email })
         .then((responce) => {
           if (responce.data.exists === true) {
             commit('setEmailExistSuccess', 'Email already Exists! Please try different one');
             commit('setCompanyError', 'Email already Exists! Please try different one');
             commit('showErrorAlert');
           } else {
-            axios.post('/ofs/createCompany', {
+            axios.post('/v2/ofs/createCompany', {
               company: payload.company, companyHq: payload.companyHq, companyHq2: payload.companyHq2, companyHqCountry: payload.companyHqCountry, companyHqState: payload.companyHqState, companyHqCity: payload.companyHqCity, companyHqZip: payload.companyHqZip,
             })
               .then((responce) => {
                 commit('setCompanyId', responce.data.data.companyId);
                 localStorage.setItem('companyId', JSON.stringify(responce.data.companyId));
                 if (responce.status === 200) {
-                  axios.post('/ofs/createUser', {
+                  axios.post('/v2/ofs/createUser', {
                     company: payload.company, firstName: payload.firstName, lastName: payload.lastName, email: payload.email, phoneNumber: payload.phoneNumber, title: payload.title, password: payload.password, companyId: responce.data.data.companyId,
                   })
                     .then((responce) => {
@@ -345,7 +345,7 @@ export default {
 
   // signAgreement
   contractGenerate({ commit }, payload) {
-    axios.post('/ofs/generateContract', {
+    axios.post('/v2/ofs/generateContract', {
       id: payload.id, ip: payload.ip, contractType: payload.contractType, plan: payload.plan, userId: payload.userId,
     })
       .then((responce) => {
@@ -366,7 +366,7 @@ export default {
   },
   signAgreement({ commit }, payload) {
     // Try to store Agreement
-    axios.post('/ofs/signContract', {
+    axios.post('/v2/ofs/signContract', {
       sign: payload.sign, contractType: payload.contractType, fileName: payload.fileName, companyId: payload.companyId, userId: payload.userId, yearly: payload.yearly, plan: payload.plan,
     })
       .then((responce) => {
@@ -424,7 +424,7 @@ export default {
         commit('setError', null);
         commit('setToken', result.user.multiFactor.user.accessToken);
         localStorage.setItem('token', JSON.stringify(result.user.multiFactor.user.accessToken));
-        const userResp = await axios.get(`/user/getUserData/${result.user.multiFactor.user.email}`);
+        const userResp = await axios.get(`v2/user/getUserData/${result.user.multiFactor.user.email}`);
         if (userResp.data.status === false) {
           commit('setError', 'Disabled account! You cannot login with this account');
           commit('showErrorAlert');

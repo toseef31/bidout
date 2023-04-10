@@ -4,7 +4,7 @@ import axios from 'axios'
 export default {
 
   pendingUserCount({commit,dispatch,state},payload){
-    axios.get('/user/getQueueUsersCount/'+payload)
+    axios.get('/v2/user/getQueueUsersCount/'+payload)
       .then(responce => {
         
         if(responce.status === 200){
@@ -25,7 +25,7 @@ export default {
       });
   }, 
   getPendingList({commit,dispatch,state},payload){
-    axios.get('/company/getCompanyInvitedUsers/'+ payload)
+    axios.get('/v2/company/getCompanyInvitedUsers/'+ payload)
       .then(responce => {
         
         if(responce.status === 200){
@@ -46,7 +46,7 @@ export default {
   },
   manageUsers({commit,dispatch,state},payload){
     const name = decodeURIComponent(payload);
-    axios.get('/company/getUsersByCompany/'+ name)
+    axios.get('/v2/company/getUsersByCompany/'+ name)
       .then(responce => {
         if(responce.status === 200){
           commit('getUsersList',responce.data)
@@ -65,7 +65,7 @@ export default {
       });
   }, 
   getInvitedList({commit,dispatch,state},payload){
-    axios.get('/company/getCompanyInvitedUsers/'+ payload)
+    axios.get('/v2/company/getCompanyInvitedUsers/'+ payload)
       .then(responce => {
         
         if(responce.status === 200){
@@ -86,7 +86,7 @@ export default {
   },
 
   disableUser({commit,dispatch,state},payload){
-    axios.get('/company/disableUser/'+ payload)
+    axios.get('/v2/company/disableUser/'+ payload)
       .then(responce => {
         
         if(responce.status === 200){
@@ -110,7 +110,7 @@ export default {
   }, 
 
   enableUser({commit,dispatch,state},payload){
-    axios.get('/company/enableUser/'+payload)
+    axios.get('/v2/company/enableUser/'+payload)
       .then(responce => {
         
         if(responce.status === 200){
@@ -133,7 +133,7 @@ export default {
       });
   }, 
   acceptPendingUser({commit,dispatch,state},payload){
-    axios.post('/user/acceptPendingUser/',{ 'userId':payload.user.id, 'email': payload.user.email,'firstName':payload.user.firstName,'lastName':payload.user.lastName,'companyId':payload.user.companyId,'phoneNumber':payload.user.phoneNumber,'title':payload.user.title,'role': 'user'})
+    axios.post('/v2/user/acceptPendingUser/',{ 'userId':payload.user.id, 'email': payload.user.email,'firstName':payload.user.firstName,'lastName':payload.user.lastName,'companyId':payload.user.companyId,'phoneNumber':payload.user.phoneNumber,'title':payload.user.title,'role': 'user'})
       .then(responce => {
       
       if(responce.status === 200){
@@ -157,7 +157,7 @@ export default {
   }, 
   getActivities({commit,dispatch,state},payload){
     commit('setActivityList',null);
-    axios.get('/activity/getUserActivities/'+payload)
+    axios.get('/v2/activity/getUserActivities/'+payload)
       .then(responce => {
         
         if(responce.status === 200){
@@ -183,7 +183,7 @@ export default {
     commit('setLocationLoader',true);
     return new Promise(async (resolve, reject) => {
       try{
-        const res = await axios.get('/company/getCompanyLocations');
+        const res = await axios.get('/v2/company/getCompanyLocations');
         commit('setAllLocations',res.data)
         
         resolve(res.data);
@@ -204,7 +204,7 @@ export default {
     commit('setPageLoader',true)
     commit('setPageSubLoader',true)
     try{
-      const res = await axios.get('bid/getBidList/'+payload,config);
+      const res = await axios.get('v2/bid/getBidList/'+payload,config);
         commit('setBidsList',res.data);
         await dispatch('getActivities',payload);
         commit('setPageSubLoader',false);

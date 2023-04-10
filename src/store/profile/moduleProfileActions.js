@@ -15,11 +15,11 @@ export default {
     };
     const formData = new FormData()
     formData.append('files', payload.files);
-    axios.post('/user/updateProfilePicture/'+payload.userid,formData,config)
+    axios.post('/v2/user/updateProfilePicture/'+payload.userid,formData,config)
      .then(responce => {
       
       if(responce.status === 200){
-        axios.get('/user/getUserData/'+payload.email)
+        axios.get('/v2/user/getUserData/'+payload.email)
          .then(responce => {
           commit('setUser',responce.data)
           localStorage.setItem("userData",JSON.stringify(responce.data));
@@ -53,11 +53,11 @@ export default {
   },  
   updateProfile({commit,dispatch,state}, payload){
     commit('editProfileLoading',true);
-    axios.post('/user/updateUser/'+payload.userid,{'email': payload.email,'firstName': payload.firstName,'lastName': payload.lastName,'phoneNumber': payload.phoneNumber,'title':payload.title,'timezone':payload.timezone})
+    axios.post('/v2/user/updateUser/'+payload.userid,{'email': payload.email,'firstName': payload.firstName,'lastName': payload.lastName,'phoneNumber': payload.phoneNumber,'title':payload.title,'timezone':payload.timezone})
     .then(responce => {
       
       if(responce.status === 200){
-        axios.get('/user/getUserData/'+payload.email)
+        axios.get('/v2/user/getUserData/'+payload.email)
          .then(responce => {
           commit('setUser',responce.data)
           commit('editProfileLoading',false)
@@ -94,7 +94,7 @@ export default {
   },  
   changePassword({commit,dispatch,state}, payload){
     commit('setPasswordLoading',true);
-    axios.post('/user/changePassword/'+payload.userid,{'currentPassword': payload.currentPassword,'newPassword': payload.newPassword})
+    axios.post('/v2/user/changePassword/'+payload.userid,{'currentPassword': payload.currentPassword,'newPassword': payload.newPassword})
      .then(responce => {
       
       if(responce.status === 200){
@@ -116,7 +116,7 @@ export default {
       });
   },  
   loginHistory({commit,dispatch}, payload){
-    axios.get('/user/getUserLoginHistory/'+payload.userid)
+    axios.get('/v2/user/getUserLoginHistory/'+payload.userid)
      .then(responce => {
       commit('setLoginHistory',responce.data)
     }).catch(err => {
@@ -125,7 +125,7 @@ export default {
   },  
   adminsCompany({commit,dispatch,state}, payload){
     
-    axios.get('/company/getCompanyAdmins/'+payload.company)
+    axios.get('/v2/company/getCompanyAdmins/'+payload.company)
      .then(responce => {
       
       if(responce.status === 200){
@@ -145,11 +145,11 @@ export default {
       });
   },  
   updateNotifications({commit,dispatch,state}, payload){
-    axios.post('/user/updateNotificationPreference/'+payload.userid,{'notificationPreference':payload.notificationPreference})
+    axios.post('/v2/user/updateNotificationPreference/'+payload.userid,{'notificationPreference':payload.notificationPreference})
      .then(responce => {
       
       if(responce.status === 200){
-        axios.get('/user/getUserData/'+payload.email)
+        axios.get('/v2/user/getUserData/'+payload.email)
          .then(responce => {
           
           commit('setUser',responce.data)
@@ -177,7 +177,7 @@ export default {
       });
   }, 
   inviteUser({commit,dispatch,state},payload){
-    axios.post('/company/addInvitedUser/',{'firstName':payload.firstName,'lastName': payload.lastName,'company': payload.company,'companyId':payload.companyId,'email':payload.email,'parent': payload.parent,'role': payload.role})
+    axios.post('/v2/company/addInvitedUser/',{'firstName':payload.firstName,'lastName': payload.lastName,'company': payload.company,'companyId':payload.companyId,'email':payload.email,'parent': payload.parent,'role': payload.role})
      .then(responce => {
         
         if(responce.status === 200){
@@ -203,7 +203,7 @@ export default {
   },
   updateUser({commit,dispatch,state},payload){
     
-    axios.post('/company/updateUser/'+payload.id,{'firstName':payload.firstName,'lastName': payload.lastName,'role': payload.role})
+    axios.post('/v2/company/updateUser/'+payload.id,{'firstName':payload.firstName,'lastName': payload.lastName,'role': payload.role})
      .then(responce => {
         
         if(responce.status === 200){
@@ -226,7 +226,7 @@ export default {
   },
   updateInvite({commit,dispatch,state},payload){
     
-    axios.post('/company/updateInvitedUser/'+payload.id,{'firstName':payload.firstName,'lastName': payload.lastName,'role': payload.role})
+    axios.post('/v2/company/updateInvitedUser/'+payload.id,{'firstName':payload.firstName,'lastName': payload.lastName,'role': payload.role})
      .then(responce => {
         
         if(responce.status === 200){
@@ -248,7 +248,7 @@ export default {
       });
   },
   getDisabledUsers({commit,dispatch,state},payload){
-    axios.get('/company/getDisabledUsersByCompany/'+ payload)
+    axios.get('/v2/company/getDisabledUsersByCompany/'+ payload)
       .then(responce => {
       
       if(responce.status === 200){
@@ -269,7 +269,7 @@ export default {
       });
   }, 
   getPendingUsers({commit,dispatch,state},payload){
-    axios.get('/user/getPendingUsers/'+ payload)
+    axios.get('/v2/user/getPendingUsers/'+ payload)
       .then(responce => {
       
       if(responce.status === 200){

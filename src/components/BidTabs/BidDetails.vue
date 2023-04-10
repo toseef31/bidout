@@ -217,7 +217,7 @@ export default {
     },
     bidType: {
       get() {
-        if (!this.$store.getters.bidData.id) {
+        if (!this.$store.getters.bidData._id) {
           return '';
         }
         return this.$store.getters.bidData.type;
@@ -235,7 +235,7 @@ export default {
 
           return currentDate.format('YYYY-MM-DD');
         }
-        if (!this.$store.getters.bidData.id) {
+        if (!this.$store.getters.bidData._id) {
           return '';
         }
 
@@ -354,7 +354,7 @@ export default {
           this.valid = true;
           this.loading = true;
           if (this.$route.name === 'EditTemplate') {
-            if (!this.$store.getters.bidData.id) {
+            if (!this.$store.getters.bidData._id) {
               await this.saveTemplateBid(bidDetails);
             } else {
               await this.updateTemplate(bidDetails);
@@ -365,9 +365,9 @@ export default {
                 await this.updateBid(bidDetails);
               }
             }
-            if (!this.$store.getters.bidData.id) {
+            if (!this.$store.getters.bidData._id) {
               await this.saveDraftBid(bidDetails);
-            } else if (this.$store.getters.bidData.id && this.$store.getters.bidData.statusType === 'templateBid') {
+            } else if (this.$store.getters.bidData._id && this.$store.getters.bidData.statusType === 'templateBid') {
               await this.saveDraftBid(bidDetails);
             } else {
               await this.updateDraftBid(bidDetails);
@@ -398,14 +398,14 @@ export default {
           companyId: this.userInfo.companyId,
           company: this.userInfo.company,
         };
-        if (this.$store.getters.bidData.id && this.$store.getters.bidData.statusType === 'templateBid') {
+        if (this.$store.getters.bidData._id && this.$store.getters.bidData.statusType === 'templateBid') {
           await this.saveDraftBid(bidDetails);
         }
         if (this.$refs.form.validate()) {
           if (this.$route.name === 'EditTemplate') {
-            if (!this.$store.getters.bidData.id) {
+            if (!this.$store.getters.bidData._id) {
               await this.saveTemplateBid(bidDetails);
-            } else if (this.$store.getters.bidData.id && this.$store.getters.bidData.statusType === 'templateBid') {
+            } else if (this.$store.getters.bidData._id && this.$store.getters.bidData.statusType === 'templateBid') {
               await this.saveTemplateBid(bidDetails);
             } else {
               await this.updateTemplate(bidDetails);
@@ -416,9 +416,9 @@ export default {
                 await this.updateBid(bidDetails);
               }
             }
-            if (!this.$store.getters.bidData.id) {
+            if (!this.$store.getters.bidData._id) {
               await this.saveDraftBid(bidDetails);
-            } else if (this.$store.getters.bidData.id && this.$store.getters.bidData.statusType === 'templateBid') {
+            } else if (this.$store.getters.bidData._id && this.$store.getters.bidData.statusType === 'templateBid') {
               await this.saveDraftBid(bidDetails);
             } else {
               await this.updateDraftBid(bidDetails);
@@ -462,7 +462,7 @@ export default {
       });
     },
     deleteDraft() {
-      this.deleteDraftBid({ draftId: this.$store.getters.bidData.id });
+      this.deleteDraftBid({ draftId: this.$store.getters.bidData._id });
     },
     validateDesc() {
       this.validDesc = this.bidDescriptions[0].body.length > 0;

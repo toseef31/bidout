@@ -157,7 +157,7 @@ export default {
         firstName: this.userData.firstName,
         lastName: this.userData.lastName,
         role: this.userData.role,
-        id: this.userData.id,
+        id: this.userData._id,
       }
       if (this.$store.getters.userData.type === 'general') {
         this.updateUser(data);

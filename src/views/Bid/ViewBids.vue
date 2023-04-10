@@ -110,14 +110,14 @@
                     <template v-if="draftBidsList.length > 0">
                       <tr class="company-link"
                       v-for="bid in draftBidsList"
-                      :key="bid.id"  @click="editDraft(bid.serial)"
+                      :key="bid._id"  @click="editDraft(bid.serial)"
                     >
                       <td class="text-left pl-sm-6" width="84px">{{ bid.serial }}</td>
                       <td class="text-left title-truncate">{{ bid.title }}</td>
                       <td class="text-left" width="150px">{{ userDatas ? userDatas.firstName : '' }} {{ userDatas ? userDatas.lastName: '' }}</td>
                       <!-- <td class="text-left" width="50px">{{ bid.bidEntries ? bid.bidEntries : 0 }}</td> -->
                       <td class="text-left" width="145px">{{ formatDate(bid.dueDate) }} {{bid.dueTime}}</td>
-                      <td class="text-left d-none d-sm-block pt-3"  width="100px"><router-link :to="'/edit-bid/' + bid.serial">Edit Draft</router-link></td>
+                      <td class="text-left d-none d-sm-block pt-3"   @click="editDraft(bid.serial) width="100px"><router-link to="">Edit Draft</router-link></td>
                       <td class="text-left d-flex d-sm-none align-center" @click="editDraft(bid.serial)">
                         <span class=""><v-icon>mdi-square-edit-outline</v-icon></span> 
                       </td>
@@ -289,6 +289,7 @@ export default {
   methods: {
     ...mapActions(['getDraftBids', 'getBidsLists','getDraftBySerial']),
     editDraft(serial){
+      console.log("============aa", this.$store.getters.userInfo)
       this.getDraftBySerial({serial,company:this.$store.getters.userInfo.company});
     },
     checkIfUserIsSupplier(bid) {

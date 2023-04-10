@@ -42,7 +42,7 @@
               </thead>
               <tbody>
                 <tr v-for="(template, index) in bidTemplates" class="py-4 px-6"
-                  v-if="template.companyId == userDatas.company.id">
+                  v-if="template.companyId == userDatas.companyId">
                   <td class="text-left pl-6">{{ template.title }}</td>
                   <td class="text-left">{{ template.type }}</td>
                   <td class="text-left">{{ formatDate(template.createdAt._seconds, template.createdAt._nanoseconds) }}
@@ -84,6 +84,7 @@ export default {
   data() {
     return {
       users: '',
+      templates: '',
     };
   },
   computed: {
@@ -106,7 +107,7 @@ export default {
     async useTemplate(template) {
       this.$store.commit('setBidData', template);
       this.$store.state.bid.bidData.statusType = 'templateBid';
-      await this.$store.dispatch('getTeamMembers', this.userDatas.company.company);
+      await this.$store.dispatch('getTeamMembers', this.userDatas.company);
       await this.$store.dispatch('getSalesReps', { query: '', basin: 'all' });
       await this.$store.dispatch('getCategories');
       await this.$store.dispatch('searchByCompany', { query: '', basin: 'all' });

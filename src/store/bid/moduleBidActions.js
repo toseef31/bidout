@@ -6,7 +6,7 @@ import axios from 'axios';
 export default {
   async getTeamMembers({ commit, dispatch, state }, payload) {
     try {
-      const res = await axios.get(`company/getTeamMembers/${payload}`);
+      const res = await axios.get(`v2/company/getTeamMembers/${payload}`);
       if (res.status === 200) {
         commit('setTeamMembers', res.data);
         commit('setTeamMembersInitial', res.data);
@@ -26,7 +26,7 @@ export default {
   },
   async getSalesReps({ commit, dispatch, state }, payload) {
     try {
-      const res = await axios.get('company/getSalesReps/', { query: payload.query, basin: payload.basin });
+      const res = await axios.get('v2/company/getSalesReps/', { query: payload.query, basin: payload.basin });
 
       if (res.status === 200) {
         commit('setSalesReps', res.data);
@@ -45,7 +45,7 @@ export default {
   },
   async searchByCompany({ commit, dispatch, state }, payload) {
     try {
-      const res = await axios.post('company/searchCompanies/', { query: payload.query, basin: payload.basin });
+      const res = await axios.post('v2/company/searchCompanies/', { query: payload.query, basin: payload.basin });
 
       if (res.status === 200) {
         commit('setCompaniesList', res.data);
@@ -65,7 +65,7 @@ export default {
 
   async getCompanyByServices({ commit, dispatch, state }, payload) {
     try {
-      const res = await axios.get(`company/getCompaniesByService/${payload}`);
+      const res = await axios.get(`v2/company/getCompaniesByService/${payload}`);
 
       if (res.status === 200) {
         commit('setCompaniesList', res.data);
@@ -84,7 +84,7 @@ export default {
   },
   async getDraftBids({ commit, dispatch, state }, payload) {
     try {
-      const res = await axios.get(`bid/draft/getUserDrafts/${payload}`);
+      const res = await axios.get(`v2/bid/draft/getUserDrafts/${payload}`);
 
       if (res.status === 200) {
         commit('setDraftBidsList', res.data);
@@ -102,7 +102,7 @@ export default {
   async getBidsLists({ commit, dispatch, state }, payload) {
     commit('setPageLoader', true);
     try {
-      const res = await axios.get(`bid/getBidList/${payload}`);
+      const res = await axios.get(`v2/bid/getBidList/${payload}`);
       if (res.status === 200) {
         commit('setBidsList', res.data);
         commit('setPageLoader', false);
@@ -128,7 +128,7 @@ export default {
       console.log("PAYLOAAD", payload)
       commit('removeSupplierAttachment');
       const res = await axios.get(
-        `bid/getBidBySerial/${payload.serial}/${payload.id}`,
+        `v2/bid/getBidBySerial/${payload.serial}/${payload.id}`,
       );
 
       if (res.status === 200) {
@@ -176,7 +176,7 @@ export default {
 
   async deleteBid({ commit, dispatch, state }, payload) {
     try {
-      const res = await axios.post('bid/deleteBid/', {
+      const res = await axios.post('v2/bid/deleteBid/', {
         bidId: payload.bidId,
       });
 
@@ -298,7 +298,7 @@ export default {
 
   async awardCompany({ commit, dispatch, state }, payload) {
     try {
-      const res = await axios.post('bid/bidAwardees/', {
+      const res = await axios.post('v2/bid/bidAwardees/', {
         companyId: payload.companyId,
         bidId: payload.bidId,
         userId: payload.userId,
@@ -324,7 +324,7 @@ export default {
   },
   async rejectCompany({ commit, dispatch, state }, payload) {
     try {
-      const res = await axios.post('bid/bidRejectees/', {
+      const res = await axios.post('v2/bid/bidRejectees/', {
         companyId: payload.companyId,
         bidId: payload.bidId,
         userId: payload.userId,
@@ -351,7 +351,7 @@ export default {
 
   async UnAwardCompany({ commit, dispatch, state }, payload) {
     try {
-      const res = await axios.post('bid/bidUnaward/', {
+      const res = await axios.post('v2/bid/bidUnaward/', {
         companyId: payload.companyId,
         bidId: payload.bidId,
       });
@@ -376,7 +376,7 @@ export default {
   },
   async UnDisqualifyCompany({ commit, dispatch, state }, payload) {
     try {
-      const res = await axios.post('bid/bidUndisqualify/', {
+      const res = await axios.post('v2/bid/bidUndisqualify/', {
         companyId: payload.companyId,
         bidId: payload.bidId,
       });
@@ -436,7 +436,7 @@ export default {
       }
     }
     try {
-      const res = await axios.post('bid/submitBid/', formData, config);
+      const res = await axios.post('v2/bid/submitBid/', formData, config);
 
       if (res.status === 200) {
         commit('setIsBidSubmitted', true);
@@ -482,15 +482,7 @@ export default {
 
     if (payload.supplierAttachments) {
       for (let i = 0; i < payload.supplierAttachments.length; i++) {
-        if (payload.supplierAttachments[i].newAttach) {
-          formData.append(`supplierAttachments[${i}]`, payload.supplierAttachments[i].attachment);
-        } else {
-          formData.append(`supplierAttachments[${i}][attachment]`, payload.supplierAttachments[i].attachment);
-          formData.append(`supplierAttachments[${i}][fileName]`, payload.supplierAttachments[i].fileName);
-          formData.append(`supplierAttachments[${i}][fileSize]`, payload.supplierAttachments[i].fileSize);
-          formData.append(`supplierAttachments[${i}][uploadedAt][_seconds]`, payload.supplierAttachments[i].uploadedAt._seconds);
-          formData.append(`supplierAttachments[${i}][uploadedAt][_nanoseconds]`, payload.supplierAttachments[i].uploadedAt._nanoseconds);
-        }       
+        formData.append(`supplierAttachments[${i}]`, payload.supplierAttachments[i]);
       }
     }
 
@@ -517,7 +509,7 @@ export default {
       }
     }
     try {
-      const res = await axios.post('bid/editSubmitBid/', formData, config);
+      const res = await axios.post('v2/bid/editSubmitBid/', formData, config);
 
       if (res.status === 200) {
         commit('removeSupplierAttachment');
@@ -552,7 +544,7 @@ export default {
       commit('setPageLoader', true);
     }
     try {
-      const res = await axios.get(`bid/getQA/${payload.bidId}/${payload.userId}`);
+      const res = await axios.get(`v2/bid/getQA/${payload.bidId}/${payload.userId}`);
 
       if (res.status === 200) {
         commit('setQAndA', res.data);
@@ -584,7 +576,7 @@ export default {
 
   async askQuestion({ commit, dispatch, state }, payload) {
     try {
-      const res = await axios.post('bid/questionAsked/', {
+      const res = await axios.post('v2/bid/questionAsked/', {
         question: payload.question,
         userId: payload.userId,
         companyId: payload.companyId,
@@ -607,7 +599,7 @@ export default {
 
   async answerQuestion({ commit, dispatch, state }, payload) {
     try {
-      const res = await axios.post('bid/questionAnswer/', {
+      const res = await axios.post('v2/bid/questionAnswer/', {
         answer: payload.answer,
         userId: payload.userId,
         questionId: payload.questionId,
@@ -630,7 +622,7 @@ export default {
 
   async editAnswer({ commit, dispatch, state }, payload) {
     try {
-      const res = await axios.post('bid/editAnswer/', {
+      const res = await axios.post('v2/editAnswer/', {
         answer: payload.answer,
         questionId: payload.questionId,
       });
@@ -756,7 +748,7 @@ export default {
     }
 
     try {
-      const res = await axios.post('bid/draft/createDraft', formData, config);
+      const res = await axios.post('v2/bid/draft/createDraft', formData, config);
       if (res.status === 200) {
         commit('setBidData', res.data);
         commit('setAttachement', res.data.attachments);
@@ -798,6 +790,7 @@ export default {
     const formData = new FormData();
 
     if (state.bidData._id) {
+      console.log("AAAAAAAAAAAAAAA BUCETA")
       commit('setDraftBidsList', state.bidData._id);
       commit('setBidSerial', state.bidData.serial);
     }
@@ -901,11 +894,12 @@ export default {
       }
     }
     try {
-      const res = await axios.post(`bid/draft/updateDraft/${state.draftBidsList}`, formData, config);
+      const res = await axios.post(`v2/bid/draft/updateDraft/${state.draftBidsList}`, formData, config);
       if (res.status === 200) {
         commit('setIsEditBidChanges', false);
         commit('setBidSerial', res.data.serial);
         commit('setDraftTime', new Date().toLocaleString());
+        commit('setDraftBidsList', null);
         commit('setSaveBidLoading', false);
       } else {
         commit('setSaveBidLoading', false);
@@ -926,7 +920,7 @@ export default {
   async inviteNewSupplier({ commit, state, dispatch }, payload) {
     commit('setLoadingInvite', true);
     try {
-      const res = await axios.post('bid/inviteSupplier/', {
+      const res = await axios.post('v2/bid/inviteSupplier/', {
         firstName: payload.firstName, lastName: payload.lastName, company: payload.company, phone: payload.phone, email: payload.email, bidTitle: payload.bidTitle, bidType: payload.bidType, bidDueDate: payload.bidDueDate, bidDueTime: payload.bidDueTime,
       });
 
@@ -955,7 +949,7 @@ export default {
   async publishBid({ commit, state, dispatch }) {
     try {
       await dispatch('updateDraftBid', 'update');
-      const res = await axios.post('bid/publishBid', {
+      const res = await axios.post('v2/bid/publishBid', {
         draftBidId: state.draftBidsList,
       });
       if (res.status === 200) {
@@ -979,7 +973,7 @@ export default {
         commit('setIsEditBidChanges', false);
         state.bidData.lastSerial = res.data.serial;
         state.bidData.serial = '';
-      //  state.bidData._id = '';
+        state.bidData._id = '';
         state.bidData.status = '';
         state.bidData.statusType = '';
         commit('setBidDescription', [{ body: '' }]);
@@ -988,7 +982,7 @@ export default {
         state.bidData.invitedTeamMembers = '';
         state.bidData.lineItems = '';
         state.bidData.questions = '';
-        const bidDetail = await axios.get(`bid/getBid/${res.data._path.segments[1]}`);
+        const bidDetail = await axios.get(`v2/bid/getv2/Bid/${res.data._path.segments[1]}`);
         return bidDetail.data.serial;
       }
 
@@ -1013,7 +1007,7 @@ export default {
       }
     }
     try {
-      const res = await axios.post('bid/uploadBidAttachment/', formData, config);
+      const res = await axios.post('v2/bid/uploadBidAttachment/', formData, config);
 
       if (res.status === 200) {
         commit('setAttachData', res.data);
@@ -1033,7 +1027,7 @@ export default {
   },
   async getBidTemplates({ commit, state, dispatch }, payload) {
     try {
-      const res = await axios.get('bid/getBidTemplates/');
+      const res = await axios.get('v2/bid/getBidTemplates/');
       if (res.status === 200) {
         commit('setBidTemplates', res.data);
       }
@@ -1049,7 +1043,7 @@ export default {
   },
   async deleteTemplate({ commit, state, dispatch }, payload) {
     try {
-      const res = await axios.post('bid/deleteTemplateBid/', { templateId: payload.id });
+      const res = await axios.post('v2/bid/deleteTemplateBid/', { templateId: payload.id });
       if (res.status === 200) {
         commit('setDraftBidsList', null);
         commit('setDraftTime', null);
@@ -1097,7 +1091,7 @@ export default {
   },
   async updateTemplateNote({ state, dispatch }, payload) {
     try {
-      const res = await axios.post('bid/editTemplateNote/', { templateId: payload.templateId, note: payload.note });
+      const res = await axios.post('v2/bid/editTemplateNote/', { templateId: payload.templateId, note: payload.note });
       if (res.status === 200) {
         dispatch('getBidTemplates');
       }
@@ -1114,7 +1108,8 @@ export default {
   async getEditTemplate({ commit, state, dispatch }, payload) {
     commit('setPageLoader', true);
     try {
-      const res = await axios.get(`bid/getBidDetailsById/${payload.id}`);
+      console.log("HAHAHAHAHAHAHAH", payload)
+      const res = await axios.get(`v2/bid/getBidDetailsById/${payload.id}`);
       if (res.status === 200) {
         commit('getSingleTemplate', res.data);
         commit('setBidData', res.data);
@@ -1171,7 +1166,7 @@ export default {
     formData.append('attachment', []);
 
     try {
-      const res = await axios.post('bid/createTemplateBid', formData, config);
+      const res = await axios.post('v2/bid/createTemplateBid', formData, config);
       if (res.status === 200) {
         commit('setBidData', res.data);
         commit('setAttachement', res.data.attachment);
@@ -1200,7 +1195,7 @@ export default {
     commit('setPageLoader', true);
     try {
       const res = await axios.get(
-        `bid/draft/getDraftBySerial/${payload.serial}`,
+        `v2/bid/draft/getDraftBySerial/${payload.serial}`,
       );
 
       if (res.status === 200) {
@@ -1423,7 +1418,7 @@ export default {
     }
 
     try {
-      const res = await axios.post('bid/editTemplateBid/', formData, config);
+      const res = await axios.post('v2/bid/editTemplateBid/', formData, config);
       if (res.status === 200) {
         // commit('setDraftBidsList',null);
         commit('setIsEditBidChanges', false);
@@ -1485,7 +1480,7 @@ export default {
 
   async deleteDraftBid({ state, dispatch }, payload) {
     try {
-      const res = await axios.post('bid/draft/deleteDraft/', { draftId: payload.draftId });
+      const res = await axios.post('v2/bid/draft/deleteDraft/', { draftId: payload.draftId });
       if (res.status === 200) {
         router.replace('/view-bids');
       }
@@ -1503,7 +1498,7 @@ export default {
     try {
       commit('setPageLoader', true);
       const res = await axios.get(
-        `bid/getBidBySerial/${payload.serial}/${payload.id}`,
+        `v2/bid/getBidBySerial/${payload.serial}/${payload.id}`,
       );
 
       if (res.status === 200) {
@@ -1661,7 +1656,7 @@ export default {
     }
 
     try {
-      const res = await axios.post('bid/editBid/', formData, config);
+      const res = await axios.post('v2/bid/editBid/', formData, config);
       if (res.status === 200) {
         // commit('setDraftBidsList',null);
         commit('setIsEditBidChanges', false);
@@ -1747,7 +1742,7 @@ export default {
   },
   async inviteSupplierToBid({ commit, state, dispatch }, payload) {
     try {
-      const res = await axios.post('bid/addSupplierToBid/', {
+      const res = await axios.post('v2/bid/addSupplierToBid/', {
         userId: payload.userId,
         bidId: payload.bidId,
         invitedSuppliers: payload.invitedSuppliers,
@@ -1775,7 +1770,7 @@ export default {
   },
   async changeBidDate({ commit, state, dispatch }, payload) {
     try {
-      const res = await axios.post('bid/changeDueDate/', payload);
+      const res = await axios.post('v2/bid/changeDueDate/', payload);
 
       if (res.status === 200) {
         commit('setDateAlert');
@@ -1793,7 +1788,7 @@ export default {
 
   async addTeamMemberToBid({ commit, state, dispatch }, payload) {
     try {
-      const res = await axios.post('bid/addTeamMemberToBid/', {
+      const res = await axios.post('v2/bid/addTeamMemberToBid/', {
         userId: payload.userId,
         bidId: payload.bidId,
         teamMemberIds: payload.teamMembersIds,
