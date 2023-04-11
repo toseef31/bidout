@@ -480,7 +480,15 @@ export default {
 
     if (payload.supplierAttachments) {
       for (let i = 0; i < payload.supplierAttachments.length; i++) {
-        formData.append(`supplierAttachments[${i}]`, payload.supplierAttachments[i]);
+        if (payload.supplierAttachments[i].newAttach) {
+          formData.append(`supplierAttachments[${i}]`, payload.supplierAttachments[i].attachment);
+        } else {
+          formData.append(`supplierAttachments[${i}][attachment]`, payload.supplierAttachments[i].attachment);
+          formData.append(`supplierAttachments[${i}][fileName]`, payload.supplierAttachments[i].fileName);
+          formData.append(`supplierAttachments[${i}][fileSize]`, payload.supplierAttachments[i].fileSize);
+          formData.append(`supplierAttachments[${i}][uploadedAt][_seconds]`, payload.supplierAttachments[i].uploadedAt._seconds);
+          formData.append(`supplierAttachments[${i}][uploadedAt][_nanoseconds]`, payload.supplierAttachments[i].uploadedAt._nanoseconds);
+        }       
       }
     }
 
@@ -704,7 +712,11 @@ export default {
           formData.append(`lineItems[${lineItemsindex}][unit]`, state.bidlines[i].unit);
           formData.append(`lineItems[${lineItemsindex}][inputType]`, state.bidlines[i].inputType);
           formData.append(`lineItems[${lineItemsindex}][quantity]`, state.bidlines[i].quantity);
-          formData.append(`lineItems[${lineItemsindex}][buyerComment]`, state.bidlines[i].buyerComment);
+          if(state.bidlines[i].buyerComment === 'undefined' || state.bidlines[i].buyerComment === '' || state.bidlines[i].buyerComment === undefined){
+            formData.append(`lineItems[${lineItemsindex}][buyerComment]`, '');
+          }else{
+            formData.append(`lineItems[${lineItemsindex}][buyerComment]`, state.bidlines[i].buyerComment);
+          }
           formData.append(`lineItems[${lineItemsindex}][required]`, state.bidlines[i].required);
           lineItemsindex++;
         }
@@ -845,7 +857,11 @@ export default {
           formData.append(`lineItems[${lineItemsindex}][unit]`, state.bidlines[i].unit);
           formData.append(`lineItems[${lineItemsindex}][inputType]`, state.bidlines[i].inputType);
           formData.append(`lineItems[${lineItemsindex}][quantity]`, state.bidlines[i].quantity);
-          formData.append(`lineItems[${lineItemsindex}][buyerComment]`, state.bidlines[i].buyerComment);
+          if(state.bidlines[i].buyerComment === 'undefined' || state.bidlines[i].buyerComment === '' || state.bidlines[i].buyerComment === undefined){
+            formData.append(`lineItems[${lineItemsindex}][buyerComment]`, '');
+          }else{
+            formData.append(`lineItems[${lineItemsindex}][buyerComment]`, state.bidlines[i].buyerComment);
+          }
           formData.append(`lineItems[${lineItemsindex}][required]`, state.bidlines[i].required);
           lineItemsindex++;
         }
@@ -1300,7 +1316,11 @@ export default {
             formData.append(`lineItems[${lineItemsindex}][unit]`, state.bidlines[i].unit);
             formData.append(`lineItems[${lineItemsindex}][inputType]`, state.bidlines[i].inputType);
             formData.append(`lineItems[${lineItemsindex}][quantity]`, state.bidlines[i].quantity);
-            formData.append(`lineItems[${lineItemsindex}][buyerComment]`, state.bidlines[i].buyerComment);
+            if(state.bidlines[i].buyerComment === 'undefined' || state.bidlines[i].buyerComment === '' || state.bidlines[i].buyerComment === undefined){
+              formData.append(`lineItems[${lineItemsindex}][buyerComment]`, '');
+            }else{
+              formData.append(`lineItems[${lineItemsindex}][buyerComment]`, state.bidlines[i].buyerComment);
+            }
             formData.append(`lineItems[${lineItemsindex}][required]`, state.bidlines[i].required);
             lineItemsindex++;
           }
@@ -1317,7 +1337,11 @@ export default {
           formData.append(`lineItems[${lineItemsindex}][unit]`, state.bidlines[i].unit);
           formData.append(`lineItems[${lineItemsindex}][inputType]`, state.bidlines[i].inputType);
           formData.append(`lineItems[${lineItemsindex}][quantity]`, state.bidlines[i].quantity);
-          formData.append(`lineItems[${lineItemsindex}][buyerComment]`, state.bidlines[i].buyerComment);
+          if(state.bidlines[i].buyerComment === 'undefined' || state.bidlines[i].buyerComment === '' || state.bidlines[i].buyerComment === undefined){
+            formData.append(`lineItems[${lineItemsindex}][buyerComment]`, '');
+          }else{
+            formData.append(`lineItems[${lineItemsindex}][buyerComment]`, state.bidlines[i].buyerComment);
+          }
           formData.append(`lineItems[${lineItemsindex}][required]`, state.bidlines[i].required);
           lineItemsindex++;
         }
@@ -1484,6 +1508,7 @@ export default {
         dispatch('getCategories');
         dispatch('searchByCompany', { query: '', basin: 'all' });
         commit('setBidData', res.data.bidData);
+        commit('setUserType', res.data.user_type);
 
         if (res.data.supplierSubmissions
           && res.data.supplierSubmissions
@@ -1505,7 +1530,7 @@ export default {
       }
     }
   },
-  async updateBid({ commit, state, dispatch }, payload) {
+  async updateBid({ commit, state, dispatch,rootState }, payload) {
     commit('setSaveBidLoading', true);
     const config = {
       headers: {
@@ -1534,7 +1559,7 @@ export default {
     formData.append('userId', state.bidData.userId.id);
     formData.append('companyId', state.bidData.companyId);
     formData.append('company', state.bidData.company);
-    // formData.append('serial', state.bidSerial);
+    formData.append('editedByUserId',rootState.auth.userInfo.id)
 
     formData.append('bidDescriptions[0][body]', state.bidData.bidDescriptions[0].body);
     if (state.bidData.bidDescriptions.length > 1) {
@@ -1585,7 +1610,11 @@ export default {
           formData.append(`lineItems[${lineItemsindex}][unit]`, state.bidlines[i].unit);
           formData.append(`lineItems[${lineItemsindex}][inputType]`, state.bidlines[i].inputType);
           formData.append(`lineItems[${lineItemsindex}][quantity]`, state.bidlines[i].quantity);
-          formData.append(`lineItems[${lineItemsindex}][buyerComment]`, state.bidlines[i].buyerComment);
+          if(state.bidlines[i].buyerComment === 'undefined' || state.bidlines[i].buyerComment === '' || state.bidlines[i].buyerComment === undefined){
+            formData.append(`lineItems[${lineItemsindex}][buyerComment]`, '');
+          }else{
+            formData.append(`lineItems[${lineItemsindex}][buyerComment]`, state.bidlines[i].buyerComment);
+          }
           formData.append(`lineItems[${lineItemsindex}][required]`, state.bidlines[i].required);
           lineItemsindex++;
         }
@@ -1626,6 +1655,7 @@ export default {
     } else {
       formData.append('questions', '');
     }
+
     try {
       const res = await axios.post('bid/editBid/', formData, config);
       if (res.status === 200) {

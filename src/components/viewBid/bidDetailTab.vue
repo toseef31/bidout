@@ -8,7 +8,7 @@
         <div class="title-desc">
           <div><span>Bid Title:</span> {{ bidDetail.bidData.title }}</div>
           <div><span>Bid Type:</span> {{ bidDetail.bidData.type }}</div>
-          <div>
+          <div class="d-flex align-center">
             <span>Due Date/Time:</span> {{ formatDate(bidDetail.bidData.dueDate) }} @
             {{ bidDetail.bidData.dueTime }} CST <v-btn @click="changeDate" icon
               v-if="bidDetail.receivingBids && !isBidOut"><v-icon color="black"
@@ -24,21 +24,20 @@
 
         <p class="bid-desc">
           <span>Description:</span>
-          {{
-            bidDetail.bidData.bidDescriptions &&
+          <span class="pl-2 font-weight-regular ql-editor pa-0" v-html="bidDetail.bidData.bidDescriptions &&
             Array.isArray(bidDetail.bidData.bidDescriptions)
             ? bidDetail.bidData.bidDescriptions[0].body
-            : bidDetail.bidData.bidDescriptions
-          }}
+            : bidDetail.bidData.bidDescriptions"></span>
         </p>
-        <br />
+        <br>
 
-        <p class="bid-headline"
+        <div class="bid-headline"
           v-if="bidDetail.bidData && bidDetail.bidData.bidDescriptions && Array.isArray(bidDetail.bidData.bidDescriptions)"
           v-for="(item, index) in bidDetail.bidData.bidDescriptions.slice(1)" :key="index">
-          <span>{{ item && item.name }}:</span> {{ item && item.body }}
-          <br /> <br />
-        </p>
+          <span class="additional-title">{{ item && item.name }}:</span>
+          <div class="font-weight-regular ql-editor pa-0" v-html="item && item.body"></div>
+          <br>
+      </div>
       </div>
     </div>
 
@@ -167,7 +166,7 @@
 
           <v-btn icon @click="toggleSupplier = false">
             <v-icon size="30" color="#F32349
-                                                                                ">mdi-close</v-icon>
+                                                                                      ">mdi-close</v-icon>
           </v-btn>
         </div>
         <AddSupplier />
@@ -221,7 +220,7 @@
 
           <v-btn icon @click="toggleTeam = false">
             <v-icon size="30" color="#F32349
-                                                                                ">mdi-close</v-icon>
+                                                                                      ">mdi-close</v-icon>
           </v-btn>
         </div>
         <AddTeamMember />
@@ -253,7 +252,7 @@
               <td class="text-left">{{ item.inputType }}</td>
               <td class="text-left">{{ item.quantity }}</td>
               <td class="text-left">
-                {{ item.buyerComment }}
+                {{ item.buyerComment === 'undefined' || item.buyerComment === '' ? '' : item.buyerComment }}
               </td>
             </tr>
           </tbody>

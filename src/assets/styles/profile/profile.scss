@@ -1,192 +1,284 @@
-.profile-module{
-	.mid-content{
+.profile-module {
+	.mid-content {
 		flex: 0 0 100%;
-	  max-width: 100%;
-	  z-index: 2;
-	  padding-left: 0 !important;
-	  .content-section{
-	  	background: #FFFFFF;
-	  	border: 1px solid #B8B8B8;
-	  	border-radius: 8px;
-	  	margin-bottom: 0px;
-	  	padding: 10px 0px;
+		max-width: 100%;
+		z-index: 2;
+		padding-left: 0 !important;
+
+		.content-section {
+			background: #FFFFFF;
+			border: 1px solid #B8B8B8;
+			border-radius: 8px;
+			margin-bottom: 0px;
+			padding: 10px 0px;
 			min-height: calc(100vh - 111px);
-	  	.manage-sections{
-	  		.top-section{
-	  			justify-content: center;
-	  			align-items: center;
-	  			.user-info{
-	  				.user-name{
-	  					h3{
-	  						font-size: 24px;
-	  					}
-	  				}
-	  			}
-	  			.admin-tag{
-	  				color: #0D9648;
-	  			}
-	  			.user {
-	  			  width: 112px;
-	  			  height: 112px;
-	  			  border-radius: 100%;
-	  			  border: 1px solid #0D9648;
-	  			  position: relative;
-	  			}
-	  			.profile-img {
-	  			  height: 100%;
-	  			  width: 100%;
-	  			  border-radius: 50%;
-	  			}
-	  			.icon {
-	  			  position: absolute;
-	  			  top: 10px;
-	  			  right: 0;
-	  			  background: #0D9648;
-	  			  border-radius: 100%;
-	  			  width: 30px;
-	  			  height: 30px;
-	  			  line-height: 30px;
-	  			  vertical-align: middle;
-	  			  text-align: center;
-	  			  color: #fff;
-	  			  font-size: 14px;
-	  			  cursor: pointer;
-	  			}
-	  		}
-	  		.editprofile-section{
-	  			.v-form{
-	  				.v-input{
-	  					&__slot{
-	  						fieldset{
-	  							border-radius: 8px;
-	  							border-color: #B8B8B8;
-	  						}
-	  					}
-	  				}
-	  				#MazPhoneNumberInput{
-	  					margin-bottom: 0!important;
-	  					.country-selector{
-	  						&__input{
-	  							height: 56px;
-	  							min-height: 56px;
-	  						}
-	  					}
-	  					.input-tel{
-	  						&__input{
-	  							height: 56px;
-	  							min-height: 56px;
-	  						}
-	  					}
-	  				}
-	  			}
-	  			.admin-title{
-	  				font-size: 24px;
-	  				color: #201B1B;
-	  			}
-	  			.v-input--switch{
-	  				float: right;
-	  			}
-	  			.v-input{
-	  				border-radius: 8px;
-	  				&--selection-controls{
-	  					&__ripple{
-	  						color: #0d9648 !important;
-	  						caret-color: #0d9648 !important;
-	  					}
-	  					&__input{
-	  						i{
-	  							color: #0d9648 !important;
-	  							caret-color: #0d9648 !important;
-	  						}
-	  					}
-	  				}
-	  			}
-	  			.v-input--is-label-active{
-	  				color: #0D9648 !important;
-	  				opacity: 1;
-	  				.v-input--switch__track.primary--text{
-	  					color: #0D9648 !important;
-	  					opacity: 1;
-	  				}
-	  				.v-input--switch__thumb.primary--text{
-	  					color: #fff !important;
-	  				}
-	  				.v-input--selection-controls__ripple.primary--text{
-	  					color: #0D9648 !important;
-	  				}
-	  			}
-	  			.v-data-table{
-	  				thead{
-	  					.head-title{
-	  						font-size: 24px;
-	  						line-height: 30px;
-	  						color: #201B1B;
-	  					}
-	  					th{
-	  						font-size: 16px;
-	  						border-bottom: 0;
-	  					}
-	  				}
-	  				tbody{
-	  					tr{
-	  						td{
-	  							color: #201B1B;
-	  							font-size: 16px;
-	  							font-weight: 500;
-	  							border-bottom: 0;
-	  							.v-input--checkbox{
-	  								float: right;
-	  							}
-	  						}
-	  					}
-	  					tr:nth-child(odd){
-	  						background: #FBFBFB;
-	  					}
-	  				}
-	  			}
-	  		}
-	  	}
-	  }
+
+			.manage-sections {
+				.top-section {
+					justify-content: center;
+					align-items: center;
+
+					.user-info {
+						.user-name {
+							h3 {
+								font-size: 24px;
+							}
+						}
+					}
+
+					.admin-tag {
+						color: #0D9648;
+					}
+
+					.user {
+						width: 112px;
+						height: 112px;
+						border-radius: 100%;
+						border: 1px solid #0D9648;
+						position: relative;
+					}
+
+					.profile-img {
+						height: 100%;
+						width: 100%;
+						border-radius: 50%;
+					}
+
+					.icon {
+						position: absolute;
+						top: 10px;
+						right: 0;
+						background: #0D9648;
+						border-radius: 100%;
+						width: 30px;
+						height: 30px;
+						line-height: 30px;
+						vertical-align: middle;
+						text-align: center;
+						color: #fff;
+						font-size: 14px;
+						cursor: pointer;
+					}
+				}
+
+				.editprofile-section {
+					.phone-class {
+						color: #ff5252;
+						font-size: 12px;
+						text-align: left;
+						margin-top: 6px;
+						padding-left: 12px;
+					}
+
+					.v-form {
+						.vue-tel-input:focus-within {
+							border: 2px solid #B8B8B8
+						}
+
+						.phone-main-class {
+							height: 56px;
+							border-radius: 8px;
+							box-shadow: none;
+							border: 1px solid #B8B8B8;
+
+							.vti__dropdown {
+								padding-right: 15px;
+								border-right: 1px solid #9E9E9E;
+
+								.vti__selection {
+									column-gap: 6px;
+								}
+
+								.vti__selection .vti__country-code {
+									color: #201B1B;
+									font-weight: 500;
+									font-size: 14px;
+
+								}
+							}
+
+							ul {
+								padding-left: 0;
+							}
+
+							.vti__dropdown-list.below {
+								top: 55px;
+								box-shadow: rgba(200, 200, 200, 0.7) 0px 0px 0px 0.125rem;
+								border: 1px solid transparent;
+								border-radius: 8px;
+
+							}
+
+							.vti__dropdown-item {
+								padding: 4px 7px;
+								font-size: 13px;
+
+								strong {
+									padding-left: 5px;
+									font-weight: 400;
+								}
+
+							}
+						}
+
+						.v-input {
+							&__slot {
+								fieldset {
+									border-radius: 8px;
+									border-color: #B8B8B8;
+								}
+							}
+						}
+
+						#MazPhoneNumberInput {
+							margin-bottom: 0 !important;
+
+							.country-selector {
+								&__input {
+									height: 56px;
+									min-height: 56px;
+								}
+							}
+
+							.input-tel {
+								&__input {
+									height: 56px;
+									min-height: 56px;
+								}
+							}
+						}
+					}
+
+					.admin-title {
+						font-size: 24px;
+						color: #201B1B;
+					}
+
+					.v-input--switch {
+						float: right;
+					}
+
+					.v-input {
+						border-radius: 8px;
+
+						&--selection-controls {
+							&__ripple {
+								color: #0d9648 !important;
+								caret-color: #0d9648 !important;
+							}
+
+							&__input {
+								i {
+									color: #0d9648 !important;
+									caret-color: #0d9648 !important;
+								}
+							}
+						}
+					}
+
+					.v-input--is-label-active {
+						color: #0D9648 !important;
+						opacity: 1;
+
+						.v-input--switch__track.primary--text {
+							color: #0D9648 !important;
+							opacity: 1;
+						}
+
+						.v-input--switch__thumb.primary--text {
+							color: #fff !important;
+						}
+
+						.v-input--selection-controls__ripple.primary--text {
+							color: #0D9648 !important;
+						}
+					}
+
+					.v-data-table {
+						thead {
+							.head-title {
+								font-size: 24px;
+								line-height: 30px;
+								color: #201B1B;
+							}
+
+							th {
+								font-size: 16px;
+								border-bottom: 0;
+							}
+						}
+
+						tbody {
+							tr {
+								td {
+									color: #201B1B;
+									font-size: 16px;
+									font-weight: 500;
+									border-bottom: 0;
+
+									.v-input--checkbox {
+										float: right;
+									}
+								}
+							}
+
+							tr:nth-child(odd) {
+								background: #FBFBFB;
+							}
+						}
+					}
+				}
+			}
+		}
 	}
-	.mid-content-collapse{
-			flex: 0 0 100%;
-		  max-width: 100%;
+
+	.mid-content-collapse {
+		flex: 0 0 100%;
+		max-width: 100%;
 	}
 }
-	
+
 @media (max-width: 768px) {
-	.profile-module{
+	.profile-module {
 		flex: 0 0 100%;
-	  	max-width: 100%;
+		max-width: 100%;
+
 		.mid-content {
 			flex: 0 0 100%;
-	  	max-width: 100%;
-			.content-section{
+			max-width: 100%;
+
+			.content-section {
 				border: 0px;
 				padding: 0;
-				.manage-sections{
+
+				.manage-sections {
 					padding: 8px !important;
-					.top-section{
+
+					.top-section {
 						display: block !important;
 					}
-					.editprofile-section{
-						.admin-title{
+
+					.editprofile-section {
+						.admin-title {
 							font-size: 18px;
 							color: #201B1B;
 						}
-						.v-data-table{
-							thead{
-								.head-title{
+
+						.v-data-table {
+							thead {
+								.head-title {
 									font-size: 14px;
-							    line-height: 18px;
+									line-height: 18px;
 								}
-								th{
+
+								th {
 									font-size: 13px;
 								}
 							}
-							tbody{
-								tr{
-									td{
+
+							tbody {
+								tr {
+									td {
 										font-size: 13px;
 									}
 								}

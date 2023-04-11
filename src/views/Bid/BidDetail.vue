@@ -84,8 +84,18 @@
                 Bid: <span class="serial">#{{ bidDetail.bidData.serial }}</span>
               </div>
               <div>
-                Due Date/Time: {{ formatDate(bidDetail.bidData.dueDate) }} @
-                {{ bidDetail.bidData.dueTime }} CST
+                <div v-if="bidDetail.bidData.type === 'BidOut Process'"> BidOut Start Date: {{
+                  formatBidOutStartDate(bidDetail.bidData.dueDate, bidDetail.bidData.dueTime) }} CST &nbsp;
+                  {{ formatDate(bidDetail.bidData.dueDate) }} @
+                  {{ bidDetail.bidData.dueTime }} CST <a class="text-decoration-none ml-1" target="_blank"
+                    href=" https://help.bidout.app/article/7-bidout-process-explain"><v-icon color="black"
+                      size="18">mdi-information-outline</v-icon></a></div>
+                <div v-else>Bid Start Date: {{
+                  formatStartDate(bidDetail.bidData.createdAt._seconds, bidDetail.bidData.createdAt._nanoseconds) }} CST
+                  &nbsp; Bid End Date: {{
+                    formatDate(bidDetail.bidData.dueDate) }} @
+                  {{ bidDetail.bidData.dueTime }} CST</div>
+
               </div>
               <div>
                 Created by: <strong>{{ bidDetail.bidData.company }}</strong>, {{ bidDetail.bidData.userId.firstName }}
@@ -97,15 +107,16 @@
         </v-col>
 
         <v-col class="status-sec mx-auto">
-          <v-sheet class="py-2 px-4 bid-status-card text-left" rounded="lg" height="119" width="300"
+          <v-sheet class="py-2 px-4 bid-status-card text-left" rounded="lg" height="119" width="310"
             v-if="bidDetail.receivingBids && !isBidOut">
             <div class="status">
               Status: Receiving Bids
             </div>
             <div class="time pt-2 align-center">
               <v-icon small color="#0D9648"> mdi-timer-outline</v-icon>
-              {{ days }} days, {{ hours }} hours, {{ minutes }} min,
-              {{ seconds }} sec remaining
+              {{ months > 0 ? `${months} months,` : '' }}
+              {{ days }} days, {{ hours }} hours, {{ minutes }} min
+              {{ months === 0 ? `, ${seconds} sec` : '' }} remaining
             </div>
 
             <v-divider color="#0D9648"></v-divider>
@@ -114,7 +125,7 @@
             </div>
           </v-sheet>
 
-          <v-sheet class="py-2 px-4 bid-status-card text-left" rounded="lg" height="119" width="300"
+          <v-sheet class="py-2 px-4 bid-status-card text-left" rounded="lg" height="119" width="310"
             v-if="!bidDetail.receivingBids && isBidOut">
 
             <div class="status">
@@ -122,8 +133,9 @@
             </div>
             <div class="time pt-2 align-center">
               <v-icon small color="#0D9648"> mdi-timer-outline</v-icon>
-              {{ days }} days, {{ hours }} hours, {{ minutes }} min,
-              {{ seconds }} sec remaining
+              {{ months > 0 ? `${months} months,` : '' }}
+              {{ days }} days, {{ hours }} hours, {{ minutes }} min
+              {{ months === 0 ? `, ${seconds} sec` : '' }} remaining
             </div>
 
             <v-divider color="#0D9648"></v-divider>
@@ -260,8 +272,18 @@
                 Bid: <span class="serial">#{{ bidDetail.bidData.serial }}</span>
               </div>
               <div>
-                Due Date/Time: {{ formatDate(bidDetail.bidData.dueDate) }} @
-                {{ bidDetail.bidData.dueTime }} CST
+                <div v-if="bidDetail.bidData.type === 'BidOut Process'"> BidOut Start Date: {{
+                  formatBidOutStartDate(bidDetail.bidData.dueDate, bidDetail.bidData.dueTime) }} CST &nbsp;
+                  {{ formatDate(bidDetail.bidData.dueDate) }} @
+                  {{ bidDetail.bidData.dueTime }} CST <a class="text-decoration-none ml-1" target="_blank"
+                    href=" https://help.bidout.app/article/7-bidout-process-explain"><v-icon color="black"
+                      size="18">mdi-information-outline</v-icon></a></div>
+                <div v-else>Bid Start Date: {{
+                  formatStartDate(bidDetail.bidData.createdAt._seconds, bidDetail.bidData.createdAt._nanoseconds) }} CST
+                  &nbsp; Bid End Date: {{
+                    formatDate(bidDetail.bidData.dueDate) }} @
+                  {{ bidDetail.bidData.dueTime }} CST</div>
+
               </div>
               <div>
                 Created by: <strong>{{ bidDetail.bidData.company }}</strong>, {{ bidDetail.bidData.userId.firstName }}
@@ -282,15 +304,16 @@
         </v-col>
 
         <v-col cols="auto">
-          <v-sheet class="py-2 px-4 bid-status-card text-left" rounded="lg" height="119" width="300"
+          <v-sheet class="py-2 px-4 bid-status-card text-left" rounded="lg" height="119" width="310"
             v-if="bidDetail.receivingBids && !isBidOut">
             <div class="status">
               Status: Receiving Bids
             </div>
             <div class="time pt-2 align-center">
               <v-icon small color="#0D9648"> mdi-timer-outline</v-icon>
-              {{ days }} days, {{ hours }} hours, {{ minutes }} min,
-              {{ seconds }} sec remaining
+              {{ months > 0 ? `${months} months,` : '' }}
+              {{ days }} days, {{ hours }} hours, {{ minutes }} min
+              {{ months === 0 ? `, ${seconds} sec` : '' }} remaining
             </div>
 
             <v-divider color="#0D9648"></v-divider>
@@ -303,15 +326,16 @@
             </div>
           </v-sheet>
 
-          <v-sheet class="py-2 px-4 bid-status-card text-left" rounded="lg" height="119" width="300"
+          <v-sheet class="py-2 px-4 bid-status-card text-left" rounded="lg" height="119" width="310"
             v-if="!bidDetail.receivingBids && isBidOut">
             <div class="status">
               Status: BidOut Phase
             </div>
             <div class="time pt-2 align-center">
               <v-icon small color="#0D9648"> mdi-timer-outline</v-icon>
-              {{ days }} days, {{ hours }} hours, {{ minutes }} min,
-              {{ seconds }} sec remaining
+              {{ months > 0 ? `${months} months,` : '' }}
+              {{ days }} days, {{ hours }} hours, {{ minutes }} min
+              {{ months === 0 ? `, ${seconds} sec` : '' }} remaining
             </div>
 
             <v-divider color="#0D9648"></v-divider>
@@ -435,6 +459,12 @@ import SupplierBidDetail from '@/components/viewBid/supplierBidDetail.vue';
 import SupplierBidSubmission from '@/components/viewBid/supplierBidSubmission.vue';
 import moment from 'moment-timezone';
 import { mapActions } from 'vuex';
+import 'vue2-editor/dist/vue2-editor.css';
+
+/* Import the Quill styles you want */
+import 'quill/dist/quill.core.css';
+import 'quill/dist/quill.bubble.css';
+import 'quill/dist/quill.snow.css';
 
 export default {
   name: 'BidDetail',
@@ -543,35 +573,6 @@ export default {
         });
 
         await this.getBidAllConversations({ bidId: this.bidDetail.bidData.id, userId: this.users.id });
-      } else if (this.getUserType === 'supplier' && event !== 'tab-2') {
-        await this.getBidBySerial({
-          serial: this.$route.params.serial,
-          id: this.users.id,
-          reload: false,
-          company: this.users.company.company,
-        });
-
-        await this.bidMessageUnreadCount({
-          userId: this.users.id,
-          bidId: this.bidDetail.bidData.id,
-        });
-
-        await this.getIntent({
-          companyId: this.users.company.id,
-          bidId: this.bidDetail.bidData.id,
-          companyName: this.users.company.company,
-          reload: false,
-        });
-
-        this.answer = this.$store.getters.bidIntent;
-
-        await this.getQA({
-          bidId: this.bidDetail.bidData.id,
-          userId: this.users.id,
-          reload: false,
-        });
-
-        await this.getBidAllConversations({ bidId: this.bidDetail.bidData.id, userId: this.users.id });
       }
     },
     ChangeT(tab) {
@@ -620,7 +621,9 @@ export default {
     },
     compute() {
       const duration = moment.duration(this.getDiffInSeconds(), 'seconds');
+
       this.years = duration.years() > 0 ? duration.years() : 0;
+
       this.months = duration.months() > 0 ? duration.months() : 0;
       this.days = duration.days() > 0 ? duration.days() : 0;
       this.hours = duration.hours() > 0 ? duration.hours() : 0;
@@ -635,7 +638,22 @@ export default {
         return true;
       } return false;
     },
+    formatStartDate(item, item2) {
+      const date = moment(item * 1000 + item2 / 1000000).tz('America/Chicago').format('MM/DD/YYYY ha');
 
+      return date;
+    },
+    formatBidOutStartDate(item, item2) {
+      const momentTime = moment(item2, ['h:mm:ss A ']).format('HH:mm:ss');
+
+      const stringDate = `${item}T${momentTime}`;
+
+      let momentDueDate = moment.tz(stringDate, 'America/Chicago');
+
+      momentDueDate = momentDueDate.subtract(4, 'hours');
+
+      return moment.tz(momentDueDate, 'America/Chicago').format('MM/DD/YYYY ha');
+    },
   },
   computed: {
     changeTime() {
@@ -706,9 +724,10 @@ export default {
     },
   },
   mounted() {
+    moment.tz.setDefault('America/Chicago');
+
     document.title = 'View Bid - BidOut';
     window.scrollTo({ top: 0, behavior: 'smooth' });
-    moment.tz.setDefault('America/Chicago');
   },
   async created() {
     this.users = this.$store.getters.userInfo;

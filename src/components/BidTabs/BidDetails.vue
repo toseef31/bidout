@@ -74,18 +74,16 @@
           <v-row justify="center" v-for="(textField, i) in bidDescriptions" :key="i">
             <v-col cols="12" sm="12" text="left" v-if="i == 0">
               <label class="d-block text-left input-label mb-2 font-weight-bold">Bid Description</label>
-              <v-textarea placeholder="Describe here..." single-line outlined type="text"
-                v-model="bidDescriptions[0]['body']" :rules="descRules">
-              </v-textarea>
+              <vue-editor v-model="bidDescriptions[0]['body']" @blur="validateDesc" @keypress="validateDesc"
+              @keyup="validateDesc" :editor-toolbar="customToolbar" />
+              <span v-if="validDesc === false && bidDescriptions[0]['body'].length == 0" class="red--text d-block text-left mt-2">Description is required.</span>
             </v-col>
             <v-col cols="12" sm="12" text="left" v-else>
               <label class="d-block text-left input-label mb-2 font-weight-bold">Additional Information <v-icon
                   color="#F32349" @click="remove(i)">mdi-trash-can-outline</v-icon></label>
               <v-text-field placeholder="Title" single-line outlined type="text" v-model="bidDescriptions[i]['name']">
               </v-text-field>
-              <v-textarea placeholder="Describe here" single-line outlined type="text" hide-details
-                v-model="bidDescriptions[i]['body']">
-              </v-textarea>
+              <vue-editor v-model="bidDescriptions[i]['body']" :editor-toolbar="customToolbar" />
             </v-col>
           </v-row>
           <v-row>
@@ -98,7 +96,7 @@
           <v-row justify="center">
             <v-col cols="12">
               <v-btn color="#0D9648" height="56" class="text-capitalize white--text font-weight-bold save-btn px-9"
-                :loading="saveBidLoading" :disabled="!valid" @click="changeTab" large>Save Changes</v-btn>
+                :loading="saveBidLoading" :disabled="!enableSaveButton" @click="changeTab" large>Save Changes</v-btn>
             </v-col>
           </v-row>
           <template v-if="route != 'EditTemplate'">
@@ -138,8 +136,12 @@
 <script>
 import { mapActions, mapGetters } from 'vuex';
 import moment from 'moment-timezone';
+import { VueEditor } from 'vue2-editor';
 
 export default {
+  components: {
+    VueEditor,
+  },
   data() {
     return {
       valid: true,
@@ -185,12 +187,22 @@ export default {
       route: '',
       isTemplate: false,
       loading: false,
+      validDesc: null,
+      customToolbar: [
+        ['bold', 'italic', 'underline'],
+        [{ list: 'ordered' }, { list: 'bullet' }],
+        [{ indent: "-1" }, { indent: "+1" }],
+        ['link'],
+      ],
     };
   },
   computed: {
     ...mapGetters(['userInfo', 'saveBidLoading', 'isEditBidChanges']),
     singleTemplate() {
       return this.$store.getters.singleTemplate;
+    },
+    getUserType() {
+      return this.$store.getters.userType;
     },
     title: {
       get() {
@@ -304,14 +316,32 @@ export default {
       this.$store.commit('setBidDetailsComplete', this.valid);
       return this.valid;
     },
+    contentRules() {
+      return [
+        (v) => !!v || 'Description is required',
+      ];
+    },
+    enableSaveButton() {
+      return this.valid && this.validDesc;
+    },
   },
   watch: {
     date() {
       this.dueDate = this.formatDate(this.date);
     },
+    bidDescriptions: {
+      handler() {
+        if (this.bidDescriptions[0].body.trim() === '') {
+          this.validDesc = false;
+        } else {
+          this.validDesc = true;
+        }
+      },
+      deep: true,
+    },
   },
   methods: {
-    ...mapActions(['saveDraftBid', 'updateDraftBid', 'deleteDraftBid', 'saveTemplateBid', 'updateTemplate', 'updateBid','getAllIntent']),
+    ...mapActions(['saveDraftBid', 'updateDraftBid', 'deleteDraftBid', 'saveTemplateBid', 'updateTemplate', 'updateBid', 'getAllIntent']),
     async changeTab() {
       if (this.$store.getters.bidData != null) {
         const bidDetails = {
@@ -323,21 +353,21 @@ export default {
         if (this.$refs.form.validate()) {
           this.valid = true;
           this.loading = true;
-          if (this.$route.name == 'EditTemplate') {
+          if (this.$route.name === 'EditTemplate') {
             if (!this.$store.getters.bidData.id) {
               await this.saveTemplateBid(bidDetails);
             } else {
               await this.updateTemplate(bidDetails);
             }
           } else {
-            if (this.$route.name == 'EditBid') {
-              if (this.isEditBidChanges == true) {
+            if (this.$route.name === 'EditBid') {
+              if (this.isEditBidChanges === true) {
                 await this.updateBid(bidDetails);
               }
             }
             if (!this.$store.getters.bidData.id) {
               await this.saveDraftBid(bidDetails);
-            } else if (this.$store.getters.bidData.id && this.$store.getters.bidData.statusType == 'templateBid') {
+            } else if (this.$store.getters.bidData.id && this.$store.getters.bidData.statusType === 'templateBid') {
               await this.saveDraftBid(bidDetails);
             } else {
               await this.updateDraftBid(bidDetails);
@@ -353,7 +383,7 @@ export default {
           companyId: this.userInfo.company.id,
           company: this.userInfo.company.company,
         };
-        if (this.$route.name == 'EditTemplate') {
+        if (this.$route.name === 'EditTemplate') {
           await this.saveTemplateBid(bidDetails);
         } else {
           await this.saveDraftBid(bidDetails);
@@ -368,24 +398,27 @@ export default {
           companyId: this.userInfo.company.id,
           company: this.userInfo.company.company,
         };
+        if (this.$store.getters.bidData.id && this.$store.getters.bidData.statusType === 'templateBid') {
+          await this.saveDraftBid(bidDetails);
+        }
         if (this.$refs.form.validate()) {
-          if (this.$route.name == 'EditTemplate') {
+          if (this.$route.name === 'EditTemplate') {
             if (!this.$store.getters.bidData.id) {
               await this.saveTemplateBid(bidDetails);
-            } else if (this.$store.getters.bidData.id && this.$store.getters.bidData.statusType == 'templateBid') {
+            } else if (this.$store.getters.bidData.id && this.$store.getters.bidData.statusType === 'templateBid') {
               await this.saveTemplateBid(bidDetails);
             } else {
               await this.updateTemplate(bidDetails);
             }
           } else {
-            if (this.$route.name == 'EditBid') {
-              if (this.isEditBidChanges == true) {
+            if (this.$route.name === 'EditBid') {
+              if (this.isEditBidChanges === true) {
                 await this.updateBid(bidDetails);
               }
             }
             if (!this.$store.getters.bidData.id) {
               await this.saveDraftBid(bidDetails);
-            } else if (this.$store.getters.bidData.id && this.$store.getters.bidData.statusType == 'templateBid') {
+            } else if (this.$store.getters.bidData.id && this.$store.getters.bidData.statusType === 'templateBid') {
               await this.saveDraftBid(bidDetails);
             } else {
               await this.updateDraftBid(bidDetails);
@@ -399,7 +432,7 @@ export default {
           companyId: this.userInfo.company.id,
           company: this.userInfo.company.company,
         };
-        if (this.$route.name == 'EditTemplate') {
+        if (this.$route.name === 'EditTemplate') {
           await this.saveTemplateBid(bidDetails);
         } else {
           await this.saveDraftBid(bidDetails);
@@ -418,7 +451,7 @@ export default {
     },
     savedraftOnInterval() {
       const timer = setInterval(() => {
-        if (this.formStatus == true) {
+        if (this.formStatus === true) {
           this.savedraft();
           this.formStatus = false;
         }
@@ -431,14 +464,24 @@ export default {
     deleteDraft() {
       this.deleteDraftBid({ draftId: this.$store.getters.bidData.id });
     },
+    validateDesc() {
+      this.validDesc = this.bidDescriptions[0].body.length > 0;
+    },
   },
   async mounted() {
     this.route = this.$route.name;
+    
+    if (this.getUserType === 'supplier') {
+      this.$router.push('/view-bids');
+    }
 
-    await this.getAllIntent({
+    if (this.$route.name === 'EditBid') {
+      await this.getAllIntent({
       bidId: this.$store.getters.bidData.id,
       reload: false,
     });
+    }
+
 
     if (this.$store.getters.entryCheckForEditBid) {
       this.$router.push('/view-bids');
@@ -448,19 +491,19 @@ export default {
     this.$store.commit('setInvitedTeamMembers', this.$store.getters.bidData.invitedTeamMembers);
     this.$store.commit('setBidlines', this.$store.getters.bidData.lineItems);
     this.$store.commit('setLineItemsComplete', false);
-    if (this.$route.name == 'EditBid') {
+    if (this.$route.name === 'EditBid') {
       this.$store.commit('setAttachement', this.$store.getters.bidData.attachments);
-    } else if (this.$store.getters.bidData.statusType == 'draftBid') {
+    } else if (this.$store.getters.bidData.statusType === 'draftBid') {
       this.$store.commit('setAttachData', null);
       this.$store.commit('setAttachement', null);
       this.$store.commit('setAttachement', this.$store.getters.bidData.attachments);
-    } else if (this.$store.getters.bidData.statusType == 'templateBid') {
+    } else if (this.$store.getters.bidData.statusType === 'templateBid') {
       this.$store.commit('setAttachement', this.$store.getters.bidData.attachment);
     } else {
       this.$store.commit('setAttachement', this.$store.getters.bidData.attachment);
     }
     this.$store.commit('setQuestions', this.$store.getters.bidData.questions);
-    if (this.$store.getters.bidData.statusType == 'templateBid') {
+    if (this.$store.getters.bidData.statusType === 'templateBid') {
       this.isTemplate = true;
       this.savedraft();
     }

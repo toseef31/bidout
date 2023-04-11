@@ -34,7 +34,6 @@
 
                     <v-list-item-subtitle v-if="conversation.isBid == true">Bid #{{conversation.bidSerial}}</v-list-item-subtitle>
                   </v-list-item-content>
-                  
                   <v-list-item-action class="mt-n5">
                     <v-list-item-action-text v-if="!conversation.latestMessage || conversation.latestMessage == null">{{ istoday(conversation.createdAt) }}</v-list-item-action-text>
 
@@ -176,6 +175,7 @@ export default {
         return _.orderBy(this.$store.getters.conversations.filter((item) => this.$store.state.chat.searchConv.toLowerCase().split(' ').every((v) => item.company.toLowerCase().includes(v))), 'latestMessage', 'desc');
       }else{
         if(this.$store.getters.conversations){
+          this.$store.commit('setPageLoader', false);
           let newArr = this.$store.getters.conversations;
         newArr.forEach((msg, index) => {
           if(!msg.latestMessage){
@@ -183,12 +183,17 @@ export default {
           }
         })
         return _.orderBy(newArr,'latestMessage', 'desc');
+        }else{
+          this.$store.commit('setPageLoader', true);
         }
       }
       
     },
     archiveList() {
       return this.$store.getters.archiveList;
+    },
+    loader() {
+      return this.$store.getters.pageLoader;
     },
   },
   methods: {
@@ -238,15 +243,17 @@ export default {
       return conversation.name;
     },
   },
-  async created(){
+  async created() {
     this.user = this.$store.getters.userInfo;
     this.archiveConversations(this.user.id);
-    let chatArr = this.$store.getters.conversations;
-    chatArr.forEach((msg, index) => {
-      if(!msg.latestMessage){
-        msg.latestMessage = msg.createdAt; // add the new field
-      }
-    });
+    const chatArr = this.$store.getters.conversations;
+    if (chatArr != null) {
+      chatArr.forEach((msg, index) => {
+        if (!msg.latestMessage) {
+          msg.latestMessage = msg.createdAt; // add the new field
+        }
+      });
+    }
     const convo = await _.orderBy(chatArr, 'latestMessage', 'desc')[0];
     if (convo) {
       if (convo.type == 'PRIVATE') {
