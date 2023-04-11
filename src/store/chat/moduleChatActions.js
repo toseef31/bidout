@@ -122,7 +122,7 @@ export default {
   // Supplier List
   supplierList({ commit }, payload) {
     axios
-      .get('/company/getSupplierCompaniesAndUsers')
+      .get('/v2/company/getSupplierCompaniesAndUsers')
       .then((responce) => {
         commit('setMembersList', responce.data);
       })
@@ -133,7 +133,7 @@ export default {
   // Supplier Users List
   supplierUserList({ commit }, payload) {
     axios
-      .get(`/user/searchSupplierUser/${payload}`)
+      .get(`/v2/user/searchSupplierUser/${payload}`)
       .then((responce) => {
         commit('setSuppliersUsers', responce.data);
       })

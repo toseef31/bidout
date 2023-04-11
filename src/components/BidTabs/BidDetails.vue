@@ -217,7 +217,7 @@ export default {
     },
     bidType: {
       get() {
-        if (!this.$store.getters.bidData.id) {
+        if (!this.$store.getters.bidData._id) {
           return '';
         }
         return this.$store.getters.bidData.type;
@@ -235,7 +235,7 @@ export default {
 
           return currentDate.format('YYYY-MM-DD');
         }
-        if (!this.$store.getters.bidData.id) {
+        if (!this.$store.getters.bidData._id) {
           return '';
         }
 
@@ -345,16 +345,16 @@ export default {
     async changeTab() {
       if (this.$store.getters.bidData != null) {
         const bidDetails = {
-          userId: this.userInfo.id,
+          userId: this.userInfo._id,
           userName: `${this.userInfo.firstName} ${this.userInfo.lastName}`,
-          companyId: this.userInfo.company.id,
-          company: this.userInfo.company.company,
+          companyId: this.userInfo.companyId,
+          company: this.userInfo.company,
         };
         if (this.$refs.form.validate()) {
           this.valid = true;
           this.loading = true;
           if (this.$route.name === 'EditTemplate') {
-            if (!this.$store.getters.bidData.id) {
+            if (!this.$store.getters.bidData._id) {
               await this.saveTemplateBid(bidDetails);
             } else {
               await this.updateTemplate(bidDetails);
@@ -365,9 +365,9 @@ export default {
                 await this.updateBid(bidDetails);
               }
             }
-            if (!this.$store.getters.bidData.id) {
+            if (!this.$store.getters.bidData._id) {
               await this.saveDraftBid(bidDetails);
-            } else if (this.$store.getters.bidData.id && this.$store.getters.bidData.statusType === 'templateBid') {
+            } else if (this.$store.getters.bidData._id && this.$store.getters.bidData.statusType === 'templateBid') {
               await this.saveDraftBid(bidDetails);
             } else {
               await this.updateDraftBid(bidDetails);
@@ -378,10 +378,10 @@ export default {
         }
       } else {
         const bidDetails = {
-          userId: this.userInfo.id,
+          userId: this.userInfo._id,
           userName: `${this.userInfo.firstName} ${this.userInfo.lastName}`,
-          companyId: this.userInfo.company.id,
-          company: this.userInfo.company.company,
+          companyId: this.userInfo.companyId,
+          company: this.userInfo.company,
         };
         if (this.$route.name === 'EditTemplate') {
           await this.saveTemplateBid(bidDetails);
@@ -393,19 +393,19 @@ export default {
     async savedraft() {
       if (this.$store.getters.bidData != null) {
         const bidDetails = {
-          userId: this.userInfo.id,
+          userId: this.userInfo._id,
           userName: `${this.userInfo.firstName} ${this.userInfo.lastName}`,
-          companyId: this.userInfo.company.id,
-          company: this.userInfo.company.company,
+          companyId: this.userInfo.companyId,
+          company: this.userInfo.company,
         };
-        if (this.$store.getters.bidData.id && this.$store.getters.bidData.statusType === 'templateBid') {
+        if (this.$store.getters.bidData._id && this.$store.getters.bidData.statusType === 'templateBid') {
           await this.saveDraftBid(bidDetails);
         }
         if (this.$refs.form.validate()) {
           if (this.$route.name === 'EditTemplate') {
-            if (!this.$store.getters.bidData.id) {
+            if (!this.$store.getters.bidData._id) {
               await this.saveTemplateBid(bidDetails);
-            } else if (this.$store.getters.bidData.id && this.$store.getters.bidData.statusType === 'templateBid') {
+            } else if (this.$store.getters.bidData._id && this.$store.getters.bidData.statusType === 'templateBid') {
               await this.saveTemplateBid(bidDetails);
             } else {
               await this.updateTemplate(bidDetails);
@@ -416,9 +416,9 @@ export default {
                 await this.updateBid(bidDetails);
               }
             }
-            if (!this.$store.getters.bidData.id) {
+            if (!this.$store.getters.bidData._id) {
               await this.saveDraftBid(bidDetails);
-            } else if (this.$store.getters.bidData.id && this.$store.getters.bidData.statusType === 'templateBid') {
+            } else if (this.$store.getters.bidData._id && this.$store.getters.bidData.statusType === 'templateBid') {
               await this.saveDraftBid(bidDetails);
             } else {
               await this.updateDraftBid(bidDetails);
@@ -427,10 +427,10 @@ export default {
         }
       } else {
         const bidDetails = {
-          userId: this.userInfo.id,
+          userId: this.userInfo._id,
           userName: `${this.userInfo.firstName} ${this.userInfo.lastName}`,
-          companyId: this.userInfo.company.id,
-          company: this.userInfo.company.company,
+          companyId: this.userInfo.companyId,
+          company: this.userInfo.company,
         };
         if (this.$route.name === 'EditTemplate') {
           await this.saveTemplateBid(bidDetails);
@@ -462,7 +462,7 @@ export default {
       });
     },
     deleteDraft() {
-      this.deleteDraftBid({ draftId: this.$store.getters.bidData.id });
+      this.deleteDraftBid({ draftId: this.$store.getters.bidData._id });
     },
     validateDesc() {
       this.validDesc = this.bidDescriptions[0].body.length > 0;
@@ -477,7 +477,7 @@ export default {
 
     if (this.$route.name === 'EditBid') {
       await this.getAllIntent({
-      bidId: this.$store.getters.bidData.id,
+      bidId: this.$store.getters.bidData._id,
       reload: false,
     });
     }

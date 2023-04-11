@@ -4,7 +4,7 @@ import axios from 'axios';
 export default {
   getCategories({ commit }) {
     axios
-      .get('/serviceCategory/getAllCategories')
+      .get('/v2/serviceCategory/getAllCategories')
       .then((responce) => {
         commit('setCatgeoryList', responce.data);
       })
@@ -15,14 +15,14 @@ export default {
   getCompanyByservice({ commit }, payload) {
     const url = encodeURIComponent(payload.service);
     axios
-      .get(`/company/getCompaniesByService/${payload.subSlug}`)
+      .get(`/v2/company/getCompaniesByService/${payload.subSlug}`)
       .then((responce) => {
         const data = {
           data: responce.data,
           name: payload.service,
         };
         commit('setCompanies', data);
-        // router.replace(`/ofs-directory/${payload.slug}/${payload.subSlug}`);
+        // router.replace(`v2/ofs-directory/${payload.slug}/${payload.subSlug}`);
       })
       .catch((err) => {
         console.log(err);
@@ -32,7 +32,7 @@ export default {
   getSupplierCompanyByservice({ commit }, payload) {
     const url = encodeURIComponent(payload.service);
     axios
-      .get(`/company/getCompaniesByService/${payload.subSlug}`)
+      .get(`/v2/company/getCompaniesByService/${payload.subSlug}`)
       .then((responce) => {
         const data = {
           data: responce.data,
@@ -48,7 +48,7 @@ export default {
   getSupplierMainService({ commit }, payload) {
     const url = encodeURIComponent(payload.name);
     axios
-      .get(`/company/getCompaniesByMainService/${payload.slug}`)
+      .get(`/v2/company/getCompaniesByMainService/${payload.slug}`)
       .then((responce) => {
         const data = {
           data: responce.data,
@@ -64,7 +64,7 @@ export default {
   getCompanyMainService({ commit }, payload) {
     const url = encodeURIComponent(payload.name);
     axios
-      .get(`/company/getCompaniesByMainService/${payload.slug}`)
+      .get(`/v2/company/getCompaniesByMainService/${payload.slug}`)
       .then((responce) => {
         const data = {
           data: responce.data,
@@ -72,7 +72,7 @@ export default {
           id: payload.id,
         };
         commit('setCompanies', data);
-        router.replace(`/ofs-directory/${payload.slug}`);
+        router.replace(`v2/ofs-directory/${payload.slug}`);
       })
       .catch((err) => {
         console.log(err);
@@ -81,7 +81,7 @@ export default {
   getCompanyByBasin({ commit }, payload) {
     commit('setOfsLoader', true);
     axios
-      .get(`/company/getCompanyByBasin/${payload.basin}/${payload.slug}`)
+      .get(`/v2/company/getCompanyByBasin/${payload.basin}/${payload.slug}`)
       .then((responce) => {
         const data = {
           data: responce.data,
@@ -98,7 +98,7 @@ export default {
   getCompanyInfo({ commit }, payload) {
     commit('setPageLoader', true);
     axios
-      .get(`/company/getCompanyBySlug/${payload.slug}`)
+      .get(`/v2/company/getCompanyBySlug/${payload.slug}`)
       .then((responce) => {
         commit('setSupplierCompany', responce.data);
         commit('setPageTitle', `${responce.data.companyData.company} - ${responce.data.companyData.companyHq} - BidOut Profile`);
@@ -112,7 +112,7 @@ export default {
   getPublicCompanyInfo({ commit }, payload) {
     commit('setPageLoader', true);
     axios
-      .get(`/company/getCompanyBySlug/${payload.slug}`)
+      .get(`/v2/company/getCompanyBySlug/${payload.slug}`)
       .then((responce) => {
         commit('setPublicCompany', responce.data);
         commit('setPageTitle', `${responce.data.companyData.company} - ${responce.data.companyData.companyHq} - BidOut Profile`);
@@ -125,7 +125,7 @@ export default {
   },
   getPremiumCompanies({ commit }, payload) {
     axios
-      .get('admin/getPremiumCompanies')
+      .get('v2/admin/getPremiumCompanies')
       .then((responce) => {
         commit('setPremiumList', responce.data);
       })
@@ -135,7 +135,7 @@ export default {
   },
   searchCompany({ commit }, payload) {
     axios
-      .get(`/ofs/searchSuppliers/${payload}`)
+      .get(`v2/ofs/searchSuppliers/${payload}`)
       .then((responce) => {
         commit('setCompanies', responce.data.hits);
       })
