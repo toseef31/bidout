@@ -813,7 +813,6 @@ export default {
     }
 
     if (state.invitedSuppliers?.length > 0) {
-      alert("invited not null")
       for (let i = 0; i < state.invitedSuppliers.length; i++) {
         if (Array.isArray(state.invitedSuppliers) && state.invitedSuppliers?.length > 0 && typeof state.invitedSuppliers[0] === 'object') {
           if (!state.invitedSuppliers[i].companyId && !state.invitedSuppliers[i].objectID) {
@@ -898,7 +897,6 @@ export default {
         commit('setIsEditBidChanges', false);
         commit('setBidSerial', res.data.serial);
         commit('setDraftTime', new Date().toLocaleString());
-        //commit('setDraftBidsList', null);
         commit('setSaveBidLoading', false);
       } else {
         commit('setSaveBidLoading', false);
@@ -1174,6 +1172,7 @@ export default {
         dispatch('getCategories');
         dispatch('searchByCompany', { query: '', basin: 'all' });
         commit('setDraftBidsList', res.data._id);
+        
         state.bidData.status = 'templateCreate';
         state.bidData.statusType = 'template';
         commit('setDraftTime', new Date().toLocaleString());
