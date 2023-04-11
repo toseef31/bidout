@@ -80,7 +80,7 @@
                 </div>
                 <div class="add-company">
                   <v-btn color="rgba(13, 150, 72, 0.1)" tile min-width="32px" height="32" class="pa-0" elevation="0"
-                    @click="addCompany(company, index)"> <v-icon color="#0D9648">mdi-plus</v-icon></v-btn>
+                    @click="addCompany(company)"> <v-icon color="#0D9648">mdi-plus</v-icon></v-btn>
                 </div>
               </div>
             </div>
@@ -161,7 +161,7 @@
                   </div>
                   <div class="add-company">
                     <v-btn color="rgba(13, 150, 72, 0.1)" tile min-width="32px" height="32" class="pa-0" elevation="0"
-                      @click="addServiceCompany(company, index)"> <v-icon color="#0D9648">mdi-plus</v-icon></v-btn>
+                      @click="addServiceCompany(company)"> <v-icon color="#0D9648">mdi-plus</v-icon></v-btn>
                   </div>
                 </div>
               </div>
@@ -262,7 +262,7 @@
                 </div>
                 <div class="add-company" v-if="checkIntent(company.objectID) !== 'intended'">
                   <v-btn color="rgba(243, 35, 73, 0.1)" tile min-width="32px" height="32" class="pa-0" elevation="0"
-                    @click="removeNewSup(company, index)"> <v-icon color="#F32349">mdi-minus</v-icon></v-btn>
+                    @click="removeNewSup(index)"> <v-icon color="#F32349">mdi-minus</v-icon></v-btn>
                 </div>
               </div>
             </template>
@@ -388,7 +388,6 @@ export default {
       parsedSelectedBasin: 'all',
       parsedSelectedCompanyBasin: 'all',
       newRepsInvited: [],
-      inviteCount: 1,
       counter: 0,
       phoneInfo: {
         valid: true,
@@ -440,7 +439,7 @@ export default {
             }
           }) && el.company !== this.userInfo.company.company) : [];
 
-          return idType === 'id' ? [...new Map(unique.map((item) => [item.id, item])).values()] : [...new Map(unique.map((item) => [item.objectID, item])).values()];
+          return [...new Map(unique.map((item) => [item[idType], item])).values()];
         }
         this.$store.getters.companiesList.forEach((el) => {
           if (el.objectID) {
@@ -450,7 +449,7 @@ export default {
           }
         });
 
-        return idType === 'id' ? [...new Map(this.$store.getters.companiesList.map((item) => [item.id, item])).values()] : [...new Map(this.$store.getters.companiesList.map((item) => [item.objectID, item])).values()];
+        return [...new Map(this.$store.getters.companiesList.map((item) => [item[idType], item])).values()];
       }
 
       return [];
@@ -464,10 +463,24 @@ export default {
         return 1;
       });
     },
+    // eslint-disable-next-line vue/return-in-computed-property
     filteredEntries() {
       if (this.bidDetail.bidData.invitedSuppliers !== '' && this.bidDetail.bidData.invitedSuppliers !== null && this.bidDetail.bidData.invitedSuppliers !== undefined) {
-        if (this.inviteCount === 1 && this.$store.getters.companiesList) {
-          const inviteData = this.$store.getters.companiesList ? this.$store.getters.companiesList.filter((el) => this.bidDetail.bidData.invitedSuppliers.find((supplier) => supplier.id === el.objectID)) : [];
+        if (this.$store.getters.companiesList) {
+          let type = '';
+          this.$store.state.bid.invitedSuppliers.forEach((el) => {
+            if (el.objectID) {
+              type = 'objectID';
+            } else if (el.id) {
+              type = 'id';
+            } else {
+              type = 'companyId';
+            }
+          });
+          let inviteData = [];
+
+          inviteData = this.$store.getters.companiesList ? this.$store.getters.companiesList.filter((el) => this.$store.state.bid.invitedSuppliers.find((supplier) => supplier[type] === el.objectID)) : [];
+
           this.repsInvited = inviteData.sort((a, b) => {
             const aHasOfsPremium = a.contracts.some((contract) => contract.contractType === 'ofs-premium');
             if (aHasOfsPremium) {
@@ -475,14 +488,26 @@ export default {
             }
             return 1;
           });
+
+          let idType = '';
+
+          this.repsInvited.forEach((el) => {
+            if (el.objectID) {
+              idType = 'objectID';
+            } else if (el.id) {
+              idType = 'id';
+            } else {
+              idType = 'companyId';
+            }
+          });
+
+          this.repsInvited = [...new Map(this.repsInvited.map((item) => [item[idType], item])).values()];
         }
       }
     },
     newSupplierFiltered() {
       if (this.bidDetail.bidData.invitedNewSuppliers) {
-        if (this.inviteCount == 1) {
-          this.newRepsInvited = this.bidDetail.bidData.invitedNewSuppliers;
-        }
+        this.newRepsInvited = this.bidDetail.bidData.invitedNewSuppliers;
       }
     },
     getCounter() {
@@ -602,7 +627,6 @@ export default {
     },
     addReps(list, index) {
       this.repsInvited.push(list);
-      this.inviteCount = 2;
       this.$store.commit('spliceSalesRepsList', index);
       const unique = [...new Map(this.repsInvited.map((m) => [m.company, m])).values()];
 
@@ -611,43 +635,38 @@ export default {
     removeReps(list, index) {
       this.$store.commit('pushSalesRepsList', list);
       this.repsInvited.splice(index, 1);
-      this.inviteCount = 2;
       this.$store.commit('setInvitedSuppliersData', this.repsInvited);
     },
-    getCompanies() {
+    async getCompanies() {
       if (this.companyBasin === 'All') {
         this.parsedSelectedCompanyBasin = 'all';
       } else {
         this.parsedSelectedCompanyBasin = this.companyBasin;
       }
-      this.searchByCompany({ query: this.companySearch, basin: this.parsedSelectedCompanyBasin });
+      await this.searchByCompany({ query: this.companySearch, basin: this.parsedSelectedCompanyBasin });
     },
     getByCategory(category) {
       this.getCompanyByServices(category);
     },
-    addCompany(company, index) {
+    addCompany(company) {
       this.repsInvited.push(company);
-      this.inviteCount = 2;
       this.$store.commit('spliceCompanies', company);
       const unique = [...new Map(this.repsInvited.map((m) => [m.company, m])).values()];
       this.$store.commit('setInvitedSuppliersData', unique);
     },
-    addServiceCompany(company, index) {
+    addServiceCompany(company) {
       this.repsInvited.push(company);
-      this.inviteCount = 2;
       this.$store.commit('spliceCompanies', company);
       const unique = [...new Map(this.repsInvited.map((m) => [m.company, m])).values()];
       this.$store.commit('setInvitedSuppliersData', unique);
     },
     removeCompany(company, index) {
       this.repsInvited.splice(index, 1);
-      this.inviteCount = 2;
       this.$store.commit('pushCompanies', company);
       this.$store.commit('setInvitedSuppliersData', this.repsInvited);
     },
-    removeNewSup(company, index) {
+    removeNewSup(index) {
       this.newRepsInvited.splice(index, 1);
-      this.inviteCount = 2;
       this.$store.commit('setInvitedNewSuppliers', this.newRepsInvited);
     },
     hasOfsPremium(supplier) {
@@ -675,7 +694,10 @@ export default {
   beforeMount() {
     this.user = this.$store.getters.userInfo;
   },
-  mounted() {
+  async mounted() {
+    this.companySearch = '';
+    await this.getCompanies();
+
     this.filteredEntries;
     this.newSupplierFiltered;
   },
