@@ -421,7 +421,6 @@ export default {
       return [...new Map(unique.map((item) => [item.companyId, item])).values()];
     },
     companiesList() {
-      console.log(this.$store.getters.companiesList.length);
       let idType = '';
       let unique;
       if (this.$store.getters.companiesList && this.$store.getters.companiesList.length) {
@@ -479,11 +478,8 @@ export default {
             }
           });
           let inviteData = [];
-          if (this.bidDetail.bidData.invitedSuppliers.length) {
-            inviteData = this.$store.getters.companiesList ? this.$store.getters.companiesList.filter((el) => this.bidDetail.bidData.invitedSuppliers.find((supplier) => supplier.id === el.objectID) && this.$store.state.bid.invitedSuppliers.find((supplier) => supplier[type] === el.objectID)) : [];
-          } else {
-            inviteData = this.$store.state.bid.invitedSuppliers;
-          }
+
+          inviteData = this.$store.getters.companiesList ? this.$store.getters.companiesList.filter((el) => this.$store.state.bid.invitedSuppliers.find((supplier) => supplier[type] === el.objectID)) : [];
 
           this.repsInvited = inviteData.sort((a, b) => {
             const aHasOfsPremium = a.contracts.some((contract) => contract.contractType === 'ofs-premium');
@@ -641,13 +637,13 @@ export default {
       this.repsInvited.splice(index, 1);
       this.$store.commit('setInvitedSuppliersData', this.repsInvited);
     },
-    getCompanies() {
+    async getCompanies() {
       if (this.companyBasin === 'All') {
         this.parsedSelectedCompanyBasin = 'all';
       } else {
         this.parsedSelectedCompanyBasin = this.companyBasin;
       }
-      this.searchByCompany({ query: this.companySearch, basin: this.parsedSelectedCompanyBasin });
+      await this.searchByCompany({ query: this.companySearch, basin: this.parsedSelectedCompanyBasin });
     },
     getByCategory(category) {
       this.getCompanyByServices(category);
@@ -698,7 +694,10 @@ export default {
   beforeMount() {
     this.user = this.$store.getters.userInfo;
   },
-  mounted() {
+  async mounted() {
+    this.companySearch = '';
+    await this.getCompanies();
+
     this.filteredEntries;
     this.newSupplierFiltered;
   },
