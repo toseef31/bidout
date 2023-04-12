@@ -294,7 +294,7 @@ export default {
       return false;
     },
     redirectLink(item) {
-      this.$router.push("/" + item.link).catch(() => {});
+      this.$router.push(`/${item.link}`).catch(() => {});
     },
     redirectCompany() {
       this.$router.push("/company-profile").catch(() => {});
