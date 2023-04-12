@@ -219,7 +219,6 @@ export default {
   mounted() {
     this.userId = this.$store.getters.userInfo.id;
     this.getUnreadMessages();
-    // this.token();
   },
 };
 </script>
