@@ -105,10 +105,10 @@ export default {
                   this.$store.getters.attachData.map((m) => [m.size, m]),
                 ).values(),
               ];
-              const totalDay = this.$store.state.bid.attachement.concat(attch);
+              const totalDay = this.$store.state.bid.attachement?.concat(attch);
               // eslint-disable-next-line vue/no-side-effects-in-computed-properties
               this.documents = [
-                ...new Map(totalDay.map((m) => [m.id, m])).values(),
+                ...new Map(totalDay?.map((m) => [m.id, m])).values(),
               ];
             } else {
               // eslint-disable-next-line vue/no-side-effects-in-computed-properties

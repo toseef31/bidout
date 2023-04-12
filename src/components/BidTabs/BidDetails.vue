@@ -220,6 +220,7 @@ export default {
         if (!this.$store.getters.bidData._id) {
           return '';
         }
+
         return this.$store.getters.bidData.type;
       },
       set(value) {
@@ -229,6 +230,8 @@ export default {
     dueDate: {
       get() {
         if (this.isTemplate) {
+          console.log("got in cr", this.isTemplate)
+
           let currentDate = moment.tz('America/Chicago');
           currentDate = currentDate.add(10, 'days');
           this.$store.commit('setBidDueDate', currentDate.format('YYYY-MM-DD'));
@@ -236,6 +239,8 @@ export default {
           return currentDate.format('YYYY-MM-DD');
         }
         if (!this.$store.getters.bidData._id) {
+          console.log("got in cr", this.$store.getters.bidData)
+          
           return '';
         }
 
@@ -247,7 +252,7 @@ export default {
     },
     dueTime: {
       get() {
-        if (!this.$store.getters.bidData.id) {
+        if (!this.$store.getters.bidData._id) {
           return '';
         }
         return this.$store.getters.bidData.dueTime;
@@ -258,7 +263,7 @@ export default {
     },
     bidRegions: {
       get() {
-        if (!this.$store.getters.bidData.id) {
+        if (!this.$store.getters.bidData._id) {
           return '';
         }
         return this.$store.getters.bidData.regions;
@@ -280,7 +285,7 @@ export default {
     },
     qAndAEnabled: {
       get() {
-        if (!this.$store.getters.bidData.id) {
+        if (!this.$store.getters.bidData._id) {
           return 'yes';
         }
         return this.$store.getters.bidData.qAndAEnabled;
@@ -291,7 +296,7 @@ export default {
     },
     serial: {
       get() {
-        if (!this.$store.getters.bidData.id) {
+        if (!this.$store.getters.bidData._id) {
           return '';
         }
         return this.$store.getters.bidData.serial;
@@ -302,7 +307,7 @@ export default {
     },
     statusType: {
       get() {
-        if (!this.$store.getters.bidData.id) {
+        if (!this.$store.getters.bidData._id) {
           return '';
         }
         return this.$store.getters.bidData.statusType;
@@ -470,7 +475,7 @@ export default {
   },
   async mounted() {
     this.route = this.$route.name;
-    
+    console.log(this.$store.getters.bidData)
     if (this.getUserType === 'supplier') {
       this.$router.push('/view-bids');
     }
