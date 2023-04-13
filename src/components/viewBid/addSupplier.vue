@@ -1,6 +1,6 @@
 <template>
   <div class="">
-    <v-row class="supplier-row fill-height" no-gutters>
+    <v-row class="supplier-row fill-height" no-gutters v-if="!getFetchSupplierLoading">
       <v-col sm="3" v-if="categories" class="category-col">
         <v-list class="pt-0">
           <v-list-group v-for="(category, index) in allCategories" :key="index" active-class="black--text">
@@ -44,13 +44,13 @@
               <div>
 
                 <v-text-field type="text" hide-details outlined placeholder="Search" prepend-inner-icon="mdi-magnify"
-                  v-model="companySearch" @keyup="getCompanies">
+                  v-model="companySearch" @keyup="getCompanies(false)">
                 </v-text-field>
               </div>
               <div class="d-flex align-center">
                 <label class="input-label black--text pr-2 font-weight-bold">Basin</label>
                 <v-select rounded hide-details outlined class="available-select text-capitalize" :items="availableSearch"
-                  width="150px" v-model="companyBasin" min-height="28px" @change="getCompanies"></v-select>
+                  width="150px" v-model="companyBasin" min-height="28px" @change="getCompanies(false)"></v-select>
               </div>
             </div>
             <div class="companies-list">
@@ -271,7 +271,13 @@
       </v-col>
     </v-row>
 
-    <v-row justify="center" align="center" no-gutters class="mt-5">
+    <div fill-height align="center" justify="center" v-if="getFetchSupplierLoading">
+      <v-col cols="12">
+        <v-progress-circular v-if="getFetchSupplierLoading" :width="3" color="green" indeterminate></v-progress-circular>
+      </v-col>
+    </div>
+
+    <v-row justify="center" align="center" no-gutters class="mt-5" v-if="!getFetchSupplierLoading">
       <div class="align-center justify-center">
         <v-dialog v-model="supplierDialog" width="800">
           <template v-slot:activator="{ on, attrs }">
@@ -394,6 +400,7 @@ export default {
         message: '',
       },
       supplierLoading: false,
+      fetchSupplierLoading: false,
     };
   },
   computed: {
@@ -410,6 +417,9 @@ export default {
     },
     bidDetail() {
       return this.$store.getters.bidViewData;
+    },
+    getFetchSupplierLoading() {
+      return this.fetchSupplierLoading;
     },
     salesRepsList() {
       const unique = this.$store.getters.salesRepsList ? this.$store.getters.salesRepsList.filter((el) => !this.repsInvited.find((item) => {
@@ -609,7 +619,7 @@ export default {
     },
     hideCategories(name) {
       this.categories = false;
-      if (name) this.getCompanies();
+      if (name) this.getCompanies(false);
     },
     subCategories(subCats) {
       return _.orderBy(subCats, 'orderNumber', 'asc');
@@ -637,13 +647,15 @@ export default {
       this.repsInvited.splice(index, 1);
       this.$store.commit('setInvitedSuppliersData', this.repsInvited);
     },
-    async getCompanies() {
+    async getCompanies(isLoading) {
+      !isLoading ? '' : this.fetchSupplierLoading = true;
       if (this.companyBasin === 'All') {
         this.parsedSelectedCompanyBasin = 'all';
       } else {
         this.parsedSelectedCompanyBasin = this.companyBasin;
       }
       await this.searchByCompany({ query: this.companySearch, basin: this.parsedSelectedCompanyBasin });
+      this.fetchSupplierLoading = false;
     },
     getByCategory(category) {
       this.getCompanyByServices(category);
@@ -696,7 +708,7 @@ export default {
   },
   async mounted() {
     this.companySearch = '';
-    await this.getCompanies();
+    await this.getCompanies(true);
 
     this.filteredEntries;
     this.newSupplierFiltered;
