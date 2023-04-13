@@ -22,6 +22,7 @@ import VueMeta from 'vue-meta';
 import Toasted from 'vue-toasted';
 import vuetify from './plugins/vuetify';
 import store from './store';
+import "./plugins/vee-validate";
 
 // Your web app's Firebase configuration
 const firebaseConfig = {

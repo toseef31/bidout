@@ -18,21 +18,38 @@
 		font-size: 12px;
 	}
 
+	.spacing-class {
+		padding-bottom: 31px;
+	}
+
 	.phone-class {
 		color: #ff5252;
 		font-size: 12px;
 		text-align: left;
-		margin-top: 16px;
-
+		margin-top: 1px;
 	}
 
-	.name-class {
+	.invited-company {
+		font-weight: 700;
+		line-height: 20px;
+	}
+
+	.checkbox-class {
 		margin-top: -20px;
-		margin-left: 10px;
+
+		.edit-company {
+			color: #B8B8B8;
+			font-weight: 500;
+			cursor: pointer;
+		}
 
 		.v-input .v-input__control .v-input__slot {
 			background: #F4F5F7 !important;
 		}
+	}
+
+	.name-class {
+		margin-top: 0px;
 	}
 
 	.existing-company {
@@ -47,6 +64,21 @@
 
 	}
 
+	.phone-error-class {
+		.vue-tel-input:focus-within {
+			border: 2px solid red;
+		}
+
+		.vue-tel-input {
+			border: 2px solid red
+		}
+	}
+
+	.phone-valid-class {
+		.vue-tel-input:focus-within {
+			border: 2px solid #1976d2
+		}
+	}
 
 	.tabs-head {
 		background: #F4F5F7;
@@ -114,6 +146,51 @@
 	}
 
 	.v-form {
+		.phone-main-class {
+			height: 56px;
+			box-shadow: none;
+			background: #ffffff;
+
+			.vti__dropdown {
+				padding-right: 15px;
+				border-right: 1px solid #9E9E9E;
+
+				.vti__selection {
+					column-gap: 6px;
+				}
+
+				.vti__selection .vti__country-code {
+					color: #201B1B;
+					font-weight: 500;
+					font-size: 14px;
+
+				}
+			}
+
+			ul {
+				padding-left: 0;
+			}
+
+			.vti__dropdown-list.below {
+				top: 55px;
+				box-shadow: rgba(200, 200, 200, 0.7) 0px 0px 0px 0.125rem;
+				border: 1px solid transparent;
+				border-radius: 8px;
+
+			}
+
+			.vti__dropdown-item {
+				padding: 4px 7px;
+				font-size: 13px;
+
+				strong {
+					padding-left: 5px;
+					font-weight: 400;
+				}
+
+			}
+		}
+
 		.v-input {
 			.v-input__control {
 				.v-input__slot {
@@ -131,24 +208,6 @@
 					margin-bottom: 0;
 					padding-left: 0;
 					padding-top: 2px;
-				}
-			}
-		}
-
-		#MazPhoneNumberInput {
-			margin-bottom: 0 !important;
-
-			.country-selector {
-				&__input {
-					height: 56px;
-					min-height: 56px;
-				}
-			}
-
-			.input-tel {
-				&__input {
-					height: 56px;
-					min-height: 56px;
 				}
 			}
 		}

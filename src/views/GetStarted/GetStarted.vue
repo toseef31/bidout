@@ -30,222 +30,326 @@
             <v-tabs-items v-model="currentItem">
               <!-- BUYER SECTION -->
               <v-tab-item>
-                <v-form @submit.prevent="buyerRequest" ref="buyerForm" v-model="buyerValid">
-                  <v-container>
+                <ValidationObserver ref="buyer" v-slot="{ invalid, validated, handleSubmit }">
+                  <v-form
+                    :class="{ 'phone-error-class': !getPhoneInfo.valid && getCounter > 1, 'phone-valid-class': getPhoneInfo.valid }">
+                    <v-container>
 
-                    <v-row class="mt-8 bg-light pa-6">
-                      <v-col cols="12" sm="12" text="left" class="pb-0">
-                        <label class="d-block text-left input-label mb-2 font-weight-bold">First Name</label>
-                        <v-text-field placeholder="First Name" single-line outlined type="text" color="#ffffff"
-                          v-model="buyer.firstName" :rules="buyer.firstNameRule"></v-text-field>
-                      </v-col>
-                      <v-col cols="12" sm="12" text="left" class="pb-0">
-                        <label class="d-block text-left input-label mb-2 font-weight-bold">Last Name</label>
-                        <v-text-field placeholder="Last Name" single-line outlined type="text" v-model="buyer.lastName"
-                          :rules="buyer.lastNameRule"></v-text-field>
-                      </v-col>
+                      <v-row class="mt-8 bg-light pa-6">
+                        <v-col cols="12" sm="12" text="left" class="pb-0">
+                          <label class="d-block text-left input-label mb-2 font-weight-bold">First Name</label>
+                          <ValidationProvider name="First name" rules="required" v-slot="{ errors, valid }">
+                            <v-text-field placeholder="First Name" single-line outlined :error-messages="errors"
+                              :success="valid" type="text" color="#ffffff" v-model="buyer.firstName"
+                              required></v-text-field>
+                          </ValidationProvider>
+                        </v-col>
+                        <v-col cols="12" sm="12" text="left" class="pb-0">
+                          <label class="d-block text-left input-label mb-2 font-weight-bold">Last Name</label>
+                          <ValidationProvider name="Last name" rules="required" v-slot="{ errors, valid }">
+                            <v-text-field placeholder="Last Name" single-line outlined :error-messages="errors"
+                              :success="valid" type="text" v-model="buyer.lastName" required></v-text-field>
+                          </ValidationProvider>
+                        </v-col>
 
-                      <v-col cols="12" sm="12" text="left" class="pb-3">
-                        <label class="d-block text-left input-label mb-2 font-weight-bold">Company Name</label>
-                        <v-text-field prepend-inner-icon="search" placeholder="Company name" single-line outlined
-                          type="text" v-model="company" @keyup="getSupplierList" :rules="companyRule" clearable>
-                        </v-text-field>
-                        <input type="hidden" v-model="companyId">
-                        <template v-if="getHideList === true">
-                          <v-list class="company-list" v-if="suppliers != ''">
-                            <template v-for="(item) in suppliers">
-                              <v-list-item :key="item.title">
-                                <v-list-item-content>
-                                  <v-list-item-title v-html="item.company"
-                                    @click="companyList(item.company, item.objectID); hideList = !hideList"
-                                    class="text-left"></v-list-item-title>
-                                </v-list-item-content>
-                              </v-list-item>
-                            </template>
-                          </v-list>
-                        </template>
-                      </v-col>
+                        <v-col cols="12" sm="12" text="left" class="pb-0">
+                          <label class="d-block text-left input-label mb-2 font-weight-bold">Company Name</label>
+                          <ValidationProvider name="Company name" rules="required" v-slot="{ errors, valid }">
+                            <v-text-field placeholder="Company name" single-line outlined type="text"
+                              v-model="buyer.companyName" :error-messages="errors" :success="valid" required>
+                            </v-text-field>
+                          </ValidationProvider>
+                        </v-col>
 
-                      <v-col cols="12" sm="12" text="left" class="pb-0">
-                        <label class="d-block text-left input-label mb-2 font-weight-bold">Email Address</label>
-                        <v-text-field placeholder="example@email.com" single-line outlined type="email" v-model="email"
-                          @keyup="emailCheck()" @keydown="emailCheck()"></v-text-field>
-                        <span class="d-block  text-left mt-n4 email-error-text" v-if="emailError">{{ emailError }}</span>
-                      </v-col>
+                        <v-col cols="12" sm="12" text="left" class="pb-0">
+                          <label class="d-block text-left input-label mb-2 font-weight-bold">Email Address</label>
+                          <ValidationProvider name="Email address" rules="required|email" v-slot="{ errors, valid }">
+                            <v-text-field placeholder="example@email.com" single-line outlined type="email"
+                              v-model="email" :error-messages="errors" :success="valid" required></v-text-field>
+                          </ValidationProvider>
 
-                      <v-col cols="12" sm="12" text="left" class="pb-8">
-                        <label class="d-block text-left input-label mb-2 font-weight-bold">Direct Phone Number</label>
+                        </v-col>
+                        <v-col cols="12" sm="12" text="left" :class="{
+                          'spacing-class': getPhoneInfo.valid && getCounter > 1 || !getPhoneInfo.valid && getCounter === 1,
+                        }">
+                          <label class="d-block text-left input-label mb-2 font-weight-bold">Direct Phone Number</label>
 
-                        <VuePhoneNumberInput :border-radius="0" size="md" v-model="buyer.phoneNumber"
-                          :translations="translations" :error="!getPhoneInfo.valid && getCounter > 1"
-                          error-color="#B8B8B8" valid-color="#B8B8B8" class="mb-2" :required="true" @update="onUpdate" />
-                        <div class="phone-class" v-if="!getPhoneInfo.valid && getCounter > 1">
-                          {{ getPhoneInfo.message }}</div>
-                      </v-col>
-                    </v-row>
+                          <vue-tel-input @focus="onUpdate" defaultCountry="US" :autoDefaultCountry="false"
+                            :autoFormat="false" :dropdownOptions="{
+                              showDialCodeInSelection: true,
+                              showFlags: true,
+                              width: ' max-content'
+                            }" :inputOptions="{
+  required: true,
+  showDialCode: false,
+  maxlength: 15,
+  placeholder: 'Phone number',
 
-                    <v-row justify="center" class="mt-10">
-                      <v-col cols="12" md="3">
-                        <v-btn color="#0D9647" large dense width="100%" height="56"
-                          class="font-weight-bold white--text text-capitalize" type="submit" :loading="loading"
-                          :disabled="!buyerValid">Next <v-icon class="pl-2"
-                            color="#fff">mdi-arrow-right-circle</v-icon></v-btn>
-                      </v-col>
-                    </v-row>
-                  </v-container>
-                </v-form>
+}" model="national" :validCharactersOnly="true" :styleClasses="{ 'phone-main-class': true }"
+                            v-model="buyer.phoneNumber" @validate="onUpdate"></vue-tel-input>
+
+                          <div class="phone-class" v-show="!getPhoneInfo.valid && getCounter > 1">
+                            {{ getPhoneInfo.message }}</div>
+                        </v-col>
+                      </v-row>
+
+                      <v-row justify="center" class="mt-10">
+                        <v-col cols="12" md="3">
+                          <v-btn color="#0D9647" large dense width="100%" height="56"
+                            class="font-weight-bold white--text text-capitalize" @click="handleSubmit(buyerRequest)"
+                            :loading="loading" :disabled="!getPhoneInfo.valid || (invalid || !validated)">Next <v-icon
+                              class="pl-2" color="#fff">mdi-arrow-right-circle</v-icon></v-btn>
+                        </v-col>
+                      </v-row>
+                    </v-container>
+                  </v-form>
+                </ValidationObserver>
               </v-tab-item>
 
               <!-- SUPPLIER SECTION -->
               <v-tab-item>
-                <v-form @submit.prevent="registerRequest" ref="form" v-model="supplierValid">
-                  <v-container>
-                    <v-row class="mt-8 bg-light px-6 py-4 ">
-                      <v-col cols="12" sm="12" text="left" class=" ">
-                        <label class="d-block text-left input-label mb-2 font-weight-bold">Company Name</label>
-                        <v-text-field prepend-inner-icon="search" placeholder="Company name" single-line outlined
-                          type="text" v-model="company" @keyup="getSupplierList" :rules="companyRule" clearable>
-                        </v-text-field>
-                        <input type="hidden" v-model="companyId">
-                        <template v-if="hideList == true">
-                          <v-list class="company-list" v-if="suppliers != ''">
-                            <template v-for="(item) in suppliers">
-                              <v-list-item :key="item.title">
-                                <v-list-item-content>
-                                  <v-list-item-title v-html="item.company"
-                                    @click="companyList(item.company, item.objectID); hideList = !hideList"
-                                    class="text-left"></v-list-item-title>
-                                </v-list-item-content>
-                              </v-list-item>
+                <ValidationObserver ref="buyer" v-slot="{ invalid, validated, handleSubmit }">
+
+                  <v-form
+                    :class="{ 'phone-error-class': !getPhoneInfo.valid && getCounter > 1, 'phone-valid-class': getPhoneInfo.valid }">
+                    <v-container>
+                      <v-row class="mt-8 bg-light px-6 py-4 ">
+                        <v-row v-if="isToken">
+                          <v-col text="left" class=" " :cols="editCompanyName ? '12' : ''"
+                            :sm="editCompanyName ? '6' : '12'">
+                            <label class="d-block text-left input-label mb-2 font-weight-bold">Bid Invite
+                              Code</label>
+                            <ValidationProvider name="Bid Invite
+                                                                          Code" rules="required"
+                              v-slot="{ errors, valid }">
+                              <v-text-field placeholder="Enter your bid invite code" single-line outlined type="text"
+                                :error-messages="errors" :success="valid" required v-model="supplier.bidInvitedCode">
+                                <template v-slot:append>
+                                  <div class="d-flex align-center" v-if="false"> <span class="invited-company">Patterson
+                                      UI</span>
+                                    <v-icon size="20" color="#0D9648" class="ml-2">mdi-check-decagram-outline</v-icon>
+                                  </div>
+
+                                  <v-progress-circular indeterminate :size="20" :width="2"
+                                    color="
+                                                                                                                      #0D1139" :value="80" v-else></v-progress-circular>
+
+                                </template>
+                              </v-text-field>
+                            </ValidationProvider>
+                          </v-col>
+
+                          <v-col v-if="editCompanyName">
+                            <label class="d-block text-left input-label mb-2 font-weight-bold">Company Name</label>
+                            <ValidationProvider name="Company name" rules="required" v-slot="{ errors, valid }">
+                              <v-text-field placeholder="Company name" single-line outlined :error-messages="errors"
+                                :success="valid" type="text" v-model="supplier.editCompany" required>
+                              </v-text-field>
+                            </ValidationProvider>
+                          </v-col>
+                        </v-row>
+
+                        <v-row v-if="!isToken">
+                          <v-col text="left" cols="12" sm="12">
+                            <label class="d-block text-left input-label mb-2 font-weight-bold">Company Name</label>
+                            <ValidationProvider name="Company name" rules="required" v-slot="{ errors, valid }">
+                              <v-text-field prepend-inner-icon="search" placeholder="Company name" single-line outlined
+                                type="text" v-model="supplier.companyName" @keyup="getSupplierList"
+                                :error-messages="errors" :success="valid" required clearable>
+                              </v-text-field>
+                            </ValidationProvider>
+                            <input type="hidden" v-model="companyId">
+                            <template v-if="hideList == true">
+                              <v-list class="company-list" v-if="suppliers != ''">
+                                <template v-for="(item) in suppliers">
+                                  <v-list-item :key="item.title">
+                                    <v-list-item-content>
+                                      <v-list-item-title v-html="item.company"
+                                        @click="companyList(item.company, item.objectID); hideList = !hideList"
+                                        class="text-left"></v-list-item-title>
+                                    </v-list-item-content>
+                                  </v-list-item>
+                                </template>
+                              </v-list>
                             </template>
-                          </v-list>
-                        </template>
 
-                      </v-col>
+                          </v-col>
+                        </v-row>
+                      </v-row>
 
-                      <div class="name-class pb-3">
-                        <v-checkbox v-model="isToken" color="#0D9648" hide-details>
-                          <template v-slot:label>
-                            <div>
-                              I have an invite token
-                            </div>
-                          </template>
-                        </v-checkbox>
-                      </div>
+                      <v-row class="px-2   bg-light  "><v-col
+                          class="checkbox-class pb-3 d-flex justify-space-between align-center ">
+                          <v-checkbox v-model="isToken" class="name-class" color="#0D9648" hide-details>
+                            <template v-slot:label>
+                              <div>
+                                I have an invite token
+                              </div>
+                            </template>
+                          </v-checkbox>
 
-                    </v-row>
+                          <div class="edit-company" v-if="isToken && !editCompanyName" @click="editCompanyName = true">
+                            <span class="text-decoration-underline">Edit company
+                              name</span>
+                            <v-icon color="#B8B8B8" size="20" class="ml-2">mdi-pencil-outline</v-icon>
+                          </div>
 
-                    <v-row class="mt-12">
-                      <div class="existing-company pa-6 text-left">
-                        <h1>This is an existing company, filling out the form will send a
-                          request to add you to the existing company.</h1>
+                          <div v-if="editCompanyName && isToken" class="edit-company" @click="editCompanyName = false">
+                            <span class="text-decoration-underline">Save</span>
+                            <v-icon color="#B8B8B8" size="20" class="ml-2">mdi-content-save</v-icon>
+                          </div>
+                        </v-col>
+                      </v-row>
 
-                      </div>
+                      <v-row class="mt-12">
+                        <div class="existing-company pa-6 text-left">
+                          <h1>This is an existing company, filling out the form will send a
+                            request to add you to the existing company.</h1>
 
-                    </v-row>
-                    <v-row class="mt-12 bg-light px-6 py-4" v-if="companyInfo">
-                      <v-col cols="12" sm="12" text="left" class="pb-0">
-                        <label class="d-block text-left input-label mb-2 font-weight-bold">Company HQ Address 1</label>
-                        <v-text-field placeholder="Company HQ Address 1" single-line outlined type="text"
-                          v-model="supplier.companyHq" color="#ffffff" :rules="supplier.companyHqRule"></v-text-field>
-                      </v-col>
-                      <v-col cols="12" sm="12" text="left" class="pb-0">
-                        <label class="d-block text-left input-label mb-2 font-weight-bold">Company HQ Address 2</label>
-                        <v-text-field placeholder="Company HQ Address 2" single-line outlined type="text"
-                          v-model="supplier.companyHq2"></v-text-field>
-                      </v-col>
-                      <v-col cols="12" sm="6" text="left">
-                        <label class="d-block text-left input-label mb-2 font-weight-bold">Company HQ Country</label>
+                        </div>
 
-                        <country-select v-model="country" :country="country" topCountry="US" className="countrySelect"
-                          :disablePlaceholder="true" placeholder="Select Country" />
-                      </v-col>
-                      <v-col cols="12" sm="6" text="left">
-                        <label class="d-block text-left input-label mb-2 font-weight-bold">Company HQ State</label>
+                      </v-row>
+                      <v-row class="mt-12 bg-light px-6 py-4" v-if="companyInfo">
+                        <v-col cols="12" sm="12" text="left" class="pb-0">
+                          <label class="d-block text-left input-label mb-2 font-weight-bold">Company HQ Address 1</label>
+                          <ValidationProvider name="Company HQ" rules="required" v-slot="{ errors, valid }">
+                            <v-text-field placeholder="Company HQ Address 1" single-line outlined type="text"
+                              v-model="supplier.companyHq" color="#ffffff" :error-messages="errors" :success="valid"
+                              required></v-text-field>
+                          </ValidationProvider>
+                        </v-col>
+                        <v-col cols="12" sm="12" text="left" class="pb-0">
+                          <label class="d-block text-left input-label mb-2 font-weight-bold">Company HQ Address 2</label>
 
-                        <region-select v-model="region" :country="country" :region="region" :disablePlaceholder="true"
-                          className="countrySelect" />
-                      </v-col>
-                      <v-col cols="12" sm="6" text="left" class="pb-0">
-                        <label class="d-block text-left input-label mb-2 font-weight-bold">Company HQ City</label>
-                        <v-text-field placeholder="Company HQ City" single-line outlined type="text"
-                          v-model="supplier.companyHqCity" :rules="supplier.companyHqCityRule"></v-text-field>
-                      </v-col>
-                      <v-col cols="12" sm="6" text="left" class="pb-0">
-                        <label class="d-block text-left input-label mb-2 font-weight-bold">Company HQ ZIP</label>
-                        <v-text-field placeholder="ZIP Code" single-line outlined type="text"
-                          v-model="supplier.companyHqZip" :rules="supplier.companyHqZipRule"></v-text-field>
-                      </v-col>
-                    </v-row>
-                    <v-row class="mt-12 bg-light px-6 py-4">
-                      <v-col cols="12" sm="12" text="left" class="pb-0">
-                        <label class="d-block text-left input-label mb-2 font-weight-bold">First Name</label>
-                        <v-text-field placeholder="First Name" single-line outlined type="text" color="#ffffff"
-                          v-model="supplier.firstName" :rules="supplier.firstNameRule"></v-text-field>
-                      </v-col>
-                      <v-col cols="12" sm="12" text="left" class="pb-0">
-                        <label class="d-block text-left input-label mb-2 font-weight-bold">Last Name</label>
-                        <v-text-field placeholder="Last Name" single-line outlined type="text" v-model="supplier.lastName"
-                          :rules="supplier.lastNameRule"></v-text-field>
-                      </v-col>
-                      <v-col cols="12" sm="12" text="left" class="pb-0">
-                        <label class="d-block text-left input-label mb-2 font-weight-bold">Email Address</label>
-                        <v-text-field placeholder="example@email.com" single-line outlined type="email" v-model="email"
-                          @keyup="emailCheck()"></v-text-field>
-                        <span class="d-block email-error-text text-left mt-n4" v-if="emailError">{{ emailError }}</span>
-                      </v-col>
-                      <v-col cols="12" sm="12" text="left" class="pb-0">
-                        <label class="d-block text-left input-label mb-2 font-weight-bold">Title</label>
-                        <v-text-field placeholder="Title" single-line outlined type="text" v-model="supplier.title"
-                          :rules="supplier.titleRule"></v-text-field>
-                      </v-col>
-                      <v-col cols="12" sm="12" text="left" class="pb-8">
-                        <label class="d-block text-left input-label mb-2 font-weight-bold">Direct Phone Number</label>
+                          <v-text-field placeholder="Company HQ Address 2" single-line outlined type="text"
+                            v-model="supplier.companyHq2"></v-text-field>
 
-                        <VuePhoneNumberInput :border-radius="0" size="md" v-model="supplier.phoneNumber"
-                          :translations="translations" :error="!getPhoneInfo.valid && getCounter > 1"
-                          error-color="#B8B8B8" valid-color="#B8B8B8" class="mb-2" :required="true" @update="onUpdate2" />
-                        <div class="phone-class" v-if="!getPhoneInfo.valid && getCounter > 1">
-                          {{ getPhoneInfo.message }}</div>
-                      </v-col>
-                    </v-row>
-                    <v-row class="mt-12 bg-light px-6 py-4">
-                      <v-col cols="12" sm="12" text="left" class="pb-0">
-                        <label class="d-block text-left input-label mb-2 font-weight-bold">Password</label>
-                        <v-text-field placeholder="Password" single-line outlined type="password" color="#ffffff"
-                          v-model="password" :rules="[required, min6]">
-                          <template v-slot:append>
-                            <v-icon v-if="successPass" color="green">{{ passRule }}</v-icon>
-                            <v-icon v-if="!successPass" color="red">{{ passRule }}</v-icon>
-                          </template>
-                        </v-text-field>
-                      </v-col>
-                      <v-col cols="12" sm="12" text="left" class="pb-0">
-                        <label class="d-block text-left input-label mb-2 font-weight-bold">Confirm Password</label>
-                        <v-text-field placeholder="Confirm Password" single-line outlined type="password"
-                          v-model="confirmPassword" :rules="[required, min6, matchingPasswords]">
-                          <template v-slot:append>
-                            <v-icon v-if="successPass1" color="green">{{ passRule1 }}</v-icon>
-                            <v-icon v-if="!successPass1" color="red">{{ passRule1 }}</v-icon>
-                          </template>
-                        </v-text-field>
-                      </v-col>
-                    </v-row>
-                    <v-row justify="center" class="mt-10">
-                      <v-col cols="12" md="3">
-                        <v-btn color="#0D9647" large dense width="100%" height="56"
-                          class="font-weight-bold white--text text-capitalize" type="submit" :loading="loading"
-                          :disabled="!supplierValid">Next <v-icon class="pl-2"
-                            color="#fff">mdi-arrow-right-circle</v-icon></v-btn>
-                      </v-col>
-                    </v-row>
-                  </v-container>
-                </v-form>
+                        </v-col>
+                        <v-col cols="12" sm="6" text="left">
+                          <label class="d-block text-left input-label mb-2 font-weight-bold">Company HQ Country</label>
+
+                          <country-select v-model="country" :country="country" topCountry="US" className="countrySelect"
+                            :disablePlaceholder="true" placeholder="Select Country" />
+                        </v-col>
+                        <v-col cols="12" sm="6" text="left">
+                          <label class="d-block text-left input-label mb-2 font-weight-bold">Company HQ State</label>
+
+                          <region-select v-model="region" :country="country" :region="region" :disablePlaceholder="true"
+                            className="countrySelect" />
+                        </v-col>
+                        <v-col cols="12" sm="6" text="left" class="pb-0">
+                          <label class="d-block text-left input-label mb-2 font-weight-bold">Company HQ City</label>
+                          <ValidationProvider name="Company HQ City" rules="required" v-slot="{ errors, valid }">
+                            <v-text-field placeholder="Company HQ City" single-line outlined type="text"
+                              v-model="supplier.companyHqCity" :error-messages="errors" :success="valid"
+                              required></v-text-field>
+                          </ValidationProvider>
+                        </v-col>
+                        <v-col cols="12" sm="6" text="left" class="pb-0">
+                          <label class="d-block text-left input-label mb-2 font-weight-bold">Company HQ ZIP</label>
+                          <ValidationProvider name="Company HQ ZIP" rules="required" v-slot="{ errors, valid }">
+                            <v-text-field placeholder="ZIP Code" single-line outlined type="text"
+                              v-model="supplier.companyHqZip" :error-messages="errors" :success="valid"
+                              required></v-text-field>
+                          </ValidationProvider>
+                        </v-col>
+                      </v-row>
+                      <v-row class="mt-12 bg-light px-6 py-4">
+                        <v-col cols="12" sm="12" text="left" class="pb-0">
+                          <label class="d-block text-left input-label mb-2 font-weight-bold">First Name</label>
+                          <ValidationProvider name="First Name" rules="required" v-slot="{ errors, valid }">
+                            <v-text-field placeholder="First Name" single-line outlined type="text" color="#ffffff"
+                              v-model="supplier.firstName" :error-messages="errors" :success="valid"
+                              required></v-text-field>
+                          </ValidationProvider>
+                        </v-col>
+                        <v-col cols="12" sm="12" text="left" class="pb-0">
+                          <label class="d-block text-left input-label mb-2 font-weight-bold">Last Name</label>
+                          <ValidationProvider name="Last Name" rules="required" v-slot="{ errors, valid }">
+                            <v-text-field placeholder="Last Name" single-line outlined type="text"
+                              v-model="supplier.lastName" :error-messages="errors" :success="valid"
+                              required></v-text-field>
+                          </ValidationProvider>
+                        </v-col>
+                        <v-col cols="12" sm="12" text="left" class="pb-0">
+                          <label class="d-block text-left input-label mb-2 font-weight-bold">Email Address</label>
+                          <v-text-field placeholder="example@email.com" single-line outlined type="email" v-model="email"
+                            @keyup="emailCheck()"></v-text-field>
+                          <span class="d-block email-error-text text-left mt-n4" v-if="emailError">{{ emailError }}</span>
+                        </v-col>
+                        <v-col cols="12" sm="12" text="left" class="pb-0">
+                          <label class="d-block text-left input-label mb-2 font-weight-bold">Title</label>
+                          <ValidationProvider name="Title" rules="required" v-slot="{ errors, valid }">
+                            <v-text-field placeholder="Title" single-line outlined type="text" v-model="supplier.title"
+                              :error-messages="errors" :success="valid" required></v-text-field>
+                          </ValidationProvider>
+                        </v-col>
+                        <v-col cols="12" sm="12" text="left" class="" :class="{
+                          'spacing-class': getPhoneInfo.valid && getCounter > 1 || !getPhoneInfo.valid && getCounter === 1,
+
+                        }">
+                          <label class="d-block text-left input-label mb-2 font-weight-bold">Direct Phone Number</label>
+
+                          <vue-tel-input @focus="onUpdate2" defaultCountry="US" :autoDefaultCountry="false"
+                            :autoFormat="false" :dropdownOptions="{
+                              showDialCodeInSelection: true,
+                              showFlags: true,
+                              width: ' max-content'
+                            }" :inputOptions="{
+  required: true,
+  showDialCode: false,
+  maxlength: 15,
+  placeholder: 'Phone number',
+
+}" model="national" :validCharactersOnly="true" :styleClasses="{ 'phone-main-class': true }"
+                            v-model="supplier.phoneNumber" @validate="onUpdate2"></vue-tel-input>
+
+                          <div class="phone-class" v-show="!getPhoneInfo.valid && getCounter > 1">
+                            {{ getPhoneInfo.message }}</div>
+                        </v-col>
+                      </v-row>
+                      <v-row class="mt-12 bg-light px-6 py-4">
+                        <v-col cols="12" sm="12" text="left" class="pb-0">
+                          <label class="d-block text-left input-label mb-2 font-weight-bold">Password</label>
+                          <ValidationProvider name="Password" rules="required|min:6" vid="password"
+                            v-slot="{ errors, valid }">
+                            <v-text-field placeholder="Password" single-line outlined type="password" color="#ffffff"
+                              v-model="password" :error-messages="errors" :success="valid" required>
+                              <template v-slot:append>
+                                <v-icon v-if="successPass" color="green">{{ passRule }}</v-icon>
+                                <v-icon v-if="!successPass" color="red">{{ passRule }}</v-icon>
+                              </template>
+                            </v-text-field>
+                          </ValidationProvider>
+                        </v-col>
+                        <v-col cols="12" sm="12" text="left" class="pb-0">
+                          <label class="d-block text-left input-label mb-2 font-weight-bold">Confirm Password</label>
+                          <ValidationProvider name="Password confirmation" rules="confirmed:password|required"
+                            v-slot="{ errors, valid }">
+                            <v-text-field placeholder="Confirm Password" single-line outlined type="password"
+                              v-model="confirmPassword" :error-messages="errors" :success="valid" required>
+                              <template v-slot:append>
+                                <v-icon v-if="successPass1" color="green">{{ passRule1 }}</v-icon>
+                                <v-icon v-if="!successPass1" color="red">{{ passRule1 }}</v-icon>
+                              </template>
+                            </v-text-field>
+                          </ValidationProvider>
+                        </v-col>
+                      </v-row>
+                      <v-row justify="center" class="mt-10">
+                        <v-col cols="12" md="3">
+                          <v-btn color="#0D9647" large dense width="100%" height="56"
+                            class="font-weight-bold white--text text-capitalize" @click="handleSubmit(supplierRequest)"
+                            :loading="loading" :disabled="!getPhoneInfo.valid || (invalid || !validated)">Next <v-icon
+                              class="pl-2" color="#fff">mdi-arrow-right-circle</v-icon></v-btn>
+                        </v-col>
+                      </v-row>
+                    </v-container>
+                  </v-form>
+                </ValidationObserver>
               </v-tab-item>
             </v-tabs-items>
           </v-col>
         </v-row>
-        <Contract />
         <v-row justify="center">
           <v-col cols="12" md="9">
             <div class="getStart-box pa-6 text-left">
@@ -272,93 +376,62 @@
   import ModuleSelection from '@/components/SignUp/module-selection.vue'
   import Contract from '@/components/SignUp/contract.vue'
   import _ from 'lodash';
-  import VuePhoneNumberInput from 'vue-phone-number-input';
-  import 'vue-phone-number-input/dist/vue-phone-number-input.css';
+  import { VueTelInput } from 'vue-tel-input';
   import { mapActions, mapGetters } from "vuex";
+  import {
+  ValidationObserver,
+  ValidationProvider
+} from "vee-validate";
 
 export default {
   name : "GetStarted",
   components: {
     NavbarBeforeLogin,
     Footer,
-    VuePhoneNumberInput,
+    VueTelInput,
     ConfirmationBuyer,
     ExistingConfirmation,
     ConfirmationSupplier,
     ModuleSelection,
-    Contract
+    Contract,
+    ValidationProvider,
+    ValidationObserver
   },
   data() {
     return {
       loader: null,
       loading: false,
       btnDisable: false,
-      buyerValid: true,
-      supplierValid: true,
       currentItem: '',
+      editCompanyName: false,
       items: [
         'Buyer', 'Supplier',
       ],
       supplier: {
         searchCompany: '',
+        companyName: '',
+        bidInvitedCode: '',
+        editCompany: '',
         companyHq: '',
-        companyHqRule:[
-          v => !!v || 'Company HQ is required',
-        ],
         companyHq2: '',
         companyHqState: '',
         companyHqCity: '',
-        companyHqCityRule: [
-          v => !!v || 'Company HQ City is required',
-        ],
         companyHqZip: '',
-        companyHqZipRule: [
-          v => !!v || 'Company HQ Zip is required',
-        ],
         firstName: '',
-        firstNameRule: [
-          v => !!v || 'First Name is required',
-        ],
         lastName: '',
-        lastNameRule: [
-          v => !!v || 'Last Name is required',
-        ],
         phoneNumber: '',
         title: '',
-        titleRule: [
-          v => !!v || 'Title is required',
-        ],
         region: "",
         country: ""
       },
       buyer: {
         companyName: '',
-        companyNameRule: [
-          v => !!v || 'Company is required',
-        ],
         firstName: '',
-        firstNameRule: [
-          v => !!v || 'First Name is required',
-        ],
         lastName: '',
-        lastNameRule: [
-          v => !!v || 'Last Name is required',
-        ],
         phoneNumber: '',
       },
       email: '',
-      // buyerEmailRule: [
-      //   v => !!v || 'Email is required',
-      //   v => /^\w+([.+_-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,3})+$/.test(v) || 'E-mail must be valid',
-      // ],
-      // supplierEmailRule: [
-      //   v => !!v || 'Email is required',
-      //   v => /^\w+([.+_-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,3})+$/.test(v) || 'E-mail must be valid',
-      // ],
       company: '',
-      companyRule: [
-      v => !!v || 'Company Name is required',
-      ],
       companyId: '',
       successPass: false,
       successPass1: false,
@@ -370,13 +443,6 @@ export default {
       list: false,
       companyInfo: true,
       emailExist: false,
-      translations: {
-        countrySelectorLabel: 'Country Code',
-        countrySelectorError: 'Choose country',
-        phoneNumberLabel: 'Phone Number',
-        example: 'Example'
-      },
-      hasErrorActive: false,
       results: {},
       results2: {},
       counter: 0,
@@ -404,19 +470,20 @@ export default {
 
       this.loader = null
     },
+    currentItem () {
+      this.phoneInfo = {
+        valid: true,
+        message: '',
+      }
+      this.counter = 0
+    }
   },
   computed:{
-    activityPanel(){
-        return this.$store.getters.g_activityPanel;
-    },
     getPhoneInfo() {
       return this.phoneInfo;
     },
     getCounter() {
       return this.counter;
-    },
-    getHideList() {
-      return this.hideList
     },
     passRule: function() {
       if (this.password === '') {
@@ -440,6 +507,7 @@ export default {
       } else if (this.min6(this.confirmPassword) === true && this.matchingPasswords() === true) {
         this.successPass1 = true;
         this.btnDisable = false;
+        this.matchingPasswords()
         return 'mdi-check';
       } else {
         // password wrong
@@ -461,20 +529,12 @@ export default {
     },
     emailError() {
       if (!this.email) {
-        this.buyerValid = false;
-        this.supplierValid = false;
         return "Email is required";
       } else if (!this.email.match(/^\w+([.+_-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,3})+$/)) {
-        this.buyerValid = false;
-        this.supplierValid = false;
         return "Email is not valid";
       } else if (this.emailMsg) {
-        this.buyerValid = false;
-        this.supplierValid = false;
         return `Email already exists! Please <a href="/login">login</a> to access your account.`;
       } else {
-        this.buyerValid = true;
-        this.supplierValid = true;
         return "";
       }
     }
@@ -483,23 +543,60 @@ export default {
     ...mapActions(["supplierSignUpAction","searchSupplier","checkEmail","buyerSignUpAction","getIpAddress"]),
     onUpdate (payload) {
       this.counter++;
-      this.phoneInfo.valid = payload.isValid;
+      this.phoneInfo.valid = payload === undefined ? false : payload.valid;
 
-      if (payload.phoneNumber && !payload.isValid) {
+      if (!payload) {
+        this.phoneInfo.message = 'Phone number is required';
+      } else {
+        this.phoneInfo.valid =  payload.valid === undefined ? false : payload.valid;
+
+        if (payload.number && !payload.valid) {
         this.phoneInfo.message = 'Invalid Phone number format';
       }
 
-      if (!payload.phoneNumber && !payload.isValid) {
+      if (!payload.number && !payload.valid) {
         this.phoneInfo.message = 'Phone number is required';
       }
-      this.results = payload.formattedNumber
+      if (payload.number && payload.valid) {
+        this.buyer.phoneNumber = payload.nationalNumber;
+        this.results = payload.number;
+      }
+      }
+
     },
     onUpdate2 (payload) {
+      this.counter++;
+      this.phoneInfo.valid = payload === undefined ? false : payload.valid;
 
-      this.results2 = payload.formattedNumber
+      if (!payload) {
+        this.phoneInfo.message = 'Phone number is required';
+      } else {
+        this.phoneInfo.valid = payload.valid === undefined ? false : payload.valid;
+        if (payload.number && !payload.valid) {
+        this.phoneInfo.message = 'Invalid Phone number format';
+      }
+
+      if (!payload.number && !payload.valid) {
+        this.phoneInfo.message = 'Phone number is required';
+      }
+      if (payload.number && payload.valid) {
+        this.supplier.phoneNumber = payload.nationalNumber;
+        this.results2 = payload.number;
+      }
+      }
+
     },
-    registerRequest() {
-      if(this.$refs.form.validate() && this.emailError === ''){
+
+    supplierRequest() {
+      if (this.results === '' || this.results === undefined) {
+        this.counter += 2;
+        this.phoneInfo = {
+          valid: false,
+          message: 'Phone number is required',
+        };
+      }
+
+      if(this.getPhoneInfo.valid && this.emailError === ''){
         if(this.companyId){
           var supplierData = {
             id: this.companyId,
@@ -530,11 +627,9 @@ export default {
         }
         this.supplierSignUpAction(supplierData);
         this.loader = 'loading';
-        this.supplierValid = false;
       }
     },
     buyerRequest() {
-      console.log(this.results)
       if (this.results === '' || this.results === undefined) {
         this.counter += 2;
         this.phoneInfo = {
@@ -543,7 +638,7 @@ export default {
         };
       }
 
-      if(this.$refs.buyerForm.validate() && this.emailError === '' && this.getPhoneInfo.valid){
+      if(this.getPhoneInfo.valid){
         var buyerData = {
         company: this.buyer.companyName,
         firstName: this.buyer.firstName,
@@ -554,7 +649,6 @@ export default {
 
       this.buyerSignUpAction(buyerData);
       this.loader = 'loading';
-      this.buyerValid = false;
       }
     },
     getSupplierList(){
@@ -568,13 +662,6 @@ export default {
         this.checkEmail(this.email);
       }else if(this.email.length < 2){
         this.$store.commit('setEmailExistSuccess', '');
-      }
-    },
-    required: function(value) {
-      if (value) {
-        return true;
-      } else {
-        return 'This field is required.';
       }
     },
     min6: function(value) {
@@ -605,3 +692,5 @@ export default {
 };
 </script>
 <style scoped lang="scss"></style>
+
+<style src="vue-tel-input/dist/vue-tel-input.css"></style>

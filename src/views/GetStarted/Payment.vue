@@ -127,13 +127,13 @@
                       </v-col>
                       <v-col cols="12" sm="12" text="left">
                         <label class="d-block text-left input-label mb-2 font-weight-bold">Billing Contact Phone</label>
-                        <VuePhoneNumberInput :border-radius="4" size="lg" v-model="phone"
+                        <!-- <VuePhoneNumberInput :border-radius="4" size="lg" v-model="phone"
                         :translations="translations"
                         :loader="hasLoaderActive"
                         :error="hasErrorActive"
                         class="mb-2"
                         @update="onUpdate"
-                        />
+                        /> -->
                       </v-col>
                       <v-col cols="12" sm="12" text="left">
                         <label class="d-block text-left input-label mb-2 font-weight-bold">Billing Contact Email</label>
@@ -169,8 +169,8 @@
 <script>
   import NavbarBeforeLogin from '../../components/Layout/NavbarBeforeLogin.vue'
   import Footer from '../../components/Layout/Footer.vue'
-  import VuePhoneNumberInput from 'vue-phone-number-input';
-  import 'vue-phone-number-input/dist/vue-phone-number-input.css';
+  // import VuePhoneNumberInput from 'vue-phone-number-input';
+  // import 'vue-phone-number-input/dist/vue-phone-number-input.css';
   import { mapActions } from "vuex";
   export default {
     name: 'Payment',
@@ -217,7 +217,7 @@
     components: {
       NavbarBeforeLogin,
       Footer,
-      VuePhoneNumberInput
+     // VuePhoneNumberInput
     },
     data () {
       return {
