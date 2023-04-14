@@ -278,7 +278,9 @@ export default {
       this.message = '';
       this.$refs.msgFile.value = null;
       this.$refs.myVueDropzone.removeFile(file);
-      document.getElementById('dropzone').style.display = 'none';
+      if (document.getElementById('dropzone')) {
+        document.getElementById('dropzone').style.display = 'none';
+      }
       const ids = {
         userId: this.user.id,
         conversationId: response.message.conversationId,
