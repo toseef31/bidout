@@ -14,7 +14,7 @@
     </div>
     <v-container>
       <v-main>
-        <v-row justify="center">
+        <!-- <v-row justify="center">
           <v-col cols="12" md="9">
             <div class="tabs-head mt-4 px-9 py-8">
               <h4 class="text-left mb-4 font-weight-bold">Choose an option</h4>
@@ -29,327 +29,328 @@
             </div>
             <v-tabs-items v-model="currentItem">
               <!-- BUYER SECTION -->
-              <v-tab-item>
-                <ValidationObserver ref="buyer" v-slot="{ invalid, validated, handleSubmit }">
-                  <v-form
-                    :class="{ 'phone-error-class': !getPhoneInfo.valid && getCounter > 1, 'phone-valid-class': getPhoneInfo.valid }">
-                    <v-container>
+        <v-tab-item>
+          <ValidationObserver ref="buyer" v-slot="{ invalid, validated, handleSubmit }">
+            <v-form
+              :class="{ 'phone-error-class': !getPhoneInfo.valid && getCounter > 1, 'phone-valid-class': getPhoneInfo.valid }">
+              <v-container>
 
-                      <v-row class="mt-8 bg-light pa-6">
-                        <v-col cols="12" sm="12" text="left" class="pb-0">
-                          <label class="d-block text-left input-label mb-2 font-weight-bold">First Name</label>
-                          <ValidationProvider name="First name" rules="required" v-slot="{ errors, valid }">
-                            <v-text-field placeholder="First Name" single-line outlined :error-messages="errors"
-                              :success="valid" type="text" color="#ffffff" v-model="buyer.firstName"
-                              required></v-text-field>
-                          </ValidationProvider>
-                        </v-col>
-                        <v-col cols="12" sm="12" text="left" class="pb-0">
-                          <label class="d-block text-left input-label mb-2 font-weight-bold">Last Name</label>
-                          <ValidationProvider name="Last name" rules="required" v-slot="{ errors, valid }">
-                            <v-text-field placeholder="Last Name" single-line outlined :error-messages="errors"
-                              :success="valid" type="text" v-model="buyer.lastName" required></v-text-field>
-                          </ValidationProvider>
-                        </v-col>
+                <v-row class="mt-8 bg-light pa-6">
+                  <v-col cols="12" sm="12" text="left" class="pb-0">
+                    <label class="d-block text-left input-label mb-2 font-weight-bold">First Name</label>
+                    <ValidationProvider name="First name" rules="required" v-slot="{ errors, valid }">
+                      <v-text-field placeholder="First Name" single-line outlined :error-messages="errors"
+                        :success="valid" type="text" color="#ffffff" v-model="buyer.firstName" required></v-text-field>
+                    </ValidationProvider>
+                  </v-col>
+                  <v-col cols="12" sm="12" text="left" class="pb-0">
+                    <label class="d-block text-left input-label mb-2 font-weight-bold">Last Name</label>
+                    <ValidationProvider name="Last name" rules="required" v-slot="{ errors, valid }">
+                      <v-text-field placeholder="Last Name" single-line outlined :error-messages="errors" :success="valid"
+                        type="text" v-model="buyer.lastName" required></v-text-field>
+                    </ValidationProvider>
+                  </v-col>
 
-                        <v-col cols="12" sm="12" text="left" class="pb-0">
-                          <label class="d-block text-left input-label mb-2 font-weight-bold">Company Name</label>
-                          <ValidationProvider name="Company name" rules="required" v-slot="{ errors, valid }">
-                            <v-text-field placeholder="Company name" single-line outlined type="text"
-                              v-model="buyer.companyName" :error-messages="errors" :success="valid" required>
-                            </v-text-field>
-                          </ValidationProvider>
-                        </v-col>
+                  <v-col cols="12" sm="12" text="left" class="pb-0">
+                    <label class="d-block text-left input-label mb-2 font-weight-bold">Company Name</label>
+                    <ValidationProvider name="Company name" rules="required" v-slot="{ errors, valid }">
+                      <v-text-field placeholder="Company name" single-line outlined type="text"
+                        v-model="buyer.companyName" :error-messages="errors" :success="valid" required>
+                      </v-text-field>
+                    </ValidationProvider>
+                  </v-col>
 
-                        <v-col cols="12" sm="12" text="left" class="pb-0">
-                          <label class="d-block text-left input-label mb-2 font-weight-bold">Email Address</label>
-                          <ValidationProvider name="Email address" rules="required|email" v-slot="{ errors, valid }">
-                            <v-text-field placeholder="example@email.com" single-line outlined type="email"
-                              v-model="email" :error-messages="errors" :success="valid" required></v-text-field>
-                          </ValidationProvider>
+                  <v-col cols="12" sm="12" text="left" class="pb-0">
+                    <label class="d-block text-left input-label mb-2 font-weight-bold">Email Address</label>
+                    <ValidationProvider name="Email address" rules="required|email" v-slot="{ errors, valid }">
+                      <v-text-field placeholder="example@email.com" single-line outlined type="email"
+                        v-model="buyer.email" @input="checkEmail" :error-messages="errors" :success="valid"
+                        required></v-text-field>
+                    </ValidationProvider>
 
-                        </v-col>
-                        <v-col cols="12" sm="12" text="left" :class="{
-                          'spacing-class': getPhoneInfo.valid && getCounter > 1 || !getPhoneInfo.valid && getCounter === 1,
-                        }">
-                          <label class="d-block text-left input-label mb-2 font-weight-bold">Direct Phone Number</label>
+                  </v-col>
+                  <v-col cols="12" sm="12" text="left" :class="{
+                    'spacing-class': getPhoneInfo.valid && getCounter > 1 || !getPhoneInfo.valid && getCounter === 1,
+                  }">
+                    <label class="d-block text-left input-label mb-2 font-weight-bold">Direct Phone Number</label>
 
-                          <vue-tel-input @focus="onUpdate" defaultCountry="US" :autoDefaultCountry="false"
-                            :autoFormat="false" :dropdownOptions="{
-                              showDialCodeInSelection: true,
-                              showFlags: true,
-                              width: ' max-content'
-                            }" :inputOptions="{
+                    <vue-tel-input @focus="onUpdate" defaultCountry="US" :autoDefaultCountry="false" :autoFormat="false"
+                      :dropdownOptions="{
+                        showDialCodeInSelection: true,
+                        showFlags: true,
+                        width: ' max-content'
+                      }" :inputOptions="{
   required: true,
   showDialCode: false,
   maxlength: 15,
   placeholder: 'Phone number',
 
 }" model="national" :validCharactersOnly="true" :styleClasses="{ 'phone-main-class': true }"
-                            v-model="buyer.phoneNumber" @validate="onUpdate"></vue-tel-input>
+                      v-model="buyer.phoneNumber" @validate="onUpdate"></vue-tel-input>
 
-                          <div class="phone-class" v-show="!getPhoneInfo.valid && getCounter > 1">
-                            {{ getPhoneInfo.message }}</div>
-                        </v-col>
-                      </v-row>
+                    <div class="phone-class" v-show="!getPhoneInfo.valid && getCounter > 1">
+                      {{ getPhoneInfo.message }}</div>
+                  </v-col>
+                </v-row>
 
-                      <v-row justify="center" class="mt-10">
-                        <v-col cols="12" md="3">
-                          <v-btn color="#0D9647" large dense width="100%" height="56"
-                            class="font-weight-bold white--text text-capitalize" @click="handleSubmit(buyerRequest)"
-                            :loading="loading" :disabled="!getPhoneInfo.valid || (invalid || !validated)">Next <v-icon
-                              class="pl-2" color="#fff">mdi-arrow-right-circle</v-icon></v-btn>
-                        </v-col>
-                      </v-row>
-                    </v-container>
-                  </v-form>
-                </ValidationObserver>
-              </v-tab-item>
+                <v-row justify="center" class="mt-10">
+                  <v-col cols="12" md="3">
+                    <v-btn color="#0D9647" large dense width="100%" height="56"
+                      class="font-weight-bold white--text text-capitalize" @click="handleSubmit(buyerRequest)"
+                      :loading="loading" :disabled="!getPhoneInfo.valid || (invalid || !validated)">Next <v-icon
+                        class="pl-2" color="#fff">mdi-arrow-right-circle</v-icon></v-btn>
+                  </v-col>
+                </v-row>
+              </v-container>
+            </v-form>
+          </ValidationObserver>
+        </v-tab-item>
 
-              <!-- SUPPLIER SECTION -->
-              <v-tab-item>
-                <ValidationObserver ref="buyer" v-slot="{ invalid, validated, handleSubmit }">
+        <!-- SUPPLIER SECTION -->
+        <v-tab-item>
+          <ValidationObserver ref="buyer" v-slot="{ invalid, validated, handleSubmit }">
 
-                  <v-form
-                    :class="{ 'phone-error-class': !getPhoneInfo.valid && getCounter > 1, 'phone-valid-class': getPhoneInfo.valid }">
-                    <v-container>
-                      <v-row class="mt-8 bg-light px-6 py-4 ">
-                        <v-row v-if="isToken">
-                          <v-col text="left" class=" " :cols="editCompanyName ? '12' : ''"
-                            :sm="editCompanyName ? '6' : '12'">
-                            <label class="d-block text-left input-label mb-2 font-weight-bold">Bid Invite
-                              Code</label>
-                            <ValidationProvider name="Bid Invite
-                                                                          Code" rules="required"
-                              v-slot="{ errors, valid }">
-                              <v-text-field placeholder="Enter your bid invite code" single-line outlined type="text"
-                                :error-messages="errors" :success="valid" required v-model="supplier.bidInvitedCode">
-                                <template v-slot:append>
-                                  <div class="d-flex align-center" v-if="false"> <span class="invited-company">Patterson
-                                      UI</span>
-                                    <v-icon size="20" color="#0D9648" class="ml-2">mdi-check-decagram-outline</v-icon>
-                                  </div>
+            <v-form
+              :class="{ 'phone-error-class': !getPhoneInfo.valid && getCounter > 1, 'phone-valid-class': getPhoneInfo.valid }">
+              <v-container>
+                <v-row class="mt-8 bg-light px-6 py-4 ">
+                  <v-row v-if="isToken" class="px-3">
+                    <v-col text="left" class=" " :cols="editCompanyName ? '12' : ''" :sm="editCompanyName ? '6' : '12'">
+                      <label class="d-block text-left input-label mb-2 font-weight-bold">Bid Invite
+                        Code</label>
+                      <ValidationProvider name="Bid Invite
+                                                                                                            Code"
+                        rules="required" v-slot="{ errors, valid }">
+                        <v-text-field placeholder="Enter your bid invite code" single-line outlined type="text"
+                          :error-messages="errors" :success="valid" required v-model="supplier.bidInvitedCode">
+                          <template v-slot:append>
+                            <div class="d-flex align-center" v-if="!editCompanyName"> <span
+                                class="invited-company">Patterson
+                                UI</span>
+                              <v-icon size="20" color="#0D9648" class="ml-2">mdi-check-decagram-outline</v-icon>
+                            </div>
 
-                                  <v-progress-circular indeterminate :size="20" :width="2"
-                                    color="
-                                                                                                                      #0D1139" :value="80" v-else></v-progress-circular>
+                            <v-progress-circular indeterminate :size="20" :width="2"
+                              color="
+                                                                                                                                                        #0D1139" :value="80"
+                              v-else></v-progress-circular>
 
-                                </template>
-                              </v-text-field>
-                            </ValidationProvider>
-                          </v-col>
+                          </template>
+                        </v-text-field>
+                      </ValidationProvider>
+                    </v-col>
 
-                          <v-col v-if="editCompanyName">
-                            <label class="d-block text-left input-label mb-2 font-weight-bold">Company Name</label>
-                            <ValidationProvider name="Company name" rules="required" v-slot="{ errors, valid }">
-                              <v-text-field placeholder="Company name" single-line outlined :error-messages="errors"
-                                :success="valid" type="text" v-model="supplier.editCompany" required>
-                              </v-text-field>
-                            </ValidationProvider>
-                          </v-col>
-                        </v-row>
+                    <v-col v-if="editCompanyName">
+                      <label class="d-block text-left input-label mb-2 font-weight-bold">Company Name</label>
+                      <ValidationProvider name="Company name" rules="required" v-slot="{ errors, valid }">
+                        <v-text-field placeholder="Company name" single-line outlined :error-messages="errors"
+                          :success="valid" type="text" v-model="supplier.editCompany" required>
+                        </v-text-field>
+                      </ValidationProvider>
+                    </v-col>
+                  </v-row>
 
-                        <v-row v-if="!isToken">
-                          <v-col text="left" cols="12" sm="12">
-                            <label class="d-block text-left input-label mb-2 font-weight-bold">Company Name</label>
-                            <ValidationProvider name="Company name" rules="required" v-slot="{ errors, valid }">
-                              <v-text-field prepend-inner-icon="search" placeholder="Company name" single-line outlined
-                                type="text" v-model="supplier.companyName" @keyup="getSupplierList"
-                                :error-messages="errors" :success="valid" required clearable>
-                              </v-text-field>
-                            </ValidationProvider>
-                            <input type="hidden" v-model="companyId">
-                            <template v-if="hideList == true">
-                              <v-list class="company-list" v-if="suppliers != ''">
-                                <template v-for="(item) in suppliers">
-                                  <v-list-item :key="item.title">
-                                    <v-list-item-content>
-                                      <v-list-item-title v-html="item.company"
-                                        @click="companyList(item.company, item.objectID); hideList = !hideList"
-                                        class="text-left"></v-list-item-title>
-                                    </v-list-item-content>
-                                  </v-list-item>
-                                </template>
-                              </v-list>
-                            </template>
+                  <v-row v-if="!isToken" class="px-3">
+                    <v-col text="left" cols="12" sm="12">
+                      <label class="d-block text-left input-label mb-2 font-weight-bold">Company Name</label>
+                      <ValidationProvider name="Company name" rules="required" v-slot="{ errors, valid }">
+                        <v-text-field prepend-inner-icon="search" placeholder="Company name" single-line outlined
+                          type="text" v-model="supplier.companyName" @keyup="getSupplierList" :error-messages="errors"
+                          :success="valid" required clearable>
+                        </v-text-field>
+                      </ValidationProvider>
+                      <input type="hidden" v-model="companyId">
+                      <template v-if="hideList == true">
+                        <v-list class="company-list" v-if="suppliers != ''">
+                          <template v-for="(item) in suppliers">
+                            <v-list-item :key="item.title">
+                              <v-list-item-content>
+                                <v-list-item-title v-html="item.company"
+                                  @click="companyList(item.company, item.objectID); hideList = !hideList"
+                                  class="text-left"></v-list-item-title>
+                              </v-list-item-content>
+                            </v-list-item>
+                          </template>
+                        </v-list>
+                      </template>
 
-                          </v-col>
-                        </v-row>
-                      </v-row>
+                    </v-col>
+                  </v-row>
+                </v-row>
 
-                      <v-row class="px-2   bg-light  "><v-col
-                          class="checkbox-class pb-3 d-flex justify-space-between align-center ">
-                          <v-checkbox v-model="isToken" class="name-class" color="#0D9648" hide-details>
-                            <template v-slot:label>
-                              <div>
-                                I have an invite token
-                              </div>
-                            </template>
-                          </v-checkbox>
-
-                          <div class="edit-company" v-if="isToken && !editCompanyName" @click="editCompanyName = true">
-                            <span class="text-decoration-underline">Edit company
-                              name</span>
-                            <v-icon color="#B8B8B8" size="20" class="ml-2">mdi-pencil-outline</v-icon>
-                          </div>
-
-                          <div v-if="editCompanyName && isToken" class="edit-company" @click="editCompanyName = false">
-                            <span class="text-decoration-underline">Save</span>
-                            <v-icon color="#B8B8B8" size="20" class="ml-2">mdi-content-save</v-icon>
-                          </div>
-                        </v-col>
-                      </v-row>
-
-                      <v-row class="mt-12">
-                        <div class="existing-company pa-6 text-left">
-                          <h1>This is an existing company, filling out the form will send a
-                            request to add you to the existing company.</h1>
-
+                <v-row class="px-5   bg-light  "><v-col
+                    class="checkbox-class pb-3 d-flex justify-space-between align-center ">
+                    <v-checkbox v-model="isToken" class="name-class" color="#0D9648" hide-details>
+                      <template v-slot:label>
+                        <div>
+                          I have an invite token
                         </div>
+                      </template>
+                    </v-checkbox>
 
-                      </v-row>
-                      <v-row class="mt-12 bg-light px-6 py-4" v-if="companyInfo">
-                        <v-col cols="12" sm="12" text="left" class="pb-0">
-                          <label class="d-block text-left input-label mb-2 font-weight-bold">Company HQ Address 1</label>
-                          <ValidationProvider name="Company HQ" rules="required" v-slot="{ errors, valid }">
-                            <v-text-field placeholder="Company HQ Address 1" single-line outlined type="text"
-                              v-model="supplier.companyHq" color="#ffffff" :error-messages="errors" :success="valid"
-                              required></v-text-field>
-                          </ValidationProvider>
-                        </v-col>
-                        <v-col cols="12" sm="12" text="left" class="pb-0">
-                          <label class="d-block text-left input-label mb-2 font-weight-bold">Company HQ Address 2</label>
+                    <div class="edit-company" v-if="isToken && !editCompanyName" @click="editCompanyName = true">
+                      <span class="text-decoration-underline">Edit company
+                        name</span>
+                      <v-icon color="#B8B8B8" size="20" class="ml-2">mdi-pencil-outline</v-icon>
+                    </div>
 
-                          <v-text-field placeholder="Company HQ Address 2" single-line outlined type="text"
-                            v-model="supplier.companyHq2"></v-text-field>
+                    <div v-if="editCompanyName && isToken" class="edit-company" @click="editCompanyName = false">
+                      <span class="text-decoration-underline">Save</span>
+                      <v-icon color="#B8B8B8" size="20" class="ml-2">mdi-content-save</v-icon>
+                    </div>
+                  </v-col>
+                </v-row>
 
-                        </v-col>
-                        <v-col cols="12" sm="6" text="left">
-                          <label class="d-block text-left input-label mb-2 font-weight-bold">Company HQ Country</label>
+                <v-row class="mt-12" v-if="true">
+                  <div class="existing-company pa-6 text-left">
+                    <h1 v-if="!isToken">{{ supplier.companyName }} is an existing company in the BidOut platform,
+                      filling out the
+                      form will send a request to add you to {{ supplier.companyName }}</h1>
 
-                          <country-select v-model="country" :country="country" topCountry="US" className="countrySelect"
-                            :disablePlaceholder="true" placeholder="Select Country" />
-                        </v-col>
-                        <v-col cols="12" sm="6" text="left">
-                          <label class="d-block text-left input-label mb-2 font-weight-bold">Company HQ State</label>
+                    <h1 v-else>We have successfully found your invite code and upon completion of the BidOut signup
+                      process, you will be automatically linked back to the bid that you were invited to.</h1>
+                  </div>
 
-                          <region-select v-model="region" :country="country" :region="region" :disablePlaceholder="true"
-                            className="countrySelect" />
-                        </v-col>
-                        <v-col cols="12" sm="6" text="left" class="pb-0">
-                          <label class="d-block text-left input-label mb-2 font-weight-bold">Company HQ City</label>
-                          <ValidationProvider name="Company HQ City" rules="required" v-slot="{ errors, valid }">
-                            <v-text-field placeholder="Company HQ City" single-line outlined type="text"
-                              v-model="supplier.companyHqCity" :error-messages="errors" :success="valid"
-                              required></v-text-field>
-                          </ValidationProvider>
-                        </v-col>
-                        <v-col cols="12" sm="6" text="left" class="pb-0">
-                          <label class="d-block text-left input-label mb-2 font-weight-bold">Company HQ ZIP</label>
-                          <ValidationProvider name="Company HQ ZIP" rules="required" v-slot="{ errors, valid }">
-                            <v-text-field placeholder="ZIP Code" single-line outlined type="text"
-                              v-model="supplier.companyHqZip" :error-messages="errors" :success="valid"
-                              required></v-text-field>
-                          </ValidationProvider>
-                        </v-col>
-                      </v-row>
-                      <v-row class="mt-12 bg-light px-6 py-4">
-                        <v-col cols="12" sm="12" text="left" class="pb-0">
-                          <label class="d-block text-left input-label mb-2 font-weight-bold">First Name</label>
-                          <ValidationProvider name="First Name" rules="required" v-slot="{ errors, valid }">
-                            <v-text-field placeholder="First Name" single-line outlined type="text" color="#ffffff"
-                              v-model="supplier.firstName" :error-messages="errors" :success="valid"
-                              required></v-text-field>
-                          </ValidationProvider>
-                        </v-col>
-                        <v-col cols="12" sm="12" text="left" class="pb-0">
-                          <label class="d-block text-left input-label mb-2 font-weight-bold">Last Name</label>
-                          <ValidationProvider name="Last Name" rules="required" v-slot="{ errors, valid }">
-                            <v-text-field placeholder="Last Name" single-line outlined type="text"
-                              v-model="supplier.lastName" :error-messages="errors" :success="valid"
-                              required></v-text-field>
-                          </ValidationProvider>
-                        </v-col>
-                        <v-col cols="12" sm="12" text="left" class="pb-0">
-                          <label class="d-block text-left input-label mb-2 font-weight-bold">Email Address</label>
-                          <v-text-field placeholder="example@email.com" single-line outlined type="email" v-model="email"
-                            @keyup="emailCheck()"></v-text-field>
-                          <span class="d-block email-error-text text-left mt-n4" v-if="emailError">{{ emailError }}</span>
-                        </v-col>
-                        <v-col cols="12" sm="12" text="left" class="pb-0">
-                          <label class="d-block text-left input-label mb-2 font-weight-bold">Title</label>
-                          <ValidationProvider name="Title" rules="required" v-slot="{ errors, valid }">
-                            <v-text-field placeholder="Title" single-line outlined type="text" v-model="supplier.title"
-                              :error-messages="errors" :success="valid" required></v-text-field>
-                          </ValidationProvider>
-                        </v-col>
-                        <v-col cols="12" sm="12" text="left" class="" :class="{
-                          'spacing-class': getPhoneInfo.valid && getCounter > 1 || !getPhoneInfo.valid && getCounter === 1,
+                </v-row>
+                <v-row class="mt-12 bg-light px-6 py-4" v-if="companyInfo">
+                  <v-col cols="12" sm="12" text="left" class="pb-0">
+                    <label class="d-block text-left input-label mb-2 font-weight-bold">Company HQ Address 1</label>
+                    <ValidationProvider name="Company HQ" rules="required" v-slot="{ errors, valid }">
+                      <v-text-field placeholder="Company HQ Address 1" single-line outlined type="text"
+                        v-model="supplier.companyHq" color="#ffffff" :error-messages="errors" :success="valid"
+                        required></v-text-field>
+                    </ValidationProvider>
+                  </v-col>
+                  <v-col cols="12" sm="12" text="left" class="pb-0">
+                    <label class="d-block text-left input-label mb-2 font-weight-bold">Company HQ Address 2</label>
 
-                        }">
-                          <label class="d-block text-left input-label mb-2 font-weight-bold">Direct Phone Number</label>
+                    <v-text-field placeholder="Company HQ Address 2" single-line outlined type="text"
+                      v-model="supplier.companyHq2"></v-text-field>
 
-                          <vue-tel-input @focus="onUpdate2" defaultCountry="US" :autoDefaultCountry="false"
-                            :autoFormat="false" :dropdownOptions="{
-                              showDialCodeInSelection: true,
-                              showFlags: true,
-                              width: ' max-content'
-                            }" :inputOptions="{
+                  </v-col>
+                  <v-col cols="12" sm="6" text="left">
+                    <label class="d-block text-left input-label mb-2 font-weight-bold">Company HQ Country</label>
+
+                    <country-select v-model="country" :country="country" topCountry="US" className="countrySelect"
+                      :disablePlaceholder="true" placeholder="Select Country" />
+                  </v-col>
+                  <v-col cols="12" sm="6" text="left">
+                    <label class="d-block text-left input-label mb-2 font-weight-bold">Company HQ State</label>
+
+                    <region-select v-model="region" :country="country" :region="region" :disablePlaceholder="true"
+                      className="countrySelect" />
+                  </v-col>
+                  <v-col cols="12" sm="6" text="left" class="pb-0">
+                    <label class="d-block text-left input-label mb-2 font-weight-bold">Company HQ City</label>
+                    <ValidationProvider name="Company HQ City" rules="required" v-slot="{ errors, valid }">
+                      <v-text-field placeholder="Company HQ City" single-line outlined type="text"
+                        v-model="supplier.companyHqCity" :error-messages="errors" :success="valid"
+                        required></v-text-field>
+                    </ValidationProvider>
+                  </v-col>
+                  <v-col cols="12" sm="6" text="left" class="pb-0">
+                    <label class="d-block text-left input-label mb-2 font-weight-bold">Company HQ ZIP</label>
+                    <ValidationProvider name="Company HQ ZIP" rules="required" v-slot="{ errors, valid }">
+                      <v-text-field placeholder="ZIP Code" single-line outlined type="text"
+                        v-model="supplier.companyHqZip" :error-messages="errors" :success="valid" required></v-text-field>
+                    </ValidationProvider>
+                  </v-col>
+                </v-row>
+                <v-row class="mt-12 bg-light px-6 py-4">
+                  <v-col cols="12" sm="12" text="left" class="pb-0">
+                    <label class="d-block text-left input-label mb-2 font-weight-bold">First Name</label>
+                    <ValidationProvider name="First Name" rules="required" v-slot="{ errors, valid }">
+                      <v-text-field placeholder="First Name" single-line outlined type="text" color="#ffffff"
+                        v-model="supplier.firstName" :error-messages="errors" :success="valid" required></v-text-field>
+                    </ValidationProvider>
+                  </v-col>
+                  <v-col cols="12" sm="12" text="left" class="pb-0">
+                    <label class="d-block text-left input-label mb-2 font-weight-bold">Last Name</label>
+                    <ValidationProvider name="Last Name" rules="required" v-slot="{ errors, valid }">
+                      <v-text-field placeholder="Last Name" single-line outlined type="text" v-model="supplier.lastName"
+                        :error-messages="errors" :success="valid" required></v-text-field>
+                    </ValidationProvider>
+                  </v-col>
+                  <v-col cols="12" sm="12" text="left" class="pb-0">
+                    <label class="d-block text-left input-label mb-2 font-weight-bold">Email Address</label>
+                    <v-text-field placeholder="example@email.com" single-line outlined type="email"
+                      v-model="supplier.email" @keyup="emailCheck()"></v-text-field>
+                    <span class="d-block email-error-text text-left mt-n4" v-if="emailError">{{ emailError }}</span>
+                  </v-col>
+                  <v-col cols="12" sm="12" text="left" class="pb-0">
+                    <label class="d-block text-left input-label mb-2 font-weight-bold">Title</label>
+                    <ValidationProvider name="Title" rules="required" v-slot="{ errors, valid }">
+                      <v-text-field placeholder="Title" single-line outlined type="text" v-model="supplier.title"
+                        :error-messages="errors" :success="valid" required></v-text-field>
+                    </ValidationProvider>
+                  </v-col>
+                  <v-col cols="12" sm="12" text="left" class="" :class="{
+                    'spacing-class': getPhoneInfo.valid && getCounter > 1 || !getPhoneInfo.valid && getCounter === 1,
+
+                  }">
+                    <label class="d-block text-left input-label mb-2 font-weight-bold">Direct Phone Number</label>
+
+                    <vue-tel-input @focus="onUpdate2" defaultCountry="US" :autoDefaultCountry="false" :autoFormat="false"
+                      :dropdownOptions="{
+                        showDialCodeInSelection: true,
+                        showFlags: true,
+                        width: ' max-content'
+                      }" :inputOptions="{
   required: true,
   showDialCode: false,
   maxlength: 15,
   placeholder: 'Phone number',
 
 }" model="national" :validCharactersOnly="true" :styleClasses="{ 'phone-main-class': true }"
-                            v-model="supplier.phoneNumber" @validate="onUpdate2"></vue-tel-input>
+                      v-model="supplier.phoneNumber" @validate="onUpdate2"></vue-tel-input>
 
-                          <div class="phone-class" v-show="!getPhoneInfo.valid && getCounter > 1">
-                            {{ getPhoneInfo.message }}</div>
-                        </v-col>
-                      </v-row>
-                      <v-row class="mt-12 bg-light px-6 py-4">
-                        <v-col cols="12" sm="12" text="left" class="pb-0">
-                          <label class="d-block text-left input-label mb-2 font-weight-bold">Password</label>
-                          <ValidationProvider name="Password" rules="required|min:6" vid="password"
-                            v-slot="{ errors, valid }">
-                            <v-text-field placeholder="Password" single-line outlined type="password" color="#ffffff"
-                              v-model="password" :error-messages="errors" :success="valid" required>
-                              <template v-slot:append>
-                                <v-icon v-if="successPass" color="green">{{ passRule }}</v-icon>
-                                <v-icon v-if="!successPass" color="red">{{ passRule }}</v-icon>
-                              </template>
-                            </v-text-field>
-                          </ValidationProvider>
-                        </v-col>
-                        <v-col cols="12" sm="12" text="left" class="pb-0">
-                          <label class="d-block text-left input-label mb-2 font-weight-bold">Confirm Password</label>
-                          <ValidationProvider name="Password confirmation" rules="confirmed:password|required"
-                            v-slot="{ errors, valid }">
-                            <v-text-field placeholder="Confirm Password" single-line outlined type="password"
-                              v-model="confirmPassword" :error-messages="errors" :success="valid" required>
-                              <template v-slot:append>
-                                <v-icon v-if="successPass1" color="green">{{ passRule1 }}</v-icon>
-                                <v-icon v-if="!successPass1" color="red">{{ passRule1 }}</v-icon>
-                              </template>
-                            </v-text-field>
-                          </ValidationProvider>
-                        </v-col>
-                      </v-row>
-                      <v-row justify="center" class="mt-10">
-                        <v-col cols="12" md="3">
-                          <v-btn color="#0D9647" large dense width="100%" height="56"
-                            class="font-weight-bold white--text text-capitalize" @click="handleSubmit(supplierRequest)"
-                            :loading="loading" :disabled="!getPhoneInfo.valid || (invalid || !validated)">Next <v-icon
-                              class="pl-2" color="#fff">mdi-arrow-right-circle</v-icon></v-btn>
-                        </v-col>
-                      </v-row>
-                    </v-container>
-                  </v-form>
-                </ValidationObserver>
-              </v-tab-item>
-            </v-tabs-items>
-          </v-col>
-        </v-row>
+                    <div class="phone-class" v-show="!getPhoneInfo.valid && getCounter > 1">
+                      {{ getPhoneInfo.message }}</div>
+                  </v-col>
+                </v-row>
+                <v-row class="mt-12 bg-light px-6 py-4">
+                  <v-col cols="12" sm="12" text="left" class="pb-0">
+                    <label class="d-block text-left input-label mb-2 font-weight-bold">Password</label>
+                    <ValidationProvider name="Password" rules="required|min:6" vid="password" v-slot="{ errors, valid }">
+                      <v-text-field placeholder="Password" single-line outlined type="password" color="#ffffff"
+                        v-model="password" :error-messages="errors" :success="valid" required>
+                        <template v-slot:append>
+                          <v-icon v-if="successPass" color="green">{{ passRule }}</v-icon>
+                          <v-icon v-if="!successPass" color="red">{{ passRule }}</v-icon>
+                        </template>
+                      </v-text-field>
+                    </ValidationProvider>
+                  </v-col>
+                  <v-col cols="12" sm="12" text="left" class="pb-0">
+                    <label class="d-block text-left input-label mb-2 font-weight-bold">Confirm Password</label>
+                    <ValidationProvider name="Password confirmation" rules="confirmed:password|required"
+                      v-slot="{ errors, valid }">
+                      <v-text-field placeholder="Confirm Password" single-line outlined type="password"
+                        v-model="confirmPassword" :error-messages="errors" :success="valid" required>
+                        <template v-slot:append>
+                          <v-icon v-if="successPass1" color="green">{{ passRule1 }}</v-icon>
+                          <v-icon v-if="!successPass1" color="red">{{ passRule1 }}</v-icon>
+                        </template>
+                      </v-text-field>
+                    </ValidationProvider>
+                  </v-col>
+                </v-row>
+                <v-row justify="center" class="mt-10">
+                  <v-col cols="12" md="3">
+                    <v-btn color="#0D9647" large dense width="100%" height="56"
+                      class="font-weight-bold white--text text-capitalize" @click="handleSubmit(supplierRequest)"
+                      :loading="loading" :disabled="!getPhoneInfo.valid || (invalid || !validated)">Next <v-icon
+                        class="pl-2" color="#fff">mdi-arrow-right-circle</v-icon></v-btn>
+                  </v-col>
+                </v-row>
+              </v-container>
+            </v-form>
+          </ValidationObserver>
+        </v-tab-item>
+        </v-tabs-items>
+        </v-col>
+        </v-row> -->
+        <ExistingConfirmation />
         <v-row justify="center">
           <v-col cols="12" md="9">
             <div class="getStart-box pa-6 text-left">
@@ -422,13 +423,15 @@ export default {
         phoneNumber: '',
         title: '',
         region: "",
-        country: ""
+        country: "",
+        email: ''
       },
       buyer: {
         companyName: '',
         firstName: '',
         lastName: '',
         phoneNumber: '',
+        email: ''
       },
       email: '',
       company: '',
@@ -564,6 +567,9 @@ export default {
       }
 
     },
+    checkEmail() {
+      let testEmail = /^\w+([.+_-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,3})+$/.test(this.buyer.email)
+    },
     onUpdate2 (payload) {
       this.counter++;
       this.phoneInfo.valid = payload === undefined ? false : payload.valid;
@@ -688,6 +694,11 @@ export default {
   },
   mounted() {
     document.title = "Get Started - BidOut"
+    if (this.$route.query.token) {
+     this.currentItem = 1
+     this.supplier.bidInvitedCode = this.$route.query.token
+     this.isToken = true
+  }
   }
 };
 </script>
