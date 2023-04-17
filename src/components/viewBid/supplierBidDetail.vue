@@ -18,8 +18,14 @@
         <v-row>
           <v-col md="2" class="text-right mr-1 title-desc">Due Date/Time:</v-col>
           <v-col class="title-brief">
-            {{ formatDate(bidDetail.bidData.dueDate) }} @
-            {{ bidDetail.bidData.dueTime }} CST</v-col>
+            <template v-if="bidDetail.bidout">
+              {{ formatDate(bidDetail.bidData.dueDate) }} @
+              {{ bidDetail.bidData.dueTime }} CST
+            </template>
+            <template v-else>
+              {{ formatBidOutStartDate(bidDetail.bidData.dueDate, bidDetail.bidData.dueTime) }} CST
+            </template>
+            </v-col>
 
         </v-row>
 
@@ -236,6 +242,17 @@ export default {
     },
     checkFileType(file) {
       return file.substring(file.lastIndexOf('.') + 1);
+    },
+    formatBidOutStartDate(item, item2) {
+      const momentTime = moment(item2, ['h:mm:ss A ']).format('HH:mm:ss');
+
+      const stringDate = `${item}T${momentTime}`;
+
+      let momentDueDate = moment.tz(stringDate, 'America/Chicago');
+
+      momentDueDate = momentDueDate.subtract(4, 'hours');
+
+      return moment.tz(momentDueDate, 'America/Chicago').format('MM/DD/YYYY ha');
     },
   },
   computed: {
