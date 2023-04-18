@@ -84,8 +84,8 @@
                 Bid: <span class="serial">#{{ bidDetail.bidData.serial }}</span>
               </div>
               <div>
-                <div v-if="bidDetail.bidData.type === 'BidOut Process'"> BidOut Start Date: {{
-                  formatBidOutStartDate(bidDetail.bidData.dueDate, bidDetail.bidData.dueTime) }} CST &nbsp;
+                <div v-if="bidDetail.bidData.type === 'BidOut Process'"> BidOut Period Start: {{
+                  formatBidOutStartDate(bidDetail.bidData.dueDate, bidDetail.bidData.dueTime) }} CST, BidOut Period End:
                   {{ formatDate(bidDetail.bidData.dueDate) }} @
                   {{ bidDetail.bidData.dueTime }} CST <a class="text-decoration-none ml-1" target="_blank"
                     href=" https://help.bidout.app/article/7-bidout-process-explain"><v-icon color="black"
@@ -270,10 +270,17 @@
                 Bid: <span class="serial">#{{ bidDetail.bidData.serial }}</span>
               </div>
               <div>
-                <div v-if="bidDetail.bidData.type === 'BidOut Process'"> BidOut Start Date: {{
-                  formatBidOutStartDate(bidDetail.bidData.dueDate, bidDetail.bidData.dueTime) }} CST &nbsp;
+                <div v-if="bidDetail.bidData.type === 'BidOut Process'">
+                  <span v-if="!bidDetail.bidout">
+
+                    Bids Due: {{
+                      formatBidOutStartDate(bidDetail.bidData.dueDate, bidDetail.bidData.dueTime) }} CST
+                  </span>
+                  <span v-else>
+                    Bids Due:
                   {{ formatDate(bidDetail.bidData.dueDate) }} @
-                  {{ bidDetail.bidData.dueTime }} CST <a class="text-decoration-none ml-1" target="_blank"
+                  {{ bidDetail.bidData.dueTime }} CST
+                  </span><a class="text-decoration-none ml-1" target="_blank"
                     href=" https://help.bidout.app/article/7-bidout-process-explain"><v-icon color="black"
                       size="18">mdi-information-outline</v-icon></a></div>
                 <div v-else>Bid End Date: {{
@@ -648,7 +655,7 @@ export default {
 
       momentDueDate = momentDueDate.subtract(4, 'hours');
 
-      return moment.tz(momentDueDate, 'America/Chicago').format('MM/DD/YYYY ha');
+      return moment.tz(momentDueDate, 'America/Chicago').format('MM/DD/YYYY @ ha');
     },
   },
   computed: {
