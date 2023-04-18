@@ -1,5 +1,6 @@
 import router from '@/router';
 import axios from 'axios';
+import * as Sentry from '@sentry/vue';
 
 export default {
   getCategories({ commit }) {
@@ -9,6 +10,7 @@ export default {
         commit('setCatgeoryList', responce.data);
       })
       .catch((err) => {
+        Sentry.captureException(err);
         console.log(err);
       });
   },
@@ -25,6 +27,7 @@ export default {
         // router.replace(`v2/ofs-directory/${payload.slug}/${payload.subSlug}`);
       })
       .catch((err) => {
+        Sentry.captureException(err);
         console.log(err);
       });
   },
@@ -42,6 +45,7 @@ export default {
         commit('setCompanies', data);
       })
       .catch((err) => {
+        Sentry.captureException(err);
         console.log(err);
       });
   },
@@ -58,6 +62,7 @@ export default {
         commit('setCompanies', data);
       })
       .catch((err) => {
+        Sentry.captureException(err);
         console.log(err);
       });
   },
@@ -75,6 +80,7 @@ export default {
         router.replace(`v2/ofs-directory/${payload.slug}`);
       })
       .catch((err) => {
+        Sentry.captureException(err);
         console.log(err);
       });
   },
@@ -91,6 +97,7 @@ export default {
         commit('setOfsLoader', false);
       })
       .catch((err) => {
+        Sentry.captureException(err);
         console.log(err);
         commit('setOfsLoader', false);
       });
@@ -106,6 +113,7 @@ export default {
         commit('setPageLoader', false);
       })
       .catch((err) => {
+        Sentry.captureException(err);
         console.log(err);
       });
   },
@@ -120,6 +128,7 @@ export default {
         commit('setPageLoader', false);
       })
       .catch((err) => {
+        Sentry.captureException(err);
         console.log(err);
       });
   },
@@ -130,6 +139,7 @@ export default {
         commit('setPremiumList', responce.data);
       })
       .catch((err) => {
+        Sentry.captureException(err);
         console.log(err);
       });
   },
@@ -140,6 +150,7 @@ export default {
         commit('setCompanies', responce.data.hits);
       })
       .catch((err) => {
+        Sentry.captureException(err);
         console.log(err);
       });
   },

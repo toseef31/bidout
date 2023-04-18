@@ -151,6 +151,7 @@ import EditBidLines from '../../components/BidTabs/BidLines.vue';
 import EditAttachment from '../../components/BidTabs/Attachment.vue';
 import EditBidDetails from '../../components/BidTabs/BidDetails.vue';
 import EditQuestionSection2 from '../../components/BidTabs/QuestionSection2.vue';
+import * as Sentry from '@sentry/vue';
 
 export default {
   name: 'NotCompleted',
@@ -265,6 +266,7 @@ export default {
         this.$store.commit('setDraftBidsList', null);
         
       } catch (error) {
+        Sentry.captureException(error);
         console.log(error);
       }
       this.saveLoading = false;

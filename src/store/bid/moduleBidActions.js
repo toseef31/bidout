@@ -2,6 +2,7 @@
 // eslint-disable-next-line import/no-cycle
 import router from '@/router';
 import axios from 'axios';
+import * as Sentry from '@sentry/vue';
 
 export default {
   async getTeamMembers({ commit, dispatch, state }, payload) {
@@ -15,6 +16,7 @@ export default {
         commit('setTeamMembers', null);
       }
     } catch (err) {
+      Sentry.captureException(err);
       if (state.apiCounter === 2) {
         dispatch('apiSignOutAction');
       } else if (err.response && err.response.status === 403) {
@@ -34,6 +36,7 @@ export default {
         commit('setSalesReps', null);
       }
     } catch (err) {
+      Sentry.captureException(err);
       if (state.apiCounter === 2) {
         dispatch('apiSignOutAction');
       } else if (err.response && err.response.status === 403) {
@@ -53,6 +56,7 @@ export default {
         commit('setCompaniesList', null);
       }
     } catch (err) {
+      Sentry.captureException(err);
       if (state.apiCounter === 2) {
         dispatch('apiSignOutAction');
       } else if (err.response && err.response.status === 403) {
@@ -73,6 +77,7 @@ export default {
         commit('setCompaniesList', null);
       }
     } catch (err) {
+      Sentry.captureException(err);
       if (state.apiCounter === 2) {
         dispatch('apiSignOutAction');
       } else if (err.response && err.response.status === 403) {
@@ -90,6 +95,7 @@ export default {
         commit('setDraftBidsList', res.data);
       }
     } catch (err) {
+      Sentry.captureException(err);
       if (state.apiCounter === 2) {
         dispatch('apiSignOutAction');
       } else if (err.response && err.response.status === 403) {
@@ -108,6 +114,7 @@ export default {
         commit('setPageLoader', false);
       }
     } catch (err) {
+      Sentry.captureException(err);
       if (state.apiCounter === 2) {
         dispatch('apiSignOutAction');
       } else if (err.response && err.response.status === 403) {
@@ -162,6 +169,7 @@ export default {
         commit('setViewBidError', false);
       }
     } catch (err) {
+      Sentry.captureException(err);
       commit('setPageLoader', false);
       commit('setViewBidError', true);
       if (state.bidApiCounter === 2) {
@@ -186,6 +194,7 @@ export default {
         commit('setSuccessDeleteBid');
       }
     } catch (err) {
+      Sentry.captureException(err);
       commit('setErrorDeleteBid');
       if (state.apiCounter === 2) {
         dispatch('apiSignOutAction');
@@ -215,6 +224,7 @@ export default {
         commit('setPageLoader', false);
       }
     } catch (err) {
+      Sentry.captureException(err);
       commit('setPageLoader', false);
       if (state.apiCounter === 2) {
         dispatch('apiSignOutAction');
@@ -241,6 +251,7 @@ export default {
         commit('setPageLoader', false);
       }
     } catch (err) {
+      Sentry.captureException(err);
       commit('setPageLoader', false);
       if (state.apiCounter === 2) {
         dispatch('apiSignOutAction');
@@ -262,6 +273,7 @@ export default {
         commit('setBidIntent', payload.answer);
       }
     } catch (err) {
+      Sentry.captureException(err);
       if (state.apiCounter === 2) {
         dispatch('apiSignOutAction');
       } else if (err.response && err.response.status === 403) {
@@ -286,6 +298,7 @@ export default {
         commit('setIntentId', res.data);
       }
     } catch (err) {
+      Sentry.captureException(err);
       if (state.apiCounter === 2) {
         dispatch('apiSignOutAction');
       } else if (err.response && err.response.status === 403) {
@@ -313,6 +326,7 @@ export default {
         commit('setAwardAlert');
       }
     } catch (err) {
+      Sentry.captureException(err);
       if (state.apiCounter === 2) {
         dispatch('apiSignOutAction');
       } else if (err.response && err.response.status === 403) {
@@ -339,6 +353,7 @@ export default {
         commit('setDisqualifyAlert');
       }
     } catch (err) {
+      Sentry.captureException(err);
       if (state.apiCounter === 2) {
         dispatch('apiSignOutAction');
       } else if (err.response && err.response.status === 403) {
@@ -365,6 +380,7 @@ export default {
         commit('setUnAwardAlert');
       }
     } catch (err) {
+      Sentry.captureException(err);
       if (state.apiCounter === 2) {
         dispatch('apiSignOutAction');
       } else if (err.response && err.response.status === 403) {
@@ -390,6 +406,7 @@ export default {
         commit('setUnDisqualifyAlert');
       }
     } catch (err) {
+      Sentry.captureException(err);
       if (state.apiCounter === 2) {
         dispatch('apiSignOutAction');
       } else if (err.response && err.response.status === 403) {
@@ -447,6 +464,7 @@ export default {
         });
       }
     } catch (err) {
+      Sentry.captureException(err);
       if (err.response && err.response.status === 400 && err.response.data.message === 'Please add a price for all required items') {
         commit('setBidSubmissionValidationAlert', 'Please add a price for all required line items');
       }
@@ -520,6 +538,7 @@ export default {
         commit('setAlertEditBidSubmissionSuccess');
       }
     } catch (err) {
+      Sentry.captureException(err);
       if (err.response && err.response.status === 400 && err.response.data.message === 'Please add a price for all required items') {
         commit('setBidSubmissionValidationAlert', 'Please add a price for all required line items');
       }
@@ -563,6 +582,7 @@ export default {
         commit('setPageLoader', false);
       }
     } catch (err) {
+      Sentry.captureException(err);
       commit('setPageLoader', false);
       if (state.apiCounter === 2) {
         dispatch('apiSignOutAction');
@@ -587,6 +607,7 @@ export default {
         dispatch('getQA', { bidId: payload.bidId, userId: payload.userId });
       }
     } catch (err) {
+      Sentry.captureException(err);
       if (state.apiCounter === 2) {
         dispatch('apiSignOutAction');
       } else if (err.response && err.response.status === 403) {
@@ -610,6 +631,7 @@ export default {
         dispatch('getQA', { bidId: payload.bidId, userId: payload.userId });
       }
     } catch (err) {
+      Sentry.captureException(err);
       if (state.apiCounter === 2) {
         dispatch('apiSignOutAction');
       } else if (err.response && err.response.status === 403) {
@@ -631,6 +653,7 @@ export default {
         dispatch('getQA', { bidId: payload.bidId, userId: payload.userId });
       }
     } catch (err) {
+      Sentry.captureException(err);
       if (state.apiCounter === 2) {
         dispatch('apiSignOutAction');
       } else if (err.response && err.response.status === 403) {
@@ -768,6 +791,7 @@ export default {
         commit('setIsEditBidChanges', false);
       }
     } catch (err) {
+      Sentry.captureException(err);
       commit('setSaveBidLoading', false);
       commit('setIsEditBidChanges', false);
       if (state.apiCounter === 2) {
@@ -902,6 +926,7 @@ export default {
         commit('setSaveBidLoading', false);
       }
     } catch (err) {
+      Sentry.captureException(err);
       commit('setSaveBidLoading', false);
       commit('setIsEditBidChanges', false);
       if (state.apiCounter === 2) {
@@ -932,6 +957,7 @@ export default {
         return userData;
       }
     } catch (err) {
+      Sentry.captureException(err);
       commit('setLoadingInvite', false);
       if (state.apiCounter === 2) {
         dispatch('apiSignOutAction');
@@ -986,6 +1012,7 @@ export default {
       // eslint-disable-next-line consistent-return
       return;
     } catch (err) {
+      Sentry.captureException(err);
       console.log(err);
     }
   },
@@ -1013,6 +1040,7 @@ export default {
         commit('setAttachData', null);
       }
     } catch (err) {
+      Sentry.captureException(err);
       if (state.apiCounter === 2) {
         dispatch('apiSignOutAction');
       } else if (err.response && err.response.status === 403) {
@@ -1029,6 +1057,7 @@ export default {
         commit('setBidTemplates', res.data);
       }
     } catch (err) {
+      Sentry.captureException(err);
       if (state.apiCounter === 2) {
         dispatch('apiSignOutAction');
       } else if (err.response && err.response.status === 403) {
@@ -1077,6 +1106,7 @@ export default {
         dispatch('getBidTemplates');
       }
     } catch (err) {
+      Sentry.captureException(err);
       if (state.apiCounter === 2) {
         dispatch('apiSignOutAction');
       } else if (err.response && err.response.status === 403) {
@@ -1093,6 +1123,7 @@ export default {
         dispatch('getBidTemplates');
       }
     } catch (err) {
+      Sentry.captureException(err);
       if (state.apiCounter === 2) {
         dispatch('apiSignOutAction');
       } else if (err.response && err.response.status === 403) {
@@ -1121,6 +1152,7 @@ export default {
         router.replace('/create-template');
       }
     } catch (err) {
+      Sentry.captureException(err);
       if (state.apiCounter === 2) {
         dispatch('apiSignOutAction');
       } else if (err.response && err.response.status === 403) {
@@ -1180,6 +1212,7 @@ export default {
         commit('setDraftBidsList', null);
       }
     } catch (err) {
+      Sentry.captureException(err);
       if (state.apiCounter === 2) {
         dispatch('apiSignOutAction');
       } else if (err.response && err.response.status === 403) {
@@ -1209,6 +1242,7 @@ export default {
         router.replace('/create-bid');
       }
     } catch (err) {
+      Sentry.captureException(err);
       commit('setIsEditBidChanges', false);
       if (state.apiCounter === 2) {
         dispatch('apiSignOutAction');
@@ -1425,6 +1459,7 @@ export default {
         // commit('setDraftBidsList',null);
       }
     } catch (err) {
+      Sentry.captureException(err);
       commit('setIsEditBidChanges', false);
       if (state.apiCounter === 2) {
         dispatch('apiSignOutAction');
@@ -1472,6 +1507,7 @@ export default {
 
       return;
     } catch (err) {
+      Sentry.captureException(err);
       console.log(err);
     }
   },
@@ -1483,6 +1519,7 @@ export default {
         router.replace('/view-bids');
       }
     } catch (err) {
+      Sentry.captureException(err);
       if (state.apiCounter === 2) {
         dispatch('apiSignOutAction');
       } else if (err.response && err.response.status === 403) {
@@ -1517,6 +1554,7 @@ export default {
         commit('setPageLoader', false);
       }
     } catch (err) {
+      Sentry.captureException(err);
       commit('setPageLoader', false);
       if (state.apiCounter === 2) {
         dispatch('apiSignOutAction');
@@ -1665,6 +1703,7 @@ export default {
         // commit('setDraftBidsList',null);
       }
     } catch (err) {
+      Sentry.captureException(err);
       commit('setIsEditBidChanges', false);
       commit('setSaveBidLoading', false);
       if (state.apiCounter === 2) {
@@ -1711,6 +1750,7 @@ export default {
       state.bidData.questions = '';
       return;
     } catch (err) {
+      Sentry.captureException(err);
       console.log(err);
     }
   },
@@ -1728,6 +1768,7 @@ export default {
         commit('setPageLoader', false);
       }
     } catch (err) {
+      Sentry.captureException(err);
       commit('setPageLoader', false);
       if (state.apiCounter === 2) {
         dispatch('apiSignOutAction');
@@ -1757,6 +1798,7 @@ export default {
         commit('setSupplierAddAlert');
       }
     } catch (err) {
+      Sentry.captureException(err);
       if (state.apiCounter === 2) {
         dispatch('apiSignOutAction');
       } else if (err.response && err.response.status === 403) {
@@ -1774,6 +1816,7 @@ export default {
         commit('setDateAlert');
       }
     } catch (err) {
+      Sentry.captureException(err);
       if (state.apiCounter === 2) {
         dispatch('apiSignOutAction');
       } else if (err.response && err.response.status === 403) {
@@ -1802,6 +1845,7 @@ export default {
         commit('setTeamMemberAddAlert');
       }
     } catch (err) {
+      Sentry.captureException(err);
       if (state.apiCounter === 2) {
         dispatch('apiSignOutAction');
       } else if (err.response && err.response.status === 403) {
