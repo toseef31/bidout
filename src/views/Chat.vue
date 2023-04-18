@@ -219,11 +219,11 @@
                                   max-width="50px"
                                   class="mt-2"></v-img>
                                 </a>
-                                <a :href="message.attachment" 
+                                <a :href="message.attachment"
                                   target="_blank"
                                   v-else-if="get_url_extension(message.attachment) == 'zip' || get_url_extension(message.attachment) == 'rar' || get_url_extension(message.attachment) == 'tar' || get_url_extension(message.attachment) == '7z' || get_url_extension(message.attachment) == 'gz'"><v-img
-                                  :src="require('@/assets/images/chat/zip.png')" 
-                                  max-height="50px" 
+                                  :src="require('@/assets/images/chat/zip.png')"
+                                  max-height="50px"
                                   max-width="50px"
                                   class="mt-2"></v-img>
                                 </a>
@@ -320,22 +320,17 @@
   </v-row>
 </template>
 <script>
-import axios from "axios";
-import _ from "lodash";
-import vueDropzone from "vue2-dropzone";
-import VueMoment from "vue-moment";
-import moment from "moment-timezone";
-import { mapActions } from "vuex";
-import ConversationsSection from "../components/Chat/ConversationsSection.vue";
-import ChatLeftsidebar from "../components/Chat/ChatLeftSideBar.vue";
-import LeftSidebar from "../components/Layout/Dashboard/LeftSidebar.vue";
-import Navbar from "../components/Layout/Navbar.vue";
+import _ from 'lodash';
+import vueDropzone from 'vue2-dropzone';
+import VueMoment from 'vue-moment';
+import moment from 'moment-timezone';
+import { mapActions } from 'vuex';
+import ConversationsSection from '../components/Chat/ConversationsSection.vue';
+import ChatLeftsidebar from '../components/Chat/ChatLeftSideBar.vue';
 
 export default {
-  name: "Chat",
+  name: 'Chat',
   components: {
-    Navbar,
-    LeftSidebar,
     vueDropzone,
     ChatLeftsidebar,
     ConversationsSection,
@@ -350,12 +345,12 @@ export default {
       backArrow: false,
       userList: true,
       dialog: false,
-      searchMessage: "",
-      message: "",
-      filename: "",
-      chatData: "",
-      toggleMenu: [{ text: "Archive Chat", icon: "mdi-archive-outline" }],
-      user: "",
+      searchMessage: '',
+      message: '',
+      filename: '',
+      chatData: '',
+      toggleMenu: [{ text: 'Archive Chat', icon: 'mdi-archive-outline' }],
+      user: '',
       dropzoneOptions: {
         url: `${import.meta.env.VITE_API_BASE_URL}/chat/sendMessage`,
         thumbnailWidth: 100,
@@ -363,16 +358,16 @@ export default {
         maxFiles: 10,
         maxFilesize: 420,
         chunking: true,
-        headers: { "My-Awesome-Header": "header value" },
+        headers: { 'My-Awesome-Header': 'header value' },
       },
       uploadDrag: false,
-      removeMember: "",
-      fileExt: "",
+      removeMember: '',
+      fileExt: '',
       loading: true,
       allMembers: [],
       snackbar: false,
       timeout: 2000,
-      convDec: "",
+      convDec: '',
       searching: '',
     };
   },
@@ -385,12 +380,10 @@ export default {
     },
     messagesList() {
       if (this.searchMessage) {
-        return this.$store.getters.messages.filter((item) =>
-          this.searchMessage
-            .toLowerCase()
-            .split(" ")
-            .every((v) => item.content.toLowerCase().includes(v))
-        );
+        return this.$store.getters.messages.filter((item) => this.searchMessage
+          .toLowerCase()
+          .split(' ')
+          .every((v) => item.content.toLowerCase().includes(v)));
       }
       return this.$store.getters.messages;
     },
@@ -412,13 +405,13 @@ export default {
   },
   methods: {
     ...mapActions([
-      "getAllMessages",
-      "sendMessage",
-      "unreadMessagesCountCon",
-      "lastMessageRead",
-      "archiveChat",
-      "removeConvUser",
-      "getAllConversations"
+      'getAllMessages',
+      'sendMessage',
+      'unreadMessagesCountCon',
+      'lastMessageRead',
+      'archiveChat',
+      'removeConvUser',
+      'getAllConversations'
     ]),
     openChat(group, name, id) {
       if (screen.width < 767) {
@@ -468,7 +461,7 @@ export default {
       this.filename = this.$refs.msgFile.files[0].name;
     },
     messageSend() {
-      this.filename = "";
+      this.filename = '';
       const chat_file = this.$refs.msgFile.files;
       if (chat_file.length > 0) {
         this.filename = chat_file[0].name;
@@ -479,7 +472,7 @@ export default {
           name: `${this.user.firstName} ${this.user.lastName}`,
           id: this.user.id,
           company: this.chatData.group.company,
-          profilePicture: "",
+          profilePicture: '',
         },
         content: this.message,
         attachment: chat_file[0],
@@ -491,8 +484,8 @@ export default {
       setTimeout(() => {
         container.scrollTop = container.scrollHeight;
       }, 500);
-      this.message = "";
-      this.filename = "";
+      this.message = '';
+      this.filename = '';
     },
     chatActions(data) {
       const archivess = {
@@ -502,19 +495,18 @@ export default {
       this.archiveChat(archivess);
       this.$store.commit('setSpliceToConversation',data);
       this.isChatMenu = false;
-      this.chatData.group = "";
-      if(this.$store.getters.conversations){
+      this.chatData.group = '';
+      if (this.$store.getters.conversations) {
         let chatArr = this.$store.getters.conversations;
         chatArr.forEach((msg, index) => {
-          if(!msg.latestMessage){
+          if (!msg.latestMessage) {
             msg.latestMessage = msg.createdAt; // add the new field
           }
         });
         const convo = _.orderBy(chatArr, 'latestMessage', 'desc')[0];
       }
-      
       if (convo) {
-        if (convo.type == 'PRIVATE') {
+        if (convo.type === 'PRIVATE') {
           const membr = convo.participantDetails.filter((item) => {
             if (this.user.id != item.id) {
               return item;
@@ -525,8 +517,8 @@ export default {
           var grpName = convo.groupName;
         }
         const obj = {
-          group : convo,
-          name : grpName,
+          group: convo,
+          name: grpName,
         };
         this.conversationId = obj.group._id;
         this.chatData = obj;
@@ -535,21 +527,23 @@ export default {
     },
     getText: (item) => `${item.firstName} ${item.lastName}`,
     dragfileupload(file, xhr, formData) {
-      formData.append("conversationId", this.conversationId);
-      formData.append("sender[id]", this.user.id);
+      formData.append('conversationId', this.conversationId);
+      formData.append('sender[id]', this.user.id);
       formData.append(
-        "sender[name]",
-        `${this.user.firstName} ${this.user.lastName}`
+        'sender[name]',
+        `${this.user.firstName} ${this.user.lastName}`,
       );
-      formData.append("sender[company]", this.chatData.group.groupName);
-      formData.append("sender[profilePicture]", this.user.image);
-      formData.append("content", this.message);
+      formData.append('sender[company]', this.chatData.group.groupName);
+      formData.append('sender[profilePicture]', this.user.image);
+      formData.append('content', this.message);
     },
     afterComplete(file, response) {
-      this.message = "";
+      this.message = '';
       this.$refs.msgFile.value = null;
       this.$refs.myVueDropzone.removeFile(file);
-      document.getElementById("dropzone").style.display = "none";
+      if (document.getElementById('dropzone')) {
+        document.getElementById('dropzone').style.display = 'none';
+      }
       const ids = {
         userId: this.user.id,
         conversationId: response.message.conversationId,
@@ -557,7 +551,7 @@ export default {
       this.getAllMessages(ids);
     },
     uploadfile(event) {
-      this.filename = "";
+      this.filename = '';
       const chat_file = this.$refs.msgFile.files;
       if (chat_file.length > 0) {
         this.filename = chat_file[0].name;
@@ -578,8 +572,8 @@ export default {
       setTimeout(() => {
         container.scrollTop = container.scrollHeight;
       }, 500);
-      this.message = "";
-      this.filename = "";
+      this.message = '';
+      this.filename = '';
     },
     removeUser(id) {
       const user = {
@@ -591,7 +585,7 @@ export default {
       this.isChatMenu = false;
     },
     get_url_extension(url) {
-      return url.split(/[#?]/)[0].split(".").pop().trim();
+      return url.split(/[#?]/)[0].split('.').pop().trim();
     },
     istoday(date) {
       return moment(date).calendar();
@@ -603,38 +597,35 @@ export default {
       return conversation.name;
     },
   },
-  async created(){
+  async created() {
     this.user = this.$store.getters.userInfo;
     await this.getAllConversations(this.user.id);
   },
-  beforeMount() {
-    
-  },
+  beforeMount() {},
   async mounted() {
-    
-    document.title = "Messages - BidOut";
+    document.title = 'Messages - BidOut';
     if (screen.width < 767) {
       this.userList = true;
       this.showMsgBlock = false;
       this.backArrow = false;
     }
-    document.addEventListener("dragenter", (e) => {
+    document.addEventListener('dragenter', (e) => {
       if (
-        e.target.className == "message-area" ||
-        e.target.className == "messages-section" ||
-        e.target.className == "v-list-item__content" ||
-        e.target.className == "v-list-item__title" ||
-        e.target.className ==
-          "v-list own-user message-list v-sheet theme--light v-list--two-line" ||
-        e.target.className == "v-item-group theme--light v-list-item-group" ||
-        e.target.className == "message-send-area" ||
-        e.target.className == "row" ||
-        e.target.className == "col-sm-10 col-md-10 col-12" ||
-        e.target.className == "msg-text-box"
+        e.target.className === 'message-area'
+        || e.target.className === 'messages-section'
+        || e.target.className === 'v-list-item__content'
+        || e.target.className === 'v-list-item__title'
+        || e.target.className
+          === 'v-list own-user message-list v-sheet theme--light v-list--two-line'
+        || e.target.className === 'v-item-group theme--light v-list-item-group'
+        || e.target.className === 'message-send-area'
+        || e.target.className === 'row'
+        || e.target.className === 'col-sm-10 col-md-10 col-12'
+        || e.target.className === 'msg-text-box'
       ) {
-        document.getElementById("dropzone").style.display = "block";
+        document.getElementById('dropzone').style.display = 'block';
       } else {
-        document.getElementById("dropzone").style.display = "none";
+        document.getElementById('dropzone').style.display = 'none';
       }
     });
   },

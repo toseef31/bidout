@@ -90,9 +90,7 @@
                   {{ bidDetail.bidData.dueTime }} CST <a class="text-decoration-none ml-1" target="_blank"
                     href=" https://help.bidout.app/article/7-bidout-process-explain"><v-icon color="black"
                       size="18">mdi-information-outline</v-icon></a></div>
-                <div v-else>Bid Start Date: {{
-                  formatStartDate(bidDetail.bidData.createdAt._seconds, bidDetail.bidData.createdAt._nanoseconds) }} CST
-                  &nbsp; Bid End Date: {{
+                <div v-else>Bid End Date: {{
                     formatDate(bidDetail.bidData.dueDate) }} @
                   {{ bidDetail.bidData.dueTime }} CST</div>
 
@@ -284,11 +282,8 @@
                   {{ bidDetail.bidData.dueTime }} CST
                   </span><a class="text-decoration-none ml-1" target="_blank"
                     href=" https://help.bidout.app/article/7-bidout-process-explain"><v-icon color="black"
-                    size="18">mdi-information-outline</v-icon></a>
-                </div>
-                <div v-else>Bid Start Date: {{
-                  formatStartDate(bidDetail.bidData.createdAt._seconds, bidDetail.bidData.createdAt._nanoseconds) }} CST
-                  &nbsp; Bid End Date: {{
+                      size="18">mdi-information-outline</v-icon></a></div>
+                <div v-else>Bid End Date: {{
                     formatDate(bidDetail.bidData.dueDate) }} @
                   {{ bidDetail.bidData.dueTime }} CST</div>
 
