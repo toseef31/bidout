@@ -660,7 +660,7 @@ export default {
 
       momentDueDate = momentDueDate.subtract(4, 'hours');
 
-      return moment.tz(momentDueDate, 'America/Chicago').format('MM/DD/YYYY ha');
+      return moment.tz(momentDueDate, 'America/Chicago').format('MM/DD/YYYY @ ha');
     },
   },
   computed: {
