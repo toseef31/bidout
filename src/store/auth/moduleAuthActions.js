@@ -4,7 +4,7 @@ import 'firebase/compat/firestore';
 // eslint-disable-next-line import/no-cycle
 import router from '@/router';
 import axios from 'axios';
-
+import * as Sentry from '@sentry/vue';
 let isNavigating = false;
 
 function navigate(route) {
@@ -58,6 +58,7 @@ export default {
             commit('setLoginLoading', false);
           });
       }).catch((error) => {
+        Sentry.captureException(err);
         if (error.code === 'auth/too-many-requests') {
           commit('setPassError', null);
           commit('setError', 'Access to this account has been temporarily disabled due to many failed login attempts. You can immediately restore it by resetting your password or you can try again later.');
@@ -108,6 +109,7 @@ export default {
         navigate('/login');
       })
       .catch((error) => {
+        Sentry.captureException(err);
         commit('setError', error.message);
       });
   },
@@ -135,6 +137,7 @@ export default {
         });
       })
       .catch((error) => {
+        Sentry.captureException(err);
         commit('setError', error.message);
       });
   },
@@ -156,6 +159,7 @@ export default {
       .then((responce) => {
         commit('setVerifyData', responce.data);
       }).catch((err) => {
+        Sentry.captureException(err);
         console.log(err);
       });
   },
@@ -172,6 +176,7 @@ export default {
           commit('setEmailError', 'Something wrong please try again');
         }
       }).catch((err) => {
+        Sentry.captureException(err);
         console.log(err);
       });
   },
@@ -186,6 +191,7 @@ export default {
             commit('setEmailExistSuccess', '');
           }
         }).catch((err) => {
+          Sentry.captureException(err);
           console.log(err);
         });
     }
@@ -217,6 +223,7 @@ export default {
                   commit('setEmailError', 'Something wrong please try again');
                 }
               }).catch((err) => {
+                Sentry.captureException(err);
                 console.log(err);
               });
           } else {
@@ -248,6 +255,7 @@ export default {
                         commit('setEmailError', 'Something wrong please try again');
                       }
                     }).catch((err) => {
+                      Sentry.captureException(err);
                       console.log(err);
                     });
                 } else {
@@ -255,6 +263,7 @@ export default {
                   commit('showErrorAlert');
                 }
               }).catch((err) => {
+                Sentry.captureException(err);
                 if (err.response.status === 400) {
                   commit('setCompanyError', err.response.data.message);
                   commit('showErrorAlert');
@@ -271,6 +280,7 @@ export default {
       .then((responce) => {
         commit('setSupplierList', responce.data);
       }).catch((err) => {
+        Sentry.captureException(err);
         console.log(err);
       });
   },
@@ -312,6 +322,7 @@ export default {
                         commit('setEmailError', 'Something wrong please try again');
                       }
                     }).catch((err) => {
+                      Sentry.captureException(err);
                       console.log(err);
                       commit('setCompanyError', 'Something wrong with your personal details! Please try with different one.');
                       commit('showErrorAlert');
@@ -321,6 +332,7 @@ export default {
                   commit('showErrorAlert');
                 }
               }).catch((err) => {
+                Sentry.captureException(err);
                 if (err.response.status === 400) {
                   commit('setCompanyError', err.response.data.message);
                   commit('showErrorAlert');
@@ -339,6 +351,7 @@ export default {
       .then((json) => {
         commit('setLocalIp', json.ip);
       }).catch((err) => {
+        Sentry.captureException(err);
         console.log(err);
       });
   },
@@ -361,6 +374,7 @@ export default {
           commit('setEmailError', 'Something wrong please try again');
         }
       }).catch((err) => {
+        Sentry.captureException(err);
         console.log(err);
       });
   },
@@ -381,6 +395,7 @@ export default {
           commit('setEmailError', 'Something wrong please try again');
         }
       }).catch((err) => {
+        Sentry.captureException(err);
         console.log(err);
       });
   },
@@ -404,6 +419,7 @@ export default {
           commit('setEmailError', 'Something wrong please try again');
         }
       }).catch((err) => {
+        Sentry.captureException(err);
         console.log(err);
       });
   },
@@ -441,6 +457,7 @@ export default {
         }
         resolve(result);
       } catch (err) {
+        Sentry.captureException(err);
         console.log(err);
         reject(err);
       }

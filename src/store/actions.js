@@ -1,6 +1,7 @@
 import firebase from 'firebase/compat/app';
 import 'firebase/compat/auth';
 import 'firebase/compat/firestore';
+import * as Sentry from '@sentry/vue';
 
 const actions = {
   // Toggle Side Menu
@@ -21,6 +22,7 @@ const actions = {
           localStorage.setItem("token",JSON.stringify(idToken));
         }).catch(function(error) {
            // Handle error
+           Sentry.captureException(error);
         });
       }
     });
@@ -37,6 +39,7 @@ const actions = {
           window.location.reload();
           resolve(token);
         } catch(error) {
+            Sentry.captureException(error);
             dispatch('signOutAction')
             reject(error)
         }

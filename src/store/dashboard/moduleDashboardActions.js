@@ -1,5 +1,6 @@
 import router from '@/router'
 import axios from 'axios'
+import * as Sentry from '@sentry/vue';
 
 export default {
 
@@ -12,6 +13,7 @@ export default {
         }
       
     }).catch(async(err) => {
+       Sentry.captureException(err);
       if(state.apiCounter === 2){
         dispatch('apiSignOutAction')
       }else{
@@ -32,6 +34,7 @@ export default {
           commit('setInvitedUsersList',responce.data)
         }
     }).catch(async(err) => {
+       Sentry.captureException(err);
       if(state.apiCounter === 2){
         dispatch('apiSignOutAction')
       }else{
@@ -52,6 +55,7 @@ export default {
           commit('getUsersList',responce.data)
         }
     }).catch(async(err) => {
+       Sentry.captureException(err);
       if(state.apiCounter === 2){
         dispatch('apiSignOutAction')
       }else{
@@ -72,6 +76,7 @@ export default {
           commit('setInvitedUsersList',responce.data)
         }
     }).catch(async(err) => {
+       Sentry.captureException(err);
         if(state.apiCounter === 2){
           dispatch('apiSignOutAction')
         }else{
@@ -96,6 +101,7 @@ export default {
           router.replace({ name: "DisabledUsers" });
         }
     }).catch(async(err) => {
+       Sentry.captureException(err);
       if(state.apiCounter === 2){
         dispatch('apiSignOutAction')
       }else{
@@ -120,6 +126,7 @@ export default {
           router.replace({ name: "ManageUsers" });
         }
     }).catch(async(err) => {
+       Sentry.captureException(err);
       if(state.apiCounter === 2){
         dispatch('apiSignOutAction')
       }else{
@@ -143,6 +150,7 @@ export default {
         dispatch('getPendingUsers',payload.user.companyId)
       }
     }).catch(async(err) => {
+       Sentry.captureException(err);
       if(state.apiCounter === 2){
         dispatch('apiSignOutAction')
       }else{
@@ -166,6 +174,7 @@ export default {
           
         }
     }).catch(async(err) => {
+       Sentry.captureException(err);
       if(state.apiCounter === 2){
         dispatch('apiSignOutAction')
       }else{
@@ -188,6 +197,7 @@ export default {
         
         resolve(res.data);
       }catch(err){
+         Sentry.captureException(err);
         commit('setLocationLoader',false);
         console.log(err);
         reject(err)
@@ -209,6 +219,7 @@ export default {
         await dispatch('getActivities',payload);
         commit('setPageSubLoader',false);
     }catch(err){
+       Sentry.captureException(err);
       console.log(err);
     }
     

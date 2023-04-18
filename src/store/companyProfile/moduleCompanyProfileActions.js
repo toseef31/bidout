@@ -1,6 +1,7 @@
 import router from '@/router'
 import store from "../../store";
 import axios from 'axios'
+import * as Sentry from '@sentry/vue';
 
 export default {
   getCompany({commit,dispatch,state}, payload){
@@ -114,6 +115,7 @@ export default {
       }
      
     }).catch(async(err) => {
+      Sentry.captureException(err);
       if(state.apiCounter === 2){
         
         dispatch('apiSignOutAction')
@@ -135,6 +137,7 @@ export default {
         commit('setSubCategories',responce.data)
       }
     }).catch(async(err) => {
+      Sentry.captureException(err);
       if(state.apiCounter === 2){
         
         dispatch('apiSignOutAction')
@@ -182,6 +185,7 @@ export default {
         }
       }
     }).catch(async(err) => {
+      Sentry.captureException(err);
       if(state.apiCounter === 2){
         
         dispatch('apiSignOutAction')
@@ -205,6 +209,7 @@ export default {
         commit('setSaveInfoLoading',false);
       }
     }).catch(async(err) => {
+      Sentry.captureException(err);
       commit('setSaveInfoLoading',false);
       if(state.apiCounter === 2){
         
@@ -246,6 +251,7 @@ export default {
         dispatch("getCompany",payload.companyId)
       }
     }).catch(async(err) => {
+      Sentry.captureException(err);
       if(state.apiCounter === 2){
         
         dispatch('apiSignOutAction')
@@ -283,6 +289,7 @@ export default {
         dispatch("getCompany",payload.companyId)
       }
     }).catch(async(err) => {
+      Sentry.captureException(err);
       console.log(err);
       if(state.apiCounter === 2){
         
@@ -310,6 +317,7 @@ export default {
         dispatch("getCompany",payload.companyId)
       }
     }).catch(async(err) => {
+      Sentry.captureException(err);
       if(state.apiCounter === 2){
         
         dispatch('apiSignOutAction')
@@ -332,6 +340,7 @@ export default {
         dispatch("getCompany",payload.companyId)
       }
     }).catch(async(err) => {
+      Sentry.captureException(err);
       if(state.apiCounter === 2){
         
         dispatch('apiSignOutAction')
@@ -370,6 +379,7 @@ export default {
         commit('setNewsLoading',false)
       }
     }).catch(async(err) => {
+      Sentry.captureException(err);
       commit('setNewsLoading',false);
       if(state.apiCounter === 2){
         
@@ -411,6 +421,7 @@ export default {
         dispatch("getCompany",payload.companyId)
       }
     }).catch(async(err) => {
+      Sentry.captureException(err);
       if(state.apiCounter === 2){
         dispatch('apiSignOutAction')
       }else{
@@ -443,6 +454,7 @@ export default {
         dispatch("getCompany",payload.companyId)
       }
     }).catch(async(err) => {
+      Sentry.captureException(err);
       if(state.apiCounter === 2){
         dispatch('apiSignOutAction')
       }else{
@@ -463,6 +475,7 @@ export default {
           dispatch("getCompany",payload.companyId)
         }
       }).catch(async(err) => {
+        Sentry.captureException(err);
         if(state.apiCounter === 2){
           dispatch('apiSignOutAction')
         }else{
@@ -501,6 +514,7 @@ export default {
         commit('setNewsLoading',false)
       }
     }).catch(async(err) => {
+      Sentry.captureException(err);
       commit('setNewsLoading',false);
       if(state.apiCounter === 2){
         dispatch('apiSignOutAction')
@@ -531,6 +545,7 @@ export default {
         commit('setKeyFactsLoading',false)
       }
     }).catch(async(err) => {
+      Sentry.captureException(err);
       commit('setKeyFactsLoading',false);
       if(state.apiCounter === 2){
         dispatch('apiSignOutAction')
@@ -569,6 +584,7 @@ export default {
         await dispatch("getCompany",payload.companyId)
       }
     } catch (err) {
+      Sentry.captureException(err);
       if(state.apiCounter === 2){
         dispatch('apiSignOutAction')
       }else{
@@ -608,6 +624,7 @@ export default {
         dispatch("getCompany",payload.companyId)
       }
     }).catch(async(err) => {
+      Sentry.captureException(err);
       if(state.apiCounter === 2){
         dispatch('apiSignOutAction')
       }else{
@@ -629,6 +646,7 @@ export default {
         dispatch("getCompany",payload.companyId)
       }
     }).catch(async(err) => {
+      Sentry.captureException(err);
       if(state.apiCounter === 2){
         dispatch('apiSignOutAction')
       }else{
@@ -663,6 +681,7 @@ export default {
         dispatch("getCompany",payload.companyId)
       }
     }).catch(async(err) => {
+      Sentry.captureException(err);
       if(state.apiCounter === 2){
         dispatch('apiSignOutAction')
       }else{
@@ -705,6 +724,7 @@ export default {
         dispatch("getCompany",payload.companyId)
       }
     }).catch(async(err) => {
+      Sentry.captureException(err);
       if(state.apiCounter === 2){
         dispatch('apiSignOutAction')
       }else{
@@ -739,6 +759,7 @@ export default {
         dispatch("getCompany",payload.companyId)
       }
     }).catch(async(err) => {
+      Sentry.captureException(err);
       if(state.apiCounter == 2){
         dispatch('apiSignOutAction');
       }else{

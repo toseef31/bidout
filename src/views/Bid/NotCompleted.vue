@@ -149,6 +149,7 @@ import BidLines from '../../components/BidTabs/BidLines.vue';
 import Attachment from '../../components/BidTabs/Attachment.vue';
 import BidDetails from '../../components/BidTabs/BidDetails.vue';
 import QuestionSection2 from '../../components/BidTabs/QuestionSection2.vue';
+import * as Sentry from '@sentry/vue';
 
 export default {
   name: 'NotCompleted',
@@ -261,6 +262,7 @@ export default {
         this.$store.commit('setDraftBidsList', null);
         this.publishLoading = false;
       } catch (error) {
+        Sentry.captureException(error);
         console.log(error);
         this.publishLoading = false;
       }
