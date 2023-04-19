@@ -97,7 +97,7 @@ export default {
       if (this.$store.getters.bidData != null) {
         if (this.$store.getters.bidData.statusType === 'template') {
           if (
-            this.$store.getters.bidData.attachment !== '' || this.$store.state.bid.attachement !== ''
+            this.$store.getters.bidData.attachment?.length > 0 || this.$store.state.bid.attachement?.length > 0
           ) {
             if (this.$store.getters.attachData) {
               const attch = [
@@ -125,7 +125,7 @@ export default {
           return this.$store.getters.attachData;
         }
         if (
-          this.$store.getters.bidData.attachments != '' || this.$store.state.bid.attachement != ''
+          this.$store.getters.bidData.attachments?.length > 0 || this.$store.state.bid.attachement?.length > 0
         ) {
           if (this.$store.getters.attachData) {
             const attch = [
@@ -282,7 +282,7 @@ export default {
       this.documents = this.$store.getters.attachData;
     }
     if (this.$store.getters.bidData != null) {
-      if (this.$store.getters.bidData.attachments !== '') {
+      if (this.$store.getters.bidData.attachments?.length > 0) {
         if (this.$store.getters.bidData.statusType === 'draftBid') {
           this.$store.commit('setAttachement', null);
           this.$store.commit(

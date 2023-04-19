@@ -1364,7 +1364,7 @@ export default {
     } else {
       if (state.attachement?.length > 0) {
         for (let i = 0; i < state.attachement.length; i++) {
-          formData.append(`attachment[${i}][fileName]`, state.attachement[i].fileName);
+          formData.append(`[${i}][fileName]`, state.attachement[i].fileName);
           formData.append(`attachment[${i}][fileSize]`, state.attachement[i].fileSize);
           formData.append(`attachment[${i}][uploadedBy]`, state.attachement[i].uploadedBy);
           formData.append(`attachment[${i}][url]`, state.attachement[i].url);
@@ -1598,7 +1598,7 @@ export default {
       formData.append('invitedTeamMembers', []);
     }
 
-    if (state.bidlines !== '') {
+    if (state.bidlines.length > 0) {
       let lineItemsindex = 0;
       for (let i = 0; i < state.bidlines?.length; i++) {
         if (state.bidlines[i].description !== '' && state.bidlines[i].quantity !== '') {
@@ -1619,7 +1619,7 @@ export default {
     } else {
       formData.append('lineItems', '');
     }
-    if (state.attachement !== '' && state.attachement && state.attachement.length > 0) {
+    if (state.attachement.length > 0 && state.attachement && state.attachement.length > 0) {
       for (let i = 0; i < state.attachement.length; i++) {
         formData.append(`attachments[${i}][fileName]`, state.attachement[i].fileName);
         formData.append(`attachments[${i}][fileSize]`, state.attachement[i].fileSize);
