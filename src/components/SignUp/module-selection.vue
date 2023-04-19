@@ -88,132 +88,90 @@
 import { mapActions } from 'vuex';
 
 export default {
-    name: 'ModuleSelection',
-    data() {
-        return {
-            loading: false,
-            loadingRfx: false,
-            rfxBtn: true,
-            ofsModule: true,
-            ofsBtn: true,
-            trial_end: 'premium',
-            billingCycle: 'Yearly',
-            billing_cycles: '',
-            unit_price: '',
-            packageType: 1,
-            packages: [
-                { name: '1-5 Sales Employees - $800/year', id: 1 },
-                { name: '6-10 Sales Employees - $1,000/year', id: 2 },
-                { name: '11-15 Sales Employees - $1,200/year', id: 3 },
-                { name: '16+ Sales Employees - $2,400/year', id: 4 },
-            ],
-        };
+  name: 'ModuleSelection',
+  data() {
+    return {
+      loading: false,
+      loadingRfx: false,
+      rfxBtn: true,
+      ofsModule: true,
+      ofsBtn: true,
+      trial_end: 'premium',
+      billingCycle: 'Yearly',
+      packageType: 1,
+      packages: [
+        { name: '1-5 Sales Employees - $800/year', id: 1 },
+        { name: '6-10 Sales Employees - $1,000/year', id: 2 },
+        { name: '11-15 Sales Employees - $1,200/year', id: 3 },
+        { name: '16+ Sales Employees - $2,400/year', id: 4 },
+      ],
+    };
+  },
+  computed: {
+    companyName() {
+      return this.$store.getters.companyName;
     },
-    computed: {
-        companyName() {
-            return this.$store.getters.companyName;
-        },
-        contractData() {
-            if (this.$store.getters.contractData) {
-                return this.$store.getters.contractData.company.contracts.filter((item) => this.$store.getters.id == item.signedBy);
-            }
-        },
-        ip() {
-            return this.$store.getters.userIp;
-        },
-        userid() {
-            return this.$store.getters.id;
-        },
+    ip() {
+      return this.$store.getters.userIp;
     },
-    methods: {
-        ...mapActions(['contractGenerate', 'getIpAddress']),
-        generateContract(type) {
-            if (this.packageType === 1) {
-                if (this.billing_cycles === 1) {
-                    this.unit_price = 79.99;
-                } else {
-                    this.unit_price = 800;
-                }
-            }
-            if (this.packageType === 2) {
-                if (this.billing_cycles === 1) {
-                    this.unit_price = 99.99;
-                } else {
-                    this.unit_price = 1000;
-                }
-            }
-            if (this.packageType === 3) {
-                if (this.billing_cycles === 1) {
-                    this.unit_price = 119.99;
-                } else {
-                    this.unit_price = 1200;
-                }
-            }
-            if (this.packageType === 4) {
-                if (this.billing_cycles === 1) {
-                    this.unit_price = 239.99;
-                } else {
-                    this.unit_price = 2400;
-                }
-            }
-            if (type === 'ofs-premium') {
-                var plan = this.packageType;
-            } else {
-                this.unit_price = 0;
-                var plan = 0;
-            }
-            if (this.trial_end === 'free') {
-                this.unit_price = 0;
-                this.billing_cycles = 0;
-                var plan = 0;
-            }
-            const contract = {
-                ip: this.$store.getters.userIp,
-                contractType: type,
-                plan,
-                id: this.$store.getters.companyId,
-                userId: this.$store.getters.id,
-                customer_id: this.$store.getters.customerId,
-                unit_price: this.unit_price,
-                package: this.packageType,
-            };
+    userid() {
+      return this.$store.getters.id;
+    },
+  },
+  methods: {
+    ...mapActions(['contractGenerate', 'getIpAddress']),
+    generateContract(type) {
+      let plan;
+      if (type === 'ofs-premium') {
+        plan = this.packageType;
+      } else {
+        plan = 0;
+      }
+      if (this.trial_end === 'free') {
+        plan = 0;
+      }
 
-            this.contractGenerate(contract);
-            if (type === 'ofs-premium') {
-                this.loading = 'loading';
-                this.ofsBtn = false;
-            } else {
-                this.loadingRfx = 'loading';
-                this.rfxBtn = false;
-            }
-        },
-        createStandard(type) {
-            const contract = {
-                ip: this.$store.getters.userIp,
-                contractType: type,
-                plan: 0,
-                id: this.$store.getters.companyId,
-                userId: this.$store.getters.id,
-                customer_id: this.$store.getters.customerId,
-                unit_price: 0,
-            };
-            this.contractGenerate(contract);
-            this.loading = 'loading';
-        },
-        getPackage() {
-            if (this.packageType === 4) {
-                this.billingCycle = 'Yearly';
-            }
-        },
-        ofsToggle() {
-            this.ofsBtn = !this.ofsBtn;
-            this.$store.commit('setModuleOfsOption', this.ofsBtn);
-        },
+      const contract = {
+        ip: this.$store.getters.userIp,
+        contractType: type,
+        plan,
+        id: this.$store.getters.companyId,
+        userId: this.$store.getters.id,
+      };
+
+      this.contractGenerate(contract);
+      if (type === 'ofs-premium') {
+        this.loading = 'loading';
+        this.ofsBtn = false;
+      } else {
+        this.loadingRfx = 'loading';
+        this.rfxBtn = false;
+      }
     },
-    mounted() {
-        document.title = 'Module Selection - BidOut';
-        this.getIpAddress();
+    createStandard(type) {
+      const contract = {
+        ip: this.$store.getters.userIp,
+        contractType: type,
+        plan: 0,
+        id: this.$store.getters.companyId,
+        userId: this.$store.getters.id,
+      };
+      this.contractGenerate(contract);
+      this.loading = 'loading';
     },
+    getPackage() {
+      if (this.packageType === 4) {
+        this.billingCycle = 'Yearly';
+      }
+    },
+    ofsToggle() {
+      this.ofsBtn = !this.ofsBtn;
+    },
+  },
+  mounted() {
+    document.title = 'Module Selection - BidOut';
+    this.getIpAddress();
+  },
 };
 </script>
 <style scoped lang="scss"></style>

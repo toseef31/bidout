@@ -555,10 +555,11 @@ export default {
         company: this.company,
         phone: this.results,
         email: this.email,
-        bidTitle: this.$store.getters.bidData.title,
-        bidType: this.$store.getters.bidData.type,
-        bidDueDate: this.$store.getters.bidData.dueDate,
-        bidDueTime: this.$store.getters.bidData.dueTime,
+        bidTitle: this.bidDetail.bidData.title,
+        bidType: this.bidDetail.bidData.type,
+        bidDueDate: this.bidDetail.bidData.dueDate,
+        bidDueTime: this.bidDetail.bidData.dueTime,
+        serial: this.bidDetail.bidData.serial
       };
 
       if (this.$refs.form.validate() && this.getPhoneInfo.valid) {

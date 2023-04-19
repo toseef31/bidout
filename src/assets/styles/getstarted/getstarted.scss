@@ -16,6 +16,7 @@
 	.email-error-text {
 		color: #ff5252;
 		font-size: 12px;
+		margin-top: -17px;
 	}
 
 	.spacing-class {
@@ -55,6 +56,18 @@
 	.existing-company {
 		background: rgba(13, 150, 71, 0.2);
 		border-left: 4px solid #0D9647;
+		width: 100%;
+
+		h1 {
+			font-size: 16px;
+			font-weight: 500;
+		}
+
+	}
+
+	.existing-company-error {
+		background: #ffcccb;
+		border-left: 4px solid red;
 		width: 100%;
 
 		h1 {
@@ -218,9 +231,10 @@
 		}
 
 		.company-list {
+			margin-top: -10px;
 			cursor: pointer;
 			position: absolute;
-			width: 94.4%;
+			width: 92%;
 			z-index: 10;
 			max-height: 320px;
 			overflow: auto;

@@ -560,6 +560,7 @@ export default {
         bidType: this.$store.getters.bidData.type,
         bidDueDate: this.$store.getters.bidData.dueDate,
         bidDueTime: this.$store.getters.bidData.dueTime,
+        serial: this.$store.getters.bidData.serial
       };
 
       if (this.$refs.form.validate() && this.getPhoneInfo.valid) {

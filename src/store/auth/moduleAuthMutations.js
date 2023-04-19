@@ -75,32 +75,8 @@ export default {
   setPlan(state, payload) {
     state.plan = payload;
   },
-  setId(state, payload) {
-    state.id = payload;
-  },
-  setCustomerId(state, payload) {
-    state.customerId = payload;
-  },
-  setPrice(state, payload) {
-    state.price = payload;
-  },
-  setCredentials(state, payload) {
-    state.credentials = payload;
-  },
-  setQueueAdmins(state, payload) {
-    state.queueAdmins = payload;
-  },
   setSameAsData(state, payload) {
     state.sameAsData = payload;
-  },
-  setPackage(state, payload) {
-    state.packageValue = payload;
-  },
-  setModuleRfxOption(state, payload) {
-    state.moduleRfxOption = payload;
-  },
-  setModuleOfsOption(state, payload) {
-    state.moduleOfsOption = payload;
   },
   setIsUserData(state, payload) {
     state.isUserData = payload;
@@ -110,5 +86,20 @@ export default {
   },
   setForgetEmail(state, payload) {
     state.forgetEmail = payload;
+  },
+  setTokenInvitedSupplier(state, payload) {
+    state.tokenInvitedSupplier = payload;
+  },
+  setTokenInvitedSupplierError(state, payload) {
+    state.tokenInvitedSupplierError = payload;
+  },
+  setBuyerSignUpSuccess(state, payload) {
+    state.buyerSignUpSuccess = payload;
+  },
+  setAdmins(state, payload) {
+    state.admins = payload;
+  },
+  setSupplierExistingSignUpSuccess(state, payload) {
+    state.supplierExistingSignUpSuccess = payload;
   },
 };

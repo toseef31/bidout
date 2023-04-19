@@ -21,7 +21,6 @@
     "unplugin-vue-components": "^0.22.9",
     "uuid": "^9.0.0",
     "vite-plugin-vue2": "^1.4.0",
-    "vue": "^2.6.12",
     "vue-axios": "^3.4.1",
     "vue-country-region-select": "^2.0.16",
     "vue-croppie": "^2.0.2",

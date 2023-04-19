@@ -1,6 +1,6 @@
 import Vue from "vue";
 import { ValidationObserver, ValidationProvider, extend } from "vee-validate";
-import { required, email, confirmed, min } from "vee-validate/dist/rules";
+import { required, confirmed, min } from "vee-validate/dist/rules";
 
 Vue.component("ValidationObserver", ValidationObserver);
 Vue.component("ValidationProvider", ValidationProvider);
@@ -10,10 +10,12 @@ extend("required", {
   message: "{_field_} is required",
 });
 
-extend("email", {
-  ...email,
-  message: "Email is not valid",
-});
+extend(
+  "email",
+  (value) =>
+    /^\w+([.+_-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,3})+$/.test(value) ||
+    "Email must be valid"
+);
 
 extend("confirmed", {
   ...confirmed,

@@ -20,7 +20,7 @@ export default {
   passError(state) {
     return state.passError;
   },
-  showErrorAlert(state) {
+  authShowErrorAlert(state) {
     return state.alerts.showErrorAlert;
   },
   showSuccessAlert(state) {
@@ -59,32 +59,8 @@ export default {
   plan(state) {
     return state.plan;
   },
-  id(state) {
-    return state.id;
-  },
-  customerId(state) {
-    return state.customerId;
-  },
-  price(state) {
-    return state.price;
-  },
-  credentials(state) {
-    return state.credentials;
-  },
-  queueAdmins(state) {
-    return state.queueAdmins;
-  },
   sameAsData(state) {
     return state.sameAsData;
-  },
-  packageValue(state) {
-    return state.packageValue;
-  },
-  moduleRfxOption(state) {
-    return state.moduleRfxOption;
-  },
-  moduleOfsOption(state) {
-    return state.moduleOfsOption;
   },
   loginLoading(state) {
     return state.loginLoading;
@@ -92,4 +68,19 @@ export default {
   forgetEmail(state) {
     return state.forgetEmail;
   },
+  tokenInvitedSupplier(state) {
+    return state.tokenInvitedSupplier;
+  },
+  tokenInvitedSupplierError(state) {
+    return state.tokenInvitedSupplierError;
+  },
+  buyerSignUpSuccess(state) {
+    return state.buyerSignUpSuccess;
+  },
+  admins(state) {
+    return state.admins
+  },
+  supplierExistingSignUpSuccess(state) {
+    return state.supplierExistingSignUpSuccess
+  }
 };
