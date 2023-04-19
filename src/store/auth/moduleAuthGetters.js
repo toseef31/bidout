@@ -8,11 +8,8 @@ export default {
   isAuthenticated(state) {
     return state.isAuthenticated;
   },
-  userId(state) {
-    return state.userId;
-  },
-  companyId(state) {
-    return state.companyId;
+  supplierId(state) {
+    return state.supplierId;
   },
   error(state) {
     return state.error;
@@ -78,9 +75,18 @@ export default {
     return state.buyerSignUpSuccess;
   },
   admins(state) {
-    return state.admins
+    return state.admins;
   },
   supplierExistingSignUpSuccess(state) {
-    return state.supplierExistingSignUpSuccess
-  }
+    return state.supplierExistingSignUpSuccess;
+  },
+  goToModuleSelection(state) {
+    return state.goToModuleSelection;
+  },
+  goToAgreement(state) {
+    return state.goToAgreement;
+  },
+  supplierSignUpSuccess(state) {
+    return state.supplierSignUpSuccess;
+  },
 };

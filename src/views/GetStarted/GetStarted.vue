@@ -14,7 +14,8 @@
     </div>
     <v-container>
       <v-main>
-        <v-row justify="center" v-if="!getBuyerSignUpSuccess && !getSupplierExistingSignUpSuccess">
+        <v-row justify="center"
+          v-if="!getBuyerSignUpSuccess && !getSupplierExistingSignUpSuccess && !getGoToModuleSelection && !getGoToAgreement && !getSupplierSignUpSuccess">
           <v-col cols="12" md="9">
             <div class="tabs-head mt-4 px-9 py-8">
               <h4 class="text-left mb-4 font-weight-bold">Choose an option</h4>
@@ -74,7 +75,7 @@
 
                                 <v-progress-circular v-if="getEmailLoading" indeterminate :size="20" :width="2"
                                   color="
-                                                                                                                                                                                                                                                                                                                                                                                                      #0D1139"
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    #0D1139"
                                   :value="80"></v-progress-circular>
                               </template>
                             </v-text-field>
@@ -141,7 +142,7 @@
                               Code</label>
                             <ValidationProvider
                               name="Bid Invite
-                                                                                                                                                                                                                                                                                                                                                                                          Code"
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                        Code"
                               rules="required" v-slot="{ errors, valid }">
                               <v-text-field placeholder="Enter your bid invite code" single-line outlined type="text"
                                 :error-messages="errors" :success="valid" required v-model="supplier.bidInvitedCode">
@@ -155,7 +156,7 @@
 
                                   <v-progress-circular v-if="getTokenLoading" indeterminate :size="20" :width="2"
                                     color="
-                                                                                                                                                                                                                                                                                                                                                                                                                                      #0D1139"
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    #0D1139"
                                     :value="80"></v-progress-circular>
 
                                 </template>
@@ -231,7 +232,7 @@
 
                       </v-row>
 
-                      <v-row class="mt-12" v-if="!getTokenLoading && getTokenSupplier">
+                      <v-row class="mt-12" v-if="!getTokenLoading && getTokenSupplier && isToken">
                         <div class="existing-company pa-6 text-left">
 
                           <h1>We have successfully found your invite code and
@@ -321,7 +322,7 @@
 
                                 <v-progress-circular v-if="getEmailLoading" indeterminate :size="20" :width="2"
                                   color="
-                                                                                                                                                                                                                                                                                                                                                                                                                                      #0D1139"
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    #0D1139"
                                   :value="80"></v-progress-circular>
                               </template>
 
@@ -348,7 +349,7 @@
                             :dropdownOptions="{
                               showDialCodeInSelection: true,
                               showFlags: true,
-                              width: ' max-content'
+                              width: 'max-content'
                             }" :inputOptions="{
   required: true,
   showDialCode: false,
@@ -409,6 +410,9 @@
         </v-row>
         <ConfirmationBuyer v-if="getBuyerSignUpSuccess" />
         <ExistingConfirmation v-if="getSupplierExistingSignUpSuccess" />
+        <ModuleSelection v-if="getGoToModuleSelection" />
+        <Contract v-if="getGoToAgreement" />
+        <ConfirmationSupplier v-if="getSupplierSignUpSuccess" />
         <v-row justify="center">
           <v-col cols="12" md="9">
             <div class="getStart-box pa-6 text-left">
@@ -458,7 +462,6 @@ export default {
   },
   data() {
     return {
-      btnDisable: false,
       currentItem: '',
       editCompanyName: false,
       tokenLoading: false,
@@ -519,11 +522,14 @@ export default {
       }
     },500),
     'supplier.bidInvitedCode': _.debounce(async function() {
+      if (this.supplier.bidInvitedCode !== '') {
       this.$store.commit('setTokenInvitedSupplier',null)
       this.tokenLoading = true
-     await this.getInvitedSupplierByToken(this.supplier.bidInvitedCode)
+
+      await this.getInvitedSupplierByToken(this.supplier.bidInvitedCode)
 
      this.tokenLoading = false
+      }
     },500),
     currentItem (old,newI) {
       this.phoneInfo.valid = true
@@ -531,7 +537,11 @@ export default {
 
       this.buyer.companyName = this.buyer.firstName = this.buyer.lastName = this.buyer.phoneNumber = this.buyer.email = ''
 
-      this.supplier.companyName = this.supplier.bidInvitedCode = this.supplier.editCompany = this.supplier.companyHq1 = this.supplier.companyHq2 = this.supplier.companyHqState = this.supplier.companyHqCity = this.supplier.companyHqZip = this.supplier.firstName = this.supplier.lastName = this.supplier.phoneNumber =this.supplier.title = this.supplier.email =''
+      this.supplier.companyName = this.supplier.bidInvitedCode = this.supplier.editCompany = this.supplier.companyHq1 = this.supplier.companyHq2 = this.supplier.companyHqState = this.supplier.companyHqCity = this.supplier.companyHqZip = this.supplier.firstName = this.supplier.lastName = this.supplier.phoneNumber =this.supplier.title = this.supplier.email =  this.password = this.confirmPassword = ''
+
+      if(this.$route.query.token) {
+        this.supplier.bidInvitedCode = this.$route.query.token
+      }
 
       this.supplier.region = 'TX'
       this.supplier.country = 'US'
@@ -544,6 +554,19 @@ export default {
         this.$refs.supplier.reset()
       }
 
+    },
+    isToken(newI,old) {
+      if (!newI) {
+        this.phoneInfo.valid = true
+        this.phoneInfo.message = ''
+
+        this.supplier.companyName = this.supplier.bidInvitedCode = this.supplier.editCompany = this.supplier.companyHq1 = this.supplier.companyHq2 = this.supplier.companyHqState = this.supplier.companyHqCity = this.supplier.companyHqZip = this.supplier.firstName = this.supplier.lastName = this.supplier.phoneNumber =this.supplier.title = this.supplier.email = this.password = this.confirmPassword = ''
+
+        this.supplier.region = 'TX'
+        this.supplier.country = 'US'
+
+        this.counter = 0
+      }
     }
   },
   computed:{
@@ -562,28 +585,22 @@ export default {
         return '';
       } else if (this.min6(this.password) === true) {
         this.successPass = true;
-        this.btnDisable = false;
         return 'mdi-check';
       } else {
         this.successPass = false;
-        this.btnDisable = true;
         return 'mdi-close';
       }
     },
     passRule1: function() {
       if (this.confirmPassword === '') {
-        // field is empty
         this.successPass1 = false;
         return '';
       } else if (this.min6(this.confirmPassword) === true && this.matchingPasswords() === true) {
         this.successPass1 = true;
-        this.btnDisable = false;
         this.matchingPasswords()
         return 'mdi-check';
       } else {
-        // password wrong
         this.successPass1 = false;
-        this.btnDisable = true;
         return 'mdi-close';
       }
     },
@@ -612,14 +629,10 @@ export default {
         this.supplier.lastName = this.$store.getters.tokenInvitedSupplier.lastName
         this.supplier.email = this.$store.getters.tokenInvitedSupplier.email
         this.supplier.email = this.$store.getters.tokenInvitedSupplier.email
-        this.supplier.phoneNumber = this.$store.getters.tokenInvitedSupplier.phoneNumber
+        this.supplier.phoneNumber = this.$store.getters.tokenInvitedSupplier.phone
       } else {
-        this.supplier.editCompany = ''
-        this.supplier.firstName = ''
-        this.supplier.lastName = ''
-        this.supplier.email = ''
-        this.supplier.email = ''
-        this.supplier.phoneNumber = ''
+        this.supplier.editCompany = this.supplier.firstName = this.supplier.lastName =  this.supplier.email =  this.supplier.phoneNumber = ''
+
         this.phoneInfo.valid = true
         this.phoneInfo.message = ''
         this.counter = 0
@@ -647,6 +660,15 @@ export default {
     },
     getSupplierExistingSignUpSuccess () {
       return this.$store.getters.supplierExistingSignUpSuccess
+    },
+    getGoToModuleSelection() {
+      return this.$store.getters.goToModuleSelection
+    },
+    getGoToAgreement () {
+      return this.$store.getters.goToAgreement
+    },
+    getSupplierSignUpSuccess() {
+      return this.$store.getters.supplierSignUpSuccess
     }
   },
   methods: {
@@ -724,7 +746,6 @@ export default {
         this.results2 = payload.number;
       }
       }
-
     },
     async supplierRequest() {
       this.signUpLoading = true
@@ -770,16 +791,14 @@ export default {
             password: this.password
           }
           if (this.isToken && this.supplier.bidInvitedCode !== '') {
-             if (this.editCompanyName && this.supplier.editCompany !== '') {
-              supplierData.company =  this.supplier.editCompany
-             }
+             supplierData.company =  this.supplier.editCompany
              supplierData.token = this.supplier.bidInvitedCode
+             supplierData.companyName = this.supplier.editCompany
           } else {
              supplierData.company =  this.supplier.companyName
           }
 
-          console.log(supplierData)
-          //await this.supplierSignUpAction(supplierData);
+          await this.supplierSignUpAction(supplierData);
         }
 
         this.signUpLoading = false
@@ -841,11 +860,21 @@ export default {
     },
   },
   async mounted() {
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+
     this.$store.commit('setTokenInvitedSupplier',null)
     this.$store.commit('setTokenInvitedSupplierError',false)
     this.$store.commit('setEmailExistSuccess',false)
     this.$store.commit('setBuyerSignUpSuccess',null)
     this.$store.commit('setSupplierExistingSignUpSuccess',null)
+    this.$store.commit('setGoToModuleSelection',null)
+    this.$store.commit('setGoToAgreement',null)
+    this.$store.commit('setSupplierSignUpSuccess',null)
+    this.$store.commit('setCompanyName','')
+    this.$store.commit('setContractData','')
+    this.$store.commit('setPlan',null)
+    this.$store.commit('setSameAsData',null)
+    this.$store.commit('setAdmins',[])
 
     document.title = "Get Started - BidOut"
 

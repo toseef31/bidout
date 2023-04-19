@@ -7,11 +7,8 @@ export default {
   setToken(state, payload) {
     state.userToken = payload;
   },
-  setUserId(state, payload) {
-    state.userId = payload;
-  },
-  setCompanyId(state, payload) {
-    state.companyId = payload;
+  setSupplierId(state, payload) {
+    state.supplierId = payload;
   },
   setError(state, payload) {
     state.error = payload;
@@ -69,7 +66,7 @@ export default {
   setResetEmail(state, payload) {
     state.resetEmail = payload;
   },
-  setContract(state, payload) {
+  setContractData(state, payload) {
     state.contractData = payload;
   },
   setPlan(state, payload) {
@@ -102,4 +99,13 @@ export default {
   setSupplierExistingSignUpSuccess(state, payload) {
     state.supplierExistingSignUpSuccess = payload;
   },
+  setGoToModuleSelection(state, payload) {
+    state.goToModuleSelection = payload;
+  },
+  setGoToAgreement(state, payload) {
+    state.goToAgreement = payload;
+  },
+  setSupplierSignUpSuccess(state,payload) {
+    state.supplierSignUpSuccess = payload
+  }
 };

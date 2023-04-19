@@ -2,8 +2,7 @@ export default {
   userInfo: null,
   userToken: JSON.parse(localStorage.getItem("token")),
   isAuthenticated: false,
-  userId: "",
-  companyId: "",
+  supplierId: "",
   error: null,
   passError: null,
   alerts: {
@@ -28,5 +27,8 @@ export default {
   tokenInvitedSupplierError: false,
   buyerSignUpSuccess: null,
   admins: [],
-  supplierExistingSignUpSuccess: null
+  supplierExistingSignUpSuccess: null,
+  goToModuleSelection: null,
+  goToAgreement: null,
+  supplierSignUpSuccess: null,
 };

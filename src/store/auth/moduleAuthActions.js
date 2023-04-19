@@ -226,122 +226,31 @@ export default {
       }
     }
   },
-  supplierSignUpAction({ commit }, payload) {
-    // Try to sigin
-    if (payload.email.indexOf("@") !== -1) {
-      axios
-        .post("/user/checkIfUserWithEmailExists", { email: payload.email })
-        .then((responce) => {
-          if (responce.data.exists === true) {
-            commit("setEmailExistSuccess", true);
-            commit(
-              "setCompanyError",
-              "Email already Exists! Please try different one"
-            );
-            commit("showErrorAlert");
-          } else if (payload.id) {
-            axios
-              .post("/ofs/queueSupplierUser", {
-                id: payload.id,
-                email: payload.email,
-                firstName: payload.firstName,
-                lastName: payload.lastName,
-                phoneNumber: payload.phoneNumber,
-                title: payload.title,
-                password: payload.password,
-              })
-              .then((responce) => {
-                if (responce.status === 200) {
-                  // localStorage.setItem("userId",payload.id);
-                  commit("setCompanyId", payload.id);
-                  commit("setCompanyName", payload.companyName);
-                  router.replace({
-                    name: "ExistingAccount",
-                  });
-                  commit(
-                    "setEmailSuccess",
-                    "Email sent successfully! Please check your email"
-                  );
-                } else {
-                  commit("setEmailError", "Something wrong please try again");
-                }
-              })
-              .catch((err) => {
-                console.log(err);
-              });
-          } else {
-            axios
-              .post("/ofs/createCompany", {
-                company: payload.company,
-                companyHq: payload.companyHq,
-                companyHq2: payload.companyHq2,
-                companyHqCountry: payload.companyHqCountry,
-                companyHqState: payload.companyHqState,
-                companyHqCity: payload.companyHqCity,
-                companyHqZip: payload.companyHqZip,
-              })
-              .then((responce) => {
-                commit("setCompanyId", responce.data.data.companyId);
-                localStorage.setItem(
-                  "companyId",
-                  JSON.stringify(responce.data.companyId)
-                );
-                if (responce.status === 200) {
-                  axios
-                    .post("/ofs/createUser", {
-                      company: payload.company,
-                      firstName: payload.firstName,
-                      lastName: payload.lastName,
-                      email: payload.email,
-                      phoneNumber: payload.phoneNumber,
-                      title: payload.title,
-                      password: payload.password,
-                      companyId: responce.data.data.companyId,
-                    })
-                    .then((responce) => {
-                      if (responce.status === 200) {
-                        commit("setSameAsData", {
-                          firstName: payload.firstName,
-                          lastName: payload.lastName,
-                          email: payload.email,
-                          phoneNumber: payload.phoneNumber,
-                        });
+  async supplierSignUpAction({ commit }, payload) {
+    try {
+      const { companyName } = payload;
 
-                        commit("setCompanyName", payload.company);
-                        router.replace({
-                          name: "ModuleSelection",
-                        });
-                        commit(
-                          "setEmailSuccess",
-                          "Email sent successfully! Please check your email"
-                        );
-                      } else {
-                        commit(
-                          "setEmailError",
-                          "Something wrong please try again"
-                        );
-                      }
-                    })
-                    .catch((err) => {
-                      console.log(err);
-                    });
-                } else {
-                  commit(
-                    "setCompanyError",
-                    "Please try with different Company details"
-                  );
-                  commit("showErrorAlert");
-                }
-              })
-              .catch((err) => {
-                if (err.response.status === 400) {
-                  commit("setCompanyError", err.response.data.message);
-                  commit("showErrorAlert");
-                }
-                console.log(err);
-              });
-          }
+      commit("setCompanyName", companyName);
+
+      delete payload.companyName;
+
+      const res = await axios.post("/ofs/supplierSignup", {
+        ...payload,
+      });
+
+      if (res.status === 200) {
+        commit("setSupplierId", res.data.id);
+        commit("setSameAsData", {
+          firstName: payload.firstName,
+          lastName: payload.lastName,
         });
+        commit("setGoToModuleSelection", true);
+      }
+    } catch (err) {
+      commit("setCompanyName", "");
+      commit("showErrorAlert");
+      commit("setCompanyError", err.response.data.message);
+      console.log(err);
     }
   },
 
@@ -431,59 +340,35 @@ export default {
       });
   },
 
-  // signAgreement
-  contractGenerate({ commit }, payload) {
-    axios
-      .post("/ofs/generateContract", {
-        id: payload.id,
-        ip: payload.ip,
-        contractType: payload.contractType,
-        plan: payload.plan,
-        userId: payload.userId,
-      })
-      .then((responce) => {
-        if (responce.status === 200) {
-          commit("setContract", responce.data);
-          commit("setPlan", payload.plan);
-          commit("setPackage", payload.package);
-          router.replace({
-            name: "Contract",
-          });
-        } else {
-          commit("setEmailError", "Something wrong please try again");
-        }
-      })
-      .catch((err) => {
-        console.log(err);
+  async contractGenerate({ commit }, payload) {
+    try {
+      const res = await axios.post("/ofs/generateSupplierContract", {
+        ...payload,
       });
-  },
-  signAgreement({ commit }, payload) {
-    // Try to store Agreement
-    axios
-      .post("/ofs/signContract", {
-        sign: payload.sign,
-        contractType: payload.contractType,
-        fileName: payload.fileName,
-        companyId: payload.companyId,
-        userId: payload.userId,
-        yearly: payload.yearly,
-        plan: payload.plan,
-      })
-      .then((responce) => {
-        if (responce.status === 200) {
-          commit("setContract", responce.data);
-          // commit('setContract', 'Contract generated successfully!')
 
-          router.replace({
-            name: "ModuleSelection",
-          });
-        } else {
-          commit("setEmailError", "Something wrong please try again");
-        }
-      })
-      .catch((err) => {
-        console.log(err);
-      });
+      if (res.status === 200) {
+        commit("setContractData", res.data);
+        commit("setPlan", payload.plan);
+        commit("setGoToModuleSelection", null);
+        commit("setGoToAgreement", true);
+      }
+    } catch (err) {
+      commit("showErrorAlert");
+      commit("setCompanyError", err.response.data.message);
+    }
+  },
+  async signAgreement({ commit }, payload) {
+    try {
+      const res = await axios.post("/ofs/signSupplierContract", { ...payload });
+
+      if (res.status === 200) {
+        commit("setGoToAgreement", null);
+        commit("setSupplierSignUpSuccess", true);
+      }
+    } catch (err) {
+      commit("showErrorAlert");
+      commit("setCompanyError", err.response.data.message);
+    }
   },
 
   signInWithCustomToken({ commit }, payload) {
