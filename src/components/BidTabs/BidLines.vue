@@ -176,7 +176,7 @@ export default {
     },
     // eslint-disable-next-line consistent-return, vue/return-in-computed-property
     validate() {
-      if (this.$store.getters.bidData.lineItems != '') {
+      if (this.$store.getters.bidData.lineItems.length > 0 ) {
         this.$emit('validation', { valid: true, items: '4' });
         this.$store.commit('setLineItemsComplete', true);
         this.$store.commit('setBidlines', this.bidLines);
@@ -391,7 +391,7 @@ export default {
     },
   },
   mounted() {
-    if (this.$store.getters.bidData.lineItems !== '') {
+    if (this.$store.getters.bidData.lineItems.length > 0) {
       this.bidLines = this.$store.getters.bidData.lineItems;
       this.bidLines = JSON.parse(JSON.stringify(this.bidLines.map((item, index) => {
         if (item.required === 'true') {
@@ -401,6 +401,7 @@ export default {
         }
         return item;
       })));
+
       this.$emit('validation', { valid: true, items: '4' });
       this.$store.commit('setLineItemsComplete', true);
       this.$store.commit('setBidlines', this.bidLines);
