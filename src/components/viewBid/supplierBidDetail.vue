@@ -18,12 +18,18 @@
         <v-row>
           <v-col md="2" class="text-right mr-1 title-desc">Due Date/Time:</v-col>
           <v-col class="title-brief">
-            <template v-if="bidDetail.bidout">
-              {{ formatDate(bidDetail.bidData.dueDate) }} @
-              {{ bidDetail.bidData.dueTime }} CST
+            <template v-if="bidDetail.bidData.type === 'BidOut Process'">
+              <template v-if="bidDetail.bidout">
+                {{ formatDate(bidDetail.bidData.dueDate) }} @
+                {{ bidDetail.bidData.dueTime }} CST
+              </template>
+              <template v-else>
+                {{ formatBidOutStartDate(bidDetail.bidData.dueDate, bidDetail.bidData.dueTime) }} CST
+              </template>
             </template>
             <template v-else>
-              {{ formatBidOutStartDate(bidDetail.bidData.dueDate, bidDetail.bidData.dueTime) }} CST
+              {{ formatDate(bidDetail.bidData.dueDate) }} @
+                {{ bidDetail.bidData.dueTime }} CST
             </template>
             </v-col>
 
