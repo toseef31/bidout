@@ -722,9 +722,9 @@ export default {
 
     if (state.bidlines?.length > 0) {
       let lineItemsindex = 0;
-      for (let i = 0; i < state.bidlines.length; i++) {
+      for (let i = 0; i < state.bidlines?.length; i++) {
         if (state.bidlines[i].description !== '' && state.bidlines[i].quantity !== '') {
-          formData.append(`lineItems[${lineItemsindex}][id]`, state.bidlines[i]._id);
+          formData.append(`lineItems[${lineItemsindex}][id]`, state.bidlines[i].id);
           formData.append(`lineItems[${lineItemsindex}][description]`, state.bidlines[i].description);
           formData.append(`lineItems[${lineItemsindex}][unit]`, state.bidlines[i].unit);
           formData.append(`lineItems[${lineItemsindex}][inputType]`, state.bidlines[i].inputType);
@@ -856,7 +856,7 @@ export default {
         formData.append(`invitedNewSuppliers[${i}]`, state.invitedNewSuppliers[i]._id);
       }
     }
-    if (state.invitedTeamMembers.length > 0) {
+    if (state.invitedTeamMembers?.length > 0) {
       for (let t = 0; t < state.invitedTeamMembers.length; t++) {
         if (!state.invitedTeamMembers[t]._id) {
           formData.append(`invitedTeamMembers[${t}]`, state.invitedTeamMembers[t]);
@@ -866,11 +866,11 @@ export default {
       }
     }
 
-    if (state.bidlines.length > 0) {
+    if (state.bidlines?.length > 0) {
       let lineItemsindex = 0;
-      for (let i = 0; i < state.bidlines.length; i++) {
+      for (let i = 0; i < state.bidlines?.length; i++) {
         if (state.bidlines[i].description !== '' && state.bidlines[i].quantity !== '') {
-          formData.append(`lineItems[${lineItemsindex}][id]`, state.bidlines[i]._id);
+          formData.append(`lineItems[${lineItemsindex}][id]`, state.bidlines[i].id);
           formData.append(`lineItems[${lineItemsindex}][description]`, state.bidlines[i].description);
           formData.append(`lineItems[${lineItemsindex}][unit]`, state.bidlines[i].unit);
           formData.append(`lineItems[${lineItemsindex}][inputType]`, state.bidlines[i].inputType);
@@ -1340,7 +1340,7 @@ export default {
     if (state.bidData.status === 'templateCreate') {
       if (state.bidlines) {
         let lineItemsindex = 0;
-        for (let i = 0; i < state.bidlines.length; i++) {
+        for (let i = 0; i < state.bidlines?.length; i++) {
           if (state.bidlines[i].description !== '' && state.bidlines[i].quantity !== '') {
             formData.append(`lineItems[${lineItemsindex}][id]`, state.bidlines[i].id);
             formData.append(`lineItems[${lineItemsindex}][description]`, state.bidlines[i].description);
@@ -1359,9 +1359,9 @@ export default {
       } else {
         formData.append('lineItems', '');
       }
-    } else if (state.bidlines.length > 0) {
+    } else if (state.bidlines?.length > 0) {
       let lineItemsindex = 0;
-      for (let i = 0; i < state.bidlines.length; i++) {
+      for (let i = 0; i < state.bidlines?.length; i++) {
         if (state.bidlines[i].description !== '' && state.bidlines[i].quantity !== '') {
           formData.append(`lineItems[${lineItemsindex}][id]`, state.bidlines[i].id);
           formData.append(`lineItems[${lineItemsindex}][description]`, state.bidlines[i].description);
@@ -1398,7 +1398,7 @@ export default {
     } else {
       if (state.attachement?.length > 0) {
         for (let i = 0; i < state.attachement.length; i++) {
-          formData.append(`attachment[${i}][fileName]`, state.attachement[i].fileName);
+          formData.append(`[${i}][fileName]`, state.attachement[i].fileName);
           formData.append(`attachment[${i}][fileSize]`, state.attachement[i].fileSize);
           formData.append(`attachment[${i}][uploadedBy]`, state.attachement[i].uploadedBy);
           formData.append(`attachment[${i}][url]`, state.attachement[i].url);
@@ -1624,7 +1624,7 @@ export default {
     } else {
       formData.append('invitedNewSuppliers', '');
     }
-    if (state.invitedTeamMembers !== '' && state.invitedTeamMembers && state.invitedTeamMembers.length > 0) {
+    if (state.invitedTeamMembers !== '' && state.invitedTeamMembers && state.invitedTeamMembers?.length > 0) {
       for (let t = 0; t < state.invitedTeamMembers.length; t++) {
         if (!state.invitedTeamMembers[t].id) {
           formData.append(`invitedTeamMembers[${t}]`, state.invitedTeamMembers[t]);
@@ -1636,9 +1636,9 @@ export default {
       formData.append('invitedTeamMembers', []);
     }
 
-    if (state.bidlines !== '') {
+    if (state.bidlines.length > 0) {
       let lineItemsindex = 0;
-      for (let i = 0; i < state.bidlines.length; i++) {
+      for (let i = 0; i < state.bidlines?.length; i++) {
         if (state.bidlines[i].description !== '' && state.bidlines[i].quantity !== '') {
           formData.append(`lineItems[${lineItemsindex}][id]`, state.bidlines[i].id);
           formData.append(`lineItems[${lineItemsindex}][description]`, state.bidlines[i].description);
@@ -1657,7 +1657,7 @@ export default {
     } else {
       formData.append('lineItems', '');
     }
-    if (state.attachement !== '' && state.attachement && state.attachement.length > 0) {
+    if (state.attachement.length > 0 && state.attachement && state.attachement.length > 0) {
       for (let i = 0; i < state.attachement.length; i++) {
         formData.append(`attachments[${i}][fileName]`, state.attachement[i].fileName);
         formData.append(`attachments[${i}][fileSize]`, state.attachement[i].fileSize);
