@@ -10,7 +10,7 @@
         <v-row justify="center">
           <v-col cols="12" sm="12" text="left">
             <label class="d-block text-left input-label mb-2 font-weight-bold">Current Password</label>
-            <v-text-field placeholder="Type your current password" v-model="currentPassword" single-line outlined type="password" hide-details>
+            <v-text-field placeholder="Type your current password" v-model="currentPassword" single-line outlined type="password" :rules="currentPasswordRule" hide-details>
             </v-text-field>
           </v-col>
         </v-row>
@@ -62,20 +62,24 @@
   </v-row>
 </template>
 <script>
-  import { mapActions,mapGetters } from "vuex";
+import { mapActions, mapGetters } from 'vuex';
+
 export default {
   data() {
     return {
       successPass: false,
       successPass1: false,
       currentPassword: '',
+      currentPasswordRule: [
+        (v) => !!v || 'Field is required',
+      ],
       newPassword: '',
       confirmPassword: '',
       valid: true,
     };
   },
-  computed:{
-    ...mapGetters(["passwordLoading"]),
+  computed: {
+    ...mapGetters(['passwordLoading']),
     passRule: function() {
       if (this.newPassword === '') {
         this.successPass = false;
@@ -104,7 +108,7 @@ export default {
     },
   },
   methods: {
-  ...mapActions(["changePassword"]),
+    ...mapActions(['changePassword']),
     required: function(value) {
       if (value) {
         return true;
@@ -126,20 +130,18 @@ export default {
         return 'Passwords does not match.';
       }
     },
-    passwordForm(){
-      var data = {
+    passwordForm() {
+      const data = {
         userid: this.$store.getters.userInfo.id,
         currentPassword: this.currentPassword,
         newPassword: this.newPassword,
-      }
+      };
       this.changePassword(data);
       this.$refs.passForm.reset();
       this.confirmPassword = '';
       this.newPassword = '';
     }
   },
-  mounted() {
-    
-  } 
+  mounted() {},
 };
 </script>
