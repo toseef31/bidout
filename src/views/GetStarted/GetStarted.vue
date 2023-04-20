@@ -75,7 +75,7 @@
 
                                 <v-progress-circular v-if="getEmailLoading" indeterminate :size="20" :width="2"
                                   color="
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                #0D1139"
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                  #0D1139"
                                   :value="80"></v-progress-circular>
                               </template>
                             </v-text-field>
@@ -91,8 +91,8 @@
                         }">
                           <label class="d-block text-left input-label mb-2 font-weight-bold">Direct Phone Number</label>
 
-                          <vue-tel-input defaultCountry="US" :autoDefaultCountry="false" :autoFormat="false"
-                            :dropdownOptions="{
+                          <vue-tel-input @blur="onBlurB" defaultCountry="US" :autoDefaultCountry="false"
+                            :autoFormat="false" :dropdownOptions="{
                               showDialCodeInSelection: true,
                               showFlags: true,
                               width: ' max-content'
@@ -143,7 +143,7 @@
                               Code</label>
                             <ValidationProvider
                               name="Bid Invite
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    Code"
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      Code"
                               rules="required" v-slot="{ errors, valid }">
                               <v-text-field placeholder="Enter your bid invite code" single-line outlined type="text"
                                 :error-messages="errors" :success="valid" required v-model="supplier.bidInvitedCode">
@@ -157,7 +157,7 @@
 
                                   <v-progress-circular v-if="getTokenLoading" indeterminate :size="20" :width="2"
                                     color="
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                #0D1139"
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                  #0D1139"
                                     :value="80"></v-progress-circular>
 
                                 </template>
@@ -323,7 +323,7 @@
 
                                 <v-progress-circular v-if="getEmailLoading" indeterminate :size="20" :width="2"
                                   color="
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                #0D1139"
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                  #0D1139"
                                   :value="80"></v-progress-circular>
                               </template>
 
@@ -347,8 +347,8 @@
                         }">
                           <label class="d-block text-left input-label mb-2 font-weight-bold">Direct Phone Number</label>
 
-                          <vue-tel-input defaultCountry="US" :autoDefaultCountry="false" :autoFormat="false"
-                            :dropdownOptions="{
+                          <vue-tel-input @blur="onBlurS" defaultCountry="US" :autoDefaultCountry="false"
+                            :autoFormat="false" :dropdownOptions="{
                               showDialCodeInSelection: true,
                               showFlags: true,
                               width: 'max-content'
@@ -569,7 +569,7 @@ export default {
 
         this.counter = 0
       }
-    }
+    },
   },
   computed:{
     getTokenLoading() {
@@ -808,8 +808,30 @@ export default {
         window.scrollTo({ top: 0, behavior: 'smooth' });
       }
     },
+    onBlurB() {
+      if (this.buyer.phoneNumber === '') {
+        this.phoneInfo.message = 'Phone number is required';
+        this.phoneInfo.valid = false
+        this.counter++
+      } else if (this.buyer.phoneNumber.length === 1) {
+        this.phoneInfo.message = 'Invalid Phone number format';
+        this.phoneInfo.valid = false
+        this.counter++
+      }
+    },
+    onBlurS() {
+      if (this.supplier.phoneNumber === '') {
+        this.phoneInfo.message = 'Phone number is required';
+        this.phoneInfo.valid = false
+        this.counter++
+      } else if (this.supplier.phoneNumber.length === 1) {
+        this.phoneInfo.message = 'Invalid Phone number format';
+        this.phoneInfo.valid = false
+        this.counter++
+      }
+    },
     async buyerRequest() {
-      this.signUpLoading = true
+     this.signUpLoading = true
 
       if (this.results === '' || this.results === undefined) {
         this.counter += 2;
