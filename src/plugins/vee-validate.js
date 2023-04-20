@@ -13,8 +13,7 @@ extend("required", {
 extend(
   "email",
   (value) =>
-    /^\w+([.+_-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,3})+$/.test(value) ||
-    "Email must be valid"
+    /^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/.test(value) || "Email must be valid"
 );
 
 extend("confirmed", {
