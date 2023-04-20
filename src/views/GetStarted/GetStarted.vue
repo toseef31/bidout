@@ -75,13 +75,14 @@
 
                                 <v-progress-circular v-if="getEmailLoading" indeterminate :size="20" :width="2"
                                   color="
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    #0D1139"
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                #0D1139"
                                   :value="80"></v-progress-circular>
                               </template>
                             </v-text-field>
                           </ValidationProvider>
-                          <div class=" email-error-text text-left mt-n4" v-if="emailError">
-                            Email already exists! Please try a different one.
+                          <div class=" email-error-text text-left" v-if="emailError">
+                            Email already exists! Please <a href="/login" class="">Login </a>to
+                            access your account.
                           </div>
 
                         </v-col>
@@ -142,7 +143,7 @@
                               Code</label>
                             <ValidationProvider
                               name="Bid Invite
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                        Code"
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    Code"
                               rules="required" v-slot="{ errors, valid }">
                               <v-text-field placeholder="Enter your bid invite code" single-line outlined type="text"
                                 :error-messages="errors" :success="valid" required v-model="supplier.bidInvitedCode">
@@ -156,7 +157,7 @@
 
                                   <v-progress-circular v-if="getTokenLoading" indeterminate :size="20" :width="2"
                                     color="
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    #0D1139"
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                #0D1139"
                                     :value="80"></v-progress-circular>
 
                                 </template>
@@ -322,14 +323,15 @@
 
                                 <v-progress-circular v-if="getEmailLoading" indeterminate :size="20" :width="2"
                                   color="
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    #0D1139"
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                #0D1139"
                                   :value="80"></v-progress-circular>
                               </template>
 
                             </v-text-field>
                           </ValidationProvider>
                           <div class=" email-error-text text-left" v-if="emailError">
-                            Email already exists! Please try a different one.
+                            Email already exists! Please <a href="/login">Login</a> to
+                            access your account.
                           </div>
                         </v-col>
                         <v-col cols="12" sm="12" text="left" class="pb-0">

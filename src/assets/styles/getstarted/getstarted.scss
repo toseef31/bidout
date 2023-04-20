@@ -16,7 +16,11 @@
 	.email-error-text {
 		color: #ff5252;
 		font-size: 12px;
-		margin-top: -17px;
+		margin-top: -12px;
+
+		a {
+			color: #ff5252;
+		}
 	}
 
 	.spacing-class {
