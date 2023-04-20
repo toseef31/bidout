@@ -75,7 +75,7 @@
 
                                 <v-progress-circular v-if="getEmailLoading" indeterminate :size="20" :width="2"
                                   color="
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        #0D1139"
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                          #0D1139"
                                   :value="80"></v-progress-circular>
                               </template>
                             </v-text-field>
@@ -143,7 +143,7 @@
                               Code</label>
                             <ValidationProvider
                               name="Bid Invite
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            Code"
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                              Code"
                               rules="required" v-slot="{ errors, valid }">
                               <v-text-field placeholder="Enter your bid invite code" single-line outlined type="text"
                                 :error-messages="errors" :success="valid" required v-model="supplier.bidInvitedCode">
@@ -157,7 +157,7 @@
 
                                   <v-progress-circular v-if="getTokenLoading" indeterminate :size="20" :width="2"
                                     color="
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        #0D1139"
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                          #0D1139"
                                     :value="80"></v-progress-circular>
 
                                 </template>
@@ -323,7 +323,7 @@
 
                                 <v-progress-circular v-if="getEmailLoading" indeterminate :size="20" :width="2"
                                   color="
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        #0D1139"
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                          #0D1139"
                                   :value="80"></v-progress-circular>
                               </template>
 
@@ -701,7 +701,7 @@ export default {
 
     },
     async checkEmailBuyer() {
-      let testEmail = /^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/.test(this.buyer.email)
+      let testEmail = /^[\w-\.+]+@([\w-]+\.)+[\w-]{2,4}$/.test(this.buyer.email)
 
       if (this.buyer.email === '' || !testEmail) {
         this.$store.commit('setEmailExistSuccess',false)
@@ -715,7 +715,7 @@ export default {
     },
 
     async checkEmailSupplier() {
-      let testEmail = /^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/.test(this.supplier.email)
+      let testEmail = /^[\w-\.+]+@([\w-]+\.)+[\w-]{2,4}$/.test(this.supplier.email)
 
       if (this.supplier.email === '' || !testEmail) {
         this.$store.commit('setEmailExistSuccess',false)
