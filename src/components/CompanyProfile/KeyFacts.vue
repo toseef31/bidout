@@ -77,7 +77,7 @@
           <v-col cols="12" sm="6" text="left">
             <label class="d-block text-left input-label mb-2">Email</label>
             <v-text-field placeholder="Enter Email ..." v-model="contactEmail" single-line outlined type="email"
-              :rules="contactEmailRule"></v-text-field>
+              :rules="contactEmailRule" required></v-text-field>
           </v-col>
           <v-col cols="12" sm="6" text="left">
 
@@ -152,7 +152,7 @@ export default {
       contactEmail: '',
       contactEmailRule: [
         (v) => !!v || 'E-mail is required',
-        (v) => /^\w+([.+_-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,3})+$/.test(v) || 'E-mail must be valid',
+        (v) => /^[\w\+]+@([\w-]+\.)+[\w-]{2,3}$/.test(v) || 'E-mail must be valid',
       ],
       contactRole: '',
       contactPhoneNo: '',
