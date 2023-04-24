@@ -113,7 +113,6 @@ export default {
       .signOut()
       .then(() => {
         commit("setToken", null);
-        commit("setUserId", null);
         commit("setError", null);
         commit("setCompany", null);
         commit("setUser", null);
@@ -138,7 +137,6 @@ export default {
       .then(() => {
         commit("setUser", null);
         commit("setToken", null);
-        commit("setUserId", null);
         commit("setError", null);
         commit("setCompany", null);
 
@@ -416,6 +414,7 @@ export default {
 
       if (res.status === 200) {
         commit("setTokenInvitedSupplier", res.data);
+        commit("setTokenInvitedSupplierError", false);
       }
     } catch (err) {
       if (
