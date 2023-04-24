@@ -69,8 +69,8 @@
                           <label class="d-block text-left input-label mb-2 font-weight-bold">Email Address</label>
                           <ValidationProvider name="Email address" rules="required|email" v-slot="{ errors, valid }">
                             <v-text-field placeholder="example@email.com" single-line outlined type="email"
-                              :class="{ 'error--text': emailError }" v-model="buyer.email" @input="checkEmailBuyer"
-                              :error-messages="errors" :success="valid" required>
+                              v-model="buyer.email" @input="checkEmailBuyer" :error-messages="errors" :success="valid"
+                              required>
                               <template v-slot:append>
 
                                 <v-progress-circular v-if="getEmailLoading" indeterminate :size="20" :width="2"
@@ -187,7 +187,7 @@
                             <input type="hidden" v-model="companyId">
                             <template v-if="hideList == true">
                               <v-list class="company-list" v-if="suppliers != ''">
-                                <template v-for="(item) in                   suppliers                  ">
+                                <template v-for="(item) in                    suppliers                   ">
                                   <v-list-item :key="item.title">
                                     <v-list-item-content>
                                       <v-list-item-title v-html="item.company"
@@ -321,8 +321,8 @@
                           <label class="d-block text-left input-label mb-2 font-weight-bold">Email Address</label>
                           <ValidationProvider name="Email address" rules="required|email" v-slot=" { errors, valid } ">
                             <v-text-field placeholder="example@email.com" single-line outlined type="email"
-                              :class=" { 'error--text': emailError } " v-model=" supplier.email "
-                              :error-messages=" errors " @input=" checkEmailSupplier " :success=" valid " required>
+                              v-model=" supplier.email " :error-messages=" errors " @input=" checkEmailSupplier "
+                              :success=" valid " required>
                               <template v-slot:append>
 
                                 <v-progress-circular v-if=" getEmailLoading " indeterminate :size=" 20 " :width=" 2 "
@@ -349,7 +349,7 @@
                           {
                             'spacing-class': getPhoneInfo.valid && getCounter > 1 || !getPhoneInfo.valid && getCounter === 1,
 
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                        }
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                }
                         ">
                           <label class="d-block text-left input-label mb-2 font-weight-bold">Direct Phone Number</label>
 

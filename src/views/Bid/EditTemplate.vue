@@ -25,7 +25,6 @@
             </v-col>
             <v-col cols="12" md="7" class="text-right">
               <div class="d-flex align-center justify-end">
-                
                 <v-btn
                   color="#0D9648"
                   :loading="templateLoading"
@@ -138,7 +137,7 @@
   </v-row>
 </template>
 <script>
-import { mapGetters,mapActions,mapState } from 'vuex';
+import { mapGetters, mapActions, mapState } from 'vuex';
 import TemplateSupplierSection from '../../components/BidTabs/SupplierSection.vue';
 import TemplateTeamMembers from '../../components/BidTabs/TeamMembers.vue';
 import TemplateBidLines from '../../components/BidTabs/BidLines.vue';
@@ -214,15 +213,15 @@ export default {
       return this.$store.getters.draftTime;
     },
     enableTabs() {
-      if (!this.$store.getters.draftBidsList) {
+      if (this.$store.getters.bidData.statusType !== 'template' || this.validate === false) {
         return true;
       }
       return false;
     },
   },
   methods: {
-    ...mapActions(["updateTemplate"]),
-    ...mapState(["invitedSuppliers"]),
+    ...mapActions(['updateTemplate']),
+    ...mapState(['invitedSuppliers']),
     ChangeT(tab) {
       this.currentItem = tab;
     },
@@ -232,7 +231,6 @@ export default {
       this.bidTitle = event.bidTitle;
     },
     validateSupplier(event) {
-      
       this.supplierValid = event.valid;
       this.supplierValue = event.supplier;
     },
@@ -245,7 +243,6 @@ export default {
       this.itemsValue = event.items;
     },
     validateAttachment(event) {
-     
       this.attachValid = event.valid;
       this.attachValue = event.attach;
     },
@@ -260,13 +257,11 @@ export default {
         this.templateLoading = false;
       }
     },
-    async updateTemplateBid(){
+    async updateTemplateBid() {
       await this.updateTemplate({'supplier': this.$store.state.bid.invitedSuppliers});
-    }
+    },
   },
-  async created(){
-
-  },
+  created() {},
   mounted() {
     document.title = 'Create Template - BidOut';
     this.users = this.$store.getters.userInfo;
