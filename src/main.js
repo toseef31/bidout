@@ -64,6 +64,7 @@ if (process.env.NODE_ENV === 'production') {
   Sentry.init({
     Vue,
     dsn: import.meta.env.VITE_SENTRY_DSN,
+    environment: "staging",
     integrations: [
       new BrowserTracing({
         routingInstrumentation: Sentry.vueRouterInstrumentation(router),
