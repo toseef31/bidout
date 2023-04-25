@@ -9,7 +9,7 @@
     <v-col cols="12" md="9">
       <div class="bg-light pa-8">
         <div class="title-head text-left">
-          <h4 class="mb-2 contract-title">RPF Platform - Create Bids</h4>
+          <h4 class="mb-2 contract-title">Respond to Bids - OFS Directory</h4>
           <h1 class="mb-8 ">Execute Contract</h1>
         </div>
         <vue-pdf-embed class="white text-left pa-4 font-weight-medium mb-5 contract-section" ref="pdfRef"
