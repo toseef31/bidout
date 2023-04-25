@@ -126,7 +126,6 @@ export default {
     ...mapActions(['contractGenerate', 'getIpAddress']),
     async generateContract(type) {
       this.loading = true;
-      this.ofsBtn = false;
 
       const contract = {
         ip: this.$store.getters.userIp,
@@ -142,7 +141,6 @@ export default {
     },
     async createStandard(type) {
       this.loading = true;
-      this.ofsBtn = false;
 
       const contract = {
         ip: this.$store.getters.userIp,
