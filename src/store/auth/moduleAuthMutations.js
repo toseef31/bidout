@@ -105,7 +105,10 @@ export default {
   setGoToAgreement(state, payload) {
     state.goToAgreement = payload;
   },
-  setSupplierSignUpSuccess(state,payload) {
-    state.supplierSignUpSuccess = payload
-  }
+  setSupplierSignUpSuccess(state, payload) {
+    state.supplierSignUpSuccess = payload;
+  },
+  setInvitedSupplierEmailExists(state, payload) {
+    state.invitedSupplierEmailExists = payload;
+  },
 };

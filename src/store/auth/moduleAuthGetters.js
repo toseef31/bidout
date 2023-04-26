@@ -89,4 +89,7 @@ export default {
   supplierSignUpSuccess(state) {
     return state.supplierSignUpSuccess;
   },
+  invitedSupplierEmailExists(state) {
+    return state.invitedSupplierEmailExists;
+  },
 };

@@ -13,6 +13,7 @@ export default {
   errorMessage: null,
   supplier: [],
   emailExists: false,
+  invitedSupplierEmailExists: false,
   companyError: null,
   userIp: null,
   companyName: "",
