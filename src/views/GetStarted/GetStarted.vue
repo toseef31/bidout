@@ -827,7 +827,7 @@ export default {
         return
       }
 
-      if(this.getPhoneInfo.valid && !this.emailError && !getInvitedSupplierEmailExists){
+      if(this.getPhoneInfo.valid && !this.emailError && !this.getInvitedSupplierEmailExists){
         if(this.companyId !== '' && this.supplierExists){
           let supplierData = {
             id: this.companyId,
@@ -907,7 +907,7 @@ export default {
         return
       }
 
-      if(this.getPhoneInfo.valid && !this.emailError && !getInvitedSupplierEmailExists ){
+      if(this.getPhoneInfo.valid && !this.emailError && !this.getInvitedSupplierEmailExists ){
         var buyerData = {
         company: this.buyer.companyName,
         firstName: this.buyer.firstName,
