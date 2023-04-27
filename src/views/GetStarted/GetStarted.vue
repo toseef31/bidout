@@ -192,7 +192,7 @@
                             <template v-if="hideList == true">
                               <v-list class="company-list" v-if="suppliers && suppliers.length > 0">
                                 <template
-                                  v-for="(item) in                                                    suppliers                                                   ">
+                                  v-for="(item) in                                                     suppliers                                                    ">
                                   <v-list-item :key="item.title">
                                     <v-list-item-content>
                                       <v-list-item-title v-html="item.company"
@@ -374,7 +374,7 @@
                           {
                             'spacing-class': getPhoneInfo.valid && getCounter > 1 || !getPhoneInfo.valid && getCounter === 1,
 
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                }
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        }
                         ">
                           <label class="d-block text-left input-label mb-2 font-weight-bold">Direct Phone Number</label>
 
@@ -586,28 +586,21 @@ export default {
      this.tokenLoading = false
       }
     },500),
-    currentItem (old,newI) {
+    currentItem (newI,old) {
       this.phoneInfo.valid = true
       this.phoneInfo.message = ''
-
-      this.buyer.companyName = this.buyer.firstName = this.buyer.lastName = this.buyer.phoneNumber = this.buyer.email = ''
-
-      this.supplier.companyName = this.supplier.bidInvitedCode = this.supplier.editCompany = this.supplier.companyHq1 = this.supplier.companyHq2 = this.supplier.companyHqState = this.supplier.companyHqCity = this.supplier.companyHqZip = this.supplier.firstName = this.supplier.lastName = this.supplier.phoneNumber =this.supplier.title = this.supplier.email =  this.password = this.confirmPassword = ''
 
       if(this.$route.query.token) {
         this.supplier.bidInvitedCode = this.$route.query.token
       }
 
-      this.supplier.region = 'TX'
-      this.supplier.country = 'US'
-
       this.counter = 0
       this.$store.commit('setEmailExistSuccess',false)
       this.$store.commit('setInvitedSupplierEmailExists',false)
       if (old === 1 && newI === 0) {
-        this.$refs.buyer.reset();
+        this.checkEmailBuyer()
       } else if (old === 0 && newI === 1) {
-        this.$refs.supplier.reset()
+        this.checkEmailSupplier()
       }
 
     },
