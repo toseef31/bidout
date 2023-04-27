@@ -924,7 +924,7 @@ export default {
     commit('setLoadingInvite', true);
     try {
       const res = await axios.post('bid/inviteSupplier/', {
-        firstName: payload.firstName, lastName: payload.lastName, company: payload.company, phone: payload.phone, email: payload.email, bidTitle: payload.bidTitle, bidType: payload.bidType, bidDueDate: payload.bidDueDate, bidDueTime: payload.bidDueTime,
+        firstName: payload.firstName, lastName: payload.lastName, company: payload.company, phone: payload.phone, email: payload.email, bidTitle: payload.bidTitle, bidType: payload.bidType, bidDueDate: payload.bidDueDate, bidDueTime: payload.bidDueTime,serial: payload.serial
       });
 
       if (res.status === 200) {
@@ -1271,13 +1271,24 @@ export default {
       }
     } else if (state.invitedSuppliers != null) {
       for (let i = 0; i < state.invitedSuppliers.length; i++) {
-        if (!state.invitedSuppliers[i].companyId && !state.invitedSuppliers[i].objectID) {
-          formData.append(`invitedSuppliers[${i}]`, state.invitedSuppliers[i].id);
-        } else if (state.invitedSuppliers[i].companyId) {
-          formData.append(`invitedSuppliers[${i}]`, state.invitedSuppliers[i].companyId);
+        if (Array.isArray(state.invitedSuppliers) && state.invitedSuppliers.length > 0 && typeof state.invitedSuppliers[0] === 'object') {
+          if (!state.invitedSuppliers[i].companyId && !state.invitedSuppliers[i].objectID) {
+            formData.append(`invitedSuppliers[${i}]`, state.invitedSuppliers[i].id);
+          } else if (state.invitedSuppliers[i].companyId) {
+            formData.append(`invitedSuppliers[${i}]`, state.invitedSuppliers[i].companyId);
+          } else {
+            formData.append(`invitedSuppliers[${i}]`, state.invitedSuppliers[i].objectID);
+          }
         } else {
-          formData.append(`invitedSuppliers[${i}]`, state.invitedSuppliers[i].objectID);
+          formData.append(`invitedSuppliers[${i}]`, state.invitedSuppliers[i]);
         }
+        // if (!state.invitedSuppliers[i].companyId && !state.invitedSuppliers[i].objectID) {
+        //   formData.append(`invitedSuppliers[${i}]`, state.invitedSuppliers[i].id);
+        // } else if (state.invitedSuppliers[i].companyId) {
+        //   formData.append(`invitedSuppliers[${i}]`, state.invitedSuppliers[i].companyId);
+        // } else {
+        //   formData.append(`invitedSuppliers[${i}]`, state.invitedSuppliers[i].objectID);
+        // }
       }
     } else {
       formData.append('invitedSuppliers', '');
@@ -1316,9 +1327,9 @@ export default {
             formData.append(`lineItems[${lineItemsindex}][unit]`, state.bidlines[i].unit);
             formData.append(`lineItems[${lineItemsindex}][inputType]`, state.bidlines[i].inputType);
             formData.append(`lineItems[${lineItemsindex}][quantity]`, state.bidlines[i].quantity);
-            if(state.bidlines[i].buyerComment === 'undefined' || state.bidlines[i].buyerComment === '' || state.bidlines[i].buyerComment === undefined){
+            if (state.bidlines[i].buyerComment === 'undefined' || state.bidlines[i].buyerComment === '' || state.bidlines[i].buyerComment === undefined) {
               formData.append(`lineItems[${lineItemsindex}][buyerComment]`, '');
-            }else{
+            } else {
               formData.append(`lineItems[${lineItemsindex}][buyerComment]`, state.bidlines[i].buyerComment);
             }
             formData.append(`lineItems[${lineItemsindex}][required]`, state.bidlines[i].required);
@@ -1337,9 +1348,9 @@ export default {
           formData.append(`lineItems[${lineItemsindex}][unit]`, state.bidlines[i].unit);
           formData.append(`lineItems[${lineItemsindex}][inputType]`, state.bidlines[i].inputType);
           formData.append(`lineItems[${lineItemsindex}][quantity]`, state.bidlines[i].quantity);
-          if(state.bidlines[i].buyerComment === 'undefined' || state.bidlines[i].buyerComment === '' || state.bidlines[i].buyerComment === undefined){
+          if (state.bidlines[i].buyerComment === 'undefined' || state.bidlines[i].buyerComment === '' || state.bidlines[i].buyerComment === undefined) {
             formData.append(`lineItems[${lineItemsindex}][buyerComment]`, '');
-          }else{
+          } else {
             formData.append(`lineItems[${lineItemsindex}][buyerComment]`, state.bidlines[i].buyerComment);
           }
           formData.append(`lineItems[${lineItemsindex}][required]`, state.bidlines[i].required);

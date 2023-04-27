@@ -8,7 +8,7 @@
         <div class="title-desc">
           <div><span>Bid Title:</span> {{ bidDetail.bidData.title }}</div>
           <div><span>Bid Type:</span> {{ bidDetail.bidData.type }}</div>
-          <div class="d-flex align-center">
+          <div>
             <span>Due Date/Time:</span> {{ formatDate(bidDetail.bidData.dueDate) }} @
             {{ bidDetail.bidData.dueTime }} CST <v-btn @click="changeDate" icon
               v-if="bidDetail.receivingBids && !isBidOut"><v-icon color="black"

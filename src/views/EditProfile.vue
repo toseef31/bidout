@@ -236,7 +236,7 @@ export default {
   },
 
   computed: {
-    ...mapGetters(['profileLoading', 'showErrorAlert', 'message']),
+    ...mapGetters(['profileLoading', 'showErrorAlert', 'message', 'resetPasswordMsg']),
     showSideBar() {
       return this.$store.getters.g_sideBarOpen;
     },
@@ -275,6 +275,24 @@ export default {
         this.$toasted.show(value, {
           position: 'top-center',
           duration: 3000,
+          className: 'error-toast',
+          type: 'error',
+        });
+      }
+    },
+    resetPasswordMsg(values) {
+      console.log('value', values);
+      if (values.status === 200) {
+        this.$toasted.show(values.message, {
+          position: 'top-center',
+          duration: 5000,
+          className: 'success-toast',
+          type: 'success',
+        });
+      } else {
+        this.$toasted.show(values.message, {
+          position: 'top-center',
+          duration: 5000,
           className: 'error-toast',
           type: 'error',
         });

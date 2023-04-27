@@ -409,8 +409,9 @@
             }
           }
         }
-        .supplier-desc{
-          .ql-editor{
+
+        .supplier-desc {
+          .ql-editor {
             min-height: auto;
           }
         }
@@ -423,12 +424,15 @@
           span:first-child {
             font-weight: 700;
           }
-          .ql-editor{
+
+          .ql-editor {
             min-height: auto;
-            ul{
+
+            ul {
               padding-left: 0;
             }
-            ol{
+
+            ol {
               padding-left: 0;
             }
           }
@@ -443,7 +447,8 @@
             font-weight: 700;
             white-space: nowrap;
           }
-          .ql-editor{
+
+          .ql-editor {
             min-height: auto;
           }
         }
@@ -916,8 +921,9 @@
         .bid-desc {
           line-height: 28px;
         }
-        .supplier-desc{
-          .ql-editor{
+
+        .supplier-desc {
+          .ql-editor {
             min-height: auto;
           }
         }
@@ -1390,9 +1396,11 @@
 
         .message-list {
           min-height: 95px;
-          .chat-video{
+
+          .chat-video {
             flex: none;
           }
+
           .v-list-item__title {
             font-weight: 700;
             font-size: 16px;
@@ -1407,7 +1415,8 @@
             line-height: 20px;
             white-space: normal;
           }
-          .v-list-item__action{
+
+          .v-list-item__action {
             align-self: self-start;
           }
         }
@@ -2037,6 +2046,14 @@
 }
 
 .inviteSupplier-dialog {
+  .email-error-text {
+    color: #ff5252;
+    font-size: 12px;
+    margin-top: -25px;
+    margin-left: 12px;
+    margin-bottom: 25px;
+  }
+
   h2 {
     color: #0D1139;
     font-size: 20px;

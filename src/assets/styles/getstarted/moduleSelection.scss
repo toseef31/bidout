@@ -1,42 +1,74 @@
-.module-selection{
-	.title-head{
-		h1{
+.module-selection {
+	.title-head {
+		.contract-title {
+			font-size: 16px;
+			font-weight: 500;
+			color: #0D1139;
+		}
+
+		h1 {
 			font-size: 32px;
+			font-weight: 700;
+			color: #0D1139;
+		}
+
+		h3 {
+			font-size: 16px;
+			font-weight: 500;
+			color: #0D1139;
 		}
 	}
-	.v-form{
-		.create-bid{
+
+	.v-form {
+		.create-bid {
 			border: 2px solid #F4F5F7;
-			.v-input--is-label-active{
+
+			.label-title {
+				.main-module-title {
+					font-size: 24px;
+					font-weight: 700;
+					color: #0D1139;
+				}
+			}
+
+			.v-input--is-label-active {
 				color: #0D9648 !important;
 				opacity: 1;
-				.v-input--selection-controls__input{
-					.primary--text{
+
+				.v-input--selection-controls__input {
+					.primary--text {
 						color: #0D9648 !important;
 					}
-					.v-input--checkbox__track.primary--text{
+
+					.v-input--checkbox__track.primary--text {
 						color: #0D9648 !important;
 						opacity: 1;
 					}
-					.v-input--checkbox__thumb.primary--text{
+
+					.v-input--checkbox__thumb.primary--text {
 						color: #fff !important;
 					}
-					.v-input--selection-controls__ripple.primary--text{
+
+					.v-input--selection-controls__ripple.primary--text {
 						color: #0D9648 !important;
 					}
 				}
-				
+
 			}
-			.agreement-box{
+
+			.agreement-box {
 				background: rgba(13, 150, 72, 0.1);
-				p{
+
+				p {
 					font-size: 12px;
 				}
 			}
-			.price-text{
+
+			.price-text {
 				color: #0d9648;
 			}
-			.agreement-link{
+
+			.agreement-link {
 				background-color: #0D9647;
 				border-radius: 4px;
 				line-height: 4;
@@ -44,41 +76,45 @@
 			}
 		}
 	}
-	.contract-section{
+
+	.contract-section {
 		height: 700px;
 		overflow-x: hidden;
 		overflow-y: auto;
 	}
-	.signBox{
-		box-shadow: 1px 1px 6px 3px #ddd;
-		border-radius: 4px;
+
+	.middle-align-class {
+		.v-input {
+			margin-top: -8px !important;
+			padding-top: 0px !important;
+		}
 	}
+
+	.agreement-text {
+		line-height: 20.08px;
+	}
+
 }
-.inviation-module{
-		flex: 0 0 100%;
-	    max-width: 100%;
+
+.inviation-module {
+	flex: 0 0 100%;
+	max-width: 100%;
 }
-@media(max-width: 768px){
-	.module-selection{
-		.create-bid{
-			h1{
+
+@media(max-width: 768px) {
+	.module-selection {
+		.create-bid {
+			h1 {
 				font-size: 19px;
 			}
 		}
-		.signBox{
-			div{
-				width: 100% !important;
-				canvas{
-					width: 100% !important;
-				}
-			}
-		}
 	}
 }
-@media(max-width: 600px){
-	.module-selection{
-		.create-bid{
-			.label-title{
+
+@media(max-width: 600px) {
+	.module-selection {
+		.create-bid {
+			.label-title {
 				display: block !important;
 			}
 		}
