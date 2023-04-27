@@ -185,7 +185,7 @@
                               <v-text-field v-click-outside="closeList" prepend-inner-icon="search"
                                 placeholder="Company name" single-line outlined type="text" v-model="supplier.companyName"
                                 @input="getSupplierList" @focus="hideList = true" :error-messages="errors"
-                                :success="valid" required>
+                                :success="valid" required :loading="getSupplierLoading" color="#0D9648" loader-height="3">
 
                                 <template v-slot:append>
                                   <v-icon size="25" @click="supplier.companyName = ''" class="clear-icon ml-2"
@@ -203,7 +203,7 @@
                                   </v-list-item-content>
                                 </v-list-item>
                                 <template
-                                  v-for="(item) in                                                                                                  suppliers                                                                                                 ">
+                                  v-for="(item) in                                                                                                     suppliers                                                                                                    ">
                                   <v-list-item :key="item.title" class="second">
                                     <v-list-item-content>
                                       <v-list-item-title v-html="item.company"
@@ -370,7 +370,7 @@
                           {
                             'spacing-class': getPhoneInfo.valid && getCounter > 1 || !getPhoneInfo.valid && getCounter === 1,
 
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                }
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        }
                         ">
                           <label class="d-block text-left input-label mb-2 font-weight-bold">Direct Phone Number</label>
 
@@ -544,6 +544,7 @@ export default {
       isToken:false,
       emailLoading: false,
       signUpLoading: false,
+      supplierLoading: false
     };
   },
   directives: {
@@ -715,6 +716,9 @@ export default {
     },
     getInvitedSupplierEmailExists () {
       return this.$store.getters.invitedSupplierEmailExists
+    },
+    getSupplierLoading() {
+      return this.supplierLoading
     }
   },
   methods: {
@@ -906,15 +910,17 @@ export default {
       window.scrollTo({ top: 0, behavior: 'smooth' });
       }
     },
-    getSupplierList:  _.debounce (function () {
+    getSupplierList:  _.debounce (async function () {
+      this.supplierLoading = true
       this.companyId = ''
       if(this.supplier.companyName && this.supplier.companyName !== '' && this.supplier.companyName.length < 3){
         this.hideList = false;
       }
       else if(this.supplier.companyName && this.supplier.companyName !== '' && this.supplier.companyName.length >= 3){
          this.hideList = true
-         this.searchSupplier(this.supplier.companyName);
+         await this.searchSupplier(this.supplier.companyName);
       }
+      this.supplierLoading = false
       },500),
     min6: function(value) {
       if (value.length >= 6) {
