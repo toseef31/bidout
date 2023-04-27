@@ -323,8 +323,11 @@
                       :value="80"></v-progress-circular>
                   </template>
                 </v-text-field>
-                <div class=" email-error-text text-left" v-if="emailError">
+                <div class=" email-error-text text-left" v-if="emailError && !getInvitedSupplierEmailExists">
                   Email already exists! Please try a different one.
+                </div>
+                <div class=" email-error-text text-left" v-if="getInvitedSupplierEmailExists">
+                  Supplier is pending registration and cannot be invited at this time.
                 </div>
 
                 <v-btn :loading="loadingInvite" :disabled="!valid || !getPhoneInfo.valid || getEmailLoading || emailError"
@@ -527,6 +530,9 @@ export default {
       }
       return false;
     },
+    getInvitedSupplierEmailExists() {
+      return this.$store.getters.invitedSupplierEmailExists;
+    },
   },
   methods: {
     ...mapActions(['getCategories', 'getSalesReps', 'getCompanyInfo', 'searchByCompany', 'getCompanyByServices', 'saveDraftBid', 'inviteNewSupplier', 'updateDraftBid', 'updateTemplate', 'updateBid', 'checkEmail']),
@@ -581,7 +587,7 @@ export default {
         serial: this.$store.getters.bidData.serial,
       };
 
-      if (this.$refs.form.validate() && this.getPhoneInfo.valid && !this.emailError) {
+      if (this.$refs.form.validate() && this.getPhoneInfo.valid && !this.emailError && !this.getInvitedSupplierEmailExists) {
         try {
           const user = await this.inviteNewSupplier(supplier);
           this.supplierDialog = false;
@@ -609,6 +615,7 @@ export default {
 
       if (this.email === '' || !testEmail) {
         this.$store.commit('setEmailExistSuccess', false);
+        this.$store.commit('setInvitedSupplierEmailExists', false);
       }
 
       if (testEmail) {
@@ -770,6 +777,7 @@ export default {
     this.newSupplierFiltered;
 
     this.$store.commit('setEmailExistSuccess', false);
+    this.$store.commit('setInvitedSupplierEmailExists', false);
   },
 };
 </script>

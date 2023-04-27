@@ -80,9 +80,12 @@
                               </template>
                             </v-text-field>
                           </ValidationProvider>
-                          <div class=" email-error-text text-left" v-if="emailError">
+                          <div class=" email-error-text text-left" v-if="emailError && !getInvitedSupplierEmailExists">
                             Email already exists! Please <a href="/login" class="">Login </a>to
                             access your account.
+                          </div>
+                          <div class=" email-error-text text-left" v-if="getInvitedSupplierEmailExists">
+                            Supplier is pending registration and cannot be invited at this time.
                           </div>
 
                         </v-col>
@@ -115,7 +118,7 @@
                           <v-btn color="#0D9647" large dense width="100%" height="56"
                             class="font-weight-bold white--text text-capitalize" @click="handleSubmit(buyerRequest)"
                             :loading="getSignUpLoading"
-                            :disabled="!getPhoneInfo.valid || emailError || getEmailLoading || !valid || getSignUpLoading">Next
+                            :disabled="!getPhoneInfo.valid || emailError || getInvitedSupplierEmailExists || getEmailLoading || !valid || getSignUpLoading">Next
                             <v-icon class="pl-2" color="#fff">mdi-arrow-right-circle</v-icon></v-btn>
                         </v-col>
                       </v-row>
@@ -179,21 +182,39 @@
                           <v-col text="left" cols="12" sm="12">
                             <label class="d-block text-left input-label mb-2 font-weight-bold">Company Name</label>
                             <ValidationProvider name="Company name" rules="required" v-slot="{ errors, valid }">
-                              <v-text-field prepend-inner-icon="search" placeholder="Company name" single-line outlined
-                                type="text" v-model="supplier.companyName" @keyup="getSupplierList"
-                                :error-messages="errors" :success="valid" required clearable>
+                              <v-text-field v-click-outside="closeList" prepend-inner-icon="search"
+                                placeholder="Company name" single-line outlined type="text" v-model="supplier.companyName"
+                                @keyup="getSupplierList" @focus="getSupplierList" :error-messages="errors"
+                                :success="valid" required clearable>
                               </v-text-field>
                             </ValidationProvider>
                             <input type="hidden" v-model="companyId">
                             <template v-if="hideList == true">
-                              <v-list class="company-list" v-if="suppliers != ''">
-                                <template v-for="(item) in                    suppliers                   ">
+                              <v-list class="company-list" v-if="suppliers.length > 0">
+                                <template
+                                  v-for="(item) in                                                suppliers                                               ">
                                   <v-list-item :key="item.title">
                                     <v-list-item-content>
                                       <v-list-item-title v-html="item.company"
                                         @click="companyList(item.company, item.objectID); hideList = !hideList"
                                         class="text-left"></v-list-item-title>
                                     </v-list-item-content>
+                                  </v-list-item>
+                                </template>
+                              </v-list>
+                              <v-list class="company-list" v-else>
+                                <template>
+                                  <v-list-item>
+                                    <v-list-item-content>
+                                      <v-list-item-title v-if=" !getSearchSupplierLoading " class="text-center">No company
+                                        available!</v-list-item-title>
+                                      <v-progress-circular v-else indeterminate :size=" 20 " :width=" 2 "
+                                        color="
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                          #0D9648"
+                                        :value=" 80 "></v-progress-circular>
+
+                                    </v-list-item-content>
+
                                   </v-list-item>
                                 </template>
                               </v-list>
@@ -333,10 +354,14 @@
 
                             </v-text-field>
                           </ValidationProvider>
-                          <div class=" email-error-text text-left" v-if=" emailError ">
+                          <div class=" email-error-text text-left" v-if=" emailError && !getInvitedSupplierEmailExists ">
                             Email already exists! Please <a href="/login">Login</a> to
                             access your account.
                           </div>
+                          <div class=" email-error-text text-left" v-if=" getInvitedSupplierEmailExists ">
+                            Supplier is pending registration and cannot be invited at this time.
+                          </div>
+
                         </v-col>
                         <v-col cols="12" sm="12" text="left" class="pb-0">
                           <label class="d-block text-left input-label mb-2 font-weight-bold">Title</label>
@@ -349,7 +374,7 @@
                           {
                             'spacing-class': getPhoneInfo.valid && getCounter > 1 || !getPhoneInfo.valid && getCounter === 1,
 
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                }
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                }
                         ">
                           <label class="d-block text-left input-label mb-2 font-weight-bold">Direct Phone Number</label>
 
@@ -409,7 +434,7 @@
                           <v-btn color="#0D9647" large dense width="100%" height="56"
                             class="font-weight-bold white--text text-capitalize" @click=" handleSubmit(supplierRequest) "
                             :loading=" getSignUpLoading "
-                            :disabled=" !getPhoneInfo.valid || emailError || getEmailLoading || !valid || getSignUpLoading ">Next
+                            :disabled=" !getPhoneInfo.valid || emailError || getInvitedSupplierEmailExists || getEmailLoading || !valid || getSignUpLoading ">Next
                             <v-icon class="pl-2" color="#fff">mdi-arrow-right-circle</v-icon></v-btn>
                         </v-col>
                       </v-row>
@@ -522,21 +547,38 @@ export default {
       },
       isToken:false,
       emailLoading: false,
-      signUpLoading: false
+      signUpLoading: false,
+      searchSupplierLoading: false
     };
+  },
+  directives: {
+      'click-outside': {
+        bind: function (el, binding, vnode) {
+          el.clickOutsideEvent = function (event) {
+            if (!(el == event.target || el.contains(event.target))) {
+              vnode.context[binding.expression](event);
+            }
+          };
+          document.body.addEventListener('click', el.clickOutsideEvent)
+        },
+        unbind: function (el) {
+          document.body.removeEventListener('click', el.clickOutsideEvent)
+        },
+      }
   },
   watch:{
     'supplier.companyName': _.debounce(function(){
-      if(this.supplier.companyName < 1){
+      if(this.supplier.companyName.length < 3){
         this.hideList = false;
       }else{
         this.hideList = true;
       }
-    },500),
+    },600),
     'supplier.bidInvitedCode': _.debounce(async function() {
       if (this.supplier.bidInvitedCode !== '') {
       this.$store.commit('setTokenInvitedSupplier',null)
       this.$store.commit('setEmailExistSuccess',false)
+      this.$store.commit('setInvitedSupplierEmailExists',false)
       this.tokenLoading = true
 
       await this.getInvitedSupplierByToken(this.supplier.bidInvitedCode)
@@ -561,6 +603,7 @@ export default {
 
       this.counter = 0
       this.$store.commit('setEmailExistSuccess',false)
+      this.$store.commit('setInvitedSupplierEmailExists',false)
       if (old === 1 && newI === 0) {
         this.$refs.buyer.reset();
       } else if (old === 0 && newI === 1) {
@@ -682,10 +725,19 @@ export default {
     },
     getSupplierSignUpSuccess() {
       return this.$store.getters.supplierSignUpSuccess
+    },
+    getSearchSupplierLoading() {
+      return this.searchSupplierLoading
+    },
+    getInvitedSupplierEmailExists () {
+      return this.$store.getters.invitedSupplierEmailExists
     }
   },
   methods: {
     ...mapActions(["supplierSignUpAction","searchSupplier","checkEmail","buyerSignUpAction","getIpAddress",'getInvitedSupplierByToken','queueSupplierUser']),
+    closeList() {
+      this.hideList = false;
+    },
     onUpdate (payload) {
       this.counter++;
 
@@ -716,6 +768,7 @@ export default {
 
       if (this.buyer.email === '' || !testEmail) {
         this.$store.commit('setEmailExistSuccess',false)
+        this.$store.commit('setInvitedSupplierEmailExists',false)
       }
 
       if (testEmail) {
@@ -730,6 +783,7 @@ export default {
 
       if (this.supplier.email === '' || !testEmail) {
         this.$store.commit('setEmailExistSuccess',false)
+        this.$store.commit('setInvitedSupplierEmailExists',false)
       }
 
       if (testEmail) {
@@ -773,7 +827,7 @@ export default {
         return
       }
 
-      if(this.getPhoneInfo.valid && !this.emailError){
+      if(this.getPhoneInfo.valid && !this.emailError && !this.getInvitedSupplierEmailExists){
         if(this.companyId !== '' && this.supplierExists){
           let supplierData = {
             id: this.companyId,
@@ -853,7 +907,7 @@ export default {
         return
       }
 
-      if(this.getPhoneInfo.valid && !this.emailError ){
+      if(this.getPhoneInfo.valid && !this.emailError && !this.getInvitedSupplierEmailExists ){
         var buyerData = {
         company: this.buyer.companyName,
         firstName: this.buyer.firstName,
@@ -868,10 +922,13 @@ export default {
       window.scrollTo({ top: 0, behavior: 'smooth' });
       }
     },
-    getSupplierList(){
-      if(this.supplier.companyName.length > 2){
-        this.searchSupplier(this.supplier.companyName);
+    async getSupplierList(){
+      this.searchSupplierLoading = true
+      if(this.supplier.companyName.length > 3){
+        this.hideList = true
+        await this.searchSupplier(this.supplier.companyName);
       }
+      this.searchSupplierLoading = false
     },
     min6: function(value) {
       if (value.length >= 6) {
@@ -890,7 +947,7 @@ export default {
     companyList(title,id){
       this.supplier.companyName = title;
       this.companyId = id;
-      setTimeout(() => this.hideList = false, 600);
+      setTimeout(() => this.hideList = false, 800);
       this.hideList = false;
     },
   },
@@ -900,6 +957,7 @@ export default {
     this.$store.commit('setTokenInvitedSupplier',null)
     this.$store.commit('setTokenInvitedSupplierError',false)
     this.$store.commit('setEmailExistSuccess',false)
+    this.$store.commit('setInvitedSupplierEmailExists',false)
     this.$store.commit('setBuyerSignUpSuccess',null)
     this.$store.commit('setSupplierExistingSignUpSuccess',null)
     this.$store.commit('setGoToModuleSelection',null)

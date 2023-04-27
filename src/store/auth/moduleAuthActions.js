@@ -213,10 +213,15 @@ export default {
           email: payload,
         });
 
-        if (res.data.exists === true) {
+        if (res.data.exists) {
           commit("setEmailExistSuccess", true);
         } else {
           commit("setEmailExistSuccess", false);
+        }
+        if (res.data.invitedSupplier) {
+          commit("setInvitedSupplierEmailExists", true);
+        } else {
+          commit("setInvitedSupplierEmailExists", false);
         }
       } catch (err) {
         console.log(err);
@@ -252,15 +257,16 @@ export default {
     }
   },
 
-  searchSupplier({ commit }, payload) {
-    axios
-      .get(`/ofs/searchSuppliers/${payload}`)
-      .then((responce) => {
-        commit("setSupplierList", responce.data);
-      })
-      .catch((err) => {
-        console.log(err);
-      });
+  async searchSupplier({ commit }, payload) {
+    try {
+      const res = await axios.get(`/ofs/searchSuppliers/${payload}`);
+
+      if (res.status === 200) {
+        commit("setSupplierList", res.data);
+      }
+    } catch (err) {
+      console.log(err);
+    }
   },
 
   async queueSupplierUser({ commit }, payload) {

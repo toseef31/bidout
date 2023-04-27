@@ -44,18 +44,19 @@
               <div>
 
                 <v-text-field type="text" hide-details outlined placeholder="Search" prepend-inner-icon="mdi-magnify"
-                  v-model="companySearch" @keyup="getCompanies(false)">
+                  v-model=" companySearch " @keyup=" getCompanies(false) ">
                 </v-text-field>
               </div>
               <div class="d-flex align-center">
                 <label class="input-label black--text pr-2 font-weight-bold">Basin</label>
-                <v-select rounded hide-details outlined class="available-select text-capitalize" :items="availableSearch"
-                  width="150px" v-model="companyBasin" min-height="28px" @change="getCompanies(false)"></v-select>
+                <v-select rounded hide-details outlined class="available-select text-capitalize"
+                  :items=" availableSearch " width="150px" v-model=" companyBasin " min-height="28px"
+                  @change=" getCompanies(false) "></v-select>
               </div>
             </div>
             <div class="companies-list">
               <div class="d-flex align-center justify-space-between list-company pa-4"
-                v-for="(            company, index            ) in             companiesList            "
+                v-for="(               company, index               ) in                companiesList               "
                 v-if=" user.company.id != company.objectID " :key=" index ">
                 <div class="comapny-data d-flex align-center">
                   <div class="company-img">
@@ -81,7 +82,7 @@
                 </div>
                 <div class="add-company">
                   <v-btn color="rgba(13, 150, 72, 0.1)" tile min-width="32px" height="32" class="pa-0" elevation="0"
-                    @click="addCompany(company)"> <v-icon color="#0D9648">mdi-plus</v-icon></v-btn>
+                    @click=" addCompany(company) "> <v-icon color="#0D9648">mdi-plus</v-icon></v-btn>
                 </div>
               </div>
             </div>
@@ -101,7 +102,7 @@
             </div>
             <div class="companies-list">
               <div class="d-flex align-center justify-space-between list-company pa-4"
-                v-for="(            list, index            ) in             salesRepsList            "
+                v-for="(               list, index               ) in                salesRepsList               "
                 v-if=" user.id != list.objectID " :key=" index ">
                 <div class="comapny-data d-flex align-center">
                   <div class="company-img">
@@ -137,7 +138,7 @@
             <div class="companies-list">
               <div>
                 <div class="d-flex align-center justify-space-between list-company pa-4"
-                  v-for="(            company, index            ) in             companiesList            "
+                  v-for="(               company, index               ) in                companiesList               "
                   v-if=" user.company.id != company.id " :key=" index ">
                   <div class="comapny-data d-flex align-center">
                     <div class="company-img">
@@ -164,7 +165,7 @@
                   </div>
                   <div class="add-company">
                     <v-btn color="rgba(13, 150, 72, 0.1)" tile min-width="32px" height="32" class="pa-0" elevation="0"
-                      @click="addServiceCompany(company)"> <v-icon color="#0D9648">mdi-plus</v-icon></v-btn>
+                      @click=" addServiceCompany(company) "> <v-icon color="#0D9648">mdi-plus</v-icon></v-btn>
                   </div>
                 </div>
               </div>
@@ -185,7 +186,7 @@
 
           <div class="companies-list">
 
-            <template v-for="(            company, index            ) in             repsInvited            ">
+            <template v-for="(               company, index               ) in                repsInvited               ">
               <div class="d-flex align-center justify-space-between list-company pa-4" v-if=" !company.companyId "
                 :key=" index ">
                 <div class="comapny-data d-flex align-center">
@@ -247,7 +248,7 @@
                 </div>
               </div>
             </template>
-            <template v-for="(            company, index            ) in             newRepsInvited            ">
+            <template v-for="(               company, index               ) in                newRepsInvited               ">
               <div class="d-flex align-center justify-space-between list-company pa-4">
                 <div class="comapny-data d-flex align-center">
                   <div class="company-img">
@@ -265,7 +266,7 @@
                 </div>
                 <div class="add-company" v-if=" checkIntent(company.objectID) !== 'intended' ">
                   <v-btn color="rgba(243, 35, 73, 0.1)" tile min-width="32px" height="32" class="pa-0" elevation="0"
-                    @click="removeNewSup(index)"> <v-icon color="#F32349">mdi-minus</v-icon></v-btn>
+                    @click=" removeNewSup(index) "> <v-icon color="#F32349">mdi-minus</v-icon></v-btn>
                 </div>
               </div>
             </template>
@@ -274,13 +275,14 @@
       </v-col>
     </v-row>
 
-    <div fill-height align="center" justify="center" v-if="getFetchSupplierLoading">
+    <div fill-height align="center" justify="center" v-if=" getFetchSupplierLoading ">
       <v-col cols="12">
-        <v-progress-circular v-if="getFetchSupplierLoading" :width="3" color="green" indeterminate></v-progress-circular>
+        <v-progress-circular v-if=" getFetchSupplierLoading " :width=" 3 " color="green"
+          indeterminate></v-progress-circular>
       </v-col>
     </div>
 
-    <v-row justify="center" align="center" no-gutters class="mt-5" v-if="!getFetchSupplierLoading">
+    <v-row justify="center" align="center" no-gutters class="mt-5" v-if=" !getFetchSupplierLoading ">
       <div class="align-center justify-center">
         <v-dialog v-model=" supplierDialog " width="800">
           <template v-slot:activator=" { on, attrs } ">
@@ -313,22 +315,22 @@
                   outlined></v-text-field>
                 <label class="d-block text-left font-weight-bold mb-2">Phone Number<span
                     class="required-class">*</span></label>
-                <vue-tel-input @blur=" onBlurS " defaultCountry="US" :autoDefaultCountry=" false " :autoFormat=" false "
-                  :dropdownOptions="
-                    {
+                <vue-tel-input
+                @blur="onBlurS"
+                defaultCountry="US"
+                :autoDefaultCountry=" false " :autoFormat=" false "
+                  :dropdownOptions="{
                       showDialCodeInSelection: true,
-                        showFlags: true,
-                          width: 'max-content'
-                    }
-                  " :inputOptions="
-  {
-    required: true,
-      showDialCode: false,
-        maxlength: 15,
-          placeholder: 'Phone number',
+                      showFlags: true,
+                      width: 'max-content'
+                    }" 
+                    :inputOptions="{
+                    required: true,
+                    showDialCode: false,
+                    maxlength: 15,
+                    placeholder: 'Phone number',
 
-}
-" model="national" :validCharactersOnly=" true " :styleClasses=" { 'phone-main-class': true } " v-model=" phoneNumber "
+}" model="national" :validCharactersOnly=" true " :styleClasses=" { 'phone-main-class': true } " v-model=" phoneNumber "
                   @validate=" onUpdate "></vue-tel-input>
                 <div class="phone-class" v-if=" !getPhoneInfo.valid && getCounter > 1 ">
                   {{ getPhoneInfo.message }}</div>
@@ -344,14 +346,17 @@
                       :value=" 80 "></v-progress-circular>
                   </template>
                 </v-text-field>
-                <div class=" email-error-text text-left" v-if=" emailError ">
+                <div class=" email-error-text text-left" v-if=" emailError && !getInvitedSupplierEmailExists ">
                   Email already exists! Please try a different one.
+                </div>
+                <div class=" email-error-text text-left" v-if=" getInvitedSupplierEmailExists ">
+                  Supplier is pending registration and cannot be invited at this time.
                 </div>
 
                 <v-btn :loading=" loadingInvite "
-                  :disabled=" !valid || !getPhoneInfo.valid || getEmailLoading || emailError " color="#0D9648"
-                  class="mr-4 text-capitalize white--text font-weight-bold" @click=" validate " large height="50px"
-                  min-width="220px">
+                  :disabled=" !valid || !getPhoneInfo.valid || getEmailLoading || emailError || getInvitedSupplierEmailExists "
+                  color="#0D9648" class="mr-4 text-capitalize white--text font-weight-bold" @click=" validate " large
+                  height="50px" min-width="220px">
                   Send Invite
                 </v-btn>
               </v-form>
@@ -552,6 +557,9 @@ export default {
       }
       return false;
     },
+    getInvitedSupplierEmailExists() {
+      return this.$store.getters.invitedSupplierEmailExists;
+    },
   },
   methods: {
     ...mapActions(['getCategories', 'getSalesReps', 'getCompanyInfo', 'searchByCompany', 'getCompanyByServices', 'inviteNewSupplier', 'inviteSupplierToBid', 'checkEmail']),
@@ -621,7 +629,7 @@ export default {
         serial: this.bidDetail.bidData.serial,
       };
 
-      if (this.$refs.form.validate() && this.getPhoneInfo.valid && !this.emailError) {
+      if (this.$refs.form.validate() && this.getPhoneInfo.valid && !this.emailError && !this.getInvitedSupplierEmailExists) {
         try {
           const user = await this.inviteNewSupplier(supplier);
           this.supplierDialog = false;
@@ -647,6 +655,7 @@ export default {
 
       if (this.email === '' || !testEmail) {
         this.$store.commit('setEmailExistSuccess', false);
+        this.$store.commit('setInvitedSupplierEmailExists', false);
       }
 
       if (testEmail) {
@@ -762,6 +771,7 @@ export default {
     this.filteredEntries;
     this.newSupplierFiltered;
     this.$store.commit('setEmailExistSuccess', false);
+    this.$store.commit('setInvitedSupplierEmailExists', false);
   },
 };
 </script>
