@@ -257,16 +257,15 @@ export default {
     }
   },
 
-  async searchSupplier({ commit }, payload) {
-    try {
-      const res = await axios.get(`/ofs/searchSuppliers/${payload}`);
-
-      if (res.status === 200) {
+  searchSupplier({ commit }, payload) {
+    axios
+      .get(`/ofs/searchSuppliers/${payload}`)
+      .then((res) => {
         commit("setSupplierList", res.data);
-      }
-    } catch (err) {
-      console.log(err);
-    }
+      })
+      .catch((err) => {
+        console.log(err);
+      });
   },
 
   async queueSupplierUser({ commit }, payload) {
