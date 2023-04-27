@@ -20,6 +20,7 @@
     "timezones-list": "^3.0.1",
     "unplugin-vue-components": "^0.22.9",
     "uuid": "^9.0.0",
+    "vee-validate": "3",
     "vite-plugin-vue2": "^1.4.0",
     "vue-axios": "^3.4.1",
     "vue-country-region-select": "^2.0.16",
@@ -51,7 +52,6 @@
     "eslint-plugin-import": "^2.24.2",
     "eslint-plugin-vue": "7.16.0",
     "sass": "1.32.13",
-    "vee-validate": "3",
     "vite": "^2.6.13",
     "vue-template-compiler": "^2.6.14"
   }
