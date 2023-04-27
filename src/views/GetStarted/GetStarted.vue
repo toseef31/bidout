@@ -190,9 +190,9 @@
                             </ValidationProvider>
                             <input type="hidden" v-model="companyId">
                             <template v-if="hideList == true">
-                              <v-list class="company-list" v-if="suppliers.length > 0">
+                              <v-list class="company-list" v-if="suppliers && suppliers.length > 0">
                                 <template
-                                  v-for="(item) in                                                suppliers                                               ">
+                                  v-for="(item) in                                                    suppliers                                                   ">
                                   <v-list-item :key="item.title">
                                     <v-list-item-content>
                                       <v-list-item-title v-html="item.company"
@@ -374,7 +374,7 @@
                           {
                             'spacing-class': getPhoneInfo.valid && getCounter > 1 || !getPhoneInfo.valid && getCounter === 1,
 
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                }
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                }
                         ">
                           <label class="d-block text-left input-label mb-2 font-weight-bold">Direct Phone Number</label>
 
@@ -568,7 +568,7 @@ export default {
   },
   watch:{
     'supplier.companyName': _.debounce(function(){
-      if(this.supplier.companyName.length < 3){
+      if(this.supplier.companyName && this.supplier.companyName !== '' && this.supplier.companyName.length < 3){
         this.hideList = false;
       }else{
         this.hideList = true;
@@ -924,7 +924,7 @@ export default {
     },
     async getSupplierList(){
       this.searchSupplierLoading = true
-      if(this.supplier.companyName.length > 3){
+      if(this.supplier.companyName && this.supplier.companyName !== '' && this.supplier.companyName.length > 3){
         this.hideList = true
         await this.searchSupplier(this.supplier.companyName);
       }

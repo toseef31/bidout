@@ -2,7 +2,7 @@
   <v-row justify="center" class="module-selection">
     <v-col cols="12" md="9">
       <v-alert type="error" class="mt-4" v-show="getShowErrorAlert">
-        {{ getCompanyErrorAlert }}
+        Something went wrong. Please try again
       </v-alert>
     </v-col>
 
