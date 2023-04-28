@@ -39,6 +39,10 @@
 		line-height: 20px;
 	}
 
+	.clear-icon {
+		cursor: pointer;
+	}
+
 	.checkbox-class {
 		margin-top: -20px;
 
@@ -230,7 +234,20 @@
 		}
 
 		.v-list {
+			padding-top: 0;
+			padding-bottom: 0;
 			border: 2px solid #b6b6b6;
+		}
+
+		.first {
+			background-color: #F4F5F7;
+			padding-bottom: 4px;
+			padding-top: 4px
+		}
+
+		.second {
+			padding-top: 5px;
+			padding-bottom: 4px
 		}
 
 		.company-list {
