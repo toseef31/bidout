@@ -27,7 +27,7 @@
                    background-color="white"
                  ></v-text-field>
                <div class="text-center">
-                 <v-btn class="reset-btn rounded-lg text-capitalize font-weight-bold white--text" color="#0D9648"  type="submit" :disabled="loading" :loading="loading" @click="reset">
+                 <v-btn class="reset-btn rounded-lg text-capitalize font-weight-bold white--text" color="#0D9648"  type="submit" :disabled="!valid" :loading="loading" @click="reset">
                    Request Reset Password Link
                  </v-btn>
                </div>
@@ -56,8 +56,8 @@ export default {
       loading: false,
       email: '',
       emailRules: [
-        v => !!v || 'E-mail is required',
-        v => /^[\w\.+]+@([\w-]+\.)+[\w-]{2,3}$/.test(v) || 'E-mail must be valid',
+        (v) => !!v || 'E-mail is required',
+        (v) => /^[\w\.+]+@([\w-]+\.)+[\w-]{2,3}$/.test(v) || 'E-mail must be valid',
       ],
       errorMessage: '',
       successMessage: '',
@@ -84,7 +84,7 @@ export default {
       const { email } = this;
     },
     forgetPassword() {
-      this.forgotEmail({ 'email': this.email});
+      this.forgotEmail({ email: this.email });
       this.loading = true;
       this.$refs.form.reset();
     },
