@@ -203,7 +203,7 @@
                                   </v-list-item-content>
                                 </v-list-item>
                                 <template
-                                  v-for="(item) in                                                                                                     suppliers                                                                                                    ">
+                                  v-for="(item) in                                                                                                           suppliers                                                                                                          ">
                                   <v-list-item :key="item.title" class="second">
                                     <v-list-item-content>
                                       <v-list-item-title v-html="item.company"
@@ -242,7 +242,7 @@
                       </v-row>
 
                       <v-row class="mt-12"
-                        v-if=" !isToken && supplier.companyName && supplierExists && suppliers.length ">
+                        v-if=" !isToken && supplier.companyName !== '' && supplierExists && suppliers.length ">
                         <div class="existing-company pa-6 text-left">
                           <h1><strong>{{ supplier.companyName }} </strong> is an existing company in
                             the BidOut platform,
@@ -370,7 +370,7 @@
                           {
                             'spacing-class': getPhoneInfo.valid && getCounter > 1 || !getPhoneInfo.valid && getCounter === 1,
 
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        }
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        }
                         ">
                           <label class="d-block text-left input-label mb-2 font-weight-bold">Direct Phone Number</label>
 
@@ -930,6 +930,8 @@ export default {
       }
     },
     companyList(title,id){
+      this.supplierExists = this.suppliers.some( (item) => item.company === title);
+
       this.supplier.companyName = title;
       this.companyId = id;
       this.hideList = false;
