@@ -196,19 +196,18 @@
                             <input type="hidden" v-model="companyId">
                             <template v-if="hideList == true && supplier.companyName && supplier.companyName.length >= 3">
                               <v-list class="company-list ">
-                                <v-list-item class="first">
+                                <v-list-item class="first" @click="hideList = false">
                                   <v-list-item-content>
-                                    <v-list-item-title @click="hideList = false" class="text-left">
+                                    <v-list-item-title class="text-left">
                                       Add "{{ supplier.companyName }}" as a Supplier</v-list-item-title>
                                   </v-list-item-content>
                                 </v-list-item>
                                 <template
-                                  v-for="(item) in                                                                                                       suppliers                                                                                                      ">
-                                  <v-list-item :key="item.title" class="second">
+                                  v-for="(item) in                                                                                                             suppliers                                                                                                            ">
+                                  <v-list-item :key="item.title" class="second"
+                                    @click="companyList(item.company, item.objectID); hideList = false">
                                     <v-list-item-content>
-                                      <v-list-item-title v-html="item.company"
-                                        @click="companyList(item.company, item.objectID); hideList = false"
-                                        class="text-left"></v-list-item-title>
+                                      <v-list-item-title v-html=" item.company " class="text-left"></v-list-item-title>
                                     </v-list-item-content>
                                   </v-list-item>
                                 </template>
@@ -242,7 +241,7 @@
                       </v-row>
 
                       <v-row class="mt-12"
-                        v-if=" !isToken && supplier.companyName && supplierExists && suppliers.length ">
+                        v-if=" !isToken && supplier.companyName !== '' && supplierExists && suppliers.length ">
                         <div class="existing-company pa-6 text-left">
                           <h1><strong>{{ supplier.companyName }} </strong> is an existing company in
                             the BidOut platform,
@@ -370,7 +369,7 @@
                           {
                             'spacing-class': getPhoneInfo.valid && getCounter > 1 || !getPhoneInfo.valid && getCounter === 1,
 
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        }
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        }
                         ">
                           <label class="d-block text-left input-label mb-2 font-weight-bold">Direct Phone Number</label>
 
@@ -941,6 +940,8 @@ export default {
       }
     },
     companyList(title,id){
+      this.supplierExists = this.suppliers.some( (item) => item.company === title);
+
       this.supplier.companyName = title;
       this.companyId = id;
       this.hideList = false;
