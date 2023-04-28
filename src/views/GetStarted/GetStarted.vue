@@ -203,7 +203,7 @@
                                   </v-list-item-content>
                                 </v-list-item>
                                 <template
-                                  v-for="(item) in                                                                                                     suppliers                                                                                                    ">
+                                  v-for="(item) in                                                                                                       suppliers                                                                                                      ">
                                   <v-list-item :key="item.title" class="second">
                                     <v-list-item-content>
                                       <v-list-item-title v-html="item.company"
@@ -370,12 +370,12 @@
                           {
                             'spacing-class': getPhoneInfo.valid && getCounter > 1 || !getPhoneInfo.valid && getCounter === 1,
 
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        }
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        }
                         ">
                           <label class="d-block text-left input-label mb-2 font-weight-bold">Direct Phone Number</label>
 
-                          <vue-tel-input @blur=" onBlurS " defaultCountry="US" :autoDefaultCountry=" false "
-                            :autoFormat=" false " :dropdownOptions="
+                          <vue-tel-input @country-changed=" countryTel " @blur=" onBlurS " defaultCountry="US"
+                            :autoDefaultCountry=" false " :autoFormat=" false " :dropdownOptions="
                               {
                                 showDialCodeInSelection: true,
                                   showFlags: true,
@@ -544,6 +544,8 @@ export default {
       isToken:false,
       emailLoading: false,
       signUpLoading: false,
+      searchSupplierLoading: false,
+      countryCode: '',
       supplierLoading: false
     };
   },
@@ -563,6 +565,12 @@ export default {
       }
   },
   watch:{
+    'supplier.phoneNumber': function () {
+      let splitI = this.supplier.phoneNumber.split(`+${this.countryCode}`)
+      if (splitI.length ===2) {
+        this.supplier.phoneNumber = this.supplier.phoneNumber.split(`+${this.countryCode}`)[1]
+      }
+    },
     'supplier.bidInvitedCode': _.debounce(async function() {
       if (this.supplier.bidInvitedCode !== '') {
       this.$store.commit('setTokenInvitedSupplier',null)
@@ -660,7 +668,7 @@ export default {
       }
     },
     getTokenSupplier() {
-      if (this.$store.getters.tokenInvitedSupplier && this.$store.getters.tokenInvitedSupplier) {
+      if (this.$store.getters.tokenInvitedSupplier) {
         this.supplier.editCompany = this.$store.getters.tokenInvitedSupplier.company
         this.supplier.firstName = this.$store.getters.tokenInvitedSupplier.firstName
         this.supplier.lastName = this.$store.getters.tokenInvitedSupplier.lastName
@@ -718,6 +726,9 @@ export default {
     ...mapActions(["supplierSignUpAction","searchSupplier","checkEmail","buyerSignUpAction","getIpAddress",'getInvitedSupplierByToken','queueSupplierUser']),
     closeList() {
       this.hideList = false;
+    },
+    countryTel(num) {
+      this.countryCode = num.dialCode
     },
     onUpdate (payload) {
       this.counter++;
@@ -964,7 +975,7 @@ export default {
 
      this.tokenLoading = false
   }
-  }
+  },
 };
 </script>
 <style scoped lang="scss"></style>
