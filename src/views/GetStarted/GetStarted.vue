@@ -184,40 +184,36 @@
                             <ValidationProvider name="Company name" rules="required" v-slot="{ errors, valid }">
                               <v-text-field v-click-outside="closeList" prepend-inner-icon="search"
                                 placeholder="Company name" single-line outlined type="text" v-model="supplier.companyName"
-                                @keyup="getSupplierList" @focus="getSupplierList" :error-messages="errors"
-                                :success="valid" required clearable>
+                                @input="getSupplierList" @focus="hideList = true" :error-messages="errors"
+                                :success="valid" required :loading="getSupplierLoading" color="#0D9648" loader-height="3">
+
+                                <template v-slot:append>
+                                  <v-icon size="25" @click="supplier.companyName = ''" class="clear-icon ml-2"
+                                    v-if="supplier.companyName !== ''" color="#0D9648">mdi-close</v-icon>
+                                </template>
                               </v-text-field>
                             </ValidationProvider>
                             <input type="hidden" v-model="companyId">
-                            <template v-if="hideList == true">
-                              <v-list class="company-list" v-if="suppliers && suppliers.length > 0">
+                            <template v-if="hideList == true && supplier.companyName && supplier.companyName.length >= 3">
+                              <v-list class="company-list ">
+                                <v-list-item class="first">
+                                  <v-list-item-content>
+                                    <v-list-item-title @click="hideList = false" class="text-left">
+                                      Add "{{ supplier.companyName }}" as a Supplier</v-list-item-title>
+                                  </v-list-item-content>
+                                </v-list-item>
                                 <template
-                                  v-for="(item) in                                                     suppliers                                                    ">
-                                  <v-list-item :key="item.title">
+                                  v-for="(item) in                                                                                                     suppliers                                                                                                    ">
+                                  <v-list-item :key="item.title" class="second">
                                     <v-list-item-content>
                                       <v-list-item-title v-html="item.company"
-                                        @click="companyList(item.company, item.objectID); hideList = !hideList"
+                                        @click="companyList(item.company, item.objectID); hideList = false"
                                         class="text-left"></v-list-item-title>
                                     </v-list-item-content>
                                   </v-list-item>
                                 </template>
                               </v-list>
-                              <v-list class="company-list" v-else>
-                                <template>
-                                  <v-list-item>
-                                    <v-list-item-content>
-                                      <v-list-item-title v-if=" !getSearchSupplierLoading " class="text-center">No company
-                                        available!</v-list-item-title>
-                                      <v-progress-circular v-else indeterminate :size=" 20 " :width=" 2 "
-                                        color="
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                          #0D9648"
-                                        :value=" 80 "></v-progress-circular>
 
-                                    </v-list-item-content>
-
-                                  </v-list-item>
-                                </template>
-                              </v-list>
                             </template>
 
                           </v-col>
@@ -374,7 +370,7 @@
                           {
                             'spacing-class': getPhoneInfo.valid && getCounter > 1 || !getPhoneInfo.valid && getCounter === 1,
 
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        }
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        }
                         ">
                           <label class="d-block text-left input-label mb-2 font-weight-bold">Direct Phone Number</label>
 
@@ -548,7 +544,7 @@ export default {
       isToken:false,
       emailLoading: false,
       signUpLoading: false,
-      searchSupplierLoading: false
+      supplierLoading: false
     };
   },
   directives: {
@@ -567,13 +563,6 @@ export default {
       }
   },
   watch:{
-    'supplier.companyName': _.debounce(function(){
-      if(this.supplier.companyName && this.supplier.companyName !== '' && this.supplier.companyName.length < 3){
-        this.hideList = false;
-      }else{
-        this.hideList = true;
-      }
-    },600),
     'supplier.bidInvitedCode': _.debounce(async function() {
       if (this.supplier.bidInvitedCode !== '') {
       this.$store.commit('setTokenInvitedSupplier',null)
@@ -654,7 +643,6 @@ export default {
       }
     },
     suppliers(){
-      this.hideList = true;
       if (this.$store.getters.supplier) {
        this.supplierExists = this.$store.getters.supplier.some( (item) => item.company === this.supplier.companyName);
       }
@@ -719,11 +707,11 @@ export default {
     getSupplierSignUpSuccess() {
       return this.$store.getters.supplierSignUpSuccess
     },
-    getSearchSupplierLoading() {
-      return this.searchSupplierLoading
-    },
     getInvitedSupplierEmailExists () {
       return this.$store.getters.invitedSupplierEmailExists
+    },
+    getSupplierLoading() {
+      return this.supplierLoading
     }
   },
   methods: {
@@ -915,14 +903,18 @@ export default {
       window.scrollTo({ top: 0, behavior: 'smooth' });
       }
     },
-    async getSupplierList(){
-      this.searchSupplierLoading = true
-      if(this.supplier.companyName && this.supplier.companyName !== '' && this.supplier.companyName.length > 3){
-        this.hideList = true
-        await this.searchSupplier(this.supplier.companyName);
+    getSupplierList:  _.debounce (async function () {
+      this.supplierLoading = true
+      this.companyId = ''
+      if(this.supplier.companyName && this.supplier.companyName !== '' && this.supplier.companyName.length < 3){
+        this.hideList = false;
       }
-      this.searchSupplierLoading = false
-    },
+      else if(this.supplier.companyName && this.supplier.companyName !== '' && this.supplier.companyName.length >= 3){
+         this.hideList = true
+         await this.searchSupplier(this.supplier.companyName);
+      }
+      this.supplierLoading = false
+      },500),
     min6: function(value) {
       if (value.length >= 6) {
         return true;
@@ -940,7 +932,6 @@ export default {
     companyList(title,id){
       this.supplier.companyName = title;
       this.companyId = id;
-      setTimeout(() => this.hideList = false, 800);
       this.hideList = false;
     },
   },
