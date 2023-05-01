@@ -188,7 +188,7 @@
                                     max-width="50px"
                                     class="mt-2"
                                   ></v-img
-                                ></a>
+                                >{{ message.attachment }}</a>
                                 <a
                                   :href="message.attachment"
                                   target="_blank"
@@ -197,7 +197,7 @@
                                   :src="require('@/assets/images/chat/excel.png')"
                                   max-height="50px"
                                   max-width="50px"
-                                  class="mt-2"></v-img>
+                                  class="mt-2"></v-img> {{ message.attachment }}
                                 </a>
                                 <a
                                   :href="message.attachment"
@@ -207,7 +207,7 @@
                                   :src="require('@/assets/images/chat/doc.png')"
                                   max-height="50px"
                                   max-width="50px"
-                                  class="mt-2"></v-img>
+                                  class="mt-2"></v-img> {{ message.attachment }}
                                 </a>
                                 <a
                                   :href="message.attachment"
@@ -217,7 +217,7 @@
                                   :src="require('@/assets/images/chat/ppt.png')"
                                   max-height="50px"
                                   max-width="50px"
-                                  class="mt-2"></v-img>
+                                  class="mt-2"></v-img> {{ message.attachment }}
                                 </a>
                                 <a :href="message.attachment"
                                   target="_blank"
@@ -225,7 +225,7 @@
                                   :src="require('@/assets/images/chat/zip.png')"
                                   max-height="50px"
                                   max-width="50px"
-                                  class="mt-2"></v-img>
+                                  class="mt-2"></v-img> {{ message.attachment }}
                                 </a>
                                 <video class="chat-video"
                                   v-else-if="get_url_extension(message.attachment) == 'mp4' || get_url_extension(message.attachment) == 'webm' || get_url_extension(message.attachment) == 'mov' || get_url_extension(message.attachment) == 'avi'"
@@ -264,7 +264,7 @@
                 </div>
                 <!-- Message Send Area -->
                 <div class="message-send-area px-5 pt-5">
-                  <span class="fileName" v-if="filename">{{ filename }}</span>
+                  <span class="fileName" v-if="filename">{{ filename }} <v-icon @click="deleteFile">mdi-close</v-icon></span>
                   <v-row>
                     <v-col cols="12" sm="10" md="10">
                       <div class="msg-text-box">
@@ -411,7 +411,7 @@ export default {
       'lastMessageRead',
       'archiveChat',
       'removeConvUser',
-      'getAllConversations'
+      'getAllConversations',
     ]),
     openChat(group, name, id) {
       if (screen.width < 767) {
@@ -460,6 +460,10 @@ export default {
     fileUpload() {
       this.filename = this.$refs.msgFile.files[0].name;
     },
+    deleteFile() {
+      this.$refs.msgFile.value = null;
+      this.filename = '';
+    },
     messageSend() {
       this.filename = '';
       const chat_file = this.$refs.msgFile.files;
@@ -485,6 +489,7 @@ export default {
         container.scrollTop = container.scrollHeight;
       }, 500);
       this.message = '';
+      this.$refs.msgFile.value = null;
       this.filename = '';
     },
     chatActions(data) {
@@ -573,6 +578,7 @@ export default {
         container.scrollTop = container.scrollHeight;
       }, 500);
       this.message = '';
+      this.$refs.msgFile.value = null;
       this.filename = '';
     },
     removeUser(id) {

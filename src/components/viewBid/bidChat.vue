@@ -100,23 +100,23 @@
                         <a :href="message.attachment" target="_blank"
                           v-if="get_url_extension(message.attachment) == 'pdf'"><v-img
                             :src="require('@/assets/images/chat/pdf.jpg')" max-height="50px" max-width="50px"
-                            class="mt-2"></v-img></a>
+                            class="mt-2"></v-img>{{ message.attachment }}</a>
                         <a :href="message.attachment" target="_blank"
                           v-else-if="get_url_extension(message.attachment) == 'xlsx' || get_url_extension(message.attachment) == 'xls' || get_url_extension(message.attachment) == 'csv'"><v-img
                             :src="require('@/assets/images/chat/excel.png')" max-height="50px" max-width="50px"
-                            class="mt-2"></v-img></a>
+                            class="mt-2"></v-img>{{ message.attachment }}</a>
                         <a :href="message.attachment" target="_blank"
                           v-else-if="get_url_extension(message.attachment) == 'doc' || get_url_extension(message.attachment) == 'docx' || get_url_extension(message.attachment) == 'txt'"><v-img
                             :src="require('@/assets/images/chat/doc.png')" max-height="50px" max-width="50px"
-                            class="mt-2"></v-img></a>
+                            class="mt-2"></v-img>{{ message.attachment }}</a>
                         <a :href="message.attachment" target="_blank"
                           v-else-if="get_url_extension(message.attachment) == 'ppt' || get_url_extension(message.attachment) == 'pptx'"><v-img
                             :src="require('@/assets/images/chat/ppt.png')" max-height="50px" max-width="50px"
-                            class="mt-2"></v-img></a>
+                            class="mt-2"></v-img>{{ message.attachment }}</a>
                         <a :href="message.attachment" target="_blank"
                           v-else-if="get_url_extension(message.attachment) == 'zip' || get_url_extension(message.attachment) == 'rar' || get_url_extension(message.attachment) == 'tar' || get_url_extension(message.attachment) == '7z' || get_url_extension(message.attachment) == 'gz'"><v-img
                             :src="require('@/assets/images/chat/zip.png')" max-height="50px" max-width="50px"
-                            class="mt-2"></v-img></a>
+                            class="mt-2"></v-img>{{ message.attachment }}</a>
                         <video class="chat-video"
                           v-else-if="get_url_extension(message.attachment) == 'mp4' || get_url_extension(message.attachment) == 'webm' || get_url_extension(message.attachment) == 'mov' || get_url_extension(message.attachment) == 'avi'"
                             :src="message.attachment"
@@ -146,7 +146,7 @@
           </v-list>
         </div>
         <div class="message-send-area px-5 pt-5">
-          <span class="fileName" v-if="filename">{{ filename }}</span>
+          <span class="fileName" v-if="filename">{{ filename }} <v-icon @click="deleteFile">mdi-close</v-icon></span>
           <v-row>
             <v-col cols="12" sm="10" md="10">
               <div class="msg-text-box">
@@ -263,6 +263,10 @@ export default {
     fileUpload() {
       this.filename = this.$refs.msgFile.files[0].name;
     },
+    deleteFile() {
+      this.$refs.msgFile.value = null;
+      this.filename = '';
+    },
     dragfileupload(file, xhr, formData) {
       formData.append('conversationId', this.conversationId);
       formData.append('sender[id]', this.user.id);
@@ -315,6 +319,7 @@ export default {
         container.scrollTop = container.scrollHeight;
       }, 500);
       this.message = '';
+      this.$refs.msgFile.value = null;
       this.filename = '';
     },
     uploadfile(event) {
@@ -340,6 +345,7 @@ export default {
         container.scrollTop = container.scrollHeight;
       }, 500);
       this.message = '';
+      this.$refs.msgFile.value = null;
       this.filename = '';
     },
     istoday(date) {
