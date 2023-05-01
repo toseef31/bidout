@@ -268,7 +268,8 @@ export default {
       this.filename = '';
     },
     fileNameTrim(url) {
-      return decodeURI(url.substring(url.lastIndexOf('/') + 1).replace(/-\d+\.([^.]+)$/, '.$1'));
+      const decodedUrl = decodeURIComponent(url);
+      return decodeURI(decodedUrl.substring(decodedUrl.lastIndexOf('/') + 1).replace(/-\d+\.([^.]+)$/, '.$1'));
     },
     dragfileupload(file, xhr, formData) {
       formData.append('conversationId', this.conversationId);
