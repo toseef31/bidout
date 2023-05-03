@@ -373,7 +373,7 @@ export default {
       email: '',
       emailRules: [
         (v) => !!v || 'E-mail is required',
-        (v) => /^[\w-\.+]+@([\w-]+\.)+[\w-]{2,3}$/.test(v) || 'E-mail must be valid',
+        (v) => /^[\w-\.+]+@([\w-]+\.)+[\w-]{1,63}$/.test(v) || 'E-mail must be valid',
       ],
       phoneNumber: '',
       results: {},
@@ -611,7 +611,7 @@ export default {
       }
     },
     async checkEmailI() {
-      const testEmail = /^[\w\.+]+@([\w-]+\.)+[\w-]{2,3}$/.test(this.email);
+      const testEmail = /^[\w-\.+]+@([\w-]+\.)+[\w-]{1,63}$/.test(this.email);
 
       if (this.email === '' || !testEmail) {
         this.$store.commit('setEmailExistSuccess', false);
