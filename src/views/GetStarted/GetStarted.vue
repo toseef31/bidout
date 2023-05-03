@@ -755,7 +755,7 @@ export default {
 
     },
     async checkEmailBuyer() {
-      let testEmail = /^[\w-\.+]+@([\w-]+\.)+[\w-]{2,4}$/.test(this.buyer.email)
+      let testEmail = /^[\w-\.+]+@([\w-]+\.)+[\w-]{1,63}$/.test(this.buyer.email)
 
       if (this.buyer.email === '' || !testEmail) {
         this.$store.commit('setEmailExistSuccess',false)
@@ -770,7 +770,7 @@ export default {
     },
 
     async checkEmailSupplier() {
-      let testEmail = /^[\w-\.+]+@([\w-]+\.)+[\w-]{2,4}$/.test(this.supplier.email)
+      let testEmail = /^[\w-\.+]+@([\w-]+\.)+[\w-]{1,63}$/.test(this.supplier.email)
 
       if (this.supplier.email === '' || !testEmail) {
         this.$store.commit('setEmailExistSuccess',false)
