@@ -281,7 +281,7 @@ export default {
     qAndAEnabled: {
       get() {
         if (!this.$store.getters.bidData.id) {
-          return 'yes';
+          return 'false';
         }
         return this.$store.getters.bidData.qAndAEnabled;
       },
@@ -490,12 +490,15 @@ export default {
     this.$store.commit('setBidlines', this.$store.getters.bidData.lineItems);
     this.$store.commit('setLineItemsComplete', false);
     if (this.$route.name === 'EditBid') {
+      this.$refs.form.validate();
       this.$store.commit('setAttachement', this.$store.getters.bidData.attachments);
     } else if (this.$store.getters.bidData.statusType === 'draftBid') {
+      this.$refs.form.validate();
       this.$store.commit('setAttachData', null);
       this.$store.commit('setAttachement', null);
       this.$store.commit('setAttachement', this.$store.getters.bidData.attachments);
     } else if (this.$store.getters.bidData.statusType === 'templateBid') {
+      this.$refs.form.validate();
       this.$store.commit('setAttachement', this.$store.getters.bidData.attachment);
     } else {
       this.$store.commit('setAttachement', this.$store.getters.bidData.attachment);
@@ -510,7 +513,11 @@ export default {
       this.isTemplate = true;
       this.savedraft();
     }
+    if(this.$store.getters.bidData.statusType === 'template'){
+      this.$refs.form.validate();
+    }
     this.savedraftOnInterval();
+    
   },
 };
 </script>
