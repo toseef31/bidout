@@ -99,9 +99,9 @@
                   <div class="pb-4  d-inline-flex pr-10"
                     v-for="(doc, attIndex) in bidDetail.supplierSubmissions[aIndex].supplierAttachments" :key="attIndex">
 
-                    <img :src="require('@/assets/images/bids/FilePdf.png')"
+                    <img :src="require('@/assets/images/bids/FilePdf.png')" height="24px"
                       v-if="checkFileType(doc.fileName) === 'pdf'" class="pr-2"/>
-                    <img :src="require('@/assets/images/bids/FileDoc.png')"
+                    <img :src="require('@/assets/images/bids/FileDoc.png')" height="24px"
                       v-else-if="checkFileType(doc.fileName) === 'docx'" class="pr-2"/>
                     <v-icon color="#0D1139" v-else class="pr-2">mdi-file-document</v-icon>
 
