@@ -213,7 +213,7 @@ export default {
     this.userInfo = this.$store.getters.userInfo;
     this.getUsers(this.user.company);
     this.invitedUsers(this.user.company);
-    this.getPendingUsers(this.user.companyId);
+    this.getPendingUsers(this.user.company);
   }
 };
 </script>
