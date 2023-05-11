@@ -210,7 +210,6 @@ export default {
         "Authorization": `Bearer ${JSON.parse(localStorage.getItem('token'))}`
       },
     };
-    console.log("o payload e essa bosa", payload)
     commit('setPageLoader',true)
     commit('setPageSubLoader',true)
     try{
