@@ -306,7 +306,7 @@ export default {
       });
   },
   verifyInviteToken({ commit }, payload) {
-    axios.get('/auth/checkIfInvitationIsValid/' + payload)
+    axios.get('/auth/v2/checkIfInvitationIsValid/' + payload)
       .then(responce => {
         commit('setInviteData', responce.data)
       }).catch(err => {
@@ -316,7 +316,7 @@ export default {
   },
   resetInvitePassword({ commit }, payload) {
 
-    axios.post('/auth/signUpInvitedUser/', { 'invitationId': payload.invitationId, 'password': payload.password })
+    axios.post('/auth/v2/signUpInvitedUser/', { 'invitationId': payload.invitationId, 'password': payload.password })
       .then(responce => {
         if (responce.status == 200) {
           commit('setEmailSuccess', 'Login here to continue with your account!');
