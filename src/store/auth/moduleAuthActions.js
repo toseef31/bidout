@@ -37,10 +37,10 @@ export default {
               commit('showErrorAlert');
               commit('setLoginLoading', false);
             } else {
-              axios.get(`v2/auth/addUserLoginHistory/${responce.data.id}`)
+              axios.get(`v2/auth/addUserLoginHistory/${responce.data._id}`)
                 .then((response) => {
                 });
-              axios.get(`v2/company/getCompanyById/${responce.data.company.id}`)
+              axios.get(`v2/company/getCompanyById/${responce.data.company}`)
                 .then((response) => {
                   commit('setCompany', response.data);
                 });
@@ -445,8 +445,8 @@ export default {
           commit('setError', 'Disabled account! You cannot login with this account');
           commit('showErrorAlert');
         } else {
-          axios.get(`/auth/addUserLoginHistory/${userResp.data.id}`);
-          const companyResp = await axios.get(`company/getCompanyById/${userResp.data.company.id}`);
+          axios.get(`/auth/addUserLoginHistory/${userResp.data._id}`);
+          const companyResp = await axios.get(`company/getCompanyById/${userResp.data.company}`);
           commit('setCompany', companyResp.data);
           localStorage.setItem('companyData', JSON.stringify(companyResp.data));
           commit('setUser', userResp.data);
