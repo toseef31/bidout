@@ -316,7 +316,7 @@ export default {
   },
   resetInvitePassword({ commit }, payload) {
 
-    axios.post('/auth/v2/signUpInvitedUser/', { 'invitationId': payload.invitationId, 'password': payload.password })
+    axios.post('v2/auth/signUpInvitedUser/', { 'invitationId': payload.invitationId, 'password': payload.password })
       .then(responce => {
         if (responce.status == 200) {
           commit('setEmailSuccess', 'Login here to continue with your account!');
