@@ -7,8 +7,8 @@
     "serve": "vite preview"
   },
   "dependencies": {
-    "@sentry/tracing": "^7.18.0",
-    "@sentry/vue": "^7.18.0",
+    "@sentry/tracing": "^7.50.0",
+    "@sentry/vue": "^7.50.0",
     "axios": "^0.27.2",
     "firebase": "^9.8.3",
     "install": "^0.13.0",
@@ -20,6 +20,7 @@
     "timezones-list": "^3.0.1",
     "unplugin-vue-components": "^0.22.9",
     "uuid": "^9.0.0",
+    "vee-validate": "3",
     "vite-plugin-vue2": "^1.4.0",
     "vue": "^2.6.12",
     "vue-axios": "^3.4.1",
@@ -31,7 +32,6 @@
     "vue-moment": "^4.1.0",
     "vue-moment-tz": "^2.1.1",
     "vue-pdf-embed": "^1.1.4",
-    "vue-phone-number-input": "^1.1.12",
     "vue-router": "^3.5.2",
     "vue-signature-pad": "2.0.5",
     "vue-slick-carousel": "^1.0.6",

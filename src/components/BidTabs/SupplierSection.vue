@@ -296,28 +296,43 @@
                   outlined></v-text-field>
                 <label class="d-block text-left font-weight-bold mb-2">Phone Number<span
                     class="required-class">*</span></label>
-                <vue-tel-input defaultCountry="US" :autoDefaultCountry="false" :autoFormat="false" :dropdownOptions="{
-                  showDialCodeInSelection: true,
-                  showFlags: true,
-                  width: ' max-content'
-                }" :inputOptions="{
-  required: true,
-  showDialCode: false,
-  maxlength: 15,
-  placeholder: 'Phone number',
+                <vue-tel-input defaultCountry="US" @blur="onBlurS" :autoDefaultCountry="false" :autoFormat="false"
+                  :dropdownOptions="{
+                      showDialCodeInSelection: true,
+                      showFlags: true,
+                      width: ' max-content'
+                    }" :inputOptions="{
+      required: true,
+      showDialCode: false,
+      maxlength: 15,
+      placeholder: 'Phone number',
 
-}" model="national" :validCharactersOnly="true" :styleClasses="{ 'phone-main-class': true }" v-model="phoneNumber"
+    }" model="national" :validCharactersOnly="true" :styleClasses="{ 'phone-main-class': true }" v-model="phoneNumber"
                   @validate="onUpdate"></vue-tel-input>
                 <div class="phone-class" v-if="!getPhoneInfo.valid && getCounter > 1">
                   {{ getPhoneInfo.message }}</div>
                 <label class="d-block text-left font-weight-bold mb-2 mt-6">Email<span
                     class="required-class">*</span></label>
-                <v-text-field v-model="email" :rules="emailRules" placeholder="example@email.com" required
-                  outlined></v-text-field>
+                <v-text-field v-model="email" :class="{ 'error--text': emailError }" :rules="emailRules"
+                  @input="checkEmailI" placeholder="example@email.com" required outlined>
+                  <template v-slot:append>
 
-                <v-btn :loading="loadingInvite" :disabled="!valid || !getPhoneInfo.valid" color="#0D9648"
-                  class="mr-4 text-capitalize white--text font-weight-bold" @click="validate" large height="50px"
-                  min-width="220px">
+                    <v-progress-circular v-if="getEmailLoading" indeterminate :size="20" :width="2"
+                      color="
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      #0D1139"
+                      :value="80"></v-progress-circular>
+                  </template>
+                </v-text-field>
+                <div class=" email-error-text text-left" v-if="emailError && !getInvitedSupplierEmailExists">
+                  Email already exists! Please try a different one.
+                </div>
+                <div class=" email-error-text text-left" v-if="getInvitedSupplierEmailExists">
+                  Supplier is pending registration and cannot be invited at this time.
+                </div>
+
+                <v-btn :loading="loadingInvite" :disabled="!valid || !getPhoneInfo.valid || getEmailLoading || emailError"
+                  color="#0D9648" class="mr-4 text-capitalize white--text font-weight-bold" @click="validate" large
+                  height="50px" min-width="220px">
                   Send Invite
                 </v-btn>
               </v-form>
@@ -358,17 +373,9 @@ export default {
       email: '',
       emailRules: [
         (v) => !!v || 'E-mail is required',
-        (v) => /^\w+([.+_-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,3})+$/.test(v) || 'E-mail must be valid',
+        (v) => /^[\w-\.+]+@([\w-]+\.)+[\w-]{1,63}$/.test(v) || 'E-mail must be valid',
       ],
       phoneNumber: '',
-      defaultCountry: 'US',
-      translations: {
-        countrySelectorLabel: 'Country Code',
-        countrySelectorError: 'Choose country',
-        phoneNumberLabel: 'Phone Number',
-        example: 'Example',
-      },
-      hasLoaderActive: false,
       results: {},
       categories: false,
       searchCompany: '',
@@ -390,6 +397,8 @@ export default {
         valid: true,
         message: '',
       },
+      supplierLoading: false,
+      emailLoading: false,
     };
   },
   computed: {
@@ -509,9 +518,24 @@ export default {
       this.$emit('validation', { valid: false, supplier: '2' });
       return this.valid;
     },
+    getEmailLoading() {
+      return this.emailLoading;
+    },
+    emailMessage() {
+      return this.$store.getters.emailExists;
+    },
+    emailError() {
+      if (this.emailMessage) {
+        return true;
+      }
+      return false;
+    },
+    getInvitedSupplierEmailExists() {
+      return this.$store.getters.invitedSupplierEmailExists;
+    },
   },
   methods: {
-    ...mapActions(['getCategories', 'getSalesReps', 'getCompanyInfo', 'searchByCompany', 'getCompanyByServices', 'saveDraftBid', 'inviteNewSupplier', 'updateDraftBid', 'updateTemplate', 'updateBid']),
+    ...mapActions(['getCategories', 'getSalesReps', 'getCompanyInfo', 'searchByCompany', 'getCompanyByServices', 'saveDraftBid', 'inviteNewSupplier', 'updateDraftBid', 'updateTemplate', 'updateBid', 'checkEmail']),
     changeTab() {
       if (this.$route.name == 'EditBid') {
         if (this.isEditBidChanges == true) {
@@ -560,9 +584,10 @@ export default {
         bidType: this.$store.getters.bidData.type,
         bidDueDate: this.$store.getters.bidData.dueDate,
         bidDueTime: this.$store.getters.bidData.dueTime,
+        serial: this.$store.getters.bidData.serial,
       };
 
-      if (this.$refs.form.validate() && this.getPhoneInfo.valid) {
+      if (this.$refs.form.validate() && this.getPhoneInfo.valid && !this.emailError && !this.getInvitedSupplierEmailExists) {
         try {
           const user = await this.inviteNewSupplier(supplier);
           this.supplierDialog = false;
@@ -583,6 +608,31 @@ export default {
         } catch (error) {
           console.log(error);
         }
+      }
+    },
+    async checkEmailI() {
+      const testEmail = /^[\w-\.+]+@([\w-]+\.)+[\w-]{1,63}$/.test(this.email);
+
+      if (this.email === '' || !testEmail) {
+        this.$store.commit('setEmailExistSuccess', false);
+        this.$store.commit('setInvitedSupplierEmailExists', false);
+      }
+
+      if (testEmail) {
+        this.emailLoading = true;
+        await this.checkEmail(this.email);
+        this.emailLoading = false;
+      }
+    },
+    onBlurS() {
+      if (this.phoneNumber === '') {
+        this.phoneInfo.message = 'Phone number is required';
+        this.phoneInfo.valid = false;
+        this.counter++;
+      } else if (this.phoneNumber.length === 1) {
+        this.phoneInfo.message = 'Invalid Phone number format';
+        this.phoneInfo.valid = false;
+        this.counter++;
       }
     },
     hideCategories(name) {
@@ -725,6 +775,9 @@ export default {
     this.savedraftOnInterval();
     this.filteredEntries;
     this.newSupplierFiltered;
+
+    this.$store.commit('setEmailExistSuccess', false);
+    this.$store.commit('setInvitedSupplierEmailExists', false);
   },
 };
 </script>

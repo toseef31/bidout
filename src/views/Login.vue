@@ -60,7 +60,6 @@
           <div class="bottom-section">
             <p class="center font-weight-bold">Don't have account yet? <router-link to="/get-started">Join BidOut</router-link></p>
           </div>
-          
       </v-col>
       <v-col cols="12" md="6" class="right d-none d-md-block">
         <v-img
@@ -84,12 +83,12 @@ export default {
       email: this.$store.getters.resetEmail,
       emailRules: [
         (v) => !!v || 'E-mail is required',
-        (v) => /^\w+([.+_-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,3})+$/.test(v) || 'E-mail must be valid',
+        (v) => /^[\w-\.+]+@([\w-]+\.)+[\w-]{1,63}$/.test(v) || 'E-mail must be valid',
       ],
       password: '',
       passwordRules: [
-        v => !!v || 'Password is required',
-        v => (v && v.length >= 6) || 'Password must be at least 6 characters',
+        (v) => !!v || 'Password is required',
+        (v) => (v && v.length >= 6) || 'Password must be at least 6 characters',
       ],
       showPass: false,
       xhrRequest: false,

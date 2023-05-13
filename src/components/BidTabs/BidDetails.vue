@@ -191,7 +191,7 @@ export default {
       customToolbar: [
         ['bold', 'italic', 'underline'],
         [{ list: 'ordered' }, { list: 'bullet' }],
-        [{ indent: "-1" }, { indent: "+1" }],
+        [{ indent: '-1' }, { indent: '+1' }],
         ['link'],
       ],
     };
@@ -475,7 +475,6 @@ export default {
   },
   async mounted() {
     this.route = this.$route.name;
-    console.log(this.$store.getters.bidData)
     if (this.getUserType === 'supplier') {
       this.$router.push('/view-bids');
     }
@@ -486,7 +485,6 @@ export default {
       reload: false,
     });
     }
-
 
     if (this.$store.getters.entryCheckForEditBid) {
       this.$router.push('/view-bids');
@@ -508,6 +506,11 @@ export default {
       this.$store.commit('setAttachement', this.$store.getters.bidData.attachment);
     }
     this.$store.commit('setQuestions', this.$store.getters.bidData.questions);
+    if (this.bidDescriptions[0].body.trim() === '') {
+      this.validDesc = false;
+    } else {
+      this.validDesc = true;
+    }
     if (this.$store.getters.bidData.statusType === 'templateBid') {
       this.isTemplate = true;
       this.savedraft();
