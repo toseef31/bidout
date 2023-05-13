@@ -904,33 +904,33 @@ export default {
       if (this.getUserType === "buyer" && event !== "tab-4") {
         await this.getBidBySerial({
           serial: this.$route.params.serial,
-          id: this.users.id,
+          id: this.users._id,
           reload: false,
-          company: this.users.company.company,
+          company: this.users.company,
         });
 
         await this.bidMessageUnreadCount({
-          userId: this.users.id,
-          bidId: this.bidDetail.bidData.id,
+          userId: this.users._id,
+          bidId: this.bidDetail.bidData._id,
         });
 
         await this.getAllIntent({
-          bidId: this.bidDetail.bidData.id,
+          bidId: this.bidDetail.bidData._id,
           reload: false,
         });
 
         await this.getQA({
-          bidId: this.bidDetail.bidData.id,
-          userId: this.users.id,
+          bidId: this.bidDetail.bidData._id,
+          userId: this.users._id,
           reload: false,
         });
 
         await this.getBidActivityList({
-          bidId: this.bidDetail.bidData.id,
-          userId: this.users.id,
+          bidId: this.bidDetail.bidData._id,
+          userId: this.users._id,
           reload: false,
         });
-
+        
         await this.getBidAllConversations({
           bidId: this.bidDetail.bidData.id,
           userId: this.users.id,
@@ -948,10 +948,10 @@ export default {
         });
       } else {
         this.makeIntent({
-          bidId: this.bidDetail.bidData.id,
-          owner: this.users.id,
-          ownerCompany: this.users.company.company,
-          companyId: this.users.company.id,
+          bidId: this.bidDetail.bidData._id,
+          owner: this.users._id,
+          ownerCompany: this.users.company,
+          companyId: this.users.companyId,
           answer: this.answer,
         });
       }
@@ -1060,7 +1060,7 @@ export default {
       return this.$store.getters.answeredQuestionCount;
     },
     noOfBidSubmitted() {
-      return this.bidDetail.supplierSubmissions.length;
+      return this.bidDetail.supplierSubmissions?.length;
     },
     getPageLoading() {
       return this.$store.getters.pageLoader;
@@ -1113,12 +1113,11 @@ export default {
   },
   async created() {
     this.users = this.$store.getters.userInfo;
-
     if (this.users) {
       await this.getBidBySerial({
         serial: this.$route.params.serial,
-        id: this.users.id,
-        company: this.users.company.company,
+        id: this.users._id,
+        company: this.users.company,
       });
     } else {
       this.$router.push("/login");
@@ -1128,8 +1127,8 @@ export default {
     this.addOneSecondToActualTimeEverySecond();
 
     await this.bidMessageUnreadCount({
-      userId: this.users.id,
-      bidId: this.bidDetail.bidData.id,
+      userId: this.users._id,
+      bidId: this.bidDetail.bidData._id,
     });
 
     if (this.$route.query.new && this.getUserType === "buyer") {
@@ -1145,26 +1144,26 @@ export default {
 
     if (this.getUserType === "supplier") {
       await this.getIntent({
-        companyId: this.users.company.id,
-        bidId: this.bidDetail.bidData.id,
-        companyName: this.users.company.company,
+        companyId: this.users.companyId,
+        bidId: this.bidDetail.bidData._id,
+        companyName: this.users.company,
       });
 
       this.answer = this.$store.getters.bidIntent;
     } else {
       await this.getAllIntent({
-        bidId: this.bidDetail.bidData.id,
+        bidId: this.bidDetail.bidData._id,
       });
 
       await this.getBidActivityList({
-        bidId: this.bidDetail.bidData.id,
-        userId: this.users.id,
+        bidId: this.bidDetail.bidData._id,
+        userId: this.users._id,
       });
     }
 
     await this.getQA({
-      bidId: this.bidDetail.bidData.id,
-      userId: this.users.id,
+      bidId: this.bidDetail.bidData._id,
+      userId: this.users._id,
     });
   },
   watch: {

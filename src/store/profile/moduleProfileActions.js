@@ -47,6 +47,7 @@ export default {
             await dispatch('refreshToken');
             state.apiCounter = 2;
             dispatch('updateProfileImg',payload);
+
           }
         }
         console.log(err);
@@ -312,6 +313,7 @@ export default {
           commit('setEmailError', 'Something wrong please try again');
         }
       }).catch((err) => {
+
         console.log(err);
       });
   },

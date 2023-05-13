@@ -1,6 +1,7 @@
 import router from '@/router'
 import store from "../../store";
 import axios from 'axios'
+import * as Sentry from '@sentry/vue';
 
 export default {
   getCompany({commit,dispatch,state}, payload){
@@ -111,10 +112,10 @@ export default {
         commit('setCompany',responce.data)
         commit('setBasinLoading',false)
         commit('setPageLoader',false)
-
       }
      
     }).catch(async(err) => {
+      Sentry.captureException(err);
       if(state.apiCounter === 2){
         
         dispatch('apiSignOutAction')
@@ -136,6 +137,7 @@ export default {
         commit('setSubCategories',responce.data)
       }
     }).catch(async(err) => {
+      Sentry.captureException(err);
       if(state.apiCounter === 2){
         
         dispatch('apiSignOutAction')
@@ -159,7 +161,7 @@ export default {
     const formData = new FormData()
     formData.append('files', payload.files);
     formData.append('companyId', payload.companyId);
-    axios.post('/company/updateCompanyProfile/',formData,config)
+    axios.post('v2/company/updateCompanyProfile/',formData,config)
      .then(responce => {
       
       if(responce.status === 200){
@@ -183,6 +185,7 @@ export default {
         }
       }
     }).catch(async(err) => {
+      Sentry.captureException(err);
       if(state.apiCounter === 2){
         
         dispatch('apiSignOutAction')
@@ -198,7 +201,7 @@ export default {
   },  
   updateBasicProfile({commit,dispatch,state}, payload){
     commit('setSaveInfoLoading',true);
-    axios.post('/company/updateBasicProfile/',{'userId': payload.userId,'companyId': payload.companyId,'profileName': payload.profileName,'profileSummary': payload.profileSummary})
+    axios.post('v2/company/updateBasicProfile/',{'userId': payload.userId,'companyId': payload.companyId,'profileName': payload.profileName,'profileSummary': payload.profileSummary})
      .then(responce => {
       
       if(responce.status === 200){
@@ -206,6 +209,7 @@ export default {
         commit('setSaveInfoLoading',false);
       }
     }).catch(async(err) => {
+      Sentry.captureException(err);
       commit('setSaveInfoLoading',false);
       if(state.apiCounter === 2){
         
@@ -216,13 +220,16 @@ export default {
          state.apiCounter = 2;
          dispatch('updateBasicProfile',payload);
         }
+        if(err.response.status === 400){
+          state.basicError = true;
+        }
       }
       commit('setManageCompanyError','Something went wrong.Please try again in few moments.');
           console.log(err);
       });
   }, 
   addCompanyService({commit,dispatch,state}, payload){
-    axios.post('/company/addCompanyService/',{'companyId': payload.companyId,'subCategories': payload.subCategories})
+    axios.post('v2/company/addCompanyService/',{'companyId': payload.companyId,'subCategories': payload.subCategories})
      .then(responce => {
       
       if(responce.status === 200){
@@ -244,6 +251,7 @@ export default {
         dispatch("getCompany",payload.companyId)
       }
     }).catch(async(err) => {
+      Sentry.captureException(err);
       if(state.apiCounter === 2){
         
         dispatch('apiSignOutAction')
@@ -258,7 +266,7 @@ export default {
       });
   }, 
   addCompanyBasins({commit,dispatch,state}, payload){
-    axios.post('/company/addCompanyBasin/',{'companyId': payload.companyId,'basins': payload.basins})
+    axios.post('v2/company/addCompanyBasin/',{'companyId': payload.companyId,'basins': payload.basins})
      .then(responce => {
       
       if(responce.status === 200){
@@ -281,6 +289,7 @@ export default {
         dispatch("getCompany",payload.companyId)
       }
     }).catch(async(err) => {
+      Sentry.captureException(err);
       console.log(err);
       if(state.apiCounter === 2){
         
@@ -295,7 +304,7 @@ export default {
     });
   }, 
   addCompanyLocation({commit,dispatch,state}, payload){
-    axios.post('/company/addCompanyLocation/',{'id': payload.id,'companyId': payload.companyId,'location': payload.location,'lat':payload.lat,'long':payload.long})
+    axios.post('v2/company/addCompanyLocation/',{'id': payload.id,'companyId': payload.companyId,'location': payload.location,'lat':payload.lat,'long':payload.long})
      .then(responce => {
       
       if(responce.status === 200){
@@ -308,6 +317,7 @@ export default {
         dispatch("getCompany",payload.companyId)
       }
     }).catch(async(err) => {
+      Sentry.captureException(err);
       if(state.apiCounter === 2){
         
         dispatch('apiSignOutAction')
@@ -323,13 +333,14 @@ export default {
   }, 
   deleteCompanyLocation({commit,dispatch,state}, payload){
     
-    axios.post('/company/deleteCompanyLocation/',{'id': payload.id,'companyId': payload.companyId,'location': payload.location,'lat':payload.lat,'long':payload.long})
+    axios.post('v2/company/deleteCompanyLocation/',{'id': payload.id,'companyId': payload.companyId,'location': payload.location,'lat':payload.lat,'long':payload.long})
      .then(responce => {
       
       if(responce.status === 200){
         dispatch("getCompany",payload.companyId)
       }
     }).catch(async(err) => {
+      Sentry.captureException(err);
       if(state.apiCounter === 2){
         
         dispatch('apiSignOutAction')
@@ -345,7 +356,7 @@ export default {
   }, 
   addCompanyVideos({commit,dispatch,state}, payload){
     commit('setNewsLoading',true);
-    axios.post('/company/addCompanyVideo/',{'companyId': payload.companyId,'videoLinks': payload.videoLinks})
+    axios.post('v2/company/addCompanyVideo/',{'companyId': payload.companyId,'videoLinks': payload.videoLinks})
      .then(responce => {
       
       if(responce.status === 200){
@@ -368,6 +379,7 @@ export default {
         commit('setNewsLoading',false)
       }
     }).catch(async(err) => {
+      Sentry.captureException(err);
       commit('setNewsLoading',false);
       if(state.apiCounter === 2){
         
@@ -396,7 +408,7 @@ export default {
     formData.append('companyId', payload.companyId);
     formData.append('name', payload.name);
     formData.append('documentId', payload.documentId);
-    axios.post('/company/addCompanyDocuments/',formData,config)
+    axios.post('v2/company/addCompanyDocuments/',formData,config)
      .then(responce => {
       
       if(responce.status === 200){
@@ -409,6 +421,7 @@ export default {
         dispatch("getCompany",payload.companyId)
       }
     }).catch(async(err) => {
+      Sentry.captureException(err);
       if(state.apiCounter === 2){
         dispatch('apiSignOutAction')
       }else{
@@ -434,13 +447,14 @@ export default {
     formData.append('corporateDocument[documentId]', payload.corporateDocument.documentId);
     formData.append('corporateDocument[name]', payload.corporateDocument.name);
     formData.append('companyId', payload.companyId);
-    axios.post('/company/deleteCompanyDocuments/',formData,config)
+    axios.post('v2/company/deleteCompanyDocuments/',formData,config)
      .then(responce => {
       
       if(responce.status === 200){
         dispatch("getCompany",payload.companyId)
       }
     }).catch(async(err) => {
+      Sentry.captureException(err);
       if(state.apiCounter === 2){
         dispatch('apiSignOutAction')
       }else{
@@ -454,13 +468,14 @@ export default {
       });
   },
   editCompanyDocument({commit,dispatch,state}, payload){
-      axios.post('/company/editCompanyDocumentName/',{'companyId': payload.companyId,'docData': payload.corporateDocument})
+      axios.post('v2/company/editCompanyDocumentName/',{'companyId': payload.companyId,'docData': payload.corporateDocument})
        .then(responce => {
         
         if(responce.status === 200){
           dispatch("getCompany",payload.companyId)
         }
       }).catch(async(err) => {
+        Sentry.captureException(err);
         if(state.apiCounter === 2){
           dispatch('apiSignOutAction')
         }else{
@@ -475,7 +490,7 @@ export default {
   },
   addCompanyNews({commit,dispatch,state}, payload){
     commit('setNewsLoading',true);
-    axios.post('/company/addCompanyNews/',{'companyId': payload.companyId,'corporateNews': payload.corporateNews})
+    axios.post('v2/company/addCompanyNews/',{'companyId': payload.companyId,'corporateNews': payload.corporateNews})
      .then(responce => {
       
       if(responce.status === 200){
@@ -499,6 +514,7 @@ export default {
         commit('setNewsLoading',false)
       }
     }).catch(async(err) => {
+      Sentry.captureException(err);
       commit('setNewsLoading',false);
       if(state.apiCounter === 2){
         dispatch('apiSignOutAction')
@@ -515,7 +531,7 @@ export default {
   },
   addCompanyFacts({commit,dispatch,state}, payload){
     commit('setKeyFactsLoading',true);
-    axios.post('/company/addCompanyKeyfacts/',{'companyId':payload.companyId,'founded':payload.founded,'employees':payload.employees,'hqlocation':payload.hqLocation,'website':payload.website,'linkedin':payload.linkedin,'careers':payload.careers})
+    axios.post('v2/company/addCompanyKeyfacts/',{'companyId':payload.companyId,'founded':payload.founded,'employees':payload.employees,'hqlocation':payload.hqLocation,'website':payload.website,'linkedin':payload.linkedin,'careers':payload.careers})
      .then(responce => {
       
       if(responce.status === 200){
@@ -529,6 +545,7 @@ export default {
         commit('setKeyFactsLoading',false)
       }
     }).catch(async(err) => {
+      Sentry.captureException(err);
       commit('setKeyFactsLoading',false);
       if(state.apiCounter === 2){
         dispatch('apiSignOutAction')
@@ -546,7 +563,7 @@ export default {
   async addCompanyContacts({commit,dispatch,state}, payload){
     try{
       commit('setBasinLoading',true)
-    const res = await axios.post('/company/addCompanyContact/',{'companyId':payload.companyId,'accountContacts':payload.accountContacts});
+    const res = await axios.post('v2/company/addCompanyContact/',{'companyId':payload.companyId,'accountContacts':payload.accountContacts});
      
       if(res.status === 200){
         if(payload.accountContacts.length > 0){
@@ -567,6 +584,7 @@ export default {
         await dispatch("getCompany",payload.companyId)
       }
     } catch (err) {
+      Sentry.captureException(err);
       if(state.apiCounter === 2){
         dispatch('apiSignOutAction')
       }else{
@@ -593,7 +611,7 @@ export default {
     formData.append('executiveLeadership[id]', payload.executiveLeadership.id);
     formData.append('executiveLeadership[orderNumber]', payload.executiveLeadership.orderNumber);
     formData.append('companyId', payload.companyId);
-    axios.post('/company/addCompanyLeadership/',formData,config)
+    axios.post('v2/company/addCompanyLeadership/',formData,config)
      .then(responce => {
       
       if(responce.status === 200){
@@ -606,6 +624,7 @@ export default {
         dispatch("getCompany",payload.companyId)
       }
     }).catch(async(err) => {
+      Sentry.captureException(err);
       if(state.apiCounter === 2){
         dispatch('apiSignOutAction')
       }else{
@@ -620,13 +639,14 @@ export default {
   },
   editCompanyExcutive({commit,dispatch,state}, payload){
   
-    axios.post('/company/updateCompanyLeadership/',{'companyId': payload.companyId, 'leadershipData': payload.leadership})
+    axios.post('v2/company/updateCompanyLeadership/',{'companyId': payload.companyId, 'leadershipData': payload.leadership})
      .then(responce => {
       
       if(responce.status === 200){
         dispatch("getCompany",payload.companyId)
       }
     }).catch(async(err) => {
+      Sentry.captureException(err);
       if(state.apiCounter === 2){
         dispatch('apiSignOutAction')
       }else{
@@ -654,13 +674,14 @@ export default {
     formData.append('executiveLeadership[id]', payload.executiveLeadership.id);
     formData.append('executiveLeadership[orderNumber]', payload.executiveLeadership.orderNumber);
     formData.append('companyId', payload.companyId);
-    axios.post('/company/deleteCompanyLeadership/',formData,config)
+    axios.post('v2/company/deleteCompanyLeadership/',formData,config)
      .then(responce => {
       
       if(responce.status === 200){
         dispatch("getCompany",payload.companyId)
       }
     }).catch(async(err) => {
+      Sentry.captureException(err);
       if(state.apiCounter === 2){
         dispatch('apiSignOutAction')
       }else{
@@ -690,7 +711,7 @@ export default {
     formData.append('esgInitiatives[id]', payload.esgInitiatives.id);
     formData.append('esgInitiatives[type]', payload.esgInitiatives.type);
     
-    axios.post('/company/editCompanyDifferentiators/',formData,config)
+    axios.post('v2/company/editCompanyDifferentiators/',formData,config)
      .then(responce => {
       
       if(responce.status === 200){
@@ -703,6 +724,7 @@ export default {
         dispatch("getCompany",payload.companyId)
       }
     }).catch(async(err) => {
+      Sentry.captureException(err);
       if(state.apiCounter === 2){
         dispatch('apiSignOutAction')
       }else{
@@ -730,13 +752,14 @@ export default {
     formData.append('esgInitiatives[id]', payload.esgInitiatives.id);
     formData.append('esgInitiatives[type]', payload.esgInitiatives.type);
     
-    axios.post('/company/deleteCompanyDifferentiators/',formData,config)
+    axios.post('v2/company/deleteCompanyDifferentiators/',formData,config)
      .then(responce => {
       
       if(responce.status === 200){
         dispatch("getCompany",payload.companyId)
       }
     }).catch(async(err) => {
+      Sentry.captureException(err);
       if(state.apiCounter == 2){
         dispatch('apiSignOutAction');
       }else{

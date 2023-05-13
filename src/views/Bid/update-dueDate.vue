@@ -235,8 +235,8 @@ export default {
         if (this.users) {
             await this.getBidBySerial({
                 serial: this.$route.params.serial,
-                id: this.users.id,
-                company: this.users.company.company,
+                id: this.users._id,
+                company: this.users.company,
             });
         } else {
             this.$router.push('/login');
