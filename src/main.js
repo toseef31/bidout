@@ -61,28 +61,12 @@ Vue.use(VueSignaturePad);
 Vue.use(VueCroppie);
 Vue.use(Toasted);
 
-Sentry.init({
-  Vue,
-  dsn: import.meta.env.VITE_SENTRY_DSN,
-  replaysSessionSampleRate: 1.0,
-  replaysOnErrorSampleRate: 1.0,
-  integrations: [
-    new BrowserTracing({
-      routingInstrumentation: Sentry.vueRouterInstrumentation(router),
-      tracingOrigins: [import.meta.env.VITE_PROJECT_URL, /^\//],
-    }),
-    new Sentry.Replay({
-      maskAllText: false,
-      blockAllMedia: false,
-    }),
-  ],
-});
-
+if (process.env.NODE_ENV === 'production') {
+  LogRocket.init('voayxx/v2-ib4bb');
 
   Sentry.init({
     Vue,
     dsn: import.meta.env.VITE_SENTRY_DSN,
-    environment: "staging",
     integrations: [
       new BrowserTracing({
         routingInstrumentation: Sentry.vueRouterInstrumentation(router),
@@ -90,22 +74,7 @@ Sentry.init({
       }),
     ],
 
-  // Sentry.init({
-  //   Vue,
-  //   dsn: import.meta.env.VITE_SENTRY_DSN,
-  //   replaysSessionSampleRate: 1.0,
-  //   replaysOnErrorSampleRate: 1.0,
-  //   integrations: [
-  //     new BrowserTracing({
-  //       routingInstrumentation: Sentry.vueRouterInstrumentation(router),
-  //       tracingOrigins: [import.meta.env.VITE_PROJECT_URL, /^\//],
-  //     }),
-  //     new Sentry.Replay({
-  //       maskAllText: false,
-  //       blockAllMedia: false,
-  //     }),
-  //   ],
-  // });
+  });
 }
 
 LogRocket.getSessionURL((sessionURL) => {
