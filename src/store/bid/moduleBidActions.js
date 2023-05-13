@@ -1136,7 +1136,6 @@ export default {
   async getEditTemplate({ commit, state, dispatch }, payload) {
     commit('setPageLoader', true);
     try {
-      console.log("HAHAHAHAHAHAHAH", payload)
       const res = await axios.get(`v2/bid/getBidDetailsById/${payload.id}`);
       if (res.status === 200) {
         commit('getSingleTemplate', res.data);
