@@ -78,8 +78,17 @@ Sentry.init({
   ],
 });
 
-if (process.env.NODE_ENV === "production") {
-  LogRocket.init("voayxx/v2-ib4bb");
+
+  Sentry.init({
+    Vue,
+    dsn: import.meta.env.VITE_SENTRY_DSN,
+    environment: "staging",
+    integrations: [
+      new BrowserTracing({
+        routingInstrumentation: Sentry.vueRouterInstrumentation(router),
+        tracingOrigins: [import.meta.env.VITE_PROJECT_URL, /^\//],
+      }),
+    ],
 
   // Sentry.init({
   //   Vue,

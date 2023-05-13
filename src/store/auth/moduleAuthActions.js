@@ -5,6 +5,7 @@ import "firebase/compat/firestore";
 import router from "@/router";
 import axios from "axios";
 
+
 let isNavigating = false;
 
 function navigate(route) {
@@ -151,6 +152,7 @@ export default {
       })
       .catch((error) => {
         commit("setError", error.message);
+
       });
   },
 
@@ -364,7 +366,6 @@ export default {
   async signAgreement({ commit }, payload) {
     try {
       const res = await axios.post("/ofs/signSupplierContract", { ...payload });
-
       if (res.status === 200) {
         commit("setGoToAgreement", null);
         commit("setSupplierSignUpSuccess", true);
@@ -409,6 +410,7 @@ export default {
         }
         resolve(result);
       } catch (err) {
+        Sentry.captureException(err);
         console.log(err);
         reject(err);
       }

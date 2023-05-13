@@ -1,4 +1,5 @@
 import axios from 'axios';
+import * as Sentry from '@sentry/vue';
 
 export default {
   unreadMessagesCount({ commit }, payload) {
@@ -8,6 +9,7 @@ export default {
         commit('setUnreadCount', responce.data.totalUnreadMessages);
       })
       .catch((err) => {
+        Sentry.captureException(err);
         console.log(err);
       });
   },
@@ -25,6 +27,7 @@ export default {
         }
       })
       .catch((err) => {
+        Sentry.captureException(err);
         console.log(err);
       });
   },
@@ -35,6 +38,7 @@ export default {
         commit('setBidConversationList', responce.data);
       })
       .catch((err) => {
+        Sentry.captureException(err);
         console.log(err);
       });
   },
@@ -46,6 +50,7 @@ export default {
         dispatch('unreadMessagesCount', { userId: payload.userId });
       })
       .catch((err) => {
+        Sentry.captureException(err);
         console.log(err);
       });
   },
@@ -73,6 +78,7 @@ export default {
         commit('setNewMessages', responce.data.message);
       })
       .catch((err) => {
+        Sentry.captureException(err);
         console.log(err);
       });
   },
@@ -86,6 +92,7 @@ export default {
         commit('setUnMessageCount', responce.data.count);
       })
       .catch((err) => {
+        Sentry.captureException(err);
         console.log(err);
       });
   },
@@ -97,6 +104,7 @@ export default {
       })
       .then((responce) => { })
       .catch((err) => {
+        Sentry.captureException(err);
         console.log(err);
       });
   },
@@ -116,28 +124,31 @@ export default {
         dispatch('getArchiveChats', rootState.auth.userInfo.id);
       })
       .catch((err) => {
+        Sentry.captureException(err);
         console.log(err);
       });
   },
   // Supplier List
   supplierList({ commit }, payload) {
     axios
-      .get('/company/getSupplierCompaniesAndUsers')
+      .get('/v2/company/getSupplierCompaniesAndUsers')
       .then((responce) => {
         commit('setMembersList', responce.data);
       })
       .catch((err) => {
+        Sentry.captureException(err);
         console.log(err);
       });
   },
   // Supplier Users List
   supplierUserList({ commit }, payload) {
     axios
-      .get(`/user/searchSupplierUser/${payload}`)
+      .get(`/v2/user/searchSupplierUser/${payload}`)
       .then((responce) => {
         commit('setSuppliersUsers', responce.data);
       })
       .catch((err) => {
+        Sentry.captureException(err);
         console.log(err);
       });
   },
@@ -156,6 +167,7 @@ export default {
         }, 5000);
       })
       .catch((err) => {
+        Sentry.captureException(err);
         console.log(err);
       });
   },
@@ -170,6 +182,7 @@ export default {
         dispatch('getAllConversations', rootState.auth.userInfo.id);
       })
       .catch((err) => {
+        Sentry.captureException(err);
         console.log(err);
       });
   },
@@ -181,6 +194,7 @@ export default {
         commit('setArchiveConverstaionList', responce.data.conversations);
       })
       .catch((err) => {
+        Sentry.captureException(err);
         console.log(err);
       });
   },
@@ -198,6 +212,7 @@ export default {
         dispatch('getAllConversations', rootState.auth.userInfo.id);
       })
       .catch((err) => {
+        Sentry.captureException(err);
         console.log(err);
       });
   },
@@ -212,6 +227,7 @@ export default {
         commit('showBroadcastAlert');
       })
       .catch((err) => {
+        Sentry.captureException(err);
         if (err.response.status === 404 && err.response.data.message === 'No suppliers found with current bid id') {
           commit('setSupplierBroadcastError');
         } else {
@@ -226,6 +242,7 @@ export default {
         commit('setBidMessageUnreadCount', responce.data.totalUnreadMessages);
       })
       .catch((err) => {
+        Sentry.captureException(err);
         console.log(err);
       });
   },

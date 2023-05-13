@@ -2,11 +2,12 @@
 // eslint-disable-next-line import/no-cycle
 import router from '@/router';
 import axios from 'axios';
+import * as Sentry from '@sentry/vue';
 
 export default {
   async getTeamMembers({ commit, dispatch, state }, payload) {
     try {
-      const res = await axios.get(`company/getTeamMembers/${payload}`);
+      const res = await axios.get(`v2/company/getTeamMembers/${payload}`);
       if (res.status === 200) {
         commit('setTeamMembers', res.data);
         commit('setTeamMembersInitial', res.data);
@@ -15,6 +16,7 @@ export default {
         commit('setTeamMembers', null);
       }
     } catch (err) {
+      Sentry.captureException(err);
       if (state.apiCounter === 2) {
         dispatch('apiSignOutAction');
       } else if (err.response && err.response.status === 403) {
@@ -26,7 +28,7 @@ export default {
   },
   async getSalesReps({ commit, dispatch, state }, payload) {
     try {
-      const res = await axios.post('company/getSalesReps/', { query: payload.query, basin: payload.basin });
+      const res = await axios.get('v2/company/getSalesReps/', { query: payload.query, basin: payload.basin });
 
       if (res.status === 200) {
         commit('setSalesReps', res.data);
@@ -34,6 +36,7 @@ export default {
         commit('setSalesReps', null);
       }
     } catch (err) {
+      Sentry.captureException(err);
       if (state.apiCounter === 2) {
         dispatch('apiSignOutAction');
       } else if (err.response && err.response.status === 403) {
@@ -45,7 +48,7 @@ export default {
   },
   async searchByCompany({ commit, dispatch, state }, payload) {
     try {
-      const res = await axios.post('company/searchCompanies/', { query: payload.query, basin: payload.basin });
+      const res = await axios.post('v2/company/searchCompanies/', { query: payload.query, basin: payload.basin });
 
       if (res.status === 200) {
         commit('setCompaniesList', res.data);
@@ -53,6 +56,7 @@ export default {
         commit('setCompaniesList', null);
       }
     } catch (err) {
+      Sentry.captureException(err);
       if (state.apiCounter === 2) {
         dispatch('apiSignOutAction');
       } else if (err.response && err.response.status === 403) {
@@ -65,7 +69,7 @@ export default {
 
   async getCompanyByServices({ commit, dispatch, state }, payload) {
     try {
-      const res = await axios.get(`company/getCompaniesByService/${payload}`);
+      const res = await axios.get(`v2/company/getCompaniesByService/${payload}`);
 
       if (res.status === 200) {
         commit('setCompaniesList', res.data);
@@ -73,6 +77,7 @@ export default {
         commit('setCompaniesList', null);
       }
     } catch (err) {
+      Sentry.captureException(err);
       if (state.apiCounter === 2) {
         dispatch('apiSignOutAction');
       } else if (err.response && err.response.status === 403) {
@@ -84,12 +89,13 @@ export default {
   },
   async getDraftBids({ commit, dispatch, state }, payload) {
     try {
-      const res = await axios.get(`bid/draft/getUserDrafts/${payload}`);
+      const res = await axios.get(`v2/bid/draft/getUserDrafts/${payload}`);
 
       if (res.status === 200) {
         commit('setDraftBidsList', res.data);
       }
     } catch (err) {
+      Sentry.captureException(err);
       if (state.apiCounter === 2) {
         dispatch('apiSignOutAction');
       } else if (err.response && err.response.status === 403) {
@@ -102,12 +108,13 @@ export default {
   async getBidsLists({ commit, dispatch, state }, payload) {
     commit('setPageLoader', true);
     try {
-      const res = await axios.get(`bid/getBidList/${payload}`);
+      const res = await axios.get(`v2/bid/getBidList/${payload}`);
       if (res.status === 200) {
         commit('setBidsList', res.data);
         commit('setPageLoader', false);
       }
     } catch (err) {
+      Sentry.captureException(err);
       if (state.apiCounter === 2) {
         dispatch('apiSignOutAction');
       } else if (err.response && err.response.status === 403) {
@@ -125,9 +132,10 @@ export default {
       commit('setPageLoader', true);
     }
     try {
+      console.log("PAYLOAAD", payload)
       commit('removeSupplierAttachment');
       const res = await axios.get(
-        `bid/getBidBySerial/${payload.serial}/${payload.id}`,
+        `v2/bid/getBidBySerial/${payload.serial}/${payload.id}`,
       );
 
       if (res.status === 200) {
@@ -161,6 +169,7 @@ export default {
         commit('setViewBidError', false);
       }
     } catch (err) {
+      Sentry.captureException(err);
       commit('setPageLoader', false);
       commit('setViewBidError', true);
       if (state.bidApiCounter === 2) {
@@ -175,7 +184,7 @@ export default {
 
   async deleteBid({ commit, dispatch, state }, payload) {
     try {
-      const res = await axios.post('bid/deleteBid/', {
+      const res = await axios.post('v2/bid/deleteBid/', {
         bidId: payload.bidId,
       });
 
@@ -185,6 +194,7 @@ export default {
         commit('setSuccessDeleteBid');
       }
     } catch (err) {
+      Sentry.captureException(err);
       commit('setErrorDeleteBid');
       if (state.apiCounter === 2) {
         dispatch('apiSignOutAction');
@@ -214,6 +224,7 @@ export default {
         commit('setPageLoader', false);
       }
     } catch (err) {
+      Sentry.captureException(err);
       commit('setPageLoader', false);
       if (state.apiCounter === 2) {
         dispatch('apiSignOutAction');
@@ -232,13 +243,15 @@ export default {
       commit('setPageLoader', true);
     }
     try {
-      const res = await axios.get(`intend/getAllIntends/${payload.bidId}`);
+      console.log("intend payload", payload)
+      const res = await axios.get(`v2/intend/getAllIntends/${payload.bidId}`);
 
       if (res.status === 200) {
         commit('setAllIntend', res.data);
         commit('setPageLoader', false);
       }
     } catch (err) {
+      Sentry.captureException(err);
       commit('setPageLoader', false);
       if (state.apiCounter === 2) {
         dispatch('apiSignOutAction');
@@ -260,6 +273,7 @@ export default {
         commit('setBidIntent', payload.answer);
       }
     } catch (err) {
+      Sentry.captureException(err);
       if (state.apiCounter === 2) {
         dispatch('apiSignOutAction');
       } else if (err.response && err.response.status === 403) {
@@ -284,6 +298,7 @@ export default {
         commit('setIntentId', res.data);
       }
     } catch (err) {
+      Sentry.captureException(err);
       if (state.apiCounter === 2) {
         dispatch('apiSignOutAction');
       } else if (err.response && err.response.status === 403) {
@@ -296,7 +311,7 @@ export default {
 
   async awardCompany({ commit, dispatch, state }, payload) {
     try {
-      const res = await axios.post('bid/bidAwardees/', {
+      const res = await axios.post('v2/bid/bidAwardees/', {
         companyId: payload.companyId,
         bidId: payload.bidId,
         userId: payload.userId,
@@ -311,6 +326,7 @@ export default {
         commit('setAwardAlert');
       }
     } catch (err) {
+      Sentry.captureException(err);
       if (state.apiCounter === 2) {
         dispatch('apiSignOutAction');
       } else if (err.response && err.response.status === 403) {
@@ -322,7 +338,7 @@ export default {
   },
   async rejectCompany({ commit, dispatch, state }, payload) {
     try {
-      const res = await axios.post('bid/bidRejectees/', {
+      const res = await axios.post('v2/bid/bidRejectees/', {
         companyId: payload.companyId,
         bidId: payload.bidId,
         userId: payload.userId,
@@ -337,6 +353,7 @@ export default {
         commit('setDisqualifyAlert');
       }
     } catch (err) {
+      Sentry.captureException(err);
       if (state.apiCounter === 2) {
         dispatch('apiSignOutAction');
       } else if (err.response && err.response.status === 403) {
@@ -349,7 +366,7 @@ export default {
 
   async UnAwardCompany({ commit, dispatch, state }, payload) {
     try {
-      const res = await axios.post('bid/bidUnaward/', {
+      const res = await axios.post('v2/bid/bidUnaward/', {
         companyId: payload.companyId,
         bidId: payload.bidId,
       });
@@ -363,6 +380,7 @@ export default {
         commit('setUnAwardAlert');
       }
     } catch (err) {
+      Sentry.captureException(err);
       if (state.apiCounter === 2) {
         dispatch('apiSignOutAction');
       } else if (err.response && err.response.status === 403) {
@@ -374,7 +392,7 @@ export default {
   },
   async UnDisqualifyCompany({ commit, dispatch, state }, payload) {
     try {
-      const res = await axios.post('bid/bidUndisqualify/', {
+      const res = await axios.post('v2/bid/bidUndisqualify/', {
         companyId: payload.companyId,
         bidId: payload.bidId,
       });
@@ -388,6 +406,7 @@ export default {
         commit('setUnDisqualifyAlert');
       }
     } catch (err) {
+      Sentry.captureException(err);
       if (state.apiCounter === 2) {
         dispatch('apiSignOutAction');
       } else if (err.response && err.response.status === 403) {
@@ -434,7 +453,7 @@ export default {
       }
     }
     try {
-      const res = await axios.post('bidSubmission/submitBid/', formData, config);
+      const res = await axios.post('v2/bid/submitBid/', formData, config);
 
       if (res.status === 200) {
         commit('setIsBidSubmitted', true);
@@ -445,6 +464,7 @@ export default {
         });
       }
     } catch (err) {
+      Sentry.captureException(err);
       if (err.response && err.response.status === 400 && err.response.data.message === 'Please add a price for all required items') {
         commit('setBidSubmissionValidationAlert', 'Please add a price for all required line items');
       }
@@ -480,15 +500,7 @@ export default {
 
     if (payload.supplierAttachments) {
       for (let i = 0; i < payload.supplierAttachments.length; i++) {
-        if (payload.supplierAttachments[i].newAttach) {
-          formData.append(`supplierAttachments[${i}]`, payload.supplierAttachments[i].attachment);
-        } else {
-          formData.append(`supplierAttachments[${i}][attachment]`, payload.supplierAttachments[i].attachment);
-          formData.append(`supplierAttachments[${i}][fileName]`, payload.supplierAttachments[i].fileName);
-          formData.append(`supplierAttachments[${i}][fileSize]`, payload.supplierAttachments[i].fileSize);
-          formData.append(`supplierAttachments[${i}][uploadedAt][_seconds]`, payload.supplierAttachments[i].uploadedAt._seconds);
-          formData.append(`supplierAttachments[${i}][uploadedAt][_nanoseconds]`, payload.supplierAttachments[i].uploadedAt._nanoseconds);
-        }       
+        formData.append(`supplierAttachments[${i}]`, payload.supplierAttachments[i]);
       }
     }
 
@@ -515,7 +527,7 @@ export default {
       }
     }
     try {
-      const res = await axios.post('bidSubmission/editSubmitBid/', formData, config);
+      const res = await axios.post('v2/bid/editSubmitBid/', formData, config);
 
       if (res.status === 200) {
         commit('removeSupplierAttachment');
@@ -526,6 +538,7 @@ export default {
         commit('setAlertEditBidSubmissionSuccess');
       }
     } catch (err) {
+      Sentry.captureException(err);
       if (err.response && err.response.status === 400 && err.response.data.message === 'Please add a price for all required items') {
         commit('setBidSubmissionValidationAlert', 'Please add a price for all required line items');
       }
@@ -550,7 +563,7 @@ export default {
       commit('setPageLoader', true);
     }
     try {
-      const res = await axios.get(`bidSubmission/getQA/${payload.bidId}/${payload.userId}`);
+      const res = await axios.get(`v2/bid/getQA/${payload.bidId}/${payload.userId}`);
 
       if (res.status === 200) {
         commit('setQAndA', res.data);
@@ -569,6 +582,7 @@ export default {
         commit('setPageLoader', false);
       }
     } catch (err) {
+      Sentry.captureException(err);
       commit('setPageLoader', false);
       if (state.apiCounter === 2) {
         dispatch('apiSignOutAction');
@@ -582,7 +596,7 @@ export default {
 
   async askQuestion({ commit, dispatch, state }, payload) {
     try {
-      const res = await axios.post('bidSubmission/questionAsked/', {
+      const res = await axios.post('v2/bid/questionAsked/', {
         question: payload.question,
         userId: payload.userId,
         companyId: payload.companyId,
@@ -593,6 +607,7 @@ export default {
         dispatch('getQA', { bidId: payload.bidId, userId: payload.userId });
       }
     } catch (err) {
+      Sentry.captureException(err);
       if (state.apiCounter === 2) {
         dispatch('apiSignOutAction');
       } else if (err.response && err.response.status === 403) {
@@ -605,7 +620,7 @@ export default {
 
   async answerQuestion({ commit, dispatch, state }, payload) {
     try {
-      const res = await axios.post('bidSubmission/questionAnswer/', {
+      const res = await axios.post('v2/bid/questionAnswer/', {
         answer: payload.answer,
         userId: payload.userId,
         questionId: payload.questionId,
@@ -616,6 +631,7 @@ export default {
         dispatch('getQA', { bidId: payload.bidId, userId: payload.userId });
       }
     } catch (err) {
+      Sentry.captureException(err);
       if (state.apiCounter === 2) {
         dispatch('apiSignOutAction');
       } else if (err.response && err.response.status === 403) {
@@ -628,7 +644,7 @@ export default {
 
   async editAnswer({ commit, dispatch, state }, payload) {
     try {
-      const res = await axios.post('bidSubmission/editAnswer/', {
+      const res = await axios.post('v2/editAnswer/', {
         answer: payload.answer,
         questionId: payload.questionId,
       });
@@ -637,6 +653,7 @@ export default {
         dispatch('getQA', { bidId: payload.bidId, userId: payload.userId });
       }
     } catch (err) {
+      Sentry.captureException(err);
       if (state.apiCounter === 2) {
         dispatch('apiSignOutAction');
       } else if (err.response && err.response.status === 403) {
@@ -673,8 +690,8 @@ export default {
     formData.append('companyId', payload.companyId);
     formData.append('company', payload.company);
 
-    if (state.invitedSuppliers != null) {
-      for (let i = 0; i < state.invitedSuppliers.length; i++) {
+    if (state.invitedSuppliers?.length > 0) {
+      for (let i = 0; i < state.invitedSuppliers?.length; i++) {
         if (Array.isArray(state.invitedSuppliers) && state.invitedSuppliers.length > 0 && typeof state.invitedSuppliers[0] === 'object') {
           if (!state.invitedSuppliers[i].companyId && !state.invitedSuppliers[i].objectID) {
             formData.append(`invitedSuppliers[${i}]`, state.invitedSuppliers[i].id);
@@ -688,12 +705,12 @@ export default {
         }
       }
     }
-    if (state.invitedNewSuppliers != null) {
+    if (state.invitedNewSuppliers?.length > 0) {
       for (let i = 0; i < state.invitedNewSuppliers.length; i++) {
         formData.append(`invitedNewSuppliers[${i}]`, state.invitedNewSuppliers[i].id);
       }
     }
-    if (state.invitedTeamMembers != null) {
+    if (state.invitedTeamMembers?.length > 0) {
       for (let t = 0; t < state.invitedTeamMembers.length; t++) {
         if (!state.invitedTeamMembers[t].id) {
           formData.append(`invitedTeamMembers[${t}]`, state.invitedTeamMembers[t]);
@@ -703,9 +720,9 @@ export default {
       }
     }
 
-    if (state.bidlines != null) {
+    if (state.bidlines?.length > 0) {
       let lineItemsindex = 0;
-      for (let i = 0; i < state.bidlines.length; i++) {
+      for (let i = 0; i < state.bidlines?.length; i++) {
         if (state.bidlines[i].description !== '' && state.bidlines[i].quantity !== '') {
           formData.append(`lineItems[${lineItemsindex}][id]`, state.bidlines[i].id);
           formData.append(`lineItems[${lineItemsindex}][description]`, state.bidlines[i].description);
@@ -723,7 +740,7 @@ export default {
       }
     }
 
-    if (state.attachement != null) {
+    if (state.attachement?.length > 0) {
       for (let i = 0; i < state.attachement.length; i++) {
         formData.append(`attachment[${i}][fileName]`, state.attachement[i].fileName);
         formData.append(`attachment[${i}][fileSize]`, state.attachement[i].fileSize);
@@ -731,13 +748,13 @@ export default {
         formData.append(`attachment[${i}][url]`, state.attachement[i].url);
         formData.append(`attachment[${i}][uploadedAt]`, state.attachement[i].uploadedAt);
         formData.append(`attachment[${i}][comment]`, state.attachement[i].comment);
-        formData.append(`attachment[${i}][id]`, state.attachement[i].id);
+        formData.append(`attachment[${i}][id]`, state.attachement[i]._id);
       }
     }
 
-    if (state.questions != null) {
+    if (state.questions?.length > 0) {
       for (let i = 0; i < state.questions.length; i++) {
-        formData.append(`questions[${i}][id]`, state.questions[i].id);
+        formData.append(`questions[${i}][id]`, state.questions[i]._id);
         formData.append(`questions[${i}][order]`, state.questions[i].order);
         formData.append(`questions[${i}][title]`, state.questions[i].title);
         formData.append(`questions[${i}][type]`, state.questions[i].type);
@@ -745,7 +762,7 @@ export default {
         formData.append(`questions[${i}][required]`, state.questions[i].required);
         if (state.questions[i].options) {
           for (let j = 0; j < state.questions[i].options.length; j++) {
-            formData.append(`questions[${i}][options][${j}][id]`, state.questions[i].options[j].id);
+            formData.append(`questions[${i}][options][${j}][id]`, state.questions[i].options[j]._id);
             formData.append(`questions[${i}][options][${j}][label]`, state.questions[i].options[j].label);
             formData.append(`questions[${i}][options][${j}][title]`, state.questions[i].options[j].title);
           }
@@ -754,7 +771,7 @@ export default {
     }
 
     try {
-      const res = await axios.post('bid/draft/createDraft', formData, config);
+      const res = await axios.post('v2/bid/draft/createDraft', formData, config);
       if (res.status === 200) {
         commit('setBidData', res.data);
         commit('setAttachement', res.data.attachments);
@@ -762,7 +779,7 @@ export default {
         dispatch('getSalesReps', { query: '', basin: 'all' });
         dispatch('getCategories');
         dispatch('searchByCompany', { query: '', basin: 'all' });
-        commit('setDraftBidsList', res.data.id);
+        commit('setDraftBidsList', res.data._id);
         commit('setBidSerial', res.data.serial);
         state.bidData.statusType = 'draftBid';
         commit('setDraftTime', new Date().toLocaleString());
@@ -774,6 +791,7 @@ export default {
         commit('setIsEditBidChanges', false);
       }
     } catch (err) {
+      Sentry.captureException(err);
       commit('setSaveBidLoading', false);
       commit('setIsEditBidChanges', false);
       if (state.apiCounter === 2) {
@@ -795,8 +813,8 @@ export default {
     };
     const formData = new FormData();
 
-    if (state.bidData.id) {
-      commit('setDraftBidsList', state.bidData.id);
+    if (state.bidData._id) {
+      commit('setDraftBidsList', state.bidData._id);
       commit('setBidSerial', state.bidData.serial);
     }
     formData.append('title', state.bidData.title);
@@ -811,18 +829,18 @@ export default {
     formData.append('serial', state.bidSerial);
 
     formData.append('bidDescriptions[0][body]', state.bidData.bidDescriptions[0].body);
-    if (state.bidData.bidDescriptions.length > 1) {
+    if (state.bidData.bidDescriptions?.length > 1) {
       for (let d = 1; d < state.bidData.bidDescriptions.length; d++) {
         formData.append(`bidDescriptions[${d}][name]`, state.bidData.bidDescriptions[d].name);
         formData.append(`bidDescriptions[${d}][body]`, state.bidData.bidDescriptions[d].body);
       }
     }
 
-    if (state.invitedSuppliers != null) {
+    if (state.invitedSuppliers?.length > 0) {
       for (let i = 0; i < state.invitedSuppliers.length; i++) {
-        if (Array.isArray(state.invitedSuppliers) && state.invitedSuppliers.length > 0 && typeof state.invitedSuppliers[0] === 'object') {
+        if (Array.isArray(state.invitedSuppliers) && state.invitedSuppliers?.length > 0 && typeof state.invitedSuppliers[0] === 'object') {
           if (!state.invitedSuppliers[i].companyId && !state.invitedSuppliers[i].objectID) {
-            formData.append(`invitedSuppliers[${i}]`, state.invitedSuppliers[i].id);
+            formData.append(`invitedSuppliers[${i}]`, state.invitedSuppliers[i]._id);
           } else if (state.invitedSuppliers[i].companyId) {
             formData.append(`invitedSuppliers[${i}]`, state.invitedSuppliers[i].companyId);
           } else {
@@ -833,24 +851,24 @@ export default {
         }
       }
     }
-    if (state.invitedNewSuppliers != null) {
+    if (state.invitedNewSuppliers?.length > 0) {
       for (let i = 0; i < state.invitedNewSuppliers.length; i++) {
-        formData.append(`invitedNewSuppliers[${i}]`, state.invitedNewSuppliers[i].id);
+        formData.append(`invitedNewSuppliers[${i}]`, state.invitedNewSuppliers[i]._id);
       }
     }
-    if (state.invitedTeamMembers != null) {
+    if (state.invitedTeamMembers?.length > 0) {
       for (let t = 0; t < state.invitedTeamMembers.length; t++) {
-        if (!state.invitedTeamMembers[t].id) {
+        if (!state.invitedTeamMembers[t]._id) {
           formData.append(`invitedTeamMembers[${t}]`, state.invitedTeamMembers[t]);
         } else {
-          formData.append(`invitedTeamMembers[${t}]`, state.invitedTeamMembers[t].id);
+          formData.append(`invitedTeamMembers[${t}]`, state.invitedTeamMembers[t]._id);
         }
       }
     }
 
-    if (state.bidlines != null) {
+    if (state.bidlines?.length > 0) {
       let lineItemsindex = 0;
-      for (let i = 0; i < state.bidlines.length; i++) {
+      for (let i = 0; i < state.bidlines?.length; i++) {
         if (state.bidlines[i].description !== '' && state.bidlines[i].quantity !== '') {
           formData.append(`lineItems[${lineItemsindex}][id]`, state.bidlines[i].id);
           formData.append(`lineItems[${lineItemsindex}][description]`, state.bidlines[i].description);
@@ -868,7 +886,7 @@ export default {
       }
     }
 
-    if (state.attachement != null) {
+    if (state.attachement?.length > 0) {
       for (let i = 0; i < state.attachement.length; i++) {
         formData.append(`attachment[${i}][fileName]`, state.attachement[i].fileName);
         formData.append(`attachment[${i}][fileSize]`, state.attachement[i].fileSize);
@@ -876,21 +894,21 @@ export default {
         formData.append(`attachment[${i}][url]`, state.attachement[i].url);
         formData.append(`attachment[${i}][uploadedAt]`, state.attachement[i].uploadedAt);
         formData.append(`attachment[${i}][comment]`, state.attachement[i].comment);
-        formData.append(`attachment[${i}][id]`, state.attachement[i].id);
+        formData.append(`attachment[${i}][id]`, state.attachement[i]._id);
       }
     }
 
-    if (state.questions != null) {
+    if (state.questions?.length > 0) {
       for (let i = 0; i < state.questions.length; i++) {
-        formData.append(`questions[${i}][id]`, state.questions[i].id);
+        formData.append(`questions[${i}][id]`, state.questions[i]._id);
         formData.append(`questions[${i}][order]`, state.questions[i].order);
         formData.append(`questions[${i}][title]`, state.questions[i].title);
         formData.append(`questions[${i}][type]`, state.questions[i].type);
         formData.append(`questions[${i}][questionType]`, state.questions[i].questionType);
-        formData.append(`questions[${i}][required]`, state.questions[i].required);
+        formData.append(`questions[${i}][required]`, state.questions[i].required ? state.questions[i].required : false);
         if (state.questions[i].options) {
-          for (let j = 0; j < state.questions[i].options.length; j++) {
-            formData.append(`questions[${i}][options][${j}][id]`, state.questions[i].options[j].id);
+          for (let j = 0; j < state.questions[i].options?.length; j++) {
+            formData.append(`questions[${i}][options][${j}][id]`, state.questions[i].options[j]._id);
             formData.append(`questions[${i}][options][${j}][label]`, state.questions[i].options[j].label);
             formData.append(`questions[${i}][options][${j}][title]`, state.questions[i].options[j].title);
           }
@@ -898,7 +916,7 @@ export default {
       }
     }
     try {
-      const res = await axios.post(`bid/draft/updateDraft/${state.draftBidsList}`, formData, config);
+      const res = await axios.post(`v2/bid/draft/updateDraft/${state.draftBidsList}`, formData, config);
       if (res.status === 200) {
         commit('setIsEditBidChanges', false);
         commit('setBidSerial', res.data.serial);
@@ -908,6 +926,7 @@ export default {
         commit('setSaveBidLoading', false);
       }
     } catch (err) {
+      Sentry.captureException(err);
       commit('setSaveBidLoading', false);
       commit('setIsEditBidChanges', false);
       if (state.apiCounter === 2) {
@@ -938,6 +957,7 @@ export default {
         return userData;
       }
     } catch (err) {
+      Sentry.captureException(err);
       commit('setLoadingInvite', false);
       if (state.apiCounter === 2) {
         dispatch('apiSignOutAction');
@@ -952,7 +972,7 @@ export default {
   async publishBid({ commit, state, dispatch }) {
     try {
       await dispatch('updateDraftBid', 'update');
-      const res = await axios.post('bid/publishBid', {
+      const res = await axios.post('v2/bid/publishBid', {
         draftBidId: state.draftBidsList,
       });
       if (res.status === 200) {
@@ -974,8 +994,9 @@ export default {
         commit('setBidRegions', '');
         commit('setBidEnabled', '');
         commit('setIsEditBidChanges', false);
+        state.bidData.lastSerial = res.data.serial;
         state.bidData.serial = '';
-        state.bidData.id = '';
+        state.bidData._id = '';
         state.bidData.status = '';
         state.bidData.statusType = '';
         commit('setBidDescription', [{ body: '' }]);
@@ -984,13 +1005,14 @@ export default {
         state.bidData.invitedTeamMembers = '';
         state.bidData.lineItems = '';
         state.bidData.questions = '';
-        const bidDetail = await axios.get(`bid/getBid/${res.data._path.segments[1]}`);
+        const bidDetail = await axios.get(`v2/bid/getv2/Bid/${res.data._path.segments[1]}`);
         return bidDetail.data.serial;
       }
 
       // eslint-disable-next-line consistent-return
       return;
     } catch (err) {
+      Sentry.captureException(err);
       console.log(err);
     }
   },
@@ -1009,7 +1031,7 @@ export default {
       }
     }
     try {
-      const res = await axios.post('bid/uploadBidAttachment/', formData, config);
+      const res = await axios.post('v2/bid/uploadBidAttachment/', formData, config);
 
       if (res.status === 200) {
         commit('setAttachData', res.data);
@@ -1018,6 +1040,7 @@ export default {
         commit('setAttachData', null);
       }
     } catch (err) {
+      Sentry.captureException(err);
       if (state.apiCounter === 2) {
         dispatch('apiSignOutAction');
       } else if (err.response && err.response.status === 403) {
@@ -1029,11 +1052,12 @@ export default {
   },
   async getBidTemplates({ commit, state, dispatch }, payload) {
     try {
-      const res = await axios.get('bid/getBidTemplates/');
+      const res = await axios.get('v2/bid/getBidTemplates/');
       if (res.status === 200) {
         commit('setBidTemplates', res.data);
       }
     } catch (err) {
+      Sentry.captureException(err);
       if (state.apiCounter === 2) {
         dispatch('apiSignOutAction');
       } else if (err.response && err.response.status === 403) {
@@ -1045,7 +1069,7 @@ export default {
   },
   async deleteTemplate({ commit, state, dispatch }, payload) {
     try {
-      const res = await axios.post('bid/deleteTemplateBid/', { templateId: payload.id });
+      const res = await axios.post('v2/bid/deleteTemplateBid/', { templateId: payload.id });
       if (res.status === 200) {
         commit('setDraftBidsList', null);
         commit('setDraftTime', null);
@@ -1064,7 +1088,7 @@ export default {
         commit('setBidRegions', '');
         commit('setBidEnabled', '');
         state.bidData.serial = '';
-        state.bidData.id = '';
+        state.bidData._id = '';
         state.bidData.status = '';
         state.bidData.statusType = '';
         commit('setBidDescription', [{ body: '' }]);
@@ -1082,6 +1106,7 @@ export default {
         dispatch('getBidTemplates');
       }
     } catch (err) {
+      Sentry.captureException(err);
       if (state.apiCounter === 2) {
         dispatch('apiSignOutAction');
       } else if (err.response && err.response.status === 403) {
@@ -1093,11 +1118,12 @@ export default {
   },
   async updateTemplateNote({ state, dispatch }, payload) {
     try {
-      const res = await axios.post('bid/editTemplateNote/', { templateId: payload.templateId, note: payload.note });
+      const res = await axios.post('v2/bid/editTemplateNote/', { templateId: payload.templateId, note: payload.note });
       if (res.status === 200) {
         dispatch('getBidTemplates');
       }
     } catch (err) {
+      Sentry.captureException(err);
       if (state.apiCounter === 2) {
         dispatch('apiSignOutAction');
       } else if (err.response && err.response.status === 403) {
@@ -1110,7 +1136,8 @@ export default {
   async getEditTemplate({ commit, state, dispatch }, payload) {
     commit('setPageLoader', true);
     try {
-      const res = await axios.get(`bid/getBidDetailsById/${payload.id}`);
+      console.log("HAHAHAHAHAHAHAH", payload)
+      const res = await axios.get(`v2/bid/getBidDetailsById/${payload.id}`);
       if (res.status === 200) {
         commit('getSingleTemplate', res.data);
         commit('setBidData', res.data);
@@ -1125,6 +1152,7 @@ export default {
         router.replace('/create-template');
       }
     } catch (err) {
+      Sentry.captureException(err);
       if (state.apiCounter === 2) {
         dispatch('apiSignOutAction');
       } else if (err.response && err.response.status === 403) {
@@ -1167,7 +1195,7 @@ export default {
     formData.append('attachment', []);
 
     try {
-      const res = await axios.post('bid/createTemplateBid', formData, config);
+      const res = await axios.post('v2/bid/createTemplateBid', formData, config);
       if (res.status === 200) {
         commit('setBidData', res.data);
         commit('setAttachement', res.data.attachment);
@@ -1175,7 +1203,8 @@ export default {
         dispatch('getSalesReps', { query: '', basin: 'all' });
         dispatch('getCategories');
         dispatch('searchByCompany', { query: '', basin: 'all' });
-        commit('setDraftBidsList', res.data.id);
+        commit('setDraftBidsList', res.data._id);
+        
         state.bidData.status = 'templateCreate';
         state.bidData.statusType = 'template';
         commit('setDraftTime', new Date().toLocaleString());
@@ -1183,6 +1212,7 @@ export default {
         commit('setDraftBidsList', null);
       }
     } catch (err) {
+      Sentry.captureException(err);
       if (state.apiCounter === 2) {
         dispatch('apiSignOutAction');
       } else if (err.response && err.response.status === 403) {
@@ -1196,7 +1226,7 @@ export default {
     commit('setPageLoader', true);
     try {
       const res = await axios.get(
-        `bid/draft/getDraftBySerial/${payload.serial}`,
+        `v2/bid/draft/getDraftBySerial/${payload.serial}`,
       );
 
       if (res.status === 200) {
@@ -1204,7 +1234,7 @@ export default {
         dispatch('getSalesReps', { query: '', basin: 'all' });
         dispatch('getCategories');
         dispatch('searchByCompany', { query: '', basin: 'all' });
-        // commit('setDraftBidData', res.data);
+         commit('setDraftBidData', res.data);
         commit('setIsEditBidChanges', false);
         commit('setBidData', res.data);
         commit('setPageLoader', false);
@@ -1212,6 +1242,7 @@ export default {
         router.replace('/create-bid');
       }
     } catch (err) {
+      Sentry.captureException(err);
       commit('setIsEditBidChanges', false);
       if (state.apiCounter === 2) {
         dispatch('apiSignOutAction');
@@ -1231,9 +1262,9 @@ export default {
     };
     const formData = new FormData();
 
-    if (state.bidData.id) {
-      // state.draftBidsList = state.bidData.id;
-      commit('setDraftBidsList', state.bidData.id);
+    if (state.bidData._id) {
+      // state.draftBidsList = state.bidData._id;
+      commit('setDraftBidsList', state.bidData._id);
     }
     formData.append('templateId', state.draftBidsList);
     formData.append('title', state.bidData.title);
@@ -1259,7 +1290,7 @@ export default {
       if (state.invitedSuppliers) {
         for (let i = 0; i < state.invitedSuppliers.length; i++) {
           if (!state.invitedSuppliers[i].companyId && !state.invitedSuppliers[i].objectID) {
-            formData.append(`invitedSuppliers[${i}]`, state.invitedSuppliers[i].id);
+            formData.append(`invitedSuppliers[${i}]`, state.invitedSuppliers[i]._id);
           } else if (state.invitedSuppliers[i].companyId) {
             formData.append(`invitedSuppliers[${i}]`, state.invitedSuppliers[i].companyId);
           } else {
@@ -1269,7 +1300,7 @@ export default {
       } else {
         formData.append('invitedSuppliers', '');
       }
-    } else if (state.invitedSuppliers != null) {
+    } else if (state.invitedSuppliers.length > 0) {
       for (let i = 0; i < state.invitedSuppliers.length; i++) {
         if (Array.isArray(state.invitedSuppliers) && state.invitedSuppliers.length > 0 && typeof state.invitedSuppliers[0] === 'object') {
           if (!state.invitedSuppliers[i].companyId && !state.invitedSuppliers[i].objectID) {
@@ -1296,21 +1327,21 @@ export default {
     if (state.bidData.status === 'templateCreate') {
       if (state.invitedTeamMembers) {
         for (let t = 0; t < state.invitedTeamMembers.length; t++) {
-          if (!state.invitedTeamMembers[t].id) {
+          if (!state.invitedTeamMembers[t]._id) {
             formData.append(`invitedTeamMembers[${t}]`, state.invitedTeamMembers[t]);
           } else {
-            formData.append(`invitedTeamMembers[${t}]`, state.invitedTeamMembers[t].id);
+            formData.append(`invitedTeamMembers[${t}]`, state.invitedTeamMembers[t]._id);
           }
         }
       } else {
         formData.append('invitedTeamMembers', '');
       }
-    } else if (state.invitedTeamMembers != null) {
+    } else if (state.invitedTeamMembers.length > 0) {
       for (let t = 0; t < state.invitedTeamMembers.length; t++) {
-        if (!state.invitedTeamMembers[t].id) {
+        if (!state.invitedTeamMembers[t]._id) {
           formData.append(`invitedTeamMembers[${t}]`, state.invitedTeamMembers[t]);
         } else {
-          formData.append(`invitedTeamMembers[${t}]`, state.invitedTeamMembers[t].id);
+          formData.append(`invitedTeamMembers[${t}]`, state.invitedTeamMembers[t]._id);
         }
       }
     } else {
@@ -1320,7 +1351,7 @@ export default {
     if (state.bidData.status === 'templateCreate') {
       if (state.bidlines) {
         let lineItemsindex = 0;
-        for (let i = 0; i < state.bidlines.length; i++) {
+        for (let i = 0; i < state.bidlines?.length; i++) {
           if (state.bidlines[i].description !== '' && state.bidlines[i].quantity !== '') {
             formData.append(`lineItems[${lineItemsindex}][id]`, state.bidlines[i].id);
             formData.append(`lineItems[${lineItemsindex}][description]`, state.bidlines[i].description);
@@ -1339,9 +1370,9 @@ export default {
       } else {
         formData.append('lineItems', '');
       }
-    } else if (state.bidlines != null) {
+    } else if (state.bidlines?.length > 0) {
       let lineItemsindex = 0;
-      for (let i = 0; i < state.bidlines.length; i++) {
+      for (let i = 0; i < state.bidlines?.length; i++) {
         if (state.bidlines[i].description !== '' && state.bidlines[i].quantity !== '') {
           formData.append(`lineItems[${lineItemsindex}][id]`, state.bidlines[i].id);
           formData.append(`lineItems[${lineItemsindex}][description]`, state.bidlines[i].description);
@@ -1375,32 +1406,32 @@ export default {
       } else {
         formData.append('attachment', '');
       }
-    } else if (state.attachement != null) {
-      for (let i = 0; i < state.attachement.length; i++) {
-        formData.append(`attachment[${i}][fileName]`, state.attachement[i].fileName);
-        formData.append(`attachment[${i}][fileSize]`, state.attachement[i].fileSize);
-        formData.append(`attachment[${i}][uploadedBy]`, state.attachement[i].uploadedBy);
-        formData.append(`attachment[${i}][url]`, state.attachement[i].url);
-        formData.append(`attachment[${i}][uploadedAt]`, state.attachement[i].uploadedAt);
-        formData.append(`attachment[${i}][comment]`, state.attachement[i].comment);
-        formData.append(`attachment[${i}][id]`, state.attachement[i].id);
-      }
     } else {
-      formData.append('attachment', '');
-    }
+      if (state.attachement?.length > 0) {
+        for (let i = 0; i < state.attachement.length; i++) {
+          formData.append(`[${i}][fileName]`, state.attachement[i].fileName);
+          formData.append(`attachment[${i}][fileSize]`, state.attachement[i].fileSize);
+          formData.append(`attachment[${i}][uploadedBy]`, state.attachement[i].uploadedBy);
+          formData.append(`attachment[${i}][url]`, state.attachement[i].url);
+          formData.append(`attachment[${i}][uploadedAt]`, state.attachement[i].uploadedAt);
+          formData.append(`attachment[${i}][comment]`, state.attachement[i].comment);
+          formData.append(`attachment[${i}][id]`, state.attachement[i].id);
+        }
+      }
+    } 
 
     if (state.bidData.status === 'templateCreate') {
       if (state.questions) {
         for (let i = 0; i < state.questions.length; i++) {
-          formData.append(`questions[${i}][id]`, state.questions[i].id);
+          formData.append(`questions[${i}][id]`, state.questions[i]._id);
           formData.append(`questions[${i}][order]`, state.questions[i].order);
           formData.append(`questions[${i}][title]`, state.questions[i].title);
           formData.append(`questions[${i}][type]`, state.questions[i].type);
           formData.append(`questions[${i}][questionType]`, state.questions[i].questionType);
-          formData.append(`questions[${i}][required]`, state.questions[i].required);
+          formData.append(`questions[${i}][required]`, state.questions[i].required ? state.questions[i].required : false);
           if (state.questions[i].options) {
             for (let j = 0; j < state.questions[i].options.length; j++) {
-              formData.append(`questions[${i}][options][${j}][id]`, state.questions[i].options[j].id);
+              formData.append(`questions[${i}][options][${j}][id]`, state.questions[i].options[j]._id);
               formData.append(`questions[${i}][options][${j}][label]`, state.questions[i].options[j].label);
               formData.append(`questions[${i}][options][${j}][title]`, state.questions[i].options[j].title);
             }
@@ -1409,17 +1440,17 @@ export default {
       } else {
         formData.append('questions', '');
       }
-    } else if (state.questions != null) {
+    } else if (state.questions?.length > 0) {
       for (let i = 0; i < state.questions.length; i++) {
-        formData.append(`questions[${i}][id]`, state.questions[i].id);
+        formData.append(`questions[${i}][id]`, state.questions[i]._id);
         formData.append(`questions[${i}][order]`, state.questions[i].order);
         formData.append(`questions[${i}][title]`, state.questions[i].title);
         formData.append(`questions[${i}][type]`, state.questions[i].type);
         formData.append(`questions[${i}][questionType]`, state.questions[i].questionType);
-        formData.append(`questions[${i}][required]`, state.questions[i].required);
+        formData.append(`questions[${i}][required]`, state.questions[i].required ? state.questions[i].required : false);
         if (state.questions[i].options) {
-          for (let j = 0; j < state.questions[i].options.length; j++) {
-            formData.append(`questions[${i}][options][${j}][id]`, state.questions[i].options[j].id);
+          for (let j = 0; j < state.questions[i].options?.length; j++) {
+            formData.append(`questions[${i}][options][${j}][id]`, state.questions[i].options[j]._id);
             formData.append(`questions[${i}][options][${j}][label]`, state.questions[i].options[j].label);
             formData.append(`questions[${i}][options][${j}][title]`, state.questions[i].options[j].title);
           }
@@ -1430,7 +1461,7 @@ export default {
     }
 
     try {
-      const res = await axios.post('bid/editTemplateBid/', formData, config);
+      const res = await axios.post('v2/bid/editTemplateBid/', formData, config);
       if (res.status === 200) {
         // commit('setDraftBidsList',null);
         commit('setIsEditBidChanges', false);
@@ -1439,6 +1470,7 @@ export default {
         // commit('setDraftBidsList',null);
       }
     } catch (err) {
+      Sentry.captureException(err);
       commit('setIsEditBidChanges', false);
       if (state.apiCounter === 2) {
         dispatch('apiSignOutAction');
@@ -1486,17 +1518,19 @@ export default {
 
       return;
     } catch (err) {
+      Sentry.captureException(err);
       console.log(err);
     }
   },
 
   async deleteDraftBid({ state, dispatch }, payload) {
     try {
-      const res = await axios.post('bid/draft/deleteDraft/', { draftId: payload.draftId });
+      const res = await axios.post('v2/bid/draft/deleteDraft/', { draftId: payload.draftId });
       if (res.status === 200) {
         router.replace('/view-bids');
       }
     } catch (err) {
+      Sentry.captureException(err);
       if (state.apiCounter === 2) {
         dispatch('apiSignOutAction');
       } else if (err.response && err.response.status === 403) {
@@ -1510,7 +1544,7 @@ export default {
     try {
       commit('setPageLoader', true);
       const res = await axios.get(
-        `bid/getBidBySerial/${payload.serial}/${payload.id}`,
+        `v2/bid/getBidBySerial/${payload.serial}/${payload.id}`,
       );
 
       if (res.status === 200) {
@@ -1531,6 +1565,7 @@ export default {
         commit('setPageLoader', false);
       }
     } catch (err) {
+      Sentry.captureException(err);
       commit('setPageLoader', false);
       if (state.apiCounter === 2) {
         dispatch('apiSignOutAction');
@@ -1582,8 +1617,8 @@ export default {
 
     if (state.invitedSuppliers !== '' && state.invitedSuppliers && state.invitedSuppliers.length > 0) {
       for (let i = 0; i < state.invitedSuppliers.length; i++) {
-        if (state.invitedSuppliers[i].id) {
-          formData.append(`invitedSuppliers[${i}]`, state.invitedSuppliers[i].id);
+        if (state.invitedSuppliers[i]._id) {
+          formData.append(`invitedSuppliers[${i}]`, state.invitedSuppliers[i]._id);
         } else if (state.invitedSuppliers[i].companyId) {
           formData.append(`invitedSuppliers[${i}]`, state.invitedSuppliers[i].companyId);
         } else {
@@ -1593,14 +1628,14 @@ export default {
     } else {
       formData.append('invitedSuppliers', []);
     }
-    if (state.invitedNewSuppliers != null) {
+    if (state.invitedNewSuppliers.length > 0) {
       for (let i = 0; i < state.invitedNewSuppliers.length; i++) {
         formData.append(`invitedNewSuppliers[${i}]`, state.invitedNewSuppliers[i].id);
       }
     } else {
       formData.append('invitedNewSuppliers', '');
     }
-    if (state.invitedTeamMembers !== '' && state.invitedTeamMembers && state.invitedTeamMembers.length > 0) {
+    if (state.invitedTeamMembers !== '' && state.invitedTeamMembers && state.invitedTeamMembers?.length > 0) {
       for (let t = 0; t < state.invitedTeamMembers.length; t++) {
         if (!state.invitedTeamMembers[t].id) {
           formData.append(`invitedTeamMembers[${t}]`, state.invitedTeamMembers[t]);
@@ -1612,9 +1647,9 @@ export default {
       formData.append('invitedTeamMembers', []);
     }
 
-    if (state.bidlines !== '') {
+    if (state.bidlines.length > 0) {
       let lineItemsindex = 0;
-      for (let i = 0; i < state.bidlines.length; i++) {
+      for (let i = 0; i < state.bidlines?.length; i++) {
         if (state.bidlines[i].description !== '' && state.bidlines[i].quantity !== '') {
           formData.append(`lineItems[${lineItemsindex}][id]`, state.bidlines[i].id);
           formData.append(`lineItems[${lineItemsindex}][description]`, state.bidlines[i].description);
@@ -1633,7 +1668,7 @@ export default {
     } else {
       formData.append('lineItems', '');
     }
-    if (state.attachement !== '' && state.attachement && state.attachement.length > 0) {
+    if (state.attachement.length > 0 && state.attachement && state.attachement.length > 0) {
       for (let i = 0; i < state.attachement.length; i++) {
         formData.append(`attachments[${i}][fileName]`, state.attachement[i].fileName);
         formData.append(`attachments[${i}][fileSize]`, state.attachement[i].fileSize);
@@ -1668,7 +1703,7 @@ export default {
     }
 
     try {
-      const res = await axios.post('bid/editBid/', formData, config);
+      const res = await axios.post('v2/bid/editBid/', formData, config);
       if (res.status === 200) {
         // commit('setDraftBidsList',null);
         commit('setIsEditBidChanges', false);
@@ -1679,6 +1714,7 @@ export default {
         // commit('setDraftBidsList',null);
       }
     } catch (err) {
+      Sentry.captureException(err);
       commit('setIsEditBidChanges', false);
       commit('setSaveBidLoading', false);
       if (state.apiCounter === 2) {
@@ -1725,6 +1761,7 @@ export default {
       state.bidData.questions = '';
       return;
     } catch (err) {
+      Sentry.captureException(err);
       console.log(err);
     }
   },
@@ -1735,13 +1772,14 @@ export default {
       commit('setPageLoader', true);
     }
     try {
-      const res = await axios.get(`/activity/getBidActivities/${payload.bidId}/${payload.userId}`);
+      const res = await axios.get(`/v2/activity/getBidActivities/${payload.bidId}/${payload.userId}`);
 
       if (res.status === 200) {
         commit('setBidActivities', res.data);
         commit('setPageLoader', false);
       }
     } catch (err) {
+      Sentry.captureException(err);
       commit('setPageLoader', false);
       if (state.apiCounter === 2) {
         dispatch('apiSignOutAction');
@@ -1754,7 +1792,7 @@ export default {
   },
   async inviteSupplierToBid({ commit, state, dispatch }, payload) {
     try {
-      const res = await axios.post('bid/addSupplierToBid/', {
+      const res = await axios.post('v2/bid/addSupplierToBid/', {
         userId: payload.userId,
         bidId: payload.bidId,
         invitedSuppliers: payload.invitedSuppliers,
@@ -1771,6 +1809,7 @@ export default {
         commit('setSupplierAddAlert');
       }
     } catch (err) {
+      Sentry.captureException(err);
       if (state.apiCounter === 2) {
         dispatch('apiSignOutAction');
       } else if (err.response && err.response.status === 403) {
@@ -1782,12 +1821,13 @@ export default {
   },
   async changeBidDate({ commit, state, dispatch }, payload) {
     try {
-      const res = await axios.post('bid/changeDueDate/', payload);
+      const res = await axios.post('v2/bid/changeDueDate/', payload);
 
       if (res.status === 200) {
         commit('setDateAlert');
       }
     } catch (err) {
+      Sentry.captureException(err);
       if (state.apiCounter === 2) {
         dispatch('apiSignOutAction');
       } else if (err.response && err.response.status === 403) {
@@ -1800,7 +1840,7 @@ export default {
 
   async addTeamMemberToBid({ commit, state, dispatch }, payload) {
     try {
-      const res = await axios.post('bid/addTeamMemberToBid/', {
+      const res = await axios.post('v2/bid/addTeamMemberToBid/', {
         userId: payload.userId,
         bidId: payload.bidId,
         teamMemberIds: payload.teamMembersIds,
@@ -1816,6 +1856,7 @@ export default {
         commit('setTeamMemberAddAlert');
       }
     } catch (err) {
+      Sentry.captureException(err);
       if (state.apiCounter === 2) {
         dispatch('apiSignOutAction');
       } else if (err.response && err.response.status === 403) {

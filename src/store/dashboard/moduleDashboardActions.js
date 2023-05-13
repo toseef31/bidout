@@ -1,10 +1,11 @@
 import router from '@/router'
 import axios from 'axios'
+import * as Sentry from '@sentry/vue';
 
 export default {
 
   pendingUserCount({commit,dispatch,state},payload){
-    axios.get('/user/getQueueUsersCount/'+payload)
+    axios.get('/v2/user/getQueueUsersCount/'+payload)
       .then(responce => {
         
         if(responce.status === 200){
@@ -12,6 +13,7 @@ export default {
         }
       
     }).catch(async(err) => {
+       Sentry.captureException(err);
       if(state.apiCounter === 2){
         dispatch('apiSignOutAction')
       }else{
@@ -25,13 +27,14 @@ export default {
       });
   }, 
   getPendingList({commit,dispatch,state},payload){
-    axios.get('/company/getCompanyInvitedUsers/'+ payload)
+    axios.get('/v2/company/getCompanyInvitedUsers/'+ payload)
       .then(responce => {
         
         if(responce.status === 200){
           commit('setInvitedUsersList',responce.data)
         }
     }).catch(async(err) => {
+       Sentry.captureException(err);
       if(state.apiCounter === 2){
         dispatch('apiSignOutAction')
       }else{
@@ -45,13 +48,13 @@ export default {
       });
   },
   manageUsers({commit,dispatch,state},payload){
-    const name = decodeURIComponent(payload);
-    axios.get('/company/getUsersByCompany/'+ name)
+    axios.get('/v2/company/getUsersByCompany/'+ payload)
       .then(responce => {
         if(responce.status === 200){
           commit('getUsersList',responce.data)
         }
     }).catch(async(err) => {
+       Sentry.captureException(err);
       if(state.apiCounter === 2){
         dispatch('apiSignOutAction')
       }else{
@@ -65,13 +68,14 @@ export default {
       });
   }, 
   getInvitedList({commit,dispatch,state},payload){
-    axios.get('/company/getCompanyInvitedUsers/'+ payload)
+    axios.get('/v2/company/getCompanyInvitedUsers/'+ payload)
       .then(responce => {
         
         if(responce.status === 200){
           commit('setInvitedUsersList',responce.data)
         }
     }).catch(async(err) => {
+       Sentry.captureException(err);
         if(state.apiCounter === 2){
           dispatch('apiSignOutAction')
         }else{
@@ -86,7 +90,7 @@ export default {
   },
 
   disableUser({commit,dispatch,state},payload){
-    axios.get('/company/disableUser/'+ payload)
+    axios.get('/v2/company/disableUser/'+ payload)
       .then(responce => {
         
         if(responce.status === 200){
@@ -96,6 +100,7 @@ export default {
           router.replace({ name: "DisabledUsers" });
         }
     }).catch(async(err) => {
+       Sentry.captureException(err);
       if(state.apiCounter === 2){
         dispatch('apiSignOutAction')
       }else{
@@ -110,7 +115,7 @@ export default {
   }, 
 
   enableUser({commit,dispatch,state},payload){
-    axios.get('/company/enableUser/'+payload)
+    axios.get('/v2/company/enableUser/'+payload)
       .then(responce => {
         
         if(responce.status === 200){
@@ -120,6 +125,7 @@ export default {
           router.replace({ name: "ManageUsers" });
         }
     }).catch(async(err) => {
+       Sentry.captureException(err);
       if(state.apiCounter === 2){
         dispatch('apiSignOutAction')
       }else{
@@ -133,7 +139,7 @@ export default {
       });
   }, 
   acceptPendingUser({commit,dispatch,state},payload){
-    axios.post('/user/acceptPendingUser/',{ 'userId':payload.user.id, 'email': payload.user.email,'firstName':payload.user.firstName,'lastName':payload.user.lastName,'companyId':payload.user.companyId,'phoneNumber':payload.user.phoneNumber,'title':payload.user.title,'role': 'user'})
+    axios.post('/v2/user/acceptPendingUser/',{ 'userId':payload.user.id, 'email': payload.user.email,'firstName':payload.user.firstName,'lastName':payload.user.lastName,'companyId':payload.user.companyId,'phoneNumber':payload.user.phoneNumber,'title':payload.user.title,'role': 'user'})
       .then(responce => {
       
       if(responce.status === 200){
@@ -143,6 +149,7 @@ export default {
         dispatch('getPendingUsers',payload.user.companyId)
       }
     }).catch(async(err) => {
+       Sentry.captureException(err);
       if(state.apiCounter === 2){
         dispatch('apiSignOutAction')
       }else{
@@ -157,7 +164,7 @@ export default {
   }, 
   getActivities({commit,dispatch,state},payload){
     commit('setActivityList',null);
-    axios.get('/activity/getUserActivities/'+payload)
+    axios.get('/v2/activity/getUserActivities/'+payload)
       .then(responce => {
         
         if(responce.status === 200){
@@ -166,6 +173,7 @@ export default {
           
         }
     }).catch(async(err) => {
+       Sentry.captureException(err);
       if(state.apiCounter === 2){
         dispatch('apiSignOutAction')
       }else{
@@ -183,11 +191,12 @@ export default {
     commit('setLocationLoader',true);
     return new Promise(async (resolve, reject) => {
       try{
-        const res = await axios.get('/company/getCompanyLocations');
+        const res = await axios.get('/v2/company/getCompanyLocations');
         commit('setAllLocations',res.data)
         
         resolve(res.data);
       }catch(err){
+         Sentry.captureException(err);
         commit('setLocationLoader',false);
         console.log(err);
         reject(err)
@@ -203,11 +212,12 @@ export default {
     commit('setPageLoader',true)
     commit('setPageSubLoader',true)
     try{
-      const res = await axios.get('bid/getBidList/'+payload,config);
+      const res = await axios.get('v2/bid/getBidList/'+payload,config);
         commit('setBidsList',res.data);
         await dispatch('getActivities',payload);
         commit('setPageSubLoader',false);
     }catch(err){
+       Sentry.captureException(err);
       console.log(err);
     }
     

@@ -1,30 +1,33 @@
 import router from '@/router';
 import axios from 'axios';
+import * as Sentry from '@sentry/vue';
 
 export default {
   getCategories({ commit }) {
     axios
-      .get('/serviceCategory/getAllCategories')
+      .get('/v2/serviceCategory/getAllCategories')
       .then((responce) => {
         commit('setCatgeoryList', responce.data);
       })
       .catch((err) => {
+        Sentry.captureException(err);
         console.log(err);
       });
   },
   getCompanyByservice({ commit }, payload) {
     const url = encodeURIComponent(payload.service);
     axios
-      .get(`/company/getCompaniesByService/${payload.subSlug}`)
+      .get(`/v2/company/getCompaniesByService/${payload.subSlug}`)
       .then((responce) => {
         const data = {
           data: responce.data,
           name: payload.service,
         };
         commit('setCompanies', data);
-        // router.replace(`/ofs-directory/${payload.slug}/${payload.subSlug}`);
+        // router.replace(`v2/ofs-directory/${payload.slug}/${payload.subSlug}`);
       })
       .catch((err) => {
+        Sentry.captureException(err);
         console.log(err);
       });
   },
@@ -32,7 +35,7 @@ export default {
   getSupplierCompanyByservice({ commit }, payload) {
     const url = encodeURIComponent(payload.service);
     axios
-      .get(`/company/getCompaniesByService/${payload.subSlug}`)
+      .get(`/v2/company/getCompaniesByService/${payload.subSlug}`)
       .then((responce) => {
         const data = {
           data: responce.data,
@@ -42,13 +45,14 @@ export default {
         commit('setCompanies', data);
       })
       .catch((err) => {
+        Sentry.captureException(err);
         console.log(err);
       });
   },
   getSupplierMainService({ commit }, payload) {
     const url = encodeURIComponent(payload.name);
     axios
-      .get(`/company/getCompaniesByMainService/${payload.slug}`)
+      .get(`/v2/company/getCompaniesByMainService/${payload.slug}`)
       .then((responce) => {
         const data = {
           data: responce.data,
@@ -58,13 +62,14 @@ export default {
         commit('setCompanies', data);
       })
       .catch((err) => {
+        Sentry.captureException(err);
         console.log(err);
       });
   },
   getCompanyMainService({ commit }, payload) {
     const url = encodeURIComponent(payload.name);
     axios
-      .get(`/company/getCompaniesByMainService/${payload.slug}`)
+      .get(`/v2/company/getCompaniesByMainService/${payload.slug}`)
       .then((responce) => {
         const data = {
           data: responce.data,
@@ -72,16 +77,17 @@ export default {
           id: payload.id,
         };
         commit('setCompanies', data);
-        router.replace(`/ofs-directory/${payload.slug}`);
+        router.replace(`v2/ofs-directory/${payload.slug}`);
       })
       .catch((err) => {
+        Sentry.captureException(err);
         console.log(err);
       });
   },
   getCompanyByBasin({ commit }, payload) {
     commit('setOfsLoader', true);
     axios
-      .get(`/company/getCompanyByBasin/${payload.basin}/${payload.slug}`)
+      .get(`/v2/company/getCompanyByBasin/${payload.basin}/${payload.slug}`)
       .then((responce) => {
         const data = {
           data: responce.data,
@@ -91,6 +97,7 @@ export default {
         commit('setOfsLoader', false);
       })
       .catch((err) => {
+        Sentry.captureException(err);
         console.log(err);
         commit('setOfsLoader', false);
       });
@@ -98,7 +105,7 @@ export default {
   getCompanyInfo({ commit }, payload) {
     commit('setPageLoader', true);
     axios
-      .get(`/company/getCompanyBySlug/${payload.slug}`)
+      .get(`/v2/company/getCompanyBySlug/${payload.slug}`)
       .then((responce) => {
         commit('setSupplierCompany', responce.data);
         commit('setPageTitle', `${responce.data.companyData.company} - ${responce.data.companyData.companyHq} - BidOut Profile`);
@@ -106,13 +113,14 @@ export default {
         commit('setPageLoader', false);
       })
       .catch((err) => {
+        Sentry.captureException(err);
         console.log(err);
       });
   },
   getPublicCompanyInfo({ commit }, payload) {
     commit('setPageLoader', true);
     axios
-      .get(`/company/getCompanyBySlug/${payload.slug}`)
+      .get(`/v2/company/getCompanyBySlug/${payload.slug}`)
       .then((responce) => {
         commit('setPublicCompany', responce.data);
         commit('setPageTitle', `${responce.data.companyData.company} - ${responce.data.companyData.companyHq} - BidOut Profile`);
@@ -120,26 +128,29 @@ export default {
         commit('setPageLoader', false);
       })
       .catch((err) => {
+        Sentry.captureException(err);
         console.log(err);
       });
   },
   getPremiumCompanies({ commit }, payload) {
     axios
-      .get('admin/getPremiumCompanies')
+      .get('v2/admin/getPremiumCompanies')
       .then((responce) => {
         commit('setPremiumList', responce.data);
       })
       .catch((err) => {
+        Sentry.captureException(err);
         console.log(err);
       });
   },
   searchCompany({ commit }, payload) {
     axios
-      .get(`/ofs/searchSuppliers/${payload}`)
+      .get(`v2/ofs/searchSuppliers/${payload}`)
       .then((responce) => {
         commit('setCompanies', responce.data.hits);
       })
       .catch((err) => {
+        Sentry.captureException(err);
         console.log(err);
       });
   },

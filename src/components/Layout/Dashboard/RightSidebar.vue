@@ -131,7 +131,7 @@ export default {
     ...mapActions(['getActivities']),
   },
   async created() {
-    await this.getActivities(this.$store.getters.userInfo.id);
+    await this.getActivities(this.$store.getters.userInfo._id);
   },
   updated() {
   },
