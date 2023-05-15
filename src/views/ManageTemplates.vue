@@ -242,6 +242,8 @@ export default {
   },
   async created() {
     await this.getBidTemplates();  
+    let a = await this.getBidTemplates()
+    console.log("a is", a)
   },
   mounted() {
     document.title = "Manage Templates - BidOut";

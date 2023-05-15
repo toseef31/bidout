@@ -241,7 +241,6 @@ export default {
       }
     },
     openBids(){
-      console.log("OS OPEN BIDS E OQ PAISAO",this.$store.getters.bidsList )
       if (this.$store.getters.bidsList.length > 0) {
         if (this.searchBid && this.tabVal == '1') {
           return _.orderBy(this.$store.getters.bidsList.filter((item) => {

@@ -35,7 +35,7 @@ export default {
           JSON.stringify(result.user.multiFactor.user.accessToken)
         );
         axios
-          .get(`/user/getUserData/${result.user.multiFactor.user.email}`)
+          .get(`/v2/user/getUserData/${result.user.multiFactor.user.email}`)
           .then(
             (responce) => {
               if (responce.data.status === false) {
@@ -47,10 +47,10 @@ export default {
                 commit("setLoginLoading", false);
               } else {
                 axios
-                  .get(`/auth/addUserLoginHistory/${responce.data.id}`)
+                  .get(`/v2/auth/addUserLoginHistory/${responce.data._id}`)
                   .then((response) => {});
                 axios
-                  .get(`company/getCompanyById/${responce.data.company.id}`)
+                  .get(`v2/company/getCompanyById/${responce.data.company._id}`)
                   .then((response) => {
                     commit("setCompany", response.data);
                   });
@@ -94,7 +94,7 @@ export default {
       firebase.auth().onAuthStateChanged((users) => {
         if (users) {
           axios
-            .get(`/user/getUserData/${users.multiFactor.user.email}`)
+            .get(`/v2/user/getUserData/${users.multiFactor.user.email}`)
             .then((responce) => {
               commit("setUser", responce.data);
               resolve(responce.data);
@@ -158,7 +158,7 @@ export default {
 
   forgotEmail({ commit }, payload) {
     // Try to sendForgot email
-    axios.post("/auth/sendPasswordResetEmail", { email: payload.email }).then(
+    axios.post("/v2/auth/sendPasswordResetEmail", { email: payload.email }).then(
       () => {
         // if(responce.status == 200){
         commit(
@@ -178,7 +178,7 @@ export default {
   },
   verifyToken({ commit }, payload) {
     axios
-      .get(`/auth/verifyPasswordResetToken/${payload}`)
+      .get(`/v2/auth/verifyPasswordResetToken/${payload}`)
       .then((responce) => {
         commit("setVerifyData", responce.data);
       })
@@ -188,7 +188,7 @@ export default {
   },
   resetPassword({ commit }, payload) {
     axios
-      .post("/auth/updatePassword", {
+      .post("/v2/auth/updatePassword", {
         email: payload.email,
         oobCode: payload.oobCode,
         password: payload.password,
@@ -211,7 +211,7 @@ export default {
   async checkEmail({ commit }, payload) {
     if (payload.indexOf("@") !== -1) {
       try {
-        const res = await axios.post("/user/checkIfUserWithEmailExists", {
+        const res = await axios.post("/v2/user/checkIfUserWithEmailExists", {
           email: payload,
         });
 
@@ -387,7 +387,7 @@ export default {
           JSON.stringify(result.user.multiFactor.user.accessToken)
         );
         const userResp = await axios.get(
-          `/user/getUserData/${result.user.multiFactor.user.email}`
+          `/v2/user/getUserData/${result.user.multiFactor.user.email}`
         );
         if (userResp.data.status === false) {
           commit(
@@ -396,9 +396,9 @@ export default {
           );
           commit("showErrorAlert");
         } else {
-          axios.get(`/auth/addUserLoginHistory/${userResp.data.id}`);
+          axios.get(`/v2/auth/addUserLoginHistory/${userResp.data.id}`);
           const companyResp = await axios.get(
-            `company/getCompanyById/${userResp.data.company.id}`
+            `v2/company/getCompanyById/${userResp.data.company.id}`
           );
           commit("setCompany", companyResp.data);
           localStorage.setItem("companyData", JSON.stringify(companyResp.data));

@@ -47,7 +47,7 @@
                 </template>
               </v-list-item>
               </template>
-              <v-list-item v-if="conversation.type == 'PRIVATE' && participant.id != user.id"  v-for="participant in conversation.participantDetails" @click="openChat(conversation,participant.name)" :class="{ 'grey--text v-list-item--active' : conversation._id === conversationsIds }" :key="participant.id" class="d-none">
+              <v-list-item v-if="conversation.type == 'PRIVATE' && participant._id != user._id"  v-for="participant in conversation.participantDetails" @click="openChat(conversation,participant.name)" :class="{ 'grey--text v-list-item--active' : conversation._id === conversationsIds }" :key="participant.id" class="d-none">
                 <template >
                     <v-list-item-avatar>
                       <v-avatar>
@@ -217,7 +217,7 @@ export default {
         this.$emit('membersData', this.chatData.group.participantDetails);
       }
       const ids = {
-        userId: this.user.id,
+        userId: this.user._id,
         conversationId: this.conversationId,
       };
       this.$emit('ChatDatas', this.chatData);
@@ -229,7 +229,7 @@ export default {
     unarchive(id) {
       const conv = {
         conversationId: id,
-        userId: this.user.id,
+        userId: this.user._id,
       };
       this.unArchiveConversation(conv);
     },
@@ -238,14 +238,14 @@ export default {
     },
     getConversationName(conversation) {
       if (conversation.type === 'GROUP') {
-        return conversation.name.split('|||').find((el) => el.trim() !== this.user.company.company);
+        return conversation.name.split('|||').find((el) => el.trim() !== this.user.company.companyName);
       }
       return conversation.name;
     },
   },
   async created() {
     this.user = this.$store.getters.userInfo;
-    this.archiveConversations(this.user.id);
+    this.archiveConversations(this.user._id);
     const chatArr = this.$store.getters.conversations;
     if (chatArr != null) {
       chatArr.forEach((msg, index) => {

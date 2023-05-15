@@ -6,6 +6,7 @@ import * as Sentry from '@sentry/vue';
 
 export default {
   async getTeamMembers({ commit, dispatch, state }, payload) {
+    console.log("team members", payload)
     try {
       const res = await axios.get(`v2/company/getTeamMembers/${payload}`);
       if (res.status === 200) {
@@ -148,7 +149,7 @@ export default {
           await dispatch('getCategories');
           await dispatch('searchByCompany', { query: '', basin: 'all' });
 
-          await dispatch('getTeamMembers', payload.company);
+          await dispatch('getTeamMembers', payload.company._id);
 
           commit('setInvitedSuppliersData', res.data.bidData.invitedSuppliers);
 
@@ -775,7 +776,7 @@ export default {
       if (res.status === 200) {
         commit('setBidData', res.data);
         commit('setAttachement', res.data.attachments);
-        dispatch('getTeamMembers', payload.company);
+        dispatch('getTeamMembers', res.data.company);
         dispatch('getSalesReps', { query: '', basin: 'all' });
         dispatch('getCategories');
         dispatch('searchByCompany', { query: '', basin: 'all' });
@@ -823,8 +824,8 @@ export default {
     formData.append('dueTime', state.bidData.dueTime);
     formData.append('regions', state.bidData.regions);
     formData.append('qAndAEnabled', state.bidData.qAndAEnabled);
-    formData.append('userId', state.bidData.userId);
-    formData.append('companyId', state.bidData.companyId);
+    formData.append('userId', state.bidData.user);
+    formData.append('companyId', state.bidData.company);
     formData.append('company', state.bidData.company);
     formData.append('serial', state.bidSerial);
 
@@ -1136,12 +1137,12 @@ export default {
   async getEditTemplate({ commit, state, dispatch }, payload) {
     commit('setPageLoader', true);
     try {
-      console.log("HAHAHAHAHAHAHAH", payload)
       const res = await axios.get(`v2/bid/getBidDetailsById/${payload.id}`);
       if (res.status === 200) {
+        console.log("bid details ", res.data)
         commit('getSingleTemplate', res.data);
         commit('setBidData', res.data);
-        dispatch('getTeamMembers', payload.company);
+        dispatch('getTeamMembers', payload.company._id);
         dispatch('getSalesReps', { query: '', basin: 'all' });
         dispatch('getCategories');
         dispatch('searchByCompany', { query: '', basin: 'all' });
@@ -1187,19 +1188,14 @@ export default {
     formData.append('userName', payload.userName);
     formData.append('companyId', payload.companyId);
     formData.append('company', payload.company);
-    formData.append('lineItems', []);
-    formData.append('invitedSuppliers', []);
-    formData.append('invitedNewSuppliers', []);
-    formData.append('invitedTeamMembers', []);
-    formData.append('questions', []);
-    formData.append('attachment', []);
+
 
     try {
       const res = await axios.post('v2/bid/createTemplateBid', formData, config);
       if (res.status === 200) {
         commit('setBidData', res.data);
         commit('setAttachement', res.data.attachment);
-        dispatch('getTeamMembers', payload.company);
+        dispatch('getTeamMembers', res.data.company);
         dispatch('getSalesReps', { query: '', basin: 'all' });
         dispatch('getCategories');
         dispatch('searchByCompany', { query: '', basin: 'all' });
@@ -1230,7 +1226,7 @@ export default {
       );
 
       if (res.status === 200) {
-        dispatch('getTeamMembers', payload.company);
+        dispatch('getTeamMembers', payload.company._id);
         dispatch('getSalesReps', { query: '', basin: 'all' });
         dispatch('getCategories');
         dispatch('searchByCompany', { query: '', basin: 'all' });
@@ -1276,7 +1272,7 @@ export default {
     formData.append('userId', state.bidData.userId);
     formData.append('userName', state.bidData.userName);
     formData.append('companyId', state.bidData.companyId);
-    formData.append('company', state.bidData.company);
+    formData.append('company', state.bidData.company.companyName);
 
     formData.append('bidDescriptions[0][body]', state.bidData.bidDescriptions[0].body);
     if (state.bidData.bidDescriptions.length > 1) {
@@ -1548,7 +1544,7 @@ export default {
       );
 
       if (res.status === 200) {
-        dispatch('getTeamMembers', payload.company);
+        dispatch('getTeamMembers', payload.company._id);
         dispatch('getSalesReps', { query: '', basin: 'all' });
         dispatch('getCategories');
         dispatch('searchByCompany', { query: '', basin: 'all' });

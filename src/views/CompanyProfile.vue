@@ -399,7 +399,7 @@ export default {
   },
   mounted() {
     document.title = "Company Profile - BidOut";
-    this.getCompany(this.$store.getters.userInfo.company.id);
+    this.getCompany(this.$store.getters.userInfo.company._id);
   }
 };
 </script>

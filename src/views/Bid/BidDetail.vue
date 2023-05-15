@@ -75,7 +75,7 @@
         <img :src="require('@/assets/images/bids/awarded.png')" />
 
         <div class="ml-5 text-left">
-          <div class="company-title">{{ users.company.company }}</div>
+          <div class="company-title">{{ users.company.companyName }}</div>
           <div class="company-submitted">
             Your bid submission has been received.
           </div>
@@ -1144,9 +1144,9 @@ export default {
 
     if (this.getUserType === "supplier") {
       await this.getIntent({
-        companyId: this.users.companyId,
+        companyId: this.users.company,
         bidId: this.bidDetail.bidData._id,
-        companyName: this.users.company,
+        companyName: this.users.company.companyName,
       });
 
       this.answer = this.$store.getters.bidIntent;

@@ -4,7 +4,7 @@ import * as Sentry from '@sentry/vue';
 export default {
   unreadMessagesCount({ commit }, payload) {
     axios
-      .post('/chat/countUnreadMessages', { userId: payload.userId })
+      .post('/v2/chat/countUnreadMessages', { userId: payload.userId })
       .then((responce) => {
         commit('setUnreadCount', responce.data.totalUnreadMessages);
       })
@@ -18,7 +18,7 @@ export default {
       commit('setPageLoader', true);
     }
     axios
-      .get(`/chat/getConversations/${payload}`)
+      .get(`/v2/chat/getConversations/${payload}`)
       .then((responce) => {
 
         commit('setConverstaionList', responce.data.conversations);
@@ -33,7 +33,7 @@ export default {
   },
   async getBidAllConversations({ commit, state }, payload) {
     await axios
-      .get(`/chat/getBidConversations/${payload.bidId}/${payload.userId}`)
+      .get(`/v2/chat/getBidConversations/${payload.bidId}/${payload.userId}`)
       .then((responce) => {
         commit('setBidConversationList', responce.data);
       })
@@ -44,7 +44,7 @@ export default {
   },
   getAllMessages({ commit, dispatch, state }, payload) {
     axios
-      .get(`/chat/getMessages/${payload.conversationId}`)
+      .get(`/v2/chat/getMessages/${payload.conversationId}`)
       .then((responce) => {
         commit('setMessagesList', responce.data.messages);
         dispatch('unreadMessagesCount', { userId: payload.userId });
@@ -74,7 +74,7 @@ export default {
       .post('chat/sendMessage', formData, config)
       .then((responce) => {
         commit('setChatRefreshToken', 1);
-        dispatch('getAllConversations', rootState.auth.userInfo.id);
+        dispatch('getAllConversations', rootState.auth.userInfo._id);
         commit('setNewMessages', responce.data.message);
       })
       .catch((err) => {
@@ -84,7 +84,7 @@ export default {
   },
   unreadMessagesCountCon({ commit }, payload) {
     axios
-      .post('/chat/countUnreadMessagesInConversation', {
+      .post('/v2/chat/countUnreadMessagesInConversation', {
         userId: payload.userId,
         conversationId: payload.conversationId,
       })
@@ -98,7 +98,7 @@ export default {
   },
   lastMessageRead({ commit }, payload) {
     axios
-      .post('/chat/setLastMessageReadAt', {
+      .post('/v2/chat/setLastMessageReadAt', {
         userId: payload.userId,
         conversationId: payload.conversationId,
       })
@@ -113,15 +113,15 @@ export default {
     commit, state, dispatch, rootState,
   }, payload) {
     axios
-      .post('/chat/archiveConversation', {
+      .post('/v2/chat/archiveConversation', {
         userId: payload.userId,
         conversationId: payload.conversationId,
       })
       .then((responce) => {
         commit('setMessagesList', null);
         commit('setChatRefreshToken', 1);
-        dispatch('getAllConversations', rootState.auth.userInfo.id);
-        dispatch('getArchiveChats', rootState.auth.userInfo.id);
+        dispatch('getAllConversations', rootState.auth.userInfo._id);
+        dispatch('getArchiveChats', rootState.auth.userInfo._id);
       })
       .catch((err) => {
         Sentry.captureException(err);
@@ -157,10 +157,10 @@ export default {
     commit, state, dispatch, rootState,
   }, payload) {
     axios
-      .post('/chat/createConversation/', payload)
+      .post('/v2/chat/createConversation/', payload)
       .then((responce) => {
         commit('setChatRefreshToken', 1);
-        dispatch('getAllConversations', rootState.auth.userInfo.id);
+        dispatch('getAllConversations', rootState.auth.userInfo._id);
         commit('setCreateMsg', responce.data.message);
         setTimeout(() => {
           commit('setCreateMsg', null);
@@ -176,10 +176,10 @@ export default {
     commit, state, dispatch, rootState,
   }, payload) {
     axios
-      .post('/chat/removeParticipantsFromConversation/', payload)
+      .post('/v2/chat/removeParticipantsFromConversation/', payload)
       .then((responce) => {
         commit('setChatRefreshToken', 1);
-        dispatch('getAllConversations', rootState.auth.userInfo.id);
+        dispatch('getAllConversations', rootState.auth.userInfo._id);
       })
       .catch((err) => {
         Sentry.captureException(err);
@@ -189,7 +189,7 @@ export default {
   // Get Archive Chat
   getArchiveChats({ commit }, payload) {
     axios
-      .get(`/chat/getArchivedConversations/${payload}`)
+      .get(`/v2/chat/getArchivedConversations/${payload}`)
       .then((responce) => {
         commit('setArchiveConverstaionList', responce.data.conversations);
       })
@@ -202,14 +202,14 @@ export default {
     commit, state, dispatch, rootState 
   }, payload) {
     axios
-      .post('/chat/unarchiveConversation/', {
+      .post('/v2/chat/unarchiveConversation/', {
         conversationId: payload.conversationId,
         userId: payload.userId,
       })
       .then((responce) => {
         commit('setChatRefreshToken', 1);
         dispatch('getArchiveChats', payload.userId);
-        dispatch('getAllConversations', rootState.auth.userInfo.id);
+        dispatch('getAllConversations', rootState.auth.userInfo._id);
       })
       .catch((err) => {
         Sentry.captureException(err);
@@ -218,7 +218,7 @@ export default {
   },
   async sendBroadcast({ commit }, payload) {
     await axios
-      .post('/chat/newbroadcastMessage/', {
+      .post('/v2/chat/newbroadcastMessage/', {
         messageContent: payload.messageContent,
         bidId: payload.bidId,
         buyerUserId: payload.buyerUserId,
@@ -237,7 +237,7 @@ export default {
   },
   bidMessageUnreadCount({ commit }, payload) {
     axios
-      .post('/chat/countUnreadMessagesInBid', { userId: payload.userId, bidId: payload.bidId })
+      .post('/v2/chat/countUnreadMessagesInBid', { userId: payload.userId, bidId: payload.bidId })
       .then((responce) => {
         commit('setBidMessageUnreadCount', responce.data.totalUnreadMessages);
       })

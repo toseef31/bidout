@@ -204,16 +204,16 @@ export default {
       this.getPendingUsers(company);
     },
     accept(user){
-      this.acceptPendingUser({user, companyName: this.user.company});
+      this.acceptPendingUser({user, companyName: this.user.company.companyName});
     },
   },
   mounted() {
     document.title = "Manage Users - BidOut";
     this.user = this.$store.getters.userInfo;
     this.userInfo = this.$store.getters.userInfo;
-    this.getUsers(this.user.company);
-    this.invitedUsers(this.user.company);
-    this.getPendingUsers(this.user.company);
+    this.getUsers(this.user.company._id);
+    this.invitedUsers(this.user.company._id);
+    this.getPendingUsers(this.user.company._id);
   }
 };
 </script>
