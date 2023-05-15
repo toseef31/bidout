@@ -599,7 +599,7 @@ export default {
   },
   async created() {
     this.user = this.$store.getters.userInfo;
-    await this.getAllConversations(this.user.id);
+    await this.getAllConversations(this.user._id);
   },
   beforeMount() {},
   async mounted() {

@@ -297,7 +297,8 @@ export default {
   created() {},
   mounted() {
     this.user = this.$store.getters.userInfo;
-    this.getTeamMembers(this.$store.getters.userInfo.company);
+    console.log("team ", this.user)
+    this.getTeamMembers(this.$store.getters.userInfo.company._id);
     this.savedraftOnInterval();
   },
 };

@@ -125,7 +125,7 @@ export default {
     async useTemplate(template) {
       this.$store.commit("setBidData", template);
       this.$store.state.bid.bidData.statusType = "templateBid";
-      await this.$store.dispatch("getTeamMembers", this.userDatas.company);
+      await this.$store.dispatch("getTeamMembers", this.userData.company._id);
       await this.$store.dispatch("getSalesReps", { query: "", basin: "all" });
       await this.$store.dispatch("getCategories");
       await this.$store.dispatch("searchByCompany", { query: "", basin: "all" });

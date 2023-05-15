@@ -74,7 +74,7 @@ export default {
       .post('chat/sendMessage', formData, config)
       .then((responce) => {
         commit('setChatRefreshToken', 1);
-        dispatch('getAllConversations', rootState.auth.userInfo.id);
+        dispatch('getAllConversations', rootState.auth.userInfo._id);
         commit('setNewMessages', responce.data.message);
       })
       .catch((err) => {
@@ -120,8 +120,8 @@ export default {
       .then((responce) => {
         commit('setMessagesList', null);
         commit('setChatRefreshToken', 1);
-        dispatch('getAllConversations', rootState.auth.userInfo.id);
-        dispatch('getArchiveChats', rootState.auth.userInfo.id);
+        dispatch('getAllConversations', rootState.auth.userInfo._id);
+        dispatch('getArchiveChats', rootState.auth.userInfo._id);
       })
       .catch((err) => {
         Sentry.captureException(err);
@@ -160,7 +160,7 @@ export default {
       .post('/v2/chat/createConversation/', payload)
       .then((responce) => {
         commit('setChatRefreshToken', 1);
-        dispatch('getAllConversations', rootState.auth.userInfo.id);
+        dispatch('getAllConversations', rootState.auth.userInfo._id);
         commit('setCreateMsg', responce.data.message);
         setTimeout(() => {
           commit('setCreateMsg', null);
@@ -179,7 +179,7 @@ export default {
       .post('/v2/chat/removeParticipantsFromConversation/', payload)
       .then((responce) => {
         commit('setChatRefreshToken', 1);
-        dispatch('getAllConversations', rootState.auth.userInfo.id);
+        dispatch('getAllConversations', rootState.auth.userInfo._id);
       })
       .catch((err) => {
         Sentry.captureException(err);
@@ -209,7 +209,7 @@ export default {
       .then((responce) => {
         commit('setChatRefreshToken', 1);
         dispatch('getArchiveChats', payload.userId);
-        dispatch('getAllConversations', rootState.auth.userInfo.id);
+        dispatch('getAllConversations', rootState.auth.userInfo._id);
       })
       .catch((err) => {
         Sentry.captureException(err);

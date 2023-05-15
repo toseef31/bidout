@@ -47,10 +47,10 @@ export default {
                 commit("setLoginLoading", false);
               } else {
                 axios
-                  .get(`/v2/auth/addUserLoginHistory/${responce.data.id}`)
+                  .get(`/v2/auth/addUserLoginHistory/${responce.data._id}`)
                   .then((response) => {});
                 axios
-                  .get(`v2/company/getCompanyById/${responce.data.company.id}`)
+                  .get(`v2/company/getCompanyById/${responce.data.company._id}`)
                   .then((response) => {
                     commit("setCompany", response.data);
                   });
