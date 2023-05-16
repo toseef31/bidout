@@ -673,6 +673,7 @@ export default {
         Authorization: `Bearer ${JSON.parse(localStorage.getItem('token'))}`,
       },
     };
+    console.log(state.bidData)
     const formData = new FormData();
     formData.append('title', state.bidData.title);
     formData.append('type', state.bidData.type);
@@ -822,7 +823,7 @@ export default {
     formData.append('type', state.bidData.type);
     formData.append('dueDate', state.bidData.dueDate);
     formData.append('dueTime', state.bidData.dueTime);
-    formData.append('regions', state.bidData.regions);
+    formData.append('regions', state.bidData.region);
     formData.append('qAndAEnabled', state.bidData.qAndAEnabled);
     formData.append('userId', state.bidData.user);
     formData.append('companyId', state.bidData.company);
@@ -1175,7 +1176,7 @@ export default {
     formData.append('type', state.bidData.type);
     formData.append('dueDate', state.bidData.dueDate);
     formData.append('dueTime', state.bidData.dueTime);
-    formData.append('regions', state.bidData.regions);
+    formData.append('regions', state.bidData.region);
     formData.append('qAndAEnabled', state.bidData.qAndAEnabled);
     formData.append('bidDescriptions[0][body]', state.bidData.bidDescriptions[0].body);
     if (state.bidData.bidDescriptions.length > 1) {
@@ -1267,7 +1268,7 @@ export default {
     formData.append('type', state.bidData.type);
     formData.append('dueDate', state.bidData.dueDate);
     formData.append('dueTime', state.bidData.dueTime);
-    formData.append('regions', state.bidData.regions);
+    formData.append('regions', state.bidData.region);
     formData.append('qAndAEnabled', state.bidData.qAndAEnabled);
     formData.append('userId', state.bidData.userId);
     formData.append('userName', state.bidData.userName);
@@ -1596,7 +1597,7 @@ export default {
     formData.append('type', state.bidData.type);
     formData.append('dueDate', state.bidData.dueDate);
     formData.append('dueTime', state.bidData.dueTime);
-    formData.append('regions', state.bidData.regions);
+    formData.append('regions', state.bidData.region);
     formData.append('qAndAEnabled', state.bidData.qAndAEnabled);
     formData.append('userId', state.bidData.userId.id);
     formData.append('companyId', state.bidData.companyId);
