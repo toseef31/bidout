@@ -25,7 +25,6 @@ export default {
     firebase
       .auth()
       .signInWithEmailAndPassword(payload.email, payload.password)
-
       .then((result) => {
         commit("setForgetEmail", null);
         commit("setError", null);
@@ -49,11 +48,13 @@ export default {
                 axios
                   .get(`/v2/auth/addUserLoginHistory/${responce.data._id}`)
                   .then((response) => {});
-                axios
-                  .get(`v2/company/getCompanyById/${responce.data.company._id}`)
-                  .then((response) => {
-                    commit("setCompany", response.data);
-                  });
+                  if (responce.data.company) {
+                    axios
+                      .get(`v2/company/getCompanyById/${responce.data.company?._id}`)
+                      .then((response) => {
+                        commit("setCompany", response.data);
+                      }); 
+                  }
                 commit("setUser", responce.data);
                 commit("setLoginLoading", false);
                 window.location.href = "/dashboard";
@@ -71,6 +72,7 @@ export default {
           );
       })
       .catch((error) => {
+        console.log("the errors", error)
         if (error.code === "auth/too-many-requests") {
           commit("setPassError", null);
           commit(
@@ -396,9 +398,9 @@ export default {
           );
           commit("showErrorAlert");
         } else {
-          axios.get(`/v2/auth/addUserLoginHistory/${userResp.data.id}`);
+          axios.get(`/v2/auth/addUserLoginHistory/${userResp.data?.id}`);
           const companyResp = await axios.get(
-            `v2/company/getCompanyById/${userResp.data.company.id}`
+            `v2/company/getCompanyById/${userResp.data.company?.id}`
           );
           commit("setCompany", companyResp.data);
           localStorage.setItem("companyData", JSON.stringify(companyResp.data));
