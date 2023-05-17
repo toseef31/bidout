@@ -280,13 +280,13 @@ export default {
     },
     qAndAEnabled: {
       get() {
-        if (!this.$store.getters.bidData._id) {
-          return 'yes';
+        if (!this.$store.getters.bidData?.qAndAEnabled) {
+          return "false";
         }
-        return this.$store.getters.bidData.qAndAEnabled;
+        return "true";
       },
       set(value) {
-        this.$store.commit('setBidEnabled', value);
+        this.$store.commit("setBidEnabled", value);
       },
     },
     serial: {
