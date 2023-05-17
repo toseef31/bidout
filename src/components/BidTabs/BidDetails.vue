@@ -235,9 +235,7 @@ export default {
 
           return currentDate.format('YYYY-MM-DD');
         }
-        if (!this.$store.getters.bidData._id) {
-          console.log("got in cr", this.$store.getters.bidData)
-          
+        if (!this.$store.getters.bidData._id) {     
           return '';
         }
 
@@ -382,7 +380,7 @@ export default {
         const bidDetails = {
           userId: this.userInfo._id,
           userName: `${this.userInfo.firstName} ${this.userInfo.lastName}`,
-          companyId: this.userInfo.company._id,
+          companyId: this.userInfo.company?._id,
           company: this.userInfo.company.companyName,
         };
         if (this.$route.name === 'EditTemplate') {
@@ -397,7 +395,7 @@ export default {
         const bidDetails = {
           userId: this.userInfo._id,
           userName: `${this.userInfo.firstName} ${this.userInfo.lastName}`,
-          companyId: this.userInfo.company._id,
+          companyId: this.userInfo.company?._id,
           company: this.userInfo.company.companyName,
         };
         if (this.$store.getters.bidData._id && this.$store.getters.bidData.statusType === 'templateBid') {

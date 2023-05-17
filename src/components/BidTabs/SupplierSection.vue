@@ -53,7 +53,7 @@
             </div>
             <div class="companies-list">
               <div class="d-flex align-center justify-space-between list-company pa-4"
-                v-for="(company, index) in companiesList" v-if="user.company.id != company.objectID">
+                v-for="(company, index) in companiesList" v-if="user.company._id != company.objectID">
                 <div class="comapny-data d-flex align-center">
                   <div class="company-img">
                     <img v-if="company.image" class="image-class" :src="company.image" />
@@ -62,7 +62,7 @@
                     </div>
                   </div>
                   <div class="company-title text-left pl-4">
-                    <h4>{{ company.company }}
+                    <h4>{{ company.companyName }}
                       <span v-if="hasOfsPremium(company)">
                         <v-tooltip top>
                           <template v-slot:activator="{ on, attrs }">
@@ -98,7 +98,7 @@
             </div>
             <div class="companies-list">
               <div class="d-flex align-center justify-space-between list-company pa-4"
-                v-for="(list, index) in salesRepsList" v-if="user.id != list.objectID">
+                v-for="(list, index) in salesRepsList" v-if="user._id != list.objectID">
                 <div class="comapny-data d-flex align-center">
                   <div class="company-img">
                     <img v-if="!list.image" :src="require('@/assets/images/chat/chatUser.png')">
@@ -132,7 +132,7 @@
             <div class="companies-list">
               <div>
                 <div class="d-flex align-center justify-space-between list-company pa-4"
-                  v-for="(company, index) in companiesList" v-if="user.company.id != company.id">
+                  v-for="(company, index) in companiesList" v-if="user.company._id != company._id">
                   <div class="comapny-data d-flex align-center">
                     <div class="company-img">
                       <img v-if="company.image" class="image-class" :src="company.image" />
@@ -142,7 +142,7 @@
                       </div>
                     </div>
                     <div class="company-title text-left pl-4">
-                      <h4>{{ company.company }}
+                      <h4>{{ company.companyName }}
                         <span v-if="hasOfsPremium(company)">
                           <v-tooltip top>
                             <template v-slot:activator="{ on, attrs }">
@@ -177,7 +177,7 @@
           <div class="companies-list">
 
             <template v-for="(company, index) in repsInvited">
-              <div class="d-flex align-center justify-space-between list-company pa-4" v-if="!company.companyId">
+              <div class="d-flex align-center justify-space-between list-company pa-4" v-if="!company.companyName">
                 <div class="comapny-data d-flex align-center">
                   <div class="company-img">
                     <img v-if="company.image" class="image-class" :src="company.image" />
@@ -187,7 +187,7 @@
                     </div>
                   </div>
                   <div class="company-title text-left pl-4">
-                    <h4>{{ company.company }}
+                    <h4>{{ company.companyName }}
                       <span v-if="hasOfsPremium(company)">
                         <v-tooltip top>
                           <template v-slot:activator="{ on, attrs }">
@@ -206,7 +206,7 @@
                     @click="removeCompany(company, index)"> <v-icon color="#F32349">mdi-minus</v-icon></v-btn>
                 </div>
               </div>
-              <div class="d-flex align-center justify-space-between list-company pa-4" v-if="company.companyId">
+              <div class="d-flex align-center justify-space-between list-company pa-4" v-if="company.companyName">
                 <div class="comapny-data d-flex align-center">
                   <div class="company-img">
                     <div class="avatar-image" v-if="!company.image">
@@ -217,8 +217,8 @@
                     </div>
                   </div>
                   <div class="company-title text-left pl-4">
-                    <h4>{{ company.firstName }} {{ company.lastName }}</h4>
-                    <p class="mb-0">{{ company.company }}
+                    <h4>{{ company.companyName }} {{ company.lastName }}</h4>
+                    <p class="mb-0">{{ company.companyName }}
                       <span v-if="hasOfsPremiumReps(company)">
                         <v-tooltip top>
                           <template v-slot:activator="{ on, attrs }">
@@ -248,7 +248,7 @@
                   </div>
                   <div class="company-title text-left pl-4">
                     <h4>{{ company.firstName }} {{ company.lastName }} </h4>
-                    <p class="mb-0">{{ company.company }}</p>
+                    <p class="mb-0">{{ company.companyName }}</p>
 
                   </div>
                 </div>
@@ -412,12 +412,12 @@ export default {
     },
     salesRepsList() {
       const unique = this.$store.getters.salesRepsList ? this.$store.getters.salesRepsList.filter((el) => !this.repsInvited.find((item) => {
-        if (item.id) return el.companyId === item.id;
-        if (item.companyId) return el.companyId === item.companyId;
-        return el.companyId === item.objectID;
-      }) && el.company !== this.userInfo.company.company) : [];
+        if (item._id) return el.company === item._id;
+        if (item.company) return el.company === item.company;
+        return el.company === item.objectID;
+      }) && el.company !== this.userInfo.company.companyName) : [];
 
-      return [...new Map(unique.map((item) => [item.companyId, item])).values()];
+      return [...new Map(unique.map((item) => [item.company, item])).values()];
     },
 
     itemBidId() {
@@ -432,29 +432,28 @@ export default {
           unique = this.$store.getters.companiesList ? this.$store.getters.companiesList.filter((el) => !this.repsInvited.find((item) => {
             if (el.objectID) {
               idType = 'objectID';
-              if (item.id) return el.objectID === item.id;
-              if (item.companyId) return el.objectID === item.companyId;
+              if (item._id) return el.objectID === item._id;
+              if (item.company) return el.objectID === item.company;
               return el.objectID === item.objectID;
-            } if (el.id) {
-              idType = 'id';
-              if (item.id) return el.id === item.id;
-              if (item.companyId) return el.id === item.companyId;
-              return el.id === item.objectID;
+            } if (el._id) {
+              idType = '_id';
+              if (item._id) return el._id === item._id;
+              if (item.company) return el._id === item.company;
+              return el._id === item.objectID;
             }
-          }) && el.company !== this.userInfo.company.company) : [];
+          }) && el.company !== this.userInfo.company.companyName) : [];
 
-          return idType === 'id' ? [...new Map(unique.map((item) => [item.id, item])).values()] : [...new Map(unique.map((item) => [item.objectID, item])).values()];
+          return idType === '_id' ? [...new Map(unique.map((item) => [item._id, item])).values()] : [...new Map(unique.map((item) => [item.objectID, item])).values()];
         }
 
         this.$store.getters.companiesList.forEach((el) => {
           if (el.objectID) {
             idType = 'objectID';
-          } if (el.id) {
-            idType = 'id';
+          } if (el._id) {
+            idType = '_id';
           }
         });
-
-        return idType === 'id' ? [...new Map(this.$store.getters.companiesList.map((item) => [item.id, item])).values()] : [...new Map(this.$store.getters.companiesList.map((item) => [item.objectID, item])).values()];
+        return idType === '_id' ? [...new Map(this.$store.getters.companiesList.map((item) => [item._id, item])).values()] : [...new Map(this.$store.getters.companiesList.map((item) => [item.objectID, item])).values()];
       }
 
       return [];
@@ -472,7 +471,7 @@ export default {
       if (this.$store.getters.bidData.invitedSuppliers != '' && this.$store.getters.bidData.invitedSuppliers != null && this.$store.getters.bidData.invitedSuppliers != undefined) {
         if (this.$route.name == 'EditBid') {
           if (this.inviteCount == 1 && this.$store.getters.companiesList) {
-            const inviteData = this.$store.getters.companiesList ? this.$store.getters.companiesList.filter((el) => this.$store.state.bid.invitedSuppliers.find((supplier) => supplier.id === el.objectID)) : [];
+            const inviteData = this.$store.getters.companiesList ? this.$store.getters.companiesList.filter((el) => this.$store.state.bid.invitedSuppliers.find((supplier) => supplier._id === el.objectID)) : [];
             this.repsInvited = inviteData.sort((a, b) => {
               const aHasOfsPremium = a.contracts.some((contract) => contract.contractType === 'ofs-premium');
               if (aHasOfsPremium) {
@@ -754,10 +753,10 @@ export default {
 
       if (intent && id) {
         intent.forEach((el) => {
-          if (el.companyId === id && el.answer === 'true') {
+          if (el.company === id && el.answer === 'true') {
             result = 'intended';
           }
-          if (el.companyId === id && el.answer === 'false') {
+          if (el.company === id && el.answer === 'false') {
             result = 'not-intended';
           }
         });
