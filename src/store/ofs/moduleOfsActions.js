@@ -156,7 +156,7 @@ export default {
   },
   async placeOrder({ commit, dispatch, state }, payload) {
     try {
-      const res = await axios.post('order/placeOrder', {
+      const res = await axios.post('v2/order/placeOrder', {
         companyId: payload.companyId,
         companyName: payload.companyName,
         content: payload.content,

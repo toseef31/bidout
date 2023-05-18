@@ -90,10 +90,10 @@ export default {
     },
     orderPlace(){
       var data = {
-        companyId: this.supplierData.id,
-        companyName: this.supplierData.company,
+        companyId: this.supplierData._id,
+        companyName: this.supplierData.companyName,
         content: this.content,
-        buyerId: this.$store.getters.userInfo.id,
+        buyerId: this.$store.getters.userInfo._id,
         slug: this.supplierData.slug,
       }
       this.placeOrder(data);
