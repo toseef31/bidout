@@ -12,7 +12,7 @@
                   <v-container class="pa-sm-10 pa-4">
                     <div class="top-section d-flex pa-sm-10 pa-4 pl-sm-0 pr-sm-0">
                       <div> 
-                        <h4>{{companyData.companyData.company}} Page</h4>
+                        <h4>{{companyData.companyData.companyName}} Page</h4>
                       </div>
                       <template>
                         <div class="progress-section">
@@ -229,7 +229,7 @@ export default {
     },
     companyData(){
       if(this.$store.getters.companyData){
-        this.profileName = this.$store.getters.companyData.companyData.company;
+        this.profileName = this.$store.getters.companyData.companyData.companyName;
         this.profileSummary = this.$store.getters.companyData.companyData.overview;
        return this.$store.getters.companyData;
       }else{
