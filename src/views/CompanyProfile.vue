@@ -300,7 +300,7 @@ export default {
     ...mapMutations(["setBasinLoading"]),
       async updateBasic(){
         var data = {
-          companyId: this.$store.getters.userInfo.company.id,
+          companyId: this.$store.getters.userInfo.company._id,
           userId: this.$store.getters.userInfo.id,
           profileName: this.profileName,
           profileSummary: this.profileSummary,
