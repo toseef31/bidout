@@ -319,7 +319,6 @@ export default {
   async mounted() {
     document.title = "Dashboard - BidOut";
     this.users = this.$store.getters.userInfo;
-    console.log(userDatas)
     this.pendingUserCount(this.userDatas.company)
     await this.getBidDashboard(this.userDatas._id);
     this.loadMapScript();
