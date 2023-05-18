@@ -17,9 +17,9 @@
             <v-img v-if="get_url_extension(doc.attachment) == 'pdf'" :src="require('@/assets/images/profile/pdf.png')" width="80px" class="mx-auto"></v-img>
             <v-img v-else-if="get_url_extension(doc.attachment) == 'xlsx' || get_url_extension(doc.attachment) == 'xls'" :src="require('@/assets/images/profile/excel.png')" width="80px" class="mx-auto"></v-img>
             <v-img v-else :src="require('@/assets/images/profile/other.png')" width="80px" class="mx-auto"></v-img>
-            <p v-if="edit != doc.documentId">{{doc.name}}</p>
+            <p v-if="edit != doc._id">{{doc.name}}</p>
           </a>
-            <v-text-field clearable v-model="nameEdit" v-if="edit == doc.documentId"></v-text-field>
+            <v-text-field clearable v-model="nameEdit" v-if="edit == doc._id"></v-text-field>
             <v-btn small min-width="36px" v-show="!edit" min-height="36px" @click="editDoc(doc)"><v-icon>mdi-pencil</v-icon></v-btn>
             <v-btn small min-width="36px" v-show="edit" min-height="36px" @click="saveDoc(doc)"><v-icon>mdi-content-save</v-icon></v-btn>
             &nbsp;
