@@ -11,7 +11,7 @@
       </v-col>
     </v-row>
     <v-row>
-      <v-col cols="3" sm="2" v-for="(doc,index) in companyData.corporateDocuments">
+      <v-col cols="3" sm="2" v-for="(doc,index) in companyData.corporateDocuments" :key="index">
         <div class="doc-col">
           <a :href="doc.attachment" target="_blank" class="text-decoration-none">
             <v-img v-if="get_url_extension(doc.attachment) == 'pdf'" :src="require('@/assets/images/profile/pdf.png')" width="80px" class="mx-auto"></v-img>
@@ -75,7 +75,7 @@ export default {
       const head = Date.now().toString();
       const tail = Math.random().toString().substr(2);
       var data = {
-        companyId: this.$store.getters.userInfo.company.id,
+        companyId: this.$store.getters.userInfo.company._id,
         files: this.file,
         name: this.fileName,
         documentId: head + tail
@@ -88,7 +88,7 @@ export default {
     addDocument(){
       
       var data = {
-        companyId: this.$store.getters.userInfo.company.id,
+        companyId: this.$store.getters.userInfo.company._id,
         files: this.documents,
       }
       this.addCompanyDocument(data);
@@ -99,7 +99,7 @@ export default {
         this.documents = this.$store.getters.companyData.companyData.corporateDocuments;
       }
       var data = {
-        companyId: this.$store.getters.userInfo.company.id,
+        companyId: this.$store.getters.userInfo.company._id,
         corporateDocument: val,
       }
       this.deleteCompanyDocument(data);
@@ -116,7 +116,7 @@ export default {
         name: this.nameEdit
       };
       var data = {
-        companyId: this.$store.getters.userInfo.company.id,
+        companyId: this.$store.getters.userInfo.company._id,
         corporateDocument: obj,
       }
       this.editCompanyDocument(data);
