@@ -21,7 +21,7 @@
                           <img v-else :src="require('@/assets/images/ofs/no-image.jpg')">
                         </div>
                         <div class="slide-caption">
-                          <h3 class="font-weight-bold">{{premium.company}}</h3>
+                          <h3 class="font-weight-bold">{{premium.companyName}}</h3>
                         </div>
                       </router-link>
                     </div>
@@ -46,7 +46,7 @@
                                 <v-img v-else :src="`/images/companies/no-image.jpg`" height="auto"></v-img>
                               </v-list-item-avatar>
                               <v-list-item-content>
-                                <div class="text-left">{{company.company}} 
+                                <div class="text-left">{{company.companyName}} 
                                   <span v-if="hasOfsPremium(company)">
                                     <v-tooltip top>
                                       <template v-slot:activator="{ on, attrs }">
