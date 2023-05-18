@@ -5,7 +5,6 @@ import * as Sentry from '@sentry/vue';
 
 export default {
   getCompany({commit,dispatch,state}, payload){
-    console.log("payload crom company", payload)
     axios.get('v2/company/getCompanyById/'+payload)
      .then(responce => {
       if(responce.status === 200){
