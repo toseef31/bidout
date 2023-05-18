@@ -313,13 +313,10 @@ export default {
   async updated(){
     this.getLocation();
   },
-  async beforeMount(){
-    
-  },
   async mounted() {
     document.title = "Dashboard - BidOut";
     this.users = this.$store.getters.userInfo;
-    this.pendingUserCount(this.userDatas.company)
+    this.pendingUserCount(this.userDatas.company._id)
     await this.getBidDashboard(this.userDatas._id);
     this.loadMapScript();
   }
