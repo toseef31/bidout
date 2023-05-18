@@ -339,7 +339,7 @@ export default {
           return unique;
       },[]);
       
-      this.addCompanyService({companyId: this.$store.getters.userInfo.company.id,subCategories: result});
+      this.addCompanyService({companyId: this.$store.getters.userInfo.company._id,subCategories: result});
       this.services = '';
       this.subservices = '';
     },
@@ -352,7 +352,7 @@ export default {
             this.companyService.splice(i,1);
           }
         }
-        this.addCompanyService({companyId: this.$store.getters.userInfo.company.id,subCategories: this.companyService});
+        this.addCompanyService({companyId: this.$store.getters.userInfo.company._id,subCategories: this.companyService});
       },
       addBasin(){
         if(this.$store.getters.companyData.basins){
@@ -362,7 +362,7 @@ export default {
         this.basinsData.push(this.basins);
         if(!this.$store.getters.companyData.companyData.basins){
           var data = {
-             companyId: this.$store.getters.userInfo.company.id,
+             companyId: this.$store.getters.userInfo.company._id,
              basins: this.basins,
            }
            this.addCompanyBasins(data);
@@ -371,7 +371,7 @@ export default {
         }else{
           if(this.$store.getters.companyData.companyData.basins.length == 0 || this.$store.getters.companyData.companyData.basins.length > 0){
             var data = {
-              companyId: this.$store.getters.userInfo.company.id,
+              companyId: this.$store.getters.userInfo.company._id,
               basins: this.basins,
             }
             this.addCompanyBasins(data);
