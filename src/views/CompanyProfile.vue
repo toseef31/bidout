@@ -116,7 +116,7 @@
                     <v-container class="pa-sm-10 pa-4">
                       <label class="d-block text-left main-label">Basins</label>
                         <v-row>
-                          <v-col cols="4" sm="2" v-for="basin in region">
+                          <v-col cols="4" sm="2" v-for="(basin,index) in region" :key="index">
                               <v-checkbox
                               v-model="basins"
                               :label="basin"
