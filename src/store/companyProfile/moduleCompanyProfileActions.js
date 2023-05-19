@@ -597,6 +597,7 @@ export default {
     } 
   },
   addCompanyExcutive({commit,dispatch,state}, payload){
+    commit('setCompanyExecutiveLoading',true)
     var config = {
       headers: {
         "Content-Type": "multipart/form-data",
@@ -622,8 +623,10 @@ export default {
         }
         commit('setModuleWeight',data);
         dispatch("getCompany",payload.companyId)
+        commit('setCompanyExecutiveLoading',false)
       }
     }).catch(async(err) => {
+      commit('setCompanyExecutiveLoading',false)
       Sentry.captureException(err);
       if(state.apiCounter === 2){
         dispatch('apiSignOutAction')
@@ -671,7 +674,7 @@ export default {
     formData.append('executiveLeadership[role]', payload.executiveLeadership.role);
     formData.append('executiveLeadership[linkedin]', payload.executiveLeadership.linkedin);
     formData.append('executiveLeadership[profilePicture]', payload.executiveLeadership.profilePicture);
-    formData.append('executiveLeadership[id]', payload.executiveLeadership.id);
+    formData.append('executiveLeadership[id]', payload.executiveLeadership._id);
     formData.append('executiveLeadership[orderNumber]', payload.executiveLeadership.orderNumber);
     formData.append('companyId', payload.companyId);
     axios.post('v2/company/deleteCompanyLeadership/',formData,config)
