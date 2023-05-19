@@ -364,6 +364,10 @@
 							border: 1px solid #F32349;
 						}
 
+						:disabled.v-btn {
+							border-color: #B8B8B8;
+						}
+
 						p {
 							font-weight: 500;
 							font-size: 12px;
