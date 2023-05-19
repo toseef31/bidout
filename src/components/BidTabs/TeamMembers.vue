@@ -30,8 +30,8 @@
             <div
               class="d-flex align-center justify-space-between list-company pa-4"
               v-for="(team, index) in teamMembers"
-              v-if="user.id != team.id && team.status != false"
-              :key="team.id"
+              v-if="user._id != team._id && team.status != false"
+              :key="team._id"
             >
               <div class="comapny-data d-flex align-center">
                 <div class="company-img">
@@ -45,7 +45,7 @@
                 </div>
                 <div class="company-title text-left pl-4">
                   <h4>{{ team.firstName }} {{ team.lastName }}</h4>
-                  <p class="mb-0">{{ team.company }}</p>
+                  <p class="mb-0">{{ team.company.companyName }}</p>
                 </div>
               </div>
               <div class="add-company">
@@ -78,8 +78,8 @@
           <div
             class="d-flex align-center justify-space-between list-company pa-4"
             v-for="(team, index) in membersAdded"
-            v-if="user.id != team.id && team.status != false"
-            :key="team.id"
+            v-if="user._id != team._id && team.status != false"
+            :key="team._id"
           >
             <div class="comapny-data d-flex align-center">
               <div class="company-img">
@@ -151,23 +151,23 @@ export default {
             const unique = this.$store.getters.teamMembers
               ? this.$store.getters.teamMembers.filter(
                 (el) => !this.$store.state.bid.invitedTeamMembers.find(
-                  (team) => team.id === el.id,
+                  (team) => team._id === el._id,
                 ),
               )
               : [];
-            return [...new Map(unique.map((item) => [item.id, item])).values()];
+            return [...new Map(unique.map((item) => [item._id, item])).values()];
           }
           return this.$store.getters.teamMembers;
         }
         if (this.$store.getters.bidData.invitedTeamMembers !== '') {
           const unique = this.$store.getters.teamMembers
             ? this.$store.getters.teamMembers.filter(
-              (el) => !this.$store.state.bid.invitedTeamMembers.includes(
-                el.id,
+              (el) => !this.$store.state.bid.invitedTeamMembers?.includes(
+                el._id,
               ),
             )
             : [];
-          return [...new Map(unique.map((item) => [item.id, item])).values()];
+          return [...new Map(unique.map((item) => [item._id, item])).values()];
         }
         return this.$store.getters.teamMembers
           ? this.$store.getters.teamMembers
@@ -198,7 +198,7 @@ export default {
             : [];
           // eslint-disable-next-line vue/no-side-effects-in-computed-properties
           this.membersAdded = [
-            ...new Map(unique.map((item) => [item.id, item])).values(),
+            ...new Map(unique.map((item) => [item._id, item])).values(),
           ];
         } else if (Array.isArray(this.$store.state.bid.invitedTeamMembers) && typeof this.$store.state.bid.invitedTeamMembers[0] === 'object') {
           // eslint-disable-next-line vue/no-side-effects-in-computed-properties
@@ -207,7 +207,7 @@ export default {
             : [];
           // eslint-disable-next-line vue/no-side-effects-in-computed-properties
           this.membersAdded = [
-            ...new Map(unique.map((item) => [item.id, item])).values(),
+            ...new Map(unique.map((item) => [item._id, item])).values(),
           ];
         } else {
           // eslint-disable-next-line vue/no-side-effects-in-computed-properties
@@ -215,11 +215,11 @@ export default {
           //   ? this.$store.state.bid.invitedTeamMembers
           //   : [];
           const unique = this.$store.getters.teamMembers
-            ? this.$store.getters.teamMembers.filter((el) => this.$store.state.bid.invitedTeamMembers.includes(el.id))
+            ? this.$store.getters.teamMembers.filter((el) => this.$store.state.bid.invitedTeamMembers?.includes(el._id))
             : [];
           // eslint-disable-next-line vue/no-side-effects-in-computed-properties
           this.membersAdded = [
-            ...new Map(unique.map((item) => [item.id, item])).values(),
+            ...new Map(unique.map((item) => [item._id, item])).values(),
           ];
         }
       }

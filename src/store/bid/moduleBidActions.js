@@ -133,7 +133,6 @@ export default {
       commit('setPageLoader', true);
     }
     try {
-      console.log("PAYLOAAD", payload)
       commit('removeSupplierAttachment');
       const res = await axios.get(
         `v2/bid/getBidBySerial/${payload.serial}/${payload.id}`,
