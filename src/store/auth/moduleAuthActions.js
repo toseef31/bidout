@@ -263,7 +263,7 @@ export default {
 
   async searchSupplier({ commit }, payload) {
     try {
-      const res = await axios.get(`/ofs/searchSuppliers/${payload}`);
+      const res = await axios.get(`/v2/ofs/searchSuppliers/${payload}`);
 
       if (res.status === 200) {
         commit("setSupplierList", res.data);
@@ -275,7 +275,7 @@ export default {
 
   async queueSupplierUser({ commit }, payload) {
     try {
-      const res = await axios.post("/ofs/queueSupplierUser", {
+      const res = await axios.post("/v2/ofs/queueSupplierUser", {
         id: payload.id,
         firstName: payload.firstName,
         lastName: payload.lastName,
@@ -302,7 +302,7 @@ export default {
   // Buyer SignUp Acton
   async buyerSignUpAction({ commit }, payload) {
     try {
-      const res = await axios.post("/ofs/pendingBuyerRegistration", {
+      const res = await axios.post("/v2/ofs/pendingBuyerRegistration", {
         firstName: payload.firstName,
         lastName: payload.lastName,
         companyName: payload.company,
@@ -350,7 +350,7 @@ export default {
 
   async contractGenerate({ commit }, payload) {
     try {
-      const res = await axios.post("/ofs/generateSupplierContract", {
+      const res = await axios.post("/v2/ofs/generateSupplierContract", {
         ...payload,
       });
 
@@ -367,7 +367,7 @@ export default {
   },
   async signAgreement({ commit }, payload) {
     try {
-      const res = await axios.post("/ofs/signSupplierContract", { ...payload });
+      const res = await axios.post("/v2/ofs/signSupplierContract", { ...payload });
       if (res.status === 200) {
         commit("setGoToAgreement", null);
         commit("setSupplierSignUpSuccess", true);
@@ -420,7 +420,7 @@ export default {
   },
   async getInvitedSupplierByToken({ commit }, payload) {
     try {
-      const res = await axios.get(`/bid/getInvitedSupplierByToken/${payload}`);
+      const res = await axios.get(`v2/bid/getInvitedSupplierByToken/${payload}`);
 
       if (res.status === 200) {
         commit("setTokenInvitedSupplier", res.data);
