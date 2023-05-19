@@ -132,7 +132,7 @@ export default {
     },
     passwordForm() {
       const data = {
-        userid: this.$store.getters.userInfo.id,
+        userid: this.$store.getters.userInfo._id,
         currentPassword: this.currentPassword,
         newPassword: this.newPassword,
       };
