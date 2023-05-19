@@ -562,7 +562,6 @@ export default {
   },
   async addCompanyContacts({commit,dispatch,state}, payload){
     try{
-      commit('setBasinLoading',true)
     const res = await axios.post('v2/company/addCompanyContact/',{'companyId':payload.companyId,'accountContacts':payload.accountContacts});
      
       if(res.status === 200){

@@ -15,7 +15,7 @@
               hide-details></v-text-field>
           </v-col>
           <v-col cols="12" sm="6" text="left">
-            <label class="d-block text-left input-label mb-2">Employess</label>
+            <label class="d-block text-left input-label mb-2">Employees</label>
             <v-text-field placeholder="Enter Employees ..." v-model="employees" single-line outlined
               hide-details></v-text-field>
           </v-col>
@@ -105,13 +105,18 @@
         <v-row>
           <v-col cols="12" sm="12">
             <v-btn color="#0D9648" large class="text-capitalize white--text" width="176px" height="54px"
-              :loading="loading" :disabled="!valid || !getPhoneInfo.valid" @click="addContacts">Add</v-btn>
+              :loading="loading" :disabled="!valid || !getPhoneInfo.valid || getContactLoading" @click="addContacts">
+              <v-progress-circular v-if="getContactLoading"
+                        indeterminate :width="3" size="25" color="#b8b8b8"></v-progress-circular>
+                        <div v-else>Add</div>
+              </v-btn>
           </v-col>
         </v-row>
       </v-container>
     </v-form>
     <v-container class="pa-sm-10 pa-4">
-      <div class="contact-list text-left mt-5 align-center" v-for="(contact, index) in companyData.accountContacts">
+      <div class="contact-list text-left mt-5 align-center" v-for="(contact, index) in companyData.accountContacts"
+        :key="index">
         <div class="profile-list">
           <h6>{{ contact.name }}</h6>
         </div>
@@ -122,11 +127,11 @@
           <h6>{{ contact.email }}</h6>
         </div>
         <div class="profile-list">
-          <h6>{{ contact.phoneNo }}</h6>
+          <h6>{{ contact.phoneNumber }}</h6>
         </div>
         <div class="profile-list text-right">
-          <v-btn default color="transparent" class="text-capitalize dele-btn" @click="deleteContact(index)"
-            :disabled="loadingBasin"><v-icon>mdi-close</v-icon>Delete</v-btn>
+          <v-btn default color="transparent" class="text-capitalize dele-btn"
+            @click="deleteContact(index)"><v-icon>mdi-close</v-icon>Delete</v-btn>
         </div>
       </div>
     </v-container>
@@ -163,7 +168,7 @@ export default {
       markerOption: {},
       maps: '',
       loader: null,
-      contctLoading: false,
+      contactLoading: false,
       valid: false,
       loading: false,
       deleteAccount: false,
@@ -203,15 +208,15 @@ export default {
     companyData() {
       return this.$store.getters.companyData.companyData;
     },
-    loadingBasin() {
-      return this.$store.getters.loadingBasin;
-    },
     getPhoneInfo() {
       return this.phoneInfo;
     },
     getCounter() {
       return this.counter;
     },
+    getContactLoading() {
+      return this.contactLoading
+    }
   },
   methods: {
     ...mapActions(['addCompanyFacts', 'addCompanyContacts']),
@@ -285,31 +290,12 @@ export default {
           return;
         }
 
-        let address = '';
-
-        if (place.address_components) {
-          address = [
-            (place.address_components[0]
-              && place.address_components[0].short_name)
-            || '',
-            (place.address_components[1]
-              && place.address_components[1].short_name)
-            || '',
-            (place.address_components[2]
-              && place.address_components[2].short_name)
-            || '',
-            (place.address_components[3]
-              && place.address_components[3].short_name)
-            || '',
-          ].join(' ');
-        }
-
         this.hqLocation = document.getElementById('hq-location').value;
       });
     },
     addKeyFacts() {
       const data = {
-        companyId: this.$store.getters.userInfo.company.id,
+        companyId: this.$store.getters.userInfo.company._id,
         founded: this.founded,
         employees: this.employees,
         hqLocation: this.hqLocation,
@@ -319,7 +305,8 @@ export default {
       };
       this.addCompanyFacts(data);
     },
-    addContacts() {
+    async addContacts() {
+      this.contactLoading = true
       if (this.$refs.contactForm.validate()) {
         if (this.$store.getters.companyData.companyData.accountContacts) {
           this.accountContacts = this.$store.getters.companyData.companyData.accountContacts;
@@ -328,12 +315,13 @@ export default {
           name: this.contactName,
           email: this.contactEmail,
           position: this.contactRole,
-          phoneNo: this.results,
+          phoneNumber: this.results,
         };
         this.accountContacts.push(data);
-        this.addCompanyContacts({ companyId: this.$store.getters.userInfo.company.id, accountContacts: this.accountContacts });
-      }
 
+        await this.addCompanyContacts({ companyId: this.$store.getters.userInfo.company._id, accountContacts: this.accountContacts });
+      }
+      this.contactLoading = false
       this.$refs.contactForm.reset();
       this.contactName = '';
       this.contactEmail = '';
@@ -343,6 +331,7 @@ export default {
       this.phoneInfo.message = '';
       this.phoneInfo.valid = true;
       this.counter = 0;
+
     },
     deleteContact(index) {
       if (this.$store.getters.companyData.companyData.accountContacts) {
@@ -350,7 +339,7 @@ export default {
       }
       this.deleteAccount = true;
       this.accountContacts.splice(index, 1);
-      this.addCompanyContacts({ companyId: this.$store.getters.userInfo.company.id, accountContacts: this.accountContacts });
+      this.addCompanyContacts({ companyId: this.$store.getters.userInfo.company._id, accountContacts: this.accountContacts });
       this.deleteAccount = false;
     },
   },
