@@ -139,7 +139,7 @@
               <div>
                 <div class="d-flex align-center justify-space-between list-company pa-4"
                   v-for="(               company, index               ) in                companiesList               "
-                  v-if=" user.company.id != company.id " :key=" index ">
+                  v-if=" user.company._id != company._id " :key=" index ">
                   <div class="comapny-data d-flex align-center">
                     <div class="company-img">
                       <img v-if=" company.image " class="image-class" :src=" company.image " />
@@ -149,7 +149,7 @@
                       </div>
                     </div>
                     <div class="company-title text-left pl-4">
-                      <h4>{{ company.company }}
+                      <h4>{{ company.companyName }}
                         <span v-if=" hasOfsPremium(company) ">
                           <v-tooltip top>
                             <template v-slot:activator=" { on, attrs } ">
@@ -230,7 +230,7 @@
                   </div>
                   <div class="company-title text-left pl-4">
                     <h4>{{ company.firstName }} {{ company.lastName }}</h4>
-                    <p class="mb-0">{{ company.company }}
+                    <p class="mb-0">{{ company.companyName }}
                       <span v-if=" hasOfsPremiumReps(company) ">
                         <v-tooltip top>
                           <template v-slot:activator=" { on, attrs } ">
@@ -260,7 +260,7 @@
                   </div>
                   <div class="company-title text-left pl-4">
                     <h4>{{ company.firstName }} {{ company.lastName }} </h4>
-                    <p class="mb-0">{{ company.company }}</p>
+                    <p class="mb-0">{{ company.companyName }}</p>
 
                   </div>
                 </div>
@@ -500,8 +500,8 @@ export default {
           this.$store.state.bid.invitedSuppliers.forEach((el) => {
             if (el.objectID) {
               type = 'objectID';
-            } else if (el.id) {
-              type = 'id';
+            } else if (el._id) {
+              type = '_id';
             } else {
               type = 'companyId';
             }

@@ -201,7 +201,7 @@
                       Profile</router-link>
                   </div>
                 </div>
-                <div class="add-company" v-if="checkIntent(company.objectID) !== 'intended'">
+                <div class="add-company" v-if="checkIntent(company._id) !== 'intended'">
                   <v-btn color="rgba(243, 35, 73, 0.1)" tile min-width="32px" height="32" class="pa-0" elevation="0"
                     @click="removeCompany(company, index)"> <v-icon color="#F32349">mdi-minus</v-icon></v-btn>
                 </div>
