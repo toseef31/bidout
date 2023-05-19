@@ -168,7 +168,7 @@ export default {
     ...mapActions(['updateNotifications']),
     updateNoti() {
       const data = {
-        userid: this.$store.getters.userInfo.id,
+        userid: this.$store.getters.userInfo._id,
         email: this.$store.getters.userInfo.email,
         notificationPreference: this.notificationPreference,
       };
