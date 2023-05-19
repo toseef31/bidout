@@ -144,7 +144,7 @@ export default {
     return {
       founded: this.$store.getters.companyData.companyData.founded,
       employees: this.$store.getters.companyData.companyData.employees,
-      hqLocation: this.$store.getters.companyData.companyData.hqlocation,
+      hqLocation: this.$store.getters.companyData.companyData.hqLocation,
       website: this.$store.getters.companyData.companyData.website,
       linkedin: this.$store.getters.companyData.companyData.linkedin,
       careers: this.$store.getters.companyData.companyData.careers,
