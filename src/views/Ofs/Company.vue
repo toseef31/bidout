@@ -17,14 +17,14 @@
                   cols="12" sm="4"
                 >
                   <v-img :src="supplierData.image"></v-img>
-                  <h4 class="pl-3 mt-2"><span v-if="supplierData.isOfsPremium"><span v-if="supplierData.isOfsPremium == 1"></span><v-icon color="#0D9647">mdi-check-decagram</v-icon>Premium Service Provider</span></h4>
+                  <h4 class="pl-3 mt-2"><span v-if="supplierData.isOfsPremium"><span v-if="supplierData.isOfsPremium == true"></span><v-icon color="#0D9647">mdi-check-decagram</v-icon>Premium Service Provider</span></h4>
                 </v-col>
                 <v-col
                   class="text-left"
                   cols="12" sm="8"
                 >
                   <div class="company-title ml-10">
-                    <h1>{{supplierData.company}}</h1>
+                    <h1>{{supplierData.companyName}}</h1>
                   </div>
                 </v-col>
               </v-row>
@@ -37,8 +37,8 @@
                   cols="12" sm="12"
                 >
                   <div class="company-title ml-2">
-                    <h1>{{supplierData.company}}</h1>
-                    <h4 class="mt-3"><span v-if="supplierData.isOfsPremium"><span v-if="supplierData.isOfsPremium == 1"></span><v-icon color="#0D9647">mdi-check-decagram</v-icon>Premium Service Provider</span></h4>
+                    <h1>{{supplierData.companyName}}</h1>
+                    <h4 class="mt-3"><span v-if="supplierData.isOfsPremium"><span v-if="supplierData.isOfsPremium == true"></span><v-icon color="#0D9647">mdi-check-decagram</v-icon>Premium Service Provider</span></h4>
                   </div>
                 </v-col>
               </v-row>
@@ -72,7 +72,7 @@
                       <div id="map" class="map" style="height:350px" v-if="supplierData.companyLocations"></div>
                       <h3 class="text-center" v-if="!supplierData.companyLocations">Location not added</h3>
                     </div>
-                    <template v-if="supplierData.isOfsPremium || supplierData.isOfsPremium == 1">
+                    <template v-if="supplierData.isOfsPremium || supplierData.isOfsPremium == true">
                       <div class="company-location mb-12" v-if="supplierData.corporateVideos && supplierData.corporateVideos.length > 0">
                         <h1 class="mb-4 font-weight-bold">Corporate Videos</h1>
                         <v-row>
@@ -245,7 +245,9 @@ export default {
       return this.$store.getters.g_activityPanel;
     },
     supplierData() {
-      return this.$store.getters.supplierCompany ? this.$store.getters.supplierCompany.companyData : {};
+      let supplier = this.$store.getters.supplierCompany ? this.$store.getters.supplierCompany.companyData : {};
+      supplier.isOfsPremium = supplier.contracts.some(contract => contract.contractType = "ofs-premium")
+      return supplier
     },
     companyCategories() {
       return this.$store.getters.supplierCompany.categories;
@@ -287,7 +289,7 @@ export default {
   methods: {
     ...mapActions(['getCompanyInfo']),
     getLocation() {
-      if (this.$store.getters.supplierCompany && this.$store.getters.supplierCompany.companyData && this.$store.getters.supplierCompany.companyData.companyLocations && this.$store.getters.supplierCompany.companyData.companyLocations.length == 1) {
+      if (this.$store.getters.supplierCompany && this.$store.getters.supplierCompany.companyData && this.$store.getters.supplierCompany.companyData.companyLocations && this.$store.getters.supplierCompany.companyData.companyLocations.length == true) {
         var LocationsForMap = this.$store.getters.supplierCompany.companyData.companyLocations;
         if(LocationsForMap.length > 0){
           var map = new google.maps.Map(document.getElementById('map'), {
