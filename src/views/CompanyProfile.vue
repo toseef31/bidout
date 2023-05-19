@@ -88,11 +88,11 @@
                           </div>
                         </v-col>
                         <v-col cols="12" sm="6">
-                          <label class="d-block text-center main-label mb-5">Selected Services</label>
-                          
+                          <label class="d-block text-center main-label mb-5">Selected Services</label>                        
                             <div class="subservice-cate service-cate">
-                              <v-list class="px-5" :expand="true">
-                                <v-list-group v-for="(category,i) in companyData.categories" v-if="category.subCategories.length > 0" :value="true">
+                           
+                               <v-list class="px-5" :expand="true">
+                                <v-list-group v-for="(category,i) in companyData.categories" v-if="category.subCategories && category.subCategories.length > 0" :value="true" :key="i">
                                   <template v-slot:activator>
                                     <v-list-item-content>
                                       <v-list-item-title v-text="category.name" class="text-left font-weight-bold black--text"></v-list-item-title>
@@ -107,7 +107,7 @@
                                     </v-list-item-content>
                                   </v-list-item>
                                 </v-list-group>
-                              </v-list>
+                              </v-list> 
                             </div>
                         </v-col>
                       </v-row>
