@@ -179,9 +179,9 @@
                 </div>
               </div>
               <div>
-                Created by: <strong>{{ bidDetail.bidData.company }}</strong
-                >, {{ bidDetail.bidData.userId.firstName }}
-                {{ bidDetail.bidData.userId.lastName }}
+                Created by: <strong>{{ bidDetail.bidData.company.companyName }}</strong
+                >, {{ bidDetail.bidData.user.firstName }}
+                {{ bidDetail.bidData.user.lastName }}
               </div>
               <div>Bid Type: {{ bidDetail.bidData.type }}</div>
             </div>
@@ -520,9 +520,9 @@
                 </div>
               </div>
               <div>
-                Created by: <strong>{{ bidDetail.bidData.company }}</strong
-                >, {{ bidDetail.bidData.userId.firstName }}
-                {{ bidDetail.bidData.userId.lastName }}
+                Created by: <strong>{{ bidDetail.bidData.company.companyName }}</strong
+                >, {{ bidDetail.bidData.user.firstName }}
+                {{ bidDetail.bidData.user.lastName }}
               </div>
               <div>Bid Type: {{ bidDetail.bidData.type }}</div>
             </div>
@@ -958,8 +958,8 @@ export default {
     },
     deleteB() {
       this.deleteBid({
-        bidId: this.bidDetail.bidData.id,
-        userid: this.users.id,
+        bidId: this.bidDetail.bidData._id,
+        userid: this.users._id,
       });
     },
     addOneSecondToActualTimeEverySecond() {
