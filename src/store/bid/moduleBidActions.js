@@ -1175,7 +1175,7 @@ export default {
     formData.append('type', state.bidData.type);
     formData.append('dueDate', state.bidData.dueDate);
     formData.append('dueTime', state.bidData.dueTime);
-    formData.append('regions', state.bidData.region);
+    formData.append('regions', state.bidData.regions);
     formData.append('qAndAEnabled', state.bidData.qAndAEnabled);
     formData.append('bidDescriptions[0][body]', state.bidData.bidDescriptions[0].body);
     if (state.bidData.bidDescriptions.length > 1) {

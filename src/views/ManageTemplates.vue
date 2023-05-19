@@ -43,7 +43,7 @@
                 <tr
                   v-for="(template, index) in bidTemplates"
                   class="py-4 px-6"
-                  v-if="template.companyId == userDatas.companyId"
+                  v-if="template.company == userDatas.company._id"
                 >
                   <td class="text-left pl-6">{{ template.title }}</td>
                   <td class="text-left">{{ template.type }}</td>
@@ -242,8 +242,6 @@ export default {
   },
   async created() {
     await this.getBidTemplates();  
-    let a = await this.getBidTemplates()
-    console.log("a is", a)
   },
   mounted() {
     document.title = "Manage Templates - BidOut";
