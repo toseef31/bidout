@@ -28,5 +28,8 @@ export default {
    },
    manageCompanyError (state){
       return state.manageCompanyError;
+   },
+   companyExecutiveLoading(state) {
+    return state.companyExecutiveLoading
    }
 }

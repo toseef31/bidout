@@ -38,5 +38,8 @@ export default {
       setTimeout(() => {
         state.manageCompanyError = null
       }, 5000) 
+    },
+    setCompanyExecutiveLoading(state,payload) {
+      state.companyExecutiveLoading = payload
     }
 }

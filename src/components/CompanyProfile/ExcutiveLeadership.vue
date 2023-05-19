@@ -67,7 +67,7 @@
       <v-row>
         <v-col cols="12" sm="12">
 
-          <v-btn color="#0D9648" large class="text-capitalize white--text" height="54px" width="176px" :loading="loading" :disabled="!valid" @click="addExcutive">Add Executive</v-btn>
+          <v-btn color="#0D9648" large class="text-capitalize white--text" height="54px" width="176px" :loading="getCompanyExecutiveLoading" :disabled="!valid" @click="addExcutive">Add Executive</v-btn>
 
         </v-col>
       </v-row>
@@ -80,7 +80,7 @@
           @start="dragging = true"
           @end="checkMove"
         > 
-          <div class="profile-list" v-for="(excutive,index) in orderCate(companyData.executiveLeadership)">
+          <div class="profile-list" v-for="(excutive,index) in orderCate(companyData.executiveLeadership)" :key="index">
             <v-icon color="#F32349" class="pa-1 white"  @click="deleteExcutive(excutive)">mdi-trash-can-outline</v-icon>
             <v-img :src="excutive.profilePicture" width="173"></v-img>
             <h6>{{excutive.name}}</h6>
@@ -105,10 +105,7 @@ export default {
   data() {
     return {
       valid: false,
-    
       croppieProfile: '',
-      loader: null,
-      loading: false,
       croppedProfile: null,
       dialogProfile: false,
       excutivelinkdinProfile: '',
@@ -128,6 +125,9 @@ export default {
     },
     draggingInfo() {
       return this.dragging ? "under drag" : "";
+    },
+    getCompanyExecutiveLoading() {
+      return this.$store.getters.companyExecutiveLoading
     }
   },
   watch:{
@@ -199,10 +199,9 @@ export default {
           this.dialogProfile = false;
         });
     },
-    addExcutive(){
-     
+    addExcutive(){  
       const head = Date.now().toString();
-      const tail = Math.random().toString().substr(2);
+      const tail = Math.random().toString();
       let order = this.$store.getters.companyData.companyData.executiveLeadership ? this.$store.getters.companyData.companyData.executiveLeadership.length : 0;
       var leader = {
         profilePicture : this.croppieProfile,
@@ -213,15 +212,10 @@ export default {
         orderNumber: order + 1,
       }
       var data = {
-        companyId: this.$store.getters.userInfo.company.id,
+        companyId: this.$store.getters.userInfo.company._id,
         executiveLeadership: leader
       }
       this.addCompanyExcutive(data);
-      this.loader = 'loading';
-      this.loading = true;
-      setTimeout(() => {
-        this.loading = false
-      }, 5000)
       this.croppieProfile = '';
       this.excutiveName = '';
       this.excutiveRole = '';
@@ -230,7 +224,7 @@ export default {
     },
     deleteExcutive(esgData){
       var data = {
-        companyId: this.$store.getters.userInfo.company.id,
+        companyId: this.$store.getters.userInfo.company._id,
         executiveLeadership: esgData,
       }
       const indexOfObject = this.companyData.executiveLeadership.findIndex(object => {
@@ -249,7 +243,7 @@ export default {
       })));
 
       var data = {
-        companyId: this.$store.getters.userInfo.company.id,
+        companyId: this.$store.getters.userInfo.company._id,
         leadership: this.executiveLeadership,
       }
       this.editCompanyExcutive(data);
