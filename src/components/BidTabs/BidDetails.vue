@@ -281,9 +281,9 @@ export default {
     qAndAEnabled: {
       get() {
         if (!this.$store.getters.bidData?.qAndAEnabled) {
-          return "false";
+          return false;
         }
-        return "true";
+        return true;
       },
       set(value) {
         this.$store.commit("setBidEnabled", value);
