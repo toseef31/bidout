@@ -46,7 +46,7 @@
                 <tr
                   v-for="(template, index) in bidTemplates"
                   class="py-4 px-6"
-                  v-if="template.companyId == userDatas.companyId"
+                  v-if="template.company == userDatas.company._id"
                 >
                   <td class="text-left pl-6">{{ template.title }}</td>
                   <td class="text-left">{{ template.type }}</td>
@@ -125,7 +125,7 @@ export default {
     async useTemplate(template) {
       this.$store.commit("setBidData", template);
       this.$store.state.bid.bidData.statusType = "templateBid";
-      await this.$store.dispatch("getTeamMembers", this.userData.company._id);
+      await this.$store.dispatch("getTeamMembers", this.userDatas.company._id);
       await this.$store.dispatch("getSalesReps", { query: "", basin: "all" });
       await this.$store.dispatch("getCategories");
       await this.$store.dispatch("searchByCompany", { query: "", basin: "all" });
