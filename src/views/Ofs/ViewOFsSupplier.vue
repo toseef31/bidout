@@ -264,7 +264,6 @@ export default {
       return _.orderBy(this.$store.getters.categories, 'orderNumber', 'asc');
     },
     companies(){
-      console.log(this.$store.getters.supplier)
       this.hideList = true;
       return this.$store.getters.supplier.sort((a, b) => {
         let aHasOfsPremium = a.contracts.some(contract => contract.contractType === 'ofs-premium');
