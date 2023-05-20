@@ -35,14 +35,14 @@
                     </v-text-field>
                     <div v-if="hideList == true">
                       <v-list  class="company-list">
-                        <template v-for="(company, index) in companies">
+                        <template v-for="(company) in companies">
                           <router-link :to="company.slug ? '/company/'+company.slug: '' " class="text-decoration-none">
                             <v-list-item class="py-1"
-                              :key="company.objectID"
+                              :key="company._id"
                             >
                             
                               <v-list-item-avatar max-height="31px" max-width="88px" width="88px" tile>
-                                <v-img v-if="company.companyImage" :src="company.companyImage" height="auto"></v-img>
+                                <v-img v-if="company.image" :src="company.image" height="auto"></v-img>
                                 <v-img v-else :src="`/images/companies/no-image.jpg`" height="auto"></v-img>
                               </v-list-item-avatar>
                               <v-list-item-content>
@@ -264,6 +264,7 @@ export default {
       return _.orderBy(this.$store.getters.categories, 'orderNumber', 'asc');
     },
     companies(){
+      console.log(this.$store.getters.supplier)
       this.hideList = true;
       return this.$store.getters.supplier.sort((a, b) => {
         let aHasOfsPremium = a.contracts.some(contract => contract.contractType === 'ofs-premium');
