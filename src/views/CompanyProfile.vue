@@ -299,20 +299,29 @@ export default {
     ...mapActions(["getCompany","getCategories","getSubCategories","updateBasicProfile","addCompanyService","addCompanyBasins"]),
     ...mapMutations(["setBasinLoading"]),
       async updateBasic(){
-        var data = {
-          companyId: this.$store.getters.userInfo.company._id,
-          userId: this.$store.getters.userInfo.id,
-          profileName: this.profileName,
-          profileSummary: this.profileSummary,
-        }
-        await this.updateBasicProfile(data);
-        if(this.$store.state.companyProfile.basicError){
-          return this.$toasted.show(`Error! Something went wrong please try again`, {
-            class: 'error-toast',
-            type : 'error',
-            duration: 5000,
-            position: 'top-center',
-          });
+        if(this.profileName){
+          var data = {
+            companyId: this.$store.getters.userInfo.company._id,
+            userId: this.$store.getters.userInfo.id,
+            profileName: this.profileName,
+            profileSummary: this.profileSummary,
+          }
+          await this.updateBasicProfile(data);
+          if(this.$store.state.companyProfile.basicError){
+            return this.$toasted.show(`Error! Something went wrong please try again`, {
+              class: 'error-toast',
+              type : 'error',
+              duration: 5000,
+              position: 'top-center',
+            });
+          }
+        } else {
+          return this.$toasted.show(`Please fill out the company name.`, {
+              class: 'error-toast',
+              type : 'error',
+              duration: 5000,
+              position: 'top-center',
+            });
         }
       },
       getAllCategories(){
