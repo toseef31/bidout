@@ -65,7 +65,7 @@
                               <v-icon>mdi-square-edit-outline</v-icon>
                             Edit Details</v-btn>
                            
-                            <v-btn depressed color="transparent" class="text-capitalize" v-if="user.id != userInfo.id" @click="disable(user.id)">
+                            <v-btn depressed color="transparent" class="text-capitalize" v-if="user._id != userInfo._id" @click="disable(user._id)">
                               <v-icon color="#F32349">mdi-window-close</v-icon>
                             Disable </v-btn>
 
