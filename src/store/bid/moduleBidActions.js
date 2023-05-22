@@ -841,12 +841,10 @@ export default {
     if (state.invitedSuppliers?.length > 0) {
       for (let i = 0; i < state.invitedSuppliers.length; i++) {
         if (Array.isArray(state.invitedSuppliers) && state.invitedSuppliers?.length > 0 && typeof state.invitedSuppliers[0] === 'object') {
-          if (!state.invitedSuppliers[i].companyId && !state.invitedSuppliers[i].objectID) {
-            formData.append(`invitedSuppliers[${i}]`, state.invitedSuppliers[i]._id);
-          } else if (state.invitedSuppliers[i].companyId) {
-            formData.append(`invitedSuppliers[${i}]`, state.invitedSuppliers[i].companyId);
+          if (state.invitedSuppliers[i].company && state.invitedSuppliers[i].company._id) {
+            formData.append(`invitedSuppliers[${i}]`, state.invitedSuppliers[i].company._id);
           } else {
-            formData.append(`invitedSuppliers[${i}]`, state.invitedSuppliers[i].objectID);
+            formData.append(`invitedSuppliers[${i}]`, state.invitedSuppliers[i]._id);
           }
         } else {
           formData.append(`invitedSuppliers[${i}]`, state.invitedSuppliers[i]);
@@ -1286,41 +1284,26 @@ export default {
     if (state.bidData.status === 'templateCreate') {
       if (state.invitedSuppliers) {
         for (let i = 0; i < state.invitedSuppliers.length; i++) {
-          if (!state.invitedSuppliers[i].companyId && !state.invitedSuppliers[i].objectID) {
-            formData.append(`invitedSuppliers[${i}]`, state.invitedSuppliers[i]._id);
-          } else if (state.invitedSuppliers[i].companyId) {
-            formData.append(`invitedSuppliers[${i}]`, state.invitedSuppliers[i].companyId);
+          if (state.invitedSuppliers[i].company && state.invitedSuppliers[i].company._id) {
+            formData.append(`invitedSuppliers[${i}]`, state.invitedSuppliers[i].company._id);
           } else {
-            formData.append(`invitedSuppliers[${i}]`, state.invitedSuppliers[i].objectID);
+            formData.append(`invitedSuppliers[${i}]`, state.invitedSuppliers[i]._id);
           }
         }
-      } else {
-        formData.append('invitedSuppliers', '');
-      }
+      } 
     } else if (state.invitedSuppliers.length > 0) {
       for (let i = 0; i < state.invitedSuppliers.length; i++) {
         if (Array.isArray(state.invitedSuppliers) && state.invitedSuppliers.length > 0 && typeof state.invitedSuppliers[0] === 'object') {
-          if (!state.invitedSuppliers[i].companyId && !state.invitedSuppliers[i].objectID) {
-            formData.append(`invitedSuppliers[${i}]`, state.invitedSuppliers[i].id);
-          } else if (state.invitedSuppliers[i].companyId) {
-            formData.append(`invitedSuppliers[${i}]`, state.invitedSuppliers[i].companyId);
+          if (state.invitedSuppliers[i].company && state.invitedSuppliers[i].company._id) {
+            formData.append(`invitedSuppliers[${i}]`, state.invitedSuppliers[i].company._id);
           } else {
-            formData.append(`invitedSuppliers[${i}]`, state.invitedSuppliers[i].objectID);
+            formData.append(`invitedSuppliers[${i}]`, state.invitedSuppliers[i]._id);
           }
         } else {
           formData.append(`invitedSuppliers[${i}]`, state.invitedSuppliers[i]);
         }
-        // if (!state.invitedSuppliers[i].companyId && !state.invitedSuppliers[i].objectID) {
-        //   formData.append(`invitedSuppliers[${i}]`, state.invitedSuppliers[i].id);
-        // } else if (state.invitedSuppliers[i].companyId) {
-        //   formData.append(`invitedSuppliers[${i}]`, state.invitedSuppliers[i].companyId);
-        // } else {
-        //   formData.append(`invitedSuppliers[${i}]`, state.invitedSuppliers[i].objectID);
-        // }
       }
-    } else {
-      formData.append('invitedSuppliers', '');
-    }
+    } 
     if (state.bidData.status === 'templateCreate') {
       if (state.invitedTeamMembers) {
         for (let t = 0; t < state.invitedTeamMembers.length; t++) {
@@ -1614,12 +1597,10 @@ export default {
 
     if (state.invitedSuppliers !== '' && state.invitedSuppliers && state.invitedSuppliers.length > 0) {
       for (let i = 0; i < state.invitedSuppliers.length; i++) {
-        if (state.invitedSuppliers[i]._id) {
+        if (state.invitedSuppliers[i].company && state.invitedSuppliers[i].company._id) {
+          formData.append(`invitedSuppliers[${i}]`, state.invitedSuppliers[i].company._id);
+        }  else {
           formData.append(`invitedSuppliers[${i}]`, state.invitedSuppliers[i]._id);
-        } else if (state.invitedSuppliers[i].companyId) {
-          formData.append(`invitedSuppliers[${i}]`, state.invitedSuppliers[i].companyId);
-        } else {
-          formData.append(`invitedSuppliers[${i}]`, state.invitedSuppliers[i].objectID);
         }
       }
     } else {
@@ -1627,7 +1608,7 @@ export default {
     }
     if (state.invitedNewSuppliers.length > 0) {
       for (let i = 0; i < state.invitedNewSuppliers.length; i++) {
-        formData.append(`invitedNewSuppliers[${i}]`, state.invitedNewSuppliers[i].id);
+        formData.append(`invitedNewSuppliers[${i}]`, state.invitedNewSuppliers[i]._id);
       }
     } else {
       formData.append('invitedNewSuppliers', '');
