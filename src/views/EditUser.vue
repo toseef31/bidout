@@ -78,7 +78,7 @@
                       required
                       outlined
                       solo-flat class="text-capitalize"
-                      :disabled="userInfo.role == 'admin' && userInfo._id == userData.id ? true : false "
+                      :disabled="userInfo.role == 'admin' && userInfo._id == userData._id ? true : false "
                     ></v-select>
                     <v-btn
                       :disabled="!valid"
