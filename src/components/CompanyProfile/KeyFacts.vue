@@ -85,11 +85,12 @@
               <label class="d-block text-left input-label mb-2 "
                 :class="{ 'space-error-class': getPhoneInfo.message !== '', 'space-class': getPhoneInfo.message === '' }">Phone
                 Number</label>
-              <vue-tel-input defaultCountry="US" :autoDefaultCountry="false" :autoFormat="false" :dropdownOptions="{
-                showDialCodeInSelection: true,
-                showFlags: true,
-                width: ' max-content'
-              }" :inputOptions="{
+              <vue-tel-input defaultCountry="US" @blur="onBlurS" @input="changeP" :autoDefaultCountry="false"
+                :autoFormat="false" :dropdownOptions="{
+                  showDialCodeInSelection: true,
+                  showFlags: true,
+                  width: ' max-content'
+                }" :inputOptions="{
   showDialCode: false,
   maxlength: 15,
   placeholder: 'Phone number',
@@ -106,10 +107,10 @@
           <v-col cols="12" sm="12">
             <v-btn color="#0D9648" large class="text-capitalize white--text" width="176px" height="54px"
               :loading="loading" :disabled="!valid || !getPhoneInfo.valid || getContactLoading" @click="addContacts">
-              <v-progress-circular v-if="getContactLoading"
-                        indeterminate :width="3" size="25" color="#b8b8b8"></v-progress-circular>
-                        <div v-else>Add</div>
-              </v-btn>
+              <v-progress-circular v-if="getContactLoading" indeterminate :width="3" size="25"
+                color="#b8b8b8"></v-progress-circular>
+              <div v-else>Add</div>
+            </v-btn>
           </v-col>
         </v-row>
       </v-container>
@@ -163,11 +164,9 @@ export default {
       contactPhoneNo: '',
       accountContacts: [],
       results: {},
-      results2: {},
       mapOption: {},
       markerOption: {},
       maps: '',
-      loader: null,
       contactLoading: false,
       valid: false,
       loading: false,
@@ -178,6 +177,7 @@ export default {
         message: '',
       },
       toggleError: false,
+      countryCallingCode: '1',
     };
   },
   watch: {
@@ -215,8 +215,8 @@ export default {
       return this.counter;
     },
     getContactLoading() {
-      return this.contactLoading
-    }
+      return this.contactLoading;
+    },
   },
   methods: {
     ...mapActions(['addCompanyFacts', 'addCompanyContacts']),
@@ -226,10 +226,32 @@ export default {
 
       if (payload.number && !payload.valid) {
         this.phoneInfo.message = 'Invalid Phone number format';
-      } else {
-        this.phoneInfo.message = '';
-        this.results = payload.number;
+      }
+      if (!payload.number && !payload.valid) {
+        this.phoneInfo.message = 'Phone number is required';
+      }
+
+      if (payload.number && payload.valid) {
         this.contactPhoneNo = payload.nationalNumber;
+        this.results = payload.number;
+        this.phoneInfo.message = '';
+        this.countryCallingCode = payload.countryCallingCode;
+      }
+    },
+    onBlurS() {
+      if (this.contactPhoneNo === '') {
+        this.phoneInfo.message = 'Phone number is required';
+        this.phoneInfo.valid = false;
+        this.counter++;
+      } else if (this.contactPhoneNo.length === 1) {
+        this.phoneInfo.message = 'Invalid Phone number format';
+        this.phoneInfo.valid = false;
+        this.counter++;
+      }
+    },
+    changeP() {
+      if (this.contactPhoneNo !== '' && this.contactPhoneNo.length !== 1 && this.phoneInfo.valid) {
+        this.results = '+' + this.countryCallingCode + this.contactPhoneNo
       }
     },
     getHqLocation() {
@@ -306,7 +328,7 @@ export default {
       this.addCompanyFacts(data);
     },
     async addContacts() {
-      this.contactLoading = true
+      this.contactLoading = true;
       if (this.$refs.contactForm.validate()) {
         if (this.$store.getters.companyData.companyData.accountContacts) {
           this.accountContacts = this.$store.getters.companyData.companyData.accountContacts;
@@ -321,7 +343,7 @@ export default {
 
         await this.addCompanyContacts({ companyId: this.$store.getters.userInfo.company._id, accountContacts: this.accountContacts });
       }
-      this.contactLoading = false
+      this.contactLoading = false;
       this.$refs.contactForm.reset();
       this.contactName = '';
       this.contactEmail = '';
@@ -331,7 +353,6 @@ export default {
       this.phoneInfo.message = '';
       this.phoneInfo.valid = true;
       this.counter = 0;
-
     },
     deleteContact(index) {
       if (this.$store.getters.companyData.companyData.accountContacts) {
