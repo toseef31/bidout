@@ -4,8 +4,8 @@ export default {
   },
   setSalesReps(state, payload) {
     state.salesRepsList = payload.sort((a, b) => {
-      const aHasOfsPremium = a.contracts.some(
-        (contract) => contract === 'ofs-premium',
+      const aHasOfsPremium = a.company.contracts.some(
+        (contract) => contract === "ofs-premium"
       );
       if (aHasOfsPremium) {
         return -1;
@@ -16,7 +16,7 @@ export default {
   setCompaniesList(state, payload) {
     state.companiesList = payload.sort((a, b) => {
       const aHasOfsPremium = a.contracts.some(
-        (contract) => contract.contractType === 'ofs-premium',
+        (contract) => contract.contractType === "ofs-premium"
       );
       if (aHasOfsPremium) {
         return -1;
@@ -27,7 +27,7 @@ export default {
   setServiceCompanies(state, payload) {
     state.serviceCompaniesList = payload.sort((a, b) => {
       const aHasOfsPremium = a.contracts.some(
-        (contract) => contract.contractType === 'ofs-premium',
+        (contract) => contract.contractType === "ofs-premium"
       );
       if (aHasOfsPremium) {
         return -1;
@@ -125,7 +125,8 @@ export default {
   setSupplierAttachment(state, payload) {
     state.supplierAttachment.push(payload);
     state.supplierAttachment = state.supplierAttachment.filter(
-      (value, index, self) => index === self.findIndex((t) => t.fileName === value.fileName),
+      (value, index, self) =>
+        index === self.findIndex((t) => t.fileName === value.fileName)
     );
   },
   removeSupplierAttachment(state) {
@@ -226,17 +227,11 @@ export default {
     state.entryCheckForEditBid = payload;
   },
   spliceCompanies(state, company) {
-    if (company.id) {
-      const index = state.companiesList.findIndex((item) => item.id === company.id);
-      if (index !== -1) {
-        state.companiesList.splice(index, 1);
-      }
-    }
-    if (company.objectID) {
-      const index = state.companiesList.findIndex((item) => item.objectID === company.objectID);
-      if (index !== -1) {
-        state.companiesList.splice(index, 1);
-      }
+    const index = state.companiesList.findIndex(
+      (item) => item._id === company._id
+    );
+    if (index !== -1) {
+      state.companiesList.splice(index, 1);
     }
   },
   pushCompanies(state, company) {
@@ -294,7 +289,7 @@ export default {
   spliceTeamMembersForBid(state, member) {
     state.teamMembersForBid = [
       ...new Map(
-        state.teamMembersForBid.map((item) => [item.id, item]),
+        state.teamMembersForBid.map((item) => [item.id, item])
       ).values(),
     ];
 
