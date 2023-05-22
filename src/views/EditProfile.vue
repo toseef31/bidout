@@ -334,7 +334,7 @@ export default {
           email: this.email,
           phoneNumber: this.results,
           title: this.title,
-          userid: this.$store.getters.userInfo.id,
+          userid: this.$store.getters.userInfo._id,
           timezone: this.userTimezone,
         };
         this.updateProfile(user);
