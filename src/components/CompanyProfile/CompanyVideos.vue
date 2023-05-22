@@ -53,7 +53,7 @@ export default {
      var urlId = this.videoLinks.slice(-11);
      this.videos.push(urlId);
      var data = {
-       companyId: this.$store.getters.userInfo.company.id,
+       companyId: this.$store.getters.userInfo.company._id,
        videoLinks: this.videos,
      }
      this.addCompanyVideos(data);
@@ -66,7 +66,7 @@ export default {
      if(index >= 0){
        this.videos.splice(index,1);
        var data = {
-         companyId: this.$store.getters.userInfo.company.id,
+         companyId: this.$store.getters.userInfo.company._id,
          videoLinks: this.videos,
        }
        this.addCompanyVideos(data);
