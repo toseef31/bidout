@@ -117,7 +117,7 @@ export default {
     document.title = "Disabled Users - BidOut";
     this.user = this.$store.getters.userInfo;
 
-    this.getDisableUsers(this.user.company.company);
+    this.getDisableUsers(this.user.company._id);
   }
 };
 </script>
