@@ -267,7 +267,7 @@ export default {
         for (i = 0; i < LocationsForMap.length; i++) {  
           for (j = 0; j < LocationsForMap[i].locations.length; j++){
             marker = new google.maps.Marker({
-              position: new google.maps.LatLng(LocationsForMap[i].locations[j].lattitude, LocationsForMap[i].locations[j].longitude),
+              position: new google.maps.LatLng(LocationsForMap[i].locations[j].latitude, LocationsForMap[i].locations[j].longitude),
               map: map,
               title: 'Marker',
               anchorPoint: new google.maps.Point(0, -29),
