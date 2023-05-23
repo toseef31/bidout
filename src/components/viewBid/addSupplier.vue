@@ -334,6 +334,7 @@
                 <label class="d-block text-left font-weight-bold mb-2 mt-6">Email<span
                     class="required-class">*</span></label>
                 <v-text-field v-model="email" :rules="emailRules" @input="checkEmailI"
+                @keypress="removeSpace($event)" 
                   placeholder="example@email.com" required outlined :class="{ 'error--text': emailError }">
                   <template v-slot:append>
 
@@ -674,6 +675,15 @@ export default {
         this.phoneInfo.message = 'Invalid Phone number format';
         this.phoneInfo.valid = false;
         this.counter++;
+      }
+    },
+    removeSpace(event) {
+      const charCode = event.keyCode;
+
+      if (charCode === 32) {
+        event.preventDefault();
+      } else {
+        return true;
       }
     },
     hideCategories(name) {
