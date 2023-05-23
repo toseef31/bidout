@@ -17,7 +17,7 @@
                   <div class="d-flex justify-space-between px-4">
                     <h1 class="text-left service-title mb-8">
 
-                      {{ categoryName.name }}
+                      {{ categoryName }}
                       
                     </h1>
                     <div class="category-list__searchBox">
@@ -62,7 +62,7 @@
                             <tr v-for="company in allcompanies" :key="company.id">
                               <td class="pl-4" style="width: 300px">
                                 <router-link class="text-decoration-none d-flex" :to="company.slug ? '/company/'+company.slug: '' ">
-                                <div class="text-truncate pr-1"> {{ company.company }}</div>
+                                <div class="text-truncate pr-1"> {{ company.companyName }}</div>
                                
                                   <span v-if="hasOfsPremium(company)">
                                     <v-tooltip top>
