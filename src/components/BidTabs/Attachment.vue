@@ -36,7 +36,7 @@
                 <span v-else>{{ doc.comment !== 'undefined' ? doc.comment : '' }}</span>
               </td>
               <td class="text-left">{{ size(doc.fileSize) }}</td>
-              <td class="text-left">{{ doc.uploadedBy }}</td>
+              <td class="text-left">{{ doc.uploadedByName }}</td>
               <td class="text-left">
                 {{ doc.uploadedAt | moment("MM/DD/YYYY hh:mm a") }}
               </td>
@@ -91,7 +91,7 @@ export default {
   computed: {
     ...mapGetters(['isEditBidChanges']),
     uploadedBy() {
-      return `${this.$store.getters.userInfo.firstName} ${this.$store.getters.userInfo.lastName}`;
+      return this.$store.getters.userInfo._id;
     },
     docsList() {
       if (this.$store.getters.bidData != null) {
@@ -200,7 +200,8 @@ export default {
       this.uploadDoc.push(this.file);
 
       const data = {
-        uploadedBy: `${this.$store.getters.userInfo.firstName} ${this.$store.getters.userInfo.lastName}`,
+        uploadedBy: this.$store.getters.userInfo._id,
+        uploadedByName: `${this.$store.getters.userInfo.firstName} ${this.$store.getters.userInfo.lastName}`,
         attachement: this.uploadDoc,
       };
       await this.uploadBidAttach(data);
