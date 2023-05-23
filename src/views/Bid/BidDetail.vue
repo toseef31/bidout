@@ -1144,9 +1144,8 @@ export default {
 
     if (this.getUserType === "supplier") {
       await this.getIntent({
-        companyId: this.users.company,
+        companyId: this.users.company._id,
         bidId: this.bidDetail.bidData._id,
-        companyName: this.users.company.companyName,
       });
 
       this.answer = this.$store.getters.bidIntent;
