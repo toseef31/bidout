@@ -932,8 +932,8 @@ export default {
         });
         
         await this.getBidAllConversations({
-          bidId: this.bidDetail.bidData.id,
-          userId: this.users.id,
+          bidId: this.bidDetail.bidData._id,
+          userId: this.users._id,
         });
       }
     },

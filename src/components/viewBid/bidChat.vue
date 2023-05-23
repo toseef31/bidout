@@ -363,8 +363,8 @@ export default {
   },
   async created() {
     this.user = this.$store.getters.userInfo;
-    this.bidId = this.$store.getters.bidViewData.bidData.id;
-    await this.getBidAllConversations({ bidId: this.bidId, userId: this.user.id });
+    this.bidId = this.$store.getters.bidViewData.bidData._id;
+    await this.getBidAllConversations({ bidId: this.bidId, userId: this.user._id });
 
     this.pageLoading = false;
     const convo = await _.orderBy(
