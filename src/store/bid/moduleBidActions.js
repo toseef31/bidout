@@ -212,7 +212,7 @@ export default {
       commit('setPageLoader', true);
     }
     try {
-      const res = await axios.get(`intend/getIntends/${payload.companyId}/${payload.bidId}/${payload.companyName}`);
+      const res = await axios.get(`v2/bid/getIntends/${payload.companyId}/${payload.bidId}`);
 
       if (res.status === 200) {
         if (res.data) {
