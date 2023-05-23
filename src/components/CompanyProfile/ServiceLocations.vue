@@ -74,7 +74,7 @@ export default {
     ...mapActions(['addCompanyLocation', 'deleteCompanyLocation']),
     getLocation() {
       if (this.$store.getters.companyData.companyData.companyLocations && this.$store.getters.companyData.companyData.companyLocations && this.$store.getters.companyData.companyData.companyLocations.length > 0) {
-        var lat = this.$store.getters.companyData.companyData.companyLocations[0].lattitude;
+        var lat = this.$store.getters.companyData.companyData.companyLocations[0].latitude;
       } else {
         var lat = 29.721085;
       }
@@ -88,7 +88,7 @@ export default {
       } else {
         var LocationsForMap = [
           {
-            lattitude: 29.721085,
+            latitude: 29.721085,
             longitude: -95.342049,
             location: 'M.D. Anderson Library'
           }
@@ -98,7 +98,7 @@ export default {
       if (this.$store.getters.companyData.companyData.companyLocations && this.$store.getters.companyData.companyData.companyLocations.length === 1) {
         var map = new google.maps.Map(document.getElementById('map'), {
           zoom: 9,
-          center: new google.maps.LatLng(LocationsForMap[0].lattitude, LocationsForMap[0].longitude),
+          center: new google.maps.LatLng(LocationsForMap[0].latitude, LocationsForMap[0].longitude),
           // mapTypeId: google.maps.MapTypeId.ROADMAP,
           mapId: "2993bb26d878ba6a",
           streetViewControl: false,
@@ -111,7 +111,7 @@ export default {
             for (i = 0; i < LocationsForMap.length; i++) {
             marker = new google.maps.Marker({
 
-              position: new google.maps.LatLng(LocationsForMap[i].lattitude, LocationsForMap[i].longitude),
+              position: new google.maps.LatLng(LocationsForMap[i].latitude, LocationsForMap[i].longitude),
 
               map: map,
               title: 'Marker',
@@ -129,7 +129,7 @@ export default {
           }
      else if (this.$store.getters.companyData.companyData.companyLocations && this.$store.getters.companyData.companyData.companyLocations.length > 1){
       var map = new google.maps.Map(document.getElementById('map'), {
-        center: new google.maps.LatLng(LocationsForMap[0].lattitude, LocationsForMap[0].longitude),
+        center: new google.maps.LatLng(LocationsForMap[0].latitude, LocationsForMap[0].longitude),
         // mapTypeId: google.maps.MapTypeId.ROADMAP,
         mapId: "2993bb26d878ba6a",
         streetViewControl: false,
@@ -144,7 +144,7 @@ export default {
             for (i = 0; i < LocationsForMap.length; i++) {  
             marker = new google.maps.Marker({
 
-              position: new google.maps.LatLng(LocationsForMap[i].lattitude, LocationsForMap[i].longitude),
+              position: new google.maps.LatLng(LocationsForMap[i].latitude, LocationsForMap[i].longitude),
 
               map: map,
               title: 'Marker',
@@ -166,7 +166,7 @@ export default {
           }else{
             var map = new google.maps.Map(document.getElementById('map'), {
             zoom: 4,
-            center: new google.maps.LatLng(LocationsForMap[0].lattitude, LocationsForMap[0].longitude),
+            center: new google.maps.LatLng(LocationsForMap[0].latitude, LocationsForMap[0].longitude),
             // mapTypeId: google.maps.MapTypeId.ROADMAP,
             mapId: "2993bb26d878ba6a",
             streetViewControl: false,
@@ -257,7 +257,7 @@ export default {
       const tail = Math.random().toString().substr(2);
       const data = {
         id: head + tail,
-        companyId: this.$store.getters.userInfo.company.id,
+        companyId: this.$store.getters.userInfo.company._id,
         location: this.address,
         lat: this.lat,
         long: this.lng,
@@ -275,14 +275,14 @@ export default {
     },
     deleteLocation(data,indexing) {
       const locData = {
-        id: data.id,
-        companyId: this.$store.getters.userInfo.company.id,
+        id: data._id,
+        companyId: this.$store.getters.userInfo.company._id,
         location: data.location,
-        lat: data.lattitude,
+        lat: data.latitude,
         long: data.longitude,
       };
 
-      const indexOfObject = this.companyData.companyLocations.findIndex((object) => object.id === data.id);
+      const indexOfObject = this.companyData.companyLocations.findIndex((object) => object._id === data._id);
 
       this.companyData.companyLocations.splice(indexOfObject, 1);
 
