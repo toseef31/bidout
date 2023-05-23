@@ -56,7 +56,7 @@
               <v-icon size="40">mdi-domain</v-icon>
             </div>
             <div class="ml-5">
-              <div class="font-weight-bold">{{ item && item.company }}
+              <div class="font-weight-bold">{{ item && item.company.companyName }}
                 <span v-if="hasOfsPremium(item)">
                   <v-tooltip top>
                     <template v-slot:activator="{ on, attrs }">
@@ -76,7 +76,7 @@
               <v-col class="mr-10">
                 <v-tooltip top>
                   <template v-slot:activator="{ on, attrs }">
-                    <v-badge color="#0D9648" dot overlap v-if="checkActiveSupplier(item.id)">
+                    <v-badge color="#0D9648" dot overlap v-if="checkActiveSupplier(item._id)">
                       <v-icon v-bind="attrs" v-on="on">mdi-domain</v-icon>
                     </v-badge>
                   </template>
@@ -85,7 +85,7 @@
 
                 <v-tooltip top>
                   <template v-slot:activator="{ on, attrs }">
-                    <v-badge color="#D5D91C" dot overlap v-if="checkInActiveSupplier(item.id)">
+                    <v-badge color="#D5D91C" dot overlap v-if="checkInActiveSupplier(item._id)">
                       <v-icon v-bind="attrs" v-on="on">mdi-domain</v-icon>
                     </v-badge>
                   </template>
@@ -98,27 +98,27 @@
                   <template v-slot:activator="{ on, attrs }">
                     <v-icon v-bind="attrs" v-on="on">mdi-eye-outline</v-icon>
                   </template>
-                  <span>Viewed {{ getBidViewNumber(item.id) }} Times</span>
+                  <span>Viewed {{ getBidViewNumber(item._id) }} Times</span>
                 </v-tooltip>
               </v-col>
               <v-col class="mr-10">
 
                 <v-tooltip top>
                   <template v-slot:activator="{ on, attrs }">
-                    <v-icon v-bind="attrs" v-on="on" v-if="getCompanyIntend(item.id) === 'not-intended'"
+                    <v-icon v-bind="attrs" v-on="on" v-if="getCompanyIntend(item._id) === 'not-intended'"
                       color="#F32349">mdi-close-circle-outline</v-icon>
-                    <v-icon v-bind="attrs" v-on="on" v-if="getCompanyIntend(item.id) === 'intended'"
+                    <v-icon v-bind="attrs" v-on="on" v-if="getCompanyIntend(item._id) === 'intended'"
                       color="#0D9648">mdi-check-circle-outline</v-icon>
                     <v-icon v-bind="attrs" v-on="on"
-                      v-if="getCompanyIntend(item.id) === 'neither'">mdi-circle-outline</v-icon>
+                      v-if="getCompanyIntend(item._id) === 'neither'">mdi-circle-outline</v-icon>
                   </template>
 
-                  <span v-if="getCompanyIntend(item.id) === 'not-intended'">{{ item && item.company }} does not intend to
+                  <span v-if="getCompanyIntend(item._id) === 'not-intended'">{{ item && item.company }} does not intend to
                     submit a bid</span>
-                  <span v-if="getCompanyIntend(item.id) === 'intended'">{{ item && item.company }} does intend to submit
+                  <span v-if="getCompanyIntend(item._id) === 'intended'">{{ item && item.company }} does intend to submit
                     a
                     bid</span>
-                  <span v-if="getCompanyIntend(item.id) === 'neither'">{{ item && item.company }} has not indicated if
+                  <span v-if="getCompanyIntend(item._id) === 'neither'">{{ item && item.company }} has not indicated if
                     they intend to submit a bid</span>
 
                 </v-tooltip>
@@ -128,21 +128,21 @@
                 <v-tooltip top>
                   <template v-slot:activator="{ on, attrs }">
                     <v-icon v-bind="attrs" v-on="on"
-                      v-if="getSubmissionStatus(item.id) === 'not-sent' && getCompanyIntend(item.id) !== 'not-intended'">mdi-circle-outline</v-icon>
+                      v-if="getSubmissionStatus(item._id) === 'not-sent' && getCompanyIntend(item._id) !== 'not-intended'">mdi-circle-outline</v-icon>
                     <img :src="require('@/assets/images/bids/bidSubmitted.svg')"
-                      v-if="getSubmissionStatus(item.id) === 'sent' && getCompanyIntend(item.id) !== 'not-intended'"
+                      v-if="getSubmissionStatus(item._id) === 'sent' && getCompanyIntend(item._id) !== 'not-intended'"
                       width="24" height="24" v-bind="attrs" v-on="on" />
-                    <v-icon v-bind="attrs" v-on="on" v-if="getCompanyIntend(item.id) === 'not-intended'"
+                    <v-icon v-bind="attrs" v-on="on" v-if="getCompanyIntend(item._id) === 'not-intended'"
                       color="#F32349">mdi-close-circle-outline</v-icon>
                   </template>
-                  <span v-if="getSubmissionStatus(item.id) === 'sent' && getCompanyIntend(item.id) !== 'not-intended'">{{
+                  <span v-if="getSubmissionStatus(item._id) === 'sent' && getCompanyIntend(item._id) !== 'not-intended'">{{
                     item
                     && item.company }} has sent Bid Submissions</span>
                   <span
-                    v-if="getSubmissionStatus(item.id) === 'not-sent' && getCompanyIntend(item.id) !== 'not-intended'">{{
+                    v-if="getSubmissionStatus(item._id) === 'not-sent' && getCompanyIntend(item._id) !== 'not-intended'">{{
                       item
                       && item.company }} has not sent Bid Submissions yet</span>
-                  <span v-if="getCompanyIntend(item.id) === 'not-intended'">{{ item && item.company }} doesn't want to
+                  <span v-if="getCompanyIntend(item._id) === 'not-intended'">{{ item && item.company }} doesn't want to
                     sent Bid Submissions</span>
                 </v-tooltip>
               </v-col>
@@ -178,18 +178,18 @@
       <div class="mt-10 d-flex flex-row flex-wrap team-member">
 
         <div class="d-flex align-center flex-child">
-          <v-img v-if="bidDetail.bidData.userId.image" max-width="100" height="auto" contain :aspect-ratio="16 / 9"
-            :src="bidDetail.bidData.userId.image"></v-img>
+          <v-img v-if="bidDetail.bidData.user.image" max-width="100" height="auto" contain :aspect-ratio="16 / 9"
+            :src="bidDetail.bidData.user.image"></v-img>
           <v-avatar v-else color="#0d96481a" size="62">
             <v-icon color="#0d9648" large>mdi-account-outline </v-icon>
           </v-avatar>
-          <span v-if="bidDetail.bidData.userId.image" class="text--black pr-4  bid-creator">{{
-            bidDetail.bidData.userId.firstName }} {{
-    bidDetail.bidData.userId.lastName
+          <span v-if="bidDetail.bidData.user.image" class="text--black pr-4  bid-creator">{{
+            bidDetail.bidData.user.firstName }} {{
+    bidDetail.bidData.user.lastName
   }}</span>
 
-          <span v-else class="text--black px-4  bid-creator">{{ bidDetail.bidData.userId.firstName }} {{
-            bidDetail.bidData.userId.lastName
+          <span v-else class="text--black px-4  bid-creator">{{ bidDetail.bidData.user.firstName }} {{
+            bidDetail.bidData.user.lastName
           }}</span>
           <span class="bid-creator-title">Bid Creator</span>
         </div>
