@@ -100,7 +100,7 @@
 
                           </td>
                         </tr>
-                        <tr v-if="invitedList.length < 1 && pendingUsers.length < 1">
+                        <tr v-if="invitedList.length < 1 && !pendingUsers">
                           <td colspan="5"><h4>There is no invited user.</h4></td>
                         </tr>
                         <tr
