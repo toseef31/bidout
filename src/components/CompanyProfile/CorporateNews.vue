@@ -69,7 +69,7 @@ export default {
         url: this.newsUrl,
       }
       this.corporateNews.push(data);
-      this.addCompanyNews({companyId: this.$store.getters.userInfo.company.id,corporateNews: this.corporateNews});
+      this.addCompanyNews({companyId: this.$store.getters.userInfo.company._id,corporateNews: this.corporateNews});
       this.newsUrl = '';
       this.newsTitle = '';
       this.newsDate = '';
@@ -79,7 +79,7 @@ export default {
         this.corporateNews = this.$store.getters.companyData.companyData.corporateNews;
       }
       this.corporateNews.splice(index,1);
-      this.addCompanyNews({companyId: this.$store.getters.userInfo.company.id,corporateNews: this.corporateNews});
+      this.addCompanyNews({companyId: this.$store.getters.userInfo.company._id,corporateNews: this.corporateNews});
     },
   },
   mounted() {
