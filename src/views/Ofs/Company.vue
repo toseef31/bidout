@@ -36,6 +36,7 @@
                   class="text-left"
                   cols="12" sm="12"
                 >
+                
                   <div class="company-title ml-2">
                     <h1>{{supplierData.companyName}}</h1>
                     <h4 class="mt-3"><span v-if="supplierData.isOfsPremium"><span v-if="supplierData.isOfsPremium == true"></span><v-icon color="#0D9647">mdi-check-decagram</v-icon>Premium Service Provider</span></h4>
@@ -162,7 +163,7 @@
                       <h3 class="mb-4"><font color="#013D3A">Key Facts</font></h3>
                       <p><font class="font-weight-bold">Founded:</font> {{supplierData.founded}}</p>
                       <p><font class="font-weight-bold">Employees:</font> {{supplierData.employees}}</p>
-                      <p><font class="font-weight-bold">HQ Location:</font> {{supplierData.hqlocation}}</p>
+                      <p><font class="font-weight-bold">HQ Location:</font> {{supplierData.hqLocation}}</p>
                       <!-- <p><font class="font-weight-bold">Stock Price:</font> {{supplierData.stockPrice}} </p> -->
                         <div class="company-links mt-6">
                           <p><a :href="supplierData.website" target="_blank">Website</a><v-icon class="pl-2" color="#013D3A">mdi-arrow-top-right-bold-box-outline</v-icon></p>
@@ -246,7 +247,7 @@ export default {
     },
     supplierData() {
       let supplier = this.$store.getters.supplierCompany ? this.$store.getters.supplierCompany.companyData : {};
-      supplier.isOfsPremium = supplier.contracts.some(contract => contract.contractType = "ofs-premium")
+      supplier.isOfsPremium = supplier.contracts.some(contract => contract.contractType === "ofs-premium")
       return supplier
     },
     companyCategories() {
