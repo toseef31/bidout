@@ -36,6 +36,7 @@
                   class="text-left"
                   cols="12" sm="12"
                 >
+                
                   <div class="company-title ml-2">
                     <h1>{{supplierData.companyName}}</h1>
                     <h4 class="mt-3"><span v-if="supplierData.isOfsPremium"><span v-if="supplierData.isOfsPremium == true"></span><v-icon color="#0D9647">mdi-check-decagram</v-icon>Premium Service Provider</span></h4>
@@ -162,7 +163,7 @@
                       <h3 class="mb-4"><font color="#013D3A">Key Facts</font></h3>
                       <p><font class="font-weight-bold">Founded:</font> {{supplierData.founded}}</p>
                       <p><font class="font-weight-bold">Employees:</font> {{supplierData.employees}}</p>
-                      <p><font class="font-weight-bold">HQ Location:</font> {{supplierData.hqlocation}}</p>
+                      <p><font class="font-weight-bold">HQ Location:</font> {{supplierData.hqLocation}}</p>
                       <!-- <p><font class="font-weight-bold">Stock Price:</font> {{supplierData.stockPrice}} </p> -->
                         <div class="company-links mt-6">
                           <p><a :href="supplierData.website" target="_blank">Website</a><v-icon class="pl-2" color="#013D3A">mdi-arrow-top-right-bold-box-outline</v-icon></p>
@@ -176,7 +177,7 @@
                         <h4 class="mb-0 font-weight-bold">{{contacts.name}}</h4>
                         <h4 class="font-weight-medium">{{contacts.position}}</h4>
                         <h4 class="font-weight-medium contact-email"><span class="font-weight-bold">Email:</span> <a :href="'mailto:'+contacts.email" class="text-decoration-none"><font color="#013D3A">{{contacts.email}}</font></a></h4>
-                        <h4 class="font-weight-medium"><span class="font-weight-bold">Phone:</span> <a :href="'tel:'+contacts.phoneNo" class="text-decoration-none"><font color="#013D3A">{{contacts.phoneNo}}</font></a></h4>
+                        <h4 class="font-weight-medium"><span class="font-weight-bold">Phone:</span> <a :href="'tel:'+contacts.phoneNumber" class="text-decoration-none"><font color="#013D3A">{{contacts.phoneNumber}}</font></a></h4>
                       </div>
                       <h4 v-if="!supplierData.accountContacts" class="text-center"> No contacts</h4>
                     </div>
@@ -246,7 +247,7 @@ export default {
     },
     supplierData() {
       let supplier = this.$store.getters.supplierCompany ? this.$store.getters.supplierCompany.companyData : {};
-      supplier.isOfsPremium = supplier.contracts.some(contract => contract.contractType = "ofs-premium")
+      supplier.isOfsPremium = supplier.contracts.some(contract => contract.contractType === "ofs-premium")
       return supplier
     },
     companyCategories() {
@@ -294,7 +295,7 @@ export default {
         if(LocationsForMap.length > 0){
           var map = new google.maps.Map(document.getElementById('map'), {
             zoom: 9,
-            center: new google.maps.LatLng(LocationsForMap[0].lattitude, LocationsForMap[0].longitude),
+            center: new google.maps.LatLng(LocationsForMap[0].latitude, LocationsForMap[0].longitude),
             // mapTypeId: google.maps.MapTypeId.ROADMAP,
             mapId: '2993bb26d878ba6a',
             streetViewControl: false,
@@ -306,7 +307,7 @@ export default {
           var marker; var i;
           for (i = 0; i < LocationsForMap.length; i++) {
             marker = new google.maps.Marker({
-              position: new google.maps.LatLng(LocationsForMap[i].lattitude, LocationsForMap[i].longitude),
+              position: new google.maps.LatLng(LocationsForMap[i].latitude, LocationsForMap[i].longitude),
               map,
               title: 'Marker',
               anchorPoint: new google.maps.Point(0, -29),
@@ -326,7 +327,7 @@ export default {
         
         if(LocationsForMap.length > 0){
           var map = new google.maps.Map(document.getElementById('map'), {
-            center: new google.maps.LatLng(LocationsForMap[0].lattitude, LocationsForMap[0].longitude),
+            center: new google.maps.LatLng(LocationsForMap[0].latitude, LocationsForMap[0].longitude),
             // mapTypeId: google.maps.MapTypeId.ROADMAP,
             mapId: '2993bb26d878ba6a',
             streetViewControl: false,
@@ -340,7 +341,7 @@ export default {
           var latlngbounds = new google.maps.LatLngBounds();
           for (i = 0; i < LocationsForMap.length; i++) {
             marker = new google.maps.Marker({
-              position: new google.maps.LatLng(LocationsForMap[i].lattitude, LocationsForMap[i].longitude),
+              position: new google.maps.LatLng(LocationsForMap[i].latitude, LocationsForMap[i].longitude),
               map,
               title: 'Marker',
               anchorPoint: new google.maps.Point(0, -29),
