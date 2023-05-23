@@ -108,7 +108,7 @@ export default {
       .get(`/v2/company/getCompanyBySlug/${payload.slug}`)
       .then((responce) => {
         commit('setSupplierCompany', responce.data);
-        commit('setPageTitle', `${responce.data.companyData.company} - ${responce.data.companyData.companyHq} - BidOut Profile`);
+        commit('setPageTitle', `${responce.data.companyData.companyName} - ${responce.data.companyData.companyHq} - BidOut Profile`);
         commit('setPageDescription', responce.data.companyData.overview);
         commit('setPageLoader', false);
       })
@@ -123,7 +123,7 @@ export default {
       .get(`/v2/company/getCompanyBySlug/${payload.slug}`)
       .then((responce) => {
         commit('setPublicCompany', responce.data);
-        commit('setPageTitle', `${responce.data.companyData.company} - ${responce.data.companyData.companyHq} - BidOut Profile`);
+        commit('setPageTitle', `${responce.data.companyData.companyName} - ${responce.data.companyData.companyHq} - BidOut Profile`);
         commit('setPageDescription', responce.data.companyData.overview);
         commit('setPageLoader', false);
       })
