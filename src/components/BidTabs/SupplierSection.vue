@@ -298,23 +298,23 @@
                     class="required-class">*</span></label>
                 <vue-tel-input defaultCountry="US" @blur="onBlurS" :autoDefaultCountry="false" :autoFormat="false"
                   :dropdownOptions="{
-                      showDialCodeInSelection: true,
-                      showFlags: true,
-                      width: ' max-content'
-                    }" :inputOptions="{
-      required: true,
-      showDialCode: false,
-      maxlength: 15,
-      placeholder: 'Phone number',
+                    showDialCodeInSelection: true,
+                    showFlags: true,
+                    width: ' max-content'
+                  }" :inputOptions="{
+  required: true,
+  showDialCode: false,
+  maxlength: 15,
+  placeholder: 'Phone number',
 
-    }" model="national" :validCharactersOnly="true" :styleClasses="{ 'phone-main-class': true }" v-model="phoneNumber"
+}" model="national" :validCharactersOnly="true" :styleClasses="{ 'phone-main-class': true }" v-model="phoneNumber"
                   @validate="onUpdate"></vue-tel-input>
                 <div class="phone-class" v-if="!getPhoneInfo.valid && getCounter > 1">
                   {{ getPhoneInfo.message }}</div>
                 <label class="d-block text-left font-weight-bold mb-2 mt-6">Email<span
                     class="required-class">*</span></label>
                 <v-text-field v-model="email" :class="{ 'error--text': emailError }" :rules="emailRules"
-                  @input="checkEmailI" placeholder="example@email.com" required outlined>
+                  @keypress="removeSpace($event)" @input="checkEmailI" placeholder="example@email.com" required outlined>
                   <template v-slot:append>
 
                     <v-progress-circular v-if="getEmailLoading" indeterminate :size="20" :width="2"
@@ -373,7 +373,10 @@ export default {
       email: '',
       emailRules: [
         (v) => !!v || 'E-mail is required',
-        (v) => /^[\w-\.+]+@([\w-]+\.)+[\w-]{1,63}$/.test(v) || 'E-mail must be valid',
+        (v) => {
+          v = v.replace(/\s+/g, '');
+          return /^[\w-\.+]+@([\w-]+\.)+[\w-]{1,63}$/.test(v) || 'E-mail must be valid';
+        },
       ],
       phoneNumber: '',
       results: {},
@@ -611,6 +614,8 @@ export default {
       }
     },
     async checkEmailI() {
+      this.email = this.email.replace(/\s+/g, '');
+
       const testEmail = /^[\w-\.+]+@([\w-]+\.)+[\w-]{1,63}$/.test(this.email);
 
       if (this.email === '' || !testEmail) {
@@ -633,6 +638,15 @@ export default {
         this.phoneInfo.message = 'Invalid Phone number format';
         this.phoneInfo.valid = false;
         this.counter++;
+      }
+    },
+    removeSpace(event) {
+      const charCode = event.keyCode;
+
+      if (charCode === 32) {
+        event.preventDefault();
+      } else {
+        return true;
       }
     },
     hideCategories(name) {
