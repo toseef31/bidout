@@ -495,7 +495,7 @@ export default {
         questionType: type,
         id: uuidv4(),
         order: this.categories ? this.categories.length : 0,
-        categoryId: this.categories.id,
+        categoryId: this.categories._id,
         type: 'question',
         options: [],
       };
@@ -524,10 +524,10 @@ export default {
     },
     questionMoved(event, categoryId, questions) {
       this.categories
-        .find((cat) => cat.id === categoryId)
+        .find((cat) => cat._id === categoryId)
         .questions.forEach((quest, index) => {
-          const questionIndex = questions.findIndex((q) => q.id === quest.id);
-          this.categories.find((cat) => cat.id === categoryId).questions[
+          const questionIndex = questions.findIndex((q) => q._id === quest._id);
+          this.categories.find((cat) => cat._id === categoryId).questions[
             index
           ].order = questionIndex;
         });
