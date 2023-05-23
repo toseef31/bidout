@@ -94,7 +94,7 @@
                           }">
                           <label class="d-block text-left input-label mb-2 font-weight-bold">Direct Phone Number</label>
 
-                          <vue-tel-input @blur="onBlurB" defaultCountry="US" :autoDefaultCountry="false"
+                          <!-- <vue-tel-input @blur="onBlurB" defaultCountry="US" :autoDefaultCountry="false"
                             :autoFormat="false" :dropdownOptions="{
                                 showDialCodeInSelection: true,
                                 showFlags: true,
@@ -106,7 +106,10 @@
       placeholder: 'Phone number',
 
     }" model="national" :validCharactersOnly="true" :styleClasses="{ 'phone-main-class': true }"
-                            v-model="buyer.phoneNumber" @validate="onUpdate"></vue-tel-input>
+                            v-model="buyer.phoneNumber" @validate="onUpdate"></vue-tel-input> -->
+                            <VuePhoneNumberInput default-country-code="US" :required="true" clearable :error="!getPhoneInfo.valid"
+                  :border-radius="8" size="lg" v-model="buyer.phoneNumber" error-color="#FF0000" valid-color="#9E9E9E"
+                  :translations="translations" class="mb-2" @update="onUpdate" />
 
                           <div class="phone-class" v-show="!getPhoneInfo.valid && getCounter > 1">
                             {{ getPhoneInfo.message }}</div>
@@ -373,7 +376,7 @@
                         ">
                           <label class="d-block text-left input-label mb-2 font-weight-bold">Direct Phone Number</label>
 
-                          <vue-tel-input @country-changed=" countryTel " @blur=" onBlurS " defaultCountry="US"
+                          <!-- <vue-tel-input @country-changed=" countryTel " @blur=" onBlurS " defaultCountry="US"
                             :autoDefaultCountry=" false " :autoFormat=" false " :dropdownOptions="
                               {
                                 showDialCodeInSelection: true,
@@ -389,7 +392,10 @@
 
 }
 " model="national" :validCharactersOnly=" true " :styleClasses=" { 'phone-main-class': true } "
-                            v-model=" supplier.phoneNumber " @validate=" onUpdate2 "></vue-tel-input>
+                            v-model=" supplier.phoneNumber " @validate=" onUpdate2 "></vue-tel-input> -->
+                            <VuePhoneNumberInput default-country-code="US" :required="true" clearable :error="!getPhoneInfo.valid"
+                  :border-radius="8" size="lg" v-model="supplier.phoneNumber" error-color="#FF0000" valid-color="#9E9E9E"
+                  :translations="translations" class="mb-2" @update="onUpdate2" />
 
                           <div class="phone-class" v-show=" !getPhoneInfo.valid && getCounter > 1 ">
                             {{ getPhoneInfo.message }}</div>
@@ -471,19 +477,22 @@
   import ModuleSelection from '@/components/SignUp/module-selection.vue'
   import Contract from '@/components/SignUp/contract.vue'
   import _ from 'lodash';
-  import { VueTelInput } from 'vue-tel-input';
+  // import { VueTelInput } from 'vue-tel-input';
   import { mapActions, mapGetters } from "vuex";
   import {
   ValidationObserver,
   ValidationProvider
 } from "vee-validate";
+import VuePhoneNumberInput from 'vue-phone-number-input';
+import 'vue-phone-number-input/dist/vue-phone-number-input.css';
 
 export default {
   name : "GetStarted",
   components: {
     NavbarBeforeLogin,
     Footer,
-    VueTelInput,
+   // VueTelInput,
+   VuePhoneNumberInput,
     ConfirmationBuyer,
     ExistingConfirmation,
     ConfirmationSupplier,
@@ -545,7 +554,13 @@ export default {
       signUpLoading: false,
       searchSupplierLoading: false,
       countryCode: '',
-      supplierLoading: false
+      supplierLoading: false,
+      translations: {
+        countrySelectorLabel: 'Country Code',
+        countrySelectorError: 'Choose country',
+        phoneNumberLabel: 'Phone Number',
+        example: 'Example',
+      },
     };
   },
   directives: {
@@ -732,24 +747,24 @@ export default {
     onUpdate (payload) {
       this.counter++;
 
-      this.phoneInfo.valid = payload === undefined ? false : payload.valid;
+      this.phoneInfo.valid = payload.isValid;
 
       if (!payload) {
         this.phoneInfo.message = 'Phone number is required';
       }
       else {
-        this.phoneInfo.valid =  payload.valid === undefined ? false : payload.valid;
+        this.phoneInfo.valid = payload.isValid;
 
-        if (payload.number && !payload.valid) {
+        if (payload.formattedNumber && !payload.isValid) {
         this.phoneInfo.message = 'Invalid Phone number format';
-      }
+         }
 
-      if (!payload.number && !payload.valid) {
+      if (!payload.formattedNumber && !payload.isValid) {
         this.phoneInfo.message = 'Phone number is required';
       }
-      if (payload.number && payload.valid) {
-        this.buyer.phoneNumber = payload.nationalNumber;
-        this.results = payload.number;
+      if (payload.formattedNumber && payload.isValid) {
+        this.buyer.phoneNumber = payload.formattedNumber;
+        this.results = payload.formattedNumber;
       }
       }
 
@@ -785,23 +800,23 @@ export default {
     },
     onUpdate2 (payload) {
       this.counter++;
-      this.phoneInfo.valid = payload === undefined ? false : payload.valid;
+      this.phoneInfo.valid = payload.isValid;
 
       if (!payload) {
         this.phoneInfo.message = 'Phone number is required';
       } else {
-        this.phoneInfo.valid = payload.valid === undefined ? false : payload.valid;
+        this.phoneInfo.valid = payload.isValid;
 
-        if (payload.number && !payload.valid) {
+        if (payload.formattedNumber && !payload.isValid) {
         this.phoneInfo.message = 'Invalid Phone number format';
       }
 
-      if (!payload.number && !payload.valid) {
+      if (!payload.formattedNumber && !payload.isValid) {
         this.phoneInfo.message = 'Phone number is required';
       }
-      if (payload.number && payload.valid) {
-        this.supplier.phoneNumber = payload.nationalNumber;
-        this.results2 = payload.number;
+      if (payload.formattedNumber && payload.isValid) {
+        this.supplier.phoneNumber = payload.formattedNumber;
+        this.results2 = payload.formattedNumber;
       }
       }
     },
@@ -818,7 +833,7 @@ export default {
         return
       }
 
-      if(this.getPhoneInfo.valid && !this.emailError && !this.getInvitedSupplierEmailExists){
+      if(!this.emailError && !this.getInvitedSupplierEmailExists){
         if(this.companyId !== '' && this.supplierExists){
           let supplierData = {
             id: this.companyId,
@@ -864,28 +879,28 @@ export default {
         window.scrollTo({ top: 0, behavior: 'smooth' });
       }
     },
-    onBlurB() {
-      if (this.buyer.phoneNumber === '') {
-        this.phoneInfo.message = 'Phone number is required';
-        this.phoneInfo.valid = false
-        this.counter++
-      } else if (this.buyer.phoneNumber.length === 1) {
-        this.phoneInfo.message = 'Invalid Phone number format';
-        this.phoneInfo.valid = false
-        this.counter++
-      }
-    },
-    onBlurS() {
-      if (this.supplier.phoneNumber === '') {
-        this.phoneInfo.message = 'Phone number is required';
-        this.phoneInfo.valid = false
-        this.counter++
-      } else if (this.supplier.phoneNumber.length === 1) {
-        this.phoneInfo.message = 'Invalid Phone number format';
-        this.phoneInfo.valid = false
-        this.counter++
-      }
-    },
+    // onBlurB() {
+    //   if (this.buyer.phoneNumber === '') {
+    //     this.phoneInfo.message = 'Phone number is required';
+    //     this.phoneInfo.valid = false
+    //     this.counter++
+    //   } else if (this.buyer.phoneNumber.length === 1) {
+    //     this.phoneInfo.message = 'Invalid Phone number format';
+    //     this.phoneInfo.valid = false
+    //     this.counter++
+    //   }
+    // },
+    // onBlurS() {
+    //   if (this.supplier.phoneNumber === '') {
+    //     this.phoneInfo.message = 'Phone number is required';
+    //     this.phoneInfo.valid = false
+    //     this.counter++
+    //   } else if (this.supplier.phoneNumber.length === 1) {
+    //     this.phoneInfo.message = 'Invalid Phone number format';
+    //     this.phoneInfo.valid = false
+    //     this.counter++
+    //   }
+    // },
     async buyerRequest() {
      this.signUpLoading = true
 
@@ -898,7 +913,7 @@ export default {
         return
       }
 
-      if(this.getPhoneInfo.valid && !this.emailError && !this.getInvitedSupplierEmailExists ){
+      if(!this.emailError && !this.getInvitedSupplierEmailExists ){
         var buyerData = {
         company: this.buyer.companyName,
         firstName: this.buyer.firstName,
@@ -980,5 +995,3 @@ export default {
 };
 </script>
 <style scoped lang="scss"></style>
-
-<style src="vue-tel-input/dist/vue-tel-input.css"></style>
