@@ -296,7 +296,7 @@
                   outlined></v-text-field>
                 <label class="d-block text-left font-weight-bold mb-2">Phone Number<span
                     class="required-class">*</span></label>
-                <vue-tel-input defaultCountry="US" @blur="onBlurS" :autoDefaultCountry="false" :autoFormat="false"
+                <!-- <vue-tel-input defaultCountry="US" @blur="onBlurS" :autoDefaultCountry="false" :autoFormat="false"
                   :dropdownOptions="{
                     showDialCodeInSelection: true,
                     showFlags: true,
@@ -308,8 +308,11 @@
   placeholder: 'Phone number',
 
 }" model="national" :validCharactersOnly="true" :styleClasses="{ 'phone-main-class': true }" v-model="phoneNumber"
-                  @validate="onUpdate"></vue-tel-input>
-                <div class="phone-class" v-if="!getPhoneInfo.valid && getCounter > 1">
+                  @validate="onUpdate"></vue-tel-input> -->
+                <VuePhoneNumberInput default-country-code="US" :required="true" clearable :error="!getPhoneInfo.valid"
+                  :border-radius="8" size="lg" v-model="phoneNumber" error-color="#FF0000" valid-color="#9E9E9E"
+                  :translations="translations" class="mb-2" @update="onUpdate" />
+                <div class="phone-class" v-if="!getPhoneInfo.valid && getCounter >= 1">
                   {{ getPhoneInfo.message }}</div>
                 <label class="d-block text-left font-weight-bold mb-2 mt-6">Email<span
                     class="required-class">*</span></label>
@@ -347,13 +350,16 @@
   </div>
 </template>
 <script>
-import { VueTelInput } from 'vue-tel-input';
+// import { VueTelInput } from 'vue-tel-input';
 import _ from 'lodash';
 import { mapActions, mapGetters } from 'vuex';
+import VuePhoneNumberInput from 'vue-phone-number-input';
+import 'vue-phone-number-input/dist/vue-phone-number-input.css';
 
 export default {
   components: {
-    VueTelInput,
+    //  VueTelInput,
+    VuePhoneNumberInput,
   },
   data() {
     return {
@@ -373,10 +379,7 @@ export default {
       email: '',
       emailRules: [
         (v) => !!v || 'E-mail is required',
-        (v) => {
-          v = v.replace(/\s+/g, '');
-          return /^[\w-\.+]+@([\w-]+\.)+[\w-]{1,63}$/.test(v) || 'E-mail must be valid';
-        },
+        (v) => /^[\w-\.+]+@([\w-]+\.)+[\w-]{1,63}$/.test(v) || 'E-mail must be valid',
       ],
       phoneNumber: '',
       results: {},
@@ -386,7 +389,12 @@ export default {
       repsInvited: [],
       companySearch: '',
       companyBasin: 'All',
-      itembidData: [],
+      translations: {
+        countrySelectorLabel: 'Country Code',
+        countrySelectorError: 'Choose country',
+        phoneNumberLabel: 'Phone Number',
+        example: 'Example',
+      },
       interval: '',
       user: '',
       parsedSelectedBasin: 'all',
@@ -552,20 +560,23 @@ export default {
       this.$emit('changetab', 'tab-3');
     },
     onUpdate(payload) {
+      // console.log(payload)
       this.counter++;
-      this.phoneInfo.valid = payload.valid;
+      this.phoneInfo.valid = payload.isValid;
 
-      if (payload.number && !payload.valid) {
+      if (payload.formattedNumber && !payload.isValid) {
         this.phoneInfo.message = 'Invalid Phone number format';
       }
+      // console.log(!payload.formattedNumber)
+      // console.log(!payload.isValid)
 
-      if (!payload.number && !payload.valid) {
+      if (!payload.formattedNumber && !payload.isValid) {
         this.phoneInfo.message = 'Phone number is required';
       }
 
-      if (payload.number && payload.valid) {
-        this.phoneNumber = payload.nationalNumber;
-        this.results = payload.number;
+      if (payload.formattedNumber && payload.isValid) {
+        this.phoneNumber = payload.formattedNumber;
+        this.results = payload.formattedNumber;
       }
     },
     async validate() {
@@ -590,7 +601,8 @@ export default {
         serial: this.$store.getters.bidData.serial,
       };
 
-      if (this.$refs.form.validate() && this.getPhoneInfo.valid && !this.emailError && !this.getInvitedSupplierEmailExists) {
+      // if (this.$refs.form.validate() && this.getPhoneInfo.valid && !this.emailError && !this.getInvitedSupplierEmailExists) {
+      if (this.$refs.form.validate() && !this.emailError && !this.getInvitedSupplierEmailExists) {
         try {
           const user = await this.inviteNewSupplier(supplier);
           this.supplierDialog = false;
@@ -629,17 +641,17 @@ export default {
         this.emailLoading = false;
       }
     },
-    onBlurS() {
-      if (this.phoneNumber === '') {
-        this.phoneInfo.message = 'Phone number is required';
-        this.phoneInfo.valid = false;
-        this.counter++;
-      } else if (this.phoneNumber.length === 1) {
-        this.phoneInfo.message = 'Invalid Phone number format';
-        this.phoneInfo.valid = false;
-        this.counter++;
-      }
-    },
+    // onBlurS() {
+    //   if (this.phoneNumber === '') {
+    //     this.phoneInfo.message = 'Phone number is required';
+    //     this.phoneInfo.valid = false;
+    //     this.counter++;
+    //   } else if (this.phoneNumber.length === 1) {
+    //     this.phoneInfo.message = 'Invalid Phone number format';
+    //     this.phoneInfo.valid = false;
+    //     this.counter++;
+    //   }
+    // },
     removeSpace(event) {
       const charCode = event.keyCode;
 
@@ -795,5 +807,3 @@ export default {
   },
 };
 </script>
-
-<style src="vue-tel-input/dist/vue-tel-input.css"></style>

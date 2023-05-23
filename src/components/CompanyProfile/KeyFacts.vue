@@ -85,7 +85,7 @@
               <label class="d-block text-left input-label mb-2 "
                 :class="{ 'space-error-class': getPhoneInfo.message !== '', 'space-class': getPhoneInfo.message === '' }">Phone
                 Number</label>
-              <vue-tel-input defaultCountry="US" :autoDefaultCountry="false" :autoFormat="false" :dropdownOptions="{
+              <!-- <vue-tel-input defaultCountry="US" :autoDefaultCountry="false" :autoFormat="false" :dropdownOptions="{
                 showDialCodeInSelection: true,
                 showFlags: true,
                 width: ' max-content'
@@ -95,7 +95,10 @@
   placeholder: 'Phone number',
 
 }" model="national" :validCharactersOnly="true" :styleClasses="{ 'phone-main-class': true }" v-model="contactPhoneNo"
-                @validate="onUpdate"></vue-tel-input>
+                @validate="onUpdate"></vue-tel-input> -->
+                <VuePhoneNumberInput default-country-code="US" :required="true" clearable :error="!getPhoneInfo.valid"
+                  :border-radius="8" size="lg" v-model="contactPhoneNo" error-color="#FF0000" valid-color="#9E9E9E"
+                  :translations="translations" class="mb-2" @update="onUpdate" />
               <div class="phone-class" v-show="!getPhoneInfo.valid && getCounter > 1">
                 {{ getPhoneInfo.message }}</div>
             </div>
@@ -133,12 +136,15 @@
   </div>
 </template>
 <script>
-import { VueTelInput } from 'vue-tel-input';
+// import { VueTelInput } from 'vue-tel-input';
 import { mapActions, mapGetters } from 'vuex';
+import VuePhoneNumberInput from 'vue-phone-number-input';
+import 'vue-phone-number-input/dist/vue-phone-number-input.css';
 
 export default {
   components: {
-    VueTelInput,
+    //VueTelInput,
+    VuePhoneNumberInput
   },
   data() {
     return {
@@ -173,6 +179,12 @@ export default {
         message: '',
       },
       toggleError: false,
+      translations: {
+        countrySelectorLabel: 'Country Code',
+        countrySelectorError: 'Choose country',
+        phoneNumberLabel: 'Phone Number',
+        example: 'Example',
+      },
     };
   },
   watch: {
@@ -217,15 +229,21 @@ export default {
     ...mapActions(['addCompanyFacts', 'addCompanyContacts']),
     onUpdate(payload) {
       this.counter++;
-      this.phoneInfo.valid = payload.valid;
-
-      if (payload.number && !payload.valid) {
+      this.phoneInfo.valid = payload.isValid;
+      
+      if (payload.formattedNumber && !payload.isValid) {
         this.phoneInfo.message = 'Invalid Phone number format';
-      } else {
-        this.phoneInfo.message = '';
-        this.results = payload.number;
-        this.contactPhoneNo = payload.nationalNumber;
       }
+
+      if (!payload.formattedNumber && !payload.valid) {
+        this.phoneInfo.message = 'Phone number is required';
+      } 
+      if (payload.formattedNumber && payload.isValid) {
+        this.phoneInfo.message = '';
+        this.results = payload.formattedNumber;
+        this.contactPhoneNo = payload.formattedNumber;
+      }
+
     },
     getHqLocation() {
       this.mapOption = {
@@ -360,4 +378,3 @@ export default {
 };
 </script>
 
-<style src="vue-tel-input/dist/vue-tel-input.css"></style>
