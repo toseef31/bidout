@@ -91,7 +91,7 @@
               </div>
               <div class="company-title text-left pl-4">
                 <h4>{{ team.firstName }} {{ team.lastName }}</h4>
-                <p class="mb-0">{{ team.company }}</p>
+                <p class="mb-0">{{ team.company.companyName }}</p>
               </div>
             </div>
             <div class="add-company">
