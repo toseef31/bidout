@@ -44,7 +44,7 @@
                 <div class="d-flex">
                   <img :src="require('@/assets/images/bids/chatdots.png')" class="mr-3 v-card--link"
                     @click="openComment(index)" />
-                  <v-icon color="#F32349" @click="deleteAttach(index, doc.id)">mdi-trash-can-outline</v-icon>
+                  <v-icon color="#F32349" @click="deleteAttach(index, doc._id)">mdi-trash-can-outline</v-icon>
                 </div>
               </td>
             </tr>
@@ -108,7 +108,7 @@ export default {
               const totalDay = this.$store.state.bid.attachement?.concat(attch);
               // eslint-disable-next-line vue/no-side-effects-in-computed-properties
               this.documents = [
-                ...new Map(totalDay?.map((m) => [m.id, m])).values(),
+                ...new Map(totalDay?.map((m) => [m._id, m])).values(),
               ];
             } else {
               // eslint-disable-next-line vue/no-side-effects-in-computed-properties
@@ -135,7 +135,7 @@ export default {
             ];
             const totalDay = this.$store.state.bid.attachement.concat(attch);
             this.documents = [
-              ...new Map(totalDay.map((m) => [m.id, m])).values(),
+              ...new Map(totalDay.map((m) => [m._id, m])).values(),
             ];
           } else {
             this.documents = this.$store.state.bid.attachement;
@@ -226,7 +226,7 @@ export default {
       return `${sizeInMB}mb`;
     },
     deleteAttach(index, id) {
-      const indexToRemove = this.documents.findIndex((obj) => obj.id === id);
+      const indexToRemove = this.documents.findIndex((obj) => obj._id === id);
 
       if (indexToRemove !== -1) {
         this.documents.splice(indexToRemove, 1);

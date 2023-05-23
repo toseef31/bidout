@@ -893,13 +893,13 @@ export default {
         formData.append(`attachment[${i}][url]`, state.attachement[i].url);
         formData.append(`attachment[${i}][uploadedAt]`, state.attachement[i].uploadedAt);
         formData.append(`attachment[${i}][comment]`, state.attachement[i].comment);
-        formData.append(`attachment[${i}][id]`, state.attachement[i]._id);
+        formData.append(`attachment[${i}][id]`, state.attachement[i].id);
       }
     }
 
     if (state.questions?.length > 0) {
       for (let i = 0; i < state.questions.length; i++) {
-        formData.append(`questions[${i}][id]`, state.questions[i]._id);
+        formData.append(`questions[${i}][id]`, state.questions[i].id);
         formData.append(`questions[${i}][order]`, state.questions[i].order);
         formData.append(`questions[${i}][title]`, state.questions[i].title);
         formData.append(`questions[${i}][type]`, state.questions[i].type);
