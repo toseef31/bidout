@@ -77,16 +77,16 @@
       <div class="title-detail">Buyer Team member</div>
       <div class="mt-10 d-flex flex-row flex-wrap team-member">
         <div class="d-flex align-center flex-child">
-          <v-img v-if="bidDetail.bidData.userId.image" max-width="100" height="auto" contain :aspect-ratio="16 / 9"
-            :src="bidDetail.bidData.userId.image"></v-img>
+          <v-img v-if="bidDetail.bidData.user.image" max-width="100" height="auto" contain :aspect-ratio="16 / 9"
+            :src="bidDetail.bidData.user.image"></v-img>
           <v-avatar v-else color="#0d96481a" size="62">
             <v-icon color="#0d9648" large>mdi-account-outline </v-icon>
           </v-avatar>
 
           <div class="d-flex flex-column">
             <div>
-              <span class="text--black pl-6  bid-creator">{{ bidDetail.bidData.userId.firstName }} {{
-                bidDetail.bidData.userId.lastName
+              <span class="text--black pl-6  bid-creator">{{ bidDetail.bidData.user.firstName }} {{
+                bidDetail.bidData.user.lastName
               }}</span>
               <v-tooltip top>
                 <template v-slot:activator="{ on, attrs }">
