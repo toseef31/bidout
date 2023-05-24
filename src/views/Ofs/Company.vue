@@ -159,11 +159,11 @@
                       <router-link :to="'/place-order/'+supplierData.slug" class="text-decoration-none"><v-btn color="#0D9647" large tile dense width="100%" height="56" class="font-weight-bold text-capitalize mb-4" outlined>Place Order <v-icon class="pl-2">mdi-arrow-right-circle</v-icon></v-btn></router-link>
                       <router-link to="/create" class="text-decoration-none"><v-btn color="#0D9647" large tile dense width="100%" height="56" class="font-weight-bold text-capitalize" type="submit" outlined>Create RFP <v-icon class="pl-2">mdi-arrow-right-circle</v-icon></v-btn></router-link>
                     </div>
-                    <div class="facts-data pa-6 text-left" v-if="supplierData.founded != null || supplierData.employees != null  || supplierData.hqlocation != null || supplierData.website != null || supplierData.linkedin != null || supplierData.careers != null">
+                    <div class="facts-data pa-6 text-left" v-if="supplierData.founded || supplierData.employees || supplierData.hqLocation || supplierData.website || supplierData.linkedin || supplierData.careers">
                       <h3 class="mb-4"><font color="#013D3A">Key Facts</font></h3>
-                      <p><font class="font-weight-bold">Founded:</font> {{supplierData.founded}}</p>
-                      <p><font class="font-weight-bold">Employees:</font> {{supplierData.employees}}</p>
-                      <p><font class="font-weight-bold">HQ Location:</font> {{supplierData.hqLocation}}</p>
+                      <p><font class="font-weight-bold">Founded:</font> {{supplierData.founded ? supplierData.founded : 'Not added'}}</p>
+                      <p><font class="font-weight-bold">Employees:</font> {{supplierData.employees ? supplierData.founded : 'Not added'}}</p>
+                      <p><font class="font-weight-bold">HQ Location:</font> {{supplierData.hqLocation ? supplierData.hqLocation : 'Not added'}}</p>
                       <!-- <p><font class="font-weight-bold">Stock Price:</font> {{supplierData.stockPrice}} </p> -->
                         <div class="company-links mt-6">
                           <p><a :href="supplierData.website" target="_blank">Website</a><v-icon class="pl-2" color="#013D3A">mdi-arrow-top-right-bold-box-outline</v-icon></p>
@@ -179,7 +179,7 @@
                         <h4 class="font-weight-medium contact-email"><span class="font-weight-bold">Email:</span> <a :href="'mailto:'+contacts.email" class="text-decoration-none"><font color="#013D3A">{{contacts.email}}</font></a></h4>
                         <h4 class="font-weight-medium"><span class="font-weight-bold">Phone:</span> <a :href="'tel:'+contacts.phoneNumber" class="text-decoration-none"><font color="#013D3A">{{contacts.phoneNumber}}</font></a></h4>
                       </div>
-                      <h4 v-if="!supplierData.accountContacts" class="text-center"> No contacts</h4>
+                      <h4 v-if="supplierData.accountContacts.length === 0" class="text-center"> No contacts added</h4>
                     </div>
                     <div class="tag-box pa-3 d-flex align-center" v-if="!supplierData.isOfsPremium">
                       <h4 class="font-weight-bold mb-0"><a href="mailto:hello@bidout.app" class="text-decoration-none green-color"><v-icon color="#0D9647">mdi-check-decagram-outline</v-icon> Upgrade to a Premium Profile Today</a></h4>
