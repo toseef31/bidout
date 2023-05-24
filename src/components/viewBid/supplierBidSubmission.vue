@@ -727,6 +727,7 @@ export default {
 
           if (data.length === this.bidDetail.bidData.lineItems.length) {
             this.lineItems = [];
+            this.value = []
 
             for (let i = 0; i < data.length; i++) {
               this.lineItems.push({
@@ -740,7 +741,16 @@ export default {
                 quantity: this.bidDetail.bidData.lineItems[i].quantity,
                 required: this.bidDetail.bidData.lineItems[i].required,
               });
+
+              this.value.push({
+                message: '',
+                status: true,
+              });
             }
+
+            this.allValid()
+            this.isValidForTheSame()
+            this.isValid
           } else {
             this.$toasted.show('The format of the Excel import must remain the same except for the price inputs!', {
               class: 'error-toast',
@@ -753,7 +763,7 @@ export default {
 
         reader.readAsBinaryString(file);
       }
-
+      
       event.target.value = '';
     },
 
