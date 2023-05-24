@@ -899,7 +899,7 @@ export default {
 
     if (state.questions?.length > 0) {
       for (let i = 0; i < state.questions.length; i++) {
-        formData.append(`questions[${i}][id]`, state.questions[i].id);
+        formData.append(`questions[${i}][oldId]`, state.questions[i].id);
         formData.append(`questions[${i}][order]`, state.questions[i].order);
         formData.append(`questions[${i}][title]`, state.questions[i].title);
         formData.append(`questions[${i}][type]`, state.questions[i].type);
@@ -907,7 +907,7 @@ export default {
         formData.append(`questions[${i}][required]`, state.questions[i].required ? state.questions[i].required : false);
         if (state.questions[i].options) {
           for (let j = 0; j < state.questions[i].options?.length; j++) {
-            formData.append(`questions[${i}][options][${j}][id]`, state.questions[i].options[j]._id);
+            formData.append(`questions[${i}][options][${j}][oldId]`, state.questions[i].options[j]._id);
             formData.append(`questions[${i}][options][${j}][label]`, state.questions[i].options[j].label);
             formData.append(`questions[${i}][options][${j}][title]`, state.questions[i].options[j].title);
           }
