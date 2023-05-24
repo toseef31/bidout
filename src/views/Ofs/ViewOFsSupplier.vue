@@ -99,14 +99,14 @@
               <v-col cols="12" md="6" v-if="loading">
                 <v-skeleton-loader type="heading, text"></v-skeleton-loader>
               </v-col>
-              <v-col cols="12" md="6" v-for="category in allcategories" :key="category.id" class="pl-sm-5 pr-sm-5">
+              <v-col cols="12" md="6" v-for="category in allcategories" :key="category._id" class="pl-sm-5 pr-sm-5">
                 <div class="ofs-listing text-left">
-                  <h1 class="font-weight-bold mb-3 text-break"><router-link :to="'/ofs-supplier/' + category.slug"
-                      class="text-decoration-none">{{ category.name }}</router-link></h1>
+                  <h1 class="font-weight-bold mb-3 text-break"><router-link :to="'/ofs-supplier/' + category.category.slug"
+                      class="text-decoration-none">{{ category.category.name }}</router-link></h1>
                   <p>
                     <span v-for="(subcategry, index) in subCategories(category.subCategories)" :key="index"
                       class="sub-catLink">
-                      <router-link :to="'/ofs-supplier/' + category.slug + '/' + subcategry.slug"
+                      <router-link :to="'/ofs-supplier/' + category.category.slug + '/' + subcategry.slug"
                         class="text-decoration-none">
                         <font class="font-weight-bold">{{ subcategry.name }} </font>
                         <font class="font-weight-medium">({{ subcategry.spCount }}) </font>
