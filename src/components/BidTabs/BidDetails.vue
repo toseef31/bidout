@@ -63,7 +63,6 @@
                   <span>More info on Q&A</span>
                 </v-tooltip>
               </label>
-
               <v-radio-group row v-model="qAndAEnabled">
                 <v-radio label="Yes" value="true" checked></v-radio>
                 <v-radio label="No" value="false"></v-radio>
@@ -280,10 +279,10 @@ export default {
     },
     qAndAEnabled: {
       get() {
-        if (!this.$store.getters.bidData?.qAndAEnabled) {
-          return false;
+        if (!this.$store.getters.bidData._id) {
+          return 'yes';
         }
-        return true;
+        return this.$store.getters.bidData.qAndAEnabled;;
       },
       set(value) {
         this.$store.commit("setBidEnabled", value);
