@@ -492,7 +492,6 @@ export default {
     async submit(action) {
       if (action === 'edit' && this.isBidOut) {
         this.allValid();
-
         if (!this.isValid) {
           this.$store.commit('setLoweringPriceAlert', '   Suppliers can only lower the prices during the BidOut Phase!');
           window.scrollTo({ top: 0, behavior: 'smooth' });
@@ -740,11 +739,6 @@ export default {
                 id: this.bidDetail.bidData.lineItems[i].id,
                 quantity: this.bidDetail.bidData.lineItems[i].quantity,
                 required: this.bidDetail.bidData.lineItems[i].required,
-              });
-
-              this.value.push({
-                message: '',
-                status: true,
               });
             }
           } else {
