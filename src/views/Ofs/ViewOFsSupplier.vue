@@ -99,7 +99,7 @@
               <v-col cols="12" md="6" v-if="loading">
                 <v-skeleton-loader type="heading, text"></v-skeleton-loader>
               </v-col>
-              <v-col cols="12" md="6" v-for="category in allcategories" :key="category._id" class="pl-sm-5 pr-sm-5">
+              <v-col cols="12" md="6" v-for="category in sortedCategories" :key="category.category._id" class="pl-sm-5 pr-sm-5">
                 <div class="ofs-listing text-left">
                   <h1 class="font-weight-bold mb-3 text-break"><router-link :to="'/ofs-supplier/' + category.category.slug"
                       class="text-decoration-none">{{ category.category.name }}</router-link></h1>
@@ -265,6 +265,12 @@ export default {
     allcategories() {
       setTimeout(() => this.loading = false, 500);
       return _.orderBy(this.$store.getters.categories, 'orderNumber', 'asc');
+    },
+    sortedCategories() {
+      setTimeout(() => this.loading = false, 500);
+      const categories = [...this.$store.getters.categories];
+      categories.sort((a, b) => a.category.orderNumber - b.category.orderNumber);
+      return categories;
     },
     companies() {
       this.hideList = true;
