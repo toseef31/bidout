@@ -179,7 +179,7 @@
                         <h4 class="font-weight-medium contact-email"><span class="font-weight-bold">Email:</span> <a :href="'mailto:'+contacts.email" class="text-decoration-none"><font color="#013D3A">{{contacts.email}}</font></a></h4>
                         <h4 class="font-weight-medium"><span class="font-weight-bold">Phone:</span> <a :href="'tel:'+contacts.phoneNumber" class="text-decoration-none"><font color="#013D3A">{{contacts.phoneNumber}}</font></a></h4>
                       </div>
-                      <h4 v-if="!supplierData.accountContacts" class="text-center"> No contacts</h4>
+                      <h4 v-if="supplierData.accountContacts.length === 0" class="text-center"> No contacts added</h4>
                     </div>
                     <div class="tag-box pa-3 d-flex align-center" v-if="!supplierData.isOfsPremium">
                       <h4 class="font-weight-bold mb-0"><a href="mailto:hello@bidout.app" class="text-decoration-none green-color"><v-icon color="#0D9647">mdi-check-decagram-outline</v-icon> Upgrade to a Premium Profile Today</a></h4>
