@@ -29,7 +29,7 @@ export default {
   },
   async getSalesReps({ commit, dispatch, state }, payload) {
     try {
-      const res = await axios.get('v2/company/getSalesReps/', { query: payload.query, basin: payload.basin });
+      const res = await axios.post('v2/company/getSalesReps', { query: payload.query, basin: payload.basin });
 
       if (res.status === 200) {
         commit('setSalesReps', res.data);
