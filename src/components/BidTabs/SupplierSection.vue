@@ -3,10 +3,10 @@
     <v-row class="supplier-row fill-height" no-gutters>
       <v-col sm="2" v-if="categories" class="category-col">
         <v-list class="pt-0">
-          <v-list-group v-for="category in allcategories" :key="category.name" active-class="black--text">
+          <v-list-group v-for="category in sortedCategories" :key="category.category._id" active-class="black--text">
             <template v-slot:activator>
               <v-list-item-content>
-                <v-list-item-title v-text="category.name" class="text-left"></v-list-item-title>
+                <v-list-item-title v-text="category.category.name" class="text-left"></v-list-item-title>
               </v-list-item-content>
             </template>
 
@@ -405,6 +405,11 @@ export default {
     ...mapGetters(['newSupplier', 'userInfo', 'loadingInvite', 'isEditBidChanges']),
     allcategories() {
       return _.orderBy(this.$store.getters.categories, 'orderNumber', 'asc');
+    },
+    sortedCategories() {
+      const categories = [...this.$store.getters.categories];
+      categories.sort((a, b) => a.category.orderNumber - b.category.orderNumber);
+      return categories;
     },
     getPhoneInfo() {
       return this.phoneInfo;
