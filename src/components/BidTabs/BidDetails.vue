@@ -281,8 +281,14 @@ export default {
       get() {
         if (!this.$store.getters.bidData._id) {
           return 'yes';
+        } else {
+          if (this.$store.getters.bidData.qAndAEnabled === true) {
+            return 'true';
+          } else {
+            return 'false';
+          }
         }
-        return this.$store.getters.bidData.qAndAEnabled;;
+        // return this.$store.getters.bidData.qAndAEnabled;;
       },
       set(value) {
         this.$store.commit("setBidEnabled", value);
