@@ -203,11 +203,11 @@
                                   </v-list-item-content>
                                 </v-list-item>
                                 <template
-                                  v-for="(item) in                                                                                                             suppliers                                                                                                            ">
-                                  <v-list-item :key="item.title" class="second"
-                                    @click="companyList(item.company, item.objectID); hideList = false">
+                                  v-for="(item) in suppliers">
+                                  <v-list-item :key="item._id" class="second"
+                                    @click="companyList(item.companyName, item._id); hideList = false">
                                     <v-list-item-content>
-                                      <v-list-item-title v-html=" item.company " class="text-left"></v-list-item-title>
+                                      <v-list-item-title v-html=" item.companyName " class="text-left"></v-list-item-title>
                                     </v-list-item-content>
                                   </v-list-item>
                                 </template>
@@ -651,7 +651,7 @@ export default {
     },
     suppliers(){
       if (this.$store.getters.supplier) {
-       this.supplierExists = this.$store.getters.supplier.some( (item) => item.company === this.supplier.companyName);
+       this.supplierExists = this.$store.getters.supplier.some( (item) => item.companyName === this.supplier.companyName);
       }
 
       return this.$store.getters.supplier;
@@ -940,8 +940,7 @@ export default {
       }
     },
     companyList(title,id){
-      this.supplierExists = this.suppliers.some( (item) => item.company === title);
-
+      this.supplierExists = this.suppliers.some( (item) => item.companyName === title);
       this.supplier.companyName = title;
       this.companyId = id;
       this.hideList = false;
