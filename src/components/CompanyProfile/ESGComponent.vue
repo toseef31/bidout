@@ -99,7 +99,7 @@ export default {
         type: esg.type,
       }
       var data = {
-        companyId: this.$store.getters.userInfo.company.id,
+        companyId: this.$store.getters.userInfo.company._id,
         esgInitiatives: esgData,
       }
       this.addCompanyEsg(data);
