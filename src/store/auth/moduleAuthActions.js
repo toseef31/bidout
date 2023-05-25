@@ -306,7 +306,7 @@ export default {
         firstName: payload.firstName,
         lastName: payload.lastName,
         companyName: payload.company,
-        emailAddress: payload.email,
+        email: payload.email,
         phoneNumber: payload.phoneNumber,
       });
 
