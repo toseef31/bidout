@@ -85,19 +85,12 @@
               <label class="d-block text-left input-label mb-2 "
                 :class="{ 'space-error-class': getPhoneInfo.message !== '', 'space-class': getPhoneInfo.message === '' }">Phone
                 Number</label>
-              <vue-tel-input defaultCountry="US" @blur="onBlurS" @input="changeP" :autoDefaultCountry="false"
-                :autoFormat="false" :dropdownOptions="{
-                  showDialCodeInSelection: true,
-                  showFlags: true,
-                  width: ' max-content'
-                }" :inputOptions="{
-  showDialCode: false,
-  maxlength: 15,
-  placeholder: 'Phone number',
-
-}" model="national" :validCharactersOnly="true" :styleClasses="{ 'phone-main-class': true }" v-model="contactPhoneNo"
-                @validate="onUpdate"></vue-tel-input>
-              <div class="phone-class" v-show="!getPhoneInfo.valid && getCounter > 1">
+              
+                <VuePhoneNumberInput @phone-number-blur="onBlurB" default-country-code="US" :required="true" clearable
+                :error="!getPhoneInfo.valid && getCounter >= 1" :border-radius="8" size="lg" v-model="contactPhoneNo"
+                error-color="#FF0000" valid-color="#9E9E9E" :translations="translations" class="mb-2"
+                @update="onUpdate" />
+              <div class="phone-class" v-show="!getPhoneInfo.valid && getCounter >= 1">
                 {{ getPhoneInfo.message }}</div>
             </div>
 
@@ -139,12 +132,13 @@
   </div>
 </template>
 <script>
-import { VueTelInput } from 'vue-tel-input';
 import { mapActions, mapGetters } from 'vuex';
+import VuePhoneNumberInput from 'vue-phone-number-input';
+import 'vue-phone-number-input/dist/vue-phone-number-input.css';
 
 export default {
   components: {
-    VueTelInput,
+    VuePhoneNumberInput,
   },
   data() {
     return {
@@ -164,6 +158,7 @@ export default {
       contactPhoneNo: '',
       accountContacts: [],
       results: {},
+      results2: {},
       mapOption: {},
       markerOption: {},
       maps: '',
@@ -177,7 +172,12 @@ export default {
         message: '',
       },
       toggleError: false,
-      countryCallingCode: '1',
+      translations: {
+        countrySelectorLabel: 'Country Code',
+        countrySelectorError: 'Choose country',
+        phoneNumberLabel: 'Phone Number',
+        example: 'Example',
+      },
     };
   },
   watch: {
@@ -222,36 +222,33 @@ export default {
     ...mapActions(['addCompanyFacts', 'addCompanyContacts']),
     onUpdate(payload) {
       this.counter++;
-      this.phoneInfo.valid = payload.valid;
+      this.phoneInfo.valid = payload.isValid;
 
-      if (payload.number && !payload.valid) {
-        this.phoneInfo.message = 'Invalid Phone number format';
-      }
-      if (!payload.number && !payload.valid) {
+      if (!payload) {
+        this.phoneInfo.message = 'Phone number is required';
+      } else if (payload.phoneNumber && payload.phoneNumber !== '' && payload.phoneNumber.length >= 1) {
+        if (!payload.isValid) {
+          this.phoneInfo.message = 'Invalid Phone number format';
+        }
+
+        if (payload.formattedNumber && payload.isValid) {
+          this.phoneInfo.message = '';
+          this.results = payload.formattedNumber;
+          this.contactPhoneNo = payload.formattedNumber;
+        }
+      } else {
         this.phoneInfo.message = 'Phone number is required';
       }
-
-      if (payload.number && payload.valid) {
-        this.contactPhoneNo = payload.nationalNumber;
-        this.results = payload.number;
-        this.phoneInfo.message = '';
-        this.countryCallingCode = payload.countryCallingCode;
-      }
     },
-    onBlurS() {
+    onBlurB() {
       if (this.contactPhoneNo === '') {
         this.phoneInfo.message = 'Phone number is required';
         this.phoneInfo.valid = false;
         this.counter++;
-      } else if (this.contactPhoneNo.length === 1) {
+      } else if (this.contactPhoneNo !== null && this.contactPhoneNo.length === 1) {
         this.phoneInfo.message = 'Invalid Phone number format';
         this.phoneInfo.valid = false;
         this.counter++;
-      }
-    },
-    changeP() {
-      if (this.contactPhoneNo !== '' && this.contactPhoneNo.length !== 1 && this.phoneInfo.valid) {
-        this.results = '+' + this.countryCallingCode + this.contactPhoneNo
       }
     },
     getHqLocation() {
@@ -370,4 +367,3 @@ export default {
 };
 </script>
 
-<style src="vue-tel-input/dist/vue-tel-input.css"></style>
