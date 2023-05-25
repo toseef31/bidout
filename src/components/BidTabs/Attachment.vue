@@ -108,7 +108,7 @@ export default {
               const totalDay = this.$store.state.bid.attachement?.concat(attch);
               // eslint-disable-next-line vue/no-side-effects-in-computed-properties
               this.documents = [
-                ...new Map(totalDay?.map((m) => [m._id, m])).values(),
+                ...new Map(totalDay?.map((m) => [m.url, m])).values(),
               ];
             } else {
               // eslint-disable-next-line vue/no-side-effects-in-computed-properties
@@ -135,7 +135,7 @@ export default {
             ];
             const totalDay = this.$store.state.bid.attachement.concat(attch);
             this.documents = [
-              ...new Map(totalDay.map((m) => [m._id, m])).values(),
+              ...new Map(totalDay.map((m) => [m.url, m])).values(),
             ];
           } else {
             this.documents = this.$store.state.bid.attachement;
