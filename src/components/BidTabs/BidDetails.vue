@@ -80,7 +80,7 @@
             <v-col cols="12" sm="12" text="left" v-else>
               <label class="d-block text-left input-label mb-2 font-weight-bold">Additional Information <v-icon
                   color="#F32349" @click="remove(i)">mdi-trash-can-outline</v-icon></label>
-              <v-text-field placeholder="Title" single-line outlined type="text" v-model="bidDescriptions[i]['name']">
+              <v-text-field placeholder="Title" single-line outlined type="text" v-model="bidDescriptions[i]['title']">
               </v-text-field>
               <vue-editor v-model="bidDescriptions[i]['body']" :editor-toolbar="customToolbar" />
             </v-col>
