@@ -24,16 +24,14 @@
     </div>
 
     <v-form @submit.prevent="submit" ref="form" v-model="valid" lazy-validation>
-      <div class="title-line" v-if="
-        bidDetail.bidData &&
+      <div class="title-line" v-if="bidDetail.bidData &&
         bidDetail.bidData.lineItems &&
         bidDetail.bidData.lineItems.length > 0
-      ">Line Items</div>
-      <v-simple-table class="template-table-style mt-1 pb-8" v-if="
-        bidDetail.bidData &&
+        ">Line Items</div>
+      <v-simple-table class="template-table-style mt-1 pb-8" v-if="bidDetail.bidData &&
         bidDetail.bidData.lineItems &&
         bidDetail.bidData.lineItems.length > 0
-      ">
+        ">
         <template v-slot:default>
           <thead>
             <tr>
@@ -212,9 +210,8 @@
           </v-col>
         </v-row>
 
-        <div class="attachment-list-style pt-6" v-if="
-          supplierDocList && supplierDocList.length
-        ">
+        <div class="attachment-list-style pt-6" v-if="supplierDocList && supplierDocList.length
+          ">
           <v-simple-table fixed-header>
             <template v-slot:default>
 
@@ -627,6 +624,7 @@ export default {
     },
     initializeForEdit() {
       const { bidData } = this.bidDetail;
+
       let updatePrice;
       for (let i = 0; i < bidData.lineItems.length; i++) {
         if (this.getSupplierBid.lineItems[i].price === 'NO_BID') {
@@ -727,7 +725,7 @@ export default {
 
           if (data.length === this.bidDetail.bidData.lineItems.length) {
             this.lineItems = [];
-            this.value = []
+            this.value = [];
 
             for (let i = 0; i < data.length; i++) {
               this.lineItems.push({
@@ -748,9 +746,10 @@ export default {
               });
             }
 
-            this.allValid()
-            this.isValidForTheSame()
-            this.isValid
+            if (this.isBidOut) {
+              this.allValid();
+              this.isValidForTheSame();
+            }
           } else {
             this.$toasted.show('The format of the Excel import must remain the same except for the price inputs!', {
               class: 'error-toast',
@@ -763,7 +762,7 @@ export default {
 
         reader.readAsBinaryString(file);
       }
-      
+
       event.target.value = '';
     },
 
