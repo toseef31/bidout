@@ -672,7 +672,6 @@ export default {
         Authorization: `Bearer ${JSON.parse(localStorage.getItem('token'))}`,
       },
     };
-    console.log(state.bidData)
     const formData = new FormData();
     formData.append('title', state.bidData.title);
     formData.append('type', state.bidData.type);
@@ -683,7 +682,7 @@ export default {
     formData.append('bidDescriptions[0][body]', state.bidData.bidDescriptions[0].body);
     if (state.bidData.bidDescriptions.length > 1) {
       for (let d = 1; d < state.bidData.bidDescriptions.length; d++) {
-        formData.append(`bidDescriptions[${d}][name]`, state.bidData.bidDescriptions[d].name);
+        formData.append(`bidDescriptions[${d}][title]`, state.bidData.bidDescriptions[d].title);
         formData.append(`bidDescriptions[${d}][body]`, state.bidData.bidDescriptions[d].body);
       }
     }
@@ -832,7 +831,7 @@ export default {
     formData.append('bidDescriptions[0][body]', state.bidData.bidDescriptions[0].body);
     if (state.bidData.bidDescriptions?.length > 1) {
       for (let d = 1; d < state.bidData.bidDescriptions.length; d++) {
-        formData.append(`bidDescriptions[${d}][name]`, state.bidData.bidDescriptions[d].name);
+        formData.append(`bidDescriptions[${d}][title]`, state.bidData.bidDescriptions[d].title);
         formData.append(`bidDescriptions[${d}][body]`, state.bidData.bidDescriptions[d].body);
       }
     }
@@ -1178,7 +1177,7 @@ export default {
     formData.append('bidDescriptions[0][body]', state.bidData.bidDescriptions[0].body);
     if (state.bidData.bidDescriptions.length > 1) {
       for (let d = 1; d < state.bidData.bidDescriptions.length; d++) {
-        formData.append(`bidDescriptions[${d}][name]`, state.bidData.bidDescriptions[d].name);
+        formData.append(`bidDescriptions[${d}][title]`, state.bidData.bidDescriptions[d].title);
         formData.append(`bidDescriptions[${d}][body]`, state.bidData.bidDescriptions[d].body);
       }
     }
@@ -1275,7 +1274,7 @@ export default {
     formData.append('bidDescriptions[0][body]', state.bidData.bidDescriptions[0].body);
     if (state.bidData.bidDescriptions.length > 1) {
       for (let d = 1; d < state.bidData.bidDescriptions.length; d++) {
-        formData.append(`bidDescriptions[${d}][name]`, state.bidData.bidDescriptions[d].name);
+        formData.append(`bidDescriptions[${d}][title]`, state.bidData.bidDescriptions[d].title);
         formData.append(`bidDescriptions[${d}][body]`, state.bidData.bidDescriptions[d].body);
       }
     }
@@ -1589,7 +1588,7 @@ export default {
     formData.append('bidDescriptions[0][body]', state.bidData.bidDescriptions[0].body);
     if (state.bidData.bidDescriptions.length > 1) {
       for (let d = 1; d < state.bidData.bidDescriptions.length; d++) {
-        formData.append(`bidDescriptions[${d}][name]`, state.bidData.bidDescriptions[d].name);
+        formData.append(`bidDescriptions[${d}][title]`, state.bidData.bidDescriptions[d].title);
         formData.append(`bidDescriptions[${d}][body]`, state.bidData.bidDescriptions[d].body);
       }
     }
