@@ -90,7 +90,7 @@ export default {
   },
 
   disableUser({commit,dispatch,state},payload){
-    axios.get('/v2/company/disableUser/'+ payload)
+    axios.post('/v2/company/disableUser/'+ payload)
       .then(responce => {
         
         if(responce.status === 200){
@@ -115,7 +115,7 @@ export default {
   }, 
 
   enableUser({commit,dispatch,state},payload){
-    axios.get('/v2/company/enableUser/'+payload)
+    axios.post('/v2/company/enableUser/'+payload)
       .then(responce => {
         
         if(responce.status === 200){
