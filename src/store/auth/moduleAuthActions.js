@@ -241,7 +241,7 @@ export default {
 
       delete payload.companyName;
 
-      const res = await axios.post("/ofs/supplierSignup", {
+      const res = await axios.post("/v2/ofs/supplierSignup", {
         ...payload,
       });
 
