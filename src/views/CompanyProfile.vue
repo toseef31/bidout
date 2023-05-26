@@ -334,7 +334,10 @@ export default {
             })
           );
         } else {
-          return _.orderBy(this.$store.getters.categories, "orderNumber", "asc");
+          const categories = [...this.$store.getters.categories];
+          categories.sort((a, b) => a.category.orderNumber - b.category.orderNumber);
+          return categories;
+          // return _.orderBy(this.$store.getters.categories, "orderNumber", "asc");
         }
       } else {
         return [];
