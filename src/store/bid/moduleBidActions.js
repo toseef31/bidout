@@ -940,7 +940,7 @@ export default {
   async inviteNewSupplier({ commit, state, dispatch }, payload) {
     commit('setLoadingInvite', true);
     try {
-      const res = await axios.post('bid/inviteSupplier/', {
+      const res = await axios.post('v2/bid/inviteSupplier/', {
         firstName: payload.firstName, lastName: payload.lastName, company: payload.company, phone: payload.phone, email: payload.email, bidTitle: payload.bidTitle, bidType: payload.bidType, bidDueDate: payload.bidDueDate, bidDueTime: payload.bidDueTime,serial: payload.serial
       });
 
