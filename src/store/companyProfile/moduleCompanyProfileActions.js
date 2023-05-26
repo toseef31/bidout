@@ -443,9 +443,7 @@ export default {
     };
     const formData = new FormData()
 
-    formData.append('corporateDocument[attachment]', payload.corporateDocument.attachment);
-    formData.append('corporateDocument[documentId]', payload.corporateDocument._id);
-    formData.append('corporateDocument[name]', payload.corporateDocument.name);
+    formData.append('documentId', payload.corporateDocument._id);
     formData.append('companyId', payload.companyId);
     axios.post('v2/company/deleteCompanyDocuments/',formData,config)
      .then(responce => {
