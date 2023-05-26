@@ -241,15 +241,14 @@
               <div class="d-flex align-center justify-space-between list-company pa-4">
                 <div class="comapny-data d-flex align-center">
                   <div class="company-img">
-                    <img v-if="company.image" class="image-class" :src="company.image" />
 
-                    <div v-else class="icon-class">
+                    <div class="icon-class">
                       <v-icon size="40">mdi-domain</v-icon>
                     </div>
                   </div>
                   <div class="company-title text-left pl-4">
                     <h4>{{ company.firstName }} {{ company.lastName }} </h4>
-                    <p class="mb-0">{{ company.companyName }}</p>
+                    <p class="mb-0">{{ company.company }}</p>
 
                   </div>
                 </div>
@@ -495,6 +494,8 @@ export default {
         } else if (this.inviteCount == 1) {
           this.newRepsInvited = this.$store.state.bid.invitedNewSuppliers;
         }
+      } else {
+        this.newRepsInvited = [];
       }
     },
     getCounter() {
@@ -583,23 +584,47 @@ export default {
       if (this.$refs.form.validate() && this.getPhoneInfo.valid && !this.emailError && !this.getInvitedSupplierEmailExists) {
         try {
           const user = await this.inviteNewSupplier(supplier);
-          this.supplierDialog = false;
-          this.oldCount = this.newRepsInvited.length;
-          this.newRepsInvited.push(user);
-          this.newCount = this.newRepsInvited.length;
-          this.$store.commit('setInvitedNewSuppliers', this.newRepsInvited);
-          this.$refs.form.reset();
+
+          if (user !== undefined && user !== null) {
+            this.oldCount = this.newRepsInvited.length;
+            this.newRepsInvited.push(user);
+            this.newCount = this.newRepsInvited.length;
+            this.$store.commit('setInvitedNewSuppliers', this.newRepsInvited);
+            this.supplierDialog = false;
+
+            this.$refs.form.reset();
+            this.loadingInvite = false;
+            this.phoneNumber = '';
+            this.phoneInfo = {
+              valid: true,
+              message: '',
+            };
+            this.counter = 0;
+            this.valid = false;
+            this.results = '';
+          } else {
+            this.$toasted.show(
+              'Error! Something went wrong. Please try again',
+              {
+                class: 'error-toast',
+                type: 'error',
+                duration: 5000,
+                position: 'top-center',
+              },
+            );
+          }
+
           this.loadingInvite = false;
-          this.phoneNumber = '';
-          this.phoneInfo = {
-            valid: true,
-            message: '',
-          };
-          this.counter = 0;
-          this.valid = false;
-          this.results = '';
         } catch (error) {
-          console.log(error);
+          this.$toasted.show(
+            'Error! Something went wrong. Please try again',
+            {
+              class: 'error-toast',
+              type: 'error',
+              duration: 5000,
+              position: 'top-center',
+            },
+          );
         }
       }
     },
@@ -765,7 +790,7 @@ export default {
     this.getCompanies();
   },
   mounted() {
-    // this.savedraftOnInterval();
+    this.savedraftOnInterval();
     this.filteredEntries;
     this.newSupplierFiltered;
 
