@@ -1266,9 +1266,9 @@ export default {
     formData.append('dueTime', state.bidData.dueTime);
     formData.append('regions', state.bidData.region);
     formData.append('qAndAEnabled', state.bidData.qAndAEnabled);
-    formData.append('userId', state.bidData.userId);
+    formData.append('userId', state.bidData.user);
     formData.append('userName', state.bidData.userName);
-    formData.append('companyId', state.bidData.companyId);
+    formData.append('companyId', state.bidData.company);
     formData.append('company', state.bidData.company.companyName);
 
     formData.append('bidDescriptions[0][body]', state.bidData.bidDescriptions[0].body);
@@ -1311,9 +1311,7 @@ export default {
             formData.append(`invitedTeamMembers[${t}]`, state.invitedTeamMembers[t]._id);
           }
         }
-      } else {
-        formData.append('invitedTeamMembers', '');
-      }
+      } 
     } else if (state.invitedTeamMembers.length > 0) {
       for (let t = 0; t < state.invitedTeamMembers.length; t++) {
         if (!state.invitedTeamMembers[t]._id) {
@@ -1322,8 +1320,6 @@ export default {
           formData.append(`invitedTeamMembers[${t}]`, state.invitedTeamMembers[t]._id);
         }
       }
-    } else {
-      formData.append('invitedTeamMembers', '');
     }
 
     if (state.bidData.status === 'templateCreate') {
@@ -1366,9 +1362,7 @@ export default {
           lineItemsindex++;
         }
       }
-    } else {
-      formData.append('lineItems', '');
-    }
+    } 
 
     if (state.bidData.status === 'templateCreate') {
       if (state.attachement) {
@@ -1420,7 +1414,7 @@ export default {
       }
     } else if (state.questions?.length > 0) {
       for (let i = 0; i < state.questions.length; i++) {
-        formData.append(`questions[${i}][id]`, state.questions[i]._id);
+        formData.append(`questions[${i}][oldId]`, state.questions[i]._id);
         formData.append(`questions[${i}][order]`, state.questions[i].order);
         formData.append(`questions[${i}][title]`, state.questions[i].title);
         formData.append(`questions[${i}][type]`, state.questions[i].type);
@@ -1428,14 +1422,12 @@ export default {
         formData.append(`questions[${i}][required]`, state.questions[i].required ? state.questions[i].required : false);
         if (state.questions[i].options) {
           for (let j = 0; j < state.questions[i].options?.length; j++) {
-            formData.append(`questions[${i}][options][${j}][id]`, state.questions[i].options[j]._id);
+            formData.append(`questions[${i}][options][${j}][oldId]`, state.questions[i].options[j]._id);
             formData.append(`questions[${i}][options][${j}][label]`, state.questions[i].options[j].label);
             formData.append(`questions[${i}][options][${j}][title]`, state.questions[i].options[j].title);
           }
         }
       }
-    } else {
-      formData.append('questions', '');
     }
 
     try {
