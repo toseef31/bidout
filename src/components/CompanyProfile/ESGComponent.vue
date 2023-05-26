@@ -6,7 +6,7 @@
         <label class="d-block text-left main-label mb-4">ESG Differentiators</label>
         </v-col>
       </v-row>
-      <v-row class="mt-5">
+      <v-row class="mt-5 align-start">
         <v-col cols="12" sm="4" v-for="(esgDB,key) in companyData">
           <div class="esg-list text-left">
             <h4 class="text-left mb-5">{{esgDB.name}}<small class="pl-5 company-link" @click="editOpen(esgDB)" v-show="!edit">Edit</small><small class="pl-5 company-link" @click="addEsG(esgDB)" v-show="edit">Save</small></h4>
