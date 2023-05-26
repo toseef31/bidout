@@ -330,7 +330,7 @@ export default {
               return this.searchService
                 .toLowerCase()
                 .split(" ")
-                .every((v) => item.name.toLowerCase().includes(v));
+                .every((v) => item.category.name.toLowerCase().includes(v));
             })
           );
         } else {
