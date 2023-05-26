@@ -58,10 +58,10 @@
                       <div class="company-service mb-12" v-if="supplierData.services && supplierData.services.length > 0">
                         <h1 class="mb-4 font-weight-bold">Services Portfolio</h1>
                         <div class="service-list text-left mt-4">
-                          <template v-for="services in companyCategories"  v-if="services.subCategories && services.subCategories.length > 0">
-                              <label v-for="(sub,index) in services.subCategories">
+                          <template v-for="service in supplierData.services" v-if="service.serviceCategory">
+                              <label>
                                 <v-icon>mdi-check</v-icon>
-                                <span>{{services.name}}: {{sub.subname}}  </span>
+                                <span>{{service.serviceCategory.name}}: {{service.name}}  </span>
                               </label>
                             </template>
                         </div>
