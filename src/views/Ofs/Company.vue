@@ -162,7 +162,7 @@
                     <div class="facts-data pa-6 text-left" v-if="supplierData.founded || supplierData.employees || supplierData.hqLocation || supplierData.website || supplierData.linkedin || supplierData.careers">
                       <h3 class="mb-4"><font color="#013D3A">Key Facts</font></h3>
                       <p><font class="font-weight-bold">Founded:</font> {{supplierData.founded ? supplierData.founded : 'Not added'}}</p>
-                      <p><font class="font-weight-bold">Employees:</font> {{supplierData.employees ? supplierData.founded : 'Not added'}}</p>
+                      <p><font class="font-weight-bold">Employees:</font> {{supplierData.employees ? supplierData.employees : 'Not added'}}</p>
                       <p><font class="font-weight-bold">HQ Location:</font> {{supplierData.hqLocation ? supplierData.hqLocation : 'Not added'}}</p>
                       <!-- <p><font class="font-weight-bold">Stock Price:</font> {{supplierData.stockPrice}} </p> -->
                         <div class="company-links mt-6">
