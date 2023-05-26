@@ -178,7 +178,7 @@ export default {
         return this.$store.getters.serviceCompanies.filter((comp) => this.searchCompany
           .toLowerCase()
           .split(' ')
-          .every((v) => comp.company.toLowerCase().includes(v)));
+          .every((v) => comp.companyName.toLowerCase().includes(v)));
       }else{
         return this.$store.getters.serviceCompanies;
       }
