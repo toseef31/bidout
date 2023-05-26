@@ -327,10 +327,12 @@ export default {
         if (this.searchService) {
           return _.orderBy(
             this.$store.getters.categories.filter((item) => {
-              return this.searchService
-                .toLowerCase()
-                .split(" ")
-                .every((v) => item.category.name.toLowerCase().includes(v));
+              const searchTerm = this.searchService.toLowerCase();
+              const categoryMatch = item.category.name.toLowerCase().includes(searchTerm);
+              const subcategoryMatch = item.subCategories.some((subcategory) =>
+                subcategory.name.toLowerCase().includes(searchTerm)
+              );
+              return categoryMatch || subcategoryMatch;
             })
           );
         } else {
