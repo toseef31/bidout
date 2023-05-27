@@ -14,15 +14,12 @@
             <v-textarea outlined name="input-7-4" v-model="description" v-show="edit == esgDB._id">{{esgDB.description}}</v-textarea>
             <a :href="esgDB.attachment" target="_blank" download class="text-decoration-none" v-if="esgDB.attachment" v-show="edit != esgDB._id">Download <v-icon>mdi-tray-arrow-down</v-icon></a>
             
-            <label for="docFile" class="profile-input" v-show="edit == esgDB._id">{{docName}}
-              <input type="file" ref="attachment" id="docFile" class="d-none" @change="onFileChange($event)">
+            <label :for="esgDB.type" class="profile-input" v-show="edit == esgDB._id">{{docName}}
+              <input type="file" ref="attachments" :id="esgDB.type" class="d-none" @change="onFileChange($event)">
             </label>
             <br>
           </div>
         </v-col>
-
-
-
       </v-row>
     </v-container>
   </v-form>
@@ -77,6 +74,7 @@ export default {
   methods: {
     ...mapActions(["addCompanyEsg","deleteCompanyEsg"]),
     onFileChange(event){
+      console.log('dd',event);
        this.attachment =  event.target.files[0];
        this.docName = this.attachment.name;
     },
@@ -105,9 +103,9 @@ export default {
       this.addCompanyEsg(data);
       this.title = '';
       this.description = '';
-      this.attachment = '';
-      this.$refs.attachment.value = null;
+      this.$refs.attachments.value = null;
       this.docName = 'Add Document';
+      this.attachment = '';
       this.edit = '';
     },
     deleteEsG(data){
