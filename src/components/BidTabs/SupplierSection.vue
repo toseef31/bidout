@@ -330,7 +330,7 @@
                   Supplier is pending registration and cannot be invited at this time.
                 </div>
 
-                <v-btn :loading="loadingInvite" :disabled="!valid || !getPhoneInfo.valid || getEmailLoading || emailError"
+                <v-btn :loading="loadingInvite" :disabled="!valid || !getPhoneInfo.valid || getEmailLoading || emailError || loadingInvite"
                   color="#0D9648" class="mr-4 text-capitalize white--text font-weight-bold" @click="validate" large
                   height="50px" min-width="220px">
                   Send Invite
@@ -585,7 +585,7 @@ export default {
         try {
           const user = await this.inviteNewSupplier(supplier);
 
-          if (user !== undefined && user !== null) {
+          if (user && user._id) {
             this.oldCount = this.newRepsInvited.length;
             this.newRepsInvited.push(user);
             this.newCount = this.newRepsInvited.length;
@@ -593,7 +593,6 @@ export default {
             this.supplierDialog = false;
 
             this.$refs.form.reset();
-            this.loadingInvite = false;
             this.phoneNumber = '';
             this.phoneInfo = {
               valid: true,
@@ -614,7 +613,6 @@ export default {
             );
           }
 
-          this.loadingInvite = false;
         } catch (error) {
           this.$toasted.show(
             'Error! Something went wrong. Please try again',
