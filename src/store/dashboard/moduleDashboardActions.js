@@ -166,7 +166,6 @@ export default {
     commit('setActivityList',null);
     axios.get('/v2/activity/getUserActivities/'+payload)
       .then(responce => {
-        
         if(responce.status === 200){
           commit('setActivityList',responce.data)
           commit('setPageLoader', false);
