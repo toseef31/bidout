@@ -170,7 +170,7 @@ export default {
       return this.$store.getters.g_activityPanel;
     },
     categoryName(){
-      return this.$store.getters.serviceCategory;
+      return this.$route.params.slug;
     },
     allcompanies() {
       if (this.searchCompany) {
