@@ -947,7 +947,7 @@ export default {
       if (res.status === 200) {
         commit('setLoadingInvite', false);
         let userData = '';
-        if (res.data.message) {
+        if (res.data) {
           userData = res.data.user;
         } else {
           userData = res.data;
