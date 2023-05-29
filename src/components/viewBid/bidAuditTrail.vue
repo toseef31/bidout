@@ -44,8 +44,8 @@ export default {
     getBidActivityList() {
       if (this.$store.getters.bidActivities) {
         this.$store.getters.bidActivities.map((item) => {
-          const timestamp = item.createdOn._seconds * 1000 + item.createdOn._nanoseconds / 1000000;
-          item.newDate = moment(timestamp).format('MM/DD/YYYY hh:mm A');
+          const timestamp = moment(item.createdAt);
+          item.newDate = timestamp.format('MM/DD/YYYY hh:mm A');
         });
         // eslint-disable-next-line vue/no-side-effects-in-computed-properties
         const sorted = this.$store.getters.bidActivities.sort((a, b) => (moment(b.newDate, 'MM/DD/YYYY hh:mm A').isBefore(moment(a.newDate, 'MM/DD/YYYY hh:mm A')) ? -1 : 1));
