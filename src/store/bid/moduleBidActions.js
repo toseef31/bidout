@@ -1356,7 +1356,6 @@ export default {
       }
     }
     
-    console.log("ATTAchment - ",state.attachement)
     if (state.bidData.status === 'templateCreate') {
       if (state.attachement && state.attachement.length) {
         for (let i = 0; i < state.attachement.length; i++) {
@@ -1387,7 +1386,6 @@ export default {
       }
     }
     
-    console.log(state.questions)
     if (state.bidData.status === 'templateCreate') {
       if (state.questions && state.questions.length) {
         for (let i = 0; i < state.questions.length; i++) {
