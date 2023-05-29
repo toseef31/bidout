@@ -1,6 +1,6 @@
 <template>
   <v-col class="my-7 pa-0 qanda-section fill-height" align="start">
-  <div v-if="bidDetail.bidData.qAndAEnabled === 'true'">
+  <div v-if="bidDetail.bidData.qAndAEnabled === true">
     <div class="px-6" v-if="(getUserType === 'buyer' && getQAndA.length)">
       <span class="title-detail" v-if="getQAndForAnswer.length">Unanswered questions</span >
 
@@ -23,10 +23,10 @@
                 >
 
                 <span class="sub-title mt-4"
-                  >By {{(item.questionedUserName)}} ({{item.questionedUserCompany
+                  >By {{(item.questionBy.firstName)}} ({{item.questionByCompany.companyName
                 }})</span
                 >
-                <span class="sub-title mt-2">{{ item.askedOn._seconds | moment('MM/DD/YYYY')}} - {{ item.askedOn._seconds | moment('hh:mma')}}</span>
+                <span class="sub-title mt-2">{{ item.askedOn | moment('MM/DD/YYYY')}} - {{ item.askedOn | moment('hh:mma')}}</span>
               </div>
             </template>
           </v-expansion-panel-header>
@@ -78,9 +78,8 @@
           >{{item.question}}</span
         >
 
-        <span class="sub-title mt-4">By {{(item.questionedUserName)}} ({{item.questionedUserCompany
-          }})</span>
-        <span class="sub-title mt-2">{{ item.askedOn._seconds | moment('MM/DD/YYYY')}} - {{ item.askedOn._seconds | moment('hh:mma')}}</span>
+        <span class="sub-title mt-4">By {{(item.questionBy.firstName)}} {{(item.questionBy.lastName)}} ({{item.questionByCompany.companyName}})</span>
+        <span class="sub-title mt-2">{{ item.askedOn | moment('MM/DD/YYYY')}} - {{ item.askedOn | moment('hh:mma')}}</span>
       </div>
 
       <div class="header d-flex flex-column pt-4" >
@@ -137,8 +136,8 @@
               </v-btn>
             </div>
           </div>
-        <span class="sub-title mt-4">By {{user.firstName + " " + user.lastName}} ({{user.company.company}}) </span>
-        <span class="sub-title mt-1">{{ item.answeredOn._seconds | moment('MM/DD/YYYY')}} - {{ item.answeredOn._seconds | moment('hh:mma')}}</span>
+        <span class="sub-title mt-4">By {{user.firstName + " " + user.lastName}} ({{user.company.companyName}}) </span>
+        <span class="sub-title mt-1">{{ item.answeredOn | moment('MM/DD/YYYY')}} - {{ item.answeredOn | moment('hh:mma')}}</span>
       </div>
       <v-divider class="mb-1 mt-4" color="#5C5C5C"/>
     </div>
@@ -191,10 +190,10 @@
             <span class=" mt-1"
               >{{item.question}}</span
             >
-            <span class="sub-title mt-4" v-if="user.id === item.questionBy">By {{(user.firstName + " " + user.lastName)}} ({{user.company.company}})</span>
+            <span class="sub-title mt-4" v-if="user.id === item.questionBy">By {{(user.firstName + " " + user.lastName)}} ({{user.company.companyName}})</span>
 
             <span class="sub-title mt-4" v-else>By Supplier</span>
-            <span class="sub-title mt-1">{{ item.askedOn._seconds | moment('MM/DD/YYYY')}} - {{ item.askedOn._seconds | moment('hh:mma')}}</span>
+            <span class="sub-title mt-1">{{ item.askedOn | moment('MM/DD/YYYY')}} - {{ item.askedOn | moment('hh:mma')}}</span>
           </div>
 
            <div class="header d-flex flex-column pt-4">
@@ -224,10 +223,10 @@
         <span class=" mt-1"
           >{{item.question}}</span
         >
-        <span class="sub-title mt-4" v-if="user.id === item.questionBy">By {{(user.firstName + " " + user.lastName)}} ({{user.company.company}})</span>
+        <span class="sub-title mt-4" v-if="user.id === item.questionBy">By {{(user.firstName + " " + user.lastName)}} ({{user.company.companyName}})</span>
 
         <span class="sub-title mt-4" v-else>By Supplier</span>
-        <span class="sub-title mt-1">{{ item.askedOn._seconds | moment('MM/DD/YYYY')}} - {{ item.askedOn._seconds | moment('hh:mma')}}</span>
+        <span class="sub-title mt-1">{{ item.askedOn | moment('MM/DD/YYYY')}} - {{ item.askedOn | moment('hh:mma')}}</span>
       </div>
 
        <v-divider class="mb-1 mt-4" color="#5C5C5C"/>
