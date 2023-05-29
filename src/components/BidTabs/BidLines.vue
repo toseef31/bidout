@@ -29,8 +29,8 @@
 
       <input type="hidden" name="" :value="validate">
       {{ validate }}
-      <draggable :list="bidLines" :disabled="!enabled" class="list-group" ghost-class="ghost" :move="checkMove"
-        @start="dragging = true" @end="dragging = false">
+      <draggable :list="bidLines" :disabled="!enabled" class="list-group" ghost-class="ghost" @start="dragging = true"
+        @end="dragging = false">
         <v-row class="bidline-list d-flex align-center px-6 mt-0" gap v-for="(items, index) in bidLines" :key="index">
           <v-col md="4" class="d-flex px-0">
             <v-row>
@@ -94,11 +94,6 @@
                   v-bind="attrs" v-on="on">mdi-trash-can-outline</v-icon>
               </v-col>
             </v-row>
-            <!-- <div class="mr-2 bid-item">
-            </div>
-            <div class="d-flex">
-
-            </div> -->
           </v-col>
         </v-row>
       </draggable>
@@ -149,8 +144,7 @@ export default {
       },
       bidLines: [
         {
-          id: uuidv4(),
-          switch1: false,
+          _id: uuidv4(),
           description: null,
           unit: 'Feet',
           inputType: 'USD',
@@ -176,7 +170,7 @@ export default {
     },
     // eslint-disable-next-line consistent-return, vue/return-in-computed-property
     validate() {
-      if (this.$store.getters.bidData.lineItems.length > 0 ) {
+      if (this.$store.getters.bidData.lineItems.length > 0) {
         this.$emit('validation', { valid: true, items: '4' });
         this.$store.commit('setLineItemsComplete', true);
         this.$store.commit('setBidlines', this.bidLines);
@@ -208,8 +202,6 @@ export default {
       },
       deep: true,
     },
-    validate() {
-    },
   },
   methods: {
     ...mapActions(['updateDraftBid', 'updateTemplate', 'updateBid']),
@@ -229,24 +221,19 @@ export default {
       // eslint-disable-next-line no-plusplus
       for (let i = 0; i < 5; i++) {
         this.bidLines.push({
-          id: uuidv4(),
+          _id: uuidv4(),
           type: 'USD',
           inputType: 'USD',
-          units: ['Gallon', 'Liter'],
           description: '',
           unit: 'Feet',
           quantity: '',
           buyerComment: '',
-          switch1: '',
           required: true,
         });
       }
     },
-    checkMove(e) {
-      console.log(`Future index: ${e.draggedContext.futureIndex}`);
-    },
+
     isLetterOrNumber(e) {
-      console.log('e', e);
       const char = String.fromCharCode(e.keyCode);
       if (/^[0-9]+$/.test(char)) return true;
       e.preventDefault();
@@ -261,7 +248,6 @@ export default {
       const header = this.excelHeader;
 
       const dataD = [];
-      let index;
 
       this.bidLines.forEach((el, lIndex) => {
         dataD.push([el.description]);
@@ -293,7 +279,7 @@ export default {
               const formatQuantity = string.replace(/[^0-9]/g, '');
 
               if (formatQuantity === '') {
-                error = 'please enter valid quantity';
+                error = 'Please enter valid quantity';
               } else {
                 error = '';
               }
@@ -305,17 +291,15 @@ export default {
             }
 
             this.bidLines.push({
-              id: uuidv4(),
+              _id: uuidv4(),
               type: 'USD',
               inputType: 'USD',
-              units: ['Gallon', 'Liter'],
               description: data[i].Description,
               unit: dataUnit,
               quantity: quantityValue,
               buyerComment: data[i].BuyerComment,
               error,
-              switch1: '',
-              required: ((data[i].Required == 'Yes')),
+              required: ((data[i].Required === 'Yes')),
             });
           }
         };
@@ -335,7 +319,9 @@ export default {
       }
     },
     removeNonNumeric(num) {
-      num = num.replace(/[^0-9]/g, '');
+      if (num !== '' && isNaN(num)) {
+        num = num.replace(/[^0-9]/g, '');
+      }
       return num;
     },
     onPaste(event) {

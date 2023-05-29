@@ -5,7 +5,6 @@
         <h4 class="text-left">Questions</h4>
       </v-col>
       <v-col cols="6" class="text-right">
-        <!-- <v-btn color="#0D9648" large class="text-capitalize py-4 px-11 font-weight-bold white--text add-question" height="56px">Add Question</v-btn> -->
         <v-menu bottom :offset-y="true" content-class="question-menu">
           <template v-slot:activator="{ on, attrs }">
             <v-btn
@@ -397,7 +396,7 @@
                   </div>
                   <div class="upload-attach ml-10">
                     <v-textarea
-                      label="File input"
+                      label="Textarea"
                       outlined
                       color="#fff"
                       id="uploadFile"
