@@ -170,7 +170,7 @@ export default {
     state.isEditBidChanges = true;
   },
   setBidRegions(state, payload) {
-    state.bidData.regions = payload;
+    state.bidData.region = payload;
     state.isEditBidChanges = true;
   },
   setBidEnabled(state, payload) {
