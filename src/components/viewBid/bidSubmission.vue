@@ -102,7 +102,8 @@
                     <img :src="require('@/assets/images/bids/FilePdf.png')"
                       v-if="checkFileType(doc.fileName) === 'pdf'" class="pr-2"/>
                     <img :src="require('@/assets/images/bids/FileDoc.png')"
-                      v-else-if="checkFileType(doc.fileName) === 'docx'" class="pr-2"/>
+                      v-else-if="checkFileType(doc.fileName) === 'docx' || checkFileType(doc.fileName) === 'doc'" class="pr-2"/>
+                      <v-icon class="pr-2" color="#0D1139" v-else-if="checkFileType(doc.fileName) === 'xlsx' || checkFileType(doc.fileName) === 'xls'">mdi-microsoft-excel</v-icon>
                     <v-icon color="#0D1139" v-else class="pr-2">mdi-file-document</v-icon>
 
                     <a target="_blank" class="text-decoration-none" :href="doc.attachment

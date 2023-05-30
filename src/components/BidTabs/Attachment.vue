@@ -22,7 +22,7 @@
                 <img :src="require('@/assets/images/bids/FilePdf.png')" v-if="checkFileType(doc.fileName) === 'pdf'" />
                 <img :src="require('@/assets/images/bids/FileDoc.png')"
                   v-else-if="checkFileType(doc.fileName) === 'docx' || checkFileType(doc.fileName) === 'doc'" />
-                <v-icon color="#0D1139" v-else-if="checkFileType(doc.fileName) === 'xlsx' || checkFileType(doc.fileName) === 'xls'">mdi-file-excel-outline</v-icon>
+                <v-icon color="#0D1139" v-else-if="checkFileType(doc.fileName) === 'xlsx' || checkFileType(doc.fileName) === 'xls'">mdi-microsoft-excel</v-icon>
                 <v-icon color="#0D1139" v-else>mdi-file-document</v-icon>
               </td>
               <td class="text-left d-block text-truncate pt-4" style="width: 200px">
