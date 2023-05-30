@@ -886,9 +886,9 @@ export default {
       for (let i = 0; i < state.attachement.length; i++) {
         formData.append(`attachment[${i}][fileName]`, state.attachement[i].fileName);
         formData.append(`attachment[${i}][fileSize]`, state.attachement[i].fileSize);
-        formData.append(`attachment[${i}][uploadedBy]`, state.attachement[i].uploadedBy);
+        state.attachement[i].uploadedBy._id ? formData.append(`attachment[${i}][uploadedBy]`, state.attachement[i].uploadedBy._id) :  formData.append(`attachment[${i}][uploadedBy]`, state.attachement[i].uploadedBy)
         formData.append(`attachment[${i}][url]`, state.attachement[i].url);
-        formData.append(`attachment[${i}][uploadedAt]`, state.attachement[i].uploadedAt);
+        state.attachement[i].uploadedAt ? formData.append(`attachment[${i}][uploadedAt]`, state.attachement[i].uploadedAt ) : ''
         formData.append(`attachment[${i}][comment]`, state.attachement[i].comment);
         formData.append(`attachment[${i}][id]`, state.attachement[i].id);
       }

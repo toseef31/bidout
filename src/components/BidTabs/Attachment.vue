@@ -37,7 +37,7 @@
                 <span v-else>{{ doc.comment !== 'undefined' ? doc.comment : '' }}</span>
               </td>
               <td class="text-left">{{ size(doc.fileSize) }}</td>
-              <td class="text-left">{{ doc.uploadedByName }}</td>
+              <td class="text-left">{{ doc.uploadedBy.firstName }} {{ doc.uploadedBy.lastName }} </td>
               <td class="text-left">
                 {{ doc.uploadedAt | moment("MM/DD/YYYY hh:mm a") }}
               </td>
