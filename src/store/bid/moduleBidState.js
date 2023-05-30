@@ -10,7 +10,7 @@ export default {
   bidData: {
     title: '',
     type: '',
-    regions: '',
+    region: '',
     dueDate: '',
     dueTime: '',
     qAndAEnabled: '',
