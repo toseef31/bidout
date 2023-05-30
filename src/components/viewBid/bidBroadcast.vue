@@ -63,7 +63,7 @@ export default {
   },
   computed: {
     bidId() {
-      return this.$store.getters.bidViewData.bidData.id;
+      return this.$store.getters.bidViewData.bidData._id;
     },
     showBroadCastAlert() {
       return this.$store.getters.showSuccessBroadcast;
@@ -88,7 +88,7 @@ export default {
       await this.sendBroadcast({
         messageContent: this.messageContent,
         bidId: this.bidId,
-        buyerUserId: this.loggedInUser.id,
+        buyerUserId: this.loggedInUser._id,
       });
       this.loading = false;
       this.messageContent = '';
