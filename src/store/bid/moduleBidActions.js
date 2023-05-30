@@ -946,10 +946,8 @@ export default {
         commit('setLoadingInvite', false);
         let userData = '';
         if (res.data) {
-          userData = res.data.user;
-        } else {
           userData = res.data;
-        }
+        } 
         return userData;
       }
     } catch (err) {
