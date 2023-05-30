@@ -116,7 +116,7 @@ export default {
         });
         // eslint-disable-next-line vue/no-side-effects-in-computed-properties
         const sorted = this.$store.getters.activities.sort((a, b) =>
-          moment(b.newDate, 'MM/DD/YYYY hh:mm A').isBefore(moment(a.newDate, 'MM/DD/YYYY hh:mm A')) ? 1 : -1
+          moment(b.newDate, 'MM/DD/YYYY hh:mm A').isBefore(moment(a.newDate, 'MM/DD/YYYY hh:mm A')) ? -1 : 1
         );
         return sorted.splice(0, 40);
       } else {
