@@ -37,9 +37,9 @@
                 <span v-else>{{ doc.comment !== 'undefined' ? doc.comment : '' }}</span>
               </td>
               <td class="text-left">{{ size(doc.fileSize) }}</td>
-              <td class="text-left">{{ doc.uploadedBy.firstName }} {{ doc.uploadedBy.lastName }} </td>
+              <td class="text-left">{{ doc.uploadedBy.firstName ?  `${doc.uploadedBy.firstName} ${doc.uploadedBy.lastName}` : `${uploadedBy.firstName} ${uploadedBy.lastName}` }}  </td>
               <td class="text-left">
-                {{ doc.uploadedAt | moment("MM/DD/YYYY hh:mm a") }}
+                {{  doc.uploadedAt ? doc.uploadedAt  : uploadedAt | moment("MM/DD/YYYY hh:mm a")  }}
               </td>
               <td>
                 <div class="d-flex">
@@ -82,6 +82,8 @@ export default {
       fileExt: '',
       fileSize: '',
       documents: [],
+      uploadedBy: {},
+      uploadedAt: '',
       isAttaching: false,
       valid: false,
       attachStatus: false,
@@ -199,7 +201,8 @@ export default {
       this.fileExt = this.fileName.split('.').pop();
       this.fileSize = (this.file.size / (1024 * 1024)).toFixed(2);
       this.uploadDoc.push(this.file);
-
+      this.uploadedBy = this.$store.getters.userInfo
+      this.uploadedAt = new Date()
       const data = {
         uploadedBy: this.$store.getters.userInfo._id,
         uploadedByName: `${this.$store.getters.userInfo.firstName} ${this.$store.getters.userInfo.lastName}`,

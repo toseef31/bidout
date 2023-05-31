@@ -1,7 +1,7 @@
 <template>
   <v-col class="my-7 pa-0 bid-submission-tab" align="start">
 
-    <div class="table-class" v-if="bidDetail.supplierSubmissions.length">
+    <div class="table-class" v-if="bidDetail.supplierSubmissions">
       <div class="d-flex justify-end mr-5" v-if="!isBidOut && !bidDetail.receivingBids">
 
         <v-tooltip top>
@@ -41,7 +41,7 @@
               </template>
             </tr>
 
-            <tr v-if="bidDetail.supplierSubmissions.length && !bidDetail.receivingBids && isBidOut">
+            <tr v-if="bidDetail.supplierSubmissions && !bidDetail.receivingBids && isBidOut">
               <td class="bid-example-title">Bid Example Pre-BidOut Period</td>
               <template v-for="(submission) in bidDetail.supplierSubmissions">
                 <td v-if="!submission.bidoutPricepre">
@@ -56,7 +56,7 @@
               </template>
             </tr>
 
-            <tr v-if="bidDetail.supplierSubmissions.length && !bidDetail.receivingBids && isBidOut">
+            <tr v-if="bidDetail.supplierSubmissions && !bidDetail.receivingBids && isBidOut">
               <td class="bid-example-title">Bid Example Post-BidOut Period</td>
               <template v-for="(submission) in bidDetail.supplierSubmissions">
                 <td v-if="!submission.postBidoutPrice">
@@ -116,12 +116,12 @@
               </template>
             </tr>
 
-            <tr v-if="bidDetail.bidData.questions.length && bidDetail.supplierSubmissions.length">
+            <tr v-if="bidDetail.bidData.questions.length && bidDetail.supplierSubmissions">
               <div class="title-detail-supplier mt-10 mb-5">Supplier Answers</div>
             </tr>
 
             <tr v-for="(item, qIndex) in bidDetail.bidData.questions" :key="qIndex + item.id"
-              v-if="bidDetail.bidData.questions.length && bidDetail.supplierSubmissions.length">
+              v-if="bidDetail.bidData.questions.length && bidDetail.supplierSubmissions">
               <td class="text-left" v-if="item.type !== 'category'"> {{ item.title }}</td>
 
               <template v-for="(ans) in answers">
@@ -151,7 +151,7 @@
               </template>
             </tr>
 
-            <tr v-if="!isBidOut && !bidDetail.receivingBids && bidDetail.supplierSubmissions.length"
+            <tr v-if="!isBidOut && !bidDetail.receivingBids && bidDetail.supplierSubmissions"
               class="action-button-class">
               <td class="text-left"></td>
               <template v-for="(item, index) in bidDetail.supplierSubmissions">
@@ -197,7 +197,7 @@
             </tr>
 
             <tr class="action-button-class"
-              v-if="!isBidOut && !bidDetail.receivingBids && bidDetail.supplierSubmissions.length && bidDetail.bidData.awardees && (bidDetail.bidData.awardees.length || bidDetail.bidData.rejectees && bidDetail.bidData.rejectees.length)">
+              v-if="!isBidOut && !bidDetail.receivingBids && bidDetail.supplierSubmissions && bidDetail.bidData.awardees && (bidDetail.bidData.awardees.length || bidDetail.bidData.rejectees && bidDetail.bidData.rejectees.length)">
               <td class="text-left"></td>
               <template v-for="(item) in bidDetail.supplierSubmissions">
                 <td class="text-left">
@@ -222,7 +222,7 @@
       </v-simple-table>
     </div>
 
-    <div class="text-center b-title-detail " v-if="bidDetail.supplierSubmissions.length === 0">There are currently no
+    <div class="text-center b-title-detail " v-if="bidDetail.supplierSubmissions === 0">There are currently no
       bid submissions by service providers. </div>
   </v-col>
 </template>
@@ -241,7 +241,7 @@ export default {
   },
   computed: {
     bidDetail() {
-      for (let i = 0; i < this.$store.getters.bidViewData.supplierSubmissions.length; i++) {
+      for (let i = 0; i < this.$store.getters.bidViewData.supplierSubmissions; i++) {
         this.loadings.push({
           load: false,
           action: 'neither',
