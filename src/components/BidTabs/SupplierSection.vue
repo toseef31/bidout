@@ -603,7 +603,6 @@ export default {
             this.valid = false;
             this.results = '';
           } else {
-            console.log(user && user._id);
             if (user !== '' && typeof user === 'string') {
               this.$toasted.show(
                 user,
