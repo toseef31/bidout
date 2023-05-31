@@ -50,7 +50,7 @@
                   width="150px" v-model="companyBasin" min-height="28px" @change="getCompanies"></v-select>
               </div>
             </div>
-            <div class="companies-list">
+            <div class="companies-list" v-if="!getCompanyLoading">
               <div class="d-flex align-center justify-space-between list-company pa-4"
                 v-for="(company, index) in companiesList" v-if="user.company._id !== company._id" :key="index">
                 <div class="comapny-data d-flex align-center">
@@ -81,6 +81,10 @@
                 </div>
               </div>
             </div>
+            <div v-else class="mt-16" align="center" justify="center">
+              <v-progress-circular :width="3" color="green" indeterminate></v-progress-circular>
+
+            </div>
           </v-tab-item>
           <v-tab-item value="salesRep">
             <div class="available-search d-flex justify-space-between align-center mt-5 px-4">
@@ -95,7 +99,7 @@
                   width="150px" v-model="basinFilter" @change="getSales"></v-select>
               </div>
             </div>
-            <div class="companies-list">
+            <div class="companies-list" v-if="!getSalesRepLoading">
               <div class="d-flex align-center justify-space-between list-company pa-4"
                 v-for="(list, index) in salesRepsList" v-if="user._id !== list._id" :key="index">
                 <div class="comapny-data d-flex align-center">
@@ -124,6 +128,10 @@
                     @click="addReps(list, index)"> <v-icon color="#0D9648">mdi-plus</v-icon></v-btn>
                 </div>
               </div>
+            </div>
+            <div v-else class="mt-16" align="center" justify="center">
+              <v-progress-circular :width="3" color="green" indeterminate></v-progress-circular>
+
             </div>
           </v-tab-item>
           <v-tab-item value="serviceCategory">
@@ -399,6 +407,8 @@ export default {
       },
       supplierLoading: false,
       emailLoading: false,
+      companyLoading: false,
+      salesRepLoading: false
     };
   },
   computed: {
@@ -528,6 +538,12 @@ export default {
     getInvitedSupplierEmailExists() {
       return this.$store.getters.invitedSupplierEmailExists;
     },
+    getCompanyLoading() {
+      return this.companyLoading;
+    },
+    getSalesRepLoading() {
+      return this.salesRepLoading
+    }
   },
   methods: {
     ...mapActions(['getCategories', 'getSalesReps', 'getCompanyInfo', 'searchByCompany', 'getCompanyByServices', 'saveDraftBid', 'inviteNewSupplier', 'updateDraftBid', 'updateTemplate', 'updateBid', 'checkEmail']),
@@ -602,28 +618,26 @@ export default {
             this.counter = 0;
             this.valid = false;
             this.results = '';
+          } else if (user !== '' && typeof user === 'string') {
+            this.$toasted.show(
+              user,
+              {
+                class: 'error-toast',
+                type: 'error',
+                duration: 5000,
+                position: 'top-center',
+              },
+            );
           } else {
-            if (user !== '' && typeof user === 'string') {
-              this.$toasted.show(
-                user,
-                {
-                  class: 'error-toast',
-                  type: 'error',
-                  duration: 5000,
-                  position: 'top-center',
-                },
-              );
-            } else {
-              this.$toasted.show(
-                'Error! Something went wrong. Please try again',
-                {
-                  class: 'error-toast',
-                  type: 'error',
-                  duration: 5000,
-                  position: 'top-center',
-                },
-              );
-            }
+            this.$toasted.show(
+              'Error! Something went wrong. Please try again',
+              {
+                class: 'error-toast',
+                type: 'error',
+                duration: 5000,
+                position: 'top-center',
+              },
+            );
           }
         } catch (error) {
           this.$toasted.show(
@@ -665,6 +679,7 @@ export default {
     },
     hideCategories(name) {
       this.categories = false;
+      this.companyBasin = "All"
 
       if (name) {
         this.companySearch = '';
@@ -674,14 +689,17 @@ export default {
     subCategories(subCats) {
       return _.orderBy(subCats, 'orderNumber', 'asc');
     },
-    getSales() {
+    getSales: _.debounce(async function () {
+      this.salesRepLoading = true
       if (this.basinFilter === 'All') {
         this.parsedSelectedBasin = 'all';
       } else {
         this.parsedSelectedBasin = this.basinFilter;
       }
-      this.getSalesReps({ query: this.searchCompany, basin: this.parsedSelectedBasin });
-    },
+      await this.getSalesReps({ query: this.searchCompany, basin: this.parsedSelectedBasin });
+
+      this.salesRepLoading = false
+    },500),
     viewCompany(id, name) {
       this.getCompanyInfo({ id, name });
     },
@@ -705,14 +723,17 @@ export default {
       this.$store.commit('setIsEditBidChanges', true);
       this.$store.commit('setInvitedSuppliersData', this.repsInvited);
     },
-    getCompanies() {
+    getCompanies: _.debounce(async function () {
+      this.companyLoading = true;
       if (this.companyBasin === 'All') {
         this.parsedSelectedCompanyBasin = 'all';
       } else {
         this.parsedSelectedCompanyBasin = this.companyBasin;
       }
-      this.searchByCompany({ query: this.companySearch, basin: this.parsedSelectedCompanyBasin });
-    },
+      await this.searchByCompany({ query: this.companySearch, basin: this.parsedSelectedCompanyBasin });
+
+      this.companyLoading = false;
+    }, 500),
     getByCategory(category) {
       this.getCompanyByServices(category);
     },
