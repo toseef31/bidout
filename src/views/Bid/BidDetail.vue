@@ -1060,7 +1060,7 @@ export default {
       return this.$store.getters.answeredQuestionCount;
     },
     noOfBidSubmitted() {
-      return this.bidDetail.supplierSubmissions?.length;
+      return this.bidDetail.supplierSubmissions ? this.bidDetail.supplierSubmissions?.length : 0;
     },
     getPageLoading() {
       return this.$store.getters.pageLoader;
