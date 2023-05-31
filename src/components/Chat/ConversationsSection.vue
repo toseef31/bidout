@@ -70,6 +70,7 @@
                 :key="index"
               ></v-divider>
             </template>
+            <infinite-loading></infinite-loading>
           </v-list-item-group>
         </v-list>
       </v-tab-item>
@@ -149,8 +150,12 @@ import _ from 'lodash';
 import VueMoment from 'vue-moment';
 import moment from 'moment-timezone';
 import { mapActions } from 'vuex';
+import InfiniteLoading from 'vue-infinite-loading';
 
 export default {
+  components: {
+    InfiniteLoading,
+  },
   props: ['searchUser','conversationsIds'],
   data() {
     return {

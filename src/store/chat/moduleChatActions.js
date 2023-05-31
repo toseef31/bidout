@@ -16,9 +16,8 @@ export default {
       commit('setPageLoader', true);
     }
     axios
-      .get(`/chat/getConversations/${payload}`)
+      .get(`/chat/getConversations/${payload}?page=1&limit=10`)
       .then((responce) => {
-
         commit('setConverstaionList', responce.data.conversations);
         if (state.chatRefreshToken != 1) {
           commit('setPageLoader', false);
