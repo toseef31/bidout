@@ -944,10 +944,12 @@ export default {
 
       if (res.status === 200) {
         commit('setLoadingInvite', false);
-        let userData = '';
-        if (res.data) {
-          userData = res.data;
-        } 
+        let userData;
+        if (res.data.message) {
+          userData = res.data.message;
+        } else {
+          userData = res.data
+        }
         return userData;
       }
     } catch (err) {

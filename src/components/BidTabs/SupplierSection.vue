@@ -330,7 +330,8 @@
                   Supplier is pending registration and cannot be invited at this time.
                 </div>
 
-                <v-btn :loading="loadingInvite" :disabled="!valid || !getPhoneInfo.valid || getEmailLoading || emailError || loadingInvite"
+                <v-btn :loading="loadingInvite"
+                  :disabled="!valid || !getPhoneInfo.valid || getEmailLoading || emailError || loadingInvite"
                   color="#0D9648" class="mr-4 text-capitalize white--text font-weight-bold" @click="validate" large
                   height="50px" min-width="220px">
                   Send Invite
@@ -602,17 +603,29 @@ export default {
             this.valid = false;
             this.results = '';
           } else {
-            this.$toasted.show(
-              'Error! Something went wrong. Please try again',
-              {
-                class: 'error-toast',
-                type: 'error',
-                duration: 5000,
-                position: 'top-center',
-              },
-            );
+            console.log(user && user._id);
+            if (user !== '' && typeof user === 'string') {
+              this.$toasted.show(
+                user,
+                {
+                  class: 'error-toast',
+                  type: 'error',
+                  duration: 5000,
+                  position: 'top-center',
+                },
+              );
+            } else {
+              this.$toasted.show(
+                'Error! Something went wrong. Please try again',
+                {
+                  class: 'error-toast',
+                  type: 'error',
+                  duration: 5000,
+                  position: 'top-center',
+                },
+              );
+            }
           }
-
         } catch (error) {
           this.$toasted.show(
             'Error! Something went wrong. Please try again',
