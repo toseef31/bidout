@@ -408,7 +408,7 @@ export default {
       supplierLoading: false,
       emailLoading: false,
       companyLoading: false,
-      salesRepLoading: false
+      salesRepLoading: false,
     };
   },
   computed: {
@@ -497,16 +497,10 @@ export default {
     },
     // eslint-disable-next-line vue/no-side-effects-in-computed-properties, vue/return-in-computed-property,
     newSupplierFiltered() {
-      if (this.$store.getters.bidData.invitedNewSuppliers) {
-        if (this.$route.name == 'EditBid') {
-          if (this.inviteCount == 1) {
-            this.newRepsInvited = this.$store.state.bid.invitedNewSuppliers;
-          }
-        } else if (this.inviteCount == 1) {
+      if (this.$store.getters.bidData.invitedNewSuppliers && this.$store.getters.bidData.invitedNewSuppliers.length) {
+        if (this.$route.name === 'EditBid' && this.inviteCount === 1) {
           this.newRepsInvited = this.$store.state.bid.invitedNewSuppliers;
         }
-      } else {
-        this.newRepsInvited = [];
       }
     },
     getCounter() {
@@ -542,8 +536,8 @@ export default {
       return this.companyLoading;
     },
     getSalesRepLoading() {
-      return this.salesRepLoading
-    }
+      return this.salesRepLoading;
+    },
   },
   methods: {
     ...mapActions(['getCategories', 'getSalesReps', 'getCompanyInfo', 'searchByCompany', 'getCompanyByServices', 'saveDraftBid', 'inviteNewSupplier', 'updateDraftBid', 'updateTemplate', 'updateBid', 'checkEmail']),
@@ -599,47 +593,37 @@ export default {
       };
 
       if (this.$refs.form.validate() && this.getPhoneInfo.valid && !this.emailError && !this.getInvitedSupplierEmailExists) {
-        try {
-          const user = await this.inviteNewSupplier(supplier);
+        const user = await this.inviteNewSupplier(supplier);
 
-          if (user && user._id) {
-            this.oldCount = this.newRepsInvited.length;
-            this.newRepsInvited.push(user);
-            this.newCount = this.newRepsInvited.length;
-            this.$store.commit('setInvitedNewSuppliers', this.newRepsInvited);
-            this.supplierDialog = false;
+        if (user && user._id) {
+          this.oldCount = this.newRepsInvited.length;
 
-            this.$refs.form.reset();
-            this.phoneNumber = '';
-            this.phoneInfo = {
-              valid: true,
-              message: '',
-            };
-            this.counter = 0;
-            this.valid = false;
-            this.results = '';
-          } else if (user !== '' && typeof user === 'string') {
-            this.$toasted.show(
-              user,
-              {
-                class: 'error-toast',
-                type: 'error',
-                duration: 5000,
-                position: 'top-center',
-              },
-            );
-          } else {
-            this.$toasted.show(
-              'Error! Something went wrong. Please try again',
-              {
-                class: 'error-toast',
-                type: 'error',
-                duration: 5000,
-                position: 'top-center',
-              },
-            );
-          }
-        } catch (error) {
+          this.newRepsInvited.push(user);
+          this.newCount = this.newRepsInvited.length;
+          this.$store.commit('setInvitedNewSuppliers', this.newRepsInvited);
+          this.supplierDialog = false;
+
+          this.$refs.form.reset();
+          this.phoneNumber = '';
+          this.phoneInfo = {
+            valid: true,
+            message: '',
+          };
+          this.counter = 0;
+          this.valid = false;
+          this.results = '';
+        } else if (user !== '' && typeof user === 'string') {
+          console.log(user);
+          this.$toasted.show(
+            user,
+            {
+              class: 'error-toast',
+              type: 'error',
+              duration: 5000,
+              position: 'top-center',
+            },
+          );
+        } else {
           this.$toasted.show(
             'Error! Something went wrong. Please try again',
             {
@@ -679,7 +663,7 @@ export default {
     },
     hideCategories(name) {
       this.categories = false;
-      this.companyBasin = "All"
+      this.companyBasin = 'All';
 
       if (name) {
         this.companySearch = '';
@@ -690,7 +674,7 @@ export default {
       return _.orderBy(subCats, 'orderNumber', 'asc');
     },
     getSales: _.debounce(async function () {
-      this.salesRepLoading = true
+      this.salesRepLoading = true;
       if (this.basinFilter === 'All') {
         this.parsedSelectedBasin = 'all';
       } else {
@@ -698,8 +682,8 @@ export default {
       }
       await this.getSalesReps({ query: this.searchCompany, basin: this.parsedSelectedBasin });
 
-      this.salesRepLoading = false
-    },500),
+      this.salesRepLoading = false;
+    }, 500),
     viewCompany(id, name) {
       this.getCompanyInfo({ id, name });
     },
