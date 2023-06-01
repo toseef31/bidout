@@ -39,7 +39,7 @@
           <v-tab-item value="companyName">
             <div class="available-search d-flex justify-space-between align-center mt-5 px-4">
               <div>
-                <input type="hidden" name="" :value="validat">
+                <input type="hidden" name="" :value="validateT">
                 <v-text-field type="text" hide-details outlined placeholder="Search" prepend-inner-icon="mdi-magnify"
                   v-model="companySearch" @keyup="getCompanies">
                 </v-text-field>
@@ -455,52 +455,29 @@ export default {
     },
     // eslint-disable-next-line vue/no-side-effects-in-computed-properties, vue/return-in-computed-property,
     filteredEntries() {
-      if (this.$store.getters.bidData.invitedSuppliers !== '' && this.$store.getters.bidData.invitedSuppliers !== null && this.$store.getters.bidData.invitedSuppliers !== undefined) {
-        if (this.$route.name === 'EditBid') {
-          if (this.inviteCount === 1 && this.$store.getters.companiesList) {
-            const inviteData = this.$store.getters.companiesList ? this.$store.getters.companiesList.filter((el) => this.$store.state.bid.invitedSuppliers.find((supplier) => supplier._id === el._id)) : [];
-            this.repsInvited = inviteData.sort((a, b) => {
-              let aHasOfsPremium;
-              if (a.contracts) {
-                aHasOfsPremium = this.hasOfsPremium(a);
-              }
-
-              if (a.company && a.company.contracts) {
-                aHasOfsPremium = this.hasOfsPremium(a.company);
-              }
-
-              if (aHasOfsPremium) {
-                return -1;
-              }
-              return 1;
-            });
+      if (this.$store.getters.bidData.invitedSuppliers && this.$store.getters.bidData.invitedSuppliers.length && this.$store.getters.companiesList && this.$store.getters.companiesList.length) {
+        const inviteData = this.$store.getters.companiesList ? this.$store.getters.companiesList.filter((el) => this.$store.state.bid.invitedSuppliers.find((supplier) => supplier._id === el._id)) : [];
+        this.repsInvited = inviteData.sort((a, b) => {
+          let aHasOfsPremium;
+          if (a.contracts) {
+            aHasOfsPremium = this.hasOfsPremium(a);
           }
-        } else if (this.inviteCount === 1 && this.$store.getters.companiesList) {
-          const inviteData = this.$store.getters.companiesList ? this.$store.getters.companiesList.filter((el) => this.$store.state.bid.invitedSuppliers.includes(el._id)) : [];
-          this.repsInvited = inviteData.sort((a, b) => {
-            let aHasOfsPremium;
-            if (a.contracts) {
-              aHasOfsPremium = this.hasOfsPremium(a);
-            }
 
-            if (a.company && a.company.contracts) {
-              aHasOfsPremium = this.hasOfsPremium(a.company);
-            }
+          if (a.company && a.company.contracts) {
+            aHasOfsPremium = this.hasOfsPremium(a.company);
+          }
 
-            if (aHasOfsPremium) {
-              return -1;
-            }
-            return 1;
-          });
-        }
+          if (aHasOfsPremium) {
+            return -1;
+          }
+          return 1;
+        });
       }
     },
     // eslint-disable-next-line vue/no-side-effects-in-computed-properties, vue/return-in-computed-property,
     newSupplierFiltered() {
       if (this.$store.getters.bidData.invitedNewSuppliers && this.$store.getters.bidData.invitedNewSuppliers.length) {
-        if (this.$route.name === 'EditBid' && this.inviteCount === 1) {
-          this.newRepsInvited = this.$store.state.bid.invitedNewSuppliers;
-        }
+        this.newRepsInvited = this.$store.state.bid.invitedNewSuppliers;
       }
     },
     getCounter() {
@@ -509,7 +486,7 @@ export default {
     getBidAllIntend() {
       return this.$store.getters.bidAllIntend;
     },
-    validat() {
+    validateT() {
       if (this.repsInvited.length > 0) {
         this.$emit('validation', { valid: true, supplier: '2' });
         return this.valid;
@@ -613,7 +590,6 @@ export default {
           this.valid = false;
           this.results = '';
         } else if (user !== '' && typeof user === 'string') {
-          console.log(user);
           this.$toasted.show(
             user,
             {
