@@ -207,7 +207,6 @@ export default {
     loadMore($state) {
       this.getAllConversationsLoadMore({id: this.user.id, page: this.page})
         .then(( data ) => {
-          console.log('daa', data);
           if (data.length) {
             this.page += 1;
             this.$store.commit('addConverstaionList', data);

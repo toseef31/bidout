@@ -5,33 +5,30 @@ export default {
     state.unreadCount = payload;
   },
   setConverstaionList(state, payload) {
-    state.unsortedConv = payload;
-    state.conversations.forEach((msg, index) => {
+    const existingConversations = state.conversations;
+    const newConversations = payload;
+    const mergedConversations = [...existingConversations, ...newConversations].filter((conv, index, self) => index === self.findIndex((c) => c._id === conv._id));
+    const unsortedConversations = mergedConversations;
+    unsortedConversations.forEach((msg, index) => {
       if (!msg.latestMessage) {
-        msg.latestMessage = msg.createdAt; // add the new field
+        unsortedConversations[index].latestMessage = msg.createdAt; // add the new field
       }
     });
-    const dataa = _.orderBy(state.unsortedConv, 'latestMessage', 'desc');
-    state.conversations = state.unsortedConv;
+    const sortedConversation = unsortedConversations.sort((a, b) => new Date(b.latestMessage) - new Date(a.latestMessage));
+    state.conversations = sortedConversation;
   },
   addConverstaionList(state, payload) {
-    state.unsortedConv.push(...payload);
-    state.unsortedConv.forEach((msg, index) => {
+    const existingConversations = state.conversations;
+    const newConversations = payload;
+    const mergedConversations = [...existingConversations, ...newConversations].filter((conv, index, self) => index === self.findIndex((c) => c._id === conv._id));
+    const unsortedConversations = mergedConversations;
+    unsortedConversations.forEach((msg, index) => {
       if (!msg.latestMessage) {
-        msg.latestMessage = msg.createdAt; // add the new field
+        unsortedConversations[index].latestMessage = msg.createdAt; // add the new field
       }
-      // msg.sort = index
-      // console.log(index ,'created', msg.createdAt);
-      // console.log(index, 'latest', msg.latestMessage);
     });
-    // console.log(state.unsortedConv);
-    // state.unsortedConv.sort(
-    //   (a, b) =>
-    //     new Date(b?.latestMessage) - new Date(a?.latestMessage)
-    // );
-    // const dataa = _.orderBy(state.unsortedConv, 'latestMessage', 'desc');
-    // console.log('after', dataa);
-    state.conversations = state.unsortedConv;
+    const sortedConversation = unsortedConversations.sort((a, b) => new Date(b.latestMessage) - new Date(a.latestMessage));
+    state.conversations = sortedConversation;
   },
   setNoMoreConversation(state, payload) {
     state.noConversation = payload;
