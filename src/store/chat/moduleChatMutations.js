@@ -20,8 +20,17 @@ export default {
       if (!msg.latestMessage) {
         msg.latestMessage = msg.createdAt; // add the new field
       }
+      // msg.sort = index
+      // console.log(index ,'created', msg.createdAt);
+      // console.log(index, 'latest', msg.latestMessage);
     });
-    const dataa = _.orderBy(state.unsortedConv, 'latestMessage', 'desc');
+    // console.log(state.unsortedConv);
+    // state.unsortedConv.sort(
+    //   (a, b) =>
+    //     new Date(b?.latestMessage) - new Date(a?.latestMessage)
+    // );
+    // const dataa = _.orderBy(state.unsortedConv, 'latestMessage', 'desc');
+    // console.log('after', dataa);
     state.conversations = state.unsortedConv;
   },
   setNoMoreConversation(state, payload) {
