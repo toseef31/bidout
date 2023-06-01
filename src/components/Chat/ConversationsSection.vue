@@ -18,7 +18,7 @@
             v-model="selectedUser"
             active-class="grey--text">
             <template v-for="(conversation, index) in conversationsList">
-              <template>
+              <template v-if="chatData">
                 <v-list-item   @click="openChat(conversation,conversation.groupName)" :key="conversation._id"  :class="{ 'grey--text v-list-item--active' : conversation._id ===  conversationsIds }" v-if="conversation.type == 'GROUP'">
                 <template>
                   <v-list-item-avatar>
@@ -185,6 +185,18 @@ export default {
       } else {
         if (this.$store.getters.conversations) {
           this.$store.commit('setPageLoader', false);
+          const arra = this.$store.getters.conversations;
+          if(arra.length > 0){
+            const group = arra[0];
+            const name = arra[0].groupName;
+            const obj = {
+              group,
+              name,
+            };
+            this.conversationId = group._id;
+            this.chatData = obj;
+            this.openChat(group, name);
+          }
           return this.$store.getters.conversations;
         }else{
           this.$store.commit('setPageLoader', true);
