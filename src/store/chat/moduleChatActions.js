@@ -12,20 +12,33 @@ export default {
       });
   },
   getAllConversations({ commit, state }, payload) {
-    if (state.chatRefreshToken != 1) {
+    if (state.chatRefreshToken !== 1) {
       commit('setPageLoader', true);
     }
     axios
-      .get(`/chat/getConversations/${payload}?page=1&limit=10`)
+      .get(`/chat/getConversations/${payload.id}?page=${state.page}&limit=10`)
       .then((responce) => {
-        commit('setConverstaionList', responce.data.conversations);
-        if (state.chatRefreshToken != 1) {
-          commit('setPageLoader', false);
+        if (responce.status === 200) {
+          commit('addConverstaionList', responce.data.conversations);
+          if (state.chatRefreshToken !== 1) {
+            commit('setPageLoader', false);
+          }
         }
       })
       .catch((err) => {
         console.log(err);
       });
+  },
+  getAllConversationsLoadMore({ commit, state }, payload) {
+    return new Promise((resolve, reject) => {
+      axios
+        .get(`/chat/getConversations/${payload.id}?page=${payload.page}&limit=10`)
+        .then((responce) => {
+          resolve(responce.data.conversations);
+        }).catch((err) => {
+          console.log(err);
+        });
+    });
   },
   async getBidAllConversations({ commit, state }, payload) {
     await axios

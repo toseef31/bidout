@@ -139,7 +139,7 @@ export default {
   methods: {
     ...mapActions(["getAllConversations","removeConvUser","archiveChat","getAllMessages","getArchiveChats","lastMessageRead"]),
     getConversations(id){
-      this.getAllConversations(id);
+      this.getAllConversations(id, page: 1, limit: 10);
     },
     openChat(group,name){
       var obj = {

@@ -14,11 +14,11 @@
     <v-tabs-items v-model="convTab">
       <v-tab-item>
         <v-list two-line  class="py-0">
-          <v-list-item-group
+          <v-list-item-group 
             v-model="selectedUser"
             active-class="grey--text">
             <template v-for="(conversation, index) in conversationsList">
-              <template v-if="chatData">
+              <template>
                 <v-list-item   @click="openChat(conversation,conversation.groupName)" :key="conversation._id"  :class="{ 'grey--text v-list-item--active' : conversation._id ===  conversationsIds }" v-if="conversation.type == 'GROUP'">
                 <template>
                   <v-list-item-avatar>
@@ -70,7 +70,7 @@
                 :key="index"
               ></v-divider>
             </template>
-            <infinite-loading></infinite-loading>
+            <infinite-loading @infinite="loadMore"></infinite-loading>
           </v-list-item-group>
         </v-list>
       </v-tab-item>
@@ -149,8 +149,9 @@
 import _ from 'lodash';
 import VueMoment from 'vue-moment';
 import moment from 'moment-timezone';
-import { mapActions } from 'vuex';
+import { mapActions, mapState, mapGetters } from 'vuex';
 import InfiniteLoading from 'vue-infinite-loading';
+import axios from 'axios';
 
 export default {
   components: {
@@ -172,22 +173,19 @@ export default {
       conversationId: '',
       backArrow: false,
       loading: true,
+      page: 1,
+      list: [],
     };
   },
   computed: {
+    ...mapGetters(['noConversation']),
     conversationsList() {
       if (this.$store.state.chat.searchConv != '') {
         return _.orderBy(this.$store.getters.conversations.filter((item) => this.$store.state.chat.searchConv.toLowerCase().split(' ').every((v) => item.company.toLowerCase().includes(v))), 'latestMessage', 'desc');
-      }else{
-        if(this.$store.getters.conversations){
+      } else {
+        if (this.$store.getters.conversations) {
           this.$store.commit('setPageLoader', false);
-          let newArr = this.$store.getters.conversations;
-        newArr.forEach((msg, index) => {
-          if(!msg.latestMessage){
-            msg.latestMessage = msg.createdAt; // add the new field
-          }
-        })
-        return _.orderBy(newArr,'latestMessage', 'desc');
+          return this.$store.getters.conversations;
         }else{
           this.$store.commit('setPageLoader', true);
         }
@@ -197,14 +195,31 @@ export default {
     archiveList() {
       return this.$store.getters.archiveList;
     },
-    loader() {
+    loaderPage() {
       return this.$store.getters.pageLoader;
     },
   },
   methods: {
-    ...mapActions(['getAllConversations', 'getAllMessages', 'lastMessageRead', 'getArchiveChats', 'unArchiveConversation']),
+    ...mapActions(['getAllConversations', 'getAllConversationsLoadMore', 'getAllMessages', 'lastMessageRead', 'getArchiveChats', 'unArchiveConversation']),
     getConversations(id) {
-      this.getAllConversations(id);
+      this.getAllConversations({id :id, page: this.page});
+    },
+    loadMore($state) {
+      this.getAllConversationsLoadMore({id: this.user.id, page: this.page})
+        .then(( data ) => {
+          console.log('daa', data);
+          if (data.length) {
+            this.page += 1;
+            this.$store.commit('addConverstaionList', data);
+            $state.loaded();
+            // this.$store.commit('INCREMENT_PAGE');
+          } else {
+            $state.complete();
+          }
+        })
+        .catch(() => {
+          $state.complete();
+        });
     },
     openChat(group, name) {
       if (screen.width < 767) {

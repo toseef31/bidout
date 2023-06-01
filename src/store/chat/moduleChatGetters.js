@@ -47,4 +47,7 @@ export default {
   showSupplierBroadcastError(state) {
     return state.supplierBroadcastError;
   },
+  noConversation(state) {
+    return state.noConversation;
+  }
 };

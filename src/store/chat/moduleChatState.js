@@ -1,6 +1,6 @@
 export default {
   unreadCount: 0,
-  conversations: null,
+  conversations: [],
   bidConversations: null,
   messages: null,
   messageSend: null,
@@ -18,4 +18,7 @@ export default {
   supplierBroadcastError: false,
   searchConv: '',
   chatRefreshToken: 0,
+  noConversation: false,
+  page: 1,
+  unsortedConv: [],
 };

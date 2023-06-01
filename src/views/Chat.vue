@@ -1,5 +1,5 @@
 <template>
-  <v-row fill-height align="center" v-if="loader">
+  <v-row fill-height align="center" v-if="loaderPage">
     <v-col cols="12">
       <v-progress-circular
         :width="3"
@@ -390,7 +390,7 @@ export default {
     archiveList() {
       return this.$store.getters.archiveList;
     },
-    loader() {
+    loaderPage() {
       return this.$store.getters.pageLoader;
     },
     createMsg() {
@@ -599,7 +599,7 @@ export default {
   },
   async created() {
     this.user = this.$store.getters.userInfo;
-    await this.getAllConversations(this.user.id);
+    // await this.getAllConversations({id: this.user.id, page: 1, limit: 10});
   },
   beforeMount() {},
   async mounted() {

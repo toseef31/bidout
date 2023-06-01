@@ -1,9 +1,31 @@
+import _ from 'lodash';
+
 export default {
   setUnreadCount(state, payload) {
     state.unreadCount = payload;
   },
   setConverstaionList(state, payload) {
-    state.conversations = payload;
+    state.unsortedConv = payload;
+    state.conversations.forEach((msg, index) => {
+      if (!msg.latestMessage) {
+        msg.latestMessage = msg.createdAt; // add the new field
+      }
+    });
+    const dataa = _.orderBy(state.unsortedConv, 'latestMessage', 'desc');
+    state.conversations = state.unsortedConv;
+  },
+  addConverstaionList(state, payload) {
+    state.unsortedConv.push(...payload);
+    state.unsortedConv.forEach((msg, index) => {
+      if (!msg.latestMessage) {
+        msg.latestMessage = msg.createdAt; // add the new field
+      }
+    });
+    const dataa = _.orderBy(state.unsortedConv, 'latestMessage', 'desc');
+    state.conversations = state.unsortedConv;
+  },
+  setNoMoreConversation(state, payload) {
+    state.noConversation = payload;
   },
   setBidConversationList(state, payload) {
     state.bidConversations = payload;
@@ -59,14 +81,20 @@ export default {
       state.supplierBroadcastError = false;
     }, 5000);
   },
-  setsearchConv(state,payload){
+  setsearchConv(state, payload) {
     state.searchConv = payload;
   },
-  setChatRefreshToken(state,payload){
+  setChatRefreshToken(state, payload) {
     state.chatRefreshToken = payload;
   },
-  setSpliceToConversation(state,id){
+  setSpliceToConversation(state, id) {
     const index = state.conversations.findIndex(item => item._id === id);
     state.conversations.splice(index, 1);
+  },
+  INCREMENT_PAGE(state) {
+    console.log('before satte', state.page);
+
+    state.page += 1;
+    console.log('after satte', state.page);
   }
 };
