@@ -849,7 +849,11 @@ export default {
     }
     if (state.invitedNewSuppliers?.length > 0) {
       for (let i = 0; i < state.invitedNewSuppliers.length; i++) {
-        formData.append(`invitedNewSuppliers[${i}]`, state.invitedNewSuppliers[i]._id);
+        if (Array.isArray(state.invitedNewSuppliers) && state.invitedNewSuppliers?.length > 0 && typeof state.invitedNewSuppliers[0] === 'object') {
+          formData.append(`invitedNewSuppliers[${i}]`, state.invitedNewSuppliers[i]._id);
+        } else {
+          formData.append(`invitedNewSuppliers[${i}]`, state.invitedNewSuppliers[i]);
+        }
       }
     }
     if (state.invitedTeamMembers?.length > 0) {
