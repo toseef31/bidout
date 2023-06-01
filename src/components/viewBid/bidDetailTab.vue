@@ -56,7 +56,7 @@
               <v-icon size="40">mdi-domain</v-icon>
             </div>
             <div class="ml-5">
-              <div class="font-weight-bold">{{ item && item.company.companyName }}
+              <div class="font-weight-bold">{{ item && item.company }}
                 <span v-if="hasOfsPremium(item)">
                   <v-tooltip top>
                     <template v-slot:activator="{ on, attrs }">
