@@ -21,4 +21,5 @@ export default {
   noConversation: false,
   page: 1,
   unsortedConv: [],
+  openChatFlag: false,
 };

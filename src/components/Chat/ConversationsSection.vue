@@ -185,18 +185,6 @@ export default {
       } else {
         if (this.$store.getters.conversations) {
           this.$store.commit('setPageLoader', false);
-          const arra = this.$store.getters.conversations;
-          if(arra.length > 0){
-            const group = arra[0];
-            const name = arra[0].groupName;
-            const obj = {
-              group,
-              name,
-            };
-            this.conversationId = group._id;
-            this.chatData = obj;
-            this.openChat(group, name);
-          }
           return this.$store.getters.conversations;
         }else{
           this.$store.commit('setPageLoader', true);
@@ -209,6 +197,24 @@ export default {
     },
     loaderPage() {
       return this.$store.getters.pageLoader;
+    },
+  },
+  watch: {
+    conversationsList: {
+      immediate: true,
+      handler(conversations) {
+        if (conversations.length > 0) {
+          const group = conversations[0];
+          const name = conversations[0].groupName;
+          const obj = {
+            group,
+            name,
+          };
+          this.conversationId = group._id;
+          this.chatData = obj;
+          this.openChat(group, name);
+        }
+      }
     },
   },
   methods: {
@@ -233,6 +239,7 @@ export default {
         });
     },
     openChat(group, name) {
+      this.$store.state.openChatFlag = false;
       if (screen.width < 767) {
         this.userList = false;
         this.showMsgBlock = true;

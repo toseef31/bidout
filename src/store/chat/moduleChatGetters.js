@@ -49,5 +49,8 @@ export default {
   },
   noConversation(state) {
     return state.noConversation;
+  },
+  openChatFlag(state){
+    return state.openChatFlag;
   }
 };

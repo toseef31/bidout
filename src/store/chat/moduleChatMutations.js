@@ -28,6 +28,7 @@ export default {
       }
     });
     const sortedConversation = unsortedConversations.sort((a, b) => new Date(b.latestMessage) - new Date(a.latestMessage));
+    state.openChatFlag = true;
     state.conversations = sortedConversation;
   },
   setNoMoreConversation(state, payload) {
