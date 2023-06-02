@@ -207,7 +207,13 @@ export default {
       .then((responce) => {
         commit('setChatRefreshToken', 1);
         dispatch('getArchiveChats', payload.userId);
-        dispatch('getAllConversations', rootState.auth.userInfo.id);
+        const obj = {
+          id: rootState.auth.userInfo.id,
+          page: 1,
+        }
+        dispatch('getAllConversations', obj);
+        
+        // dispatch('getAllConversationsLoadMore', obj);
       })
       .catch((err) => {
         console.log(err);
