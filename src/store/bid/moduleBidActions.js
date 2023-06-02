@@ -145,10 +145,6 @@ export default {
         if (payload.type !== 'update-date') {
           commit('setTeamMembersForBid', []);
           if (res.data.user_type === 'buyer') {
-            await dispatch('getSalesReps', { query: '', basin: 'all' });
-            await dispatch('getCategories');
-            await dispatch('searchByCompany', { query: '', basin: 'all' });
-  
             await dispatch('getTeamMembers', payload.company._id);
   
             commit('setInvitedSuppliersData', res.data.bidData.invitedSuppliers);
@@ -162,7 +158,7 @@ export default {
             commit('setSupplierBid', res.data.supplierSubmissions);
             commit('setIsBidSubmitted', true);
           } else {
-             commit('setSupplierBid', []);
+            commit('setSupplierBid', []);
             commit('setIsBidSubmitted', false);
           }
         }
