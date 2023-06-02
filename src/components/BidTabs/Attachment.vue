@@ -202,11 +202,10 @@ export default {
       this.fileSize = (this.file.size / (1024 * 1024)).toFixed(2);
       this.uploadDoc.push(this.file);
       this.uploadedBy = this.$store.getters.userInfo
-      this.uploadedAt = new Date()
       const data = {
         uploadedBy: this.$store.getters.userInfo._id,
         uploadedByName: `${this.$store.getters.userInfo.firstName} ${this.$store.getters.userInfo.lastName}`,
-        attachement: this.uploadDoc,
+        attachement: this.uploadDoc
       };
       await this.uploadBidAttach(data);
       this.isAttaching = false;
