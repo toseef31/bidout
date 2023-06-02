@@ -141,28 +141,31 @@ export default {
         commit('setBidViewData', res.data);
         commit('setViewBidError', false);
         commit('setUserType', res.data.user_type);
-        commit('setTeamMembersForBid', []);
-        if (res.data.user_type === 'buyer') {
-          await dispatch('getSalesReps', { query: '', basin: 'all' });
-          await dispatch('getCategories');
-          await dispatch('searchByCompany', { query: '', basin: 'all' });
-
-          await dispatch('getTeamMembers', payload.company._id);
-
-          commit('setInvitedSuppliersData', res.data.bidData.invitedSuppliers);
-
-          commit('setInvitedNewSuppliers', res.data.bidData.invitedNewSuppliers);
-
-          commit('setTeamMembersForBid', res.data.bidData.invitedTeamMembers);
+ 
+        if (payload.type !== 'update-date') {
+          commit('setTeamMembersForBid', []);
+          if (res.data.user_type === 'buyer') {
+            await dispatch('getSalesReps', { query: '', basin: 'all' });
+            await dispatch('getCategories');
+            await dispatch('searchByCompany', { query: '', basin: 'all' });
+  
+            await dispatch('getTeamMembers', payload.company._id);
+  
+            commit('setInvitedSuppliersData', res.data.bidData.invitedSuppliers);
+  
+            commit('setInvitedNewSuppliers', res.data.bidData.invitedNewSuppliers);
+  
+            commit('setTeamMembersForBid', res.data.bidData.invitedTeamMembers);
+          }
+  
+          if (res.data.user_type === 'supplier' && res.data.supplierSubmissions) {
+            commit('setSupplierBid', res.data.supplierSubmissions);
+            commit('setIsBidSubmitted', true);
+          } else {
+            commit('setIsBidSubmitted', false);
+          }
         }
-
-        if (res.data.user_type === 'supplier' && res.data.supplierSubmissions && res.data.supplierSubmissions.length) {
-          commit('setSupplierBid', res.data.supplierSubmissions);
-          commit('setIsBidSubmitted', true);
-        } else {
-          commit('setSupplierBid', []);
-          commit('setIsBidSubmitted', false);
-        }
+      
         commit('setPageLoader', false);
       } else {
         commit('setPageLoader', false);
@@ -773,10 +776,6 @@ export default {
       if (res.status === 200) {
         commit('setBidData', res.data);
         commit('setAttachement', res.data.attachments);
-        dispatch('getTeamMembers', res.data.company);
-        dispatch('getSalesReps', { query: '', basin: 'all' });
-        dispatch('getCategories');
-        dispatch('searchByCompany', { query: '', basin: 'all' });
         commit('setDraftBidsList', res.data._id);
         commit('setBidSerial', res.data.serial);
         state.bidData.statusType = 'draftBid';
@@ -1140,11 +1139,6 @@ export default {
       if (res.status === 200) {
         commit('getSingleTemplate', res.data);
         commit('setBidData', res.data);
-        dispatch('getTeamMembers', payload.company._id);
-        dispatch('getSalesReps', { query: '', basin: 'all' });
-        dispatch('getCategories');
-        dispatch('searchByCompany', { query: '', basin: 'all' });
-        // commit('setDraftBidData', res.data);
         state.bidData.status = 'templateUpdate';
         state.bidData.statusType = 'template';
         commit('setPageLoader', false);
@@ -1192,10 +1186,6 @@ export default {
       if (res.status === 200) {
         commit('setBidData', res.data);
         commit('setAttachement', res.data.attachment);
-        dispatch('getTeamMembers', res.data.company);
-        dispatch('getSalesReps', { query: '', basin: 'all' });
-        dispatch('getCategories');
-        dispatch('searchByCompany', { query: '', basin: 'all' });
         commit('setDraftBidsList', res.data._id);
 
         state.bidData.status = 'templateCreate';
@@ -1223,10 +1213,6 @@ export default {
       );
 
       if (res.status === 200) {
-        dispatch('getTeamMembers', payload.company._id);
-        dispatch('getSalesReps', { query: '', basin: 'all' });
-        dispatch('getCategories');
-        dispatch('searchByCompany', { query: '', basin: 'all' });
         commit('setDraftBidData', res.data);
         commit('setIsEditBidChanges', false);
         commit('setBidData', res.data);

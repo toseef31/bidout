@@ -36,9 +36,9 @@
                                 {{ bidDetail.bidData.dueTime }} CST
                             </div>
                             <div>
-                                Created by: <strong>{{ bidDetail.bidData.company }}</strong>, {{
-                                    bidDetail.bidData.userId.firstName }}
-                                {{ bidDetail.bidData.userId.lastName }}
+                                Created by: <strong>{{ bidDetail.bidData.company.companyName }}</strong>, {{
+                                    bidDetail.bidData.user.firstName }}
+                                {{ bidDetail.bidData.user.lastName }}
                             </div>
                             <div>Bid Type: {{ bidDetail.bidData.type }}</div>
                         </div>
@@ -195,8 +195,8 @@ export default {
             await this.changeBidDate({
                 dueDate: this.dueDate,
                 dueTime: this.dueTime,
-                userId: this.users.id,
-                bidId: this.bidDetail.bidData.id,
+                userId: this.users._id,
+                bidId: this.bidDetail.bidData._id,
             });
 
             this.$router.push(`/view-bids/${this.$route.params.serial}`);
@@ -224,7 +224,7 @@ export default {
             return this.$store.getters.showViewBidError;
         },
         noOfBidSubmitted() {
-            return this.bidDetail.supplierSubmissions.length;
+            return this.bidDetail.supplierSubmissions ? this.bidDetail.supplierSubmissions?.length : 0;
         },
         getLoading() {
             return this.loading;
@@ -236,7 +236,7 @@ export default {
             await this.getBidBySerial({
                 serial: this.$route.params.serial,
                 id: this.users._id,
-                company: this.users.company,
+                type: 'update-date',
             });
         } else {
             this.$router.push('/login');
