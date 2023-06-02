@@ -158,10 +158,11 @@ export default {
             commit('setTeamMembersForBid', res.data.bidData.invitedTeamMembers);
           }
   
-          if (res.data.user_type === 'supplier' && res.data.supplierSubmissions) {
+          if (res.data.user_type === 'supplier' && res.data.supplierSubmissions && res.data.supplierSubmissions.length) {
             commit('setSupplierBid', res.data.supplierSubmissions);
             commit('setIsBidSubmitted', true);
           } else {
+             commit('setSupplierBid', []);
             commit('setIsBidSubmitted', false);
           }
         }
