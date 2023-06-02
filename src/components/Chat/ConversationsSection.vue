@@ -70,7 +70,9 @@
                 :key="index"
               ></v-divider>
             </template>
-            <infinite-loading @infinite="loadMore"></infinite-loading>
+            <infinite-loading @infinite="loadMore">
+              <div slot="no-more"></div>
+            </infinite-loading>
           </v-list-item-group>
         </v-list>
       </v-tab-item>
