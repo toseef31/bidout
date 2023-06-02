@@ -260,7 +260,7 @@
 
                   </div>
                 </div>
-                <div class="add-company" v-if="checkIntent(company.objectID) !== 'intended'">
+                <div class="add-company">
                   <v-btn color="rgba(243, 35, 73, 0.1)" tile min-width="32px" height="32" class="pa-0" elevation="0"
                     @click="removeNewSup(index)"> <v-icon color="#F32349">mdi-minus</v-icon></v-btn>
                 </div>
@@ -439,6 +439,7 @@ export default {
 
           return [...new Map(unique.map((item) => [item._id, item])).values()];
         }
+
         return [...new Map(this.$store.getters.companiesList.map((item) => [item._id, item])).values()];
       }
 
@@ -455,9 +456,8 @@ export default {
     },
     // eslint-disable-next-line vue/no-side-effects-in-computed-properties, vue/return-in-computed-property,
     filteredEntries() {
-      if (this.$store.getters.bidData.invitedSuppliers && this.$store.getters.bidData.invitedSuppliers.length && this.$store.getters.companiesList && this.$store.getters.companiesList.length) {
-        const inviteData = this.$store.getters.companiesList ? this.$store.getters.companiesList.filter((el) => this.$store.state.bid.invitedSuppliers.find((supplier) => supplier._id === el._id)) : [];
-        this.repsInvited = inviteData.sort((a, b) => {
+      if (this.$store.getters.bidData.invitedSuppliers && this.$store.getters.bidData.invitedSuppliers.length) {
+        this.repsInvited = this.$store.getters.bidData.invitedSuppliers.sort((a, b) => {
           let aHasOfsPremium;
           if (a.contracts) {
             aHasOfsPremium = this.hasOfsPremium(a);
