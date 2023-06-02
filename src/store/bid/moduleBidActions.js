@@ -1547,14 +1547,14 @@ export default {
     };
     const formData = new FormData();
 
-    if (state.bidData.id) {
-      commit('setDraftBidsList', state.bidData.id);
+    if (state.bidData._id) {
+      commit('setDraftBidsList', state.bidData._id);
       commit('setBidSerial', state.bidData.serial);
       // state.draftBidsList = state.bidData.id;
       // state.bidSerial = state.bidData.serial;
     }
-    if (state.bidData.company === '') {
-      state.bidData.company = payload.company;
+    if (state.bidData.company.companyName === '') {
+      state.bidData.company.companyName = payload.company;
     }
     formData.append('bidId', state.draftBidsList);
     formData.append('title', state.bidData.title);
@@ -1563,10 +1563,10 @@ export default {
     formData.append('dueTime', state.bidData.dueTime);
     formData.append('regions', state.bidData.region);
     formData.append('qAndAEnabled', state.bidData.qAndAEnabled);
-    formData.append('userId', state.bidData.userId.id);
-    formData.append('companyId', state.bidData.companyId);
+    formData.append('userId', state.bidData.user._id);
+    formData.append('companyId', state.bidData.company._id);
     formData.append('company', state.bidData.company);
-    formData.append('editedByUserId', rootState.auth.userInfo.id);
+    formData.append('editedByUserId', rootState.auth.userInfo._id);
 
     formData.append('bidDescriptions[0][body]', state.bidData.bidDescriptions[0].body);
     if (state.bidData.bidDescriptions.length > 1) {
@@ -1579,14 +1579,16 @@ export default {
     if (state.invitedSuppliers !== '' && state.invitedSuppliers && state.invitedSuppliers.length > 0) {
       for (let i = 0; i < state.invitedSuppliers.length; i++) {
         if (state.invitedSuppliers[i].company && state.invitedSuppliers[i].company._id) {
-          formData.append(`invitedSuppliers[${i}]`, state.invitedSuppliers[i].company._id);
+          if (state.invitedSuppliers[i] !== '') {
+            formData.append(`invitedSuppliers[${i}]`, state.invitedSuppliers[i].company._id);
+          }
         } else {
-          formData.append(`invitedSuppliers[${i}]`, state.invitedSuppliers[i]._id);
+          if (state.invitedSuppliers[i] !== '') {
+            formData.append(`invitedSuppliers[${i}]`, state.invitedSuppliers[i]._id);
+          }
         }
       }
-    } else {
-      formData.append('invitedSuppliers', []);
-    }
+    } 
     if (state.invitedNewSuppliers.length > 0) {
       for (let i = 0; i < state.invitedNewSuppliers.length; i++) {
         formData.append(`invitedNewSuppliers[${i}]`, state.invitedNewSuppliers[i]._id);
@@ -1596,10 +1598,10 @@ export default {
     }
     if (state.invitedTeamMembers !== '' && state.invitedTeamMembers && state.invitedTeamMembers?.length > 0) {
       for (let t = 0; t < state.invitedTeamMembers.length; t++) {
-        if (!state.invitedTeamMembers[t].id) {
+        if (!state.invitedTeamMembers[t]._id) {
           formData.append(`invitedTeamMembers[${t}]`, state.invitedTeamMembers[t]);
         } else {
-          formData.append(`invitedTeamMembers[${t}]`, state.invitedTeamMembers[t].id);
+          formData.append(`invitedTeamMembers[${t}]`, state.invitedTeamMembers[t]._id);
         }
       }
     } else {
