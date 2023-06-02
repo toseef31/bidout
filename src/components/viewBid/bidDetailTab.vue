@@ -14,10 +14,10 @@
               v-if="bidDetail.receivingBids && !isBidOut"><v-icon color="black"
                 size="20">mdi-square-edit-outline</v-icon></v-btn>
           </div>
-          <div><span>Region:</span> {{ bidDetail.bidData.regions }}</div>
+          <div><span>Region:</span> {{ bidDetail.bidData.region }}</div>
           <div>
             <span>Q&A:</span>
-            {{ bidDetail.bidData.qAndAEnabled === 'true' ? "Yes" : "No" }}
+            {{ bidDetail.bidData.qAndAEnabled === true ? "Yes" : "No" }}
           </div>
         </div>
         <br />
@@ -297,7 +297,7 @@
                   <span>{{ doc.comment !== 'undefined' ? doc.comment : '' }}</span>
                 </td>
                 <td class="text-left">{{ size(doc.fileSize) }}</td>
-                <td class="text-left">{{ doc.uploadedBy }}</td>
+                <td class="text-left">{{ `${doc.uploadedBy.firstName} ${doc.uploadedBy.lastName}` }}</td>
                 <td class="text-left">
                   {{ doc.uploadedAt | moment("MM/DD/YYYY") }}
                 </td>
@@ -328,7 +328,7 @@
               item.title
             }}</v-col>
 
-            <div class="second-child ml-auto" v-if="item.required === 'true'">Required Question</div>
+            <div class="second-child ml-auto" v-if="item.required === true">Required Question</div>
 
           </v-row>
         </div>

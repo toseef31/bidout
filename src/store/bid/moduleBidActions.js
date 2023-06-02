@@ -682,6 +682,7 @@ export default {
     formData.append('regions', state.bidData.region);
     formData.append('qAndAEnabled', state.bidData.qAndAEnabled);
     formData.append('bidDescriptions[0][body]', state.bidData.bidDescriptions[0].body);
+    formData.append('bidDescriptions[0][title]', state.bidData.bidDescriptions[0].title);
     if (state.bidData.bidDescriptions.length > 1) {
       for (let d = 1; d < state.bidData.bidDescriptions.length; d++) {
         formData.append(`bidDescriptions[${d}][title]`, state.bidData.bidDescriptions[d].title);
@@ -827,6 +828,7 @@ export default {
     formData.append('serial', state.bidSerial);
 
     formData.append('bidDescriptions[0][body]', state.bidData.bidDescriptions[0].body);
+    formData.append('bidDescriptions[0][title]', state.bidData.bidDescriptions[0].title);
     if (state.bidData.bidDescriptions?.length > 1) {
       for (let d = 1; d < state.bidData.bidDescriptions.length; d++) {
         formData.append(`bidDescriptions[${d}][title]`, state.bidData.bidDescriptions[d].title);
