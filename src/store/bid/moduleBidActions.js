@@ -156,10 +156,11 @@ export default {
           commit('setTeamMembersForBid', res.data.bidData.invitedTeamMembers);
         }
 
-        if (res.data.user_type === 'supplier' && res.data.supplierSubmissions) {
+        if (res.data.user_type === 'supplier' && res.data.supplierSubmissions && res.data.supplierSubmissions.length) {
           commit('setSupplierBid', res.data.supplierSubmissions);
           commit('setIsBidSubmitted', true);
         } else {
+          commit('setSupplierBid', []);
           commit('setIsBidSubmitted', false);
         }
         commit('setPageLoader', false);
@@ -242,7 +243,7 @@ export default {
       commit('setPageLoader', true);
     }
     try {
-      const res = await axios.get(`v2/intend/getAllIntends/${payload.bidId}`);
+      const res = await axios.get(`v2/bid/getAllIntends/${payload.bidId}`);
 
       if (res.status === 200) {
         commit('setAllIntend', res.data);
@@ -262,7 +263,7 @@ export default {
   },
   async updateIntent({ commit, state, dispatch }, payload) {
     try {
-      const res = await axios.post('intend/editIntend/', {
+      const res = await axios.post('v2/bid/editIntend/', {
         answer: payload.answer,
         intendId: payload.intendId,
       });
@@ -283,10 +284,9 @@ export default {
   },
   async makeIntent({ commit, state, dispatch }, payload) {
     try {
-      const res = await axios.post('intend/createIntend/', {
+      const res = await axios.post('v2/bid/createIntend/', {
         bidId: payload.bidId,
         owner: payload.owner,
-        ownerCompany: payload.ownerCompany,
         companyId: payload.companyId,
         answer: payload.answer,
       });

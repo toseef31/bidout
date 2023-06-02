@@ -950,8 +950,7 @@ export default {
         this.makeIntent({
           bidId: this.bidDetail.bidData._id,
           owner: this.users._id,
-          ownerCompany: this.users.company,
-          companyId: this.users.companyId,
+          companyId: this.users.company._id,
           answer: this.answer,
         });
       }
