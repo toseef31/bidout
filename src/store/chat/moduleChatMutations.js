@@ -31,6 +31,14 @@ export default {
     state.openChatFlag = true;
     state.conversations = sortedConversation;
   },
+  setAllConversations(state, payload) {
+    const existingConversations = state.allConversations;
+    const newConversations = payload;
+    state.allConversations = [...existingConversations, ...newConversations].filter((conv, index, self) => index === self.findIndex((c) => c._id === conv._id));
+  },
+  searchIncrement(state) {
+    state.searchPage += 1;
+  },
   setNoMoreConversation(state, payload) {
     state.noConversation = payload;
   },
@@ -99,9 +107,6 @@ export default {
     state.conversations.splice(index, 1);
   },
   INCREMENT_PAGE(state) {
-    console.log('before satte', state.page);
-
     state.page += 1;
-    console.log('after satte', state.page);
   }
 };

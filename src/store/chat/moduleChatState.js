@@ -1,6 +1,7 @@
 export default {
   unreadCount: 0,
   conversations: [],
+  allConversations: [],
   bidConversations: null,
   messages: null,
   messageSend: null,
@@ -22,4 +23,5 @@ export default {
   page: 1,
   unsortedConv: [],
   openChatFlag: false,
+  searchPage: 1,
 };

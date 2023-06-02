@@ -411,7 +411,8 @@ export default {
       'lastMessageRead',
       'archiveChat',
       'removeConvUser',
-      'getAllConversations'
+      'getAllConversations',
+      'getAllConversationsSearch',
     ]),
     openChat(group, name, id) {
       if (screen.width < 767) {
@@ -599,6 +600,7 @@ export default {
   },
   async created() {
     this.user = this.$store.getters.userInfo;
+    await this.getAllConversationsSearch(this.user.id);
     // await this.getAllConversations({id: this.user.id, page: 1, limit: 10});
   },
   beforeMount() {},

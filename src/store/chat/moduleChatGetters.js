@@ -50,7 +50,10 @@ export default {
   noConversation(state) {
     return state.noConversation;
   },
-  openChatFlag(state){
+  openChatFlag(state) {
     return state.openChatFlag;
-  }
+  },
+  allConversations(state) {
+    return state.allConversations;
+  },
 };

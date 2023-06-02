@@ -29,16 +29,36 @@ export default {
         console.log(err);
       });
   },
-  getAllConversationsLoadMore({ commit, state }, payload) {
+  getAllConversationsLoadMore({ commit, state, dispatch }, payload) {
     return new Promise((resolve, reject) => {
       axios
         .get(`/chat/getConversations/${payload.id}?page=${payload.page}&limit=10`)
         .then((responce) => {
+          dispatch('getAllConversationsSearch', payload.id);
           resolve(responce.data.conversations);
         }).catch((err) => {
           console.log(err);
         });
     });
+  },
+  getAllConversationsSearch({ commit, state, rootState, dispatch }, payload) {
+    axios
+      .get(`/chat/getConversations/${payload}?page=${state.searchPage}&limit=10`)
+      .then((responce) => {
+        if (responce.status === 200) {
+          if (responce.data.conversations.length > 0) {
+            commit('searchIncrement');
+            commit('setAllConversations', responce.data.conversations);
+            dispatch('getAllConversationsSearch', rootState.auth.userInfo.id);
+          }
+          if (state.chatRefreshToken !== 1) {
+            commit('setPageLoader', false);
+          }
+        }
+      })
+      .catch((err) => {
+        console.log(err);
+      });
   },
   async getBidAllConversations({ commit, state }, payload) {
     await axios
