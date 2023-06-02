@@ -311,7 +311,7 @@ export default {
     }
   },
   beforeMount() {
-    
+    this.$store.commit('setsearchConv', '');
   },
   updated() {
     
