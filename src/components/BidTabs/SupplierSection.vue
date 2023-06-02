@@ -141,7 +141,7 @@
             <div class="companies-list">
               <div>
                 <div class="d-flex align-center justify-space-between list-company pa-4"
-                  v-for="(company, index) in companiesList" v-if="user.company._id != company._id" :key="index">
+                  v-for="(company, index) in companiesList" v-if="user.company._id !== company._id" :key="index">
                   <div class="comapny-data d-flex align-center">
                     <div class="company-img">
                       <img v-if="company.image" class="image-class" :src="company.image" />
@@ -413,9 +413,6 @@ export default {
   },
   computed: {
     ...mapGetters(['newSupplier', 'userInfo', 'loadingInvite', 'isEditBidChanges']),
-    allcategories() {
-      return _.orderBy(this.$store.getters.categories, 'orderNumber', 'asc');
-    },
     sortedCategories() {
       const categories = [...this.$store.getters.categories];
       categories.sort((a, b) => a.category.orderNumber - b.category.orderNumber);
