@@ -141,27 +141,31 @@ export default {
         commit('setBidViewData', res.data);
         commit('setViewBidError', false);
         commit('setUserType', res.data.user_type);
-        commit('setTeamMembersForBid', []);
-        if (res.data.user_type === 'buyer') {
-          await dispatch('getSalesReps', { query: '', basin: 'all' });
-          await dispatch('getCategories');
-          await dispatch('searchByCompany', { query: '', basin: 'all' });
-
-          await dispatch('getTeamMembers', payload.company._id);
-
-          commit('setInvitedSuppliersData', res.data.bidData.invitedSuppliers);
-
-          commit('setInvitedNewSuppliers', res.data.bidData.invitedNewSuppliers);
-
-          commit('setTeamMembersForBid', res.data.bidData.invitedTeamMembers);
+ 
+        if (payload.type !== 'update-date') {
+          commit('setTeamMembersForBid', []);
+          if (res.data.user_type === 'buyer') {
+            await dispatch('getSalesReps', { query: '', basin: 'all' });
+            await dispatch('getCategories');
+            await dispatch('searchByCompany', { query: '', basin: 'all' });
+  
+            await dispatch('getTeamMembers', payload.company._id);
+  
+            commit('setInvitedSuppliersData', res.data.bidData.invitedSuppliers);
+  
+            commit('setInvitedNewSuppliers', res.data.bidData.invitedNewSuppliers);
+  
+            commit('setTeamMembersForBid', res.data.bidData.invitedTeamMembers);
+          }
+  
+          if (res.data.user_type === 'supplier' && res.data.supplierSubmissions) {
+            commit('setSupplierBid', res.data.supplierSubmissions);
+            commit('setIsBidSubmitted', true);
+          } else {
+            commit('setIsBidSubmitted', false);
+          }
         }
-
-        if (res.data.user_type === 'supplier' && res.data.supplierSubmissions) {
-          commit('setSupplierBid', res.data.supplierSubmissions);
-          commit('setIsBidSubmitted', true);
-        } else {
-          commit('setIsBidSubmitted', false);
-        }
+      
         commit('setPageLoader', false);
       } else {
         commit('setPageLoader', false);
