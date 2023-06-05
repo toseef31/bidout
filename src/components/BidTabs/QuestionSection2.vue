@@ -565,18 +565,18 @@ export default {
       this.$store.commit('setIsEditBidChanges',true);
       this.questionStatus = true;
     },
-    updateQuestion() {
+    async updateQuestion() {
       this.loading = true;
       if(this.$route.name == 'EditBid'){
         if(this.isEditBidChanges == true){
-          this.updateBid({ questions: this.categories });
+          await this.updateBid({ questions: this.categories });
         }
         this.loading = false;
       }else if(this.$route.name == 'EditTemplate'){
-        this.updateTemplate({ questions: this.categories });
+        await this.updateTemplate({ questions: this.categories });
         this.loading = false;
       }else{
-        this.updateDraftBid({ questions: this.categories });
+        await this.updateDraftBid({ questions: this.categories });
         this.loading = false;
       }
       

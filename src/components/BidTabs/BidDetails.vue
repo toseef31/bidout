@@ -95,7 +95,7 @@
           <v-row justify="center">
             <v-col cols="12">
               <v-btn color="#0D9648" height="56" class="text-capitalize white--text font-weight-bold save-btn px-9"
-                :loading="saveBidLoading" :disabled="!enableSaveButton" @click="changeTab" large>Save Changes</v-btn>
+                :loading="saveBidLoading" :disabled="!enableSaveButton || saveBidLoading" @click="changeTab" large>Save Changes</v-btn>
             </v-col>
           </v-row>
           <template v-if="route != 'EditTemplate'">

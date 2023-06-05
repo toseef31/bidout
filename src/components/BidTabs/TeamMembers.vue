@@ -121,6 +121,8 @@
           large
           class="white--text text-capitalize font-weight-bold mt-6 mb-5 save-btn"
           @click="changeTab"
+          :loading="saveBidLoading" 
+          :disabled="saveBidLoading"
           >Save Changes</v-btn
         >
       </v-col>
@@ -143,7 +145,7 @@ export default {
     };
   },
   computed: {
-    ...mapGetters(['isEditBidChanges']),
+    ...mapGetters(['isEditBidChanges','saveBidLoading']),
     teamMembers() {
       if (this.$store.getters.bidData != null) {
         if (this.$route.name === 'EditBid') {
@@ -241,15 +243,15 @@ export default {
       'updateTemplate',
       'updateBid',
     ]),
-    changeTab() {
+    async changeTab() {
       if (this.$route.name === 'EditBid') {
         if (this.isEditBidChanges == true) {
-          this.updateBid({ invitedTeamMembers: this.membersAdded });
+          await this.updateBid({ invitedTeamMembers: this.membersAdded });
         }
       } else if (this.$route.name === 'EditTemplate') {
-        this.updateTemplate({ invitedTeamMembers: this.membersAdded });
+        await this.updateTemplate({ invitedTeamMembers: this.membersAdded });
       } else {
-        this.updateDraftBid({ invitedTeamMembers: this.membersAdded });
+        await this.updateDraftBid({ invitedTeamMembers: this.membersAdded });
       }
       this.$emit('changetab', 'tab-4');
     },

@@ -108,7 +108,7 @@
     <v-row justify="center" align="center" no-gutters class="my-12">
       <v-col cols="12">
         <v-btn color="#0D9648" elevation="0" class="white--text text-capitalize font-weight-bold save-btn py-4 px-9" large
-          height="56px" @click="changeTab">Save Changes</v-btn>
+          height="56px" :disabled="saveBidLoading" :loading="saveBidLoading" @click="changeTab">Save Changes</v-btn>
       </v-col>
     </v-row>
   </div>
@@ -164,7 +164,7 @@ export default {
     };
   },
   computed: {
-    ...mapGetters(['isEditBidChanges']),
+    ...mapGetters(['isEditBidChanges','saveBidLoading']),
     draggingInfo() {
       return this.dragging ? 'under drag' : '';
     },
@@ -205,15 +205,15 @@ export default {
   },
   methods: {
     ...mapActions(['updateDraftBid', 'updateTemplate', 'updateBid']),
-    changeTab() {
+    async changeTab() {
       if (this.$route.name === 'EditBid') {
         if (this.isEditBidChanges === true) {
-          this.updateBid({ bidlines: this.bidLines });
+          await this.updateBid({ bidlines: this.bidLines });
         }
       } else if (this.$route.name === 'EditTemplate') {
-        this.updateTemplate({ bidlines: this.bidLines });
+        await this.updateTemplate({ bidlines: this.bidLines });
       } else {
-        this.updateDraftBid({ bidlines: this.bidLines });
+        await this.updateDraftBid({ bidlines: this.bidLines });
       }
       this.$emit('changetab', 'tab-5');
     },

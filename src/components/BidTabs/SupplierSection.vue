@@ -349,6 +349,8 @@
           </v-card>
         </v-dialog>
         <v-btn color="#0D9648" elevation="0" height="56px" width="220px" large
+        :loading="saveBidLoading" 
+        :disabled="saveBidLoading"
           class="white--text text-capitalize font-weight-bold mt-5 mb-5 save-btn" @click="changeTab">Save
           Changes</v-btn>
       </v-col>
@@ -412,7 +414,7 @@ export default {
     };
   },
   computed: {
-    ...mapGetters(['newSupplier', 'userInfo', 'loadingInvite', 'isEditBidChanges']),
+    ...mapGetters(['newSupplier', 'userInfo', 'loadingInvite', 'isEditBidChanges','saveBidLoading']),
     sortedCategories() {
       const categories = [...this.$store.getters.categories];
       categories.sort((a, b) => a.category.orderNumber - b.category.orderNumber);
@@ -515,16 +517,17 @@ export default {
   },
   methods: {
     ...mapActions(['getCategories', 'getSalesReps', 'getCompanyInfo', 'searchByCompany', 'getCompanyByServices', 'saveDraftBid', 'inviteNewSupplier', 'updateDraftBid', 'updateTemplate', 'updateBid', 'checkEmail']),
-    changeTab() {
+    async changeTab() {
       if (this.$route.name == 'EditBid') {
         if (this.isEditBidChanges == true) {
-          this.updateBid({ invitedSuppliers: this.repsInvited });
+          await this.updateBid({ invitedSuppliers: this.repsInvited });
         }
       } else if (this.$route.name == 'EditTemplate') {
-        this.updateTemplate({ invitedSuppliers: this.repsInvited });
+        await this.updateTemplate({ invitedSuppliers: this.repsInvited });
       } else {
-        this.updateDraftBid({ invitedSuppliers: this.repsInvited });
+        await this.updateDraftBid({ invitedSuppliers: this.repsInvited });
       }
+
       this.$emit('changetab', 'tab-3');
     },
     onUpdate(payload) {
