@@ -12,16 +12,48 @@ export default {
       });
   },
   getAllConversations({ commit, state }, payload) {
-    if (state.chatRefreshToken != 1) {
+    if (state.chatRefreshToken !== 1) {
       commit('setPageLoader', true);
     }
     axios
-      .get(`/chat/getConversations/${payload}`)
+      .get(`/chat/getConversations/${payload.id}?page=${state.page}&limit=10`)
       .then((responce) => {
-
-        commit('setConverstaionList', responce.data.conversations);
-        if (state.chatRefreshToken != 1) {
-          commit('setPageLoader', false);
+        if (responce.status === 200) {
+          commit('addConverstaionList', responce.data.conversations);
+          if (state.chatRefreshToken !== 1) {
+            commit('setPageLoader', false);
+          }
+        }
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  },
+  getAllConversationsLoadMore({ commit, state, dispatch }, payload) {
+    return new Promise((resolve, reject) => {
+      axios
+        .get(`/chat/getConversations/${payload.id}?page=${payload.page}&limit=10`)
+        .then((responce) => {
+          dispatch('getAllConversationsSearch', payload.id);
+          resolve(responce.data.conversations);
+        }).catch((err) => {
+          console.log(err);
+        });
+    });
+  },
+  getAllConversationsSearch({ commit, state, rootState, dispatch }, payload) {
+    axios
+      .get(`/chat/getConversations/${payload}?page=${state.searchPage}&limit=10`)
+      .then((responce) => {
+        if (responce.status === 200) {
+          if (responce.data.conversations.length > 0) {
+            commit('searchIncrement');
+            commit('setAllConversations', responce.data.conversations);
+            dispatch('getAllConversationsSearch', rootState.auth.userInfo.id);
+          }
+          if (state.chatRefreshToken !== 1) {
+            commit('setPageLoader', false);
+          }
         }
       })
       .catch((err) => {
@@ -195,7 +227,13 @@ export default {
       .then((responce) => {
         commit('setChatRefreshToken', 1);
         dispatch('getArchiveChats', payload.userId);
-        dispatch('getAllConversations', rootState.auth.userInfo.id);
+        const obj = {
+          id: rootState.auth.userInfo.id,
+          page: 1,
+        }
+        dispatch('getAllConversations', obj);
+        
+        // dispatch('getAllConversationsLoadMore', obj);
       })
       .catch((err) => {
         console.log(err);

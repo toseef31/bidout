@@ -1,9 +1,46 @@
+import _ from 'lodash';
+
 export default {
   setUnreadCount(state, payload) {
     state.unreadCount = payload;
   },
   setConverstaionList(state, payload) {
-    state.conversations = payload;
+    const existingConversations = state.conversations;
+    const newConversations = payload;
+    const mergedConversations = [...existingConversations, ...newConversations].filter((conv, index, self) => index === self.findIndex((c) => c._id === conv._id));
+    const unsortedConversations = mergedConversations;
+    unsortedConversations.forEach((msg, index) => {
+      if (!msg.latestMessage) {
+        unsortedConversations[index].latestMessage = msg.createdAt; // add the new field
+      }
+    });
+    const sortedConversation = unsortedConversations.sort((a, b) => new Date(b.latestMessage) - new Date(a.latestMessage));
+    state.conversations = sortedConversation;
+  },
+  addConverstaionList(state, payload) {
+    const existingConversations = state.conversations;
+    const newConversations = payload;
+    const mergedConversations = [...existingConversations, ...newConversations].filter((conv, index, self) => index === self.findIndex((c) => c._id === conv._id));
+    const unsortedConversations = mergedConversations;
+    unsortedConversations.forEach((msg, index) => {
+      if (!msg.latestMessage) {
+        unsortedConversations[index].latestMessage = msg.createdAt; // add the new field
+      }
+    });
+    const sortedConversation = unsortedConversations.sort((a, b) => new Date(b.latestMessage) - new Date(a.latestMessage));
+    state.openChatFlag = true;
+    state.conversations = sortedConversation;
+  },
+  setAllConversations(state, payload) {
+    const existingConversations = state.allConversations;
+    const newConversations = payload;
+    state.allConversations = [...existingConversations, ...newConversations].filter((conv, index, self) => index === self.findIndex((c) => c._id === conv._id));
+  },
+  searchIncrement(state) {
+    state.searchPage += 1;
+  },
+  setNoMoreConversation(state, payload) {
+    state.noConversation = payload;
   },
   setBidConversationList(state, payload) {
     state.bidConversations = payload;
@@ -59,14 +96,17 @@ export default {
       state.supplierBroadcastError = false;
     }, 5000);
   },
-  setsearchConv(state,payload){
+  setsearchConv(state, payload) {
     state.searchConv = payload;
   },
-  setChatRefreshToken(state,payload){
+  setChatRefreshToken(state, payload) {
     state.chatRefreshToken = payload;
   },
-  setSpliceToConversation(state,id){
+  setSpliceToConversation(state, id) {
     const index = state.conversations.findIndex(item => item._id === id);
     state.conversations.splice(index, 1);
+  },
+  INCREMENT_PAGE(state) {
+    state.page += 1;
   }
 };
