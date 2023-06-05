@@ -14,7 +14,7 @@
     <v-tabs-items v-model="convTab">
       <v-tab-item>
         <v-list two-line  class="py-0">
-          <v-list-item-group
+          <v-list-item-group 
             v-model="selectedUser"
             active-class="grey--text">
             <template v-for="(conversation, index) in conversationsList">
@@ -70,6 +70,9 @@
                 :key="index"
               ></v-divider>
             </template>
+            <infinite-loading @infinite="loadMore">
+              <div slot="no-more"></div>
+            </infinite-loading>
           </v-list-item-group>
         </v-list>
       </v-tab-item>
@@ -148,9 +151,14 @@
 import _ from 'lodash';
 import VueMoment from 'vue-moment';
 import moment from 'moment-timezone';
-import { mapActions } from 'vuex';
+import { mapActions, mapState, mapGetters } from 'vuex';
+import InfiniteLoading from 'vue-infinite-loading';
+import axios from 'axios';
 
 export default {
+  components: {
+    InfiniteLoading,
+  },
   props: ['searchUser','conversationsIds'],
   data() {
     return {
@@ -167,22 +175,19 @@ export default {
       conversationId: '',
       backArrow: false,
       loading: true,
+      page: 1,
+      list: [],
     };
   },
   computed: {
+    ...mapGetters(['noConversation']),
     conversationsList() {
       if (this.$store.state.chat.searchConv != '') {
-        return _.orderBy(this.$store.getters.conversations.filter((item) => this.$store.state.chat.searchConv.toLowerCase().split(' ').every((v) => item.company.toLowerCase().includes(v))), 'latestMessage', 'desc');
-      }else{
-        if(this.$store.getters.conversations){
+        return _.orderBy(this.$store.getters.allConversations.filter((item) => this.$store.state.chat.searchConv.toLowerCase().split(' ').every((v) => item.company.toLowerCase().includes(v))), 'latestMessage', 'desc');
+      } else {
+        if (this.$store.getters.conversations) {
           this.$store.commit('setPageLoader', false);
-          let newArr = this.$store.getters.conversations;
-        newArr.forEach((msg, index) => {
-          if(!msg.latestMessage){
-            msg.latestMessage = msg.createdAt; // add the new field
-          }
-        })
-        return _.orderBy(newArr,'latestMessage', 'desc');
+          return this.$store.getters.conversations;
         }else{
           this.$store.commit('setPageLoader', true);
         }
@@ -192,16 +197,51 @@ export default {
     archiveList() {
       return this.$store.getters.archiveList;
     },
-    loader() {
+    loaderPage() {
       return this.$store.getters.pageLoader;
     },
   },
+  watch: {
+    conversationsList: {
+      immediate: true,
+      handler(conversations) {
+        if (conversations.length > 0) {
+          const group = conversations[0];
+          const name = conversations[0].groupName;
+          const obj = {
+            group,
+            name,
+          };
+          this.conversationId = group._id;
+          this.chatData = obj;
+          this.openChat(group, name);
+        }
+      }
+    },
+  },
   methods: {
-    ...mapActions(['getAllConversations', 'getAllMessages', 'lastMessageRead', 'getArchiveChats', 'unArchiveConversation']),
+    ...mapActions(['getAllConversations', 'getAllConversationsLoadMore', 'getAllMessages', 'lastMessageRead', 'getArchiveChats', 'unArchiveConversation']),
     getConversations(id) {
-      this.getAllConversations(id);
+      this.getAllConversations({id :id, page: this.page});
+    },
+    loadMore($state) {
+      this.getAllConversationsLoadMore({id: this.user.id, page: this.page})
+        .then(( data ) => {
+          if (data.length) {
+            this.page += 1;
+            this.$store.commit('addConverstaionList', data);
+            $state.loaded();
+            // this.$store.commit('INCREMENT_PAGE');
+          } else {
+            $state.complete();
+          }
+        })
+        .catch(() => {
+          $state.complete();
+        });
     },
     openChat(group, name) {
+      this.$store.state.openChatFlag = false;
       if (screen.width < 767) {
         this.userList = false;
         this.showMsgBlock = true;
@@ -271,7 +311,7 @@ export default {
     }
   },
   beforeMount() {
-    
+    this.$store.commit('setsearchConv', '');
   },
   updated() {
     

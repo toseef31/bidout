@@ -47,4 +47,13 @@ export default {
   showSupplierBroadcastError(state) {
     return state.supplierBroadcastError;
   },
+  noConversation(state) {
+    return state.noConversation;
+  },
+  openChatFlag(state) {
+    return state.openChatFlag;
+  },
+  allConversations(state) {
+    return state.allConversations;
+  },
 };

@@ -298,8 +298,7 @@
 
             <v-card-text>
               <h2 class="text-left mb-6 font-weight-bold">Invite New Supplier</h2>
-              <v-form ref="form" v-model="valid" lazy-validation
-                :class="{ 'phone-error-class': !getPhoneInfo.valid && getCounter > 1, 'phone-valid-class': getPhoneInfo.valid }">
+              <v-form ref="form" v-model="valid" lazy-validation>
                 <label class="d-block text-left font-weight-bold mb-2">First Name<span
                     class="required-class">*</span></label>
                 <v-text-field v-model="firstName" :rules="nameRules" placeholder="First Name" required
@@ -314,30 +313,20 @@
                   outlined></v-text-field>
                 <label class="d-block text-left font-weight-bold mb-2">Phone Number<span
                     class="required-class">*</span></label>
-                <!-- <vue-tel-input @blur="onBlurS" defaultCountry="US" :autoDefaultCountry="false" :autoFormat="false"
-                  :dropdownOptions="{
-                    showDialCodeInSelection: true,
-                    showFlags: true,
-                    width: 'max-content'
-                  }" :inputOptions="{
-  required: true,
-  showDialCode: false,
-  maxlength: 15,
-  placeholder: 'Phone number',
 
-}" model="national" :validCharactersOnly="true" :styleClasses="{ 'phone-main-class': true }"
-                  v-model="phoneNumber" @validate="onUpdate"></vue-tel-input> -->
-                <VuePhoneNumberInput default-country-code="US" :border-radius="0" size="lg" :required="true" clearable
-                  :error="!getPhoneInfo.valid" v-model="phoneNumber" 
-                  error-color="#FF0000" valid-color="#9E9E9E"
-                  :translations="translations" class="mb-2"
+                <VuePhoneNumberInput @phone-number-blur="onBlurS" default-country-code="US" :border-radius="0" size="lg"
+                  :required="true" clearable :error="!getPhoneInfo.valid && getCounter >= 1" v-model="phoneNumber"
+                  error-color="#FF0000" valid-color="#9E9E9E" :translations="translations" class="mb-2"
                   @update="onUpdate" />
-                <div class="phone-class" v-if="!getPhoneInfo.valid && getCounter > 1">
+                <div class="phone-class" v-if="!getPhoneInfo.valid && getCounter >= 1">
                   {{ getPhoneInfo.message }}</div>
-                <label class="d-block text-left font-weight-bold mb-2 mt-6">Email<span
-                    class="required-class">*</span></label>
-                <v-text-field v-model="email" :rules="emailRules" @input="checkEmailI" @keypress="removeSpace($event)"
-                  placeholder="example@email.com" required outlined :class="{ 'error--text': emailError }">
+                <label class="d-block text-left font-weight-bold mb-2 " :class="{
+                  ' mt-2': !getPhoneInfo.valid && getCounter >= 1,
+                  'mt-6': getPhoneInfo.valid
+                }">Email<span class="required-class">*</span></label>
+                <v-text-field v-model="email" :rules="emailRules" @input="checkEmailI"
+                  @keypress="removeSpace($event)" placeholder="example@email.com" required outlined
+                  :class="{ 'error--text': emailError }">
                   <template v-slot:append>
 
                     <v-progress-circular v-if="getEmailLoading" indeterminate :size="20" :width="2"
@@ -363,8 +352,8 @@
             </v-card-text>
           </v-card>
         </v-dialog>
-        <v-btn color="#0D9648" elevation="0" :loading="getSupplierLoading" :disabled="getSupplierLoading" height="56px"
-          width="220px" large class="white--text text-capitalize font-weight-bold mt-5 mb-5 save-btn"
+        <v-btn color="#0D9648" elevation="0" :loading="getSupplierLoading" :disabled="getSupplierLoading"
+          height="56px" width="220px" large class="white--text text-capitalize font-weight-bold mt-5 mb-5 save-btn"
           @click="saveSuppliers">Save
           Changes</v-btn>
       </div>
@@ -606,17 +595,19 @@ export default {
       this.counter++;
       this.phoneInfo.valid = payload.isValid;
 
-      if (payload.formattedNumber && !payload.isValid) {
-        this.phoneInfo.message = 'Invalid Phone number format';
-      }
-
-      if (!payload.formattedNumber && !payload.isValid) {
+      if (!payload) {
         this.phoneInfo.message = 'Phone number is required';
-      }
+      } else if (payload.phoneNumber && payload.phoneNumber !== '' && payload.phoneNumber.length >= 1) {
+        if (!payload.isValid) {
+          this.phoneInfo.message = 'Invalid Phone number format';
+        }
 
-      if (payload.formattedNumber && payload.isValid) {
-        this.phoneNumber = payload.formattedNumber;
-        this.results = payload.formattedNumber;
+        if (payload.formattedNumber && payload.isValid) {
+          this.phoneNumber = payload.formattedNumber;
+          this.results = payload.formattedNumber;
+        }
+      } else {
+        this.phoneInfo.message = 'Phone number is required';
       }
     },
     async validate() {
@@ -640,7 +631,7 @@ export default {
         serial: this.bidDetail.bidData.serial,
       };
 
-      if (this.$refs.form.validate() && !this.emailError && !this.getInvitedSupplierEmailExists) {
+      if (this.getPhoneInfo.valid && this.$refs.form.validate() && !this.emailError && !this.getInvitedSupplierEmailExists) {
         try {
           const user = await this.inviteNewSupplier(supplier);
           this.supplierDialog = false;
@@ -676,17 +667,17 @@ export default {
         this.emailLoading = false;
       }
     },
-    // onBlurS() {
-    //   if (this.phoneNumber === '') {
-    //     this.phoneInfo.message = 'Phone number is required';
-    //     this.phoneInfo.valid = false;
-    //     this.counter++;
-    //   } else if (this.phoneNumber.length === 1) {
-    //     this.phoneInfo.message = 'Invalid Phone number format';
-    //     this.phoneInfo.valid = false;
-    //     this.counter++;
-    //   }
-    // },
+    onBlurS() {
+      if (this.phoneNumber === '') {
+        this.phoneInfo.message = 'Phone number is required';
+        this.phoneInfo.valid = false;
+        this.counter++;
+      } else if (this.phoneNumber !== null && this.phoneNumber.length === 1) {
+        this.phoneInfo.message = 'Invalid Phone number format';
+        this.phoneInfo.valid = false;
+        this.counter++;
+      }
+    },
     removeSpace(event) {
       const charCode = event.keyCode;
 

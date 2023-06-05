@@ -233,8 +233,12 @@ export default {
         this.hideMemberList = true;
       }
     },500),
-    searchUsers(){
-      this.$store.commit('setsearchConv', this.searchUsers);
+    searchUsers(val){
+      if(val){
+        this.$store.commit('setsearchConv', this.searchUsers);
+      }else{
+        this.$store.commit('setsearchConv', '');
+      }
     }
   },
   methods: {
