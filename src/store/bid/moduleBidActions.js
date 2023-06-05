@@ -1155,6 +1155,7 @@ export default {
     }
   },
   async saveTemplateBid({ commit, dispatch, state }, payload) {
+    commit('setSaveBidLoading', true);
     const config = {
       headers: {
         'Content-Type': 'multipart/form-data',
@@ -1193,7 +1194,9 @@ export default {
       } else {
         commit('setDraftBidsList', null);
       }
+      commit('setSaveBidLoading', false);
     } catch (err) {
+      commit('setSaveBidLoading', false);
       Sentry.captureException(err);
       if (state.apiCounter === 2) {
         dispatch('apiSignOutAction');
@@ -1234,6 +1237,7 @@ export default {
   async updateTemplate({
     commit, state, dispatch, rootState,
   }, payload) {
+    commit('setSaveBidLoading', true);
     const config = {
       headers: {
         'Content-Type': 'multipart/form-data',
@@ -1426,7 +1430,9 @@ export default {
         commit('setIsEditBidChanges', false);
         commit('setDraftTime', new Date().toLocaleString());
       }
+      commit('setSaveBidLoading', false);
     } catch (err) {
+      commit('setSaveBidLoading', false);
       Sentry.captureException(err);
       commit('setIsEditBidChanges', false);
       if (state.apiCounter === 2) {
