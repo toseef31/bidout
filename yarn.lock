@@ -3560,7 +3560,7 @@ vue-slick-carousel@^1.0.6:
     resize-observer-polyfill "1.5.1"
     vue "^2.6.10"
 
-vue-tel-input@^5.12.0:
+vue-tel-input@5.14.0:
   version "5.14.0"
   resolved "https://registry.yarnpkg.com/vue-tel-input/-/vue-tel-input-5.14.0.tgz#e9f88d61c326b2a6721fb56a8c7918cb18088fbf"
   integrity sha512-jxw3yjF/diDhswi0RrXTO7+oCcm52xZBXxbBq5vk+806I003HfMEeqntUqNtK8WG6hbWZt8B8TATVVGzTv/5uw==

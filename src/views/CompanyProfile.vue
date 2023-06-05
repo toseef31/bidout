@@ -154,11 +154,12 @@
                         >
                         <div class="subservice-cate service-cate">
                           <v-list class="px-5" :expand="true">
+                            
                             <v-list-group
-                              v-for="(category, i) in companyData.categories"
+                              v-for="(category, i) in groupingServices(companyData.companyData.services)"
                               v-if="
-                                category.subCategories &&
-                                category.subCategories.length > 0
+                                category.subcategories &&
+                                category.subcategories.length > 0
                               "
                               :value="true"
                               :key="i"
@@ -166,20 +167,20 @@
                               <template v-slot:activator>
                                 <v-list-item-content>
                                   <v-list-item-title
-                                    v-text="category.name"
+                                    v-text="category.parentCategory.name"
                                     class="text-left font-weight-bold black--text"
                                   ></v-list-item-title>
                                 </v-list-item-content>
                               </template>
                               <v-list-item
                                 min-height="30px"
-                                v-for="(subcategory, index) in category.subCategories"
+                                v-for="(subcategory, index) in category.subcategories"
                                 :key="subcategory.subid"
                               >
                                 <v-list-item-content class="py-0 pl-4">
                                   <v-list-item-title class="text-left"
                                     ><v-icon>mdi-circle-small</v-icon>
-                                    {{ subcategory.subname }}
+                                    {{ subcategory.name }}
                                     <v-icon
                                       class="ml-5"
                                       small
@@ -461,15 +462,14 @@ export default {
       if (this.$store.getters.companyData.companyData.services) {
         this.companyService = this.$store.getters.companyData.companyData.services;
       }
-      this.companyService.push(subcate._id);
-      let result = this.companyService.map((companyServ) => companyServ._id);
-      //   var result = this.companyService.reduce((unique, o) => {
-      //     if(!unique.some(obj => obj.id === o.id)) {
-      //       unique.push(o);
-      //     }
-      //     return unique;
-      // },[]);
-
+      this.companyService.push(subcate);
+      // let result = this.companyService.map((companyServ) => companyServ);
+        var result = this.companyService.reduce((unique, o) => {
+          if(!unique.some(obj => obj._id === o._id)) {
+            unique.push(o);
+          }
+          return unique;
+      },[]);
       this.addCompanyService({
         companyId: this.$store.getters.userInfo.company._id,
         subCategories: result,
@@ -482,7 +482,7 @@ export default {
         this.companyService = this.$store.getters.companyData.companyData.services;
       }
       for (var i = 0; i < this.companyService.length; i++) {
-        if (this.companyService[i].id == item.subid) {
+        if (this.companyService[i]._id == item._id) {
           this.companyService.splice(i, 1);
         }
       }
@@ -518,7 +518,23 @@ export default {
         }
       }
     },
+    groupingServices(response){
+      const groupedCategories = {};
 
+      response.forEach((subcategory) => {
+        const parentId = subcategory.serviceCategory._id;
+        
+        if (!groupedCategories[parentId]) {
+          groupedCategories[parentId] = {
+            parentCategory: subcategory.serviceCategory,
+            subcategories: []
+          };
+        }
+        groupedCategories[parentId].subcategories.push(subcategory);
+      });
+      const groupedResult = Object.values(groupedCategories);
+      return groupedResult;
+    },
     getSubCate(catId) {
       this.getSubCategories(catId);
     },
