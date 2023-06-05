@@ -239,7 +239,7 @@
                     </p>
                   </div>
                 </div>
-                <div class="add-company" v-if="checkIntent(company.objectID) !== 'intended'">
+                <div class="add-company" v-if="checkIntent(company._id) !== 'intended'">
                   <v-btn color="rgba(243, 35, 73, 0.1)" tile min-width="32px" height="32" class="pa-0" elevation="0"
                     @click="removeReps(company, index)"> <v-icon color="#F32349">mdi-minus</v-icon></v-btn>
                 </div>
@@ -760,13 +760,13 @@ export default {
     checkIntent(id) {
       let result = 'neither';
       const intent = this.getBidAllIntend;
-
+      
       if (intent && id) {
         intent.forEach((el) => {
-          if (el.company === id && el.answer === 'true') {
+          if (el.company === id && (el.answer === 'true' || el.answer === true)) {
             result = 'intended';
           }
-          if (el.company === id && el.answer === 'false') {
+          if (el.company === id && (el.answer === 'false' || el.answer === false)) {
             result = 'not-intended';
           }
         });

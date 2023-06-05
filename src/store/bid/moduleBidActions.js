@@ -221,7 +221,7 @@ export default {
       if (res.status === 200) {
         if (res.data) {
           commit('setBidIntent', res.data.answer);
-          commit('setIntentId', res.data.id);
+          commit('setIntentId', res.data._id);
         } else {
           commit('setBidIntent', null);
         }
