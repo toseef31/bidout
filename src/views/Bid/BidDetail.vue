@@ -1146,8 +1146,7 @@ export default {
         companyId: this.users.company._id,
         bidId: this.bidDetail.bidData._id,
       });
-
-      this.answer = this.$store.getters.bidIntent;
+      this.answer = `${this.$store.getters.bidIntent}`;
     } else {
       await this.getAllIntent({
         bidId: this.bidDetail.bidData._id,
