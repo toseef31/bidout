@@ -126,7 +126,7 @@
                   :rules="item.required === 'true' ? answerRule : []"
                   v-if="(item.questionType === 'checkbox' && item.options)">
                   <v-radio :label="item.options[selectIndex].label" :value="item.options[selectIndex].label"
-                    color="#0d9648" checked v-for="(select, selectIndex) in item.options" :key="select.id"></v-radio>
+                    color="#0d9648" checked v-for="(select, selectIndex) in item.options" :key="select._id"></v-radio>
                 </v-radio-group>
 
                 <v-text-field v-if="item.questionType === 'textfield'" :rules="item.required === 'true' ? answerRule : []"
@@ -316,7 +316,6 @@ export default {
   data() {
     return {
       lineItems: [],
-      intent: 'true',
       loading: false,
       dialog: false,
       dialogT: [],
@@ -521,9 +520,9 @@ export default {
         const answersA = this.answers;
 
         await this.submitBid({
-          userId: this.user.id,
-          companyId: this.user.company.id,
-          bidId: this.bidDetail.bidData.id,
+          userId: this.user._id,
+          companyId: this.user.company._id,
+          bidId: this.bidDetail.bidData._id,
           supplierNote: this.supplierNote,
           supplierAttachments: this.supplierDocList,
           lineItems: lineItemsA,
@@ -547,14 +546,14 @@ export default {
         const lineItemsA = this.lineItems;
 
         await this.editSubmitBid({
-          userId: this.user.id,
-          companyId: this.user.company.id,
-          bidId: this.bidDetail.bidData.id,
+          userId: this.user._id,
+          companyId: this.user.company._id,
+          bidId: this.bidDetail.bidData._id,
           supplierNote: this.supplierNote,
           supplierAttachments: this.supplierDocList,
           lineItems: lineItemsA,
           answers: this.answers,
-          submitBidId: this.getSupplierBid.id,
+          submitBidId: this.getSupplierBid._id,
           serial: this.$route.params.serial,
         });
 
@@ -608,7 +607,7 @@ export default {
         this.lineItems.push({
           price: null,
           bid: true,
-          id: bidData.lineItems[i].id,
+          id: bidData.lineItems[i]._id,
           quantity: bidData.lineItems[i].quantity,
           required: bidData.lineItems[i].required,
         });
@@ -621,7 +620,7 @@ export default {
 
       for (let i = 0; i < bidData.questions.length; i++) {
         this.answers.push({
-          questionId: bidData.questions[i].id,
+          questionId: bidData.questions[i]._id,
           answer: null,
           category: bidData.questions[i].type,
         });
@@ -639,7 +638,7 @@ export default {
         this.lineItems.push({
           price: updatePrice,
           bid: this.getSupplierBid.lineItems[i].price !== 'NO_BID',
-          id: this.getSupplierBid.lineItems[i].id,
+          id: this.getSupplierBid.lineItems[i]._id,
           quantity: this.getSupplierBid.lineItems[i].Qty,
           required: this.getSupplierBid.lineItems[i].required,
         });
@@ -682,7 +681,7 @@ export default {
           }
         } else {
           this.answers.push({
-            questionId: bidData.questions[i].id,
+            questionId: bidData.questions[i]._id,
             answer: null,
             category: bidData.questions[i].type,
           });
@@ -738,7 +737,7 @@ export default {
                   minimumFractionDigits: 2, maximumFractionDigits: 2,
                 }) : '',
                 bid: data[i].Price !== 'NO_BID',
-                id: this.bidDetail.bidData.lineItems[i].id,
+                id: this.bidDetail.bidData.lineItems[i]._id,
                 quantity: this.bidDetail.bidData.lineItems[i].quantity,
                 required: this.bidDetail.bidData.lineItems[i].required,
               });
