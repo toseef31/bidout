@@ -34,7 +34,7 @@
         <div class="bid-headline"
           v-if="bidDetail.bidData && bidDetail.bidData.bidDescriptions && Array.isArray(bidDetail.bidData.bidDescriptions)"
           v-for="(item, index) in bidDetail.bidData.bidDescriptions.slice(1)" :key="index">
-          <span class="additional-title">{{ item && item.name }}:</span>
+          <span class="additional-title">{{ item && item.title }}:</span>
           <div class="font-weight-regular ql-editor pa-0" v-html="item && item.body"></div>
           <br>
       </div>
@@ -56,7 +56,7 @@
               <v-icon size="40">mdi-domain</v-icon>
             </div>
             <div class="ml-5">
-              <div class="font-weight-bold">{{ item && item.company }}
+              <div class="font-weight-bold">{{ item && item.companyName ? item.companyName : item.company }}
                 <span v-if="hasOfsPremium(item)">
                   <v-tooltip top>
                     <template v-slot:activator="{ on, attrs }">
@@ -113,12 +113,12 @@
                       v-if="getCompanyIntend(item._id) === 'neither'">mdi-circle-outline</v-icon>
                   </template>
 
-                  <span v-if="getCompanyIntend(item._id) === 'not-intended'">{{ item && item.company }} does not intend to
+                  <span v-if="getCompanyIntend(item._id) === 'not-intended'">{{ item && item.companyName ? item.companyName : item.company }} does not intend to
                     submit a bid</span>
-                  <span v-if="getCompanyIntend(item._id) === 'intended'">{{ item && item.company }} does intend to submit
+                  <span v-if="getCompanyIntend(item._id) === 'intended'">{{ item && item.companyName ? item.companyName : item.company }} does intend to submit
                     a
                     bid</span>
-                  <span v-if="getCompanyIntend(item._id) === 'neither'">{{ item && item.company }} has not indicated if
+                  <span v-if="getCompanyIntend(item._id) === 'neither'">{{ item && item.companyName ? item.companyName : item.company }} has not indicated if
                     they intend to submit a bid</span>
 
                 </v-tooltip>
@@ -137,12 +137,12 @@
                   </template>
                   <span v-if="getSubmissionStatus(item._id) === 'sent' && getCompanyIntend(item._id) !== 'not-intended'">{{
                     item
-                    && item.company }} has sent Bid Submissions</span>
+                    && item.companyName ? item.companyName : item.company }} has sent Bid Submissions</span>
                   <span
                     v-if="getSubmissionStatus(item._id) === 'not-sent' && getCompanyIntend(item._id) !== 'not-intended'">{{
                       item
-                      && item.company }} has not sent Bid Submissions yet</span>
-                  <span v-if="getCompanyIntend(item._id) === 'not-intended'">{{ item && item.company }} doesn't want to
+                      && item.companyName ? item.companyName : item.company }} has not sent Bid Submissions yet</span>
+                  <span v-if="getCompanyIntend(item._id) === 'not-intended'">{{ item && item.companyName ? item.companyName : item.company }} doesn't want to
                     sent Bid Submissions</span>
                 </v-tooltip>
               </v-col>
@@ -372,7 +372,7 @@ export default {
 
       if (supplierViews && id) {
         supplierViews.forEach((el) => {
-          if (el.id === id) {
+          if (el._id === id) {
             number = el.views;
           }
         });
@@ -385,10 +385,10 @@ export default {
 
       if (intent && id) {
         intent.forEach((el) => {
-          if (el.companyId === id && el.answer === 'true') {
+          if (el.company === id && el.answer === true) {
             result = 'intended';
           }
-          if (el.companyId === id && el.answer === 'false') {
+          if (el.company === id && el.answer === false) {
             result = 'not-intended';
           }
         });
@@ -402,7 +402,7 @@ export default {
 
       if (supplierSubmissions.length) {
         supplierSubmissions.forEach((el) => {
-          if (el.companyId === id) {
+          if (el.company === id) {
             result = 'sent';
           }
         });
@@ -419,7 +419,7 @@ export default {
       let active = false;
       if (invitedSuppliers.length) {
         invitedSuppliers.forEach((el) => {
-          if (el && el.id === id) {
+          if (el && el._id === id) {
             active = true;
           }
         });
@@ -433,7 +433,7 @@ export default {
       let inActive = false;
       if (invitedNewSuppliers.length) {
         invitedNewSuppliers.forEach((el) => {
-          if (el && el.id === id) {
+          if (el && el._id === id) {
             inActive = true;
           }
         });
