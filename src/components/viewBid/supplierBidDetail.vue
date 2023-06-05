@@ -43,12 +43,12 @@
 
         <v-row>
           <v-col md="2" class="text-right mr-1 title-desc">Region:</v-col>
-          <v-col class="title-brief">{{ bidDetail.bidData.regions }}</v-col>
+          <v-col class="title-brief">{{ bidDetail.bidData.region }}</v-col>
         </v-row>
 
         <v-row>
           <v-col md="2" class="text-right mr-1 title-desc">Q&A:</v-col>
-          <v-col class="title-brief">{{ bidDetail.bidData.qAndAEnabled === 'true' ? "Yes" : "No" }}</v-col>
+          <v-col class="title-brief">{{ bidDetail.bidData.qAndAEnabled === true ? "Yes" : "No" }}</v-col>
         </v-row>
         <br />
         <v-row>
@@ -64,7 +64,7 @@
         <v-row
           v-if="bidDetail.bidData && bidDetail.bidData.bidDescriptions && Array.isArray(bidDetail.bidData.bidDescriptions)"
           v-for="(item, index) in bidDetail.bidData.bidDescriptions.slice(1)" :key="index">
-          <v-col md="2" class="text-right mr-1 title-desc">{{ item && item.name }}:</v-col>
+          <v-col md="2" class="text-right mr-1 title-desc">{{ item && item.title }}:</v-col>
           <v-col class="title-brief bid-desc supplier-desc"> 
             <div class="ql-editor pa-0" v-html="item && item.body"></div>
           </v-col>
@@ -201,7 +201,7 @@
                   <span>{{ doc.comment !== 'undefined' ? doc.comment : '' }}</span>
                 </td>
                 <td class="text-left">{{ size(doc.fileSize) }}</td>
-                <td class="text-left">{{ doc.uploadedBy }}</td>
+                <td class="text-left">{{ `${doc.uploadedBy.firstName} ${doc.uploadedBy.lastName}` }}</td>
                 <td class="text-left">
                   {{ doc.uploadedAt | moment("MM/DD/YYYY") }}
                 </td>
@@ -230,7 +230,7 @@
             <v-col md="6" class="first-child" v-if="item.type === 'question'">{{
               item.title
             }}</v-col>
-            <div class="second-child ml-auto" v-if="item.required === 'true'">Required Question</div>
+            <div class="second-child ml-auto" v-if="item.required === true">Required Question</div>
 
           </v-row>
         </div>
