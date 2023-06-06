@@ -97,37 +97,32 @@
                         message.sender && message.sender.name
                       }}</v-list-item-title>
                       <template v-if="message.attachment">
-                        <a :href="message.attachment" target="_blank"
-                          v-if="get_url_extension(message.attachment) == 'pdf'"><v-img
+                        <a :href="message.attachment[0].url" target="_blank"
+                          v-if="get_url_extension(message.attachment) === 'pdf'"><v-img
                             :src="require('@/assets/images/chat/pdf.jpg')" max-height="50px" max-width="50px"
                             class="mt-2"></v-img></a>
-                        <a :href="message.attachment" target="_blank"
-                          v-else-if="get_url_extension(message.attachment) == 'xlsx' || get_url_extension(message.attachment) == 'xls' || get_url_extension(message.attachment) == 'csv'"><v-img
+                        <a :href="message.attachment[0].url" target="_blank"
+                          v-else-if="get_url_extension(message.attachment) === 'xlsx' || get_url_extension(message.attachment) === 'xls' || get_url_extension(message.attachment) === 'csv'"><v-img
                             :src="require('@/assets/images/chat/excel.png')" max-height="50px" max-width="50px"
                             class="mt-2"></v-img></a>
-                        <a :href="message.attachment" target="_blank"
-                          v-else-if="get_url_extension(message.attachment) == 'doc' || get_url_extension(message.attachment) == 'docx' || get_url_extension(message.attachment) == 'txt'"><v-img
+                        <a :href="message.attachment[0].url" target="_blank"
+                          v-else-if="get_url_extension(message.attachment) === 'doc' || get_url_extension(message.attachment) === 'docx' || get_url_extension(message.attachment) === 'txt'"><v-img
                             :src="require('@/assets/images/chat/doc.png')" max-height="50px" max-width="50px"
                             class="mt-2"></v-img></a>
-                        <a :href="message.attachment" target="_blank"
-                          v-else-if="get_url_extension(message.attachment) == 'ppt' || get_url_extension(message.attachment) == 'pptx'"><v-img
+                        <a :href="message.attachment[0].url" target="_blank"
+                          v-else-if="get_url_extension(message.attachment) === 'ppt' || get_url_extension(message.attachment) === 'pptx'"><v-img
                             :src="require('@/assets/images/chat/ppt.png')" max-height="50px" max-width="50px"
                             class="mt-2"></v-img></a>
-                        <a :href="message.attachment" target="_blank"
-                          v-else-if="get_url_extension(message.attachment) == 'zip' || get_url_extension(message.attachment) == 'rar' || get_url_extension(message.attachment) == 'tar' || get_url_extension(message.attachment) == '7z' || get_url_extension(message.attachment) == 'gz'"><v-img
+                        <a :href="message.attachment[0].url" target="_blank"
+                          v-else-if="get_url_extension(message.attachment) === 'zip' || get_url_extension(message.attachment) === 'rar' || get_url_extension(message.attachment) === 'tar' || get_url_extension(message.attachment) === '7z' || get_url_extension(message.attachment) === 'gz'"><v-img
                             :src="require('@/assets/images/chat/zip.png')" max-height="50px" max-width="50px"
                             class="mt-2"></v-img></a>
                         <video class="chat-video"
-                          v-else-if="get_url_extension(message.attachment) == 'mp4' || get_url_extension(message.attachment) == 'webm' || get_url_extension(message.attachment) == 'mov' || get_url_extension(message.attachment) == 'avi'"
-                            :src="message.attachment"
-                            :autoplay="false"
-                            :controls="true"
-                            :loop="true"
-                            height="300"
-                            :style="{ width: '500px' }"
-                          ></video>
-                        <a :href="message.attachment" target="_blank" v-else>
-                          <v-img :src="message.attachment" max-height="125px" max-width="245px" class="mt-2"></v-img>
+                          v-else-if="get_url_extension(message.attachment) == 'mp4' || get_url_extension(message.attachment) === 'webm' || get_url_extension(message.attachment) === 'mov' || get_url_extension(message.attachment) === 'avi'"
+                          :src="message.attachment[0].url" :autoplay="false" :controls="true" :loop="true" height="300"
+                          :style="{ width: '500px' }"></video>
+                        <a :href="message.attachment[0].url" target="_blank" v-else>
+                          <v-img :src="message.attachment[0].url" max-height="125px" max-width="245px" class="mt-2"></v-img>
                         </a>
                       </template>
                       <v-list-item-subtitle class="text--primary">{{
@@ -209,7 +204,6 @@ export default {
 
   computed: {
     messagesList() {
-      console.log(this.$store.getters.messages)
       if (this.searchMessage) {
         return this.$store.getters.messages.filter((item) => this.searchMessage
           .toLowerCase()
@@ -222,7 +216,6 @@ export default {
       return this.pageLoading;
     },
     conversationsList() {
-      console.log(this.$store.getters.bidConversations)
       if (this.$store.getters.bidConversations) {
         return _.orderBy(
           this.$store.getters.bidConversations,
@@ -238,14 +231,14 @@ export default {
   methods: {
     ...mapActions(['getAllMessages', 'lastMessageRead', 'sendMessage', 'getBidAllConversations']),
     getName(conversation) {
-      return conversation.company.companyName
+      return conversation.company.companyName;
     },
     openChat(conversation) {
       this.chatData = {
         conversation,
       };
       this.conversationId = conversation._id;
-      console.log(this.conversationId)
+
       const ids = {
         userId: this.user._id,
         conversationId: this.conversationId,
@@ -268,12 +261,12 @@ export default {
     },
     dragfileupload(file, xhr, formData) {
       formData.append('conversationId', this.conversationId);
-      formData.append('sender[id]', this.user.id);
+      formData.append('sender[id]', this.user._id);
       formData.append(
         'sender[name]',
         `${this.user.firstName} ${this.user.lastName}`,
       );
-      formData.append('sender[company]', this.chatData.conversation.company);
+      formData.append('sender[company]', this.chatData.conversation.company.companyName);
       formData.append('sender[profilePicture]', this.user.image);
       formData.append('content', this.message);
     },
@@ -303,7 +296,7 @@ export default {
         sender: {
           name: `${this.user.firstName} ${this.user.lastName}`,
           id: this.user._id,
-          company: this.chatData.conversation.company,
+          company: this.chatData.conversation.company.companyName,
           profilePicture: this.user.image,
         },
         content: this.message,
@@ -324,7 +317,7 @@ export default {
       return moment(date).calendar();
     },
     get_url_extension(url) {
-      return url.split(/[#?]/)[0].split('.').pop().trim();
+      return url[0].url.split(/[#?]/)[0].split('.').pop().trim();
     },
     getConversationName(conversation) {
       return conversation.company.companyName;
