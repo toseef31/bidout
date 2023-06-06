@@ -427,15 +427,18 @@ export default {
     formData.append('userId', payload.userId);
     formData.append('companyId', payload.companyId);
     formData.append('bidId', payload.bidId);
-    formData.append('supplierNote', payload.supplierNote);
 
-    if (payload.supplierAttachments) {
+    if (payload.supplierNote && payload.supplierNote !== '') {
+      formData.append('supplierNote', payload.supplierNote);
+    }
+
+    if (payload.supplierAttachments && payload.supplierAttachments.length) {
       for (let i = 0; i < payload.supplierAttachments.length; i++) {
         formData.append(`supplierAttachments[${i}]`, payload.supplierAttachments[i].attachment);
       }
     }
 
-    if (payload.lineItems) {
+    if (payload.lineItems && payload.lineItems.length) {
       for (let i = 0; i < payload.lineItems.length; i++) {
         formData.append(`lineItems[${i}][price]`, payload.lineItems[i].price);
         formData.append(`lineItems[${i}][id]`, payload.lineItems[i].id);
@@ -444,7 +447,7 @@ export default {
       }
     }
 
-    if (payload.answers) {
+    if (payload.answers && payload.answers.length) {
       for (let i = 0; i < payload.answers.length; i++) {
         formData.append(`answers[${i}][questionId]`, payload.answers[i].questionId);
         formData.append(`answers[${i}][answer]`, payload.answers[i].answer);
@@ -494,15 +497,18 @@ export default {
     formData.append('companyId', payload.companyId);
     formData.append('bidId', payload.bidId);
     formData.append('submitBidId', payload.submitBidId);
-    formData.append('supplierNote', payload.supplierNote);
 
-    if (payload.supplierAttachments) {
+    if (payload.supplierNote && payload.supplierNote !== '') {
+      formData.append('supplierNote', payload.supplierNote);
+    }
+
+    if (payload.supplierAttachments && payload.supplierAttachments.length) {
       for (let i = 0; i < payload.supplierAttachments.length; i++) {
         formData.append(`supplierAttachments[${i}]`, payload.supplierAttachments[i]);
       }
     }
 
-    if (payload.lineItems) {
+    if (payload.lineItems && payload.lineItems.length) {
       for (let i = 0; i < payload.lineItems.length; i++) {
         formData.append(`lineItems[${i}][price]`, payload.lineItems[i].price);
         formData.append(`lineItems[${i}][id]`, payload.lineItems[i].id);
@@ -511,7 +517,7 @@ export default {
       }
     }
 
-    if (payload.answers) {
+    if (payload.answers && payload.answers.length) {
       for (let i = 0; i < payload.answers.length; i++) {
         formData.append(`answers[${i}][questionId]`, payload.answers[i].questionId);
         formData.append(`answers[${i}][answer]`, payload.answers[i].answer);
