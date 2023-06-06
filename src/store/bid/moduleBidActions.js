@@ -1593,8 +1593,8 @@ export default {
         formData.append(`bidDescriptions[${d}][body]`, state.bidData.bidDescriptions[d].body);
       }
     }
-
-    if (state.invitedSuppliers !== '' && state.invitedSuppliers && state.invitedSuppliers.length > 0) {
+    console.log("this is --", state.invitedSuppliers )
+    if (state.invitedSuppliers && state.invitedSuppliers.length > 0) {
       for (let i = 0; i < state.invitedSuppliers.length; i++) {
         if (state.invitedSuppliers[i].company && state.invitedSuppliers[i].company._id) {
           if (state.invitedSuppliers[i] !== '') {
@@ -1611,9 +1611,7 @@ export default {
       for (let i = 0; i < state.invitedNewSuppliers.length; i++) {
         formData.append(`invitedNewSuppliers[${i}]`, state.invitedNewSuppliers[i]._id);
       }
-    } else {
-      formData.append('invitedNewSuppliers', '');
-    }
+    } 
     if (state.invitedTeamMembers !== '' && state.invitedTeamMembers && state.invitedTeamMembers?.length > 0) {
       for (let t = 0; t < state.invitedTeamMembers.length; t++) {
         if (!state.invitedTeamMembers[t]._id) {
@@ -1622,8 +1620,6 @@ export default {
           formData.append(`invitedTeamMembers[${t}]`, state.invitedTeamMembers[t]._id);
         }
       }
-    } else {
-      formData.append('invitedTeamMembers', []);
     }
 
     if (state.bidlines.length > 0) {
@@ -1651,15 +1647,13 @@ export default {
       for (let i = 0; i < state.attachement.length; i++) {
         formData.append(`attachments[${i}][fileName]`, state.attachement[i].fileName);
         formData.append(`attachments[${i}][fileSize]`, state.attachement[i].fileSize);
-        formData.append(`attachments[${i}][uploadedBy]`, state.attachement[i].uploadedBy);
+        formData.append(`attachments[${i}][uploadedBy]`, state.attachement[i].uploadedBy._id);
         formData.append(`attachments[${i}][url]`, state.attachement[i].url);
         formData.append(`attachments[${i}][uploadedAt]`, state.attachement[i].uploadedAt);
         formData.append(`attachments[${i}][comment]`, state.attachement[i].comment);
         formData.append(`attachments[${i}][id]`, state.attachement[i].id);
       }
-    } else {
-      formData.append('attachments', []);
-    }
+    } 
 
     if (state.questions !== '') {
       for (let i = 0; i < state.questions.length; i++) {
@@ -1668,7 +1662,7 @@ export default {
         formData.append(`questions[${i}][title]`, state.questions[i].title);
         formData.append(`questions[${i}][type]`, state.questions[i].type);
         formData.append(`questions[${i}][questionType]`, state.questions[i].questionType);
-        formData.append(`questions[${i}][required]`, state.questions[i].required);
+        formData.append(`questions[${i}][required]`, state.questions[i].required ? state.questions[i].required : false);
         if (state.questions[i].options) {
           for (let j = 0; j < state.questions[i].options.length; j++) {
             formData.append(`questions[${i}][options][${j}][id]`, state.questions[i].options[j].id);
