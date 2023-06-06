@@ -49,7 +49,7 @@
                   <td class="text-left">{{ template.type }}</td>
                   <td class="text-left">
     
-                    {{ formatDatev2(template.dueDate) }} {{template.dueTime}}
+                    {{ formatDate(template.createdAt) }}
                   </td>
                   <td class="text-left">
                     {{ template.user ? `${template.user.firstName} ${template.user.lastName}` : "No name" }}
@@ -179,8 +179,8 @@ export default {
       "updateTemplateNote",
       "getEditTemplate",
     ]),
-    formatDate(item, item2) {
-      const date = moment(item * 1000 + item2 / 1000000)
+    formatDate(item) {
+      const date = moment(item)
         .tz("America/Chicago")
         .format("MM/DD/YYYY");
 
