@@ -51,7 +51,7 @@
                   <td class="text-left pl-6">{{ template.title }}</td>
                   <td class="text-left">{{ template.type }}</td>
                   <td class="text-left">
-                    {{ formatDatev2(template.dueDate) }} {{ template.dueTime }}
+                    {{ formatDate(template.createdAt) }}
                   </td>
                   <td class="text-left">
                     {{
@@ -131,8 +131,8 @@ export default {
       await this.$store.dispatch("searchByCompany", { query: "", basin: "all" });
       this.$router.push("/create-bid/");
     },
-    formatDate(item, item2) {
-      const date = moment(item * 1000 + item2 / 1000000)
+    formatDate(item) {
+      const date = moment(item)
         .tz("America/Chicago")
         .format("MM/DD/YYYY");
 
@@ -145,7 +145,7 @@ export default {
     },
   },
   async created() {
-    await this.getBidTemplates();
+    await this.getBidTemplates({ id: this.$store.getters.userInfo.company._id});
   },
   mounted() {
     document.title = "Create Bid - BidOut";
