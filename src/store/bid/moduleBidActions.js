@@ -784,16 +784,15 @@ export default {
         commit('setBidSerial', res.data.serial);
         state.bidData.statusType = 'draftBid';
         commit('setDraftTime', new Date().toLocaleString());
-        commit('setSaveBidLoading', false);
         commit('setIsEditBidChanges', false);
       } else {
         commit('setDraftBidsList', null);
-        commit('setSaveBidLoading', false);
         commit('setIsEditBidChanges', false);
       }
-    } catch (err) {
-      Sentry.captureException(err);
       commit('setSaveBidLoading', false);
+    } catch (err) {
+      commit('setSaveBidLoading', false);
+      Sentry.captureException(err);
       commit('setIsEditBidChanges', false);
       if (state.apiCounter === 2) {
         dispatch('apiSignOutAction');
@@ -894,10 +893,21 @@ export default {
       for (let i = 0; i < state.attachement.length; i++) {
         formData.append(`attachment[${i}][fileName]`, state.attachement[i].fileName);
         formData.append(`attachment[${i}][fileSize]`, state.attachement[i].fileSize);
-        state.attachement[i].uploadedBy._id ? formData.append(`attachment[${i}][uploadedBy]`, state.attachement[i].uploadedBy._id) :  formData.append(`attachment[${i}][uploadedBy]`, state.attachement[i].uploadedBy)
+
+        if (state.attachement[i].uploadedBy) {
+          state.attachement[i].uploadedBy._id ? formData.append(`attachment[${i}][uploadedBy]`, state.attachement[i].uploadedBy._id) :  formData.append(`attachment[${i}][uploadedBy]`, state.attachement[i].uploadedBy)
+        }
+        
         formData.append(`attachment[${i}][url]`, state.attachement[i].url);
-        state.attachement[i].uploadedAt ? formData.append(`attachment[${i}][uploadedAt]`, state.attachement[i].uploadedAt ) : ''
-        formData.append(`attachment[${i}][comment]`, state.attachement[i].comment);
+
+        if (state.attachement[i].uploadedAt) {
+          formData.append(`attachment[${i}][uploadedAt]`, state.attachement[i].uploadedAt )
+        }
+        
+        if (state.attachement[i].comment && state.attachement[i].comment !== '' && state.attachement[i].comment !== 'undefined') {
+          formData.append(`attachment[${i}][comment]`, state.attachement[i].comment);
+        }
+        
         formData.append(`attachment[${i}][id]`, state.attachement[i].id);
       }
     }
@@ -925,13 +935,11 @@ export default {
         commit('setIsEditBidChanges', false);
         commit('setBidSerial', res.data.serial);
         commit('setDraftTime', new Date().toLocaleString());
-        commit('setSaveBidLoading', false);
-      } else {
-        commit('setSaveBidLoading', false);
       }
-    } catch (err) {
-      Sentry.captureException(err);
       commit('setSaveBidLoading', false);
+    } catch (err) {
+      commit('setSaveBidLoading', false);
+      Sentry.captureException(err);
       commit('setIsEditBidChanges', false);
       if (state.apiCounter === 2) {
         dispatch('apiSignOutAction');
