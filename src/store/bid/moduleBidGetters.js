@@ -3,6 +3,8 @@ export default {
     return state.validate;
   },
   teamMembers(state) {
+    // console.log('tem state', state);
+    // console.log('array team', [...new Set(state.teamMembers)]);
     return [...new Set(state.teamMembers)];
     // return state.teamMembers;
   },
