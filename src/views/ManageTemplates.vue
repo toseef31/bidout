@@ -241,7 +241,7 @@ export default {
     },
   },
   async created() {
-    await this.getBidTemplates();  
+    await this.getBidTemplates({ id: this.$store.getters.userInfo.company._id});
   },
   mounted() {
     document.title = "Manage Templates - BidOut";

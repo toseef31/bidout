@@ -1056,7 +1056,7 @@ export default {
   },
   async getBidTemplates({ commit, state, dispatch }, payload) {
     try {
-      const res = await axios.get('v2/bid/getBidTemplates/');
+      const res = await axios.get(`v2/bid/getBidTemplates/${payload.id}`);
       if (res.status === 200) {
         commit('setBidTemplates', res.data);
       }
