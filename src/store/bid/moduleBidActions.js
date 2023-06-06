@@ -1380,12 +1380,12 @@ export default {
       }
     } else if (state.attachement?.length > 0) {
       for (let i = 0; i < state.attachement.length; i++) {
-        formData.append(`[${i}][fileName]`, state.attachement[i].fileName);
+        formData.append(`attachment[${i}][fileName]`, state.attachement[i].fileName);
         formData.append(`attachment[${i}][fileSize]`, state.attachement[i].fileSize);
-        formData.append(`attachment[${i}][uploadedBy]`, state.attachement[i].uploadedBy);
+        formData.append(`attachment[${i}][uploadedBy]`, state.attachement[i].uploadedBy._id ? state.attachement[i].uploadedBy._id : state.attachement[i].uploadedBy);
         formData.append(`attachment[${i}][url]`, state.attachement[i].url);
         formData.append(`attachment[${i}][uploadedAt]`, state.attachement[i].uploadedAt);
-        formData.append(`attachment[${i}][id]`, state.attachement[i].id);
+        formData.append(`attachment[${i}][id]`, state.attachement[i]._id);
 
         if (state.attachement[i].comment !== 'undefined' && state.attachement[i].comment !== '' && state.attachement[i].comment !== undefined) {
           formData.append(`attachment[${i}][comment]`, state.attachement[i].comment);
