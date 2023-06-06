@@ -38,8 +38,8 @@
 
               <v-list-item-action>
                 <v-list-item-action-text>{{
-                  list.latestMessage ? istoday(list.latestMessage) :
-                  istoday(list.updatedAt)
+                  list.latestMessage ? isToday(list.latestMessage) :
+                  isToday(list.updatedAt)
                 }}</v-list-item-action-text>
               </v-list-item-action>
             </template>
@@ -94,7 +94,7 @@
                   <template>
                     <v-list-item-content>
                       <v-list-item-title>{{
-                        message.sender.name
+                        message.sender && message.sender.name
                       }}</v-list-item-title>
                       <template v-if="message.attachment">
                         <a :href="message.attachment" target="_blank"
@@ -136,7 +136,7 @@
                     </v-list-item-content>
                     <v-list-item-action>
                       <v-list-item-action-text>{{
-                        istoday(message.updatedAt)
+                        isToday(message.updatedAt)
                       }}</v-list-item-action-text>
                     </v-list-item-action>
                   </template>
@@ -209,6 +209,7 @@ export default {
 
   computed: {
     messagesList() {
+      console.log(this.$store.getters.messages)
       if (this.searchMessage) {
         return this.$store.getters.messages.filter((item) => this.searchMessage
           .toLowerCase()
@@ -221,6 +222,7 @@ export default {
       return this.pageLoading;
     },
     conversationsList() {
+      console.log(this.$store.getters.bidConversations)
       if (this.$store.getters.bidConversations) {
         return _.orderBy(
           this.$store.getters.bidConversations,
@@ -236,15 +238,16 @@ export default {
   methods: {
     ...mapActions(['getAllMessages', 'lastMessageRead', 'sendMessage', 'getBidAllConversations']),
     getName(conversation) {
-      return conversation.name.split('|||').find((el) => el.trim() !== this.user.company.company);
+      return conversation.company.companyName
     },
     openChat(conversation) {
       this.chatData = {
         conversation,
       };
       this.conversationId = conversation._id;
+      console.log(this.conversationId)
       const ids = {
-        userId: this.user.id,
+        userId: this.user._id,
         conversationId: this.conversationId,
       };
       this.getAllMessages(ids);
@@ -299,7 +302,7 @@ export default {
         conversationId: this.conversationId,
         sender: {
           name: `${this.user.firstName} ${this.user.lastName}`,
-          id: this.user.id,
+          id: this.user._id,
           company: this.chatData.conversation.company,
           profilePicture: this.user.image,
         },
@@ -317,42 +320,14 @@ export default {
       this.message = '';
       this.filename = '';
     },
-    uploadfile(event) {
-      this.filename = '';
-      const chat_file = this.$refs.msgFile.files;
-      if (chat_file.length > 0) {
-        this.filename = chat_file[0].name;
-      }
-      const data = {
-        conversationId: this.conversationId,
-        sender: {
-          name: `${this.user.firstName} ${this.user.lastName}`,
-          id: this.user.id,
-          company: this.chatData.conversation.company,
-          profilePicture: this.user.image,
-        },
-        content: this.message,
-        attachment: chat_file.length > 0 ? chat_file[0] : null,
-      };
-      this.sendMessage(data);
-      const container = this.$refs.messagesSection;
-      setTimeout(() => {
-        container.scrollTop = container.scrollHeight;
-      }, 500);
-      this.message = '';
-      this.filename = '';
-    },
-    istoday(date) {
+    isToday(date) {
       return moment(date).calendar();
     },
     get_url_extension(url) {
       return url.split(/[#?]/)[0].split('.').pop().trim();
     },
     getConversationName(conversation) {
-      if (conversation.type === 'GROUP') {
-        return conversation.name.split('|||').find((el) => el.trim() !== this.user.company.company);
-      }
-      return conversation.name;
+      return conversation.company.companyName;
     },
     checkIfCompanyOfs(company) {
       if (company && company.contracts) {
