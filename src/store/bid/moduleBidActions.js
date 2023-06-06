@@ -184,9 +184,7 @@ export default {
 
   async deleteBid({ commit, dispatch, state }, payload) {
     try {
-      const res = await axios.post('v2/bid/deleteBid/', {
-        bidId: payload.bidId,
-      });
+      const res = await axios.post(`v2/bid/deleteBid/${payload.bidId}`);
 
       if (res.status === 200) {
         commit('setBidViewData', null);
