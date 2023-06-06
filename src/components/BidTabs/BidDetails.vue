@@ -506,6 +506,10 @@ export default {
       this.$store.commit('setAttachData', null);
       this.$store.commit('setAttachement', null);
       this.$store.commit('setAttachement', this.$store.getters.bidData.attachments);
+    } else if (this.$store.getters.bidData.statusType === 'template') {  
+      this.$store.commit('setAttachData', null);
+      this.$store.commit('setAttachement', null);
+      this.$store.commit('setAttachement', this.$store.getters.bidData.attachments); 
     } else {
       this.$store.commit('setAttachData', null);
       this.$store.commit('setAttachement', null);
