@@ -99,10 +99,15 @@ export default {
     docsList() {
       if (this.$store.getters.bidData != null) {
         if (this.$store.getters.bidData.statusType === 'template') {
+          console.log('attachment', this.$store.getters.bidData.attachment);
+          console.log('attachments', this.$store.getters.bidData.attachments);
+          console.log('stae', this.$store.state.bid.attachement);
+          console.log('state attachments', this.$store.state.bid.attachements);
           if (
-            this.$store.getters.bidData.attachment?.length > 0 || this.$store.state.bid.attachement?.length > 0
+            this.$store.getters.bidData.attachments?.length > 0 || this.$store.state.bid.attachement?.length > 0
           ) {
             if (this.$store.getters.attachData) {
+              console.log('if', this.$store.getters.attachData);
               const attch = [
                 ...new Map(
                   this.$store.getters.attachData.map((m) => [m.size, m]),
@@ -114,8 +119,9 @@ export default {
                 ...new Map(totalDay?.map((m) => [m.url, m])).values(),
               ];
             } else {
+              console.log('else');
               // eslint-disable-next-line vue/no-side-effects-in-computed-properties
-              this.documents = this.$store.state.bid.attachement;
+              this.documents = this.$store.getters.bidData.attachments;
             }
             this.$store.commit('setAttachement', null);
             this.$store.commit('setAttachement', this.documents);
