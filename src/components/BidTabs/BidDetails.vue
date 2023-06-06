@@ -495,19 +495,21 @@ export default {
     this.$store.commit('setBidlines', this.$store.getters.bidData.lineItems);
     this.$store.commit('setLineItemsComplete', false);
     if (this.$route.name === 'EditBid') {
+      this.$store.commit('setAttachData', null);
+      this.$store.commit('setAttachement', null);
       this.$store.commit('setAttachement', this.$store.getters.bidData.attachments);
     } else if (this.$store.getters.bidData.statusType === 'draftBid') {
       this.$store.commit('setAttachData', null);
       this.$store.commit('setAttachement', null);
       this.$store.commit('setAttachement', this.$store.getters.bidData.attachments);
-    } else if (this.$store.getters.bidData.statusType === 'templateBid') {
-      this.$store.commit('setAttachement', this.$store.getters.bidData.attachment);
-    } else if (this.$store.getters.bidData.statusType === 'template') {
-      console.log('templates', this.$store.getters.bidData);
+    } else if (this.$store.getters.bidData.statusType === 'templateBid') {  
       this.$store.commit('setAttachData', null);
+      this.$store.commit('setAttachement', null);
       this.$store.commit('setAttachement', this.$store.getters.bidData.attachments);
     } else {
-      this.$store.commit('setAttachement', this.$store.getters.bidData.attachment);
+      this.$store.commit('setAttachData', null);
+      this.$store.commit('setAttachement', null);
+      this.$store.commit('setAttachement', this.$store.getters.bidData.attachments);
     }
     this.$store.commit('setQuestions', this.$store.getters.bidData.questions);
     if (this.bidDescriptions[0].body.trim() === '') {
