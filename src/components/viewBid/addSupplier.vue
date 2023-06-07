@@ -251,20 +251,12 @@
                   </div>
                 </div>
                 <div class="add-company" v-if="checkIntent(company._id) !== 'intended'">
-                  <v-btn color="rgba(243, 35, 73, 0.1)" tile min-width="32px" height="32" class="pa-0" elevation="0"
                     @click=" removeReps(company, index)"> <v-icon color="#F32349">mdi-minus</v-icon></v-btn>
-                </div>
-              </div>
-            </template>
             <template
               v-for="(               company, index               ) in                newRepsInvited               ">
               <div class="d-flex align-center justify-space-between list-company pa-4">
                 <div class="comapny-data d-flex align-center">
                   <div class="company-img">
-
-                    <div class="icon-class text-center">
-                      <v-icon size="40">mdi-domain</v-icon>
-                    </div>
                   </div>
                   <div class="company-title text-left pl-4">
                     <h4>{{ company.firstName }} {{ company.lastName }} </h4>
@@ -273,10 +265,6 @@
                   </div>
                 </div>
                 <div class="add-company">
-                  <v-btn color="rgba(243, 35, 73, 0.1)" tile min-width="32px" height="32" class="pa-0" elevation="0"
-                    @click=" removeNewSup(index)"> <v-icon color="#F32349">mdi-minus</v-icon></v-btn>
-                </div>
-              </div>
             </template>
           </div>
         </div>
@@ -306,8 +294,7 @@
 
             <v-card-text>
               <h2 class="text-left mb-6 font-weight-bold">Invite New Supplier</h2>
-              <v-form ref="form" v-model="valid" lazy-validation
-                :class="{ 'phone-error-class': !getPhoneInfo.valid && getCounter > 1, 'phone-valid-class': getPhoneInfo.valid }">
+              <v-form ref="form" v-model="valid" lazy-validation>
                 <label class="d-block text-left font-weight-bold mb-2">First Name<span
                     class="required-class">*</span></label>
                 <v-text-field v-model="firstName" :rules="nameRules" placeholder="First Name" required
@@ -322,25 +309,20 @@
                   outlined></v-text-field>
                 <label class="d-block text-left font-weight-bold mb-2">Phone Number<span
                     class="required-class">*</span></label>
-                <vue-tel-input @blur="onBlurS" defaultCountry="US" :autoDefaultCountry="false" :autoFormat="false"
-                  :dropdownOptions="{
-                    showDialCodeInSelection: true,
-                    showFlags: true,
-                    width: 'max-content'
-                  }" :inputOptions="{
-  required: true,
-  showDialCode: false,
-  maxlength: 15,
-  placeholder: 'Phone number',
 
-}" model="national" :validCharactersOnly="true" :styleClasses="{ 'phone-main-class': true }" v-model="phoneNumber"
-                  @validate="onUpdate"></vue-tel-input>
-                <div class="phone-class" v-if="!getPhoneInfo.valid && getCounter > 1">
+                <VuePhoneNumberInput @phone-number-blur="onBlurS" default-country-code="US" :border-radius="0" size="lg"
+                  :required="true" clearable :error="!getPhoneInfo.valid && getCounter >= 1" v-model="phoneNumber"
+                  error-color="#FF0000" valid-color="#9E9E9E" :translations="translations" class="mb-2"
+                  @update="onUpdate" />
+                <div class="phone-class" v-if="!getPhoneInfo.valid && getCounter >= 1">
                   {{ getPhoneInfo.message }}</div>
-                <label class="d-block text-left font-weight-bold mb-2 mt-6">Email<span
-                    class="required-class">*</span></label>
-                <v-text-field v-model="email" :rules="emailRules" @input="checkEmailI" placeholder="example@email.com"
-                  required outlined :class="{ 'error--text': emailError }">
+                <label class="d-block text-left font-weight-bold mb-2 " :class="{
+                  ' mt-2': !getPhoneInfo.valid && getCounter >= 1,
+                  'mt-6': getPhoneInfo.valid
+                }">Email<span class="required-class">*</span></label>
+                <v-text-field v-model="email" :rules="emailRules" @input="checkEmailI"
+                  @keypress="removeSpace($event)" placeholder="example@email.com" required outlined
+                  :class="{ 'error--text': emailError }">
                   <template v-slot:append>
 
                     <v-progress-circular v-if="getEmailLoading" indeterminate :size="20" :width="2"
@@ -375,13 +357,14 @@
   </div>
 </template>
 <script>
-import { VueTelInput } from 'vue-tel-input';
 import _ from 'lodash';
 import { mapActions, mapGetters } from 'vuex';
+import VuePhoneNumberInput from 'vue-phone-number-input';
+import 'vue-phone-number-input/dist/vue-phone-number-input.css';
 
 export default {
   components: {
-    VueTelInput,
+    VuePhoneNumberInput,
   },
   data() {
     return {
@@ -401,7 +384,10 @@ export default {
       email: '',
       emailRules: [
         (v) => !!v || 'E-mail is required',
-        (v) => /^[\w-\.+]+@([\w-]+\.)+[\w-]{1,63}$/.test(v) || 'E-mail must be valid',
+        (v) => {
+          v = v.replace(/\s+/g, '');
+          return /^[\w-\.+]+@([\w-]+\.)+[\w-]{1,63}$/.test(v) || 'E-mail must be valid';
+        },
       ],
       phoneNumber: '',
       results: {},
@@ -425,6 +411,12 @@ export default {
       fetchSupplierLoading: false,
       companyLoading: false,
       salesRepLoading: false,
+      translations: {
+        countrySelectorLabel: 'Country Code',
+        countrySelectorError: 'Choose country',
+        phoneNumberLabel: 'Phone Number',
+        example: 'Example',
+      },
     };
   },
   computed: {
@@ -554,19 +546,21 @@ export default {
     },
     onUpdate(payload) {
       this.counter++;
-      this.phoneInfo.valid = payload.valid;
+      this.phoneInfo.valid = payload.isValid;
 
-      if (payload.number && !payload.valid) {
-        this.phoneInfo.message = 'Invalid Phone number format';
-      }
-
-      if (!payload.number && !payload.valid) {
+      if (!payload) {
         this.phoneInfo.message = 'Phone number is required';
-      }
+      } else if (payload.phoneNumber && payload.phoneNumber !== '' && payload.phoneNumber.length >= 1) {
+        if (!payload.isValid) {
+          this.phoneInfo.message = 'Invalid Phone number format';
+        }
 
-      if (payload.number && payload.valid) {
-        this.phoneNumber = payload.nationalNumber;
-        this.results = payload.number;
+        if (payload.formattedNumber && payload.isValid) {
+          this.phoneNumber = payload.formattedNumber;
+          this.results = payload.formattedNumber;
+        }
+      } else {
+        this.phoneInfo.message = 'Phone number is required';
       }
     },
     async validate() {
@@ -630,6 +624,7 @@ export default {
       }
     },
     async checkEmailI() {
+      this.email = this.email.replace(/\s+/g, '');
       const testEmail = /^[\w-\.+]+@([\w-]+\.)+[\w-]{1,63}$/.test(this.email);
 
       if (this.email === '' || !testEmail) {
@@ -648,10 +643,19 @@ export default {
         this.phoneInfo.message = 'Phone number is required';
         this.phoneInfo.valid = false;
         this.counter++;
-      } else if (this.phoneNumber.length === 1) {
+      } else if (this.phoneNumber !== null && this.phoneNumber.length === 1) {
         this.phoneInfo.message = 'Invalid Phone number format';
         this.phoneInfo.valid = false;
         this.counter++;
+      }
+    },
+    removeSpace(event) {
+      const charCode = event.keyCode;
+
+      if (charCode === 32) {
+        event.preventDefault();
+      } else {
+        return true;
       }
     },
     hideCategories(name) {
@@ -762,5 +766,3 @@ export default {
   },
 };
 </script>
-
-<style src="vue-tel-input/dist/vue-tel-input.css"></style>

@@ -548,9 +548,13 @@ export default {
       if (err.response && err.response.status === 400 && err.response.data.message === 'Please add a valid price for all items') {
         commit('setBidSubmissionValidationAlert', 'Please add a valid price or click the "X" button that you are no-biding for each line item');
       }
+
+      if (err.response && err.response.status === 403 && err.response.data.message === 'Line items price can\'t be increased') {
+        commit('setBidSubmissionValidationAlert', ' Suppliers can only lower the prices during the BidOut Phase!')     
+      }
       if (state.apiCounter === 2) {
         dispatch('apiSignOutAction');
-      } else if (err.response && err.response.status === 403) {
+      } else if (err.response && err.response.status === 403 && err.response.data.message !== 'Line items price can\'t be increased') {
         await dispatch('refreshToken');
         state.apiCounter = 2;
         dispatch('editSubmitBid', payload);

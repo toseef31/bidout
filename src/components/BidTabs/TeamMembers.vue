@@ -164,9 +164,13 @@ export default {
         if (this.$store.getters.bidData.invitedTeamMembers !== '') {
           const unique = this.$store.getters.teamMembers
             ? this.$store.getters.teamMembers.filter(
-              (el) => !this.$store.state.bid.invitedTeamMembers?.includes(
-                el._id,
-              ),
+              (el) => !this.$store.state.bid.invitedTeamMembers.find((item) => {
+                if (item.id) {
+                  return item.id === el.id;
+                } else {
+                  return item === el.id;
+                }
+              }),
             )
             : [];
           return [...new Map(unique.map((item) => [item._id, item])).values()];
@@ -263,7 +267,7 @@ export default {
       this.membersAdded.push(member);
 
       this.newCount = this.membersAdded.length;
-      this.$store.commit('spliceTeamMember', index);
+      this.$store.commit('spliceTeamMember', member);
       this.$store.commit('setIsEditBidChanges', true);
       this.$store.commit('setInvitedTeamMembers', this.membersAdded);
     },
@@ -271,7 +275,8 @@ export default {
       this.oldCount = this.membersAdded.length;
       this.$store.commit('pushTeamMember', member);
       this.newCount = this.membersAdded.length;
-      this.membersAdded.splice(index, 1);
+      const indexToRemove = this.membersAdded.findIndex((obj) => obj.id === member.id);
+      this.membersAdded.splice(indexToRemove, 1);
       this.$store.commit('setIsEditBidChanges', true);
       this.$store.commit('setInvitedTeamMembers', this.membersAdded);
     },

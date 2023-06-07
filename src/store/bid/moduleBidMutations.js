@@ -252,8 +252,11 @@ export default {
   setBidActivities(state, payload) {
     state.bidActivities = payload;
   },
-  spliceTeamMember(state, index) {
-    state.teamMembers.splice(index, 1);
+  spliceTeamMember(state, member) {
+    const index = state.teamMembers.findIndex((item) => item.id === member.id);
+    if (index !== -1) {
+      state.teamMembers.splice(index, 1);
+    }
   },
   pushTeamMember(state, member) {
     state.teamMembers.push(member);
