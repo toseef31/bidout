@@ -20,7 +20,7 @@
           </div>
           <div class="companies-list">
             <div class="d-flex align-center justify-space-between list-company pa-4" v-for="(team, index) in teamMembers"
-              v-if="user.id !== team.id && team.status !== false" :key="index">
+              v-if="user._id !== team._id && team.status !== false" :key="index">
               <div class="comapny-data d-flex align-center">
                 <div class="company-img">
                   <img v-if="!team.image" :src="require('@/assets/images/chat/chatUser.png')" width="48px"
@@ -29,7 +29,7 @@
                 </div>
                 <div class="company-title text-left pl-4">
                   <h4>{{ team.firstName }} {{ team.lastName }}</h4>
-                  <p class="mb-0">{{ team.company }}</p>
+                  <p class="mb-0">{{ team.company.companyName }}</p>
                 </div>
               </div>
               <div class="add-company">
@@ -49,9 +49,9 @@
         </div>
         <div class="companies-list">
           <div class="d-flex align-center justify-space-between list-company pa-4" v-for="(team, index) in filterTeam"
-            v-if="
-              user.id !== team.id && team.status !== false && filterTeam.length
-            " :key="index">
+            v-if="user._id !== team._id && team.status !== false && filterTeam.length
+              " :key="index">
+
             <div class="comapny-data d-flex align-center">
               <div class="company-img">
                 <img v-if="!team.image" :src="require('@/assets/images/chat/chatUser.png')" />
@@ -59,7 +59,6 @@
               </div>
               <div class="company-title text-left pl-4">
                 <h4>{{ team.firstName }} {{ team.lastName }}</h4>
-                <p class="mb-0">{{ team.company }}</p>
               </div>
             </div>
             <div class="add-company">
@@ -102,8 +101,8 @@ export default {
     },
     teamMembers() {
       if (
-        this.$store.getters.teamMembersInitial !== null
-        && this.$store.getters.teamMembersInitial !== ''
+        this.$store.getters.teamMembersForBid
+        && this.$store.getters.teamMembersForBid.length
       ) {
         if (this.searchMember) {
           const unique = this.$store.getters.teamMembersInitial.filter(
@@ -121,15 +120,16 @@ export default {
         const unique = this.$store.getters.teamMembersInitial
           ? this.$store.getters.teamMembersInitial.filter(
             (el) => !this.$store.getters.teamMembersForBid.find(
-              (team) => team.id === el.id,
+              (team) => team._id === el._id,
             ),
           )
           : [];
 
-        return [...new Map(unique.map((item) => [item.id, item])).values()];
+        return [...new Map(unique.map((item) => [item._id, item])).values()];
       }
+
       if (this.searchMember) {
-        const unique = this.$store.getters.teamMembersInitial.filter(
+        return this.$store.getters.teamMembersInitial.filter(
           (item) => this.searchMember
             .toLowerCase()
             .split(' ')
@@ -139,17 +139,14 @@ export default {
               .split(' ')
               .every((v) => item.lastName.toLowerCase().includes(v)),
         );
-        return [...new Map(unique.map((item) => [item.id, item])).values()];
       }
-      return this.$store.getters.teamMembers
-        ? this.$store.getters.teamMembers
-        : [];
+      return this.$store.getters.teamMembersInitial ? this.$store.getters.teamMembersInitial : [];
     },
     filterTeam() {
       const unique = this.$store.getters.teamMembersForBid;
 
-      return unique !== '' && unique !== null && unique !== undefined
-        ? [...new Map(unique.map((item) => [item.id, item])).values()]
+      return unique && unique.length
+        ? [...new Map(unique.map((item) => [item._id, item])).values()]
         : [];
     },
     getTeamLoading() {
@@ -162,16 +159,16 @@ export default {
       let teamIds = [];
       this.teamLoading = true;
 
-      this.$store.getters.teamMembersForBid.forEach((el) => teamIds.push(el.id));
+      this.$store.getters.teamMembersForBid.forEach((el) => teamIds.push(el._id));
 
       teamIds = [...new Set(teamIds)];
 
       await this.addTeamMemberToBid({
-        userId: this.user.id,
-        bidId: this.bidDetail.bidData.id,
+        userId: this.user._id,
+        bidId: this.bidDetail.bidData._id,
         teamMembersIds: teamIds,
         serial: this.$route.params.serial,
-        company: this.user.company.company,
+        company: this.user.company.companyName,
       });
 
       this.teamLoading = false;
@@ -179,14 +176,14 @@ export default {
       window.scrollTo({ top: 0, behavior: 'smooth' });
     },
     addMember(member) {
-      this.$store.commit('spliceTeamMembersInitial', member.id);
+      this.$store.commit('spliceTeamMembersInitial', member._id);
 
       this.$store.commit('pushTeamMembersForBid', member);
     },
     remove(member) {
-      this.$store.commit('spliceTeamMembersForBid', member.id);
+      this.$store.commit('spliceTeamMembersForBid', member._id);
       this.$store.commit('pushTeamMembersInitial', member);
-    },
+    }
   },
   mounted() {
     this.user = this.$store.getters.userInfo;
