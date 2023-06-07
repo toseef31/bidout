@@ -1062,7 +1062,7 @@ export default {
   },
   async getBidTemplates({ commit, state, dispatch }, payload) {
     try {
-      const res = await axios.get(`v2/bid/getBidTemplates/${payload.id}`);
+      const res = await axios.get(`v2/bid/getBidTemplates/${payload.companyId}`);
       if (res.status === 200) {
         commit('setBidTemplates', res.data);
       }
@@ -1113,7 +1113,7 @@ export default {
         commit('setAttachement', null);
         commit('setQuestions', null);
         commit('setDraftBidData', null);
-        dispatch('getBidTemplates');
+        dispatch('getBidTemplates', payload);
       }
     } catch (err) {
       Sentry.captureException(err);
@@ -1130,7 +1130,7 @@ export default {
     try {
       const res = await axios.post('v2/bid/editTemplateNote/', { templateId: payload.templateId, note: payload.note });
       if (res.status === 200) {
-        dispatch('getBidTemplates');
+        dispatch('getBidTemplates', payload);
       }
     } catch (err) {
       Sentry.captureException(err);
