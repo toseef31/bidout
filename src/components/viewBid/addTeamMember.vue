@@ -168,7 +168,7 @@ export default {
         bidId: this.bidDetail.bidData._id,
         teamMembersIds: teamIds,
         serial: this.$route.params.serial,
-        company: this.user.company.companyName,
+        company: this.user.company,
       });
 
       this.teamLoading = false;
