@@ -252,8 +252,11 @@ export default {
   setBidActivities(state, payload) {
     state.bidActivities = payload;
   },
-  spliceTeamMember(state, index) {
-    state.teamMembers.splice(index, 1);
+  spliceTeamMember(state, member) {
+    const index = state.teamMembers.findIndex((item) => item._id === member._id);
+    if (index !== -1) {
+      state.teamMembers.splice(index, 1);
+    }
   },
   pushTeamMember(state, member) {
     state.teamMembers.push(member);
@@ -289,11 +292,11 @@ export default {
   spliceTeamMembersForBid(state, member) {
     state.teamMembersForBid = [
       ...new Map(
-        state.teamMembersForBid.map((item) => [item.id, item])
+        state.teamMembersForBid.map((item) => [item._id, item])
       ).values(),
     ];
 
-    const index = state.teamMembersForBid.findIndex((el) => el.id === member);
+    const index = state.teamMembersForBid.findIndex((el) => el._id === member);
 
     if (index !== -1) {
       state.teamMembersForBid.splice(index, 1);
@@ -303,7 +306,7 @@ export default {
     state.teamMembersInitial = payload;
   },
   spliceTeamMembersInitial(state, member) {
-    const index = state.teamMembersInitial.findIndex((el) => el.id === member);
+    const index = state.teamMembersInitial.findIndex((el) => el._id === member);
 
     if (index !== -1) {
       state.teamMembersInitial.splice(index, 1);

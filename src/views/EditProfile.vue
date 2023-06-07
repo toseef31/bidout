@@ -40,21 +40,12 @@
                             <label class="d-block text-left input-label mb-2 font-weight-bold">Mobile Number
                             </label>
 
-                            <vue-tel-input defaultCountry="US" :autoDefaultCountry="false" :autoFormat="false"
-                              :dropdownOptions="{
-                                showDialCodeInSelection: true,
-                                showFlags: true,
-                                width: ' max-content'
-                              }" :inputOptions="{
-  required: true,
-  showDialCode: false,
-  maxlength: 15,
-  placeholder: 'Phone number',
+                            <VuePhoneNumberInput @phone-number-blur="onBlurB" default-country-code="US" :required="true"
+                              clearable :error="!getPhoneInfo.valid && getCounter >= 1" :border-radius="8" size="lg"
+                              v-model="mobileNumber" error-color="#FF0000" valid-color="#9E9E9E"
+                              :translations="translations" class="mb-2" @update="onUpdate" />
 
-}" model="national" :validCharactersOnly="true" :styleClasses="{ 'phone-main-class': true, }" v-model="mobileNumber"
-                              @validate="onUpdate"></vue-tel-input>
-
-                            <div class="phone-class" v-if="!getPhoneInfo.valid && getCounter > 1">
+                            <div class="phone-class" v-if="!getPhoneInfo.valid && getCounter >= 1">
                               {{ getPhoneInfo.message }}</div>
                           </v-col>
                         </v-row>
@@ -186,7 +177,8 @@
 import { mapActions, mapGetters } from 'vuex';
 import timezones from 'timezones-list';
 import moment from 'moment-timezone';
-import { VueTelInput } from 'vue-tel-input';
+import VuePhoneNumberInput from 'vue-phone-number-input';
+import 'vue-phone-number-input/dist/vue-phone-number-input.css';
 import _ from 'lodash';
 import ProfileImage from '../components/Profile/ProfileImage.vue';
 import ChangePassword from '../components/Profile/ChangePassword.vue';
@@ -198,7 +190,7 @@ export default {
     ProfileImage,
     ChangePassword,
     Notifications,
-    VueTelInput,
+    VuePhoneNumberInput,
   },
 
   data() {
@@ -224,12 +216,11 @@ export default {
       lastNameRule: [
         (v) => !!v || 'Last name is required',
       ],
-      hasLoaderActive: false,
       results: {},
       saveLoading: false,
       counter: 0,
       phoneInfo: {
-        valid: true,
+        valid: false,
         message: '',
       },
     };
@@ -281,7 +272,6 @@ export default {
       }
     },
     resetPasswordMsg(values) {
-      console.log('value', values);
       if (values.status === 200) {
         this.$toasted.show(values.message, {
           position: 'top-center',
@@ -303,19 +293,33 @@ export default {
     ...mapActions(['updateProfile', 'loginHistory', 'adminsCompany']),
     onUpdate(payload) {
       this.counter++;
-      this.phoneInfo.valid = payload.valid;
+      this.phoneInfo.valid = payload.isValid;
 
-      if (payload.number && !payload.valid) {
-        this.phoneInfo.message = 'Invalid Phone number format';
-      }
+      if (!payload) {
+        this.phoneInfo.message = 'Phone number is required';
+      } else if (payload.phoneNumber && payload.phoneNumber !== '' && payload.phoneNumber.length >= 1) {
+        if (!payload.isValid) {
+          this.phoneInfo.message = 'Invalid Phone number format';
+        }
 
-      if (!payload.number && !payload.valid) {
+        if (payload.formattedNumber && payload.isValid) {
+          this.phoneInfo.message = '';
+          this.results = payload.formattedNumber;
+          this.mobileNumber = payload.formattedNumber;
+        }
+      } else {
         this.phoneInfo.message = 'Phone number is required';
       }
-
-      if (payload.number && payload.valid) {
-        this.results = payload.number;
-        this.mobileNumber = payload.nationalNumber;
+    },
+    onBlurB() {
+      if (this.mobileNumber === '') {
+        this.phoneInfo.message = 'Phone number is required';
+        this.phoneInfo.valid = false;
+        this.counter++;
+      } else if (this.mobileNumber !== null && this.mobileNumber.length === 1) {
+        this.phoneInfo.message = 'Invalid Phone number format';
+        this.phoneInfo.valid = false;
+        this.counter++;
       }
     },
     editForm() {
@@ -370,5 +374,3 @@ export default {
   },
 };
 </script>
-
-<style src="vue-tel-input/dist/vue-tel-input.css"></style>

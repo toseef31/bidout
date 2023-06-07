@@ -1,5 +1,5 @@
 <template>
-  <v-row fill-height align="center" v-if="loader">
+  <v-row fill-height align="center" v-if="loaderPage">
     <v-col cols="12">
       <v-progress-circular
         :width="3"
@@ -390,7 +390,7 @@ export default {
     archiveList() {
       return this.$store.getters.archiveList;
     },
-    loader() {
+    loaderPage() {
       return this.$store.getters.pageLoader;
     },
     createMsg() {
@@ -411,7 +411,8 @@ export default {
       'lastMessageRead',
       'archiveChat',
       'removeConvUser',
-      'getAllConversations'
+      'getAllConversations',
+      'getAllConversationsSearch',
     ]),
     openChat(group, name, id) {
       if (screen.width < 767) {

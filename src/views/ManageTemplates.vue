@@ -49,7 +49,7 @@
                   <td class="text-left">{{ template.type }}</td>
                   <td class="text-left">
     
-                    {{ formatDatev2(template.dueDate) }} {{template.dueTime}}
+                    {{ formatDate(template.createdAt) }}
                   </td>
                   <td class="text-left">
                     {{ template.user ? `${template.user.firstName} ${template.user.lastName}` : "No name" }}
@@ -179,8 +179,8 @@ export default {
       "updateTemplateNote",
       "getEditTemplate",
     ]),
-    formatDate(item, item2) {
-      const date = moment(item * 1000 + item2 / 1000000)
+    formatDate(item) {
+      const date = moment(item)
         .tz("America/Chicago")
         .format("MM/DD/YYYY");
 
@@ -195,7 +195,7 @@ export default {
       this.templateIndex = index;
     },
     deleteTemp() {
-      this.deleteTemplate({ id: this.templateId });
+      this.deleteTemplate({ id: this.templateId, companyId: this.$store.getters.userInfo.company._id });
       this.dialog = false;
     },
     openNote(index) {
@@ -206,7 +206,7 @@ export default {
     saveNote(template, index) {
       this.isEdit = false;
       this.editIcon[index] = true;
-      this.updateTemplateNote({ templateId: template._id, note: template.note });
+      this.updateTemplateNote({ templateId: template._id, note: template.note, companyId: this.$store.getters.userInfo.company._id });
     },
     editDraft(id) {
       this.getEditTemplate({ id, company: this.$store.getters.userInfo.company });
@@ -241,7 +241,7 @@ export default {
     },
   },
   async created() {
-    await this.getBidTemplates();  
+    await this.getBidTemplates({ companyId: this.$store.getters.userInfo.company._id});
   },
   mounted() {
     document.title = "Manage Templates - BidOut";

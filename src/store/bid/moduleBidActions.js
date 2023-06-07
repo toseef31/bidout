@@ -184,9 +184,7 @@ export default {
 
   async deleteBid({ commit, dispatch, state }, payload) {
     try {
-      const res = await axios.post('v2/bid/deleteBid/', {
-        bidId: payload.bidId,
-      });
+      const res = await axios.post(`v2/bid/deleteBid/${payload.bidId}`);
 
       if (res.status === 200) {
         commit('setBidViewData', null);
@@ -550,9 +548,13 @@ export default {
       if (err.response && err.response.status === 400 && err.response.data.message === 'Please add a valid price for all items') {
         commit('setBidSubmissionValidationAlert', 'Please add a valid price or click the "X" button that you are no-biding for each line item');
       }
+
+      if (err.response && err.response.status === 403 && err.response.data.message === 'Line items price can\'t be increased') {
+        commit('setBidSubmissionValidationAlert', ' Suppliers can only lower the prices during the BidOut Phase!')     
+      }
       if (state.apiCounter === 2) {
         dispatch('apiSignOutAction');
-      } else if (err.response && err.response.status === 403) {
+      } else if (err.response && err.response.status === 403 && err.response.data.message !== 'Line items price can\'t be increased') {
         await dispatch('refreshToken');
         state.apiCounter = 2;
         dispatch('editSubmitBid', payload);
@@ -698,12 +700,12 @@ export default {
     if (state.invitedSuppliers?.length > 0) {
       for (let i = 0; i < state.invitedSuppliers?.length; i++) {
         if (Array.isArray(state.invitedSuppliers) && state.invitedSuppliers.length > 0 && typeof state.invitedSuppliers[0] === 'object') {
-          if (!state.invitedSuppliers[i].companyId && !state.invitedSuppliers[i].objectID) {
-            formData.append(`invitedSuppliers[${i}]`, state.invitedSuppliers[i].id);
-          } else if (state.invitedSuppliers[i].companyId) {
-            formData.append(`invitedSuppliers[${i}]`, state.invitedSuppliers[i].companyId);
+          if (!state.invitedSuppliers[i].company && !state.invitedSuppliers[i]._id) {
+            formData.append(`invitedSuppliers[${i}]`, state.invitedSuppliers[i]._id);
+          } else if (state.invitedSuppliers[i].company) {
+            formData.append(`invitedSuppliers[${i}]`, state.invitedSuppliers[i].company);
           } else {
-            formData.append(`invitedSuppliers[${i}]`, state.invitedSuppliers[i].objectID);
+            formData.append(`invitedSuppliers[${i}]`, state.invitedSuppliers[i]._id);
           }
         } else {
           formData.append(`invitedSuppliers[${i}]`, state.invitedSuppliers[i]);
@@ -712,7 +714,7 @@ export default {
     }
     if (state.invitedNewSuppliers?.length > 0) {
       for (let i = 0; i < state.invitedNewSuppliers.length; i++) {
-        formData.append(`invitedNewSuppliers[${i}]`, state.invitedNewSuppliers[i].id);
+        formData.append(`invitedNewSuppliers[${i}]`, state.invitedNewSuppliers[i]._id);
       }
     }
     if (state.invitedTeamMembers?.length > 0) {
@@ -720,7 +722,7 @@ export default {
         if (!state.invitedTeamMembers[t].id) {
           formData.append(`invitedTeamMembers[${t}]`, state.invitedTeamMembers[t]);
         } else {
-          formData.append(`invitedTeamMembers[${t}]`, state.invitedTeamMembers[t].id);
+          formData.append(`invitedTeamMembers[${t}]`, state.invitedTeamMembers[t]._id);
         }
       }
     }
@@ -784,16 +786,15 @@ export default {
         commit('setBidSerial', res.data.serial);
         state.bidData.statusType = 'draftBid';
         commit('setDraftTime', new Date().toLocaleString());
-        commit('setSaveBidLoading', false);
         commit('setIsEditBidChanges', false);
       } else {
         commit('setDraftBidsList', null);
-        commit('setSaveBidLoading', false);
         commit('setIsEditBidChanges', false);
       }
-    } catch (err) {
-      Sentry.captureException(err);
       commit('setSaveBidLoading', false);
+    } catch (err) {
+      commit('setSaveBidLoading', false);
+      Sentry.captureException(err);
       commit('setIsEditBidChanges', false);
       if (state.apiCounter === 2) {
         dispatch('apiSignOutAction');
@@ -894,10 +895,21 @@ export default {
       for (let i = 0; i < state.attachement.length; i++) {
         formData.append(`attachment[${i}][fileName]`, state.attachement[i].fileName);
         formData.append(`attachment[${i}][fileSize]`, state.attachement[i].fileSize);
-        state.attachement[i].uploadedBy._id ? formData.append(`attachment[${i}][uploadedBy]`, state.attachement[i].uploadedBy._id) :  formData.append(`attachment[${i}][uploadedBy]`, state.attachement[i].uploadedBy)
+
+        if (state.attachement[i].uploadedBy) {
+          state.attachement[i].uploadedBy._id ? formData.append(`attachment[${i}][uploadedBy]`, state.attachement[i].uploadedBy._id) :  formData.append(`attachment[${i}][uploadedBy]`, state.attachement[i].uploadedBy)
+        }
+        
         formData.append(`attachment[${i}][url]`, state.attachement[i].url);
-        state.attachement[i].uploadedAt ? formData.append(`attachment[${i}][uploadedAt]`, state.attachement[i].uploadedAt ) : ''
-        formData.append(`attachment[${i}][comment]`, state.attachement[i].comment);
+
+        if (state.attachement[i].uploadedAt) {
+          formData.append(`attachment[${i}][uploadedAt]`, state.attachement[i].uploadedAt )
+        }
+        
+        if (state.attachement[i].comment && state.attachement[i].comment !== '' && state.attachement[i].comment !== 'undefined') {
+          formData.append(`attachment[${i}][comment]`, state.attachement[i].comment);
+        }
+        
         formData.append(`attachment[${i}][id]`, state.attachement[i].id);
       }
     }
@@ -925,13 +937,11 @@ export default {
         commit('setIsEditBidChanges', false);
         commit('setBidSerial', res.data.serial);
         commit('setDraftTime', new Date().toLocaleString());
-        commit('setSaveBidLoading', false);
-      } else {
-        commit('setSaveBidLoading', false);
       }
-    } catch (err) {
-      Sentry.captureException(err);
       commit('setSaveBidLoading', false);
+    } catch (err) {
+      commit('setSaveBidLoading', false);
+      Sentry.captureException(err);
       commit('setIsEditBidChanges', false);
       if (state.apiCounter === 2) {
         dispatch('apiSignOutAction');
@@ -1056,7 +1066,7 @@ export default {
   },
   async getBidTemplates({ commit, state, dispatch }, payload) {
     try {
-      const res = await axios.get('v2/bid/getBidTemplates/');
+      const res = await axios.get(`v2/bid/getBidTemplates/${payload.companyId}`);
       if (res.status === 200) {
         commit('setBidTemplates', res.data);
       }
@@ -1107,7 +1117,7 @@ export default {
         commit('setAttachement', null);
         commit('setQuestions', null);
         commit('setDraftBidData', null);
-        dispatch('getBidTemplates');
+        dispatch('getBidTemplates', payload);
       }
     } catch (err) {
       Sentry.captureException(err);
@@ -1124,7 +1134,7 @@ export default {
     try {
       const res = await axios.post('v2/bid/editTemplateNote/', { templateId: payload.templateId, note: payload.note });
       if (res.status === 200) {
-        dispatch('getBidTemplates');
+        dispatch('getBidTemplates', payload);
       }
     } catch (err) {
       Sentry.captureException(err);
@@ -1372,12 +1382,12 @@ export default {
       }
     } else if (state.attachement?.length > 0) {
       for (let i = 0; i < state.attachement.length; i++) {
-        formData.append(`[${i}][fileName]`, state.attachement[i].fileName);
+        formData.append(`attachment[${i}][fileName]`, state.attachement[i].fileName);
         formData.append(`attachment[${i}][fileSize]`, state.attachement[i].fileSize);
-        formData.append(`attachment[${i}][uploadedBy]`, state.attachement[i].uploadedBy);
+        formData.append(`attachment[${i}][uploadedBy]`, state.attachement[i].uploadedBy._id ? state.attachement[i].uploadedBy._id : state.attachement[i].uploadedBy);
         formData.append(`attachment[${i}][url]`, state.attachement[i].url);
         formData.append(`attachment[${i}][uploadedAt]`, state.attachement[i].uploadedAt);
-        formData.append(`attachment[${i}][id]`, state.attachement[i].id);
+        formData.append(`attachment[${i}][id]`, state.attachement[i]._id);
 
         if (state.attachement[i].comment !== 'undefined' && state.attachement[i].comment !== '' && state.attachement[i].comment !== undefined) {
           formData.append(`attachment[${i}][comment]`, state.attachement[i].comment);
@@ -1585,8 +1595,7 @@ export default {
         formData.append(`bidDescriptions[${d}][body]`, state.bidData.bidDescriptions[d].body);
       }
     }
-
-    if (state.invitedSuppliers !== '' && state.invitedSuppliers && state.invitedSuppliers.length > 0) {
+    if (state.invitedSuppliers && state.invitedSuppliers.length > 0) {
       for (let i = 0; i < state.invitedSuppliers.length; i++) {
         if (state.invitedSuppliers[i].company && state.invitedSuppliers[i].company._id) {
           if (state.invitedSuppliers[i] !== '') {
@@ -1603,9 +1612,7 @@ export default {
       for (let i = 0; i < state.invitedNewSuppliers.length; i++) {
         formData.append(`invitedNewSuppliers[${i}]`, state.invitedNewSuppliers[i]._id);
       }
-    } else {
-      formData.append('invitedNewSuppliers', '');
-    }
+    } 
     if (state.invitedTeamMembers !== '' && state.invitedTeamMembers && state.invitedTeamMembers?.length > 0) {
       for (let t = 0; t < state.invitedTeamMembers.length; t++) {
         if (!state.invitedTeamMembers[t]._id) {
@@ -1614,8 +1621,6 @@ export default {
           formData.append(`invitedTeamMembers[${t}]`, state.invitedTeamMembers[t]._id);
         }
       }
-    } else {
-      formData.append('invitedTeamMembers', []);
     }
 
     if (state.bidlines.length > 0) {
@@ -1643,15 +1648,13 @@ export default {
       for (let i = 0; i < state.attachement.length; i++) {
         formData.append(`attachments[${i}][fileName]`, state.attachement[i].fileName);
         formData.append(`attachments[${i}][fileSize]`, state.attachement[i].fileSize);
-        formData.append(`attachments[${i}][uploadedBy]`, state.attachement[i].uploadedBy);
+        formData.append(`attachments[${i}][uploadedBy]`, state.attachement[i].uploadedBy._id);
         formData.append(`attachments[${i}][url]`, state.attachement[i].url);
         formData.append(`attachments[${i}][uploadedAt]`, state.attachement[i].uploadedAt);
         formData.append(`attachments[${i}][comment]`, state.attachement[i].comment);
         formData.append(`attachments[${i}][id]`, state.attachement[i].id);
       }
-    } else {
-      formData.append('attachments', []);
-    }
+    } 
 
     if (state.questions !== '') {
       for (let i = 0; i < state.questions.length; i++) {
@@ -1660,7 +1663,7 @@ export default {
         formData.append(`questions[${i}][title]`, state.questions[i].title);
         formData.append(`questions[${i}][type]`, state.questions[i].type);
         formData.append(`questions[${i}][questionType]`, state.questions[i].questionType);
-        formData.append(`questions[${i}][required]`, state.questions[i].required);
+        formData.append(`questions[${i}][required]`, state.questions[i].required ? state.questions[i].required : false);
         if (state.questions[i].options) {
           for (let j = 0; j < state.questions[i].options.length; j++) {
             formData.append(`questions[${i}][options][${j}][id]`, state.questions[i].options[j].id);
