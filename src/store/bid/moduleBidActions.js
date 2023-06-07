@@ -700,12 +700,12 @@ export default {
     if (state.invitedSuppliers?.length > 0) {
       for (let i = 0; i < state.invitedSuppliers?.length; i++) {
         if (Array.isArray(state.invitedSuppliers) && state.invitedSuppliers.length > 0 && typeof state.invitedSuppliers[0] === 'object') {
-          if (!state.invitedSuppliers[i].companyId && !state.invitedSuppliers[i].objectID) {
-            formData.append(`invitedSuppliers[${i}]`, state.invitedSuppliers[i].id);
-          } else if (state.invitedSuppliers[i].companyId) {
-            formData.append(`invitedSuppliers[${i}]`, state.invitedSuppliers[i].companyId);
+          if (!state.invitedSuppliers[i].company && !state.invitedSuppliers[i]._id) {
+            formData.append(`invitedSuppliers[${i}]`, state.invitedSuppliers[i]._id);
+          } else if (state.invitedSuppliers[i].company) {
+            formData.append(`invitedSuppliers[${i}]`, state.invitedSuppliers[i].company);
           } else {
-            formData.append(`invitedSuppliers[${i}]`, state.invitedSuppliers[i].objectID);
+            formData.append(`invitedSuppliers[${i}]`, state.invitedSuppliers[i]._id);
           }
         } else {
           formData.append(`invitedSuppliers[${i}]`, state.invitedSuppliers[i]);
@@ -714,7 +714,7 @@ export default {
     }
     if (state.invitedNewSuppliers?.length > 0) {
       for (let i = 0; i < state.invitedNewSuppliers.length; i++) {
-        formData.append(`invitedNewSuppliers[${i}]`, state.invitedNewSuppliers[i].id);
+        formData.append(`invitedNewSuppliers[${i}]`, state.invitedNewSuppliers[i]._id);
       }
     }
     if (state.invitedTeamMembers?.length > 0) {
@@ -722,7 +722,7 @@ export default {
         if (!state.invitedTeamMembers[t].id) {
           formData.append(`invitedTeamMembers[${t}]`, state.invitedTeamMembers[t]);
         } else {
-          formData.append(`invitedTeamMembers[${t}]`, state.invitedTeamMembers[t].id);
+          formData.append(`invitedTeamMembers[${t}]`, state.invitedTeamMembers[t]._id);
         }
       }
     }
