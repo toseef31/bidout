@@ -61,7 +61,7 @@
                     </div>
                   </div>
                   <div class="company-title text-left pl-4">
-                    <h4>{{ company.companyName }}
+                    <h4>{{ company ? company.companyName : '' }}
                       <span v-if="hasOfsPremium(company)">
                         <v-tooltip top>
                           <template v-slot:activator="{ on, attrs }">
@@ -111,7 +111,7 @@
                   </div>
                   <div class="company-title text-left pl-4">
                     <h4>{{ list.firstName }} {{ list.lastName }}</h4>
-                    <p class="mb-0">{{ list.company.companyName }}
+                    <p class="mb-0">{{ list.company ? list.company.companyName : '' }}
                       <span v-if="hasOfsPremium(list.company)">
                         <v-tooltip top>
                           <template v-slot:activator="{ on, attrs }">
@@ -151,7 +151,7 @@
                       </div>
                     </div>
                     <div class="company-title text-left pl-4">
-                      <h4>{{ company.companyName }}
+                      <h4>{{ company ? company.companyName : '' }}
                         <span v-if="hasOfsPremium(company)">
                           <v-tooltip top>
                             <template v-slot:activator="{ on, attrs }">
@@ -186,7 +186,7 @@
           <div class="companies-list">
 
             <template v-for="(company, index) in repsInvited">
-              <div class="d-flex align-center justify-space-between list-company pa-4" v-if="company.companyName">
+              <div class="d-flex align-center justify-space-between list-company pa-4" v-if="company ? company.companyName : ''">
                 <div class="comapny-data d-flex align-center">
                   <div class="company-img">
                     <img v-if="company.image" class="image-class" :src="company.image" />
@@ -196,7 +196,7 @@
                     </div>
                   </div>
                   <div class="company-title text-left pl-4">
-                    <h4>{{ company.companyName }}
+                    <h4>{{ company ? company.companyName : '' }}
                       <span v-if="hasOfsPremium(company)">
                         <v-tooltip top>
                           <template v-slot:activator="{ on, attrs }">
@@ -215,7 +215,7 @@
                     @click="removeCompany(company, index)"> <v-icon color="#F32349">mdi-minus</v-icon></v-btn>
                 </div>
               </div>
-              <div class="d-flex align-center justify-space-between list-company pa-4" v-if="!company.companyName">
+              <div class="d-flex align-center justify-space-between list-company pa-4" v-if="!company ? company.companyName : ''">
                 <div class="comapny-data d-flex align-center">
                   <div class="company-img">
                     <div class="avatar-image" v-if="!company.image">
@@ -227,7 +227,7 @@
                   </div>
                   <div class="company-title text-left pl-4">
                     <h4>{{ company.firstName }} {{ company.lastName }}</h4>
-                    <p class="mb-0">{{ company.company.companyName }}
+                    <p class="mb-0">{{ company.company ? company.companyName : '' }}
                       <span v-if="hasOfsPremium(company.company)">
                         <v-tooltip top>
                           <template v-slot:activator="{ on, attrs }">
@@ -430,7 +430,7 @@ export default {
       if (this.$store.getters.companiesList && this.$store.getters.companiesList.length) {
         if (this.repsInvited.length) {
           unique = this.$store.getters.companiesList ? this.$store.getters.companiesList.filter((el) => !this.repsInvited.find((item) => el._id === item._id) && el._id !== this.userInfo.company._id) : [];
-
+   
           return [...new Map(unique.map((item) => [item._id, item])).values()];
         }
 
@@ -466,6 +466,7 @@ export default {
           }
           return 1;
         });
+
       }
     },
     // eslint-disable-next-line vue/no-side-effects-in-computed-properties, vue/return-in-computed-property,
