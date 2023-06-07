@@ -317,7 +317,7 @@ export default {
       return moment(date).calendar();
     },
     get_url_extension(url) {
-      return url[0].url.split(/[#?]/)[0].split('.').pop().trim();
+      return url[0] && url[0].url && url[0].url.split(/[#?]/)[0].split('.').pop().trim();
     },
     getConversationName(conversation) {
       return conversation.company.companyName;
