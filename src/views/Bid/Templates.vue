@@ -145,7 +145,7 @@ export default {
     },
   },
   async created() {
-    await this.getBidTemplates({ id: this.$store.getters.userInfo.company._id});
+    await this.getBidTemplates({ companyId: this.$store.getters.userInfo.company._id});
   },
   mounted() {
     document.title = "Create Bid - BidOut";

@@ -195,7 +195,7 @@ export default {
       this.templateIndex = index;
     },
     deleteTemp() {
-      this.deleteTemplate({ id: this.templateId });
+      this.deleteTemplate({ id: this.templateId, companyId: this.$store.getters.userInfo.company._id });
       this.dialog = false;
     },
     openNote(index) {
@@ -206,7 +206,7 @@ export default {
     saveNote(template, index) {
       this.isEdit = false;
       this.editIcon[index] = true;
-      this.updateTemplateNote({ templateId: template._id, note: template.note });
+      this.updateTemplateNote({ templateId: template._id, note: template.note, companyId: this.$store.getters.userInfo.company._id });
     },
     editDraft(id) {
       this.getEditTemplate({ id, company: this.$store.getters.userInfo.company });
@@ -241,7 +241,7 @@ export default {
     },
   },
   async created() {
-    await this.getBidTemplates({ id: this.$store.getters.userInfo.company._id});
+    await this.getBidTemplates({ companyId: this.$store.getters.userInfo.company._id});
   },
   mounted() {
     document.title = "Manage Templates - BidOut";
