@@ -1595,7 +1595,6 @@ export default {
         formData.append(`bidDescriptions[${d}][body]`, state.bidData.bidDescriptions[d].body);
       }
     }
-    console.log("this is --", state.invitedSuppliers )
     if (state.invitedSuppliers && state.invitedSuppliers.length > 0) {
       for (let i = 0; i < state.invitedSuppliers.length; i++) {
         if (state.invitedSuppliers[i].company && state.invitedSuppliers[i].company._id) {

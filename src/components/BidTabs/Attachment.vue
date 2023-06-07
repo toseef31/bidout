@@ -45,7 +45,7 @@
                 <div class="d-flex">
                   <img :src="require('@/assets/images/bids/chatdots.png')" class="mr-3 v-card--link"
                     @click="openComment(index)" />
-                  <v-icon color="#F32349" @click="deleteAttach(index, doc._id)">mdi-trash-can-outline</v-icon>
+                  <v-icon color="#F32349" @click="deleteAttach(index, doc)">mdi-trash-can-outline</v-icon>
                 </div>
               </td>
             </tr>
@@ -89,6 +89,7 @@ export default {
       attachStatus: false,
       docs: '',
       uploadDoc: [],
+      docId: null,
     };
   },
   computed: {
@@ -99,15 +100,10 @@ export default {
     docsList() {
       if (this.$store.getters.bidData != null) {
         if (this.$store.getters.bidData.statusType === 'template') {
-          console.log('attachment', this.$store.getters.bidData.attachment);
-          console.log('attachments', this.$store.getters.bidData.attachments);
-          console.log('stae', this.$store.state.bid.attachement);
-          console.log('state attachments', this.$store.state.bid.attachements);
           if (
             this.$store.getters.bidData.attachments?.length > 0 || this.$store.state.bid.attachement?.length > 0
           ) {
             if (this.$store.getters.attachData) {
-              console.log('if', this.$store.getters.attachData);
               const attch = [
                 ...new Map(
                   this.$store.getters.attachData.map((m) => [m.size, m]),
@@ -119,7 +115,6 @@ export default {
                 ...new Map(totalDay?.map((m) => [m.url, m])).values(),
               ];
             } else {
-              console.log('else');
               // eslint-disable-next-line vue/no-side-effects-in-computed-properties
               this.documents = this.$store.getters.bidData.attachments;
             }
@@ -234,14 +229,25 @@ export default {
       const sizeInMB = (size / (1024 * 1024)).toFixed(2);
       return `${sizeInMB}mb`;
     },
-    deleteAttach(index, id) {
-      const indexToRemove = this.documents.findIndex((obj) => obj._id === id);
+    deleteAttach(index, doc) {
+      const indexToRemove = this.documents.findIndex((obj) => {
+        if (obj._id && doc._id) {
+          return obj._id === doc._id;
+        } else {
+          return obj.id === doc.id;
+        }
+      });
+      if(doc._id){
+        this.docId = doc._id;
+      }else{
+        this.docId = doc.id;
+      }
 
       if (indexToRemove !== -1) {
         this.documents.splice(indexToRemove, 1);
       }
       if (this.$store.getters.attachData) {
-        this.$store.commit('spliceAttachData', id);
+        this.$store.commit('spliceAttachData', this.docId);
       }
       this.$store.commit('setAttachement', this.documents);
       this.$store.commit('setIsEditBidChanges', true);
