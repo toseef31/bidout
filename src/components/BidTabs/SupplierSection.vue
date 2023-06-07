@@ -245,7 +245,7 @@
                 </div>
               </div>
             </template>
-            <template v-for="(company, index) in newRepsInvited">
+            <template v-for="(company) in newRepsInvited">
               <div class="d-flex align-center justify-space-between list-company pa-4">
                 <div class="comapny-data d-flex align-center">
                   <div class="company-img">
@@ -259,10 +259,6 @@
                     <p class="mb-0">{{ company.company }}</p>
 
                   </div>
-                </div>
-                <div class="add-company">
-                  <v-btn color="rgba(243, 35, 73, 0.1)" tile min-width="32px" height="32" class="pa-0" elevation="0"
-                    @click="removeNewSup(index)"> <v-icon color="#F32349">mdi-minus</v-icon></v-btn>
                 </div>
               </div>
             </template>

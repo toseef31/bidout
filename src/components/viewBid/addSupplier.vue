@@ -251,12 +251,18 @@
                   </div>
                 </div>
                 <div class="add-company" v-if="checkIntent(company._id) !== 'intended'">
+                  <v-btn color="rgba(243, 35, 73, 0.1)" tile min-width="32px" height="32" class="pa-0" elevation="0"
                     @click=" removeReps(company, index)"> <v-icon color="#F32349">mdi-minus</v-icon></v-btn>
-            <template
-              v-for="(               company, index               ) in                newRepsInvited               ">
+                </div>
+              </div>
+            </template>
+            <template v-for="(               company               ) in                newRepsInvited               ">
               <div class="d-flex align-center justify-space-between list-company pa-4">
                 <div class="comapny-data d-flex align-center">
                   <div class="company-img">
+                    <div class="icon-class text-center">
+                      <v-icon size="40">mdi-domain</v-icon>
+                    </div>
                   </div>
                   <div class="company-title text-left pl-4">
                     <h4>{{ company.firstName }} {{ company.lastName }} </h4>
@@ -264,7 +270,7 @@
 
                   </div>
                 </div>
-                <div class="add-company">
+              </div>
             </template>
           </div>
         </div>
@@ -320,9 +326,8 @@
                   ' mt-2': !getPhoneInfo.valid && getCounter >= 1,
                   'mt-6': getPhoneInfo.valid
                 }">Email<span class="required-class">*</span></label>
-                <v-text-field v-model="email" :rules="emailRules" @input="checkEmailI"
-                  @keypress="removeSpace($event)" placeholder="example@email.com" required outlined
-                  :class="{ 'error--text': emailError }">
+                <v-text-field v-model="email" :rules="emailRules" @input="checkEmailI" @keypress="removeSpace($event)"
+                  placeholder="example@email.com" required outlined :class="{ 'error--text': emailError }">
                   <template v-slot:append>
 
                     <v-progress-circular v-if="getEmailLoading" indeterminate :size="20" :width="2"
