@@ -16,7 +16,6 @@
           </thead>
           <tbody>
             <tr v-for="(doc, index) in docsList" :key="index">
-
               <input type="hidden" :value="validat" />
               <td class="text-left">
                 <img :src="require('@/assets/images/bids/FilePdf.png')" v-if="checkFileType(doc.fileName) === 'pdf'" />
@@ -94,9 +93,6 @@ export default {
   },
   computed: {
     ...mapGetters(['isEditBidChanges']),
-    uploadedBy() {
-      return this.$store.getters.userInfo._id;
-    },
     docsList() {
       if (this.$store.getters.bidData != null) {
         if (this.$store.getters.bidData.statusType === 'template') {
