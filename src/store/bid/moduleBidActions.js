@@ -686,7 +686,7 @@ export default {
     formData.append('regions', state.bidData.region);
     formData.append('qAndAEnabled', state.bidData.qAndAEnabled);
     formData.append('bidDescriptions[0][body]', state.bidData.bidDescriptions[0].body);
-    formData.append('bidDescriptions[0][title]', state.bidData.bidDescriptions[0].title);
+
     if (state.bidData.bidDescriptions.length > 1) {
       for (let d = 1; d < state.bidData.bidDescriptions.length; d++) {
         formData.append(`bidDescriptions[${d}][title]`, state.bidData.bidDescriptions[d].title);
@@ -712,12 +712,12 @@ export default {
         }
       }
     }
-    if (state.invitedNewSuppliers?.length > 0) {
+    if (state.invitedNewSuppliers && state.invitedNewSuppliers?.length > 0) {
       for (let i = 0; i < state.invitedNewSuppliers.length; i++) {
         formData.append(`invitedNewSuppliers[${i}]`, state.invitedNewSuppliers[i]._id);
       }
     }
-    if (state.invitedTeamMembers?.length > 0) {
+    if (state.invitedTeamMembers && state.invitedTeamMembers?.length > 0) {
       for (let t = 0; t < state.invitedTeamMembers.length; t++) {
         if (!state.invitedTeamMembers[t].id) {
           formData.append(`invitedTeamMembers[${t}]`, state.invitedTeamMembers[t]);
@@ -731,47 +731,48 @@ export default {
       let lineItemsindex = 0;
       for (let i = 0; i < state.bidlines?.length; i++) {
         if (state.bidlines[i].description !== '' && state.bidlines[i].quantity !== '') {
-          formData.append(`lineItems[${lineItemsindex}][id]`, state.bidlines[i].id);
+          formData.append(`lineItems[${lineItemsindex}][id]`, state.bidlines[i]._id);
           formData.append(`lineItems[${lineItemsindex}][description]`, state.bidlines[i].description);
           formData.append(`lineItems[${lineItemsindex}][unit]`, state.bidlines[i].unit);
           formData.append(`lineItems[${lineItemsindex}][inputType]`, state.bidlines[i].inputType);
           formData.append(`lineItems[${lineItemsindex}][quantity]`, state.bidlines[i].quantity);
-          if (state.bidlines[i].buyerComment === 'undefined' || state.bidlines[i].buyerComment === '' || state.bidlines[i].buyerComment === undefined) {
-            formData.append(`lineItems[${lineItemsindex}][buyerComment]`, '');
-          } else {
+          if (state.bidlines[i].buyerComment !== 'undefined' && state.bidlines[i].buyerComment !== '' && state.bidlines[i].buyerComment !== undefined) {
             formData.append(`lineItems[${lineItemsindex}][buyerComment]`, state.bidlines[i].buyerComment);
-          }
+          } 
           formData.append(`lineItems[${lineItemsindex}][required]`, state.bidlines[i].required);
           lineItemsindex++;
         }
       }
     }
-
-    if (state.attachement?.length > 0) {
+    
+    if (state.attachement && state.attachement?.length > 0) {
       for (let i = 0; i < state.attachement.length; i++) {
         formData.append(`attachment[${i}][fileName]`, state.attachement[i].fileName);
         formData.append(`attachment[${i}][fileSize]`, state.attachement[i].fileSize);
-        formData.append(`attachment[${i}][uploadedBy]`, state.attachement[i].uploadedBy);
+        formData.append(`attachment[${i}][uploadedBy]`, state.attachement[i].uploadedBy && state.attachement[i].uploadedBy._id ? state.attachement[i].uploadedBy._id : state.attachement[i].uploadedBy);;
         formData.append(`attachment[${i}][url]`, state.attachement[i].url);
         formData.append(`attachment[${i}][uploadedAt]`, state.attachement[i].uploadedAt);
-        formData.append(`attachment[${i}][comment]`, state.attachement[i].comment);
-        formData.append(`attachment[${i}][id]`, state.attachement[i]._id);
+
+        if (state.attachement[i].comment && state.attachement[i].comment !== '' && state.attachement[i].comment !== 'undefined') {
+          formData.append(`attachments[${i}][comment]`, state.attachement[i].comment);
+        }    
+
+        formData.append(`attachment[${i}][id]`, state.attachement[i]._id ? state.attachement[i]._id : state.attachement[i].id);
       }
     }
 
-    if (state.questions?.length > 0) {
+    if (state.questions && state.questions?.length > 0) {
       for (let i = 0; i < state.questions.length; i++) {
-        formData.append(`questions[${i}][oldId]`, state.questions[i]._id);
+        formData.append(`questions[${i}][id]`, state.questions[i]._id ? state.questions[i]._id : state.questions[i].id);
         formData.append(`questions[${i}][order]`, state.questions[i].order);
         formData.append(`questions[${i}][title]`, state.questions[i].title);
         formData.append(`questions[${i}][type]`, state.questions[i].type);
         formData.append(`questions[${i}][questionType]`, state.questions[i].questionType);
         formData.append(`questions[${i}][required]`, state.questions[i].required);
-        if (state.questions[i].options) {
+        if (state.questions[i].options && state.questions[i].options) {
           for (let j = 0; j < state.questions[i].options.length; j++) {
-            formData.append(`questions[${i}][options][${j}][oldId]`, state.questions[i].options[j]._id);
+            formData.append(`questions[${i}][options][${j}][id]`, state.questions[i].options[j]._id ? state.questions[i].options[j]._id : state.questions[i].options[j].id);
             formData.append(`questions[${i}][options][${j}][label]`, state.questions[i].options[j].label);
-            formData.append(`questions[${i}][options][${j}][title]`, state.questions[i].options[j].title);
           }
         }
       }
@@ -805,7 +806,7 @@ export default {
       }
     }
   },
-  async updateDraftBid({ commit, state, dispatch }, payload) {
+  async updateDraftBid({ commit, state, dispatch,rootState }, payload) {
     commit('setSaveBidLoading', true);
     const config = {
       headers: {
@@ -825,13 +826,13 @@ export default {
     formData.append('dueTime', state.bidData.dueTime);
     formData.append('regions', state.bidData.region);
     formData.append('qAndAEnabled', state.bidData.qAndAEnabled);
-    formData.append('userId', state.bidData.user);
-    formData.append('companyId', state.bidData.company);
-    formData.append('company', state.bidData.company);
+    formData.append('userId', rootState.auth.userInfo._id);
+    formData.append('companyId', rootState.auth.userInfo.company._id);
+    formData.append('company', rootState.auth.userInfo.company.companyName);
     formData.append('serial', state.bidSerial);
 
     formData.append('bidDescriptions[0][body]', state.bidData.bidDescriptions[0].body);
-    formData.append('bidDescriptions[0][title]', state.bidData.bidDescriptions[0].title);
+
     if (state.bidData.bidDescriptions?.length > 1) {
       for (let d = 1; d < state.bidData.bidDescriptions.length; d++) {
         formData.append(`bidDescriptions[${d}][title]`, state.bidData.bidDescriptions[d].title);
@@ -839,11 +840,13 @@ export default {
       }
     }
 
-    if (state.invitedSuppliers?.length > 0) {
+    if (state.invitedSuppliers && state.invitedSuppliers?.length > 0) {
       for (let i = 0; i < state.invitedSuppliers.length; i++) {
         if (Array.isArray(state.invitedSuppliers) && state.invitedSuppliers?.length > 0 && typeof state.invitedSuppliers[0] === 'object') {
-          if (state.invitedSuppliers[i].company && state.invitedSuppliers[i].company._id) {
-            formData.append(`invitedSuppliers[${i}]`, state.invitedSuppliers[i].company._id);
+          if (!state.invitedSuppliers[i].company && !state.invitedSuppliers[i]._id) {
+            formData.append(`invitedSuppliers[${i}]`, state.invitedSuppliers[i]._id);
+          } else if (state.invitedSuppliers[i].company) {
+            formData.append(`invitedSuppliers[${i}]`, state.invitedSuppliers[i].company);
           } else {
             formData.append(`invitedSuppliers[${i}]`, state.invitedSuppliers[i]._id);
           }
@@ -875,14 +878,12 @@ export default {
       let lineItemsindex = 0;
       for (let i = 0; i < state.bidlines?.length; i++) {
         if (state.bidlines[i].description !== '' && state.bidlines[i].quantity !== '') {
-          formData.append(`lineItems[${lineItemsindex}][id]`, state.bidlines[i].id);
+          formData.append(`lineItems[${lineItemsindex}][id]`, state.bidlines[i]._id);
           formData.append(`lineItems[${lineItemsindex}][description]`, state.bidlines[i].description);
           formData.append(`lineItems[${lineItemsindex}][unit]`, state.bidlines[i].unit);
           formData.append(`lineItems[${lineItemsindex}][inputType]`, state.bidlines[i].inputType);
           formData.append(`lineItems[${lineItemsindex}][quantity]`, state.bidlines[i].quantity);
-          if (state.bidlines[i].buyerComment === 'undefined' || state.bidlines[i].buyerComment === '' || state.bidlines[i].buyerComment === undefined) {
-            formData.append(`lineItems[${lineItemsindex}][buyerComment]`, '');
-          } else {
+          if (state.bidlines[i].buyerComment !== 'undefined' && state.bidlines[i].buyerComment !== '' && state.bidlines[i].buyerComment !== undefined) {
             formData.append(`lineItems[${lineItemsindex}][buyerComment]`, state.bidlines[i].buyerComment);
           }
           formData.append(`lineItems[${lineItemsindex}][required]`, state.bidlines[i].required);
@@ -891,7 +892,7 @@ export default {
       }
     }
 
-    if (state.attachement?.length > 0) {
+    if (state.attachement && state.attachement?.length > 0) {
       for (let i = 0; i < state.attachement.length; i++) {
         formData.append(`attachment[${i}][fileName]`, state.attachement[i].fileName);
         formData.append(`attachment[${i}][fileSize]`, state.attachement[i].fileSize);
@@ -910,23 +911,25 @@ export default {
           formData.append(`attachment[${i}][comment]`, state.attachement[i].comment);
         }
         
-        formData.append(`attachment[${i}][id]`, state.attachement[i].id);
+        formData.append(`attachment[${i}][id]`, state.attachement[i]._id ? state.attachement[i]._id : state.attachement[i].id);
       }
     }
 
-    if (state.questions?.length > 0) {
+    if (state.questions && state.questions?.length > 0) {
       for (let i = 0; i < state.questions.length; i++) {
-        formData.append(`questions[${i}][oldId]`, state.questions[i].id);
+        formData.append(`questions[${i}][id]`, state.questions[i]._id ? state.questions[i]._id : state.questions[i].id);
         formData.append(`questions[${i}][order]`, state.questions[i].order);
         formData.append(`questions[${i}][title]`, state.questions[i].title);
         formData.append(`questions[${i}][type]`, state.questions[i].type);
-        formData.append(`questions[${i}][questionType]`, state.questions[i].questionType);
+        if(state.questions[i].type !== 'category') {
+          formData.append(`questions[${i}][questionType]`, state.questions[i].questionType);
+        }
+     
         formData.append(`questions[${i}][required]`, state.questions[i].required ? state.questions[i].required : false);
-        if (state.questions[i].options) {
+        if (state.questions[i].options && state.questions[i].options.length) {
           for (let j = 0; j < state.questions[i].options?.length; j++) {
-            formData.append(`questions[${i}][options][${j}][oldId]`, state.questions[i].options[j]._id);
+            formData.append(`questions[${i}][options][${j}][id]`, state.questions[i].options[j]._id ? state.questions[i].options[j]._id : state.questions[i].options[j].id);
             formData.append(`questions[${i}][options][${j}][label]`, state.questions[i].options[j].label);
-            formData.append(`questions[${i}][options][${j}][title]`, state.questions[i].options[j].title);
           }
         }
       }
@@ -994,7 +997,6 @@ export default {
         commit('setDraftTime', null);
         commit('setDraftTime', null);
         commit('setAttachData', null);
-        // commit('setBidData', null);
         commit('setInvitedSuppliersData', null);
         commit('setInvitedTeamMembers', null);
         commit('setBidlines', null);
@@ -1049,7 +1051,6 @@ export default {
 
       if (res.status === 200) {
         commit('setAttachData', res.data);
-        // commit('setAttachement',res.data);
       } else {
         commit('setAttachData', null);
       }
@@ -1289,18 +1290,26 @@ export default {
     if (state.bidData.status === 'templateCreate') {
       if (state.invitedSuppliers && state.invitedSuppliers.length) {
         for (let i = 0; i < state.invitedSuppliers.length; i++) {
-          if (state.invitedSuppliers[i].company && state.invitedSuppliers[i].company._id) {
-            formData.append(`invitedSuppliers[${i}]`, state.invitedSuppliers[i].company._id);
+          if (Array.isArray(state.invitedSuppliers) && state.invitedSuppliers.length > 0 && typeof state.invitedSuppliers[0] === 'object') {
+            if (!state.invitedSuppliers[i].company && !state.invitedSuppliers[i]._id) {
+              formData.append(`invitedSuppliers[${i}]`, state.invitedSuppliers[i]._id);
+            } else if (state.invitedSuppliers[i].company) {
+              formData.append(`invitedSuppliers[${i}]`, state.invitedSuppliers[i].company);
+            } else {
+              formData.append(`invitedSuppliers[${i}]`, state.invitedSuppliers[i]._id);
+            }
           } else {
-            formData.append(`invitedSuppliers[${i}]`, state.invitedSuppliers[i]._id);
+            formData.append(`invitedSuppliers[${i}]`, state.invitedSuppliers[i]);
           }
         }
       }
     } else if (state.invitedSuppliers.length > 0) {
       for (let i = 0; i < state.invitedSuppliers.length; i++) {
         if (Array.isArray(state.invitedSuppliers) && state.invitedSuppliers.length > 0 && typeof state.invitedSuppliers[0] === 'object') {
-          if (state.invitedSuppliers[i].company && state.invitedSuppliers[i].company._id) {
-            formData.append(`invitedSuppliers[${i}]`, state.invitedSuppliers[i].company._id);
+          if (!state.invitedSuppliers[i].company && !state.invitedSuppliers[i]._id) {
+            formData.append(`invitedSuppliers[${i}]`, state.invitedSuppliers[i]._id);
+          } else if (state.invitedSuppliers[i].company) {
+            formData.append(`invitedSuppliers[${i}]`, state.invitedSuppliers[i].company);
           } else {
             formData.append(`invitedSuppliers[${i}]`, state.invitedSuppliers[i]._id);
           }
@@ -1364,16 +1373,15 @@ export default {
         }
       }
     }
-    
     if (state.bidData.status === 'templateCreate') {
       if (state.attachement && state.attachement.length) {
         for (let i = 0; i < state.attachement.length; i++) {
           formData.append(`attachment[${i}][fileName]`, state.attachement[i].fileName);
           formData.append(`attachment[${i}][fileSize]`, state.attachement[i].fileSize);
-          formData.append(`attachment[${i}][uploadedBy]`, state.attachement[i].uploadedBy);
+          formData.append(`attachment[${i}][uploadedBy]`, state.attachement[i].uploadedBy && state.attachement[i].uploadedBy._id ? state.attachement[i].uploadedBy._id : state.attachement[i].uploadedBy);
           formData.append(`attachment[${i}][url]`, state.attachement[i].url);
           formData.append(`attachment[${i}][uploadedAt]`, state.attachement[i].uploadedAt);
-          formData.append(`attachment[${i}][id]`, state.attachement[i].id);
+          formData.append(`attachment[${i}][id]`, state.attachement[i]._id ? state.attachement[i]._id : state.attachement[i].id);
 
           if (state.attachement[i].comment !== 'undefined' && state.attachement[i].comment !== '' && state.attachement[i].comment !== undefined) {
             formData.append(`attachment[${i}][comment]`, state.attachement[i].comment);
@@ -1384,10 +1392,10 @@ export default {
       for (let i = 0; i < state.attachement.length; i++) {
         formData.append(`attachment[${i}][fileName]`, state.attachement[i].fileName);
         formData.append(`attachment[${i}][fileSize]`, state.attachement[i].fileSize);
-        formData.append(`attachment[${i}][uploadedBy]`, state.attachement[i].uploadedBy._id ? state.attachement[i].uploadedBy._id : state.attachement[i].uploadedBy);
+        formData.append(`attachment[${i}][uploadedBy]`, state.attachement[i].uploadedBy && state.attachement[i].uploadedBy._id ? state.attachement[i].uploadedBy._id : state.attachement[i].uploadedBy);
         formData.append(`attachment[${i}][url]`, state.attachement[i].url);
         formData.append(`attachment[${i}][uploadedAt]`, state.attachement[i].uploadedAt);
-        formData.append(`attachment[${i}][id]`, state.attachement[i]._id);
+        formData.append(`attachment[${i}][id]`, state.attachement[i]._id ? state.attachement[i]._id : state.attachement[i].id);
 
         if (state.attachement[i].comment !== 'undefined' && state.attachement[i].comment !== '' && state.attachement[i].comment !== undefined) {
           formData.append(`attachment[${i}][comment]`, state.attachement[i].comment);
@@ -1398,7 +1406,7 @@ export default {
     if (state.bidData.status === 'templateCreate') {
       if (state.questions && state.questions.length) {
         for (let i = 0; i < state.questions.length; i++) {
-          formData.append(`questions[${i}][id]`, state.questions[i]._id);
+          formData.append(`questions[${i}][id]`, state.questions[i]._id ? state.questions[i]._id : state.questions[i].id);
           formData.append(`questions[${i}][order]`, state.questions[i].order);
           formData.append(`questions[${i}][title]`, state.questions[i].title);
           
@@ -1411,16 +1419,15 @@ export default {
           formData.append(`questions[${i}][required]`, state.questions[i].required ? state.questions[i].required : false);
           if (state.questions[i].options && state.questions[i].options.length) {
             for (let j = 0; j < state.questions[i].options.length; j++) {
-              formData.append(`questions[${i}][options][${j}][id]`, state.questions[i].options[j]._id);
+              formData.append(`questions[${i}][options][${j}][id]`, state.questions[i].options[j]._id ? state.questions[i].options[j]._id : state.questions[i].options[j].id);
               formData.append(`questions[${i}][options][${j}][label]`, state.questions[i].options[j].label);
-              formData.append(`questions[${i}][options][${j}][title]`, state.questions[i].options[j].title);
             }
           }
         }
       }
     } else if (state.questions?.length > 0) {
       for (let i = 0; i < state.questions.length; i++) {
-        formData.append(`questions[${i}][oldId]`, state.questions[i]._id);
+        formData.append(`questions[${i}][id]`, state.questions[i]._id ? state.questions[i]._id : state.questions[i].id);
         formData.append(`questions[${i}][order]`, state.questions[i].order);
         formData.append(`questions[${i}][title]`, state.questions[i].title);
         formData.append(`questions[${i}][type]`, state.questions[i].type);
@@ -1432,9 +1439,8 @@ export default {
         formData.append(`questions[${i}][required]`, state.questions[i].required ? state.questions[i].required : false);
         if (state.questions[i].options && state.questions[i].options.length) {
           for (let j = 0; j < state.questions[i].options?.length; j++) {
-            formData.append(`questions[${i}][options][${j}][oldId]`, state.questions[i].options[j]._id);
+            formData.append(`questions[${i}][options][${j}][id]`, state.questions[i].options[j]._id ? state.questions[i].options[j]._id : state.questions[i].options[j].id);
             formData.append(`questions[${i}][options][${j}][label]`, state.questions[i].options[j].label);
-            formData.append(`questions[${i}][options][${j}][title]`, state.questions[i].options[j].title);
           }
         }
       }
@@ -1570,8 +1576,6 @@ export default {
     if (state.bidData._id) {
       commit('setDraftBidsList', state.bidData._id);
       commit('setBidSerial', state.bidData.serial);
-      // state.draftBidsList = state.bidData.id;
-      // state.bidSerial = state.bidData.serial;
     }
     if (state.bidData.company.companyName === '') {
       state.bidData.company.companyName = payload.company;
@@ -1583,12 +1587,13 @@ export default {
     formData.append('dueTime', state.bidData.dueTime);
     formData.append('regions', state.bidData.region);
     formData.append('qAndAEnabled', state.bidData.qAndAEnabled);
-    formData.append('userId', state.bidData.user._id);
-    formData.append('companyId', state.bidData.company._id);
-    formData.append('company', state.bidData.company);
+    formData.append('userId', rootState.auth.userInfo._id);
+    formData.append('companyId', rootState.auth.userInfo.company._id);
+    formData.append('company', rootState.auth.userInfo.company.companyName);
     formData.append('editedByUserId', rootState.auth.userInfo._id);
 
     formData.append('bidDescriptions[0][body]', state.bidData.bidDescriptions[0].body);
+
     if (state.bidData.bidDescriptions.length > 1) {
       for (let d = 1; d < state.bidData.bidDescriptions.length; d++) {
         formData.append(`bidDescriptions[${d}][title]`, state.bidData.bidDescriptions[d].title);
@@ -1597,23 +1602,25 @@ export default {
     }
     if (state.invitedSuppliers && state.invitedSuppliers.length > 0) {
       for (let i = 0; i < state.invitedSuppliers.length; i++) {
-        if (state.invitedSuppliers[i].company && state.invitedSuppliers[i].company._id) {
-          if (state.invitedSuppliers[i] !== '') {
-            formData.append(`invitedSuppliers[${i}]`, state.invitedSuppliers[i].company._id);
-          }
-        } else {
-          if (state.invitedSuppliers[i] !== '') {
+        if (Array.isArray(state.invitedSuppliers) && state.invitedSuppliers.length > 0 && typeof state.invitedSuppliers[0] === 'object') {
+          if (!state.invitedSuppliers[i].company && !state.invitedSuppliers[i]._id) {
+            formData.append(`invitedSuppliers[${i}]`, state.invitedSuppliers[i]._id);
+          } else if (state.invitedSuppliers[i].company) {
+            formData.append(`invitedSuppliers[${i}]`, state.invitedSuppliers[i].company);
+          } else {
             formData.append(`invitedSuppliers[${i}]`, state.invitedSuppliers[i]._id);
           }
+        } else {
+          formData.append(`invitedSuppliers[${i}]`, state.invitedSuppliers[i]);
         }
       }
     } 
-    if (state.invitedNewSuppliers.length > 0) {
+    if (state.invitedNewSuppliers && state.invitedNewSuppliers.length > 0) {
       for (let i = 0; i < state.invitedNewSuppliers.length; i++) {
         formData.append(`invitedNewSuppliers[${i}]`, state.invitedNewSuppliers[i]._id);
       }
     } 
-    if (state.invitedTeamMembers !== '' && state.invitedTeamMembers && state.invitedTeamMembers?.length > 0) {
+    if (state.invitedTeamMembers && state.invitedTeamMembers?.length > 0) {
       for (let t = 0; t < state.invitedTeamMembers.length; t++) {
         if (!state.invitedTeamMembers[t]._id) {
           formData.append(`invitedTeamMembers[${t}]`, state.invitedTeamMembers[t]);
@@ -1627,70 +1634,66 @@ export default {
       let lineItemsindex = 0;
       for (let i = 0; i < state.bidlines?.length; i++) {
         if (state.bidlines[i].description !== '' && state.bidlines[i].quantity !== '') {
-          formData.append(`lineItems[${lineItemsindex}][id]`, state.bidlines[i].id);
+          formData.append(`lineItems[${lineItemsindex}][id]`, state.bidlines[i]._id);
           formData.append(`lineItems[${lineItemsindex}][description]`, state.bidlines[i].description);
           formData.append(`lineItems[${lineItemsindex}][unit]`, state.bidlines[i].unit);
           formData.append(`lineItems[${lineItemsindex}][inputType]`, state.bidlines[i].inputType);
           formData.append(`lineItems[${lineItemsindex}][quantity]`, state.bidlines[i].quantity);
-          if (state.bidlines[i].buyerComment === 'undefined' || state.bidlines[i].buyerComment === '' || state.bidlines[i].buyerComment === undefined) {
-            formData.append(`lineItems[${lineItemsindex}][buyerComment]`, '');
-          } else {
-            formData.append(`lineItems[${lineItemsindex}][buyerComment]`, state.bidlines[i].buyerComment);
-          }
+          if (state.bidlines[i].buyerComment !== 'undefined' && state.bidlines[i].buyerComment !== '' && state.bidlines[i].buyerComment !== undefined) {
+            formData.append(`lineItems[${lineItemsindex}][buyerComment]`, state.bidlines[i].buyerComment);        
+          } 
           formData.append(`lineItems[${lineItemsindex}][required]`, state.bidlines[i].required);
           lineItemsindex++;
         }
       }
-    } else {
-      formData.append('lineItems', '');
     }
-    if (state.attachement.length > 0 && state.attachement && state.attachement.length > 0) {
+    if (state.attachement && state.attachement.length > 0) {
       for (let i = 0; i < state.attachement.length; i++) {
         formData.append(`attachments[${i}][fileName]`, state.attachement[i].fileName);
         formData.append(`attachments[${i}][fileSize]`, state.attachement[i].fileSize);
-        formData.append(`attachments[${i}][uploadedBy]`, state.attachement[i].uploadedBy._id);
+        formData.append(`attachments[${i}][uploadedBy]`, state.attachement[i].uploadedBy && state.attachement[i].uploadedBy._id ? state.attachement[i].uploadedBy._id : state.attachement[i].uploadedBy);
         formData.append(`attachments[${i}][url]`, state.attachement[i].url);
         formData.append(`attachments[${i}][uploadedAt]`, state.attachement[i].uploadedAt);
-        formData.append(`attachments[${i}][comment]`, state.attachement[i].comment);
-        formData.append(`attachments[${i}][id]`, state.attachement[i].id);
+
+        if (state.attachement[i].comment && state.attachement[i].comment !== '' && state.attachement[i].comment !== 'undefined') {
+          formData.append(`attachments[${i}][comment]`, state.attachement[i].comment);
+        }       
+        formData.append(`attachment[${i}][id]`, state.attachement[i]._id ? state.attachement[i]._id : state.attachement[i].id);
       }
     } 
-
-    if (state.questions !== '') {
+    
+    if (state.questions && state.questions.length) {
       for (let i = 0; i < state.questions.length; i++) {
-        formData.append(`questions[${i}][id]`, state.questions[i].id);
+        formData.append(`questions[${i}][id]`, state.questions[i]._id ? state.questions[i]._id : state.questions[i].id);
         formData.append(`questions[${i}][order]`, state.questions[i].order);
         formData.append(`questions[${i}][title]`, state.questions[i].title);
         formData.append(`questions[${i}][type]`, state.questions[i].type);
-        formData.append(`questions[${i}][questionType]`, state.questions[i].questionType);
+
+        if(state.questions[i].type !== 'category') {
+          formData.append(`questions[${i}][questionType]`, state.questions[i].questionType);
+        }
+        
         formData.append(`questions[${i}][required]`, state.questions[i].required ? state.questions[i].required : false);
-        if (state.questions[i].options) {
+        if (state.questions[i].options && state.questions[i].options.length) {
           for (let j = 0; j < state.questions[i].options.length; j++) {
-            formData.append(`questions[${i}][options][${j}][id]`, state.questions[i].options[j].id);
+            formData.append(`questions[${i}][options][${j}][id]`, state.questions[i].options[j]._id ? state.questions[i].options[j]._id : state.questions[i].options[j].id);
             formData.append(`questions[${i}][options][${j}][label]`, state.questions[i].options[j].label);
-            formData.append(`questions[${i}][options][${j}][title]`, state.questions[i].options[j].title);
           }
         }
       }
-    } else {
-      formData.append('questions', '');
     }
 
     try {
       const res = await axios.post('v2/bid/editBid/', formData, config);
       if (res.status === 200) {
-        // commit('setDraftBidsList',null);
         commit('setIsEditBidChanges', false);
         commit('setDraftTime', new Date().toLocaleString());
-        commit('setSaveBidLoading', false);
-      } else {
-        commit('setSaveBidLoading', false);
-        // commit('setDraftBidsList',null);
       }
+      commit('setSaveBidLoading', false); 
     } catch (err) {
+      commit('setSaveBidLoading', false);
       Sentry.captureException(err);
       commit('setIsEditBidChanges', false);
-      commit('setSaveBidLoading', false);
       if (state.apiCounter === 2) {
         dispatch('apiSignOutAction');
       } else if (err.response && err.response.status === 403) {
