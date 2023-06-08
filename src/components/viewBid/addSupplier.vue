@@ -580,7 +580,7 @@ export default {
         firstName: this.firstName,
         lastName: this.lastName,
         company: this.company,
-        phone: this.results,
+        phoneNumber: this.results,
         email: this.email,
         bidTitle: this.bidDetail.bidData.title,
         bidType: this.bidDetail.bidData.type,
