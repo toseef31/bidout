@@ -68,12 +68,12 @@
                       <div class="title-section text-left">
                         <h4 v-if="chatData.group" class="mb-0 font-weight-bold">{{ getConversationName(chatData.group) }}</h4>
                         <template v-if="chatData.group">
-                          <template v-if="chatData.group.isBid == true">
+                          <template v-if="chatData.group.isBid == true && chatData.group.bid !== null">
                             <p class="sub-title mb-0 font-weight-regular">
-                              {{ chatData.group.bidTitle }}
+                              {{ chatData.group.bid.title }}
                             </p>
                             <p class="sub-title mb-0">
-                              Bid #{{ chatData.group.bidSerial }}
+                              Bid #{{ chatData.group.bid.serial }}
                             </p>
                           </template>
                         </template>
@@ -471,7 +471,7 @@ export default {
         conversationId: this.conversationId,
         sender: {
           name: `${this.user.firstName} ${this.user.lastName}`,
-          id: this.user.id,
+          id: this.user._id,
           company: this.chatData.group.company,
           profilePicture: '',
         },
@@ -515,7 +515,7 @@ export default {
           });
           var grpName = membr[0].name;
         } else {
-          var grpName = convo.groupName;
+          var grpName = convo.company.companyName;
         }
         const obj = {
           group: convo,
@@ -595,7 +595,7 @@ export default {
       if (conversation.type === 'GROUP') {
         return conversation.name.split('|||').find((el) => el.trim() !== this.user.company.company);
       }
-      return conversation.name;
+      return conversation.company.companyName;
     },
   },
   async created() {

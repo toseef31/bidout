@@ -97,7 +97,7 @@ export default {
     formData.append("conversationId", payload.conversationId);
     formData.append("sender[id]", payload.sender.id);
     formData.append("sender[name]", payload.sender.name);
-    formData.append("sender[company]", payload.sender.company);
+    formData.append("sender[company]", payload.sender.company._id);
 
     if (payload.sender.profilePicture) {
       formData.append("sender[profilePicture]", payload.sender.profilePicture);
@@ -117,7 +117,7 @@ export default {
       .post("/v2/chat/sendMessage", formData, config)
       .then((responce) => {
         commit("setChatRefreshToken", 1);
-        dispatch("getAllConversations", rootState.auth.userInfo._id);
+        dispatch("getAllConversations", {id: rootState.auth.userInfo._id});
         commit("setNewMessages", responce.data.message);
       })
       .catch((err) => {
