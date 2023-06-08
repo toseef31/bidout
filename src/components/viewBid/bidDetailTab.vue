@@ -37,16 +37,15 @@
           <span class="additional-title">{{ item && item.title }}:</span>
           <div class="font-weight-regular ql-editor pa-0" v-html="item && item.body"></div>
           <br>
-      </div>
+        </div>
       </div>
     </div>
 
     <div class="px-5 pt-8 bid-row-2">
       <div class="title-detail">Invited Suppliers</div>
 
-      <div v-if="
-        getAllInvitedSuppliers && getAllInvitedSuppliers.length
-      ">
+      <div v-if="getAllInvitedSuppliers && getAllInvitedSuppliers.length
+        ">
         <div class="d-flex bid-section-2" v-for="(item, i) in getAllInvitedSuppliers" :key="i">
           <div class="d-flex align-center">
             <v-img v-if="item && item.image" max-height="26.67" max-width="100" width="100"
@@ -103,22 +102,38 @@
               </v-col>
               <v-col class="mr-10">
 
-                <v-tooltip top>
+                <v-tooltip top v-if="getCompanyIntend(item._id) === 'intended'">
                   <template v-slot:activator="{ on, attrs }">
-                    <v-icon v-bind="attrs" v-on="on" v-if="getCompanyIntend(item._id) === 'not-intended'"
-                      color="#F32349">mdi-close-circle-outline</v-icon>
-                    <v-icon v-bind="attrs" v-on="on" v-if="getCompanyIntend(item._id) === 'intended'"
-                      color="#0D9648">mdi-check-circle-outline</v-icon>
-                    <v-icon v-bind="attrs" v-on="on"
-                      v-if="getCompanyIntend(item._id) === 'neither'">mdi-circle-outline</v-icon>
+                    <v-icon v-bind="attrs" v-on="on" color="#0D9648">mdi-check-circle-outline</v-icon>
+
                   </template>
 
-                  <span v-if="getCompanyIntend(item._id) === 'not-intended'">{{ item && item.companyName ? item.companyName : item.company }} does not intend to
-                    submit a bid</span>
-                  <span v-if="getCompanyIntend(item._id) === 'intended'">{{ item && item.companyName ? item.companyName : item.company }} does intend to submit
+                  <span>{{ item && item.companyName ? item.companyName :
+                    item.company }} does intend to submit
                     a
                     bid</span>
-                  <span v-if="getCompanyIntend(item._id) === 'neither'">{{ item && item.companyName ? item.companyName : item.company }} has not indicated if
+
+                </v-tooltip>
+
+                <v-tooltip top v-if="getCompanyIntend(item._id) === 'not-intended'">
+                  <template v-slot:activator="{ on, attrs }">
+                    <v-icon v-bind="attrs" v-on="on" color="#F32349">mdi-close-circle-outline</v-icon>
+                  </template>
+
+                  <span>{{ item && item.companyName ?
+                    item.companyName : item.company }} does not intend to
+                    submit a bid</span>
+
+                </v-tooltip>
+
+                <v-tooltip top v-if="getCompanyIntend(item._id) === 'neither'">
+                  <template v-slot:activator="{ on, attrs }">
+
+                    <v-icon v-bind="attrs" v-on="on">mdi-circle-outline</v-icon>
+                  </template>
+
+                  <span>{{ item && item.companyName ? item.companyName :
+                    item.company }} has not indicated if
                     they intend to submit a bid</span>
 
                 </v-tooltip>
@@ -135,14 +150,16 @@
                     <v-icon v-bind="attrs" v-on="on" v-if="getCompanyIntend(item._id) === 'not-intended'"
                       color="#F32349">mdi-close-circle-outline</v-icon>
                   </template>
-                  <span v-if="getSubmissionStatus(item._id) === 'sent' && getCompanyIntend(item._id) !== 'not-intended'">{{
-                    item
-                    && item.companyName ? item.companyName : item.company }} has sent Bid Submissions</span>
+                  <span
+                    v-if="getSubmissionStatus(item._id) === 'sent' && getCompanyIntend(item._id) !== 'not-intended'">{{
+                      item
+                      && item.companyName ? item.companyName : item.company }} has sent Bid Submissions</span>
                   <span
                     v-if="getSubmissionStatus(item._id) === 'not-sent' && getCompanyIntend(item._id) !== 'not-intended'">{{
                       item
                       && item.companyName ? item.companyName : item.company }} has not sent Bid Submissions yet</span>
-                  <span v-if="getCompanyIntend(item._id) === 'not-intended'">{{ item && item.companyName ? item.companyName : item.company }} doesn't want to
+                  <span v-if="getCompanyIntend(item._id) === 'not-intended'">{{ item && item.companyName ?
+                    item.companyName : item.company }} doesn't want to
                     sent Bid Submissions</span>
                 </v-tooltip>
               </v-col>
@@ -194,10 +211,9 @@
           <span class="bid-creator-title">Bid Creator</span>
         </div>
 
-        <div v-if="
-          bidDetail.bidData && bidDetail.bidData.invitedTeamMembers &&
-          bidDetail.bidData.invitedTeamMembers.length > 0
-        " v-for="(item, index) in bidDetail.bidData.invitedTeamMembers" :key="index"
+        <div v-if="bidDetail.bidData && bidDetail.bidData.invitedTeamMembers &&
+            bidDetail.bidData.invitedTeamMembers.length > 0
+            " v-for="(item, index) in bidDetail.bidData.invitedTeamMembers" :key="index"
           class="d-flex align-center flex-child">
           <v-img v-if="item.image" max-width="100" height="auto" contain :aspect-ratio="16 / 9" :src="item.image"></v-img>
           <v-avatar v-else color="#0d96481a" size="62" class="ml-5">
@@ -208,8 +224,8 @@
       </div>
 
       <div class="text-center my-8" v-if="!toggleTeam && bidDetail.receivingBids && !isBidOut"><v-btn
-          color="rgba(13, 150, 72, 0.1)" elevation="0" @click="
-            openTeam" height="32px" width="250px" large class="text-capitalize invited-btn py-2 px-4">
+          color="rgba(13, 150, 72, 0.1)" elevation="0" @click="openTeam" height="32px" width="250px" large
+          class="text-capitalize invited-btn py-2 px-4">
           <v-icon class="mr-1">mdi-plus</v-icon>
           Add Additional Team member </v-btn>
       </div>
@@ -230,11 +246,10 @@
     <div class="pt-8 pb-10 bid-row-2">
       <div class="title-detail px-6">Line items</div>
 
-      <v-simple-table class="template-table-style mt-8" v-if="
-        bidDetail.bidData &&
+      <v-simple-table class="template-table-style mt-8" v-if="bidDetail.bidData &&
         bidDetail.bidData.lineItems &&
         bidDetail.bidData.lineItems.length > 0
-      ">
+        ">
         <template v-slot:default>
           <thead>
             <tr>
@@ -264,11 +279,10 @@
 
     <div class="py-8 bid-row-2">
       <div class="title-detail px-6">Attachments</div>
-      <div class="attachment-list-style" v-if="
-        bidDetail.bidData &&
+      <div class="attachment-list-style" v-if="bidDetail.bidData &&
         bidDetail.bidData.attachments &&
         bidDetail.bidData.attachments.length
-      ">
+        ">
         <v-simple-table fixed-header>
           <template v-slot:default>
             <thead>
@@ -287,7 +301,8 @@
                   <img :src="require('@/assets/images/bids/FilePdf.png')" v-if="checkFileType(doc.fileName) === 'pdf'" />
                   <img :src="require('@/assets/images/bids/FileDoc.png')"
                     v-else-if="checkFileType(doc.fileName) === 'docx' || checkFileType(doc.fileName) === 'doc'" />
-                  <v-icon color="#0D1139" v-else-if="checkFileType(doc.fileName) === 'xlsx' || checkFileType(doc.fileName) === 'xls'">mdi-microsoft-excel</v-icon>
+                  <v-icon color="#0D1139"
+                    v-else-if="checkFileType(doc.fileName) === 'xlsx' || checkFileType(doc.fileName) === 'xls'">mdi-microsoft-excel</v-icon>
                   <v-icon color="#0D1139" v-else>mdi-file-document</v-icon>
                 </td>
                 <td class="text-left doc-class "><a :href="doc.url" target="_blank" class="text-decoration-none">{{
@@ -446,17 +461,6 @@ export default {
         return supplier.contracts.some((contract) => contract.contractType === 'ofs-premium');
       }
     },
-    sortedSuppliers(suppliers) {
-      return suppliers.sort((a, b) => {
-        if (a.contracts) {
-          const aHasOfsPremium = a.contracts.some((contract) => contract.contractType === 'ofs-premium');
-          if (aHasOfsPremium) {
-            return -1;
-          }
-          return 1;
-        }
-      });
-    },
     changeDate() {
       this.$router.push(`/update-dueDate/${this.$route.params.serial}`);
     },
@@ -479,13 +483,55 @@ export default {
 
       if (this.bidDetail.bidData) {
         if ((invitedSuppliers && Array.isArray(invitedSuppliers) && invitedSuppliers.length > 0) && (invitedNewSuppliers && Array.isArray(invitedNewSuppliers) && invitedNewSuppliers.length > 0)) {
-          return [...invitedSuppliers, ...invitedNewSuppliers];
+          return [...invitedSuppliers, ...invitedNewSuppliers].sort((a, b) => {
+            let aHasOfsPremium;
+            if (a.contracts) {
+              aHasOfsPremium = this.hasOfsPremium(a);
+            }
+
+            if (a.company && a.company.contracts) {
+              aHasOfsPremium = this.hasOfsPremium(a.company);
+            }
+
+            if (aHasOfsPremium) {
+              return -1;
+            }
+            return 1;
+          });
         }
         if (invitedNewSuppliers && Array.isArray(invitedNewSuppliers) && invitedNewSuppliers.length > 0) {
-          return invitedNewSuppliers;
+          return invitedNewSuppliers.sort((a, b) => {
+            let aHasOfsPremium;
+            if (a.contracts) {
+              aHasOfsPremium = this.hasOfsPremium(a);
+            }
+
+            if (a.company && a.company.contracts) {
+              aHasOfsPremium = this.hasOfsPremium(a.company);
+            }
+
+            if (aHasOfsPremium) {
+              return -1;
+            }
+            return 1;
+          });
         }
         if (invitedSuppliers && Array.isArray(invitedSuppliers) && invitedSuppliers.length > 0) {
-          return invitedSuppliers;
+          return invitedSuppliers.sort((a, b) => {
+            let aHasOfsPremium;
+            if (a.contracts) {
+              aHasOfsPremium = this.hasOfsPremium(a);
+            }
+
+            if (a.company && a.company.contracts) {
+              aHasOfsPremium = this.hasOfsPremium(a.company);
+            }
+
+            if (aHasOfsPremium) {
+              return -1;
+            }
+            return 1;
+          });
         }
 
         return [];
