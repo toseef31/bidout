@@ -527,5 +527,8 @@ export default {
     }
     this.savedraftOnInterval();
   },
+  destroyed() {
+    this.$store.commit('setEntryCheckForEditBid',false)
+  }
 };
 </script>
