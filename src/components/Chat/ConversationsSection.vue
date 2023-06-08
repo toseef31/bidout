@@ -225,7 +225,7 @@ export default {
       this.getAllConversations({id :id, page: this.page});
     },
     loadMore($state) {
-      this.getAllConversationsLoadMore({id: this.user.id, page: this.page})
+      this.getAllConversationsLoadMore({id: this.user._id, page: this.page})
         .then(( data ) => {
           if (data.length) {
             this.page += 1;
