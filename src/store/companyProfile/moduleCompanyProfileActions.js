@@ -208,6 +208,9 @@ export default {
         dispatch("getCompany",payload.companyId)
         commit('setSaveInfoLoading',false);
       }
+      state.basicError = false;
+      commit('setCompanySuccess')
+      commit('setManageCompanyError', null);
     }).catch(async(err) => {
       Sentry.captureException(err);
       commit('setSaveInfoLoading',false);
@@ -224,7 +227,7 @@ export default {
           state.basicError = true;
         }
       }
-      commit('setManageCompanyError','Something went wrong.Please try again in few moments.');
+      commit('setManageCompanyError',err.response.data.message);
           console.log(err);
       });
   }, 
