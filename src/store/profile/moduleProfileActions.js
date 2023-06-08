@@ -276,7 +276,7 @@ export default {
     axios.get('/v2/user/getPendingUsers/'+ payload)
       .then((responce) => {
         if (responce.status === 200) {
-          commit('setPendingUsersList', responce.data.data);
+          commit('setPendingUsersList', responce.data);
           commit('showErrorAlert');
         }
       }).catch(async (err) => {
