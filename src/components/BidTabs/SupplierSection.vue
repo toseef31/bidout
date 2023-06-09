@@ -561,7 +561,7 @@ export default {
         firstName: this.firstName,
         lastName: this.lastName,
         company: this.company,
-        phone: this.results,
+        phoneNumber: this.results,
         email: this.email,
         bidTitle: this.$store.getters.bidData.title,
         bidType: this.$store.getters.bidData.type,

@@ -651,7 +651,7 @@ export default {
         this.supplier.lastName = this.$store.getters.tokenInvitedSupplier.lastName
         this.supplier.email = this.$store.getters.tokenInvitedSupplier.email
         this.supplier.email = this.$store.getters.tokenInvitedSupplier.email
-        this.supplier.phoneNumber = this.$store.getters.tokenInvitedSupplier.phone
+        this.supplier.phoneNumber = this.$store.getters.tokenInvitedSupplier.phoneNumber
       } else {
         this.supplier.editCompany = this.supplier.firstName = this.supplier.lastName =  this.supplier.email =  this.supplier.phoneNumber = ''
 
