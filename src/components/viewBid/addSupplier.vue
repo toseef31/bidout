@@ -256,7 +256,8 @@
                 </div>
               </div>
             </template>
-            <template v-for="(               company               ) in                newRepsInvited               ">
+            <template
+              v-for="(               company               ) in                newSupplierFiltered               ">
               <div class="d-flex align-center justify-space-between list-company pa-4">
                 <div class="comapny-data d-flex align-center">
                   <div class="company-img">
@@ -269,6 +270,10 @@
                     <p class="mb-0">{{ company.company }}</p>
 
                   </div>
+                </div>
+                <div class="add-company">
+                  <v-btn color="rgba(243, 35, 73, 0.1)" tile min-width="32px" height="32" class="pa-0" elevation="0"
+                    @click=" removeNewSup(company)"> <v-icon color="#F32349">mdi-minus</v-icon></v-btn>
                 </div>
               </div>
             </template>
@@ -390,7 +395,7 @@ export default {
       emailRules: [
         (v) => !!v || 'E-mail is required',
         (v) => {
-          v = v.replace(/\s+/g, '');
+          v = v && v.replace(/\s+/g, '');
           return /^[\w-\.+]+@([\w-]+\.)+[\w-]{1,63}$/.test(v) || 'E-mail must be valid';
         },
       ],
@@ -475,7 +480,11 @@ export default {
     // eslint-disable-next-line vue/return-in-computed-property
     filteredEntries() {
       if (this.bidDetail.bidData.invitedSuppliers && this.bidDetail.bidData.invitedSuppliers.length) {
-        this.repsInvited = this.bidDetail.bidData.invitedSuppliers.sort((a, b) => {
+        let inviteData = [];
+
+        inviteData = [...this.bidDetail.bidData.invitedSuppliers];
+
+        this.repsInvited = inviteData.sort((a, b) => {
           let aHasOfsPremium;
           if (a.contracts) {
             aHasOfsPremium = this.hasOfsPremium(a);
@@ -493,9 +502,11 @@ export default {
       }
     },
     newSupplierFiltered() {
-      if (this.bidDetail.bidData.invitedNewSuppliers && this.bidDetail.bidData.invitedNewSuppliers.length) {
-        this.newRepsInvited = this.bidDetail.bidData.invitedNewSuppliers;
+      if (this.newRepsInvited.length) {
+        this.newRepsInvited = [...new Map(this.newRepsInvited.map((item) => [item._id, item])).values()];
+        return this.newRepsInvited;
       }
+      return [];
     },
     getCounter() {
       return this.counter;
@@ -594,7 +605,6 @@ export default {
 
         if (user && user._id) {
           this.newRepsInvited.push(user);
-          this.$store.commit('setInvitedNewSuppliers', this.newRepsInvited);
           this.$refs.form.reset();
           this.phoneNumber = '';
           this.phoneInfo = {
@@ -629,7 +639,7 @@ export default {
       }
     },
     async checkEmailI() {
-      this.email = this.email.replace(/\s+/g, '');
+      this.email = this.email && this.email.replace(/\s+/g, '');
       const testEmail = /^[\w-\.+]+@([\w-]+\.)+[\w-]{1,63}$/.test(this.email);
 
       if (this.email === '' || !testEmail) {
@@ -732,9 +742,11 @@ export default {
       this.$store.commit('pushCompanies', company);
       this.$store.commit('setInvitedSuppliersData', this.repsInvited);
     },
-    removeNewSup(index) {
-      this.newRepsInvited.splice(index, 1);
-      this.$store.commit('setInvitedNewSuppliers', this.newRepsInvited);
+    removeNewSup(company) {
+      const index = this.newRepsInvited.findIndex((el) => el._id === company._id);
+      if (index !== -1) {
+        this.newRepsInvited.splice(index, 1);
+      }
     },
     hasOfsPremium(supplier) {
       return supplier.contracts.some((contract) => contract.contractType === 'ofs-premium');
@@ -764,8 +776,12 @@ export default {
     await this.getCategories();
     await this.getSales();
 
+    const invitedData = this.$store.getters.invitedNewSuppliers;
+    if (invitedData && invitedData.length) {
+      this.newRepsInvited = this.newRepsInvited.concat(invitedData);
+    }
+
     this.filteredEntries;
-    this.newSupplierFiltered;
     this.$store.commit('setEmailExistSuccess', false);
     this.$store.commit('setInvitedSupplierEmailExists', false);
   },
