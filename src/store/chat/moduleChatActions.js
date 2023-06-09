@@ -14,11 +14,12 @@ export default {
       });
   },
   getAllConversations({ commit, state }, payload) {
+    console.log('pay', payload);
     if (state.chatRefreshToken !== 1) {
       commit('setPageLoader', true);
     }
     axios
-      .get(`/chat/getConversations/${payload.id}?page=${state.page}&limit=10`)
+      .get(`/v2/chat/getConversations/${payload.id}?page=${state.page}&limit=10`)
       .then((responce) => {
         if (responce.status === 200) {
           commit('addConverstaionList', responce.data.conversations);
@@ -34,7 +35,7 @@ export default {
   getAllConversationsLoadMore({ commit, state, dispatch }, payload) {
     return new Promise((resolve, reject) => {
       axios
-        .get(`/chat/getConversations/${payload.id}?page=${payload.page}&limit=10`)
+        .get(`/v2/chat/getConversations/${payload.id}?page=${payload.page}&limit=10`)
         .then((responce) => {
           dispatch('getAllConversationsSearch', payload.id);
           resolve(responce.data.conversations);
@@ -45,13 +46,13 @@ export default {
   },
   getAllConversationsSearch({ commit, state, rootState, dispatch }, payload) {
     axios
-      .get(`/chat/getConversations/${payload}?page=${state.searchPage}&limit=10`)
+      .get(`/v2/chat/getConversations/${payload}?page=${state.searchPage}&limit=10`)
       .then((responce) => {
         if (responce.status === 200) {
           if (responce.data.conversations.length > 0) {
             commit('searchIncrement');
             commit('setAllConversations', responce.data.conversations);
-            dispatch('getAllConversationsSearch', rootState.auth.userInfo.id);
+            dispatch('getAllConversationsSearch', rootState.auth.userInfo._id);
           }
           if (state.chatRefreshToken !== 1) {
             commit('setPageLoader', false);
@@ -96,7 +97,7 @@ export default {
     formData.append("conversationId", payload.conversationId);
     formData.append("sender[id]", payload.sender.id);
     formData.append("sender[name]", payload.sender.name);
-    formData.append("sender[company]", payload.sender.company);
+    formData.append("sender[company]", payload.sender.company._id);
 
     if (payload.sender.profilePicture) {
       formData.append("sender[profilePicture]", payload.sender.profilePicture);
@@ -116,7 +117,7 @@ export default {
       .post("/v2/chat/sendMessage", formData, config)
       .then((responce) => {
         commit("setChatRefreshToken", 1);
-        dispatch("getAllConversations", rootState.auth.userInfo._id);
+        dispatch("getAllConversations", {id: rootState.auth.userInfo._id});
         commit("setNewMessages", responce.data.message);
       })
       .catch((err) => {

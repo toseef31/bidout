@@ -186,7 +186,8 @@
           <div class="companies-list">
 
             <template v-for="(company, index) in repsInvited">
-              <div class="d-flex align-center justify-space-between list-company pa-4" v-if="company ? company.companyName : ''">
+              <div class="d-flex align-center justify-space-between list-company pa-4"
+                v-if="company ? company.companyName : ''">
                 <div class="comapny-data d-flex align-center">
                   <div class="company-img">
                     <img v-if="company.image" class="image-class" :src="company.image" />
@@ -215,7 +216,8 @@
                     @click="removeCompany(company, index)"> <v-icon color="#F32349">mdi-minus</v-icon></v-btn>
                 </div>
               </div>
-              <div class="d-flex align-center justify-space-between list-company pa-4" v-if="!company ? company.companyName : ''">
+              <div class="d-flex align-center justify-space-between list-company pa-4"
+                v-if="!company ? company.companyName : ''">
                 <div class="comapny-data d-flex align-center">
                   <div class="company-img">
                     <div class="avatar-image" v-if="!company.image">
@@ -336,10 +338,9 @@
             </v-card-text>
           </v-card>
         </v-dialog>
-        <v-btn color="#0D9648" elevation="0" height="56px" width="220px" large
-        :loading="saveBidLoading" 
-        :disabled="saveBidLoading"
-          class="white--text text-capitalize font-weight-bold mt-5 mb-5 save-btn" @click="changeTab">Save
+        <v-btn color="#0D9648" elevation="0" height="56px" width="220px" large :loading="saveBidLoading"
+          :disabled="saveBidLoading" class="white--text text-capitalize font-weight-bold mt-5 mb-5 save-btn"
+          @click="changeTab">Save
           Changes</v-btn>
       </v-col>
     </v-row>
@@ -373,7 +374,10 @@ export default {
       email: '',
       emailRules: [
         (v) => !!v || 'E-mail is required',
-        (v) => /^[\w-\.+]+@([\w-]+\.)+[\w-]{1,63}$/.test(v) || 'E-mail must be valid',
+        (v) => {
+          v = v && v.replace(/\s+/g, '');
+          return /^[\w-\.+]+@([\w-]+\.)+[\w-]{1,63}$/.test(v) || 'E-mail must be valid';
+        },
       ],
       phoneNumber: '',
       results: {},
@@ -409,7 +413,7 @@ export default {
     };
   },
   computed: {
-    ...mapGetters(['newSupplier', 'userInfo', 'loadingInvite', 'isEditBidChanges','saveBidLoading']),
+    ...mapGetters(['newSupplier', 'userInfo', 'loadingInvite', 'isEditBidChanges', 'saveBidLoading']),
     sortedCategories() {
       const categories = [...this.$store.getters.categories];
       categories.sort((a, b) => a.category.orderNumber - b.category.orderNumber);
@@ -430,7 +434,7 @@ export default {
       if (this.$store.getters.companiesList && this.$store.getters.companiesList.length) {
         if (this.repsInvited.length) {
           unique = this.$store.getters.companiesList ? this.$store.getters.companiesList.filter((el) => !this.repsInvited.find((item) => el._id === item._id) && el._id !== this.userInfo.company._id) : [];
-   
+
           return [...new Map(unique.map((item) => [item._id, item])).values()];
         }
 
@@ -466,7 +470,6 @@ export default {
           }
           return 1;
         });
-
       }
     },
     // eslint-disable-next-line vue/no-side-effects-in-computed-properties, vue/return-in-computed-property,
@@ -611,7 +614,7 @@ export default {
       }
     },
     async checkEmailI() {
-      this.email = this.email.replace(/\s+/g, '');
+      this.email = this.email && this.email.replace(/\s+/g, '');
 
       const testEmail = /^[\w-\.+]+@([\w-]+\.)+[\w-]{1,63}$/.test(this.email);
 
@@ -769,7 +772,7 @@ export default {
     checkIntent(id) {
       let result = 'neither';
       const intent = this.getBidAllIntend;
-      
+
       if (intent && id) {
         intent.forEach((el) => {
           if (el.company === id && (el.answer === 'true' || el.answer === true)) {

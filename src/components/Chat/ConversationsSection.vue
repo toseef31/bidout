@@ -19,7 +19,7 @@
             active-class="grey--text">
             <template v-for="(conversation, index) in conversationsList">
               <template v-if="chatData">
-                <v-list-item   @click="openChat(conversation,conversation.groupName)" :key="conversation._id"  :class="{ 'grey--text v-list-item--active' : conversation._id ===  conversationsIds }" v-if="conversation.type == 'GROUP'">
+                <v-list-item   @click="openChat(conversation,conversation.company.companyName)" :key="conversation._id"  :class="{ 'grey--text v-list-item--active' : conversation._id ===  conversationsIds }">
                 <template>
                   <v-list-item-avatar>
                     <v-icon>mdi-domain</v-icon>
@@ -27,12 +27,12 @@
                   <v-list-item-content>
                     <v-list-item-title> {{  getConversationName(conversation)  }} </v-list-item-title>
 
-                    <v-list-item-subtitle v-if="conversation.isBid == true"
+                    <v-list-item-subtitle v-if="conversation.isBid === true && conversation.bid != null"
                       class="text--primary"
-                      v-text="conversation.bidTitle"
+                      v-text="conversation.bid.title"
                     ></v-list-item-subtitle>
 
-                    <v-list-item-subtitle v-if="conversation.isBid == true">Bid #{{conversation.bidSerial}}</v-list-item-subtitle>
+                    <v-list-item-subtitle v-if="conversation.isBid === true  && conversation.bid != null">Bid #{{conversation.bid.serial}}</v-list-item-subtitle>
                   </v-list-item-content>
                   <v-list-item-action class="mt-n5">
                     <v-list-item-action-text v-if="!conversation.latestMessage || conversation.latestMessage == null">{{ istoday(conversation.createdAt) }}</v-list-item-action-text>
@@ -183,7 +183,7 @@ export default {
     ...mapGetters(['noConversation']),
     conversationsList() {
       if (this.$store.state.chat.searchConv != '') {
-        return _.orderBy(this.$store.getters.allConversations.filter((item) => this.$store.state.chat.searchConv.toLowerCase().split(' ').every((v) => item.company.toLowerCase().includes(v))), 'latestMessage', 'desc');
+        return _.orderBy(this.$store.getters.allConversations.filter((item) => this.$store.state.chat.searchConv.toLowerCase().split(' ').every((v) => item.company.companyName.toLowerCase().includes(v))), 'latestMessage', 'desc');
       } else {
         if (this.$store.getters.conversations) {
           this.$store.commit('setPageLoader', false);
@@ -225,7 +225,7 @@ export default {
       this.getAllConversations({id :id, page: this.page});
     },
     loadMore($state) {
-      this.getAllConversationsLoadMore({id: this.user.id, page: this.page})
+      this.getAllConversationsLoadMore({id: this.user._id, page: this.page})
         .then(( data ) => {
           if (data.length) {
             this.page += 1;
@@ -280,7 +280,7 @@ export default {
       if (conversation.type === 'GROUP') {
         return conversation.name.split('|||').find((el) => el.trim() !== this.user.company.companyName);
       }
-      return conversation.name;
+      return conversation.company.companyName;
     },
   },
   async created() {

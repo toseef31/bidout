@@ -435,14 +435,6 @@ export default {
           profileSummary: this.profileSummary,
         };
         await this.updateBasicProfile(data);
-        if (this.$store.state.companyProfile.basicError) {
-          return this.$toasted.show(`Error! Something went wrong please try again`, {
-            class: "error-toast",
-            type: "error",
-            duration: 5000,
-            position: "top-center",
-          });
-        }
       } else {
         return this.$toasted.show(`Please fill out the company name.`, {
           class: "error-toast",

@@ -62,7 +62,10 @@ export default {
             },
             (error) => {
               if (error.response.status === 404) {
-                commit("setError", error.response.data);
+                commit("setError", error.response.data.message);
+              }
+              if (error.response.status === 403) {
+                commit("setError", error.response.data.message);
               }
               if (error.response.status === 401) {
                 commit("setError", "Please try again after few moments.");
