@@ -154,11 +154,11 @@ export default {
             commit('setTeamMembersForBid', res.data.bidData.invitedTeamMembers);
           }
   
-          if (res.data.user_type === 'supplier' && res.data.supplierSubmissions && res.data.supplierSubmissions.length) {
+          if (res.data.user_type === 'supplier' && res.data.supplierSubmissions && res.data.supplierSubmissions._id) {
             commit('setSupplierBid', res.data.supplierSubmissions);
             commit('setIsBidSubmitted', true);
           } else {
-            commit('setSupplierBid', []);
+            commit('setSupplierBid', null);
             commit('setIsBidSubmitted', false);
           }
         }
@@ -440,11 +440,11 @@ export default {
       for (let i = 0; i < payload.lineItems.length; i++) {
         formData.append(`lineItems[${i}][price]`, payload.lineItems[i].price);
         formData.append(`lineItems[${i}][id]`, payload.lineItems[i].id);
-        formData.append(`lineItems[${i}][Qty]`, payload.lineItems[i].quantity);
+        formData.append(`lineItems[${i}][quantity]`, payload.lineItems[i].quantity);
         formData.append(`lineItems[${i}][required]`, payload.lineItems[i].required);
       }
     }
-
+    
     if (payload.answers && payload.answers.length) {
       for (let i = 0; i < payload.answers.length; i++) {
         formData.append(`answers[${i}][questionId]`, payload.answers[i].questionId);
@@ -452,7 +452,7 @@ export default {
       }
     }
     try {
-      const res = await axios.post('v2/bid/submitBid/', formData, config);
+      const res = await axios.post('v2/bidSubmission/submitBid/', formData, config);
 
       if (res.status === 200) {
         commit('setIsBidSubmitted', true);
@@ -494,15 +494,15 @@ export default {
     formData.append('userId', payload.userId);
     formData.append('companyId', payload.companyId);
     formData.append('bidId', payload.bidId);
-    formData.append('submitBidId', payload.submitBidId);
+    formData.append('bidSubmissionId', payload.submitBidId);
 
     if (payload.supplierNote && payload.supplierNote !== '') {
       formData.append('supplierNote', payload.supplierNote);
     }
-
+    console.log(payload.supplierAttachments)
     if (payload.supplierAttachments && payload.supplierAttachments.length) {
       for (let i = 0; i < payload.supplierAttachments.length; i++) {
-        formData.append(`supplierAttachments[${i}]`, payload.supplierAttachments[i]);
+        formData.append(`supplierAttachments[${i}]`, payload.supplierAttachments[i].attachment);
       }
     }
 
@@ -510,7 +510,7 @@ export default {
       for (let i = 0; i < payload.lineItems.length; i++) {
         formData.append(`lineItems[${i}][price]`, payload.lineItems[i].price);
         formData.append(`lineItems[${i}][id]`, payload.lineItems[i].id);
-        formData.append(`lineItems[${i}][Qty]`, payload.lineItems[i].quantity);
+        formData.append(`lineItems[${i}][quantity]`, payload.lineItems[i].quantity);
         formData.append(`lineItems[${i}][required]`, payload.lineItems[i].required);
       }
     }
@@ -529,7 +529,7 @@ export default {
       }
     }
     try {
-      const res = await axios.post('v2/bid/editSubmitBid/', formData, config);
+      const res = await axios.post('v2/bidSubmission/editBidSubmission/', formData, config);
 
       if (res.status === 200) {
         commit('removeSupplierAttachment');

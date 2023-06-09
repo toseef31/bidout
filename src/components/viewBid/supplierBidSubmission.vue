@@ -54,7 +54,7 @@
                   <div class="mr-2">
                     <v-text-field v-model="lineItems[index]['price']" single-line class="mt-7" outlined
                       :disabled="checkTimeForLineItems" dense prefix="$" type="text" :key="index"
-                      :rules="item.required === 'true' ? lineItemsRule : []" @input="validatePrice($event, index)"
+                      :rules="item.required === true ? lineItemsRule : []" @input="validatePrice($event, index)"
                       @keypress="NumbersOnly($event, index)" @blur="formatNumber(index)" v-if="lineItems[index]['bid']"
                       :class="{ 'error--text': getPriceError[index].message !== '' }"
                       :hideDetails="getPriceError[index].message !== ''">
@@ -67,7 +67,7 @@
                     </div>
                   </div>
 
-                  <div v-if="item.required === 'false' && bidDetail.receivingBids">
+                  <div v-if="item.required === false && bidDetail.receivingBids">
                     <v-btn @click="noBidUpdate(index)" icon v-if="lineItems[index]['bid']">
                       <v-icon size="20" color="#F03F20">mdi-close</v-icon>
                     </v-btn>
@@ -84,7 +84,7 @@
                 {{ item.quantity }}
               </td>
               <td class="text-left ">
-                {{ item.required === 'true' ? 'Yes' : 'No' }}
+                {{ item.required === true ? 'Yes' : 'No' }}
               </td>
               <td class="text-left">
                 {{ item.buyerComment === 'undefined' || item.buyerComment === '' ? '' : item.buyerComment }}
@@ -113,26 +113,26 @@
 
               <v-col md="8" class="first-child" v-if="item.type === 'question'">{{
                 item.title
-              }} <sup class="sub-title">{{ item.required === 'true' ? '(Required)' : '' }}</sup></v-col>
+              }} <sup class="sub-title">{{ item.required === true ? '(Required)' : '' }}</sup></v-col>
               <v-col class="second-child text-right">
 
                 <v-checkbox v-if="(item.questionType === 'checkbox' && !item.options)"
-                  :rules="item.required === 'true' ? answerRule : []" :disabled="!bidDetail.receivingBids"
+                  :rules="item.required === true ? answerRule : []" :disabled="!bidDetail.receivingBids"
                   v-model="answers[index]['answer']"></v-checkbox>
 
                 <v-radio-group v-model="answers[index]['answer']" row :disabled="!bidDetail.receivingBids"
-                  :rules="item.required === 'true' ? answerRule : []"
+                  :rules="item.required === true ? answerRule : []"
                   v-if="(item.questionType === 'checkbox' && item.options)">
                   <v-radio :label="item.options[selectIndex].label" :value="item.options[selectIndex].label"
                     color="#0d9648" checked v-for="(select, selectIndex) in item.options" :key="select._id"></v-radio>
                 </v-radio-group>
 
-                <v-text-field v-if="item.questionType === 'textfield'" :rules="item.required === 'true' ? answerRule : []"
+                <v-text-field v-if="item.questionType === 'textfield'" :rules="item.required === true ? answerRule : []"
                   outlined :disabled="!bidDetail.receivingBids" v-model="answers[index]['answer']"></v-text-field>
 
                 <v-textarea v-if="item.questionType === 'textarea'" outlined auto-grow
                   :disabled="!bidDetail.receivingBids" rows="3" row-height="25"
-                  :rules="item.required === 'true' ? answerRule : []" v-model="answers[index]['answer']"></v-textarea>
+                  :rules="item.required === true ? answerRule : []" v-model="answers[index]['answer']"></v-textarea>
 
                 <div class="upload-attach" v-if="item.questionType === 'uploadFile'">
                   <div class="d-flex justify-space-between align-center"
@@ -181,7 +181,7 @@
                                                                                                                                                                                                                                                     text-center
                                                                                                                                                                                                                                                   ">
                     <v-file-input :id="`uploadFileQ${index}`" @change="handleDocumentForAnswer($event, index)"
-                      :disabled="!bidDetail.receivingBids" :rules="item.required === 'true' ? fileRule : []" />
+                      :disabled="!bidDetail.receivingBids" :rules="item.required === true ? fileRule : []" />
 
                     <div class="mt-1">
                       <v-icon class="mr-4">mdi-cloud-upload-outline</v-icon>Upload here
@@ -222,7 +222,8 @@
                       v-if="checkFileType(doc.fileName) === 'pdf'" />
                     <img :src="require('@/assets/images/bids/FileDoc.png')"
                       v-else-if="checkFileType(doc.fileName) === 'docx' || checkFileType(doc.fileName) === 'doc'" />
-                      <v-icon color="#0D1139" v-else-if="checkFileType(doc.fileName) === 'xlsx' || checkFileType(doc.fileName) === 'xls'">mdi-microsoft-excel</v-icon>
+                    <v-icon color="#0D1139"
+                      v-else-if="checkFileType(doc.fileName) === 'xlsx' || checkFileType(doc.fileName) === 'xls'">mdi-microsoft-excel</v-icon>
                     <v-icon color="#0D1139" v-else>mdi-file-document</v-icon>
                   </td>
                   <td class="text-left">{{ doc.fileName }}</td>
@@ -282,7 +283,7 @@
       </div>
 
       <div class="text-center mt-3"
-        v-if="(getIntent !== null && getIntent === 'true' && bidDetail.receivingBids && !isBidSubmitted)">
+        v-if="(getIntent !== null && (getIntent === 'true' || getIntent === true) && bidDetail.receivingBids && !isBidSubmitted)">
         <v-btn color="#0D9648" height="56" width="220"
           class="text-capitalize white--text font-weight-bold save-button px-9" @click="submit('submit')"
           :disabled="showLoading" large>
@@ -291,7 +292,7 @@
         </v-btn>
       </div>
       <div class="text-center mt-3"
-        v-if="(getIntent !== null && getIntent === 'true' && !checkTimeForLineItems && isBidSubmitted)">
+        v-if="(getIntent !== null && (getIntent === 'true' || getIntent === true) && !checkTimeForLineItems && isBidSubmitted)">
         <v-btn color="#0D9648" height="56" width="220"
           class="text-capitalize white--text font-weight-bold save-button px-9" @click="submit('edit')"
           :disabled="showLoading" large>
@@ -446,7 +447,9 @@ export default {
       return num.toString().replace(/\B(?=(\d{3})+(?!\d)\.?)/g, '');
     },
     removeNonNumeric(num) {
-      num = num.replace(/[^\d.]/g, '');
+      if (num !== '' && isNaN(num)) {
+        num = num.replace(/[^\d.]/g, '');
+      }
       return num;
     },
     validatePrice(event, index) {
@@ -630,13 +633,13 @@ export default {
         if (this.getSupplierBid.lineItems[i].price === 'NO_BID') {
           updatePrice = this.getSupplierBid.lineItems[i].price;
         } else {
-          updatePrice = this.getSupplierBid.lineItems[i].price ? parseFloat(this.removeNonNumeric(this.getSupplierBid.lineItems[i].price)).toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 }) : '';
+          updatePrice = this.getSupplierBid.lineItems[i].price ? parseFloat(this.removeNonNumeric(this.getSupplierBid.lineItems[i].price.toString())).toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 }) : '';
         }
         this.lineItems.push({
           price: updatePrice,
           bid: this.getSupplierBid.lineItems[i].price !== 'NO_BID',
           id: this.getSupplierBid.lineItems[i]._id,
-          quantity: this.getSupplierBid.lineItems[i].Qty,
+          quantity: this.getSupplierBid.lineItems[i].quantity,
           required: this.getSupplierBid.lineItems[i].required,
         });
 
@@ -662,7 +665,7 @@ export default {
       this.supplierNote = this.getSupplierBid.supplierNote;
 
       for (let i = 0; i < bidData.questions.length; i++) {
-        if (this.getSupplierBid.answers[i].questionId === bidData.questions[i].id) {
+        if (this.getSupplierBid.answers[i].questionId === bidData.questions[i]._id) {
           if (bidData.questions[i].questionType === 'uploadFile') {
             this.answers.push({
               questionId: this.getSupplierBid.answers[i].questionId,
@@ -697,7 +700,7 @@ export default {
 
         dataD[index].push([el.inputType]);
         dataD[index].push([el.quantity]);
-        dataD[index].push([el.required === 'true' ? 'Yes' : 'No']);
+        dataD[index].push([el.required === true ? 'Yes' : 'No']);
         dataD[index].push([el.buyerComment]);
       });
 
@@ -773,7 +776,9 @@ export default {
   created() {
     if (this.isBidSubmitted) {
       this.initializeForEdit();
-    } else { this.initializeForNew(); }
+    } else {
+      this.initializeForNew();
+    }
 
     this.user = this.$store.getters.userInfo;
   },
