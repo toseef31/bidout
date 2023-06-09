@@ -204,7 +204,7 @@ export default {
       this.getPendingUsers(company);
     },
     accept(user){
-      this.acceptPendingUser({user, companyName: this.user.company.companyName});
+      this.acceptPendingUser({user, companyId: this.user.company._id});
     },
   },
   mounted() {
