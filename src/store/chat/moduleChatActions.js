@@ -1,6 +1,5 @@
 import axios from "axios";
 import * as Sentry from "@sentry/vue";
-import state from "../state";
 
 export default {
   unreadMessagesCount({ commit }, payload) {
@@ -39,6 +38,9 @@ export default {
         .then((responce) => {
           if (state.searchApiCount === 0) {
             dispatch('getAllConversationsSearch', payload.id);
+          }
+          if (state.searchApiCount === 1){
+            commit('addConverstaionList', responce.data.conversations)
           }
           resolve(responce.data.conversations);
         }).catch((err) => {
@@ -124,7 +126,8 @@ export default {
           id: rootState.auth.userInfo._id,
           page: 1,
         };
-        dispatch("getAllConversations", obj);
+
+        dispatch("getAllConversationsLoadMore", obj);
         commit("setNewMessages", responce.data.message);
       })
       .catch((err) => {
