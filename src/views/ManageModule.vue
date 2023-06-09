@@ -39,7 +39,7 @@
                                   </div>
                                 </div>
                                 <div class="panel-content" v-if="modules.contractType == 'ofs' || modules.contractType == 'ofs-premium'">
-                                  <p class="mb-1 black--text">Renewal Date: {{ modules.renewsOn ? new Date(modules.renewsOn._seconds * 1000).toLocaleDateString() : 'Invalid Date'}} </p>
+                                  <p class="mb-1 black--text">Renewal Date: {{ modules.renewsOn ? new Date(modules.renewsOn).toLocaleDateString() : 'Invalid Date'}} </p>
                                   <p class="black--text mb-0">Annual Fee: ${{modules.annualFee}}</p>
                                 </div>
                               </div>
