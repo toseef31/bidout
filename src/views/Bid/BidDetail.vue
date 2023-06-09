@@ -571,8 +571,8 @@
               }}
               <div
                 v-if="
-                  showIntent === true ||
-                  (showIntent === 'true' && !isBidSubmitted)
+                  (showIntent === true ||
+                  showIntent === 'true') && !isBidSubmitted
                 "
                 @click="ChangeT('tab-2')"
               >
@@ -616,12 +616,12 @@
                   ? "Bid Submission is not allowed"
                   : ""
               }}
-              {{ showIntent === true || showIntent === 'true' && !isBidSubmitted && isBidOut ? 'Bid Submission is not
+              {{ (showIntent === true || showIntent === 'true') && !isBidSubmitted && isBidOut ? 'Bid Submission is not
                             allowed' : ''}}
               <div
                 v-if="
-                  showIntent === true ||
-                  (showIntent === 'true' && !isBidSubmitted && !isBidOut)
+                  (showIntent === true ||
+                  showIntent === 'true') && !isBidSubmitted && !isBidOut
                 "
                 @click="ChangeT('tab-2')"
               >

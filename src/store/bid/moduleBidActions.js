@@ -154,11 +154,11 @@ export default {
             commit('setTeamMembersForBid', res.data.bidData.invitedTeamMembers);
           }
   
-          if (res.data.user_type === 'supplier' && res.data.supplierSubmissions && res.data.supplierSubmissions.length) {
+          if (res.data.user_type === 'supplier' && res.data.supplierSubmissions && res.data.supplierSubmissions._id) {
             commit('setSupplierBid', res.data.supplierSubmissions);
             commit('setIsBidSubmitted', true);
           } else {
-            commit('setSupplierBid', []);
+            commit('setSupplierBid', null);
             commit('setIsBidSubmitted', false);
           }
         }
@@ -499,10 +499,10 @@ export default {
     if (payload.supplierNote && payload.supplierNote !== '') {
       formData.append('supplierNote', payload.supplierNote);
     }
-
+    console.log(payload.supplierAttachments)
     if (payload.supplierAttachments && payload.supplierAttachments.length) {
       for (let i = 0; i < payload.supplierAttachments.length; i++) {
-        formData.append(`supplierAttachments[${i}]`, payload.supplierAttachments[i]);
+        formData.append(`supplierAttachments[${i}]`, payload.supplierAttachments[i].attachment);
       }
     }
 

@@ -54,7 +54,7 @@
                   <div class="mr-2">
                     <v-text-field v-model="lineItems[index]['price']" single-line class="mt-7" outlined
                       :disabled="checkTimeForLineItems" dense prefix="$" type="text" :key="index"
-                      :rules="item.required === 'true' ? lineItemsRule : []" @input="validatePrice($event, index)"
+                      :rules="item.required === true ? lineItemsRule : []" @input="validatePrice($event, index)"
                       @keypress="NumbersOnly($event, index)" @blur="formatNumber(index)" v-if="lineItems[index]['bid']"
                       :class="{ 'error--text': getPriceError[index].message !== '' }"
                       :hideDetails="getPriceError[index].message !== ''">
@@ -67,7 +67,7 @@
                     </div>
                   </div>
 
-                  <div v-if="item.required === 'false' && bidDetail.receivingBids">
+                  <div v-if="item.required === false && bidDetail.receivingBids">
                     <v-btn @click="noBidUpdate(index)" icon v-if="lineItems[index]['bid']">
                       <v-icon size="20" color="#F03F20">mdi-close</v-icon>
                     </v-btn>
@@ -84,7 +84,7 @@
                 {{ item.quantity }}
               </td>
               <td class="text-left ">
-                {{ item.required === 'true' ? 'Yes' : 'No' }}
+                {{ item.required === true ? 'Yes' : 'No' }}
               </td>
               <td class="text-left">
                 {{ item.buyerComment === 'undefined' || item.buyerComment === '' ? '' : item.buyerComment }}
@@ -222,7 +222,8 @@
                       v-if="checkFileType(doc.fileName) === 'pdf'" />
                     <img :src="require('@/assets/images/bids/FileDoc.png')"
                       v-else-if="checkFileType(doc.fileName) === 'docx' || checkFileType(doc.fileName) === 'doc'" />
-                      <v-icon color="#0D1139" v-else-if="checkFileType(doc.fileName) === 'xlsx' || checkFileType(doc.fileName) === 'xls'">mdi-microsoft-excel</v-icon>
+                    <v-icon color="#0D1139"
+                      v-else-if="checkFileType(doc.fileName) === 'xlsx' || checkFileType(doc.fileName) === 'xls'">mdi-microsoft-excel</v-icon>
                     <v-icon color="#0D1139" v-else>mdi-file-document</v-icon>
                   </td>
                   <td class="text-left">{{ doc.fileName }}</td>
@@ -446,7 +447,9 @@ export default {
       return num.toString().replace(/\B(?=(\d{3})+(?!\d)\.?)/g, '');
     },
     removeNonNumeric(num) {
-      num = num.replace(/[^\d.]/g, '');
+      if (num !== '' && isNaN(num)) {
+        num = num.replace(/[^\d.]/g, '');
+      }
       return num;
     },
     validatePrice(event, index) {
@@ -630,7 +633,7 @@ export default {
         if (this.getSupplierBid.lineItems[i].price === 'NO_BID') {
           updatePrice = this.getSupplierBid.lineItems[i].price;
         } else {
-          updatePrice = this.getSupplierBid.lineItems[i].price ? parseFloat(this.removeNonNumeric(this.getSupplierBid.lineItems[i].price)).toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 }) : '';
+          updatePrice = this.getSupplierBid.lineItems[i].price ? parseFloat(this.removeNonNumeric(this.getSupplierBid.lineItems[i].price.toString())).toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 }) : '';
         }
         this.lineItems.push({
           price: updatePrice,
@@ -645,6 +648,8 @@ export default {
           status: true,
         });
       }
+
+      console.log(this.lineItems)
 
       for (let i = 0; i < this.getSupplierBid.supplierAttachments.length; i++) {
         this.$store.commit('setSupplierAttachment', {
@@ -773,7 +778,9 @@ export default {
   created() {
     if (this.isBidSubmitted) {
       this.initializeForEdit();
-    } else { this.initializeForNew(); }
+    } else {
+      this.initializeForNew();
+    }
 
     this.user = this.$store.getters.userInfo;
   },
