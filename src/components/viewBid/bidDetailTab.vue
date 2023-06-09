@@ -140,29 +140,45 @@
 
               </v-col>
               <v-col>
-                <v-tooltip top>
+                <v-tooltip top
+                  v-if="getSubmissionStatus(item._id) === 'not-sent' && getCompanyIntend(item._id) !== 'not-intended'">
                   <template v-slot:activator="{ on, attrs }">
-                    <v-icon v-bind="attrs" v-on="on"
-                      v-if="getSubmissionStatus(item._id) === 'not-sent' && getCompanyIntend(item._id) !== 'not-intended'">mdi-circle-outline</v-icon>
-                    <img :src="require('@/assets/images/bids/bidSubmitted.svg')"
-                      v-if="getSubmissionStatus(item._id) === 'sent' && getCompanyIntend(item._id) !== 'not-intended'"
-                      width="24" height="24" v-bind="attrs" v-on="on" />
-                    <v-icon v-bind="attrs" v-on="on" v-if="getCompanyIntend(item._id) === 'not-intended'"
-                      color="#F32349">mdi-close-circle-outline</v-icon>
+                    <v-icon v-bind="attrs" v-on="on">mdi-circle-outline</v-icon>
                   </template>
-                  <span
-                    v-if="getSubmissionStatus(item._id) === 'sent' && getCompanyIntend(item._id) !== 'not-intended'">{{
-                      item
-                      && item.companyName ? item.companyName : item.company }} has sent Bid Submissions</span>
-                  <span
-                    v-if="getSubmissionStatus(item._id) === 'not-sent' && getCompanyIntend(item._id) !== 'not-intended'">{{
-                      item
-                      && item.companyName ? item.companyName : item.company }} has not sent Bid Submissions yet</span>
-                  <span v-if="getCompanyIntend(item._id) === 'not-intended'">{{ item && item.companyName ?
-                    item.companyName : item.company }} doesn't want to
-                    sent Bid Submissions</span>
+                  <span>{{
+                    item
+                    && item.companyName ? item.companyName : item.company }} has not sent Bid Submissions yet</span>
                 </v-tooltip>
+
+                <v-tooltip top
+                  v-if="getSubmissionStatus(item._id) === 'sent' && getCompanyIntend(item._id) !== 'not-intended'">
+                  <template v-slot:activator="{ on, attrs }">
+                    <img :src="require('@/assets/images/bids/bidSubmitted.svg')" width="24" height="24" v-bind="attrs"
+                      v-on="on" />
+
+                  </template>
+                  <span>{{
+                    item
+                    && item.companyName ? item.companyName : item.company }} has sent Bid Submissions</span>
+
+                </v-tooltip>
+                <div
+                  v-if="getCompanyIntend(item._id) === 'not-intended' || getSubmissionStatus(item._id) === 'sent' && getCompanyIntend(item._id) === 'not-intended'">
+                  <v-tooltip top
+                    v-if="getCompanyIntend(item._id) === 'not-intended' || getSubmissionStatus(item._id) === 'sent' && getCompanyIntend(item._id) === 'not-intended'">
+                    <template v-slot:activator="{ on, attrs }">
+
+                      <v-icon v-bind="attrs" v-on="on" color="#F32349">mdi-close-circle-outline</v-icon>
+                    </template>
+
+                    <span>{{
+                      item && item.companyName ?
+                      item.companyName : item.company }} doesn't want to
+                      sent Bid Submissions</span>
+                  </v-tooltip>
+                </div>
               </v-col>
+
             </v-row>
           </div>
         </div>
