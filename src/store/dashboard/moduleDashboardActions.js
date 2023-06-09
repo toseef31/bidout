@@ -139,7 +139,8 @@ export default {
       });
   }, 
   acceptPendingUser({commit,dispatch,state},payload){
-    axios.post('/v2/user/acceptPendingUser/',{ 'userId':payload.user.id, 'email': payload.user.email,'firstName':payload.user.firstName,'lastName':payload.user.lastName,'companyId':payload.user.companyId,'phoneNumber':payload.user.phoneNumber,'title':payload.user.title,'role': 'user'})
+    console.log('user', payload);
+    axios.post('/v2/user/acceptPendingUser/',{ 'userId':payload.user._id, 'email': payload.user.email,'firstName':payload.user.firstName,'lastName':payload.user.lastName,'companyId':payload.companyId,'phoneNumber':payload.user.phoneNumber,'title':payload.user.title,'role': 'user'})
       .then(responce => {
       
       if(responce.status === 200){
