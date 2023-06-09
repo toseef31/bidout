@@ -1,5 +1,6 @@
 import axios from "axios";
 import * as Sentry from "@sentry/vue";
+import state from "../state";
 
 export default {
   unreadMessagesCount({ commit }, payload) {
@@ -14,7 +15,6 @@ export default {
       });
   },
   getAllConversations({ commit, state }, payload) {
-    console.log('pay', payload);
     if (state.chatRefreshToken !== 1) {
       commit('setPageLoader', true);
     }
@@ -37,7 +37,9 @@ export default {
       axios
         .get(`/v2/chat/getConversations/${payload.id}?page=${payload.page}&limit=10`)
         .then((responce) => {
-          dispatch('getAllConversationsSearch', payload.id);
+          if (state.searchApiCount === 0) {
+            dispatch('getAllConversationsSearch', payload.id);
+          }
           resolve(responce.data.conversations);
         }).catch((err) => {
           console.log(err);
@@ -79,7 +81,7 @@ export default {
     axios
       .get(`/v2/chat/getMessages/${payload.conversationId}`)
       .then((responce) => {
-        commit("setMessagesList", responce.data.messages);
+        commit("setMessagesList", responce.data);
         dispatch("unreadMessagesCount", { userId: payload.userId });
       })
       .catch((err) => {
@@ -87,7 +89,7 @@ export default {
         console.log(err);
       });
   },
-  sendMessage({ commit, dispatch, rootState }, payload) {
+  sendMessage({ commit, dispatch, rootState, state }, payload) {
     const config = {
       header: {
         "Content-Type": "multipart/form-data",
@@ -117,7 +119,12 @@ export default {
       .post("/v2/chat/sendMessage", formData, config)
       .then((responce) => {
         commit("setChatRefreshToken", 1);
-        dispatch("getAllConversations", {id: rootState.auth.userInfo._id});
+        state.searchApiCount = 1;
+        const obj = {
+          id: rootState.auth.userInfo._id,
+          page: 1,
+        };
+        dispatch("getAllConversations", obj);
         commit("setNewMessages", responce.data.message);
       })
       .catch((err) => {
@@ -161,7 +168,11 @@ export default {
       .then((responce) => {
         commit("setMessagesList", null);
         commit("setChatRefreshToken", 1);
-        dispatch("getAllConversations", rootState.auth.userInfo._id);
+        const obj = {
+          id: rootState.auth.userInfo._id,
+          page: 1,
+        };
+        dispatch("getAllConversations", obj);
         dispatch("getArchiveChats", rootState.auth.userInfo._id);
       })
       .catch((err) => {
@@ -199,7 +210,11 @@ export default {
       .post("/v2/chat/createConversation/", payload)
       .then((responce) => {
         commit("setChatRefreshToken", 1);
-        dispatch("getAllConversations", rootState.auth.userInfo._id);
+        const obj = {
+          id: rootState.auth.userInfo._id,
+          page: 1,
+        }
+        dispatch("getAllConversations", obj);
         commit("setCreateMsg", responce.data.message);
         setTimeout(() => {
           commit("setCreateMsg", null);
@@ -216,7 +231,11 @@ export default {
       .post("/v2/chat/removeParticipantsFromConversation/", payload)
       .then((responce) => {
         commit("setChatRefreshToken", 1);
-        dispatch("getAllConversations", rootState.auth.userInfo._id);
+        const obj = {
+          id: rootState.auth.userInfo._id,
+          page: 1,
+        }
+        dispatch("getAllConversations", obj);
       })
       .catch((err) => {
         Sentry.captureException(err);
@@ -245,7 +264,7 @@ export default {
         commit('setChatRefreshToken', 1);
         dispatch('getArchiveChats', payload.userId);
         const obj = {
-          id: rootState.auth.userInfo.id,
+          id: rootState.auth.userInfo._id,
           page: 1,
         }
         dispatch('getAllConversations', obj);

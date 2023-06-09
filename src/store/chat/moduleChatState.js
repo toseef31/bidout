@@ -24,4 +24,5 @@ export default {
   unsortedConv: [],
   openChatFlag: false,
   searchPage: 1,
+  searchApiCount: 0,
 };
