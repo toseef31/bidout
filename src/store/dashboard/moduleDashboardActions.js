@@ -139,14 +139,14 @@ export default {
       });
   }, 
   acceptPendingUser({commit,dispatch,state},payload){
-    axios.post('/v2/user/acceptPendingUser/',{ 'userId':payload.user.id, 'email': payload.user.email,'firstName':payload.user.firstName,'lastName':payload.user.lastName,'companyId':payload.user.companyId,'phoneNumber':payload.user.phoneNumber,'title':payload.user.title,'role': 'user'})
+    axios.post('/v2/user/acceptPendingUser/',{ 'userId':payload.user._id, 'email': payload.user.email,'firstName':payload.user.firstName,'lastName':payload.user.lastName,'companyId':payload.user.company,'phoneNumber':payload.user.phoneNumber,'title':payload.user.title,'role': 'user', 'companyName': payload.companyName})
       .then(responce => {
       
       if(responce.status === 200){
         commit('setStatusMessage','User accepted sucessfully!')
         commit('showErrorAlert')
-        dispatch('manageUsers',payload.companyName)
-        dispatch('getPendingUsers',payload.user.companyId)
+        dispatch('manageUsers',responce.data.company._id)
+        dispatch('getPendingUsers',responce.data.company._id)
       }
     }).catch(async(err) => {
        Sentry.captureException(err);
