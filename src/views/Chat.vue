@@ -173,7 +173,7 @@
                           <template>
                             <v-list-item-content>
                               <v-list-item-title>{{
-                                message.sender.name
+                                `${message.sender.firstName} ${message.sender.lastName}`
                               }}</v-list-item-title>
                               <template v-if="message.attachment">
                                 <a

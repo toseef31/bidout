@@ -183,7 +183,7 @@ export default {
     ...mapGetters(['noConversation']),
     conversationsList() {
       if (this.$store.state.chat.searchConv != '') {
-        return _.orderBy(this.$store.getters.allConversations.filter((item) => this.$store.state.chat.searchConv.toLowerCase().split(' ').every((v) => item.company.companyName.toLowerCase().includes(v))), 'latestMessage', 'desc');
+        return _.orderBy(this.$store.getters.allConversations.filter((item) => this.$store.state.chat.searchConv.toLowerCase().split(' ').every((v) => item.company.companyName.toLowerCase().includes(v))), 'sortDate', 'desc');
       } else {
         if (this.$store.getters.conversations) {
           this.$store.commit('setPageLoader', false);
