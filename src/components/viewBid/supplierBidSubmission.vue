@@ -113,26 +113,26 @@
 
               <v-col md="8" class="first-child" v-if="item.type === 'question'">{{
                 item.title
-              }} <sup class="sub-title">{{ item.required === 'true' ? '(Required)' : '' }}</sup></v-col>
+              }} <sup class="sub-title">{{ item.required === true ? '(Required)' : '' }}</sup></v-col>
               <v-col class="second-child text-right">
 
                 <v-checkbox v-if="(item.questionType === 'checkbox' && !item.options)"
-                  :rules="item.required === 'true' ? answerRule : []" :disabled="!bidDetail.receivingBids"
+                  :rules="item.required === true ? answerRule : []" :disabled="!bidDetail.receivingBids"
                   v-model="answers[index]['answer']"></v-checkbox>
 
                 <v-radio-group v-model="answers[index]['answer']" row :disabled="!bidDetail.receivingBids"
-                  :rules="item.required === 'true' ? answerRule : []"
+                  :rules="item.required === true ? answerRule : []"
                   v-if="(item.questionType === 'checkbox' && item.options)">
                   <v-radio :label="item.options[selectIndex].label" :value="item.options[selectIndex].label"
                     color="#0d9648" checked v-for="(select, selectIndex) in item.options" :key="select._id"></v-radio>
                 </v-radio-group>
 
-                <v-text-field v-if="item.questionType === 'textfield'" :rules="item.required === 'true' ? answerRule : []"
+                <v-text-field v-if="item.questionType === 'textfield'" :rules="item.required === true ? answerRule : []"
                   outlined :disabled="!bidDetail.receivingBids" v-model="answers[index]['answer']"></v-text-field>
 
                 <v-textarea v-if="item.questionType === 'textarea'" outlined auto-grow
                   :disabled="!bidDetail.receivingBids" rows="3" row-height="25"
-                  :rules="item.required === 'true' ? answerRule : []" v-model="answers[index]['answer']"></v-textarea>
+                  :rules="item.required === true ? answerRule : []" v-model="answers[index]['answer']"></v-textarea>
 
                 <div class="upload-attach" v-if="item.questionType === 'uploadFile'">
                   <div class="d-flex justify-space-between align-center"
@@ -181,7 +181,7 @@
                                                                                                                                                                                                                                                     text-center
                                                                                                                                                                                                                                                   ">
                     <v-file-input :id="`uploadFileQ${index}`" @change="handleDocumentForAnswer($event, index)"
-                      :disabled="!bidDetail.receivingBids" :rules="item.required === 'true' ? fileRule : []" />
+                      :disabled="!bidDetail.receivingBids" :rules="item.required === true ? fileRule : []" />
 
                     <div class="mt-1">
                       <v-icon class="mr-4">mdi-cloud-upload-outline</v-icon>Upload here
@@ -639,7 +639,7 @@ export default {
           price: updatePrice,
           bid: this.getSupplierBid.lineItems[i].price !== 'NO_BID',
           id: this.getSupplierBid.lineItems[i]._id,
-          quantity: this.getSupplierBid.lineItems[i].Qty,
+          quantity: this.getSupplierBid.lineItems[i].quantity,
           required: this.getSupplierBid.lineItems[i].required,
         });
 
@@ -648,8 +648,6 @@ export default {
           status: true,
         });
       }
-
-      console.log(this.lineItems)
 
       for (let i = 0; i < this.getSupplierBid.supplierAttachments.length; i++) {
         this.$store.commit('setSupplierAttachment', {
@@ -667,7 +665,7 @@ export default {
       this.supplierNote = this.getSupplierBid.supplierNote;
 
       for (let i = 0; i < bidData.questions.length; i++) {
-        if (this.getSupplierBid.answers[i].questionId === bidData.questions[i].id) {
+        if (this.getSupplierBid.answers[i].questionId === bidData.questions[i]._id) {
           if (bidData.questions[i].questionType === 'uploadFile') {
             this.answers.push({
               questionId: this.getSupplierBid.answers[i].questionId,
@@ -702,7 +700,7 @@ export default {
 
         dataD[index].push([el.inputType]);
         dataD[index].push([el.quantity]);
-        dataD[index].push([el.required === 'true' ? 'Yes' : 'No']);
+        dataD[index].push([el.required === true ? 'Yes' : 'No']);
         dataD[index].push([el.buyerComment]);
       });
 
