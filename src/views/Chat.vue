@@ -471,6 +471,8 @@ export default {
         conversationId: this.conversationId,
         sender: {
           name: `${this.user.firstName} ${this.user.lastName}`,
+          firstName: this.user.firstName,
+          lastName: this.user.lastName,
           id: this.user._id,
           company: this.chatData.group.company,
           profilePicture: '',
