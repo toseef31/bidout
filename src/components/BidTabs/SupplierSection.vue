@@ -262,6 +262,10 @@
 
                   </div>
                 </div>
+                <div class="add-company">
+                  <v-btn color="rgba(243, 35, 73, 0.1)" tile min-width="32px" height="32" class="pa-0" elevation="0"
+                    @click=" removeNewSup(company)"> <v-icon color="#F32349">mdi-minus</v-icon></v-btn>
+                </div>
               </div>
             </template>
           </div>
@@ -738,9 +742,12 @@ export default {
       this.$store.commit('setIsEditBidChanges', true);
       this.$store.commit('setInvitedSuppliersData', this.repsInvited);
     },
-    removeNewSup(index) {
-      this.oldCount = this.newRepsInvited.length;
-      this.newRepsInvited.splice(index, 1);
+    removeNewSup(company) {
+      this.oldCount = this.newRepsInvited.length;;
+      const index = this.newRepsInvited.findIndex((el) => el._id === company._id);
+      if (index !== -1) {
+        this.newRepsInvited.splice(index, 1);
+      }
       this.inviteCount = 2;
       this.newCount = this.newRepsInvited.length;
       this.$store.commit('setIsEditBidChanges', true);
