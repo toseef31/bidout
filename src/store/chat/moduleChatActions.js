@@ -128,7 +128,20 @@ export default {
         };
 
         dispatch("getAllConversationsLoadMore", obj);
-        commit("setNewMessages", responce.data.message);
+        const newMsgObj = {
+          "conversationId": responce.data.message.conversationId,
+          "sender": {
+              "firstName": payload.sender.firstName,
+              "lastName": payload.sender.lastName,
+          },
+          "content": responce.data.message.content,
+          "attachment": responce.data.message.attachment,
+          "_id": responce.data.message._id,
+          "createdAt": responce.data.message.createdAt,
+          "updatedAt": responce.data.message.updatedAt,
+          "__v": 0
+        };
+        commit("setNewMessages", newMsgObj);
       })
       .catch((err) => {
         Sentry.captureException(err);
