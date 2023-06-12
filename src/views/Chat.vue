@@ -173,14 +173,14 @@
                           <template>
                             <v-list-item-content>
                               <v-list-item-title>{{
-                                message.sender.name
+                                `${message.sender.firstName} ${message.sender.lastName}`
                               }}</v-list-item-title>
-                              <template v-if="message.attachment">
+                              <template v-if="message.attachment !== null">
                                 <a
-                                  :href="message.attachment"
+                                  :href="message.attachment[0].url"
                                   target="_blank"
                                   v-if="
-                                    get_url_extension(message.attachment) == 'pdf'
+                                    get_url_extension(message.attachment[0].url) == 'pdf'
                                   "
                                   ><v-img
                                     :src="require('@/assets/images/chat/pdf.jpg')"
@@ -190,9 +190,9 @@
                                   ></v-img
                                 ></a>
                                 <a
-                                  :href="message.attachment"
+                                  :href="message.attachment[0].url"
                                   target="_blank"
-                                  v-else-if="get_url_extension(message.attachment) == 'xlsx' || get_url_extension(message.attachment) == 'xls' || get_url_extension(message.attachment) == 'csv'">
+                                  v-else-if="get_url_extension(message.attachment[0].url) == 'xlsx' || get_url_extension(message.attachment[0].url) == 'xls' || get_url_extension(message.attachment[0].url) == 'csv'">
                                   <v-img
                                   :src="require('@/assets/images/chat/excel.png')"
                                   max-height="50px"
@@ -200,9 +200,9 @@
                                   class="mt-2"></v-img>
                                 </a>
                                 <a
-                                  :href="message.attachment"
+                                  :href="message.attachment[0].url"
                                   target="_blank"
-                                  v-else-if="get_url_extension(message.attachment) == 'doc' || get_url_extension(message.attachment) == 'docx' || get_url_extension(message.attachment) == 'txt'">
+                                  v-else-if="get_url_extension(message.attachment[0].url) == 'doc' || get_url_extension(message.attachment[0].url) == 'docx' || get_url_extension(message.attachment[0].url) == 'txt'">
                                   <v-img
                                   :src="require('@/assets/images/chat/doc.png')"
                                   max-height="50px"
@@ -210,26 +210,26 @@
                                   class="mt-2"></v-img>
                                 </a>
                                 <a
-                                  :href="message.attachment"
+                                  :href="message.attachment[0].url"
                                   target="_blank"
-                                  v-else-if="get_url_extension(message.attachment) == 'ppt' || get_url_extension(message.attachment) == 'pptx'">
+                                  v-else-if="get_url_extension(message.attachment[0].url) == 'ppt' || get_url_extension(message.attachment[0].url) == 'pptx'">
                                   <v-img
                                   :src="require('@/assets/images/chat/ppt.png')"
                                   max-height="50px"
                                   max-width="50px"
                                   class="mt-2"></v-img>
                                 </a>
-                                <a :href="message.attachment"
+                                <a :href="message.attachment[0].url"
                                   target="_blank"
-                                  v-else-if="get_url_extension(message.attachment) == 'zip' || get_url_extension(message.attachment) == 'rar' || get_url_extension(message.attachment) == 'tar' || get_url_extension(message.attachment) == '7z' || get_url_extension(message.attachment) == 'gz'"><v-img
+                                  v-else-if="get_url_extension(message.attachment[0].url) == 'zip' || get_url_extension(message.attachment[0].url) == 'rar' || get_url_extension(message.attachment[0].url) == 'tar' || get_url_extension(message.attachment[0].url) == '7z' || get_url_extension(message.attachment[0].url) == 'gz'"><v-img
                                   :src="require('@/assets/images/chat/zip.png')"
                                   max-height="50px"
                                   max-width="50px"
                                   class="mt-2"></v-img>
                                 </a>
                                 <video class="chat-video"
-                                  v-else-if="get_url_extension(message.attachment) == 'mp4' || get_url_extension(message.attachment) == 'webm' || get_url_extension(message.attachment) == 'mov' || get_url_extension(message.attachment) == 'avi'"
-                                  :src="message.attachment"
+                                  v-else-if="get_url_extension(message.attachment[0].url) == 'mp4' || get_url_extension(message.attachment[0].url) == 'webm' || get_url_extension(message.attachment[0].url) == 'mov' || get_url_extension(message.attachment[0].url) == 'avi'"
+                                  :src="message.attachment[0].url"
                                   :autoplay="false"
                                   :controls="true"
                                   :loop="true"
@@ -237,10 +237,10 @@
                                   :style="{ width: '500px' }"
                                 ></video>
                                 <a
-                                  :href="message.attachment"
+                                  :href="message.attachment[0].url"
                                   target="_blank" v-else>
                                   <v-img
-                                    :src="message.attachment"
+                                    :src="message.attachment[0].url"
                                     max-height="125px"
                                     max-width="245px"
                                     class="mt-2"
@@ -546,7 +546,7 @@ export default {
         document.getElementById('dropzone').style.display = 'none';
       }
       const ids = {
-        userId: this.user.id,
+        userId: this.user._id,
         conversationId: response.message.conversationId,
       };
       this.getAllMessages(ids);
@@ -586,7 +586,9 @@ export default {
       this.isChatMenu = false;
     },
     get_url_extension(url) {
-      return url.split(/[#?]/)[0].split('.').pop().trim();
+      if(url != undefined){
+        return url.split(/[#?]/)[0].split('.').pop().trim();
+      }
     },
     istoday(date) {
       return moment(date).calendar();

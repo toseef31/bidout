@@ -278,7 +278,7 @@ export default {
         document.getElementById('dropzone').style.display = 'none';
       }
       const ids = {
-        userId: this.user.id,
+        userId: this.user._id,
         conversationId: response.message.conversationId,
       };
       this.getAllMessages(ids);

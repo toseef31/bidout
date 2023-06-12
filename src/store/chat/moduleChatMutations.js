@@ -18,18 +18,23 @@ export default {
     state.conversations = sortedConversation;
   },
   addConverstaionList(state, payload) {
-    const existingConversations = state.conversations;
-    const newConversations = payload;
-    const mergedConversations = [...existingConversations, ...newConversations].filter((conv, index, self) => index === self.findIndex((c) => c._id === conv._id));
-    const unsortedConversations = mergedConversations;
-    unsortedConversations.forEach((msg, index) => {
-      if (!msg.latestMessage) {
-        unsortedConversations[index].latestMessage = msg.createdAt; // add the new field
-      }
-    });
-    const sortedConversation = unsortedConversations.sort((a, b) => new Date(b.latestMessage) - new Date(a.latestMessage));
-    state.openChatFlag = true;
-    state.conversations = sortedConversation;
+    if (state.searchApiCount === 1) {
+      state.conversations = payload;
+      state.searchApiCount = 0;
+    } else {
+      const existingConversations = state.conversations;
+      const newConversations = payload;
+      const mergedConversations = [...existingConversations, ...newConversations].filter((conv, index, self) => index === self.findIndex((c) => c._id === conv._id));
+      const unsortedConversations = mergedConversations;
+      unsortedConversations.forEach((msg, index) => {
+        if (!msg.latestMessage) {
+          unsortedConversations[index].latestMessage = msg.createdAt; // add the new field
+        }
+      });
+      const sortedConversation = unsortedConversations.sort((a, b) => new Date(b.latestMessage) - new Date(a.latestMessage));
+      state.openChatFlag = true;
+      state.conversations = sortedConversation;
+    }
   },
   setAllConversations(state, payload) {
     const existingConversations = state.allConversations;
