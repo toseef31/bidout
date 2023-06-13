@@ -94,7 +94,7 @@
                   <template>
                     <v-list-item-content>
                       <v-list-item-title>{{
-                        message.sender && message.sender.name
+                        message.sender && `${message.sender.firstName} ${message.sender.lastName}`
                       }}</v-list-item-title>
                       <template v-if="message.attachment">
                         <a :href="message.attachment[0].url" target="_blank"
@@ -302,7 +302,7 @@ export default {
           firstName: this.user.firstName,
           lastName: this.user.lastName,
           id: this.user._id,
-          company: this.chatData.conversation.company.companyName,
+          company: this.chatData.conversation.company,
           profilePicture: this.user.image,
         },
         content: this.message,
