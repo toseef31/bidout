@@ -191,7 +191,7 @@ export default {
       selectedUser: null,
       pageLoading: true,
       dropzoneOptions: {
-        url: `${import.meta.env.VITE_API_BASE_URL}/chat/sendMessage`,
+        url: `${import.meta.env.VITE_API_BASE_URL}/v2/chat/sendMessage`,
         thumbnailWidth: 100,
         thumbnailHeight: 100,
         maxFiles: 10,
@@ -268,7 +268,11 @@ export default {
       );
       formData.append('sender[company]', this.chatData.conversation.company.companyName);
       formData.append('sender[profilePicture]', this.user.image);
-      formData.append('content', this.message);
+      if (this.message && this.message !== '') {
+        formData.append('content', this.message);
+      } else {
+        formData.append("content", ' ');
+      }
     },
     afterComplete(file, response) {
       this.message = '';
@@ -279,7 +283,7 @@ export default {
       }
       const ids = {
         userId: this.user._id,
-        conversationId: response.message.conversationId,
+        conversationId: response.message.conversation,
       };
       this.getAllMessages(ids);
     },
@@ -295,6 +299,8 @@ export default {
         conversationId: this.conversationId,
         sender: {
           name: `${this.user.firstName} ${this.user.lastName}`,
+          firstName: this.user.firstName,
+          lastName: this.user.lastName,
           id: this.user._id,
           company: this.chatData.conversation.company.companyName,
           profilePicture: this.user.image,
