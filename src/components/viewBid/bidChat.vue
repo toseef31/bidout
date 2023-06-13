@@ -39,7 +39,7 @@
               <v-list-item-action>
                 <v-list-item-action-text>{{
                   list.latestMessage ? isToday(list.latestMessage) :
-                  isToday(list.updatedAt)
+                  isToday(list.createdAt)
                 }}</v-list-item-action-text>
               </v-list-item-action>
             </template>
@@ -130,9 +130,7 @@
                       }}</v-list-item-subtitle>
                     </v-list-item-content>
                     <v-list-item-action>
-                      <v-list-item-action-text>{{
-                        isToday(message.updatedAt)
-                      }}</v-list-item-action-text>
+                      <v-list-item-action-text>{{ isToday(message.createdAt) }}</v-list-item-action-text>
                     </v-list-item-action>
                   </template>
                 </v-list-item>
@@ -320,7 +318,8 @@ export default {
       this.filename = '';
     },
     isToday(date) {
-      return moment(date).calendar();
+      const zone = moment.tz.guess();
+      return moment(date).tz(zone).calendar();
     },
     get_url_extension(url) {
       return url[0] && url[0].url && url[0].url.split(/[#?]/)[0].split('.').pop().trim();
