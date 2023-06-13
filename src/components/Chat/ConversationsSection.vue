@@ -274,7 +274,8 @@ export default {
       this.unArchiveConversation(conv);
     },
     istoday(date) {
-      return moment(date).calendar();
+      const zone = moment.tz.guess();
+      return moment(date).tz(zone).calendar();
     },
     getConversationName(conversation) {
       if (conversation.type === 'GROUP') {
