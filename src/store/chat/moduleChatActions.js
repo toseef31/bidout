@@ -129,7 +129,7 @@ export default {
 
         dispatch("getAllConversationsLoadMore", obj);
         const newMsgObj = {
-          "conversationId": responce.data.message.conversationId,
+          "conversationId": responce.data.message.conversation,
           "sender": {
               "firstName": payload.sender.firstName,
               "lastName": payload.sender.lastName,
