@@ -299,7 +299,7 @@ export default {
     if (convo) {
       if (convo.type == 'PRIVATE') {
         const membr = convo.participantDetails.filter((item) => {
-          if (this.user.id != item.id) {
+          if (this.user._id != item._id) {
             return item;
           }
         });

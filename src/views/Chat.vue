@@ -493,7 +493,7 @@ export default {
     chatActions(data) {
       const archivess = {
         conversationId: data,
-        userId: this.user.id,
+        userId: this.user._id,
       };
       this.archiveChat(archivess);
       this.$store.commit('setSpliceToConversation',data);
@@ -511,7 +511,7 @@ export default {
       if (convo) {
         if (convo.type === 'PRIVATE') {
           const membr = convo.participantDetails.filter((item) => {
-            if (this.user.id != item.id) {
+            if (this.user._id != item._id) {
               return item;
             }
           });
