@@ -1,7 +1,7 @@
 <template>
   <v-col class="my-7 pa-0 bid-submission-tab" align="start">
 
-    <div class="table-class" v-if="bidDetail.supplierSubmissions">
+    <div class="table-class" v-if="bidDetail.supplierSubmissions.length">
       <div class="d-flex justify-end mr-5" v-if="!isBidOut && !bidDetail.receivingBids">
 
         <v-tooltip top>
@@ -99,15 +99,17 @@
                   <div class="pb-4  d-inline-flex pr-10"
                     v-for="(doc, attIndex) in bidDetail.supplierSubmissions[aIndex].supplierAttachments" :key="attIndex">
 
-                    <img :src="require('@/assets/images/bids/FilePdf.png')"
-                      v-if="checkFileType(doc.fileName) === 'pdf'" class="pr-2"/>
+                    <img :src="require('@/assets/images/bids/FilePdf.png')" v-if="checkFileType(doc.fileName) === 'pdf'"
+                      class="pr-2" />
                     <img :src="require('@/assets/images/bids/FileDoc.png')"
-                      v-else-if="checkFileType(doc.fileName) === 'docx' || checkFileType(doc.fileName) === 'doc'" class="pr-2"/>
-                      <v-icon class="pr-2" color="#0D1139" v-else-if="checkFileType(doc.fileName) === 'xlsx' || checkFileType(doc.fileName) === 'xls'">mdi-microsoft-excel</v-icon>
+                      v-else-if="checkFileType(doc.fileName) === 'docx' || checkFileType(doc.fileName) === 'doc'"
+                      class="pr-2" />
+                    <v-icon class="pr-2" color="#0D1139"
+                      v-else-if="checkFileType(doc.fileName) === 'xlsx' || checkFileType(doc.fileName) === 'xls'">mdi-microsoft-excel</v-icon>
                     <v-icon color="#0D1139" v-else class="pr-2">mdi-file-document</v-icon>
 
                     <a target="_blank" class="text-decoration-none" :href="doc.attachment
-                    ">{{ doc.fileName }}</a>
+                      ">{{ doc.fileName }}</a>
                   </div>
                 </td>
                 <td class="text-left bid-note" v-else>
@@ -141,7 +143,7 @@
                     <v-icon color="#0D1139" v-else>mdi-file-document</v-icon>
 
                     <a target="_blank" class="text-decoration-none pl-2" :href="ans.answers[qIndex].answer
-                    ">{{ ans.answers[qIndex].fileName }}</a>
+                      ">{{ ans.answers[qIndex].fileName }}</a>
 
                   </div>
                 </td>
@@ -151,8 +153,7 @@
               </template>
             </tr>
 
-            <tr v-if="!isBidOut && !bidDetail.receivingBids && bidDetail.supplierSubmissions"
-              class="action-button-class">
+            <tr v-if="!isBidOut && !bidDetail.receivingBids && bidDetail.supplierSubmissions" class="action-button-class">
               <td class="text-left"></td>
               <template v-for="(item, index) in bidDetail.supplierSubmissions">
                 <td class="text-left">
@@ -222,7 +223,7 @@
       </v-simple-table>
     </div>
 
-    <div class="text-center b-title-detail " v-if="bidDetail.supplierSubmissions === 0">There are currently no
+    <div class="text-center b-title-detail " v-if="!bidDetail.supplierSubmissions.length">There are currently no
       bid submissions by service providers. </div>
   </v-col>
 </template>
@@ -401,7 +402,7 @@ export default {
         userId: this.user.id,
         bidId: this.bidDetail.bidData.id,
         serial: this.$route.params.serial,
-        company: this.user.company.company
+        company: this.user.company.company,
       });
 
       this.loadings[index].load = false;
@@ -416,7 +417,7 @@ export default {
         userId: this.user.id,
         bidId: this.bidDetail.bidData.id,
         serial: this.$route.params.serial,
-        company: this.user.company.company
+        company: this.user.company.company,
       });
 
       this.loadings[index].load = false;
@@ -431,7 +432,7 @@ export default {
         userId: this.user.id,
         bidId: this.bidDetail.bidData.id,
         serial: this.$route.params.serial,
-        company: this.user.company.company
+        company: this.user.company.company,
       });
 
       this.loadings[index].load = false;
@@ -446,7 +447,7 @@ export default {
         userId: this.user.id,
         bidId: this.bidDetail.bidData.id,
         serial: this.$route.params.serial,
-        company: this.user.company.company
+        company: this.user.company.company,
       });
 
       this.loadings[index].load = false;
