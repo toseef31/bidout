@@ -403,7 +403,7 @@ export default {
 
       if (supplierViews && id) {
         supplierViews.forEach((el) => {
-          if (el._id === id) {
+          if (el.supplier === id) {
             number = el.views;
           }
         });
