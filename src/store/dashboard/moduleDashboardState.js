@@ -9,4 +9,5 @@ export default {
    pendingCount : 0,
    allLocations: null,
    locationLoader: false,
+   activityLoader: false,
 }
