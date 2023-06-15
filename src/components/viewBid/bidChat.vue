@@ -97,28 +97,28 @@
                         message.sender && `${message.sender.firstName} ${message.sender.lastName}`
                       }}</v-list-item-title>
                       <template v-if="message.attachment">
-                        <a :href="message.attachment[0].url" target="_blank"
-                          v-if="get_url_extension(message.attachment) === 'pdf'"><v-img
+                        <a :href="message.attachment[0].url" class="text-decoration-none" target="_blank"
+                          v-if="get_url_extension(message.attachment[0].url) === 'pdf'"><v-img
                             :src="require('@/assets/images/chat/pdf.jpg')" max-height="50px" max-width="50px"
-                            class="mt-2"></v-img></a>
-                        <a :href="message.attachment[0].url" target="_blank"
-                          v-else-if="get_url_extension(message.attachment) === 'xlsx' || get_url_extension(message.attachment) === 'xls' || get_url_extension(message.attachment) === 'csv'"><v-img
+                            class="mt-2 mb-2"></v-img>{{ message.attachment[0].fileName }}</a>
+                        <a :href="message.attachment[0].url" class="text-decoration-none" target="_blank"
+                          v-else-if="get_url_extension(message.attachment[0].url) === 'xlsx' || get_url_extension(message.attachment[0].url) === 'xls' || get_url_extension(message.attachment[0].url) === 'csv'"><v-img
                             :src="require('@/assets/images/chat/excel.png')" max-height="50px" max-width="50px"
-                            class="mt-2"></v-img></a>
-                        <a :href="message.attachment[0].url" target="_blank"
-                          v-else-if="get_url_extension(message.attachment) === 'doc' || get_url_extension(message.attachment) === 'docx' || get_url_extension(message.attachment) === 'txt'"><v-img
+                            class="mt-2 mb-2"></v-img>{{ message.attachment[0].fileName }}</a>
+                        <a :href="message.attachment[0].url" class="text-decoration-none" target="_blank"
+                          v-else-if="get_url_extension(message.attachment[0].url) === 'doc' || get_url_extension(message.attachment[0].url) === 'docx' || get_url_extension(message.attachment[0].url) === 'txt'"><v-img
                             :src="require('@/assets/images/chat/doc.png')" max-height="50px" max-width="50px"
-                            class="mt-2"></v-img></a>
-                        <a :href="message.attachment[0].url" target="_blank"
-                          v-else-if="get_url_extension(message.attachment) === 'ppt' || get_url_extension(message.attachment) === 'pptx'"><v-img
+                            class="mt-2 mb-2"></v-img>{{ message.attachment[0].fileName }}</a>
+                        <a :href="message.attachment[0].url" class="text-decoration-none" target="_blank"
+                          v-else-if="get_url_extension(message.attachment[0].url) === 'ppt' || get_url_extension(message.attachment[0].url) === 'pptx'"><v-img
                             :src="require('@/assets/images/chat/ppt.png')" max-height="50px" max-width="50px"
-                            class="mt-2"></v-img></a>
-                        <a :href="message.attachment[0].url" target="_blank"
-                          v-else-if="get_url_extension(message.attachment) === 'zip' || get_url_extension(message.attachment) === 'rar' || get_url_extension(message.attachment) === 'tar' || get_url_extension(message.attachment) === '7z' || get_url_extension(message.attachment) === 'gz'"><v-img
+                            class="mt-2 mb-2"></v-img>{{ message.attachment[0].fileName }}</a>
+                        <a :href="message.attachment[0].url" class="text-decoration-none" target="_blank"
+                          v-else-if="get_url_extension(message.attachment[0].url) === 'zip' || get_url_extension(message.attachment[0].url) === 'rar' || get_url_extension(message.attachment[0].url) === 'tar' || get_url_extension(message.attachment[0].url) === '7z' || get_url_extension(message.attachment[0].url) === 'gz'"><v-img
                             :src="require('@/assets/images/chat/zip.png')" max-height="50px" max-width="50px"
-                            class="mt-2"></v-img></a>
+                            class="mt-2 mb-2"></v-img>{{ message.attachment[0].fileName }}</a>
                         <video class="chat-video"
-                          v-else-if="get_url_extension(message.attachment) == 'mp4' || get_url_extension(message.attachment) === 'webm' || get_url_extension(message.attachment) === 'mov' || get_url_extension(message.attachment) === 'avi'"
+                          v-else-if="get_url_extension(message.attachment[0].url) == 'mp4' || get_url_extension(message.attachment[0].url) === 'webm' || get_url_extension(message.attachment[0].url) === 'mov' || get_url_extension(message.attachment[0].url) === 'avi'"
                           :src="message.attachment[0].url" :autoplay="false" :controls="true" :loop="true" height="300"
                           :style="{ width: '500px' }"></video>
                         <a :href="message.attachment[0].url" target="_blank" v-else>
@@ -322,7 +322,12 @@ export default {
       return moment(date).tz(zone).calendar();
     },
     get_url_extension(url) {
-      return url[0] && url[0].url && url[0].url.split(/[#?]/)[0].split('.').pop().trim();
+      if (url !== undefined) {
+        const lastDotIndex = url.lastIndexOf('.');
+        // Extract the file extension
+        const fileExtension = url.slice(lastDotIndex + 1);
+        return fileExtension;
+      }
     },
     getConversationName(conversation) {
       return conversation.displayName;
