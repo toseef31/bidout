@@ -20,7 +20,7 @@
             <tr>
               <th class="text-left">Line Items</th>
               <th class="text-left" v-for="(item, index) in bidDetail.supplierSubmissions" :key="index">{{
-                item.company
+                item.company.companyName
               }}
               </th>
             </tr>
@@ -31,7 +31,7 @@
               <td class="no-wrap">{{ item.description }}</td>
               <template v-for="(submission) in bidDetail.supplierSubmissions">
                 <td
-                  v-if="submission.lineItems[index].price === 'NO_BID' || submission.lineItems[index].price === '' || submission.lineItems[index].price === 'null'">
+                  v-if="submission.lineItems[index].price === 'NO_BID' || submission.lineItems[index].price === '' || submission.lineItems[index].price === null">
                   <v-icon color="#F32349">mdi-close</v-icon> No Bid
                 </td>
 
@@ -122,19 +122,19 @@
               <div class="title-detail-supplier mt-10 mb-5">Supplier Answers</div>
             </tr>
 
-            <tr v-for="(item, qIndex) in bidDetail.bidData.questions" :key="qIndex + item.id"
+            <tr v-for="(item, qIndex) in bidDetail.bidData.questions" :key="qIndex + item._id"
               v-if="bidDetail.bidData.questions.length && bidDetail.supplierSubmissions">
               <td class="text-left" v-if="item.type !== 'category'"> {{ item.title }}</td>
 
               <template v-for="(ans) in answers">
-                <td class="text-left" v-if="ans.answers[qIndex].answer !== 'null' && item.questionType === 'checkbox'">
+                <td class="text-left" v-if="ans.answers[qIndex].answer !== null && item.questionType === 'checkbox'">
                   {{ ans.answers[qIndex].answer }}
                 </td>
                 <td class="text-left"
-                  v-if="ans.answers[qIndex].answer !== 'null' && item.questionType === 'textfield' || item.questionType === 'textarea'">
+                  v-if="ans.answers[qIndex].answer !== null && item.questionType === 'textfield' || item.questionType === 'textarea'">
                   {{ ans.answers[qIndex].answer }}
                 </td>
-                <td class="text-left" v-if="ans.answers[qIndex].answer !== 'null' && item.questionType === 'uploadFile'">
+                <td class="text-left" v-if="ans.answers[qIndex].answer !== null && item.questionType === 'uploadFile'">
                   <div class="pb-4 d-inline-flex">
                     <img :src="require('@/assets/images/bids/FilePdf.png')"
                       v-if="checkFileType(ans.answers[qIndex].fileName) === 'pdf'" />
@@ -147,7 +147,7 @@
 
                   </div>
                 </td>
-                <td class="text-left " v-if="ans.answers[qIndex].answer === 'null' && item.type !== 'category'">
+                <td class="text-left " v-if="ans.answers[qIndex].answer === null && item.type !== 'category'">
                   None
                 </td>
               </template>
@@ -157,15 +157,15 @@
               <td class="text-left"></td>
               <template v-for="(item, index) in bidDetail.supplierSubmissions">
                 <td class="text-left">
-                  <div class="d-flex flex-column" v-if="!checkAwardee(item.companyId) && !checkRejectee(item.companyId)">
-                    <v-btn @click="award(item.companyId, index, 'award')" color="#0d9648" depressed
+                  <div class="d-flex flex-column" v-if="!checkAwardee(item.company._id) && !checkRejectee(item.company._id)">
+                    <v-btn @click="award(item.company._id, index, 'award')" color="#0d9648" depressed
                       :disabled="showLoading[index].load && showLoading[index].action === 'award'">
                       <v-progress-circular v-if="showLoading[index].load && showLoading[index].action === 'award'"
                         indeterminate :width="3" size="25" color="#0D9648"></v-progress-circular>
                       <div v-else>Award Bid</div>
 
                     </v-btn>
-                    <v-btn @click="disqualify(item.companyId, index, 'disqualify')" color="#F03F20" depressed class="mt-2"
+                    <v-btn @click="disqualify(item.company._id, index, 'disqualify')" color="#F03F20" depressed class="mt-2"
                       :disabled="showLoading[index].load && showLoading[index].action === 'disqualify'">
 
                       <v-progress-circular v-if="showLoading[index].load && showLoading[index].action === 'disqualify'"
@@ -174,17 +174,17 @@
                     </v-btn>
                   </div>
                   <div v-else class="d-flex flex-column">
-                    <v-btn @click="unAward(item.companyId, index, 'award')" color="#0d9648" depressed
+                    <v-btn @click="unAward(item.company._id, index, 'award')" color="#0d9648" depressed
                       :disabled="showLoading[index].load && showLoading[index].action === 'award'"
-                      v-if="checkAwardee(item.companyId) && !checkRejectee(item.companyId)">
+                      v-if="checkAwardee(item.company._id) && !checkRejectee(item.company._id)">
                       <v-progress-circular v-if="showLoading[index].load && showLoading[index].action === 'award'"
                         indeterminate :width="3" size="25" color="#0D9648"></v-progress-circular>
                       <div v-else>Un-Award</div>
 
                     </v-btn>
-                    <v-btn @click="unDisqualify(item.companyId, index, 'disqualify')" color="#F03F20" depressed
+                    <v-btn @click="unDisqualify(item.company._id, index, 'disqualify')" color="#F03F20" depressed
                       :disabled="showLoading[index].load && showLoading[index].action === 'disqualify'"
-                      v-if="!checkAwardee(item.companyId) && checkRejectee(item.companyId)">
+                      v-if="!checkAwardee(item.company._id) && checkRejectee(item.company._id)">
 
                       <v-progress-circular v-if="showLoading[index].load && showLoading[index].action === 'disqualify'"
                         indeterminate :width="3" size="25" color="#F03F20"></v-progress-circular>
@@ -203,13 +203,13 @@
               <template v-for="(item) in bidDetail.supplierSubmissions">
                 <td class="text-left">
                   <div class=" action d-flex align-center" color="white" height="56" rounded width="190"
-                    v-if="checkRejectee(item.companyId)">
+                    v-if="checkRejectee(item.company._id)">
                     <img :src="require('@/assets/images/bids/disqualified.png')" />
                     Disqualified Bid
                   </div>
 
                   <div class=" action d-flex align-center" color="white" height="56" rounded width="190"
-                    v-if="checkAwardee(item.companyId)">
+                    v-if="checkAwardee(item.company._id)">
                     <img :src="require('@/assets/images/bids/awarded.png')" />
                     Awarded Bid
                   </div>
@@ -266,7 +266,7 @@ export default {
       return file.substring(file.lastIndexOf('.') + 1);
     },
     exportF() {
-      const header = this.bidDetail.supplierSubmissions.map((el) => el.company);
+      const header = this.bidDetail.supplierSubmissions.map((el) => el.company.companyName);
 
       header.unshift('UOM');
       header.unshift('QTY');
@@ -399,10 +399,10 @@ export default {
 
       await this.awardCompany({
         companyId: id,
-        userId: this.user.id,
-        bidId: this.bidDetail.bidData.id,
+        userId: this.user._id,
+        bidId: this.bidDetail.bidData._id,
         serial: this.$route.params.serial,
-        company: this.user.company.company,
+        company: this.user.company,
       });
 
       this.loadings[index].load = false;
@@ -414,10 +414,10 @@ export default {
 
       await this.rejectCompany({
         companyId: id,
-        userId: this.user.id,
-        bidId: this.bidDetail.bidData.id,
+        userId: this.user._id,
+        bidId: this.bidDetail.bidData._id,
         serial: this.$route.params.serial,
-        company: this.user.company.company,
+        company: this.user.company,
       });
 
       this.loadings[index].load = false;
@@ -429,10 +429,10 @@ export default {
 
       await this.UnAwardCompany({
         companyId: id,
-        userId: this.user.id,
-        bidId: this.bidDetail.bidData.id,
+        userId: this.user._id,
+        bidId: this.bidDetail.bidData._id,
         serial: this.$route.params.serial,
-        company: this.user.company.company,
+        company: this.user.company,
       });
 
       this.loadings[index].load = false;
@@ -444,10 +444,10 @@ export default {
 
       await this.UnDisqualifyCompany({
         companyId: id,
-        userId: this.user.id,
-        bidId: this.bidDetail.bidData.id,
+        userId: this.user._id,
+        bidId: this.bidDetail.bidData._id,
         serial: this.$route.params.serial,
-        company: this.user.company.company,
+        company: this.user.company,
       });
 
       this.loadings[index].load = false;
