@@ -207,7 +207,6 @@ export default {
     try{
       const res = await axios.get('bid/getBidList/'+payload,config);
         commit('setBidsList',res.data);
-        await dispatch('getActivities',payload);
         commit('setPageSubLoader',false);
         commit('setPageLoader',false)
     }catch(err){
