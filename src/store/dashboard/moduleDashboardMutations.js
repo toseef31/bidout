@@ -31,5 +31,8 @@ export default {
   },
   setLocationLoader (state, payload){
     state.locationLoader = payload;
+  },
+  setActivityLoader (state, payload){
+    state.activityLoader = payload;
   }
 }
