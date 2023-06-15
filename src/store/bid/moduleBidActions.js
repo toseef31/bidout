@@ -736,7 +736,8 @@ export default {
           formData.append(`lineItems[${lineItemsindex}][unit]`, state.bidlines[i].unit);
           formData.append(`lineItems[${lineItemsindex}][inputType]`, state.bidlines[i].inputType);
           formData.append(`lineItems[${lineItemsindex}][quantity]`, state.bidlines[i].quantity);
-          if (state.bidlines[i].buyerComment !== 'undefined' && state.bidlines[i].buyerComment !== '' && state.bidlines[i].buyerComment !== undefined) {
+          if (state.bidlines[i].buyerComment !== 'undefined' && state.bidlines[i].buyerComment !== '' && state.bidlines[i].buyerComment !== undefined && state.bidlines[i].buyerComment !== null) {
+
             formData.append(`lineItems[${lineItemsindex}][buyerComment]`, state.bidlines[i].buyerComment);
           } 
           formData.append(`lineItems[${lineItemsindex}][required]`, state.bidlines[i].required);
@@ -754,7 +755,7 @@ export default {
         formData.append(`attachment[${i}][uploadedAt]`, state.attachement[i].uploadedAt);
 
         if (state.attachement[i].comment && state.attachement[i].comment !== '' && state.attachement[i].comment !== 'undefined') {
-          formData.append(`attachments[${i}][comment]`, state.attachement[i].comment);
+          formData.append(`attachment[${i}][comment]`, state.attachement[i].comment);
         }    
 
         formData.append(`attachment[${i}][id]`, state.attachement[i]._id ? state.attachement[i]._id : state.attachement[i].id);
