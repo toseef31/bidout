@@ -157,15 +157,17 @@ export default {
   }, 
   getActivities({commit,dispatch,state},payload){
     commit('setActivityList',null);
+    commit('setActivityLoader', true);
     axios.get('/activity/getUserActivities/'+payload)
       .then(responce => {
         
         if(responce.status === 200){
           commit('setActivityList',responce.data)
-          commit('setPageLoader', false);
+          commit('setActivityLoader', false);
           
         }
     }).catch(async(err) => {
+      commit('setActivityLoader', false);
       if(state.apiCounter === 2){
         dispatch('apiSignOutAction')
       }else{
@@ -207,8 +209,10 @@ export default {
         commit('setBidsList',res.data);
         await dispatch('getActivities',payload);
         commit('setPageSubLoader',false);
+        commit('setPageLoader',false)
     }catch(err){
       console.log(err);
+      commit('setPageLoader',false)
     }
     
   },

@@ -28,5 +28,8 @@ export default {
    },
    locationLoader (state){
       return state.locationLoader;
+   },
+   activityLoader (state){
+      return state.activityLoader;
    }
 }
