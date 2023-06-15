@@ -517,7 +517,7 @@ export default {
           });
           var grpName = membr[0].name;
         } else {
-          var grpName = convo.company.companyName;
+          var grpName = convo.displayName;
         }
         const obj = {
           group: convo,
@@ -603,10 +603,7 @@ export default {
       return moment(date).tz(zone).calendar();
     },
     getConversationName(conversation) {
-      if (conversation.type === 'GROUP') {
-        return conversation.name.split('|||').find((el) => el.trim() !== this.user.company.company);
-      }
-      return conversation.company.companyName;
+      return conversation.displayName;
     },
   },
   async created() {

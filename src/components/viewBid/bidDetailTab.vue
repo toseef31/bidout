@@ -151,7 +151,7 @@
                 </v-tooltip>
 
                 <v-tooltip top
-                  v-if="getSubmissionStatus(item._id) === 'sent' && getCompanyIntend(item._id) !== 'not-intended'">
+                  v-if="getSubmissionStatus(item._id) === 'sent' && getCompanyIntend(item._id) === 'intended'">
                   <template v-slot:activator="{ on, attrs }">
                     <img :src="require('@/assets/images/bids/bidSubmitted.svg')" width="24" height="24" v-bind="attrs"
                       v-on="on" />
@@ -403,7 +403,7 @@ export default {
 
       if (supplierViews && id) {
         supplierViews.forEach((el) => {
-          if (el._id === id) {
+          if (el.supplier === id) {
             number = el.views;
           }
         });

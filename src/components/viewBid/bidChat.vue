@@ -229,7 +229,7 @@ export default {
   methods: {
     ...mapActions(['getAllMessages', 'lastMessageRead', 'sendMessage', 'getBidAllConversations']),
     getName(conversation) {
-      return conversation.company.companyName;
+      return conversation.displayName;
     },
     openChat(conversation) {
       this.chatData = {
@@ -325,7 +325,7 @@ export default {
       return url[0] && url[0].url && url[0].url.split(/[#?]/)[0].split('.').pop().trim();
     },
     getConversationName(conversation) {
-      return conversation.company.companyName;
+      return conversation.displayName;
     },
     checkIfCompanyOfs(company) {
       if (company && company.contracts) {

@@ -19,7 +19,7 @@
             active-class="grey--text">
             <template v-for="(conversation, index) in conversationsList">
               <template v-if="chatData">
-                <v-list-item   @click="openChat(conversation,conversation.company.companyName)" :key="conversation._id"  :class="{ 'grey--text v-list-item--active' : conversation._id ===  conversationsIds }">
+                <v-list-item   @click="openChat(conversation,conversation.displayName)" :key="conversation._id"  :class="{ 'grey--text v-list-item--active' : conversation._id ===  conversationsIds }">
                 <template>
                   <v-list-item-avatar>
                     <v-icon>mdi-domain</v-icon>
@@ -183,7 +183,7 @@ export default {
     ...mapGetters(['noConversation']),
     conversationsList() {
       if (this.$store.state.chat.searchConv != '') {
-        return _.orderBy(this.$store.getters.allConversations.filter((item) => this.$store.state.chat.searchConv.toLowerCase().split(' ').every((v) => item.company.companyName.toLowerCase().includes(v))), 'latestMessage', 'desc');
+        return _.orderBy(this.$store.getters.allConversations.filter((item) => this.$store.state.chat.searchConv.toLowerCase().split(' ').every((v) => item.displayName.toLowerCase().includes(v))), 'latestMessage', 'desc');
       } else {
         if (this.$store.getters.conversations) {
           this.$store.commit('setPageLoader', false);
@@ -278,10 +278,7 @@ export default {
       return moment(date).tz(zone).calendar();
     },
     getConversationName(conversation) {
-      if (conversation.type === 'GROUP') {
-        return conversation.name.split('|||').find((el) => el.trim() !== this.user.company.companyName);
-      }
-      return conversation.company.companyName;
+      return conversation.displayName;
     },
   },
   async created() {
@@ -305,7 +302,7 @@ export default {
         });
         var grpName = membr[0].name;
       } else {
-        var grpName = convo.groupName;
+        var grpName = convo.displayName;
       }
       
       await this.openChat(convo, grpName);
