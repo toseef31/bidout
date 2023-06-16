@@ -118,8 +118,8 @@
               </template>
             </tr>
 
-            <tr v-if="bidDetail.bidData.questions.length && bidDetail.supplierSubmissions">
-              <div class="title-detail-supplier mt-10 mb-5">Supplier Answers</div>
+            <tr class="supplier-row" v-if="bidDetail.bidData.questions.length && bidDetail.supplierSubmissions">
+              <div class="title-detail-supplier mt-8 mb-7">Supplier Answers</div>
             </tr>
 
             <tr v-for="(item, qIndex) in bidDetail.bidData.questions" :key="qIndex + item._id"
@@ -157,7 +157,8 @@
               <td class="text-left"></td>
               <template v-for="(item, index) in bidDetail.supplierSubmissions">
                 <td class="text-left">
-                  <div class="d-flex flex-column" v-if="!checkAwardee(item.company._id) && !checkRejectee(item.company._id)">
+                  <div class="d-flex flex-column"
+                    v-if="!checkAwardee(item.company._id) && !checkRejectee(item.company._id)">
                     <v-btn @click="award(item.company._id, index, 'award')" color="#0d9648" depressed
                       :disabled="showLoading[index].load && showLoading[index].action === 'award'">
                       <v-progress-circular v-if="showLoading[index].load && showLoading[index].action === 'award'"
@@ -165,8 +166,8 @@
                       <div v-else>Award Bid</div>
 
                     </v-btn>
-                    <v-btn @click="disqualify(item.company._id, index, 'disqualify')" color="#F03F20" depressed class="mt-2"
-                      :disabled="showLoading[index].load && showLoading[index].action === 'disqualify'">
+                    <v-btn @click="disqualify(item.company._id, index, 'disqualify')" color="#F03F20" depressed
+                      class="mt-2" :disabled="showLoading[index].load && showLoading[index].action === 'disqualify'">
 
                       <v-progress-circular v-if="showLoading[index].load && showLoading[index].action === 'disqualify'"
                         indeterminate :width="3" size="25" color="#F03F20"></v-progress-circular>
@@ -242,12 +243,13 @@ export default {
   },
   computed: {
     bidDetail() {
-      for (let i = 0; i < this.$store.getters.bidViewData.supplierSubmissions; i++) {
+      this.$store.getters.bidViewData.supplierSubmissions.forEach((el) => {
         this.loadings.push({
           load: false,
           action: 'neither',
         });
-      }
+      });
+
       return this.$store.getters.bidViewData;
     },
     showLoading() {
