@@ -499,10 +499,13 @@ export default {
     if (payload.supplierNote && payload.supplierNote !== '') {
       formData.append('supplierNote', payload.supplierNote);
     }
-    console.log(payload.supplierAttachments)
+
     if (payload.supplierAttachments && payload.supplierAttachments.length) {
       for (let i = 0; i < payload.supplierAttachments.length; i++) {
-        formData.append(`supplierAttachments[${i}]`, payload.supplierAttachments[i].attachment);
+        formData.append(`supplierAttachments[${i}][attachment]`, payload.supplierAttachments[i].attachment);
+        formData.append(`supplierAttachments[${i}][fileName]`, payload.supplierAttachments[i].fileName);
+        formData.append(`supplierAttachments[${i}][fileSize]`, payload.supplierAttachments[i].fileSize);
+        formData.append(`supplierAttachments[${i}][uploadedAt]`, payload.supplierAttachments[i].uploadedAt);
       }
     }
 
