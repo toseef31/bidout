@@ -315,6 +315,7 @@ export default {
         container.scrollTop = container.scrollHeight;
       }, 500);
       this.message = '';
+      this.$refs.msgFile.value = null;
       this.filename = '';
     },
     isToday(date) {

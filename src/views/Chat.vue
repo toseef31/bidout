@@ -489,6 +489,7 @@ export default {
         container.scrollTop = container.scrollHeight;
       }, 500);
       this.message = '';
+      this.$refs.msgFile.value = null;
       this.filename = '';
     },
     chatActions(data) {
@@ -583,6 +584,7 @@ export default {
         container.scrollTop = container.scrollHeight;
       }, 500);
       this.message = '';
+      this.$refs.msgFile.value = null;
       this.filename = '';
     },
     removeUser(id) {
