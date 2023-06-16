@@ -82,14 +82,14 @@
           v-model="selectedUser"
           active-class="grey--text">
           <template v-for="(conversation, index) in archiveList">
-            <v-list-item :key="conversation._id" v-if="conversation.type == 'GROUP'">
+            <v-list-item :key="conversation._id">
               <template>
                 <v-list-item-avatar>
                   <v-icon>mdi-domain</v-icon>
                 </v-list-item-avatar>
                 <v-list-item-content>
-                  <v-list-item-title v-if="conversation.company == ''" v-text="conversation.company"></v-list-item-title>
-                  <v-list-item-title v-else >{{  getConversationName(conversation)  }}</v-list-item-title>
+                  <!-- <v-list-item-title v-if="conversation.displayName == ''" v-text="conversation.displayName"></v-list-item-title> -->
+                  <v-list-item-title >{{  getConversationName(conversation)  }}</v-list-item-title>
 
                   <!-- <v-list-item-subtitle  v-if="conversation.isBid == true"
                     class="text--primary"
@@ -296,7 +296,7 @@ export default {
     if (convo) {
       if (convo.type == 'PRIVATE') {
         const membr = convo.participantDetails.filter((item) => {
-          if (this.user.id != item.id) {
+          if (this.user._id != item._id) {
             return item;
           }
         });

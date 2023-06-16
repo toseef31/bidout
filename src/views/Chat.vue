@@ -495,7 +495,7 @@ export default {
     chatActions(data) {
       const archivess = {
         conversationId: data,
-        userId: this.user.id,
+        userId: this.user._id,
       };
       this.archiveChat(archivess);
       this.$store.commit('setSpliceToConversation',data);
@@ -509,26 +509,27 @@ export default {
           }
         });
         const convo = _.orderBy(chatArr, 'latestMessage', 'desc')[0];
-      }
-      if (convo) {
-        if (convo.type === 'PRIVATE') {
-          const membr = convo.participantDetails.filter((item) => {
-            if (this.user.id != item.id) {
-              return item;
-            }
-          });
-          var grpName = membr[0].name;
-        } else {
-          var grpName = convo.displayName;
+        if (convo) {
+          if (convo.type === 'PRIVATE') {
+            const membr = convo.participantDetails.filter((item) => {
+              if (this.user._id != item._id) {
+                return item;
+              }
+            });
+            var grpName = membr[0].name;
+          } else {
+            var grpName = convo.displayName;
+          }
+          const obj = {
+            group: convo,
+            name: grpName,
+          };
+          this.conversationId = obj.group._id;
+          this.chatData = obj;
+          this.openChat(convo, grpName);
         }
-        const obj = {
-          group: convo,
-          name: grpName,
-        };
-        this.conversationId = obj.group._id;
-        this.chatData = obj;
-        this.openChat(convo, grpName);
       }
+      
     },
     getText: (item) => `${item.firstName} ${item.lastName}`,
     dragfileupload(file, xhr, formData) {
