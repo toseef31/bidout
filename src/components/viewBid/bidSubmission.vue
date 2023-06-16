@@ -20,7 +20,7 @@
             <tr>
               <th class="text-left">Line Items</th>
               <th class="text-left" v-for="(item, index) in bidDetail.supplierSubmissions" :key="index">{{
-                item.company
+                item.company.companyName
               }}
               </th>
             </tr>
