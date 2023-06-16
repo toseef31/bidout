@@ -380,7 +380,7 @@ export default {
         (v) => !!v || 'E-mail is required',
         (v) => {
           v = v && v.replace(/\s+/g, '');
-          return /^[\w-\.+]+@([\w-]+\.)+[\w-]{1,63}$/.test(v) || 'E-mail must be valid';
+          return /^(?!.*_[^@]*$)(?!.*\.\.)[A-Za-z0-9+_.-]+@[A-Za-z0-9-]+\.[A-Za-z]{1,63}$/.test(v) || 'E-mail must be valid';
         },
       ],
       phoneNumber: '',
@@ -620,7 +620,7 @@ export default {
     async checkEmailI() {
       this.email = this.email && this.email.replace(/\s+/g, '');
 
-      const testEmail = /^[\w-\.+]+@([\w-]+\.)+[\w-]{1,63}$/.test(this.email);
+      const testEmail = /^(?!.*_[^@]*$)(?!.*\.\.)[A-Za-z0-9+_.-]+@[A-Za-z0-9-]+\.[A-Za-z]{1,63}$/.test(this.email);
 
       if (this.email === '' || !testEmail) {
         this.$store.commit('setEmailExistSuccess', false);
