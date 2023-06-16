@@ -150,18 +150,19 @@
                     && item.companyName ? item.companyName : item.company }} has not sent Bid Submissions yet</span>
                 </v-tooltip>
 
-                <v-tooltip top
-                  v-if="getSubmissionStatus(item._id) === 'sent' && getCompanyIntend(item._id) === 'intended'">
-                  <template v-slot:activator="{ on, attrs }">
-                    <img :src="require('@/assets/images/bids/bidSubmitted.svg')" width="24" height="24" v-bind="attrs"
-                      v-on="on" />
+                <span v-if="getSubmissionStatus(item._id) === 'sent' && getCompanyIntend(item._id) === 'intended'">
+                  <v-tooltip top>
+                    <template v-slot:activator="{ on, attrs }">
+                      <img :src="require('@/assets/images/bids/bidSubmitted.svg')" width="24" height="24" v-bind="attrs"
+                        v-on="on" />
 
-                  </template>
-                  <span>{{
-                    item
-                    && item.companyName ? item.companyName : item.company }} has sent Bid Submissions</span>
+                    </template>
+                    <span>{{
+                      item
+                      && item.companyName ? item.companyName : item.company }} has sent Bid Submissions</span>
 
-                </v-tooltip>
+                  </v-tooltip>
+                </span>
                 <div
                   v-if="getCompanyIntend(item._id) === 'not-intended' || getSubmissionStatus(item._id) === 'sent' && getCompanyIntend(item._id) === 'not-intended'">
                   <v-tooltip top
@@ -433,7 +434,7 @@ export default {
 
       if (supplierSubmissions.length) {
         supplierSubmissions.forEach((el) => {
-          if (el.company === id) {
+          if (el.company._id === id) {
             result = 'sent';
           }
         });
