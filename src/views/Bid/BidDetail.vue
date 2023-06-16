@@ -1,17 +1,7 @@
 <template>
-  <v-row
-    fill-height
-    align="center"
-    class="bid-alert"
-    v-if="getPageLoading || getViewBidError"
-  >
+  <v-row fill-height align="center" class="bid-alert" v-if="getPageLoading || getViewBidError">
     <v-col cols="12">
-      <v-progress-circular
-        v-if="getPageLoading"
-        :width="3"
-        color="green"
-        indeterminate
-      ></v-progress-circular>
+      <v-progress-circular v-if="getPageLoading" :width="3" color="green" indeterminate></v-progress-circular>
       <div class="alert-section" v-if="getViewBidError && !getPageLoading">
         <div class="error-title mb-5">
           <h1 class="font-weight-bold">Opps!</h1>
@@ -19,38 +9,17 @@
         </div>
 
         <div class="btn-section mt-8 mb-16 pb-16">
-          <a class="text-decoration-none" href="https://bidout.app"
-            ><v-btn
-              large
-              outlined
-              color="#0D9647"
-              height="52"
-              class="mr-5 font-weight-bold text-capitalize"
-              >Access Homepage</v-btn
-            ></a
-          >
-          <router-link to="/dashboard" class="text-decoration-none"
-            ><v-btn
-              large
-              outlined
-              color="#0D9647"
-              class="font-weight-bold text-capitalize"
-              height="52"
-              >Access Dashboard</v-btn
-            ></router-link
-          >
+          <a class="text-decoration-none" href="https://bidout.app"><v-btn large outlined color="#0D9647" height="52"
+              class="mr-5 font-weight-bold text-capitalize">Access Homepage</v-btn></a>
+          <router-link to="/dashboard" class="text-decoration-none"><v-btn large outlined color="#0D9647"
+              class="font-weight-bold text-capitalize" height="52">Access Dashboard</v-btn></router-link>
         </div>
       </div>
     </v-col>
   </v-row>
 
   <v-col v-else class="pl-0 pr-3 pb-0 pt-0 bid-detail-module">
-    <v-alert
-      type="error"
-      v-show="showErrorDeleteAlert"
-      class="mx-5"
-      v-if="getUserType === 'buyer'"
-    >
+    <v-alert type="error" v-show="showErrorDeleteAlert" class="mx-5" v-if="getUserType === 'buyer'">
       Deleting this bid has failed. Please try again!
     </v-alert>
 
@@ -66,11 +35,7 @@
       were sent to all invited suppliers.
     </v-alert>
 
-    <v-card
-      class="bid-submitted-card"
-      :elevation="0"
-      v-if="isBidSubmitted && getUserType === 'supplier'"
-    >
+    <v-card class="bid-submitted-card" :elevation="0" v-if="isBidSubmitted && getUserType === 'supplier'">
       <div class="d-flex align-center">
         <img :src="require('@/assets/images/bids/awarded.png')" />
 
@@ -84,64 +49,32 @@
     </v-card>
 
     <v-card class="fill-height main-card" :elevation="0">
-      <v-alert
-        type="success"
-        v-show="showAlertEditBidSubmissionSuccess"
-        class="mx-5 mt-5"
-      >
+      <v-alert type="success" v-show="showAlertEditBidSubmissionSuccess" class="mx-5 mt-5">
         This bid has been updated successfully!
       </v-alert>
 
-      <v-alert
-        type="success"
-        v-show="showBidSubmissionAlert.award"
-        class="mx-5 mt-5"
-      >
+      <v-alert type="success" v-show="showBidSubmissionAlert.award" class="mx-5 mt-5">
         You have awarded a company successfully!
       </v-alert>
 
-      <v-alert
-        type="success"
-        v-show="showBidSubmissionAlert.disqualify"
-        class="mx-5 mt-5"
-      >
+      <v-alert type="success" v-show="showBidSubmissionAlert.disqualify" class="mx-5 mt-5">
         You have disqualified a company successfully!
       </v-alert>
-      <v-alert
-        type="success"
-        v-show="showBidSubmissionAlert.unAward"
-        class="mx-5 mt-5"
-      >
+      <v-alert type="success" v-show="showBidSubmissionAlert.unAward" class="mx-5 mt-5">
         You have un-awarded a company successfully!
       </v-alert>
-      <v-alert
-        type="success"
-        v-show="showBidSubmissionAlert.unDisqualify"
-        class="mx-5 mt-5"
-      >
+      <v-alert type="success" v-show="showBidSubmissionAlert.unDisqualify" class="mx-5 mt-5">
         You have un-disqualified a company successfully!
       </v-alert>
-      <v-alert
-        type="error"
-        v-show="getLoweringPriceAlert !== null"
-        class="mx-5 mt-5"
-      >
+      <v-alert type="error" v-show="getLoweringPriceAlert !== null" class="mx-5 mt-5">
         {{ getLoweringPriceAlert }}
       </v-alert>
 
-      <v-alert
-        type="error"
-        v-show="getBidSubmissionValidationAlert !== null"
-        class="mx-5 mt-5"
-      >
+      <v-alert type="error" v-show="getBidSubmissionValidationAlert !== null" class="mx-5 mt-5">
         {{ getBidSubmissionValidationAlert }}
       </v-alert>
 
-      <v-row
-        class="px-5 my-5 row-title"
-        no-gutters
-        v-if="getUserType === 'buyer'"
-      >
+      <v-row class="px-5 my-5 row-title" no-gutters v-if="getUserType === 'buyer'">
         <v-col>
           <div class="pa-1 text-left text--primary">
             <div class="font-weight-bold text--primary bid-title">
@@ -164,14 +97,9 @@
                   CST, BidOut Period End:
                   {{ formatDate(bidDetail.bidData.dueDate) }} @
                   {{ bidDetail.bidData.dueTime }} CST
-                  <a
-                    class="text-decoration-none ml-1"
-                    target="_blank"
-                    href=" https://help.bidout.app/article/7-bidout-process-explain"
-                    ><v-icon color="black" size="18"
-                      >mdi-information-outline</v-icon
-                    ></a
-                  >
+                  <a class="text-decoration-none ml-1" target="_blank"
+                    href=" https://help.bidout.app/article/7-bidout-process-explain"><v-icon color="black"
+                      size="18">mdi-information-outline</v-icon></a>
                 </div>
                 <div v-else>
                   Bid End Date: {{ formatDate(bidDetail.bidData.dueDate) }} @
@@ -179,8 +107,8 @@
                 </div>
               </div>
               <div>
-                Created by: <strong>{{ bidDetail.bidData.company.companyName }}</strong
-                >, {{ bidDetail.bidData.user.firstName }}
+                Created by: <strong>{{ bidDetail.bidData.company.companyName }}</strong>, {{
+                  bidDetail.bidData.user.firstName }}
                 {{ bidDetail.bidData.user.lastName }}
               </div>
               <div>Bid Type: {{ bidDetail.bidData.type }}</div>
@@ -189,13 +117,8 @@
         </v-col>
 
         <v-col class="status-sec mx-auto">
-          <v-sheet
-            class="py-2 px-4 bid-status-card text-left"
-            rounded="lg"
-            height="119"
-            width="310"
-            v-if="bidDetail.receivingBids && !isBidOut"
-          >
+          <v-sheet class="py-2 px-4 bid-status-card text-left" rounded="lg" height="119" width="310"
+            v-if="bidDetail.receivingBids && !isBidOut">
             <div class="status">Status: Receiving Bids</div>
             <div class="time pt-2 align-center">
               <v-icon small color="#0D9648"> mdi-timer-outline</v-icon>
@@ -208,13 +131,8 @@
             <div class="bid-number">{{ noOfBidSubmitted }} Bids Received</div>
           </v-sheet>
 
-          <v-sheet
-            class="py-2 px-4 bid-status-card text-left"
-            rounded="lg"
-            height="119"
-            width="310"
-            v-if="!bidDetail.receivingBids && isBidOut"
-          >
+          <v-sheet class="py-2 px-4 bid-status-card text-left" rounded="lg" height="119" width="310"
+            v-if="!bidDetail.receivingBids && isBidOut">
             <div class="status">Status: BidOut Phase</div>
             <div class="time pt-2 align-center">
               <v-icon small color="#0D9648"> mdi-timer-outline</v-icon>
@@ -227,35 +145,22 @@
             <div class="bid-number">{{ noOfBidSubmitted }} Bids Received</div>
           </v-sheet>
 
-          <v-sheet
-            class="py-2 px-5 text-left award-status-card"
-            rounded="lg"
-            height="85"
-            width="290"
-            v-if="!bidDetail.receivingBids && !isBidOut"
-          >
-            <div
-              class="award-status"
-              v-if="
-                (bidDetail.bidData.rejectees &&
-                  bidDetail.bidData.rejectees.length === 0 &&
-                  bidDetail.bidData.awardees &&
-                  bidDetail.bidData.awardees.length === 0) ||
-                (!bidDetail.bidData.rejectees && !bidDetail.bidData.awardees)
-              "
-            >
+          <v-sheet class="py-2 px-5 text-left award-status-card" rounded="lg" height="85" width="290"
+            v-if="!bidDetail.receivingBids && !isBidOut">
+            <div class="award-status" v-if="(bidDetail.bidData.rejectees &&
+                bidDetail.bidData.rejectees.length === 0 &&
+                bidDetail.bidData.awardees &&
+                bidDetail.bidData.awardees.length === 0) ||
+              (!bidDetail.bidData.rejectees && !bidDetail.bidData.awardees)
+              ">
               Status: Not Awarded
             </div>
 
-            <div
-              class="award-status"
-              v-if="
-                (bidDetail.bidData.rejectees &&
-                  bidDetail.bidData.rejectees.length) ||
-                (bidDetail.bidData.awardees &&
-                  bidDetail.bidData.awardees.length)
-              "
-            >
+            <div class="award-status" v-if="(bidDetail.bidData.rejectees &&
+                bidDetail.bidData.rejectees.length) ||
+              (bidDetail.bidData.awardees &&
+                bidDetail.bidData.awardees.length)
+              ">
               Status: Awarding Phase
             </div>
             <v-divider class="mt-3" color="#b489251c"></v-divider>
@@ -266,168 +171,77 @@
         </v-col>
 
         <v-col cols="auto">
-          <div
-            class="toggle-setting"
-            v-if="bidDetail.receivingBids && !isBidOut"
-          >
-            <v-btn
-              class="py-2 setting"
-              plain
-              color="#0d96481a"
-              @click="isSetting = !isSetting"
-              ><v-icon color="#0D9648"> mdi-cog-outline</v-icon></v-btn
-            >
+          <div class="toggle-setting" v-if="bidDetail.receivingBids && !isBidOut">
+            <v-btn class="py-2 setting" plain color="#0d96481a" @click="isSetting = !isSetting"><v-icon color="#0D9648">
+                mdi-cog-outline</v-icon></v-btn>
             <div v-show="isSetting">
-              <v-card
-                tile
-                outlined
-                class="mx-auto setting-card"
-                min-width="312"
-              >
+              <v-card tile outlined class="mx-auto setting-card" min-width="312">
                 <v-list class="pa-0">
                   <v-list-item-group color="success">
                     <v-list-item class="edit-item">
-                      <router-link
-                        to="#"
-                        class="text-decoration-none"
-                        v-if="noOfBidSubmitted === 0"
-                      >
-                        <v-list-item-icon
-                          class="mr-2 my-2"
-                          @click="isSetting = !isSetting"
-                        >
-                          <v-icon size="24" color="#0D9648"
-                            >mdi-note-edit-outline</v-icon
-                          >
+                      <router-link to="#" class="text-decoration-none" v-if="noOfBidSubmitted === 0">
+                        <v-list-item-icon class="mr-2 my-2" @click="isSetting = !isSetting">
+                          <v-icon size="24" color="#0D9648">mdi-note-edit-outline</v-icon>
                         </v-list-item-icon>
                       </router-link>
 
-                      <v-list-item-icon
-                        v-if="noOfBidSubmitted > 0"
-                        class="mr-2 my-2"
-                        @click="isSetting = !isSetting"
-                      >
-                        <v-icon size="24" color="#959595"
-                          >mdi-note-edit-outline</v-icon
-                        >
+                      <v-list-item-icon v-if="noOfBidSubmitted > 0" class="mr-2 my-2" @click="isSetting = !isSetting">
+                        <v-icon size="24" color="#959595">mdi-note-edit-outline</v-icon>
                       </v-list-item-icon>
-                      <v-list-item-content
-                        align-start
-                        color="#0D9648"
-                        class="pa-0"
-                      >
-                        <router-link
-                          :to="'/edit-bid/' + bidDetail.bidData.serial"
-                          class="text-decoration-none"
-                          v-if="noOfBidSubmitted === 0"
-                        >
-                          <v-list-item-title
-                            color="#0D9648"
-                            @click="isSetting = !isSetting"
-                            class="py-3"
-                            >Edit Bid</v-list-item-title
-                          >
+                      <v-list-item-content align-start color="#0D9648" class="pa-0">
+                        <router-link :to="'/edit-bid/' + bidDetail.bidData.serial" class="text-decoration-none"
+                          v-if="noOfBidSubmitted === 0">
+                          <v-list-item-title color="#0D9648" @click="isSetting = !isSetting" class="py-3">Edit
+                            Bid</v-list-item-title>
                         </router-link>
                         <v-tooltip top>
                           <template v-slot:activator="{ on, attrs }">
-                            <v-list-item-title
-                              v-bind="attrs"
-                              v-on="on"
-                              v-if="noOfBidSubmitted > 0"
-                              color="#959595"
-                              @click="isSetting = !isSetting"
-                              class="pt-2"
-                            >
+                            <v-list-item-title v-bind="attrs" v-on="on" v-if="noOfBidSubmitted > 0" color="#959595"
+                              @click="isSetting = !isSetting" class="pt-2">
                               <p class="disabled-item">Edit Bid</p>
                             </v-list-item-title>
                           </template>
-                          <span
-                            >Editing this bid is not allowed once entries are
-                            received</span
-                          >
+                          <span>Editing this bid is not allowed once entries are
+                            received</span>
                         </v-tooltip>
                       </v-list-item-content>
                     </v-list-item>
                     <v-list-item class="delete-item">
-                      <router-link
-                        to="#"
-                        class="text-decoration-none"
-                        v-if="noOfBidSubmitted === 0"
-                      >
-                        <v-list-item-icon
-                          class="mr-2 my-2"
-                          @click="isSetting = !isSetting"
-                        >
-                          <v-icon size="24" color="#F32349"
-                            >mdi-trash-can-outline</v-icon
-                          >
+                      <router-link to="#" class="text-decoration-none" v-if="noOfBidSubmitted === 0">
+                        <v-list-item-icon class="mr-2 my-2" @click="isSetting = !isSetting">
+                          <v-icon size="24" color="#F32349">mdi-trash-can-outline</v-icon>
                         </v-list-item-icon>
                       </router-link>
 
-                      <v-list-item-icon
-                        v-if="noOfBidSubmitted > 0"
-                        class="mr-2 my-2"
-                        @click="isSetting = !isSetting"
-                      >
-                        <v-icon size="24" color="#959595"
-                          >mdi-trash-can-outline</v-icon
-                        >
+                      <v-list-item-icon v-if="noOfBidSubmitted > 0" class="mr-2 my-2" @click="isSetting = !isSetting">
+                        <v-icon size="24" color="#959595">mdi-trash-can-outline</v-icon>
                       </v-list-item-icon>
-                      <v-list-item-content
-                        align-start
-                        color="#0D9648"
-                        class="pa-0"
-                      >
-                        <v-dialog
-                          class="dialog-class"
-                          v-model="dialog"
-                          width="300"
-                          v-if="noOfBidSubmitted === 0"
-                        >
+                      <v-list-item-content align-start color="#0D9648" class="pa-0">
+                        <v-dialog class="dialog-class" v-model="dialog" width="300" v-if="noOfBidSubmitted === 0">
                           <template v-slot:activator="{ on, attrs }">
-                            <v-btn
-                              color="#F32349"
-                              block
-                              plain
-                              :ripple="false"
-                              class="delete-button"
-                              v-bind="attrs"
-                              @click="isSetting = !isSetting"
-                              v-on="on"
-                            >
+                            <v-btn color="#F32349" block plain :ripple="false" class="delete-button" v-bind="attrs"
+                              @click="isSetting = !isSetting" v-on="on">
                               Delete Bid
                             </v-btn>
                           </template>
 
                           <v-card>
-                            <v-card-title
-                              class="text-h5 justify-center grey lighten-2"
-                            >
+                            <v-card-title class="text-h5 justify-center grey lighten-2">
                               Delete Bid
                             </v-card-title>
-                            <v-card-text class="pt-3 mb-n2"
-                              >Are you sure you really want to delete this
-                              bid?</v-card-text
-                            >
+                            <v-card-text class="pt-3 mb-n2">Are you sure you really want to delete this
+                              bid?</v-card-text>
                             <v-divider></v-divider>
                             <v-card-actions>
                               <v-spacer></v-spacer>
 
-                              <v-btn
-                                color="#0d9648"
-                                outlined
-                                @click="dialog = false"
-                              >
+                              <v-btn color="#0d9648" outlined @click="dialog = false">
                                 Cancel
                               </v-btn>
-                              <v-btn
-                                color="#F32349"
-                                outlined
-                                @click="
-                                  dialog = false;
-                                  deleteB();
-                                "
-                              >
+                              <v-btn color="#F32349" outlined @click="
+                                dialog = false;
+                              deleteB();
+                              ">
                                 Agree
                               </v-btn>
                             </v-card-actions>
@@ -436,21 +250,13 @@
 
                         <v-tooltip top>
                           <template v-slot:activator="{ on, attrs }">
-                            <v-list-item-title
-                              v-bind="attrs"
-                              v-on="on"
-                              v-if="noOfBidSubmitted > 0"
-                              color="#959595"
-                              @click="isSetting = !isSetting"
-                              class="pt-2"
-                            >
+                            <v-list-item-title v-bind="attrs" v-on="on" v-if="noOfBidSubmitted > 0" color="#959595"
+                              @click="isSetting = !isSetting" class="pt-2">
                               <p class="disabled-item">Delete Bid</p>
                             </v-list-item-title>
                           </template>
-                          <span
-                            >Deleting this bid is not allowed once entries are
-                            received</span
-                          >
+                          <span>Deleting this bid is not allowed once entries are
+                            received</span>
                         </v-tooltip>
                       </v-list-item-content>
                     </v-list-item>
@@ -459,12 +265,7 @@
               </v-card>
             </div>
           </div>
-          <v-btn
-            v-if="!bidDetail.receivingBids && !isBidOut"
-            color="#F03F20"
-            depressed
-            @click="ChangeT('tab-2')"
-          >
+          <v-btn v-if="!bidDetail.receivingBids && !isBidOut" color="#F03F20" depressed @click="ChangeT('tab-2')">
             <div class="supplier-class">Select Supplier</div>
           </v-btn>
         </v-col>
@@ -505,14 +306,9 @@
                     {{ formatDate(bidDetail.bidData.dueDate) }} @
                     {{ bidDetail.bidData.dueTime }} CST
                   </template>
-                  <a
-                    class="text-decoration-none ml-1"
-                    target="_blank"
-                    href=" https://help.bidout.app/article/7-bidout-process-explain"
-                    ><v-icon color="black" size="18"
-                      >mdi-information-outline</v-icon
-                    ></a
-                  >
+                  <a class="text-decoration-none ml-1" target="_blank"
+                    href=" https://help.bidout.app/article/7-bidout-process-explain"><v-icon color="black"
+                      size="18">mdi-information-outline</v-icon></a>
                 </div>
                 <div v-else>
                   Bid End Date: {{ formatDate(bidDetail.bidData.dueDate) }} @
@@ -520,8 +316,8 @@
                 </div>
               </div>
               <div>
-                Created by: <strong>{{ bidDetail.bidData.company.companyName }}</strong
-                >, {{ bidDetail.bidData.user.firstName }}
+                Created by: <strong>{{ bidDetail.bidData.company.companyName }}</strong>, {{
+                  bidDetail.bidData.user.firstName }}
                 {{ bidDetail.bidData.user.lastName }}
               </div>
               <div>Bid Type: {{ bidDetail.bidData.type }}</div>
@@ -529,11 +325,7 @@
           </div>
         </v-col>
 
-        <v-col
-          class="status-sec mr-6 text-left mt-2"
-          cols="auto"
-          v-if="bidDetail.receivingBids && !isBidSubmitted"
-        >
+        <v-col class="status-sec mr-6 text-left mt-2" cols="auto" v-if="bidDetail.receivingBids && !isBidSubmitted">
           <label class="intent-title">Intent to bid? </label>
           <v-radio-group v-model="answer" @change="makeIntentBid" row>
             <v-radio label="Yes" value="true" color="#0d9648" checked></v-radio>
@@ -542,13 +334,8 @@
         </v-col>
 
         <v-col cols="auto">
-          <v-sheet
-            class="py-2 px-4 bid-status-card text-left"
-            rounded="lg"
-            height="119"
-            width="310"
-            v-if="bidDetail.receivingBids && !isBidOut"
-          >
+          <v-sheet class="py-2 px-4 bid-status-card text-left" rounded="lg" height="119" width="310"
+            v-if="bidDetail.receivingBids && !isBidOut">
             <div class="status">Status: Receiving Bids</div>
             <div class="time pt-2 align-center">
               <v-icon small color="#0D9648"> mdi-timer-outline</v-icon>
@@ -561,21 +348,17 @@
             <div class="bid-number">
               {{
                 showIntent === null && !isBidSubmitted
-                  ? "Please specify your intend to bid"
-                  : ""
+                ? "Please specify your intend to bid"
+                : ""
               }}
               {{
                 showIntent === false || showIntent === "false"
-                  ? "Bid Submission is not allowed"
-                  : ""
+                ? "Bid Submission is not allowed"
+                : ""
               }}
-              <div
-                v-if="
-                  (showIntent === true ||
-                  showIntent === 'true') && !isBidSubmitted
-                "
-                @click="ChangeT('tab-2')"
-              >
+              <div v-if="(showIntent === true ||
+                    showIntent === 'true') && !isBidSubmitted
+                  " @click="ChangeT('tab-2')">
                 Submit Bid
               </div>
               <div @click="ChangeT('tab-2')" v-if="isBidSubmitted">
@@ -584,13 +367,8 @@
             </div>
           </v-sheet>
 
-          <v-sheet
-            class="py-2 px-4 bid-status-card text-left"
-            rounded="lg"
-            height="119"
-            width="310"
-            v-if="!bidDetail.receivingBids && isBidOut"
-          >
+          <v-sheet class="py-2 px-4 bid-status-card text-left" rounded="lg" height="119" width="310"
+            v-if="!bidDetail.receivingBids && isBidOut">
             <div class="status">Status: BidOut Phase</div>
             <div class="time pt-2 align-center">
               <v-icon small color="#0D9648"> mdi-timer-outline</v-icon>
@@ -603,28 +381,24 @@
             <div class="bid-number">
               {{
                 showIntent === null && !isBidSubmitted && !isBidOut
-                  ? "Please specify your intend to bid"
-                  : ""
+                ? "Please specify your intend to bid"
+                : ""
               }}
               {{
                 showIntent === null && isBidOut
-                  ? "Bid Submission is not allowed"
-                  : ""
+                ? "Bid Submission is not allowed"
+                : ""
               }}
               {{
                 showIntent === false || showIntent === "false"
-                  ? "Bid Submission is not allowed"
-                  : ""
+                ? "Bid Submission is not allowed"
+                : ""
               }}
               {{ (showIntent === true || showIntent === 'true') && !isBidSubmitted && isBidOut ? 'Bid Submission is not
                             allowed' : ''}}
-              <div
-                v-if="
-                  (showIntent === true ||
+              <div v-if="(showIntent === true ||
                   showIntent === 'true') && !isBidSubmitted && !isBidOut
-                "
-                @click="ChangeT('tab-2')"
-              >
+                " @click="ChangeT('tab-2')">
                 Submit Bid
               </div>
               <div @click="ChangeT('tab-2')" v-if="isBidSubmitted">
@@ -633,28 +407,15 @@
             </div>
           </v-sheet>
 
-          <v-sheet
-            class="py-2 px-5 text-left award-status-card"
-            rounded="lg"
-            height="85"
-            width="290"
-            v-if="
-              !bidDetail.receivingBids &&
-              !isBidOut &&
-              bidDetail.user_status !== 'awarded'
-            "
-          >
-            <div
-              class="award-status"
-              v-if="bidDetail.user_status === 'waiting'"
-            >
+          <v-sheet class="py-2 px-5 text-left award-status-card" rounded="lg" height="85" width="290" v-if="!bidDetail.receivingBids &&
+            !isBidOut &&
+            bidDetail.user_status !== 'awarded'
+            ">
+            <div class="award-status" v-if="bidDetail.user_status === 'waiting'">
               Status: Awarding Phase
             </div>
 
-            <div
-              class="award-status"
-              v-if="bidDetail.user_status === 'rejected'"
-            >
+            <div class="award-status" v-if="bidDetail.user_status === 'rejected'">
               Status: Not Awarded
             </div>
             <v-divider class="mt-3" color="#b489251c"></v-divider>
@@ -664,18 +425,11 @@
               </div>
             </div>
           </v-sheet>
-          <v-sheet
-            class="py-2 px-5 text-left bid-status-card"
-            rounded="lg"
-            height="85"
-            width="290"
-            v-if="
-              bidDetail.user_status === 'awarded' &&
-              isBidSubmitted &&
-              !bidDetail.receivingBids &&
-              !isBidOut
-            "
-          >
+          <v-sheet class="py-2 px-5 text-left bid-status-card" rounded="lg" height="85" width="290" v-if="bidDetail.user_status === 'awarded' &&
+            isBidSubmitted &&
+            !bidDetail.receivingBids &&
+            !isBidOut
+            ">
             <div class="status">Status: Awarded, Congrats!</div>
 
             <v-divider class="mt-3" color="#0D9648"></v-divider>
@@ -687,36 +441,15 @@
       </v-row>
 
       <div class="bidDetail-tabs-section mt-7" v-if="getUserType === 'buyer'">
-        <v-tabs
-          v-model="currentItem"
-          class="bids-tabs"
-          fixed-tabs
-          hide-slider
-          :mobile-breakpoint="767"
-          @change="reload"
-        >
-          <v-tab
-            v-for="item in tabs"
-            :key="item.value"
-            :href="'#tab-' + item.value"
-            class="text-capitalize black--text font-weight-bold"
-          >
+        <v-tabs v-model="currentItem" class="bids-tabs" fixed-tabs hide-slider :mobile-breakpoint="767" @change="reload">
+          <v-tab v-for="item in tabs" :key="item.value" :href="'#tab-' + item.value"
+            class="text-capitalize black--text font-weight-bold">
             {{ item.text }}
-            <v-badge
-              v-if="item.value === 3 && showBidMessageC !== 0"
-              color="#0D9648"
-              :content="showBidMessageC"
-              inline
-              tile
-            >
+            <v-badge v-if="item.value === 3 && showBidMessageC !== 0" color="#0D9648" :content="showBidMessageC" inline
+              tile>
             </v-badge>
-            <v-badge
-              v-if="item.value === 5 && getUnansweredQuestionCount !== 0"
-              color="#0D9648"
-              :content="getUnansweredQuestionCount"
-              inline
-              tile
-            >
+            <v-badge v-if="item.value === 5 && getUnansweredQuestionCount !== 0" color="#0D9648"
+              :content="getUnansweredQuestionCount" inline tile>
             </v-badge>
           </v-tab>
         </v-tabs>
@@ -742,36 +475,15 @@
         </v-tabs-items>
       </div>
       <div v-else class="bidDetail-tabs-section mt-7">
-        <v-tabs
-          v-model="currentItem"
-          class="bids-tabs"
-          fixed-tabs
-          hide-slider
-          :mobile-breakpoint="767"
-          @change="reload"
-        >
-          <v-tab
-            v-for="item in tabsSupplier"
-            :key="item.value"
-            :href="'#tab-' + item.value"
-            class="text-capitalize black--text font-weight-bold"
-          >
+        <v-tabs v-model="currentItem" class="bids-tabs" fixed-tabs hide-slider :mobile-breakpoint="767" @change="reload">
+          <v-tab v-for="item in tabsSupplier" :key="item.value" :href="'#tab-' + item.value"
+            class="text-capitalize black--text font-weight-bold">
             {{ item.text }}
-            <v-badge
-              v-if="item.value === 3 && showBidMessageC !== 0"
-              color="#0D9648"
-              :content="showBidMessageC"
-              inline
-              tile
-            >
+            <v-badge v-if="item.value === 3 && showBidMessageC !== 0" color="#0D9648" :content="showBidMessageC" inline
+              tile>
             </v-badge>
-            <v-badge
-              v-if="item.value === 4 && getAnsweredQuestionCount !== 0"
-              color="#0D9648"
-              :content="getAnsweredQuestionCount"
-              inline
-              tile
-            >
+            <v-badge v-if="item.value === 4 && getAnsweredQuestionCount !== 0" color="#0D9648"
+              :content="getAnsweredQuestionCount" inline tile>
             </v-badge>
           </v-tab>
         </v-tabs>
@@ -780,9 +492,7 @@
             <SupplierBidDetail @changetab="ChangeT($event)"></SupplierBidDetail>
           </v-tab-item>
           <v-tab-item value="tab-2">
-            <SupplierBidSubmission
-              @changetab="ChangeT($event)"
-            ></SupplierBidSubmission>
+            <SupplierBidSubmission @changetab="ChangeT($event)"></SupplierBidSubmission>
           </v-tab-item>
           <v-tab-item value="tab-3">
             <BidChat @changetab="ChangeT($event)"></BidChat>
@@ -797,25 +507,25 @@
 </template>
 
 <script>
-import BidDetailTab from "@/components/viewBid/bidDetailTab.vue";
-import BidBroadcast from "@/components/viewBid/bidBroadcast.vue";
-import BidQandA from "@/components/viewBid/bidQandA.vue";
-import BidChat from "@/components/viewBid/bidChat.vue";
-import BidSubmission from "@/components/viewBid/bidSubmission.vue";
-import BidAuditTrail from "@/components/viewBid/bidAuditTrail.vue";
-import SupplierBidDetail from "@/components/viewBid/supplierBidDetail.vue";
-import SupplierBidSubmission from "@/components/viewBid/supplierBidSubmission.vue";
-import moment from "moment-timezone";
-import { mapActions } from "vuex";
-import "vue2-editor/dist/vue2-editor.css";
+import BidDetailTab from '@/components/viewBid/bidDetailTab.vue';
+import BidBroadcast from '@/components/viewBid/bidBroadcast.vue';
+import BidQandA from '@/components/viewBid/bidQandA.vue';
+import BidChat from '@/components/viewBid/bidChat.vue';
+import BidSubmission from '@/components/viewBid/bidSubmission.vue';
+import BidAuditTrail from '@/components/viewBid/bidAuditTrail.vue';
+import SupplierBidDetail from '@/components/viewBid/supplierBidDetail.vue';
+import SupplierBidSubmission from '@/components/viewBid/supplierBidSubmission.vue';
+import moment from 'moment-timezone';
+import { mapActions } from 'vuex';
+import 'vue2-editor/dist/vue2-editor.css';
 
 /* Import the Quill styles you want */
-import "quill/dist/quill.core.css";
-import "quill/dist/quill.bubble.css";
-import "quill/dist/quill.snow.css";
+import 'quill/dist/quill.core.css';
+import 'quill/dist/quill.bubble.css';
+import 'quill/dist/quill.snow.css';
 
 export default {
-  name: "BidDetail",
+  name: 'BidDetail',
   components: {
     BidDetailTab,
     BidBroadcast,
@@ -828,10 +538,10 @@ export default {
   },
   data() {
     return {
-      currentItem: "tab-1",
+      currentItem: 'tab-1',
       isSetting: false,
-      users: "",
-      actualTime: moment.tz("America/Chicago").format("X"),
+      users: '',
+      actualTime: moment.tz('America/Chicago').format('X'),
       years: 0,
       months: 0,
       days: 0,
@@ -843,45 +553,45 @@ export default {
       answer: null,
       tabs: [
         {
-          text: "Bid Detail",
+          text: 'Bid Detail',
           value: 1,
         },
         {
-          text: "Bid Submissions",
+          text: 'Bid Submissions',
           value: 2,
         },
         {
-          text: "Bid Chat",
+          text: 'Bid Chat',
           value: 3,
         },
         {
-          text: "Bid Broadcast",
+          text: 'Bid Broadcast',
           value: 4,
         },
         {
-          text: "Q&A",
+          text: 'Q&A',
           value: 5,
         },
         {
-          text: "Audit Trail",
+          text: 'Audit Trail',
           value: 6,
         },
       ],
       tabsSupplier: [
         {
-          text: "Bid Detail",
+          text: 'Bid Detail',
           value: 1,
         },
         {
-          text: "Bid Submissions",
+          text: 'Bid Submissions',
           value: 2,
         },
         {
-          text: "Bid Chat",
+          text: 'Bid Chat',
           value: 3,
         },
         {
-          text: "Q&A",
+          text: 'Q&A',
           value: 4,
         },
       ],
@@ -889,19 +599,19 @@ export default {
   },
   methods: {
     ...mapActions([
-      "getBidBySerial",
-      "deleteBid",
-      "bidMessageUnreadCount",
-      "makeIntent",
-      "getIntent",
-      "updateIntent",
-      "getQA",
-      "getAllIntent",
-      "getBidAllConversations",
-      "getBidActivityList",
+      'getBidBySerial',
+      'deleteBid',
+      'bidMessageUnreadCount',
+      'makeIntent',
+      'getIntent',
+      'updateIntent',
+      'getQA',
+      'getAllIntent',
+      'getBidAllConversations',
+      'getBidActivityList',
     ]),
     async reload(event) {
-      if (this.getUserType === "buyer" && event !== "tab-4") {
+      if (this.getUserType === 'buyer' && event !== 'tab-4') {
         await this.getBidBySerial({
           serial: this.$route.params.serial,
           id: this.users._id,
@@ -930,7 +640,7 @@ export default {
           userId: this.users._id,
           reload: false,
         });
-        
+
         await this.getBidAllConversations({
           bidId: this.bidDetail.bidData._id,
           userId: this.users._id,
@@ -963,35 +673,38 @@ export default {
     },
     addOneSecondToActualTimeEverySecond() {
       const component = this;
-      component.actualTime = moment.tz("America/Chicago").format("X");
+      component.actualTime = moment.tz('America/Chicago').format('X');
       setTimeout(() => {
         component.addOneSecondToActualTimeEverySecond();
       }, 1000);
     },
     getDiffInSeconds() {
-      const bidDueDate = this.bidDetail.bidData.dueDate;
-      const bidDueTime = this.bidDetail.bidData.dueTime;
-      const momentTime = moment(bidDueTime, ["h:mm:ss A "]).format("HH:mm:ss");
-
-      const stringDate = `${bidDueDate}T${momentTime}`;
-
-      let momentDueDate = moment.tz(stringDate, "America/Chicago");
-
-      if (
-        this.bidDetail.bidData.type === "BidOut Process" &&
-        !this.bidDetail.bidout &&
-        this.bidDetail.receivingBids
+      if (this.bidDetail
       ) {
-        momentDueDate = momentDueDate.subtract(4, "hours");
-      }
+        const bidDueDate = this.bidDetail.bidData.dueDate;
+        const bidDueTime = this.bidDetail.bidData.dueTime;
+        const momentTime = moment(bidDueTime, ['h:mm:ss A ']).format('HH:mm:ss');
 
-      return (
-        moment.tz(momentDueDate, "America/Chicago").format("X") -
-        this.actualTime
-      );
+        const stringDate = `${bidDueDate}T${momentTime}`;
+
+        let momentDueDate = moment.tz(stringDate, 'America/Chicago');
+
+        if (
+          this.bidDetail.bidData.type === 'BidOut Process'
+          && !this.bidDetail.bidout
+          && this.bidDetail.receivingBids
+        ) {
+          momentDueDate = momentDueDate.subtract(4, 'hours');
+        }
+
+        return (
+          moment.tz(momentDueDate, 'America/Chicago').format('X')
+          - this.actualTime
+        );
+      }
     },
     compute() {
-      const duration = moment.duration(this.getDiffInSeconds(), "seconds");
+      const duration = moment.duration(this.getDiffInSeconds(), 'seconds');
 
       this.years = duration.years() > 0 ? duration.years() : 0;
 
@@ -1002,9 +715,9 @@ export default {
       this.seconds = duration.seconds() > 0 ? duration.seconds() : 0;
     },
     formatDate(dueDate) {
-      return dueDate !== "" && dueDate !== null
-        ? moment.tz(dueDate, "America/Chicago").format("MM/DD/YYYY")
-        : "";
+      return dueDate !== '' && dueDate !== null
+        ? moment.tz(dueDate, 'America/Chicago').format('MM/DD/YYYY')
+        : '';
     },
     checkZero(item) {
       if (Number(item) === 0) {
@@ -1014,23 +727,23 @@ export default {
     },
     formatStartDate(item, item2) {
       const date = moment(item * 1000 + item2 / 1000000)
-        .tz("America/Chicago")
-        .format("MM/DD/YYYY ha");
+        .tz('America/Chicago')
+        .format('MM/DD/YYYY ha');
 
       return date;
     },
     formatBidOutStartDate(item, item2) {
-      const momentTime = moment(item2, ["h:mm:ss A "]).format("HH:mm:ss");
+      const momentTime = moment(item2, ['h:mm:ss A ']).format('HH:mm:ss');
 
       const stringDate = `${item}T${momentTime}`;
 
-      let momentDueDate = moment.tz(stringDate, "America/Chicago");
+      let momentDueDate = moment.tz(stringDate, 'America/Chicago');
 
-      momentDueDate = momentDueDate.subtract(4, "hours");
+      momentDueDate = momentDueDate.subtract(4, 'hours');
 
       return moment
-        .tz(momentDueDate, "America/Chicago")
-        .format("MM/DD/YYYY @ ha");
+        .tz(momentDueDate, 'America/Chicago')
+        .format('MM/DD/YYYY @ ha');
     },
   },
   computed: {
@@ -1084,8 +797,8 @@ export default {
     },
     isBidOut() {
       if (
-        this.bidDetail.bidData.type === "BidOut Process" &&
-        this.bidDetail.bidout
+        this.bidDetail.bidData.type === 'BidOut Process'
+        && this.bidDetail.bidout
       ) {
         return true;
       }
@@ -1105,10 +818,10 @@ export default {
     },
   },
   mounted() {
-    moment.tz.setDefault("America/Chicago");
+    moment.tz.setDefault('America/Chicago');
 
-    document.title = "View Bid - BidOut";
-    window.scrollTo({ top: 0, behavior: "smooth" });
+    document.title = 'View Bid - BidOut';
+    window.scrollTo({ top: 0, behavior: 'smooth' });
   },
   async created() {
     this.users = this.$store.getters.userInfo;
@@ -1119,7 +832,7 @@ export default {
         company: this.users.company,
       });
     } else {
-      this.$router.push("/login");
+      this.$router.push('/login');
     }
 
     this.compute();
@@ -1130,18 +843,18 @@ export default {
       bidId: this.bidDetail.bidData._id,
     });
 
-    if (this.$route.query.new && this.getUserType === "buyer") {
+    if (this.$route.query.new && this.getUserType === 'buyer') {
       this.$toasted.show(
         `Success! Bid #${this.$route.params.serial} has been created and all invitations have been sent to the suppliers`,
         {
-          class: "success-toast",
+          class: 'success-toast',
           duration: 5000,
-          position: "top-center",
-        }
+          position: 'top-center',
+        },
       );
     }
 
-    if (this.getUserType === "supplier") {
+    if (this.getUserType === 'supplier') {
       await this.getIntent({
         companyId: this.users.company._id,
         bidId: this.bidDetail.bidData._id,
@@ -1168,15 +881,15 @@ export default {
       this.compute();
     },
     changeTime(newVal) {
-      const [years, months, days, hours, minutes, seconds] = newVal.split("|");
+      const [years, months, days, hours, minutes, seconds] = newVal.split('|');
 
       if (
-        this.checkZero(years) &&
-        this.checkZero(months) &&
-        this.checkZero(days) &&
-        this.checkZero(hours) &&
-        this.checkZero(minutes) &&
-        this.checkZero(seconds)
+        this.checkZero(years)
+        && this.checkZero(months)
+        && this.checkZero(days)
+        && this.checkZero(hours)
+        && this.checkZero(minutes)
+        && this.checkZero(seconds)
       ) {
         this.$router.go(0);
       }
