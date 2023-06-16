@@ -728,7 +728,7 @@ export default {
     },
     async checkEmailBuyer() {
       // let testEmail = /^[\w-\.+]+@([\w-]+\.)+[\w-]{1,63}$/.test(this.buyer.email)
-      let testEmail = /^(?!.*_[^@]*$)(?!.*\.\.)[A-Za-z0-9+_.-]+@[A-Za-z0-9-]+\.[A-Za-z]{1,63}$/.test(this.buyer.email);
+      let testEmail = /^[\w.+-]+@(?!.*_{1})[A-Za-z0-9-]+(\.[A-Za-z0-9-]+)*\.[A-Za-z]{1,63}$/.test(this.buyer.email);
       if (this.buyer.email === '' || !testEmail) {
         this.$store.commit('setEmailExistSuccess',false)
         this.$store.commit('setInvitedSupplierEmailExists',false)
@@ -743,7 +743,7 @@ export default {
 
     async checkEmailSupplier() {
       // let testEmail = /^[\w-\.+]+@([\w-]+\.)+[\w-]{1,63}$/.test(this.supplier.email)
-      let testEmail = /^(?!.*_[^@]*$)(?!.*\.\.)[A-Za-z0-9+_.-]+@[A-Za-z0-9-]+\.[A-Za-z]{1,63}$/.test(this.supplier.email);
+      let testEmail = /^[\w.+-]+@(?!.*_{1})[A-Za-z0-9-]+(\.[A-Za-z0-9-]+)*\.[A-Za-z]{1,63}$/.test(this.supplier.email);
       
       if (this.supplier.email === '' || !testEmail) {
         this.$store.commit('setEmailExistSuccess',false)
