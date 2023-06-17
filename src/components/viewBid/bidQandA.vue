@@ -45,7 +45,7 @@
                 color="#0D9648"
                 height="32"
                 class="text-capitalize white--text font-weight-bold save-button px-12"
-                @click="reply(item.id,index)"
+                @click="reply(item._id,index)"
                 large
                 :disabled="getLoading[index].loading"
                 >
@@ -120,7 +120,7 @@
                 color="#0D9648"
                 height="40"
                 class="text-capitalize font-weight-bold save-button px-8"
-                @click="editA(item.id,index)"
+                @click="editA(item._id,index)"
                 large
                 depressed
                 :disabled="showLoading"
@@ -190,7 +190,7 @@
             <span class=" mt-1"
               >{{item.question}}</span
             >
-            <span class="sub-title mt-4" v-if="user.id === item.questionBy">By {{(user.firstName + " " + user.lastName)}} ({{user.company.companyName}})</span>
+            <span class="sub-title mt-4" v-if="user._id === item.questionBy._id">By {{(user.firstName + " " + user.lastName)}} ({{user.company.companyName}})</span>
 
             <span class="sub-title mt-4" v-else>By Supplier</span>
             <span class="sub-title mt-1">{{ item.askedOn | moment('MM/DD/YYYY')}} - {{ item.askedOn | moment('hh:mma')}}</span>
@@ -203,9 +203,8 @@
                 >{{item.answer}}</span
               >
 
-              <span class="sub-title mt-4">By {{item.answeredUserName
-}} ({{item.answeredUserCompany}}) </span>
-              <span class="sub-title mt-1">{{item.answeredOn._seconds | moment('MM/DD/YYYY')}} - {{ item.answeredOn._seconds | moment('hh:mma')}}</span>
+              <span class="sub-title mt-4">By {{item.answerBy.firstName}} {{ item.answerBy.lastName }} ({{item.answerBy.company.companyName}}) </span>
+              <span class="sub-title mt-1">{{item.answeredOn | moment('MM/DD/YYYY')}} - {{ item.answeredOn | moment('hh:mma')}}</span>
 
            </div>
 
@@ -223,7 +222,7 @@
         <span class=" mt-1"
           >{{item.question}}</span
         >
-        <span class="sub-title mt-4" v-if="user.id === item.questionBy">By {{(user.firstName + " " + user.lastName)}} ({{user.company.companyName}})</span>
+        <span class="sub-title mt-4" v-if="user._id === item.questionBy._id">By {{(user.firstName + " " + user.lastName)}} ({{user.company.companyName}})</span>
 
         <span class="sub-title mt-4" v-else>By Supplier</span>
         <span class="sub-title mt-1">{{ item.askedOn | moment('MM/DD/YYYY')}} - {{ item.askedOn | moment('hh:mma')}}</span>
@@ -274,7 +273,7 @@ export default {
       return this.$store.getters.qAndA.filter((el) => el.answer);
     },
     getQAndAUnAnswered() {
-      return this.$store.getters.qAndA.filter((el) => !el.answer && this.user.id === el.questionBy);
+      return this.$store.getters.qAndA.filter((el) => !el.answer && this.user._id === el.questionBy._id);
     },
     getQAndForAnswer() {
       return this.getQAndA.filter((el) => {
