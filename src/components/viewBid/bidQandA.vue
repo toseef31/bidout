@@ -310,9 +310,9 @@ export default {
 
       await this.askQuestion({
         question: this.question,
-        userId: this.user.id,
-        bidId: this.bidDetail.bidData.id,
-        companyId: this.user.company.id,
+        userId: this.user._id,
+        bidId: this.bidDetail.bidData._id,
+        companyId: this.user.company._id,
       });
 
       this.loading = false;
@@ -323,8 +323,8 @@ export default {
 
       await this.answerQuestion({
         answer: this.answers[index].answer,
-        userId: this.user.id,
-        bidId: this.bidDetail.bidData.id,
+        userId: this.user._id,
+        bidId: this.bidDetail.bidData._id,
         questionId,
       });
 
@@ -340,8 +340,8 @@ export default {
 
       await this.editAnswer({
         answer: this.editedAnswer,
-        userId: this.user.id,
-        bidId: this.bidDetail.bidData.id,
+        userId: this.user._id,
+        bidId: this.bidDetail.bidData._id,
         questionId,
 
       });
