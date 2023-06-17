@@ -44,14 +44,14 @@
             <tr v-if="bidDetail.supplierSubmissions && !bidDetail.receivingBids && isBidOut">
               <td class="bid-example-title">Bid Example Pre-BidOut Period</td>
               <template v-for="(submission) in bidDetail.supplierSubmissions">
-                <td v-if="!submission.bidoutPricepre">
+                <td v-if="!submission.bidOutPricePre">
                   Not submitted
                 </td>
-                <td v-else-if="submission.bidoutPricepre === null">
+                <td v-else-if="submission.bidOutPricePre === null">
                   Not submitted
                 </td>
                 <td v-else>
-                  $ {{ submission.bidoutPricepre }}
+                  $ {{ submission.bidOutPricePre }}
                 </td>
               </template>
             </tr>
@@ -59,20 +59,20 @@
             <tr v-if="bidDetail.supplierSubmissions && !bidDetail.receivingBids && isBidOut">
               <td class="bid-example-title">Bid Example Post-BidOut Period</td>
               <template v-for="(submission) in bidDetail.supplierSubmissions">
-                <td v-if="!submission.postBidoutPrice">
+                <td v-if="!submission.postBidOutPrice">
                   Not submitted
                 </td>
-                <td v-else-if="submission.postBidoutPrice
+                <td v-else-if="submission.postBidOutPrice
                   === null">
                   Not submitted
                 </td>
                 <td v-else>
                   <v-icon color="#0D9648">mdi-arrow-down-thin-circle-outline</v-icon>
                   <span class="ml-1">$ {{
-                    submission.postBidoutPrice
+                    submission.postBidOutPrice
                   }}</span>
                   <div class="subscript">Saving {{
-                    100 - Math.round(((submission.postBidoutPrice / submission.bidoutPricepre) +
+                    100 - Math.round(((submission.postBidOutPrice / submission.bidOutPricePre) +
                       Number.EPSILON) * 100)
                   }}%</div>
                 </td>
