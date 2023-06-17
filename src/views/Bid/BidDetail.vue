@@ -194,9 +194,9 @@
                           <v-list-item-title color="#0D9648" @click="isSetting = !isSetting" class="py-3">Edit
                             Bid</v-list-item-title>
                         </router-link>
-                        <v-tooltip top>
+                        <v-tooltip top v-if="noOfBidSubmitted > 0" >
                           <template v-slot:activator="{ on, attrs }">
-                            <v-list-item-title v-bind="attrs" v-on="on" v-if="noOfBidSubmitted > 0" color="#959595"
+                            <v-list-item-title v-bind="attrs" v-on="on" color="#959595"
                               @click="isSetting = !isSetting" class="pt-2">
                               <p class="disabled-item">Edit Bid</p>
                             </v-list-item-title>
@@ -248,9 +248,9 @@
                           </v-card>
                         </v-dialog>
 
-                        <v-tooltip top>
+                        <v-tooltip top v-if="noOfBidSubmitted > 0">
                           <template v-slot:activator="{ on, attrs }">
-                            <v-list-item-title v-bind="attrs" v-on="on" v-if="noOfBidSubmitted > 0" color="#959595"
+                            <v-list-item-title v-bind="attrs" v-on="on"  color="#959595"
                               @click="isSetting = !isSetting" class="pt-2">
                               <p class="disabled-item">Delete Bid</p>
                             </v-list-item-title>
