@@ -425,6 +425,7 @@ export default {
         group,
         name,
       };
+      console.log('group', group);
       this.conversationId = group._id;
       this.chatData = obj;
       if (this.chatData) {
