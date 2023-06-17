@@ -85,6 +85,9 @@ export default {
       .then((responce) => {
         commit("setMessagesList", responce.data);
         dispatch("unreadMessagesCount", { userId: payload.userId });
+        if (payload.bidId) {
+          dispatch("bidMessageUnreadCount", { userId: payload.userId, bidId: payload.bidId})
+        }
       })
       .catch((err) => {
         Sentry.captureException(err);

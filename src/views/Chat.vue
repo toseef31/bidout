@@ -370,6 +370,7 @@ export default {
       timeout: 2000,
       convDec: '',
       searching: '',
+      bidId: '',
     };
   },
   computed: {

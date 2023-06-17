@@ -240,6 +240,7 @@ export default {
       const ids = {
         userId: this.user._id,
         conversationId: this.conversationId,
+        bidId: this.bidId,
       };
       this.getAllMessages(ids);
       var container = this.$refs.messagesSection;
@@ -282,6 +283,7 @@ export default {
       const ids = {
         userId: this.user._id,
         conversationId: response.message.conversation,
+        bidId: this.bidId,
       };
       this.getAllMessages(ids);
     },
