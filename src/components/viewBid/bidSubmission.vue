@@ -125,8 +125,8 @@
             <tr v-for="(item, qIndex) in bidDetail.bidData.questions" :key="qIndex + item._id"
               v-if="bidDetail.bidData.questions.length && bidDetail.supplierSubmissions">
               <td class="text-left" v-if="item.type !== 'category'"> {{ item.title }}</td>
-
               <template v-for="(ans) in answers">
+
                 <td class="text-left" v-if="ans.answers[qIndex].answer !== null && item.questionType === 'checkbox'">
                   {{ ans.answers[qIndex].answer }}
                 </td>
@@ -249,7 +249,9 @@ export default {
           action: 'neither',
         });
       });
-
+      if (this.$store.getters.bidViewData.bidData.questions && this.$store.getters.bidViewData.bidData.questions.length) {
+        this.answers = this.$store.getters.bidViewData.supplierSubmissions;
+      }
       return this.$store.getters.bidViewData;
     },
     showLoading() {
@@ -463,10 +465,6 @@ export default {
   mounted() {
     window.scrollTo({ top: 0, behavior: 'smooth' });
     this.user = this.$store.getters.userInfo;
-
-    if (Array.isArray(this.bidDetail.bidData.questions)) {
-      this.answers = this.bidDetail.supplierSubmissions;
-    }
   },
 };
 </script>
