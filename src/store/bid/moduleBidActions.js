@@ -605,7 +605,7 @@ export default {
 
   async askQuestion({ commit, dispatch, state }, payload) {
     try {
-      const res = await axios.post('v2/bid/questionAsked/', {
+      const res = await axios.post('v2/bidSubmission/questionAsked/', {
         question: payload.question,
         userId: payload.userId,
         companyId: payload.companyId,
@@ -629,7 +629,7 @@ export default {
 
   async answerQuestion({ commit, dispatch, state }, payload) {
     try {
-      const res = await axios.post('v2/bid/questionAnswer/', {
+      const res = await axios.post('v2/bidSubmission/questionAnswer/', {
         answer: payload.answer,
         userId: payload.userId,
         questionId: payload.questionId,
@@ -653,7 +653,7 @@ export default {
 
   async editAnswer({ commit, dispatch, state }, payload) {
     try {
-      const res = await axios.post('v2/editAnswer/', {
+      const res = await axios.post('v2/bidSubmission/editAnswer/', {
         answer: payload.answer,
         questionId: payload.questionId,
       });
