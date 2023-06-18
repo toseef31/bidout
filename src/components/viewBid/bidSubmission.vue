@@ -267,7 +267,7 @@ export default {
   methods: {
     ...mapActions(['awardCompany', 'rejectCompany', 'UnAwardCompany', 'UnDisqualifyCompany']),
     checkFileType(file) {
-      return file.substring(file.lastIndexOf('.') + 1);
+      return file && file.substring(file.lastIndexOf('.') + 1);
     },
     exportF() {
       const header = this.bidDetail.supplierSubmissions.map((el) => el.company.companyName);
