@@ -319,8 +319,8 @@ export default {
       }
     },
     removeNonNumeric(num) {
-      if (num !== '' && isNaN(num)) {
-        num = num.replace(/[^0-9]/g, '');
+      if (num !== '') {
+        num = num.toString().replace(/[^0-9]/g, '');
       }
       return num;
     },

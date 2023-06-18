@@ -447,8 +447,8 @@ export default {
       return num.toString().replace(/\B(?=(\d{3})+(?!\d)\.?)/g, '');
     },
     removeNonNumeric(num) {
-      if (num !== '' && isNaN(num)) {
-        num = num.replace(/[^\d.]/g, '');
+      if (num !== '') {
+        num = num.toString().replace(/[^\d.]/g, '');
       }
       return num;
     },
