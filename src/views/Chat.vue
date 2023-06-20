@@ -187,7 +187,7 @@
                                     max-height="50px"
                                     max-width="50px"
                                     class="mt-2 mb-2"
-                                  ></v-img>{{ message.attachment[0].fileName }}
+                                  ></v-img>{{ getFileName(message.attachment[0].fileName) }}
                                 </a>
                                 <a
                                   :href="message.attachment[0].url" class="text-decoration-none"
@@ -198,7 +198,7 @@
                                   max-height="50px"
                                   max-width="50px"
                                   class="mt-2 mb-2"></v-img>
-                                  {{ message.attachment[0].fileName }}
+                                  {{ getFileName(message.attachment[0].fileName) }}
                                 </a>
                                 <a
                                   :href="message.attachment[0].url" class="text-decoration-none"
@@ -208,7 +208,7 @@
                                   :src="require('@/assets/images/chat/doc.png')"
                                   max-height="50px"
                                   max-width="50px"
-                                  class="mt-2 mb-2"></v-img>{{ message.attachment[0].fileName }}
+                                  class="mt-2 mb-2"></v-img>{{ getFileName(message.attachment[0].fileName) }}
                                 </a>
                                 <a
                                   :href="message.attachment[0].url" class="text-decoration-none"
@@ -218,7 +218,7 @@
                                   :src="require('@/assets/images/chat/ppt.png')"
                                   max-height="50px"
                                   max-width="50px"
-                                  class="mt-2 mb-2"></v-img>{{ message.attachment[0].fileName }}
+                                  class="mt-2 mb-2"></v-img>{{ getFileName(message.attachment[0].fileName) }}
                                 </a>
                                 <a :href="message.attachment[0].url" class="text-decoration-none"
                                   target="_blank"
@@ -226,7 +226,7 @@
                                   :src="require('@/assets/images/chat/zip.png')"
                                   max-height="50px"
                                   max-width="50px"
-                                  class="mt-2 mb-2"></v-img>{{ message.attachment[0].fileName }}
+                                  class="mt-2 mb-2"></v-img>{{ getFileName(message.attachment[0].fileName) }}
                                 </a>
                                 <video class="chat-video"
                                   v-else-if="get_url_extension(message.attachment[0].url) == 'mp4' || get_url_extension(message.attachment[0].url) == 'webm' || get_url_extension(message.attachment[0].url) == 'mov' || get_url_extension(message.attachment[0].url) == 'avi'"
@@ -605,6 +605,10 @@ export default {
         const fileExtension = url.slice(lastDotIndex + 1);
         return fileExtension;
       }
+    },
+    getFileName(name) {
+      const filename = decodeURIComponent(name);
+      return filename;
     },
     istoday(date) {
       const zone = moment.tz.guess();
