@@ -137,7 +137,9 @@
               </v-btn>
             </div>
           </div>
-        <span class="sub-title mt-4">By {{user.firstName + " " + user.lastName}} ({{user.company.company}}) </span>
+        <span class="sub-title mt-4">By {{item.answeredUserName
+}} ({{item.answeredUserCompany
+}}) </span>
         <span class="sub-title mt-1">{{ item.answeredOn._seconds | moment('MM/DD/YYYY')}} - {{ item.answeredOn._seconds | moment('hh:mma')}}</span>
       </div>
       <v-divider class="mb-1 mt-4" color="#5C5C5C"/>
