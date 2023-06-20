@@ -403,7 +403,7 @@ export default {
         } else {
           axios.get(`/v2/auth/addUserLoginHistory/${userResp.data?.id}`);
           const companyResp = await axios.get(
-            `v2/company/getCompanyById/${userResp.data.company?.id}`
+            `v2/company/getCompanyById/${userResp.data.company?._id}`
           );
           commit("setCompany", companyResp.data);
           localStorage.setItem("companyData", JSON.stringify(companyResp.data));
