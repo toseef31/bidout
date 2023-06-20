@@ -401,7 +401,6 @@ export default {
           );
           commit("showErrorAlert");
         } else {
-          axios.get(`/v2/auth/addUserLoginHistory/${userResp.data?._id}`);
           const companyResp = await axios.get(
             `v2/company/getCompanyById/${userResp.data.company?._id}`
           );
