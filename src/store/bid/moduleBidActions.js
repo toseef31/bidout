@@ -1025,7 +1025,6 @@ export default {
         state.bidData.invitedTeamMembers = '';
         state.bidData.lineItems = '';
         state.bidData.questions = '';
-        const bidDetail = await axios.get(`v2/bid/getv2/Bid/${res.data._path.segments[1]}`);
         return bidDetail.data.serial;
       }
 
