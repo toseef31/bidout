@@ -3,16 +3,17 @@ import axios from 'axios';
 import * as Sentry from '@sentry/vue';
 
 export default {
-  getCategories({ commit }) {
-    axios
+  async getCategories({ commit }) {
+    try {
+      const res = await axios
       .get('/v2/serviceCategory/getAllCategories')
-      .then((responce) => {
-        commit('setCatgeoryList', responce.data);
-      })
-      .catch((err) => {
-        Sentry.captureException(err);
-        console.log(err);
-      });
+
+      if (res.status === 200) {
+        commit('setCatgeoryList', res.data);
+      }
+    } catch(error) {
+      Sentry.captureException(error);
+    } 
   },
   getCompanyByservice({ commit }, payload) {
     const url = encodeURIComponent(payload.service);
