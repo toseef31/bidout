@@ -125,41 +125,41 @@ export default {
   watch: {
     responseAll: _.debounce(function () {
       if (this.responseAll == true) {
-        this.notificationPreferences.bidResponses.email = true;
-        this.notificationPreferences.bidResponses.sms = true;
+        this.notificationPreference.bidResponses.email = true;
+        this.notificationPreference.bidResponses.sms = true;
       } else {
-        this.notificationPreferences.bidResponses.email = false;
-        this.notificationPreferences.bidResponses.sms = false;
+        this.notificationPreference.bidResponses.email = false;
+        this.notificationPreference.bidResponses.sms = false;
       }
       this.updateNoti();
     }, 500),
     questionAndAnswersAll: _.debounce(function () {
       if (this.questionAndAnswersAll == true) {
-        this.notificationPreferences.questionAndAnswers.email = true;
-        this.notificationPreferences.questionAndAnswers.sms = true;
+        this.notificationPreference.questionAndAnswers.email = true;
+        this.notificationPreference.questionAndAnswers.sms = true;
       } else {
-        this.notificationPreferences.questionAndAnswers.email = false;
-        this.notificationPreferences.questionAndAnswers.sms = false;
+        this.notificationPreference.questionAndAnswers.email = false;
+        this.notificationPreference.questionAndAnswers.sms = false;
       }
       this.updateNoti();
     }, 500),
     bidCompletionEmailsAll: _.debounce(function () {
       if (this.bidCompletionEmailsAll == true) {
-        this.notificationPreferences.bidCompletionEmails.email = true;
-        this.notificationPreferences.bidCompletionEmails.sms = true;
+        this.notificationPreference.bidCompletionEmails.email = true;
+        this.notificationPreference.bidCompletionEmails.sms = true;
       } else {
-        this.notificationPreferences.bidCompletionEmails.email = false;
-        this.notificationPreferences.bidCompletionEmails.sms = false;
+        this.notificationPreference.bidCompletionEmails.email = false;
+        this.notificationPreference.bidCompletionEmails.sms = false;
       }
       this.updateNoti();
     }, 500),
     chatNotificationAll: _.debounce(function () {
       if (this.chatNotificationAll == true) {
-        this.notificationPreferences.chatNotification.email = true;
-        this.notificationPreferences.chatNotification.sms = true;
+        this.notificationPreference.chatNotification.email = true;
+        this.notificationPreference.chatNotification.sms = true;
       } else {
-        this.notificationPreferences.chatNotification.email = false;
-        this.notificationPreferences.chatNotification.sms = false;
+        this.notificationPreference.chatNotification.email = false;
+        this.notificationPreference.chatNotification.sms = false;
       }
       this.updateNoti();
     }, 500),
