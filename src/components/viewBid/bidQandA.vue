@@ -126,9 +126,12 @@
               <span>Question:</span>
 
               <span class=" mt-1">{{ item.question }}</span>
-              <span class="sub-title mt-4" v-if="user._id === item.questionBy._id">By {{ (user.firstName + " " +
-                user.lastName) }} ({{ user.company.companyName }})</span>
-              <span class="sub-title mt-4" v-else-if="item.questionBy && user.company._id === item.questionBy.company">By
+
+              <span class="sub-title mt-4" v-if="item.questionBy && user._id === item.questionBy._id">By {{
+                (user.firstName + " " +
+                  user.lastName) }} ({{ user.company.companyName }})</span>
+              <span class="sub-title mt-4"
+                v-else-if="item.questionBy && user.company && user.company._id === item.questionBy.company">By
                 {{ (item.questionBy.firstName + " " + item.questionBy.lastName) }}
                 ({{ item.questionByCompany.companyName }})</span>
 
@@ -161,10 +164,13 @@
               <span>Question:</span>
 
               <span class=" mt-1">{{ item.question }}</span>
-              <span class="sub-title mt-4" v-if="user._id === item.questionBy._id">By {{ (user.firstName + " " +
-                user.lastName) }} ({{ user.company.companyName }})</span>
 
-              <span class="sub-title mt-4" v-else-if="item.questionBy && user.company._id === item.questionBy.company">By
+              <span class="sub-title mt-4" v-if="item.questionBy && user._id === item.questionBy._id">By {{
+                (user.firstName + " " +
+                  user.lastName) }} ({{ user.company.companyName }})</span>
+
+              <span class="sub-title mt-4"
+                v-else-if="item.questionBy && user.company && user.company._id === item.questionBy.company">By
                 {{ (item.questionBy.firstName + " " + item.questionBy.lastName) }}
                 ({{ item.questionByCompany.companyName }})</span>
 
@@ -218,7 +224,7 @@ export default {
       return this.$store.getters.qAndA.filter((el) => el.answer);
     },
     getQAndAUnAnswered() {
-      return this.$store.getters.qAndA.filter((el) => !el.answer && this.user._id === el.questionBy._id);
+      return this.$store.getters.qAndA.filter((el) => !el.answer && el.questionBy && this.user._id === el.questionBy._id);
     },
     getQAndForAnswer() {
       return this.getQAndA.filter((el) => {
