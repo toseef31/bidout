@@ -1,4 +1,5 @@
 import Base from '@/components/Layout/Base.vue';
+import store from '@/store';
 
 const routes = [
   {
@@ -10,6 +11,17 @@ const routes = [
         path: '/login',
         name: 'Login',
         component: () => import('@/views/Login.vue'),
+        beforeEnter: (to, from, next) => {
+          if (store.getters.userInfo == null) {
+            store.dispatch('getCurrentUser').then((data) => {
+              console.log('data', data, 'next', next());
+              next('/dashboard');
+            }).catch((error) => {
+              console.log(error);
+              next();
+            });
+          }
+        },
       },
       {
         path: '/forgot-password',
