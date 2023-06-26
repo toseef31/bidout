@@ -189,7 +189,12 @@ export default {
       'getCategories',
     ]),
     getByBasin(basin) {
-      this.getCompanyByBasin({ basin, slug: this.$route.params.slug });
+      if (this.$route.params.name) {
+      this.cateSlug = this.$route.params.name;
+    } else {
+      this.cateSlug = this.$route.params.slug;
+    }
+      this.getCompanyByBasin({ basin, slug: this.cateSlug });
     },
     hasOfsPremium(supplier) {
       return supplier.contracts.some((contract) => contract.contractType === 'ofs-premium');
