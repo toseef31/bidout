@@ -111,6 +111,10 @@ export default {
               resolve(responce.data);
             }, (error) => {
               console.log('errors', error);
+              if (error.response && error.response.status === 401) {
+                dispatch('refreshToken');
+                dispatch('getCurrentUser');
+              }
             });
         } else {
           dispatch("signOutAction");
