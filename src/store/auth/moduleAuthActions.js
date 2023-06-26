@@ -39,6 +39,7 @@ export default {
             Authorization: `Bearer ${result.user.multiFactor.user.accessToken}`,
           },
         };
+        console.log('token login',result.user.multiFactor.user.accessToken);
         axios
           .get(`/v2/user/getUserData/${result.user.multiFactor.user.email}`, config)
           .then(
@@ -108,23 +109,26 @@ export default {
               Authorization: `Bearer ${JSON.parse(localStorage.getItem("token"))}`,
             },
           };
-          axios
+          if(localStorage.getItem("token") && localStorage.getItem("token") !== null && localStorage.getItem("token") !== '') {
+            axios
             .get(`/v2/user/getUserData/${users.multiFactor.user.email}`,config)
             .then((responce) => {
               commit("setUser", responce.data);
               resolve(responce.data);
-            }, (error) => {
-              console.log('errors', error);
-              if (error.response && error.response.status === 401) {
-                dispatch('refreshToken');
-                dispatch('getCurrentUser');
+                }, (error) => {
+                  console.log('errors', error);
+                  if (error.response && error.response.status === 401) {
+                    dispatch('refreshToken');
+                    dispatch('getCurrentUser');
+                  }
+                });
               }
-            });
-        } else {
-          dispatch("signOutAction");
-          // eslint-disable-next-line prefer-promise-reject-errors
-          reject("User is not logged In");
-        }
+            } else {
+              dispatch("signOutAction");
+              // eslint-disable-next-line prefer-promise-reject-errors
+              reject("User is not logged In");
+            }
+          
       });
     });
   },
