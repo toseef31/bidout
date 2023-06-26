@@ -572,7 +572,7 @@ export default {
       commit('setPageLoader', true);
     }
     try {
-      const res = await axios.get(`v2/bid/getQA/${payload.bidId}/${payload.userId}`);
+      const res = await axios.get(`v2/bidSubmission/getQA/${payload.bidId}/${payload.userId}`);
 
       if (res.status === 200) {
         commit('setQAndA', res.data);

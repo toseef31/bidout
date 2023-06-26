@@ -36,7 +36,6 @@ export default {
         );
         const config = {
           headers: {
-            'Content-Type': 'multipart/form-data',
             Authorization: `Bearer ${result.user.multiFactor.user.accessToken}`,
           },
         };
@@ -104,8 +103,13 @@ export default {
     return new Promise((resolve, reject) => {
       firebase.auth().onAuthStateChanged((users) => {
         if (users) {
+          const config = {
+            headers: {
+              Authorization: `Bearer ${JSON.parse(localStorage.getItem("token"))}`,
+            },
+          };
           axios
-            .get(`/v2/user/getUserData/${users.multiFactor.user.email}`)
+            .get(`/v2/user/getUserData/${users.multiFactor.user.email}`,config)
             .then((responce) => {
               commit("setUser", responce.data);
               resolve(responce.data);

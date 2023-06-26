@@ -1,13 +1,9 @@
 <template>
   <v-row class="catgeory-module ofsSupplier-module white pa-0 ma-0">
-    <v-col
-      class="pa-0 pr-sm-3"
-      :class="[
-        showSideBar ? 'col-md-12 col-12 col-sm-12' : 'mid-content-collapse',
-        activityPanel ? 'd-sm-block' : 'd-md-block',
-      ]"
-      v-show="!activityPanel"
-    >
+    <v-col class="pa-0 pr-sm-3" :class="[
+      showSideBar ? 'col-md-12 col-12 col-sm-12' : 'mid-content-collapse',
+      activityPanel ? 'd-sm-block' : 'd-md-block',
+    ]" v-show="!activityPanel">
       <div class="mid-content">
         <div class="content-section fill-height">
           <v-container class="px-sm-0">
@@ -19,16 +15,8 @@
                       {{ categoryName }}
                     </h1>
                     <div class="category-list__searchBox">
-                      <v-text-field
-                        v-model="searchCompany"
-                        prepend-inner-icon="search"
-                        placeholder="Search here..."
-                        single-line
-                        outlined
-                        min-height="40px"
-                        min-width="100%"
-                        hide-details
-                      ></v-text-field>
+                      <v-text-field v-model="searchCompany" prepend-inner-icon="search" placeholder="Search here..."
+                        single-line outlined min-height="40px" min-width="100%" hide-details></v-text-field>
                     </div>
                   </div>
                   <div class="d-flex align-center tabs-header mb-3 px-4">
@@ -40,11 +28,7 @@
                   </div>
                   <v-tabs-items v-model="tab">
                     <v-tab-item v-for="item in items" :key="item">
-                      <v-simple-table
-                        dense
-                        v-if="!showLoading"
-                        class="company-table mb-12"
-                      >
+                      <v-simple-table dense v-if="!showLoading" class="company-table mb-12">
                         <template v-slot:default>
                           <thead>
                             <tr class="py-4 px-6">
@@ -57,12 +41,10 @@
                             </tr>
                           </thead>
                           <tbody>
-                            <tr v-for="company in allcompanies" :key="company.id">
+                            <tr v-for="company in allcompanies" :key="company._id">
                               <td class="pl-4" style="width: 300px">
-                                <router-link
-                                  class="text-decoration-none d-flex"
-                                  :to="company.slug ? '/company/' + company.slug : ''"
-                                >
+                                <router-link class="text-decoration-none d-flex"
+                                  :to="company.slug ? '/company/' + company.slug : ''">
                                   <div class="text-truncate pr-1">
                                     {{ company.companyName }}
                                   </div>
@@ -70,13 +52,8 @@
                                   <span v-if="hasOfsPremium(company)">
                                     <v-tooltip top>
                                       <template v-slot:activator="{ on, attrs }">
-                                        <v-icon
-                                          color="#0D9647"
-                                          size="16px"
-                                          v-bind="attrs"
-                                          v-on="on"
-                                          >mdi-check-decagram</v-icon
-                                        >
+                                        <v-icon color="#0D9647" size="16px" v-bind="attrs"
+                                          v-on="on">mdi-check-decagram</v-icon>
                                       </template>
                                       <span>Premium Service Provider</span>
                                     </v-tooltip>
@@ -84,50 +61,34 @@
                                 </router-link>
                               </td>
                               <td class="view-class">
-                                <span v-if="!company.companyHq">No location</span
-                                ><span v-else
-                                  >{{ company.companyHqCity }},
+                                <span v-if="!company.companyHq">No location</span><span v-else>{{ company.companyHqCity
+                                }},
                                   {{ company.companyHqState }}
-                                  {{ company.companyHqCountry }}</span
-                                >
+                                  {{ company.companyHqCountry }}</span>
                               </td>
                               <td class="view-class">
-                                <span v-if="!company.employees">Not Added</span
-                                ><span v-else>{{ company.employees }}</span>
+                                <span v-if="!company.employees">Not Added</span><span v-else>{{ company.employees
+                                }}</span>
                               </td>
                               <td>
-                                <span v-if="!company.companyLocations">0</span
-                                ><span v-else>{{ company.companyLocations.length }}</span>
+                                <span v-if="!company.companyLocations">0</span><span v-else>{{
+                                  company.companyLocations.length }}</span>
                               </td>
                               <td>
-                                <span v-if="!company.accountContacts">0</span
-                                ><span v-else>{{ company.accountContacts.length }}</span>
+                                <span v-if="!company.accountContacts">0</span><span v-else>{{
+                                  company.accountContacts.length }}</span>
                               </td>
                               <td class="view-class">
-                                <span class="text-decoration-none company-link"
-                                  ><router-link
-                                    class="text-decoration-none"
-                                    :to="company.slug ? '/company/' + company.slug : ''"
-                                    >View Details</router-link
-                                  ></span
-                                >
+                                <span class="text-decoration-none company-link"><router-link class="text-decoration-none"
+                                    :to="company.slug ? '/company/' + company.slug : ''">View Details</router-link></span>
                               </td>
                             </tr>
                           </tbody>
                         </template>
                       </v-simple-table>
-                      <v-row
-                        fill-height
-                        align="center"
-                        class="fill-height mt-5"
-                        v-if="showLoading"
-                      >
+                      <v-row fill-height align="center" class="fill-height mt-5" v-if="showLoading">
                         <v-col cols="12">
-                          <v-progress-circular
-                            :width="3"
-                            color="green"
-                            indeterminate
-                          ></v-progress-circular>
+                          <v-progress-circular :width="3" color="green" indeterminate></v-progress-circular>
                         </v-col>
                       </v-row>
                     </v-tab-item>
@@ -180,20 +141,33 @@ export default {
     activityPanel() {
       return this.$store.getters.g_activityPanel;
     },
-    categoryName(){
-      if (this.$route.params.name) return this.unslug(this.$route.params.name)
-      return this.unslug(this.$route.params.slug)
+    categoryName() {
+      const categories = [...this.$store.getters.categories];
+
+      let name;
+
+      if (this.$route.params.name) {
+        categories.forEach((el) => {
+          el.subCategories.forEach((item) => {
+            if (this.$route.params.name === item.slug) name = item.name;
+          });
+        });
+      } else {
+        categories.forEach((el) => {
+          if (el.category.slug === this.$route.params.slug) name = el.category.name;
+        });
+      }
+
+      return name;
     },
     allcompanies() {
       if (this.searchCompany) {
-
         return this.$store.getters.serviceCompanies.filter((comp) => this.searchCompany
           .toLowerCase()
           .split(' ')
           .every((v) => comp.companyName.toLowerCase().includes(v)));
-      }else{
-        return this.$store.getters.serviceCompanies;
       }
+      return this.$store.getters.serviceCompanies;
     },
     showLoading() {
       return this.$store.getters.ofsLoader;
@@ -209,29 +183,26 @@ export default {
   },
   methods: {
     ...mapActions([
-      'getCompanyInfo',
       'getCompanyByBasin',
       'getSupplierMainService',
       'getSupplierCompanyByservice',
+      'getCategories',
     ]),
-      unslug(slug) {
-      var words = slug.split("-");
-      return words.map(function(word) {
-        return word.charAt(0).toUpperCase() + word.substring(1).toLowerCase();
-      }).join(' ');
-    },
-    viewCompany(id, name) {
-      this.getCompanyInfo({ id, name });
-    },
     getByBasin(basin) {
-      this.getCompanyByBasin({ basin, slug: this.$route.fullPath.split('/').pop() });
+      this.getCompanyByBasin({ basin, slug: this.$route.params.slug });
     },
     hasOfsPremium(supplier) {
-      return supplier.contracts.some(contract => contract.contractType === 'ofs-premium');
+      return supplier.contracts.some((contract) => contract.contractType === 'ofs-premium');
     },
   },
-  async created(){
-    await this.getCompanyByBasin({ basin: 'all', slug: this.$route.fullPath.split('/').pop() });
+  async created() {
+    await this.getCategories();
+    if (this.$route.params.name) {
+      this.cateSlug = this.$route.params.name;
+    } else {
+      this.cateSlug = this.$route.params.slug;
+    }
+    await this.getCompanyByBasin({ basin: 'all', slug: this.cateSlug });
   },
   mounted() {
     document.title = 'Categories - BidOut';
