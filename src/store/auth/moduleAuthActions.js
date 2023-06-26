@@ -4,6 +4,7 @@ import "firebase/compat/firestore";
 // eslint-disable-next-line import/no-cycle
 import router from "@/router";
 import axios from "axios";
+import { error } from "logrocket";
 
 
 let isNavigating = false;
@@ -19,7 +20,7 @@ function navigate(route) {
 }
 
 export default {
-  signInAction({ commit }, payload) {
+  signInAction({ commit, dispatch, state }, payload) {
     // Try to sigin
     commit("setLoginLoading", true);
     firebase
@@ -33,8 +34,13 @@ export default {
           "token",
           JSON.stringify(result.user.multiFactor.user.accessToken)
         );
+        const config = {
+          headers: {
+            Authorization: `Bearer ${result.user.multiFactor.user.accessToken}`,
+          },
+        };
         axios
-          .get(`/v2/user/getUserData/${result.user.multiFactor.user.email}`)
+          .get(`/v2/user/getUserData/${result.user.multiFactor.user.email}`, config)
           .then(
             (responce) => {
               if (responce.data.status === false) {
@@ -75,7 +81,6 @@ export default {
           );
       })
       .catch((error) => {
-        console.log("the errors", error)
         if (error.code === "auth/too-many-requests") {
           commit("setPassError", null);
           commit(
@@ -93,16 +98,23 @@ export default {
         // commit('showErrorAlert')
       });
   },
-  getCurrentUser({ commit, dispatch }) {
+  getCurrentUser({ commit, dispatch, state }) {
     commit("setIsUserData", true);
     return new Promise((resolve, reject) => {
       firebase.auth().onAuthStateChanged((users) => {
         if (users) {
+          const config = {
+            headers: {
+              Authorization: `Bearer ${JSON.parse(localStorage.getItem("token"))}`,
+            },
+          };
           axios
-            .get(`/v2/user/getUserData/${users.multiFactor.user.email}`)
+            .get(`/v2/user/getUserData/${users.multiFactor.user.email}`,config)
             .then((responce) => {
               commit("setUser", responce.data);
               resolve(responce.data);
+            }, (error) => {
+              console.log('errors', error);
             });
         } else {
           dispatch("signOutAction");
