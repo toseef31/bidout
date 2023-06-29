@@ -868,6 +868,14 @@ export default {
         }
       }
     }
+
+    state.invitedTeamMembers = state.invitedTeamMembers.filter((el) => {
+      if (el._id) {
+        return el._id !== rootState.auth.userInfo._id
+      } else {
+        return el !== rootState.auth.userInfo._id
+      }
+    })
     if (state.invitedTeamMembers?.length > 0) {
       for (let t = 0; t < state.invitedTeamMembers.length; t++) {
         if (!state.invitedTeamMembers[t]._id) {
@@ -1025,7 +1033,7 @@ export default {
         state.bidData.invitedTeamMembers = '';
         state.bidData.lineItems = '';
         state.bidData.questions = '';
-        return bidDetail.data.serial;
+        return res.data.serial;
       }
 
       // eslint-disable-next-line consistent-return
