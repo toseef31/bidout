@@ -869,7 +869,7 @@ export default {
       }
     }
 
-    state.invitedTeamMembers = state.invitedTeamMembers.filter((el) => {
+    state.invitedTeamMembers = state.invitedTeamMembers && state.invitedTeamMembers.filter((el) => {
       if (el._id) {
         return el._id !== rootState.auth.userInfo._id
       } else {
