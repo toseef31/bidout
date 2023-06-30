@@ -99,18 +99,18 @@ export default {
       if (this.$store.getters.bidData && this.$store.getters.bidData.invitedTeamMembers && this.$store.getters.bidData.invitedTeamMembers.length) {
         if (this.searchMember) {
           return this.$store.getters.teamMembers.filter(
-            (item) => this.searchMember
+            (item) => (this.searchMember
               .toLowerCase()
               .split(' ')
               .every((v) => item.firstName.toLowerCase().includes(v))
               || this.searchMember
                 .toLowerCase()
                 .split(' ')
-                .every((v) => item.lastName.toLowerCase().includes(v)),
+                .every((v) => item.lastName.toLowerCase().includes(v))) && item._id !== this.$store.state.bid.bidData.user._id,
           );
         }
 
-        const unique = this.$store.getters.teamMembers
+        const unique = this.$store.getters.teamMembers && this.$store.state.bid.invitedTeamMembers
           ? this.$store.getters.teamMembers.filter(
             (el) => !this.$store.state.bid.invitedTeamMembers.find(
               (team) => {
@@ -119,27 +119,28 @@ export default {
                 }
                 return team === el._id;
               },
-            ),
+            ) && el._id !== this.$store.state.bid.bidData.user._id
           )
           : [];
+
         return [...new Map(unique.map((item) => [item._id, item])).values()];
       }
 
       if (this.searchMember) {
         return this.$store.getters.teamMembers.filter(
-          (item) => this.searchMember
+          (item) => (this.searchMember
             .toLowerCase()
             .split(' ')
             .every((v) => item.firstName.toLowerCase().includes(v))
             || this.searchMember
               .toLowerCase()
               .split(' ')
-              .every((v) => item.lastName.toLowerCase().includes(v)),
+              .every((v) => item.lastName.toLowerCase().includes(v))) && item._id !== this.$store.state.bid.bidData.user._id,
         );
       }
 
       return this.$store.getters.teamMembers
-        ? this.$store.getters.teamMembers
+        ? this.$store.getters.teamMembers.filter((item) => item._id !== this.$store.state.bid.bidData.user._id)
         : [];
     },
     // eslint-disable-next-line vue/return-in-computed-property
