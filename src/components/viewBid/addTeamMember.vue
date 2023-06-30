@@ -106,45 +106,53 @@ export default {
       ) {
         if (this.searchMember) {
           const unique = this.$store.getters.teamMembersInitial.filter(
-            (item) => this.searchMember
+            (item) => (this.searchMember
               .toLowerCase()
               .split(' ')
               .every((v) => item.firstName.toLowerCase().includes(v))
               || this.searchMember
                 .toLowerCase()
                 .split(' ')
-                .every((v) => item.lastName.toLowerCase().includes(v)),
+                .every((v) => item.lastName.toLowerCase().includes(v))) && item._id !== this.bidDetail.bidData.user._id && !this.$store.getters.teamMembersForBid.find(
+                  (team) => {
+                    if (team._id) {
+                      return team._id === item._id;
+                    }
+                    return team === item._id;
+                  },
+                ),
           );
+
           return [...new Map(unique.map((item) => [item.id, item])).values()];
         }
+
         const unique = this.$store.getters.teamMembersInitial
           ? this.$store.getters.teamMembersInitial.filter(
             (el) => !this.$store.getters.teamMembersForBid.find(
               (team) => team._id === el._id,
-            ),
+            ) && el._id !== this.bidDetail.bidData.user._id,
           )
           : [];
-
         return [...new Map(unique.map((item) => [item._id, item])).values()];
       }
 
       if (this.searchMember) {
         return this.$store.getters.teamMembersInitial.filter(
-          (item) => this.searchMember
+          (item) => (this.searchMember
             .toLowerCase()
             .split(' ')
             .every((v) => item.firstName.toLowerCase().includes(v))
             || this.searchMember
               .toLowerCase()
               .split(' ')
-              .every((v) => item.lastName.toLowerCase().includes(v)),
+              .every((v) => item.lastName.toLowerCase().includes(v))) && item._id !== this.bidDetail.bidData.user._id,
         );
       }
-      return this.$store.getters.teamMembersInitial ? this.$store.getters.teamMembersInitial : [];
+
+      return this.$store.getters.teamMembersInitial ? this.$store.getters.teamMembersInitial.filter((item) => item._id !== this.bidDetail.bidData.user._id) : [];
     },
     filterTeam() {
       const unique = this.$store.getters.teamMembersForBid;
-
       return unique && unique.length
         ? [...new Map(unique.map((item) => [item._id, item])).values()]
         : [];
@@ -183,7 +191,7 @@ export default {
     remove(member) {
       this.$store.commit('spliceTeamMembersForBid', member._id);
       this.$store.commit('pushTeamMembersInitial', member);
-    }
+    },
   },
   mounted() {
     this.user = this.$store.getters.userInfo;
