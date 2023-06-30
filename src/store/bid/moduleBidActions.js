@@ -869,13 +869,16 @@ export default {
       }
     }
 
-    state.invitedTeamMembers = state.invitedTeamMembers && state.invitedTeamMembers.filter((el) => {
-      if (el._id) {
-        return el._id !== rootState.auth.userInfo._id
-      } else {
-        return el !== rootState.auth.userInfo._id
-      }
-    })
+    if (state.bidData && state.bidData.user && state.bidData.user._id === rootState.auth.userInfo._id && state.invitedTeamMembers) {
+      state.invitedTeamMembers = state.invitedTeamMembers && state.invitedTeamMembers.filter((el) => {
+        if (el._id) {
+          return el._id !== rootState.auth.userInfo._id
+        } else {
+          return el !== rootState.auth.userInfo._id
+        }
+      })
+    }
+   
     if (state.invitedTeamMembers?.length > 0) {
       for (let t = 0; t < state.invitedTeamMembers.length; t++) {
         if (!state.invitedTeamMembers[t]._id) {
