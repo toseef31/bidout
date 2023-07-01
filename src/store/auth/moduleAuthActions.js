@@ -75,7 +75,9 @@ export default {
               }
               if (error.response.status === 401) {
                 commit("setError", "Please try again after few moments.");
-                dispatch('apiSignOutAction');
+                setTimeout(() => {
+                  dispatch('apiSignOutAction');
+                }, 5000);
               }
               commit("setLoginLoading", false);
             }
