@@ -75,6 +75,7 @@ export default {
               }
               if (error.response.status === 401) {
                 commit("setError", "Please try again after few moments.");
+                dispatch('apiSignOutAction');
               }
               commit("setLoginLoading", false);
             }
@@ -108,14 +109,19 @@ export default {
               Authorization: `Bearer ${JSON.parse(localStorage.getItem("token"))}`,
             },
           };
-          axios
-            .get(`/v2/user/getUserData/${users.multiFactor.user.email}`,config)
+          if (localStorage.getItem("token") && localStorage.getItem("token") !== null && localStorage.getItem("token") !== '') {
+            axios
+            .get(`/v2/user/getUserData/${users.multiFactor.user.email}`, config)
             .then((responce) => {
               commit("setUser", responce.data);
               resolve(responce.data);
             }, (error) => {
               console.log('errors', error);
+              if (error.response && error.response.status === 401) {
+                dispatch('apiSignOutAction');
+              }
             });
+          }
         } else {
           dispatch("signOutAction");
           // eslint-disable-next-line prefer-promise-reject-errors
