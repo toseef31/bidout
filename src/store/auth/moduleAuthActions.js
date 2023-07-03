@@ -452,7 +452,7 @@ export default {
       if (
         err.response &&
         err.response.status === 404 &&
-        err.response.data === "Supplier not found"
+        err.response.data.message === "Invalid token"
       ) {
         commit("setTokenInvitedSupplierError", true);
       }
