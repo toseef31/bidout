@@ -41,7 +41,8 @@
               </template>
             </tr>
 
-            <tr v-if="bidDetail.supplierSubmissions && !bidDetail.receivingBids && isBidOut">
+            <tr
+              v-if="bidDetail.supplierSubmissions && (!bidDetail.receivingBids && isBidOut) || (!bidDetail.receivingBids && !isBidOut)">
               <td class="bid-example-title">Bid Example Pre-BidOut Period</td>
               <template v-for="(submission) in bidDetail.supplierSubmissions">
                 <td v-if="!submission.bidOutPricePre">
@@ -56,7 +57,8 @@
               </template>
             </tr>
 
-            <tr v-if="bidDetail.supplierSubmissions && !bidDetail.receivingBids && isBidOut">
+            <tr
+              v-if="bidDetail.supplierSubmissions && (!bidDetail.receivingBids && isBidOut) || (!bidDetail.receivingBids && !isBidOut)">
               <td class="bid-example-title">Bid Example Post-BidOut Period</td>
               <template v-for="(submission) in bidDetail.supplierSubmissions">
                 <td v-if="!submission.postBidOutPrice">
@@ -293,6 +295,35 @@ export default {
           }
         });
       });
+
+      dataD.push(['Bid Example Pre-BidOut Period']);
+
+      index = this.indexOfArray(['Bid Example Pre-BidOut Period'], dataD);
+
+      this.bidDetail.supplierSubmissions.forEach((list) => {
+        if (list.bidOutPricePre) {
+          dataD[index].push(`$${list.bidOutPricePre}`);
+        } else {
+          dataD[index].push('Not submitted');
+        }
+      });
+
+      dataD = this.spacer(dataD, index);
+
+      dataD.push(['Bid Example Post-BidOut Period']);
+
+      index = this.indexOfArray(['Bid Example Post-BidOut Period'], dataD);
+
+      this.bidDetail.supplierSubmissions.forEach((list) => {
+        if (list.postBidOutPrice) {
+          dataD[index].push(`$${list.postBidOutPrice} (Saving-${100 - Math.round(((list.postBidOutPrice / list.bidOutPricePre)
+            + Number.EPSILON) * 100)}%)`);
+        } else {
+          dataD[index].push('Not submitted');
+        }
+      });
+
+      dataD = this.spacer(dataD, index);
 
       dataD.push(['Supplier Note']);
 
