@@ -369,13 +369,14 @@ export default {
               if (this.isEditBidChanges === true) {
                 await this.updateBid(bidDetails);
               }
-            }
-            if (!this.$store.getters.bidData._id) {
+            } else {
+              if (!this.$store.getters.bidData._id) {
               await this.saveDraftBid(bidDetails);
             } else if (this.$store.getters.bidData._id && this.$store.getters.bidData.statusType === 'templateBid') {
               await this.saveDraftBid(bidDetails);
             } else {
               await this.updateDraftBid(bidDetails);
+            }           
             }
           }
 
@@ -420,13 +421,14 @@ export default {
               if (this.isEditBidChanges === true) {
                 await this.updateBid(bidDetails);
               }
-            }
-            if (!this.$store.getters.bidData._id) {
+            } else {
+              if (!this.$store.getters.bidData._id) {
               await this.saveDraftBid(bidDetails);
             } else if (this.$store.getters.bidData._id && this.$store.getters.bidData.statusType === 'templateBid') {
               await this.saveDraftBid(bidDetails);
             } else {
               await this.updateDraftBid(bidDetails);
+            }
             }
           }
         }
