@@ -869,7 +869,7 @@ export default {
       }
     }
 
-    if (state.bidData && state.bidData.user && state.bidData.user._id === rootState.auth.userInfo._id && state.invitedTeamMembers) {
+    if (state.bidData && state.bidData.user === rootState.auth.userInfo._id && state.invitedTeamMembers) {
       state.invitedTeamMembers = state.invitedTeamMembers && state.invitedTeamMembers.filter((el) => {
         if (el._id) {
           return el._id !== rootState.auth.userInfo._id
