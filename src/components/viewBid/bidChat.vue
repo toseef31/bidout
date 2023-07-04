@@ -31,7 +31,7 @@
 
               <v-list-item-content align-center>
                 <v-list-item-title v-text="getName(list)"></v-list-item-title>
-                <v-list-item-subtitle v-if="checkIfCompanyOfs(list.company)">
+                <v-list-item-subtitle v-if="checkIfCompanyOfs(list.company) && getUserType === 'buyer'">
                   <router-link :to="list.company && list.company.slug ? '/company/' + list.company.slug : ''"
                     class="text-decoration-underline">View Profile</router-link></v-list-item-subtitle>
               </v-list-item-content>
@@ -56,7 +56,7 @@
               <div class="company-title text-left" v-if="chatData">
                 <h4>{{ getConversationName(chatData.conversation) }}</h4>
 
-                <p class="mb-0" v-if="checkIfCompanyOfs(chatData.conversation.company)">
+                <p class="mb-0" v-if="checkIfCompanyOfs(chatData.conversation.company) && getUserType === 'buyer'">
                   <router-link
                     :to="(chatData.conversation.company && chatData.conversation.company.slug ? '/company/' + chatData.conversation.company.slug : '')"
                     class="text-decoration-underline">View Profile</router-link>
@@ -340,6 +340,7 @@ export default {
       return conversation.displayName;
     },
     checkIfCompanyOfs(company) {
+      console.log('user', this.user);
       if (company && company.contracts) {
         return company.contracts.find((contract) => contract.contractType === 'ofs' || contract.contractType === 'ofs-premium');
       }
