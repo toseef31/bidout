@@ -340,7 +340,6 @@ export default {
       return conversation.displayName;
     },
     checkIfCompanyOfs(company) {
-      console.log('user', this.user);
       if (company && company.contracts) {
         return company.contracts.find((contract) => contract.contractType === 'ofs' || contract.contractType === 'ofs-premium');
       }
