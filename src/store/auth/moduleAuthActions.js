@@ -111,8 +111,7 @@ export default {
               Authorization: `Bearer ${JSON.parse(localStorage.getItem("token"))}`,
             },
           };
-          if (localStorage.getItem("token") && localStorage.getItem("token") !== null && localStorage.getItem("token") !== '') {
-            axios
+          axios
             .get(`/v2/user/getUserData/${users.multiFactor.user.email}`, config)
             .then((responce) => {
               commit("setUser", responce.data);
@@ -123,7 +122,6 @@ export default {
                 dispatch('apiSignOutAction');
               }
             });
-          }
         } else {
           dispatch("signOutAction");
           // eslint-disable-next-line prefer-promise-reject-errors
@@ -411,9 +409,14 @@ export default {
           "token",
           JSON.stringify(result.user.multiFactor.user.accessToken)
         );
+        const config = {
+          headers: {
+            Authorization: `Bearer ${result.user.multiFactor.user.accessToken}`,
+          },
+        };
         const userResp = await axios.get(
           `/v2/user/getUserData/${result.user.multiFactor.user.email}`
-        );
+          , config);
         if (userResp.data.status === false) {
           commit(
             "setError",
@@ -423,7 +426,7 @@ export default {
         } else {
           const companyResp = await axios.get(
             `v2/company/getCompanyById/${userResp.data.company?._id}`
-          );
+          , config);
           commit("setCompany", companyResp.data);
           localStorage.setItem("companyData", JSON.stringify(companyResp.data));
           commit("setUser", userResp.data);
