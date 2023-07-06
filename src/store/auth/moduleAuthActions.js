@@ -106,9 +106,13 @@ export default {
     return new Promise((resolve, reject) => {
       firebase.auth().onAuthStateChanged((users) => {
         if (users) {
+          localStorage.setItem(
+            "token",
+            JSON.stringify(users.multiFactor.user.accessToken)
+          );
           const config = {
             headers: {
-              Authorization: `Bearer ${JSON.parse(localStorage.getItem("token"))}`,
+              Authorization: `Bearer ${users.multiFactor.user.accessToken}`,
             },
           };
           if (localStorage.getItem("token") && localStorage.getItem("token") !== null && localStorage.getItem("token") !== '') {
