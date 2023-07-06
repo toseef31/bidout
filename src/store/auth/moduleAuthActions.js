@@ -75,6 +75,9 @@ export default {
               }
               if (error.response.status === 401) {
                 commit("setError", "Please try again after few moments.");
+                setTimeout(() => {
+                  dispatch('apiSignOutAction');
+                }, 5000);
               }
               commit("setLoginLoading", false);
             }
@@ -109,12 +112,15 @@ export default {
             },
           };
           axios
-            .get(`/v2/user/getUserData/${users.multiFactor.user.email}`,config)
+            .get(`/v2/user/getUserData/${users.multiFactor.user.email}`, config)
             .then((responce) => {
               commit("setUser", responce.data);
               resolve(responce.data);
             }, (error) => {
               console.log('errors', error);
+              if (error.response && error.response.status === 401) {
+                dispatch('apiSignOutAction');
+              }
             });
         } else {
           dispatch("signOutAction");
@@ -403,9 +409,14 @@ export default {
           "token",
           JSON.stringify(result.user.multiFactor.user.accessToken)
         );
+        const config = {
+          headers: {
+            Authorization: `Bearer ${result.user.multiFactor.user.accessToken}`,
+          },
+        };
         const userResp = await axios.get(
           `/v2/user/getUserData/${result.user.multiFactor.user.email}`
-        );
+          , config);
         if (userResp.data.status === false) {
           commit(
             "setError",
@@ -415,7 +426,7 @@ export default {
         } else {
           const companyResp = await axios.get(
             `v2/company/getCompanyById/${userResp.data.company?._id}`
-          );
+          , config);
           commit("setCompany", companyResp.data);
           localStorage.setItem("companyData", JSON.stringify(companyResp.data));
           commit("setUser", userResp.data);
@@ -444,7 +455,7 @@ export default {
       if (
         err.response &&
         err.response.status === 404 &&
-        err.response.data === "Supplier not found"
+        err.response.data.message === "Invalid token"
       ) {
         commit("setTokenInvitedSupplierError", true);
       }
