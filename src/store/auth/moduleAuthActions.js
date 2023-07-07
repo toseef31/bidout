@@ -71,7 +71,11 @@ export default {
                 commit("setError", error.response.data.message);
               }
               if (error.response.status === 403) {
-                commit("setError", error.response.data.message);
+                // commit("setError", error.response.data.message);
+                commit("setError", "Please try again after few moments.");
+                setTimeout(() => {
+                  dispatch('apiSignOutAction');
+                }, 5000);
               }
               if (error.response.status === 401) {
                 commit("setError", "Please try again after few moments.");
