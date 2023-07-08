@@ -164,6 +164,7 @@ export default {
   }, 
   getActivities({commit,dispatch,state},payload){
     commit('setActivityList',null);
+    commit('setActivityLoader', true);
     axios.get('/v2/activity/getUserActivities/'+payload)
       .then(responce => {
         if(responce.status === 200){
@@ -172,6 +173,7 @@ export default {
           
         }
     }).catch(async(err) => {
+      commit('setActivityLoader', false);
        Sentry.captureException(err);
       if(state.apiCounter === 2){
         dispatch('apiSignOutAction')
