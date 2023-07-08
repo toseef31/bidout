@@ -129,14 +129,14 @@
               <td class="text-left" v-if="item.type !== 'category'"> {{ item.title }}</td>
               <template v-for="(ans) in answers">
 
-                <td class="text-left" v-if="ans.answers[qIndex].answer !== null && item.questionType === 'checkbox'">
+                <td class="text-left" v-if="(ans.answers[qIndex].answer !== null || ans.answers[qIndex].answer !== 'null') && item.questionType === 'checkbox'">
                   {{ ans.answers[qIndex].answer }}
                 </td>
                 <td class="text-left"
-                  v-if="ans.answers[qIndex].answer !== null && item.questionType === 'textfield' || item.questionType === 'textarea'">
+                  v-if="(ans.answers[qIndex].answer !== null || ans.answers[qIndex].answer !== 'null') && item.questionType === 'textfield' || item.questionType === 'textarea'">
                   {{ ans.answers[qIndex].answer }}
                 </td>
-                <td class="text-left" v-if="ans.answers[qIndex].answer !== null && item.questionType === 'uploadFile'">
+                <td class="text-left" v-if="(ans.answers[qIndex].answer !== null || ans.answers[qIndex].answer !== 'null') && item.questionType === 'uploadFile'">
                   <div class="pb-4 d-inline-flex">
                     <img :src="require('@/assets/images/bids/FilePdf.png')"
                       v-if="checkFileType(ans.answers[qIndex].fileName) === 'pdf'" />
@@ -149,7 +149,7 @@
 
                   </div>
                 </td>
-                <td class="text-left " v-if="ans.answers[qIndex].answer === null && item.type !== 'category'">
+                <td class="text-left " v-if="(ans.answers[qIndex].answer === null || ans.answers[qIndex].answer === 'null') && item.type !== 'category'">
                   None
                 </td>
               </template>
