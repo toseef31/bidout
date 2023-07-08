@@ -665,7 +665,8 @@ export default {
       this.supplierNote = this.getSupplierBid.supplierNote;
 
       for (let i = 0; i < bidData.questions.length; i++) {
-        if (this.getSupplierBid.answers[i].questionId === bidData.questions[i]._id) {
+        const selectId = bidData.questions[i].oldId ? bidData.questions[i].oldId : bidData.questions[i]._id
+        if (this.getSupplierBid.answers[i].questionId === selectId) {
           if (bidData.questions[i].questionType === 'uploadFile') {
             this.answers.push({
               questionId: this.getSupplierBid.answers[i].questionId,
@@ -681,7 +682,7 @@ export default {
           }
         } else {
           this.answers.push({
-            questionId: bidData.questions[i]._id,
+            questionId: selectId,
             answer: null,
             category: bidData.questions[i].type,
           });
