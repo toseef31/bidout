@@ -481,7 +481,7 @@ export default {
       this.$router.push('/view-bids');
     }
 
-    if (this.$route.name === 'EditBid') {
+    if (this.$route.name === 'EditBid' && this.$store.getters.bidData && this.$store.getters.bidData._id) {
       await this.getAllIntent({
       bidId: this.$store.getters.bidData._id,
       reload: false,

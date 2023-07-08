@@ -371,6 +371,7 @@ export default {
       convDec: '',
       searching: '',
       bidId: '',
+      conversationId: '',
     };
   },
   computed: {
@@ -400,9 +401,6 @@ export default {
         this.snackbar = true;
       }
       return this.$store.getters.createMsg;
-      setTimeout(function () {
-        this.$store.state.createMsg = null;
-      }, 4000);
     },
   },
   methods: {
@@ -499,11 +497,11 @@ export default {
         userId: this.user._id,
       };
       this.archiveChat(archivess);
-      this.$store.commit('setSpliceToConversation',data);
+      this.$store.commit('setSpliceToConversation', data);
       this.isChatMenu = false;
       this.chatData.group = '';
       if (this.$store.getters.conversations) {
-        let chatArr = this.$store.getters.conversations;
+        const chatArr = this.$store.getters.conversations;
         chatArr.forEach((msg, index) => {
           if (!msg.latestMessage) {
             msg.latestMessage = msg.createdAt; // add the new field
@@ -530,7 +528,6 @@ export default {
           this.openChat(convo, grpName);
         }
       }
-      
     },
     getText: (item) => `${item.firstName} ${item.lastName}`,
     dragfileupload(file, xhr, formData) {
@@ -545,7 +542,7 @@ export default {
       if (this.message && this.message !== '') {
         formData.append('content', this.message);
       } else {
-        formData.append("content", ' ');
+        formData.append('content', ' ');
       }
     },
     afterComplete(file, response) {
@@ -599,7 +596,7 @@ export default {
       this.isChatMenu = false;
     },
     get_url_extension(url) {
-      if(url != undefined){
+      if (url != undefined) {
         const lastDotIndex = url.lastIndexOf('.');
         // Extract the file extension
         const fileExtension = url.slice(lastDotIndex + 1);
