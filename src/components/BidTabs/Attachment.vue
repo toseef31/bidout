@@ -16,12 +16,12 @@
           </thead>
           <tbody>
             <tr v-for="(doc, index) in docsList" :key="index">
-
               <input type="hidden" :value="validat" />
               <td class="text-left">
                 <img :src="require('@/assets/images/bids/FilePdf.png')" v-if="checkFileType(doc.fileName) === 'pdf'" />
                 <img :src="require('@/assets/images/bids/FileDoc.png')"
-                  v-else-if="checkFileType(doc.fileName) === 'docx'" />
+                  v-else-if="checkFileType(doc.fileName) === 'docx' || checkFileType(doc.fileName) === 'doc'" />
+                <v-icon color="#0D1139" v-else-if="checkFileType(doc.fileName) === 'xlsx' || checkFileType(doc.fileName) === 'xls'">mdi-microsoft-excel</v-icon>
                 <v-icon color="#0D1139" v-else>mdi-file-document</v-icon>
               </td>
               <td class="text-left d-block text-truncate pt-4" style="width: 200px">
@@ -36,15 +36,15 @@
                 <span v-else>{{ doc.comment !== 'undefined' ? doc.comment : '' }}</span>
               </td>
               <td class="text-left">{{ size(doc.fileSize) }}</td>
-              <td class="text-left">{{ doc.uploadedBy }}</td>
+              <td class="text-left">{{ doc.uploadedBy.firstName ?  `${doc.uploadedBy.firstName} ${doc.uploadedBy.lastName}` : `${uploadedBy.firstName} ${uploadedBy.lastName}` }}  </td>
               <td class="text-left">
-                {{ doc.uploadedAt | moment("MM/DD/YYYY hh:mm a") }}
+                {{  doc.uploadedAt ? doc.uploadedAt  : uploadedAt | moment("MM/DD/YYYY hh:mm a")  }}
               </td>
               <td>
                 <div class="d-flex">
                   <img :src="require('@/assets/images/bids/chatdots.png')" class="mr-3 v-card--link"
                     @click="openComment(index)" />
-                  <v-icon color="#F32349" @click="deleteAttach(index, doc.id)">mdi-trash-can-outline</v-icon>
+                  <v-icon color="#F32349" @click="deleteAttach(index, doc)">mdi-trash-can-outline</v-icon>
                 </div>
               </td>
             </tr>
@@ -81,23 +81,23 @@ export default {
       fileExt: '',
       fileSize: '',
       documents: [],
+      uploadedBy: {},
+      uploadedAt: '',
       isAttaching: false,
       valid: false,
       attachStatus: false,
       docs: '',
       uploadDoc: [],
+      docId: null,
     };
   },
   computed: {
     ...mapGetters(['isEditBidChanges']),
-    uploadedBy() {
-      return `${this.$store.getters.userInfo.firstName} ${this.$store.getters.userInfo.lastName}`;
-    },
     docsList() {
       if (this.$store.getters.bidData != null) {
         if (this.$store.getters.bidData.statusType === 'template') {
           if (
-            this.$store.getters.bidData.attachment !== '' || this.$store.state.bid.attachement !== ''
+            this.$store.getters.bidData.attachments?.length > 0 || this.$store.state.bid.attachement?.length > 0
           ) {
             if (this.$store.getters.attachData) {
               const attch = [
@@ -105,14 +105,14 @@ export default {
                   this.$store.getters.attachData.map((m) => [m.size, m]),
                 ).values(),
               ];
-              const totalDay = this.$store.state.bid.attachement.concat(attch);
+              const totalDay = this.$store.state.bid.attachement?.concat(attch);
               // eslint-disable-next-line vue/no-side-effects-in-computed-properties
               this.documents = [
-                ...new Map(totalDay.map((m) => [m.id, m])).values(),
+                ...new Map(totalDay?.map((m) => [m.url, m])).values(),
               ];
             } else {
               // eslint-disable-next-line vue/no-side-effects-in-computed-properties
-              this.documents = this.$store.state.bid.attachement;
+              this.documents = this.$store.getters.bidData.attachments;
             }
             this.$store.commit('setAttachement', null);
             this.$store.commit('setAttachement', this.documents);
@@ -125,7 +125,7 @@ export default {
           return this.$store.getters.attachData;
         }
         if (
-          this.$store.getters.bidData.attachments != '' || this.$store.state.bid.attachement != ''
+          this.$store.getters.bidData.attachments?.length > 0 || this.$store.state.bid.attachement?.length > 0
         ) {
           if (this.$store.getters.attachData) {
             const attch = [
@@ -135,7 +135,7 @@ export default {
             ];
             const totalDay = this.$store.state.bid.attachement.concat(attch);
             this.documents = [
-              ...new Map(totalDay.map((m) => [m.id, m])).values(),
+              ...new Map(totalDay.map((m) => [m.url, m])).values(),
             ];
           } else {
             this.documents = this.$store.state.bid.attachement;
@@ -198,10 +198,11 @@ export default {
       this.fileExt = this.fileName.split('.').pop();
       this.fileSize = (this.file.size / (1024 * 1024)).toFixed(2);
       this.uploadDoc.push(this.file);
-
+      this.uploadedBy = this.$store.getters.userInfo
       const data = {
-        uploadedBy: `${this.$store.getters.userInfo.firstName} ${this.$store.getters.userInfo.lastName}`,
-        attachement: this.uploadDoc,
+        uploadedBy: this.$store.getters.userInfo._id,
+        uploadedByName: `${this.$store.getters.userInfo.firstName} ${this.$store.getters.userInfo.lastName}`,
+        attachement: this.uploadDoc
       };
       await this.uploadBidAttach(data);
       this.isAttaching = false;
@@ -224,14 +225,25 @@ export default {
       const sizeInMB = (size / (1024 * 1024)).toFixed(2);
       return `${sizeInMB}mb`;
     },
-    deleteAttach(index, id) {
-      const indexToRemove = this.documents.findIndex((obj) => obj.id === id);
+    deleteAttach(index, doc) {
+      const indexToRemove = this.documents.findIndex((obj) => {
+        if (obj._id && doc._id) {
+          return obj._id === doc._id;
+        } else {
+          return obj.id === doc.id;
+        }
+      });
+      if(doc._id){
+        this.docId = doc._id;
+      }else{
+        this.docId = doc.id;
+      }
 
       if (indexToRemove !== -1) {
         this.documents.splice(indexToRemove, 1);
       }
       if (this.$store.getters.attachData) {
-        this.$store.commit('spliceAttachData', id);
+        this.$store.commit('spliceAttachData', this.docId);
       }
       this.$store.commit('setAttachement', this.documents);
       this.$store.commit('setIsEditBidChanges', true);
@@ -282,7 +294,7 @@ export default {
       this.documents = this.$store.getters.attachData;
     }
     if (this.$store.getters.bidData != null) {
-      if (this.$store.getters.bidData.attachments !== '') {
+      if (this.$store.getters.bidData.attachments?.length > 0) {
         if (this.$store.getters.bidData.statusType === 'draftBid') {
           this.$store.commit('setAttachement', null);
           this.$store.commit(

@@ -64,6 +64,7 @@ export default {
     createBid() {
       this.$store.state.bid.bidData.serial = '';
       this.$store.state.bid.bidData.id = '';
+      this.$store.state.bid.bidData._id = '';
       this.$store.state.bid.bidData.status = '';
       this.$store.state.bid.bidData.statusType = '';
       this.$store.state.bid.bidData.attachments = '';

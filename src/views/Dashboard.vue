@@ -267,7 +267,7 @@ export default {
         for (i = 0; i < LocationsForMap.length; i++) {  
           for (j = 0; j < LocationsForMap[i].locations.length; j++){
             marker = new google.maps.Marker({
-              position: new google.maps.LatLng(LocationsForMap[i].locations[j].lattitude, LocationsForMap[i].locations[j].longitude),
+              position: new google.maps.LatLng(LocationsForMap[i].locations[j].latitude, LocationsForMap[i].locations[j].longitude),
               map: map,
               title: 'Marker',
               anchorPoint: new google.maps.Point(0, -29),
@@ -313,14 +313,11 @@ export default {
   async updated(){
     this.getLocation();
   },
-  async beforeMount(){
-    
-  },
   async mounted() {
     document.title = "Dashboard - BidOut";
     this.users = this.$store.getters.userInfo;
-    this.pendingUserCount(this.userDatas.company.id)
-    await this.getBidDashboard(this.userDatas.id);
+    this.pendingUserCount(this.userDatas.company._id)
+    await this.getBidDashboard(this.userDatas._id);
     this.loadMapScript();
   }
 };

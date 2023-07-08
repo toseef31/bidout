@@ -5,7 +5,6 @@
         <h4 class="text-left">Questions</h4>
       </v-col>
       <v-col cols="6" class="text-right">
-        <!-- <v-btn color="#0D9648" large class="text-capitalize py-4 px-11 font-weight-bold white--text add-question" height="56px">Add Question</v-btn> -->
         <v-menu bottom :offset-y="true" content-class="question-menu">
           <template v-slot:activator="{ on, attrs }">
             <v-btn
@@ -397,7 +396,7 @@
                   </div>
                   <div class="upload-attach ml-10">
                     <v-textarea
-                      label="File input"
+                      label="Textarea"
                       outlined
                       color="#fff"
                       id="uploadFile"
@@ -495,7 +494,7 @@ export default {
         questionType: type,
         id: uuidv4(),
         order: this.categories ? this.categories.length : 0,
-        categoryId: this.categories.id,
+        categoryId: this.categories._id,
         type: 'question',
         options: [],
       };
@@ -524,10 +523,10 @@ export default {
     },
     questionMoved(event, categoryId, questions) {
       this.categories
-        .find((cat) => cat.id === categoryId)
+        .find((cat) => cat._id === categoryId)
         .questions.forEach((quest, index) => {
-          const questionIndex = questions.findIndex((q) => q.id === quest.id);
-          this.categories.find((cat) => cat.id === categoryId).questions[
+          const questionIndex = questions.findIndex((q) => q._id === quest._id);
+          this.categories.find((cat) => cat._id === categoryId).questions[
             index
           ].order = questionIndex;
         });
@@ -566,18 +565,18 @@ export default {
       this.$store.commit('setIsEditBidChanges',true);
       this.questionStatus = true;
     },
-    updateQuestion() {
+    async updateQuestion() {
       this.loading = true;
       if(this.$route.name == 'EditBid'){
         if(this.isEditBidChanges == true){
-          this.updateBid({ questions: this.categories });
+          await this.updateBid({ questions: this.categories });
         }
         this.loading = false;
       }else if(this.$route.name == 'EditTemplate'){
-        this.updateTemplate({ questions: this.categories });
+        await this.updateTemplate({ questions: this.categories });
         this.loading = false;
       }else{
-        this.updateDraftBid({ questions: this.categories });
+        await this.updateDraftBid({ questions: this.categories });
         this.loading = false;
       }
       
@@ -629,7 +628,7 @@ export default {
     {
       this.categories = this.$store.getters.bidData.questions;
       this.categories.forEach((cat, index) => {
-        cat.required == "true" ? this.categories[index].required = true : this.categories[index].required = false;
+        cat.required === true ? this.categories[index].required = true : this.categories[index].required = false;
       });
       this.isInitialized = true;
     }

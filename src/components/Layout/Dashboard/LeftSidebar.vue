@@ -259,7 +259,7 @@ export default {
     moduleData() {
       if (this.$store.getters.userInfo.company.contracts) {
         return this.$store.getters.userInfo.company.contracts.filter(
-          (item) => this.$store.getters.userInfo.id == item.signedBy
+          (item) => this.$store.getters.userInfo._id == item.signedBy
         );
       }
     },
@@ -301,7 +301,7 @@ export default {
     },
   },
   mounted() {
-    this.userId = this.$store.getters.userInfo.id;
+    this.userId = this.$store.getters.userInfo._id;
     this.getUnreadMessages();
   },
 };

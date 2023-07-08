@@ -49,7 +49,7 @@
                           <td class="text-left font-weight-medium"><span v-if="user.lastSeen">{{ user.lastSeen | moment("MM/D/YYYY") }}</span><span v-else>no history</span></td>
                           <td class="text-left font-weight-medium text-capitalize">{{user.role}}</td>
                           <td class="text-center">
-                            <v-btn depressed color="transparent" class="text-capitalize" @click="enable(user.id)" >
+                            <v-btn depressed color="transparent" class="text-capitalize edit-btn" @click="enable(user._id)" >
                                 <v-icon>mdi-check</v-icon>
                               Enable </v-btn>
                           </td>
@@ -117,7 +117,7 @@ export default {
     document.title = "Disabled Users - BidOut";
     this.user = this.$store.getters.userInfo;
 
-    this.getDisableUsers(this.user.company.company);
+    this.getDisableUsers(this.user.company._id);
   }
 };
 </script>

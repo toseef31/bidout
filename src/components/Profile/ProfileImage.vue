@@ -23,7 +23,7 @@
       </v-dialog>
 	    <div class="user-name text-left pl-4 mr-6">
 	      <h3>{{userDatas ? userDatas.firstName : ''}}  {{ userDatas ? userDatas.lastName : ''}}</h3>
-	      <p class="mb-0">{{userDatas && userDatas.company ? userDatas.company.company : ''}}</p>
+	      <p class="mb-0">{{userDatas && userDatas.company ? userDatas.company.companyName : ''}}</p>
 	    </div>
 	    <v-divider vertical inset class="my-4"></v-divider>
 	  </div>
@@ -110,7 +110,7 @@ export default {
         this.dialog = false;
 
           var data = {
-            userid: this.$store.getters.userInfo.id,
+            userid: this.$store.getters.userInfo._id,
             email: this.$store.getters.userInfo.email,
             files: this.image_name,
           }

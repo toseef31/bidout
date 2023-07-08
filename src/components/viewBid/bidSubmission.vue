@@ -20,7 +20,7 @@
             <tr>
               <th class="text-left">Line Items</th>
               <th class="text-left" v-for="(item, index) in bidDetail.supplierSubmissions" :key="index">{{
-                item.company
+                item.company.companyName
               }}
               </th>
             </tr>
@@ -31,7 +31,7 @@
               <td class="no-wrap">{{ item.description }}</td>
               <template v-for="(submission) in bidDetail.supplierSubmissions">
                 <td
-                  v-if="submission.lineItems[index].price === 'NO_BID' || submission.lineItems[index].price === '' || submission.lineItems[index].price === 'null'">
+                  v-if="submission.lineItems[index].price === 'NO_BID' || submission.lineItems[index].price === '' || submission.lineItems[index].price === null">
                   <v-icon color="#F32349">mdi-close</v-icon> No Bid
                 </td>
 
@@ -41,38 +41,40 @@
               </template>
             </tr>
 
-            <tr v-if="bidDetail.supplierSubmissions.length && !bidDetail.receivingBids && isBidOut">
+            <tr
+              v-if="bidDetail.supplierSubmissions && (!bidDetail.receivingBids && isBidOut) || (!bidDetail.receivingBids && !isBidOut)">
               <td class="bid-example-title">Bid Example Pre-BidOut Period</td>
               <template v-for="(submission) in bidDetail.supplierSubmissions">
-                <td v-if="!submission.bidoutPricepre">
+                <td v-if="!submission.bidOutPricePre">
                   Not submitted
                 </td>
-                <td v-else-if="submission.bidoutPricepre === null">
+                <td v-else-if="submission.bidOutPricePre === null">
                   Not submitted
                 </td>
                 <td v-else>
-                  $ {{ submission.bidoutPricepre }}
+                  $ {{ submission.bidOutPricePre }}
                 </td>
               </template>
             </tr>
 
-            <tr v-if="bidDetail.supplierSubmissions.length && !bidDetail.receivingBids && isBidOut">
+            <tr
+              v-if="bidDetail.supplierSubmissions && (!bidDetail.receivingBids && isBidOut) || (!bidDetail.receivingBids && !isBidOut)">
               <td class="bid-example-title">Bid Example Post-BidOut Period</td>
               <template v-for="(submission) in bidDetail.supplierSubmissions">
-                <td v-if="!submission.postBidoutPrice">
+                <td v-if="!submission.postBidOutPrice">
                   Not submitted
                 </td>
-                <td v-else-if="submission.postBidoutPrice
+                <td v-else-if="submission.postBidOutPrice
                   === null">
                   Not submitted
                 </td>
                 <td v-else>
                   <v-icon color="#0D9648">mdi-arrow-down-thin-circle-outline</v-icon>
                   <span class="ml-1">$ {{
-                    submission.postBidoutPrice
+                    submission.postBidOutPrice
                   }}</span>
                   <div class="subscript">Saving {{
-                    100 - Math.round(((submission.postBidoutPrice / submission.bidoutPricepre) +
+                    100 - Math.round(((submission.postBidOutPrice / submission.bidOutPricePre) +
                       Number.EPSILON) * 100)
                   }}%</div>
                 </td>
@@ -99,14 +101,17 @@
                   <div class="pb-4  d-inline-flex pr-10"
                     v-for="(doc, attIndex) in bidDetail.supplierSubmissions[aIndex].supplierAttachments" :key="attIndex">
 
-                    <img :src="require('@/assets/images/bids/FilePdf.png')"
-                      v-if="checkFileType(doc.fileName) === 'pdf'" class="pr-2"/>
+                    <img :src="require('@/assets/images/bids/FilePdf.png')" v-if="checkFileType(doc.fileName) === 'pdf'"
+                      class="pr-2" />
                     <img :src="require('@/assets/images/bids/FileDoc.png')"
-                      v-else-if="checkFileType(doc.fileName) === 'docx'" class="pr-2"/>
+                      v-else-if="checkFileType(doc.fileName) === 'docx' || checkFileType(doc.fileName) === 'doc'"
+                      class="pr-2" />
+                    <v-icon class="pr-2" color="#0D1139"
+                      v-else-if="checkFileType(doc.fileName) === 'xlsx' || checkFileType(doc.fileName) === 'xls'">mdi-microsoft-excel</v-icon>
                     <v-icon color="#0D1139" v-else class="pr-2">mdi-file-document</v-icon>
 
                     <a target="_blank" class="text-decoration-none" :href="doc.attachment
-                    ">{{ doc.fileName }}</a>
+                      ">{{ doc.fileName }}</a>
                   </div>
                 </td>
                 <td class="text-left bid-note" v-else>
@@ -115,23 +120,23 @@
               </template>
             </tr>
 
-            <tr v-if="bidDetail.bidData.questions.length && bidDetail.supplierSubmissions.length">
-              <div class="title-detail-supplier mt-10 mb-5">Supplier Answers</div>
+            <tr class="supplier-row" v-if="bidDetail.bidData.questions.length && bidDetail.supplierSubmissions">
+              <div class="title-detail-supplier mt-8 mb-7">Supplier Answers</div>
             </tr>
 
-            <tr v-for="(item, qIndex) in bidDetail.bidData.questions" :key="qIndex + item.id"
-              v-if="bidDetail.bidData.questions.length && bidDetail.supplierSubmissions.length">
+            <tr v-for="(item, qIndex) in bidDetail.bidData.questions" :key="qIndex + item._id"
+              v-if="bidDetail.bidData.questions.length && bidDetail.supplierSubmissions">
               <td class="text-left" v-if="item.type !== 'category'"> {{ item.title }}</td>
-
               <template v-for="(ans) in answers">
-                <td class="text-left" v-if="ans.answers[qIndex].answer !== 'null' && item.questionType === 'checkbox'">
+
+                <td class="text-left" v-if="ans.answers[qIndex].answer !== null && item.questionType === 'checkbox'">
                   {{ ans.answers[qIndex].answer }}
                 </td>
                 <td class="text-left"
-                  v-if="ans.answers[qIndex].answer !== 'null' && item.questionType === 'textfield' || item.questionType === 'textarea'">
+                  v-if="ans.answers[qIndex].answer !== null && item.questionType === 'textfield' || item.questionType === 'textarea'">
                   {{ ans.answers[qIndex].answer }}
                 </td>
-                <td class="text-left" v-if="ans.answers[qIndex].answer !== 'null' && item.questionType === 'uploadFile'">
+                <td class="text-left" v-if="ans.answers[qIndex].answer !== null && item.questionType === 'uploadFile'">
                   <div class="pb-4 d-inline-flex">
                     <img :src="require('@/assets/images/bids/FilePdf.png')"
                       v-if="checkFileType(ans.answers[qIndex].fileName) === 'pdf'" />
@@ -140,31 +145,31 @@
                     <v-icon color="#0D1139" v-else>mdi-file-document</v-icon>
 
                     <a target="_blank" class="text-decoration-none pl-2" :href="ans.answers[qIndex].answer
-                    ">{{ ans.answers[qIndex].fileName }}</a>
+                      ">{{ ans.answers[qIndex].fileName }}</a>
 
                   </div>
                 </td>
-                <td class="text-left " v-if="ans.answers[qIndex].answer === 'null' && item.type !== 'category'">
+                <td class="text-left " v-if="ans.answers[qIndex].answer === null && item.type !== 'category'">
                   None
                 </td>
               </template>
             </tr>
 
-            <tr v-if="!isBidOut && !bidDetail.receivingBids && bidDetail.supplierSubmissions.length"
-              class="action-button-class">
+            <tr v-if="!isBidOut && !bidDetail.receivingBids && bidDetail.supplierSubmissions" class="action-button-class">
               <td class="text-left"></td>
               <template v-for="(item, index) in bidDetail.supplierSubmissions">
                 <td class="text-left">
-                  <div class="d-flex flex-column" v-if="!checkAwardee(item.companyId) && !checkRejectee(item.companyId)">
-                    <v-btn @click="award(item.companyId, index, 'award')" color="#0d9648" depressed
+                  <div class="d-flex flex-column"
+                    v-if="!checkAwardee(item.company._id) && !checkRejectee(item.company._id)">
+                    <v-btn @click="award(item.company._id, index, 'award')" color="#0d9648" depressed
                       :disabled="showLoading[index].load && showLoading[index].action === 'award'">
                       <v-progress-circular v-if="showLoading[index].load && showLoading[index].action === 'award'"
                         indeterminate :width="3" size="25" color="#0D9648"></v-progress-circular>
                       <div v-else>Award Bid</div>
 
                     </v-btn>
-                    <v-btn @click="disqualify(item.companyId, index, 'disqualify')" color="#F03F20" depressed class="mt-2"
-                      :disabled="showLoading[index].load && showLoading[index].action === 'disqualify'">
+                    <v-btn @click="disqualify(item.company._id, index, 'disqualify')" color="#F03F20" depressed
+                      class="mt-2" :disabled="showLoading[index].load && showLoading[index].action === 'disqualify'">
 
                       <v-progress-circular v-if="showLoading[index].load && showLoading[index].action === 'disqualify'"
                         indeterminate :width="3" size="25" color="#F03F20"></v-progress-circular>
@@ -172,17 +177,17 @@
                     </v-btn>
                   </div>
                   <div v-else class="d-flex flex-column">
-                    <v-btn @click="unAward(item.companyId, index, 'award')" color="#0d9648" depressed
+                    <v-btn @click="unAward(item.company._id, index, 'award')" color="#0d9648" depressed
                       :disabled="showLoading[index].load && showLoading[index].action === 'award'"
-                      v-if="checkAwardee(item.companyId) && !checkRejectee(item.companyId)">
+                      v-if="checkAwardee(item.company._id) && !checkRejectee(item.company._id)">
                       <v-progress-circular v-if="showLoading[index].load && showLoading[index].action === 'award'"
                         indeterminate :width="3" size="25" color="#0D9648"></v-progress-circular>
                       <div v-else>Un-Award</div>
 
                     </v-btn>
-                    <v-btn @click="unDisqualify(item.companyId, index, 'disqualify')" color="#F03F20" depressed
+                    <v-btn @click="unDisqualify(item.company._id, index, 'disqualify')" color="#F03F20" depressed
                       :disabled="showLoading[index].load && showLoading[index].action === 'disqualify'"
-                      v-if="!checkAwardee(item.companyId) && checkRejectee(item.companyId)">
+                      v-if="!checkAwardee(item.company._id) && checkRejectee(item.company._id)">
 
                       <v-progress-circular v-if="showLoading[index].load && showLoading[index].action === 'disqualify'"
                         indeterminate :width="3" size="25" color="#F03F20"></v-progress-circular>
@@ -196,18 +201,18 @@
             </tr>
 
             <tr class="action-button-class"
-              v-if="!isBidOut && !bidDetail.receivingBids && bidDetail.supplierSubmissions.length && bidDetail.bidData.awardees && (bidDetail.bidData.awardees.length || bidDetail.bidData.rejectees && bidDetail.bidData.rejectees.length)">
+              v-if="!isBidOut && !bidDetail.receivingBids && bidDetail.supplierSubmissions && bidDetail.bidData.awardees && (bidDetail.bidData.awardees.length || bidDetail.bidData.rejectees && bidDetail.bidData.rejectees.length)">
               <td class="text-left"></td>
               <template v-for="(item) in bidDetail.supplierSubmissions">
                 <td class="text-left">
                   <div class=" action d-flex align-center" color="white" height="56" rounded width="190"
-                    v-if="checkRejectee(item.companyId)">
+                    v-if="checkRejectee(item.company._id)">
                     <img :src="require('@/assets/images/bids/disqualified.png')" />
                     Disqualified Bid
                   </div>
 
                   <div class=" action d-flex align-center" color="white" height="56" rounded width="190"
-                    v-if="checkAwardee(item.companyId)">
+                    v-if="checkAwardee(item.company._id)">
                     <img :src="require('@/assets/images/bids/awarded.png')" />
                     Awarded Bid
                   </div>
@@ -221,7 +226,7 @@
       </v-simple-table>
     </div>
 
-    <div class="text-center b-title-detail " v-if="bidDetail.supplierSubmissions.length === 0">There are currently no
+    <div class="text-center b-title-detail " v-if="!bidDetail.supplierSubmissions.length">There are currently no
       bid submissions by service providers. </div>
   </v-col>
 </template>
@@ -240,11 +245,14 @@ export default {
   },
   computed: {
     bidDetail() {
-      for (let i = 0; i < this.$store.getters.bidViewData.supplierSubmissions.length; i++) {
+      this.$store.getters.bidViewData.supplierSubmissions.forEach((el) => {
         this.loadings.push({
           load: false,
           action: 'neither',
         });
+      });
+      if (this.$store.getters.bidViewData.bidData.questions && this.$store.getters.bidViewData.bidData.questions.length) {
+        this.answers = this.$store.getters.bidViewData.supplierSubmissions;
       }
       return this.$store.getters.bidViewData;
     },
@@ -261,10 +269,10 @@ export default {
   methods: {
     ...mapActions(['awardCompany', 'rejectCompany', 'UnAwardCompany', 'UnDisqualifyCompany']),
     checkFileType(file) {
-      return file.substring(file.lastIndexOf('.') + 1);
+      return file && file.substring(file.lastIndexOf('.') + 1);
     },
     exportF() {
-      const header = this.bidDetail.supplierSubmissions.map((el) => el.company);
+      const header = this.bidDetail.supplierSubmissions.map((el) => el.company.companyName);
 
       header.unshift('UOM');
       header.unshift('QTY');
@@ -287,6 +295,35 @@ export default {
           }
         });
       });
+
+      dataD.push(['Bid Example Pre-BidOut Period']);
+
+      index = this.indexOfArray(['Bid Example Pre-BidOut Period'], dataD);
+
+      this.bidDetail.supplierSubmissions.forEach((list) => {
+        if (list.bidOutPricePre) {
+          dataD[index].push(`$${list.bidOutPricePre}`);
+        } else {
+          dataD[index].push('Not submitted');
+        }
+      });
+
+      dataD = this.spacer(dataD, index);
+
+      dataD.push(['Bid Example Post-BidOut Period']);
+
+      index = this.indexOfArray(['Bid Example Post-BidOut Period'], dataD);
+
+      this.bidDetail.supplierSubmissions.forEach((list) => {
+        if (list.postBidOutPrice) {
+          dataD[index].push(`$${list.postBidOutPrice} (Saving-${100 - Math.round(((list.postBidOutPrice / list.bidOutPricePre)
+            + Number.EPSILON) * 100)}%)`);
+        } else {
+          dataD[index].push('Not submitted');
+        }
+      });
+
+      dataD = this.spacer(dataD, index);
 
       dataD.push(['Supplier Note']);
 
@@ -397,10 +434,10 @@ export default {
 
       await this.awardCompany({
         companyId: id,
-        userId: this.user.id,
-        bidId: this.bidDetail.bidData.id,
+        userId: this.user._id,
+        bidId: this.bidDetail.bidData._id,
         serial: this.$route.params.serial,
-        company: this.user.company.company
+        company: this.user.company,
       });
 
       this.loadings[index].load = false;
@@ -412,10 +449,10 @@ export default {
 
       await this.rejectCompany({
         companyId: id,
-        userId: this.user.id,
-        bidId: this.bidDetail.bidData.id,
+        userId: this.user._id,
+        bidId: this.bidDetail.bidData._id,
         serial: this.$route.params.serial,
-        company: this.user.company.company
+        company: this.user.company,
       });
 
       this.loadings[index].load = false;
@@ -427,10 +464,10 @@ export default {
 
       await this.UnAwardCompany({
         companyId: id,
-        userId: this.user.id,
-        bidId: this.bidDetail.bidData.id,
+        userId: this.user._id,
+        bidId: this.bidDetail.bidData._id,
         serial: this.$route.params.serial,
-        company: this.user.company.company
+        company: this.user.company,
       });
 
       this.loadings[index].load = false;
@@ -442,10 +479,10 @@ export default {
 
       await this.UnDisqualifyCompany({
         companyId: id,
-        userId: this.user.id,
-        bidId: this.bidDetail.bidData.id,
+        userId: this.user._id,
+        bidId: this.bidDetail.bidData._id,
         serial: this.$route.params.serial,
-        company: this.user.company.company
+        company: this.user.company,
       });
 
       this.loadings[index].load = false;
@@ -459,10 +496,6 @@ export default {
   mounted() {
     window.scrollTo({ top: 0, behavior: 'smooth' });
     this.user = this.$store.getters.userInfo;
-
-    if (Array.isArray(this.bidDetail.bidData.questions)) {
-      this.answers = this.bidDetail.supplierSubmissions;
-    }
   },
 };
 </script>

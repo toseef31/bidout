@@ -19,7 +19,7 @@
             active-class="grey--text">
             <template v-for="(conversation, index) in conversationsList">
               <template v-if="chatData">
-                <v-list-item   @click="openChat(conversation,conversation.groupName)" :key="conversation._id"  :class="{ 'grey--text v-list-item--active' : conversation._id ===  conversationsIds }" v-if="conversation.type == 'GROUP'">
+                <v-list-item   @click="openChat(conversation,conversation.displayName)" :key="conversation._id"  :class="{ 'grey--text v-list-item--active' : conversation._id ===  conversationsIds }">
                 <template>
                   <v-list-item-avatar>
                     <v-icon>mdi-domain</v-icon>
@@ -27,12 +27,12 @@
                   <v-list-item-content>
                     <v-list-item-title> {{  getConversationName(conversation)  }} </v-list-item-title>
 
-                    <v-list-item-subtitle v-if="conversation.isBid == true"
+                    <v-list-item-subtitle v-if="conversation.isBid === true && conversation.bid != null"
                       class="text--primary"
-                      v-text="conversation.bidTitle"
+                      v-text="conversation.bid.title"
                     ></v-list-item-subtitle>
 
-                    <v-list-item-subtitle v-if="conversation.isBid == true">Bid #{{conversation.bidSerial}}</v-list-item-subtitle>
+                    <v-list-item-subtitle v-if="conversation.isBid === true  && conversation.bid != null">Bid #{{conversation.bid.serial}}</v-list-item-subtitle>
                   </v-list-item-content>
                   <v-list-item-action class="mt-n5">
                     <v-list-item-action-text v-if="!conversation.latestMessage || conversation.latestMessage == null">{{ istoday(conversation.createdAt) }}</v-list-item-action-text>
@@ -47,7 +47,7 @@
                 </template>
               </v-list-item>
               </template>
-              <v-list-item v-if="conversation.type == 'PRIVATE' && participant.id != user.id"  v-for="participant in conversation.participantDetails" @click="openChat(conversation,participant.name)" :class="{ 'grey--text v-list-item--active' : conversation._id === conversationsIds }" :key="participant.id" class="d-none">
+              <v-list-item v-if="conversation.type == 'PRIVATE' && participant._id != user._id"  v-for="participant in conversation.participantDetails" @click="openChat(conversation,participant.name)" :class="{ 'grey--text v-list-item--active' : conversation._id === conversationsIds }" :key="participant.id" class="d-none">
                 <template >
                     <v-list-item-avatar>
                       <v-avatar>
@@ -82,14 +82,14 @@
           v-model="selectedUser"
           active-class="grey--text">
           <template v-for="(conversation, index) in archiveList">
-            <v-list-item :key="conversation._id" v-if="conversation.type == 'GROUP'">
+            <v-list-item :key="conversation._id">
               <template>
                 <v-list-item-avatar>
                   <v-icon>mdi-domain</v-icon>
                 </v-list-item-avatar>
                 <v-list-item-content>
-                  <v-list-item-title v-if="conversation.company == ''" v-text="conversation.company"></v-list-item-title>
-                  <v-list-item-title v-else >{{  getConversationName(conversation)  }}</v-list-item-title>
+                  <!-- <v-list-item-title v-if="conversation.displayName == ''" v-text="conversation.displayName"></v-list-item-title> -->
+                  <v-list-item-title >{{  getConversationName(conversation)  }}</v-list-item-title>
 
                   <!-- <v-list-item-subtitle  v-if="conversation.isBid == true"
                     class="text--primary"
@@ -183,7 +183,7 @@ export default {
     ...mapGetters(['noConversation']),
     conversationsList() {
       if (this.$store.state.chat.searchConv != '') {
-        return _.orderBy(this.$store.getters.allConversations.filter((item) => this.$store.state.chat.searchConv.toLowerCase().split(' ').every((v) => item.company.toLowerCase().includes(v))), 'latestMessage', 'desc');
+        return _.orderBy(this.$store.getters.allConversations.filter((item) => this.$store.state.chat.searchConv.toLowerCase().split(' ').every((v) => item.displayName.toLowerCase().includes(v))), 'latestMessage', 'desc');
       } else {
         if (this.$store.getters.conversations) {
           this.$store.commit('setPageLoader', false);
@@ -225,7 +225,7 @@ export default {
       this.getAllConversations({id :id, page: this.page});
     },
     loadMore($state) {
-      this.getAllConversationsLoadMore({id: this.user.id, page: this.page})
+      this.getAllConversationsLoadMore({id: this.user._id, page: this.page})
         .then(( data ) => {
           if (data.length) {
             this.page += 1;
@@ -257,7 +257,7 @@ export default {
         this.$emit('membersData', this.chatData.group.participantDetails);
       }
       const ids = {
-        userId: this.user.id,
+        userId: this.user._id,
         conversationId: this.conversationId,
       };
       this.$emit('ChatDatas', this.chatData);
@@ -269,23 +269,21 @@ export default {
     unarchive(id) {
       const conv = {
         conversationId: id,
-        userId: this.user.id,
+        userId: this.user._id,
       };
       this.unArchiveConversation(conv);
     },
     istoday(date) {
-      return moment(date).calendar();
+      const zone = moment.tz.guess();
+      return moment(date).tz(zone).calendar();
     },
     getConversationName(conversation) {
-      if (conversation.type === 'GROUP') {
-        return conversation.name.split('|||').find((el) => el.trim() !== this.user.company.company);
-      }
-      return conversation.name;
+      return conversation.displayName;
     },
   },
   async created() {
     this.user = this.$store.getters.userInfo;
-    this.archiveConversations(this.user.id);
+    this.archiveConversations(this.user._id);
     const chatArr = this.$store.getters.conversations;
     if (chatArr != null) {
       chatArr.forEach((msg, index) => {
@@ -298,13 +296,13 @@ export default {
     if (convo) {
       if (convo.type == 'PRIVATE') {
         const membr = convo.participantDetails.filter((item) => {
-          if (this.user.id != item.id) {
+          if (this.user._id != item._id) {
             return item;
           }
         });
         var grpName = membr[0].name;
       } else {
-        var grpName = convo.groupName;
+        var grpName = convo.displayName;
       }
       
       await this.openChat(convo, grpName);

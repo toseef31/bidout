@@ -63,7 +63,6 @@
                   <span>More info on Q&A</span>
                 </v-tooltip>
               </label>
-
               <v-radio-group row v-model="qAndAEnabled">
                 <v-radio label="Yes" value="true" checked></v-radio>
                 <v-radio label="No" value="false"></v-radio>
@@ -81,7 +80,7 @@
             <v-col cols="12" sm="12" text="left" v-else>
               <label class="d-block text-left input-label mb-2 font-weight-bold">Additional Information <v-icon
                   color="#F32349" @click="remove(i)">mdi-trash-can-outline</v-icon></label>
-              <v-text-field placeholder="Title" single-line outlined type="text" v-model="bidDescriptions[i]['name']">
+              <v-text-field placeholder="Title" single-line outlined type="text" v-model="bidDescriptions[i]['title']">
               </v-text-field>
               <vue-editor v-model="bidDescriptions[i]['body']" :editor-toolbar="customToolbar" />
             </v-col>
@@ -96,7 +95,7 @@
           <v-row justify="center">
             <v-col cols="12">
               <v-btn color="#0D9648" height="56" class="text-capitalize white--text font-weight-bold save-btn px-9"
-                :loading="saveBidLoading" :disabled="!enableSaveButton" @click="changeTab" large>Save Changes</v-btn>
+                :loading="saveBidLoading" :disabled="!enableSaveButton || saveBidLoading" @click="changeTab" large>Save Changes</v-btn>
             </v-col>
           </v-row>
           <template v-if="route != 'EditTemplate'">
@@ -217,7 +216,7 @@ export default {
     },
     bidType: {
       get() {
-        if (!this.$store.getters.bidData.id) {
+        if (!this.$store.getters.bidData._id) {
           return '';
         }
         return this.$store.getters.bidData.type;
@@ -235,7 +234,7 @@ export default {
 
           return currentDate.format('YYYY-MM-DD');
         }
-        if (!this.$store.getters.bidData.id) {
+        if (!this.$store.getters.bidData._id) {     
           return '';
         }
 
@@ -247,7 +246,7 @@ export default {
     },
     dueTime: {
       get() {
-        if (!this.$store.getters.bidData.id) {
+        if (!this.$store.getters.bidData._id) {
           return '';
         }
         return this.$store.getters.bidData.dueTime;
@@ -258,10 +257,10 @@ export default {
     },
     bidRegions: {
       get() {
-        if (!this.$store.getters.bidData.id) {
+        if (!this.$store.getters.bidData._id) {
           return '';
         }
-        return this.$store.getters.bidData.regions;
+        return this.$store.getters.bidData.region;
       },
       set(value) {
         this.$store.commit('setBidRegions', value);
@@ -280,18 +279,24 @@ export default {
     },
     qAndAEnabled: {
       get() {
-        if (!this.$store.getters.bidData.id) {
+        if (!this.$store.getters.bidData._id) {
           return 'yes';
+        } else {
+          if (this.$store.getters.bidData.qAndAEnabled === true) {
+            return 'true';
+          } else {
+            return 'false';
+          }
         }
-        return this.$store.getters.bidData.qAndAEnabled;
+        // return this.$store.getters.bidData.qAndAEnabled;;
       },
       set(value) {
-        this.$store.commit('setBidEnabled', value);
+        this.$store.commit("setBidEnabled", value);
       },
     },
     serial: {
       get() {
-        if (!this.$store.getters.bidData.id) {
+        if (!this.$store.getters.bidData._id) {
           return '';
         }
         return this.$store.getters.bidData.serial;
@@ -302,7 +307,7 @@ export default {
     },
     statusType: {
       get() {
-        if (!this.$store.getters.bidData.id) {
+        if (!this.$store.getters.bidData._id) {
           return '';
         }
         return this.$store.getters.bidData.statusType;
@@ -345,16 +350,16 @@ export default {
     async changeTab() {
       if (this.$store.getters.bidData != null) {
         const bidDetails = {
-          userId: this.userInfo.id,
+          userId: this.userInfo._id,
           userName: `${this.userInfo.firstName} ${this.userInfo.lastName}`,
-          companyId: this.userInfo.company.id,
-          company: this.userInfo.company.company,
+          companyId: this.userInfo.company._id,
+          company: this.userInfo.company.companyName,
         };
         if (this.$refs.form.validate()) {
           this.valid = true;
           this.loading = true;
           if (this.$route.name === 'EditTemplate') {
-            if (!this.$store.getters.bidData.id) {
+            if (!this.$store.getters.bidData._id) {
               await this.saveTemplateBid(bidDetails);
             } else {
               await this.updateTemplate(bidDetails);
@@ -364,13 +369,14 @@ export default {
               if (this.isEditBidChanges === true) {
                 await this.updateBid(bidDetails);
               }
-            }
-            if (!this.$store.getters.bidData.id) {
+            } else {
+              if (!this.$store.getters.bidData._id) {
               await this.saveDraftBid(bidDetails);
-            } else if (this.$store.getters.bidData.id && this.$store.getters.bidData.statusType === 'templateBid') {
+            } else if (this.$store.getters.bidData._id && this.$store.getters.bidData.statusType === 'templateBid') {
               await this.saveDraftBid(bidDetails);
             } else {
               await this.updateDraftBid(bidDetails);
+            }           
             }
           }
 
@@ -378,10 +384,10 @@ export default {
         }
       } else {
         const bidDetails = {
-          userId: this.userInfo.id,
+          userId: this.userInfo._id,
           userName: `${this.userInfo.firstName} ${this.userInfo.lastName}`,
-          companyId: this.userInfo.company.id,
-          company: this.userInfo.company.company,
+          companyId: this.userInfo.company?._id,
+          company: this.userInfo.company.companyName,
         };
         if (this.$route.name === 'EditTemplate') {
           await this.saveTemplateBid(bidDetails);
@@ -393,19 +399,19 @@ export default {
     async savedraft() {
       if (this.$store.getters.bidData != null) {
         const bidDetails = {
-          userId: this.userInfo.id,
+          userId: this.userInfo._id,
           userName: `${this.userInfo.firstName} ${this.userInfo.lastName}`,
-          companyId: this.userInfo.company.id,
-          company: this.userInfo.company.company,
+          companyId: this.userInfo.company?._id,
+          company: this.userInfo.company.companyName,
         };
-        if (this.$store.getters.bidData.id && this.$store.getters.bidData.statusType === 'templateBid') {
+        if (this.$store.getters.bidData._id && this.$store.getters.bidData.statusType === 'templateBid') {
           await this.saveDraftBid(bidDetails);
         }
         if (this.$refs.form.validate()) {
           if (this.$route.name === 'EditTemplate') {
-            if (!this.$store.getters.bidData.id) {
+            if (!this.$store.getters.bidData._id) {
               await this.saveTemplateBid(bidDetails);
-            } else if (this.$store.getters.bidData.id && this.$store.getters.bidData.statusType === 'templateBid') {
+            } else if (this.$store.getters.bidData._id && this.$store.getters.bidData.statusType === 'templateBid') {
               await this.saveTemplateBid(bidDetails);
             } else {
               await this.updateTemplate(bidDetails);
@@ -415,22 +421,23 @@ export default {
               if (this.isEditBidChanges === true) {
                 await this.updateBid(bidDetails);
               }
-            }
-            if (!this.$store.getters.bidData.id) {
+            } else {
+              if (!this.$store.getters.bidData._id) {
               await this.saveDraftBid(bidDetails);
-            } else if (this.$store.getters.bidData.id && this.$store.getters.bidData.statusType === 'templateBid') {
+            } else if (this.$store.getters.bidData._id && this.$store.getters.bidData.statusType === 'templateBid') {
               await this.saveDraftBid(bidDetails);
             } else {
               await this.updateDraftBid(bidDetails);
+            }
             }
           }
         }
       } else {
         const bidDetails = {
-          userId: this.userInfo.id,
+          userId: this.userInfo._id,
           userName: `${this.userInfo.firstName} ${this.userInfo.lastName}`,
-          companyId: this.userInfo.company.id,
-          company: this.userInfo.company.company,
+          companyId: this.userInfo.company._id,
+          company: this.userInfo.company.companyName,
         };
         if (this.$route.name === 'EditTemplate') {
           await this.saveTemplateBid(bidDetails);
@@ -462,7 +469,7 @@ export default {
       });
     },
     deleteDraft() {
-      this.deleteDraftBid({ draftId: this.$store.getters.bidData.id });
+      this.deleteDraftBid({ draftId: this.$store.getters.bidData._id });
     },
     validateDesc() {
       this.validDesc = this.bidDescriptions[0].body.length > 0;
@@ -474,11 +481,11 @@ export default {
       this.$router.push('/view-bids');
     }
 
-    if (this.$route.name === 'EditBid') {
+    if (this.$route.name === 'EditBid' && this.$store.getters.bidData && this.$store.getters.bidData._id) {
       await this.getAllIntent({
-        bidId: this.$store.getters.bidData.id,
-        reload: false,
-      });
+      bidId: this.$store.getters.bidData._id,
+      reload: false,
+    });
     }
 
     if (this.$store.getters.entryCheckForEditBid) {
@@ -490,15 +497,25 @@ export default {
     this.$store.commit('setBidlines', this.$store.getters.bidData.lineItems);
     this.$store.commit('setLineItemsComplete', false);
     if (this.$route.name === 'EditBid') {
+      this.$store.commit('setAttachData', null);
+      this.$store.commit('setAttachement', null);
       this.$store.commit('setAttachement', this.$store.getters.bidData.attachments);
     } else if (this.$store.getters.bidData.statusType === 'draftBid') {
       this.$store.commit('setAttachData', null);
       this.$store.commit('setAttachement', null);
       this.$store.commit('setAttachement', this.$store.getters.bidData.attachments);
-    } else if (this.$store.getters.bidData.statusType === 'templateBid') {
-      this.$store.commit('setAttachement', this.$store.getters.bidData.attachment);
+    } else if (this.$store.getters.bidData.statusType === 'templateBid') {  
+      this.$store.commit('setAttachData', null);
+      this.$store.commit('setAttachement', null);
+      this.$store.commit('setAttachement', this.$store.getters.bidData.attachments);
+    } else if (this.$store.getters.bidData.statusType === 'template') {  
+      this.$store.commit('setAttachData', null);
+      this.$store.commit('setAttachement', null);
+      this.$store.commit('setAttachement', this.$store.getters.bidData.attachments); 
     } else {
-      this.$store.commit('setAttachement', this.$store.getters.bidData.attachment);
+      this.$store.commit('setAttachData', null);
+      this.$store.commit('setAttachement', null);
+      this.$store.commit('setAttachement', this.$store.getters.bidData.attachments);
     }
     this.$store.commit('setQuestions', this.$store.getters.bidData.questions);
     if (this.bidDescriptions[0].body.trim() === '') {
@@ -512,5 +529,8 @@ export default {
     }
     this.savedraftOnInterval();
   },
+  destroyed() {
+    this.$store.commit('setEntryCheckForEditBid',false)
+  }
 };
 </script>

@@ -15,6 +15,7 @@
           multiple
           v-else
         >
+        
           <template v-if="activities.length == 0 || !activities">
             <h4 class="text-center py-3">
               No activity
@@ -110,11 +111,13 @@ export default {
       if (this.$store.getters.activities) {
         // eslint-disable-next-line array-callback-return
         this.$store.getters.activities.map((item, index) => {
-          const timestamp = item.createdOn._seconds * 1000 + item.createdOn._nanoseconds / 1000000;
-          item.newDate = moment(timestamp).format('MM/DD/YYYY hh:mm A');
+          const timestamp = moment(item.createdAt);
+          item.newDate = timestamp.format('MM/DD/YYYY hh:mm A');
         });
         // eslint-disable-next-line vue/no-side-effects-in-computed-properties
-        const sorted = this.$store.getters.activities.sort((a, b) => (moment(b.newDate, 'MM/DD/YYYY hh:mm A').isBefore(moment(a.newDate, 'MM/DD/YYYY hh:mm A')) ? -1 : 1));
+        const sorted = this.$store.getters.activities.sort((a, b) =>
+          moment(b.newDate, 'MM/DD/YYYY hh:mm A').isBefore(moment(a.newDate, 'MM/DD/YYYY hh:mm A')) ? -1 : 1
+        );
         return sorted.splice(0, 40);
       } else {
         return [];
@@ -131,7 +134,7 @@ export default {
     ...mapActions(['getActivities']),
   },
   async created() {
-    await this.getActivities(this.$store.getters.userInfo.id);
+    await this.getActivities(this.$store.getters.userInfo._id);
   },
   updated() {
   },

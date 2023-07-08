@@ -99,20 +99,20 @@ export default {
       chatNotificationAll: false,
       notificationPreference: {
         bidResponses: {
-          email: true,
-          sms: '',
+          email: this.$store.getters.userInfo.notificationPreferences.bidResponses.email,
+          sms: this.$store.getters.userInfo.notificationPreferences.bidResponses.sms,
         },
         questionAndAnswers: {
-          email: true,
-          sms: '',
+          email: this.$store.getters.userInfo.notificationPreferences.questionAndAnswers.email,
+          sms: this.$store.getters.userInfo.notificationPreferences.questionAndAnswers.sms,
         },
         bidCompletionEmails: {
-          email: true,
-          sms: '',
+          email: this.$store.getters.userInfo.notificationPreferences.bidCompletionEmails.email,
+          sms: this.$store.getters.userInfo.notificationPreferences.bidCompletionEmails.sms,
         },
         chatNotification: {
-          email: true,
-          sms: '',
+          email: this.$store.getters.userInfo.notificationPreferences.chatNotification.email,
+          sms: this.$store.getters.userInfo.notificationPreferences.chatNotification.sms,
         },
       },
     };
@@ -168,7 +168,7 @@ export default {
     ...mapActions(['updateNotifications']),
     updateNoti() {
       const data = {
-        userid: this.$store.getters.userInfo.id,
+        userid: this.$store.getters.userInfo._id,
         email: this.$store.getters.userInfo.email,
         notificationPreference: this.notificationPreference,
       };
@@ -177,26 +177,26 @@ export default {
     },
   },
   mounted() {
-    if (this.$store.getters.userInfo.notificationPreference) {
-      this.notificationPreference.bidResponses.email = this.$store.getters.userInfo.notificationPreference.bidResponses.email;
-      this.notificationPreference.bidResponses.sms = this.$store.getters.userInfo.notificationPreference.bidResponses.sms;
-      if (this.$store.getters.userInfo.notificationPreference.bidResponses.email == true && this.$store.getters.userInfo.notificationPreference.bidResponses.sms == true) {
+    if (this.$store.getters.userInfo.notificationPreferences) {
+      this.notificationPreferences.bidResponses.email = this.$store.getters.userInfo.notificationPreferences.bidResponses.email;
+      this.notificationPreferences.bidResponses.sms = this.$store.getters.userInfo.notificationPreferences.bidResponses.sms;
+      if (this.$store.getters.userInfo.notificationPreferences.bidResponses.email == true && this.$store.getters.userInfo.notificationPreferences.bidResponses.sms == true) {
         this.responseAll = true;
       }
-      this.notificationPreference.questionAndAnswers.email = this.$store.getters.userInfo.notificationPreference.questionAndAnswers.email;
-      this.notificationPreference.questionAndAnswers.sms = this.$store.getters.userInfo.notificationPreference.questionAndAnswers.sms;
-      if (this.$store.getters.userInfo.notificationPreference.questionAndAnswers.email == true && this.$store.getters.userInfo.notificationPreference.questionAndAnswers.sms == true) {
+      this.notificationPreferences.questionAndAnswers.email = this.$store.getters.userInfo.notificationPreferences.questionAndAnswers.email;
+      this.notificationPreferences.questionAndAnswers.sms = this.$store.getters.userInfo.notificationPreferences.questionAndAnswers.sms;
+      if (this.$store.getters.userInfo.notificationPreferences.questionAndAnswers.email == true && this.$store.getters.userInfo.notificationPreferences.questionAndAnswers.sms == true) {
         this.questionAndAnswersAll = true;
       }
-      this.notificationPreference.bidCompletionEmails.email = this.$store.getters.userInfo.notificationPreference.bidCompletionEmails.email;
-      this.notificationPreference.bidCompletionEmails.sms = this.$store.getters.userInfo.notificationPreference.bidCompletionEmails.sms;
-      if (this.$store.getters.userInfo.notificationPreference.bidCompletionEmails.email == true && this.$store.getters.userInfo.notificationPreference.bidCompletionEmails.sms == true) {
+      this.notificationPreferences.bidCompletionEmails.email = this.$store.getters.userInfo.notificationPreferences.bidCompletionEmails.email;
+      this.notificationPreferences.bidCompletionEmails.sms = this.$store.getters.userInfo.notificationPreferences.bidCompletionEmails.sms;
+      if (this.$store.getters.userInfo.notificationPreferences.bidCompletionEmails.email == true && this.$store.getters.userInfo.notificationPreferences.bidCompletionEmails.sms == true) {
         this.bidCompletionEmailsAll = true;
       }
 
-      this.notificationPreference.chatNotification.email = this.$store.getters.userInfo.notificationPreference.chatNotification.email;
-      this.notificationPreference.chatNotification.sms = this.$store.getters.userInfo.notificationPreference.chatNotification.sms;
-      if (this.$store.getters.userInfo.notificationPreference.chatNotification.email == true && this.$store.getters.userInfo.notificationPreference.chatNotification.sms == true) {
+      this.notificationPreferences.chatNotification.email = this.$store.getters.userInfo.notificationPreferences.chatNotification.email;
+      this.notificationPreferences.chatNotification.sms = this.$store.getters.userInfo.notificationPreferences.chatNotification.sms;
+      if (this.$store.getters.userInfo.notificationPreferences.chatNotification.email == true && this.$store.getters.userInfo.notificationPreferences.chatNotification.sms == true) {
         this.chatNotificationAll = true;
       }
     }

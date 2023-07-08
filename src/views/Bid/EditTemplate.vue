@@ -144,6 +144,7 @@ import TemplateBidLines from '../../components/BidTabs/BidLines.vue';
 import TemplateAttachment from '../../components/BidTabs/Attachment.vue';
 import TemplateEditBidDetails from '../../components/BidTabs/BidDetails.vue';
 import TemplateQuestionSection2 from '../../components/BidTabs/QuestionSection2.vue';
+import * as Sentry from '@sentry/vue';
 
 export default {
   name: 'EditTemplate',
@@ -253,6 +254,7 @@ export default {
         this.$router.push('/manage-templates');
         this.templateLoading = false;
       } catch (error) {
+        Sentry.captureException(error);
         console.log(error);
         this.templateLoading = false;
       }

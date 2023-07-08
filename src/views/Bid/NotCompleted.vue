@@ -149,6 +149,7 @@ import BidLines from '../../components/BidTabs/BidLines.vue';
 import Attachment from '../../components/BidTabs/Attachment.vue';
 import BidDetails from '../../components/BidTabs/BidDetails.vue';
 import QuestionSection2 from '../../components/BidTabs/QuestionSection2.vue';
+import * as Sentry from '@sentry/vue';
 
 export default {
   name: 'NotCompleted',
@@ -257,11 +258,11 @@ export default {
       this.publishLoading = true;
       try {
         const serial = await this.$store.dispatch('publishBid');
-        
-        this.$router.push(`/view-bids/${serial}?new=true`);
+        this.$router.push(`/view-bids/${this.$store.getters.bidData.lastSerial}?new=true`);
         this.$store.commit('setDraftBidsList', null);
         this.publishLoading = false;
       } catch (error) {
+        Sentry.captureException(error);
         console.log(error);
         this.publishLoading = false;
       }

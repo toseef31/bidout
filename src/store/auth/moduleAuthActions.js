@@ -4,6 +4,8 @@ import "firebase/compat/firestore";
 // eslint-disable-next-line import/no-cycle
 import router from "@/router";
 import axios from "axios";
+import { error } from "logrocket";
+
 
 let isNavigating = false;
 
@@ -18,13 +20,12 @@ function navigate(route) {
 }
 
 export default {
-  signInAction({ commit }, payload) {
+  signInAction({ commit, dispatch, state }, payload) {
     // Try to sigin
     commit("setLoginLoading", true);
     firebase
       .auth()
       .signInWithEmailAndPassword(payload.email, payload.password)
-
       .then((result) => {
         commit("setForgetEmail", null);
         commit("setError", null);
@@ -33,8 +34,13 @@ export default {
           "token",
           JSON.stringify(result.user.multiFactor.user.accessToken)
         );
+        const config = {
+          headers: {
+            Authorization: `Bearer ${result.user.multiFactor.user.accessToken}`,
+          },
+        };
         axios
-          .get(`/user/getUserData/${result.user.multiFactor.user.email}`)
+          .get(`/v2/user/getUserData/${result.user.multiFactor.user.email}`, config)
           .then(
             (responce) => {
               if (responce.data.status === false) {
@@ -46,13 +52,15 @@ export default {
                 commit("setLoginLoading", false);
               } else {
                 axios
-                  .get(`/auth/addUserLoginHistory/${responce.data.id}`)
+                  .get(`/v2/auth/addUserLoginHistory/${responce.data._id}`)
                   .then((response) => {});
-                axios
-                  .get(`company/getCompanyById/${responce.data.company.id}`)
-                  .then((response) => {
-                    commit("setCompany", response.data);
-                  });
+                  if (responce.data.company) {
+                    axios
+                      .get(`v2/company/getCompanyById/${responce.data.company?._id}`)
+                      .then((response) => {
+                        commit("setCompany", response.data);
+                      }); 
+                  }
                 commit("setUser", responce.data);
                 commit("setLoginLoading", false);
                 window.location.href = "/dashboard";
@@ -60,10 +68,25 @@ export default {
             },
             (error) => {
               if (error.response.status === 404) {
-                commit("setError", error.response.data);
+                commit("setError", error.response.data.message);
+              }
+              if (error.response.status === 403) {
+                commit("setError", "User not found");
+                commit("setUser", null);
+                commit("setToken", null);
+                commit("setCompany", null);
+        
+                localStorage.removeItem("userData");
+        
+                localStorage.removeItem("token");
+                localStorage.removeItem("companyData");
+                localStorage.removeItem("companyId");
               }
               if (error.response.status === 401) {
                 commit("setError", "Please try again after few moments.");
+                setTimeout(() => {
+                  dispatch('apiSignOutAction');
+                }, 5000);
               }
               commit("setLoginLoading", false);
             }
@@ -87,16 +110,30 @@ export default {
         // commit('showErrorAlert')
       });
   },
-  getCurrentUser({ commit, dispatch }) {
+  getCurrentUser({ commit, dispatch, state }) {
     commit("setIsUserData", true);
     return new Promise((resolve, reject) => {
       firebase.auth().onAuthStateChanged((users) => {
         if (users) {
+          localStorage.setItem(
+            "token",
+            JSON.stringify(users.multiFactor.user.accessToken)
+          );
+          const config = {
+            headers: {
+              Authorization: `Bearer ${users.multiFactor.user.accessToken}`,
+            },
+          };
           axios
-            .get(`/user/getUserData/${users.multiFactor.user.email}`)
+            .get(`/v2/user/getUserData/${users.multiFactor.user.email}`, config)
             .then((responce) => {
               commit("setUser", responce.data);
               resolve(responce.data);
+            }, (error) => {
+              console.log('errors', error);
+              if (error.response && error.response.status === 401) {
+                dispatch('apiSignOutAction');
+              } reject(error);
             });
         } else {
           dispatch("signOutAction");
@@ -151,12 +188,13 @@ export default {
       })
       .catch((error) => {
         commit("setError", error.message);
+
       });
   },
 
   forgotEmail({ commit }, payload) {
     // Try to sendForgot email
-    axios.post("/auth/sendPasswordResetEmail", { email: payload.email }).then(
+    axios.post("/v2/auth/sendPasswordResetEmail", { email: payload.email }).then(
       () => {
         // if(responce.status == 200){
         commit(
@@ -176,7 +214,7 @@ export default {
   },
   verifyToken({ commit }, payload) {
     axios
-      .get(`/auth/verifyPasswordResetToken/${payload}`)
+      .get(`/v2/auth/verifyPasswordResetToken/${payload}`)
       .then((responce) => {
         commit("setVerifyData", responce.data);
       })
@@ -186,7 +224,7 @@ export default {
   },
   resetPassword({ commit }, payload) {
     axios
-      .post("/auth/updatePassword", {
+      .post("/v2/auth/updatePassword", {
         email: payload.email,
         oobCode: payload.oobCode,
         password: payload.password,
@@ -209,7 +247,7 @@ export default {
   async checkEmail({ commit }, payload) {
     if (payload.indexOf("@") !== -1) {
       try {
-        const res = await axios.post("/user/checkIfUserWithEmailExists", {
+        const res = await axios.post("/v2/user/checkIfUserWithEmailExists", {
           email: payload,
         });
 
@@ -237,7 +275,7 @@ export default {
 
       delete payload.companyName;
 
-      const res = await axios.post("/ofs/supplierSignup", {
+      const res = await axios.post("/v2/ofs/supplierSignup", {
         ...payload,
       });
 
@@ -259,7 +297,7 @@ export default {
 
   async searchSupplier({ commit }, payload) {
     try {
-      const res = await axios.get(`/ofs/searchSuppliers/${payload}`);
+      const res = await axios.get(`/v2/ofs/searchSuppliers/${payload}`);
 
       if (res.status === 200) {
         commit("setSupplierList", res.data);
@@ -271,7 +309,7 @@ export default {
 
   async queueSupplierUser({ commit }, payload) {
     try {
-      const res = await axios.post("/ofs/queueSupplierUser", {
+      const res = await axios.post("/v2/ofs/queueSupplierUser", {
         id: payload.id,
         firstName: payload.firstName,
         lastName: payload.lastName,
@@ -298,11 +336,11 @@ export default {
   // Buyer SignUp Acton
   async buyerSignUpAction({ commit }, payload) {
     try {
-      const res = await axios.post("/ofs/pendingBuyerRegistration", {
+      const res = await axios.post("/v2/ofs/pendingBuyerRegistration", {
         firstName: payload.firstName,
         lastName: payload.lastName,
         companyName: payload.company,
-        emailAddress: payload.email,
+        email: payload.email,
         phoneNumber: payload.phoneNumber,
       });
 
@@ -346,7 +384,7 @@ export default {
 
   async contractGenerate({ commit }, payload) {
     try {
-      const res = await axios.post("/ofs/generateSupplierContract", {
+      const res = await axios.post("/v2/ofs/generateSupplierContract", {
         ...payload,
       });
 
@@ -363,8 +401,7 @@ export default {
   },
   async signAgreement({ commit }, payload) {
     try {
-      const res = await axios.post("/ofs/signSupplierContract", { ...payload });
-
+      const res = await axios.post("/v2/ofs/signSupplierContract", { ...payload });
       if (res.status === 200) {
         commit("setGoToAgreement", null);
         commit("setSupplierSignUpSuccess", true);
@@ -385,9 +422,14 @@ export default {
           "token",
           JSON.stringify(result.user.multiFactor.user.accessToken)
         );
+        const config = {
+          headers: {
+            Authorization: `Bearer ${result.user.multiFactor.user.accessToken}`,
+          },
+        };
         const userResp = await axios.get(
-          `/user/getUserData/${result.user.multiFactor.user.email}`
-        );
+          `/v2/user/getUserData/${result.user.multiFactor.user.email}`
+          , config);
         if (userResp.data.status === false) {
           commit(
             "setError",
@@ -395,10 +437,9 @@ export default {
           );
           commit("showErrorAlert");
         } else {
-          axios.get(`/auth/addUserLoginHistory/${userResp.data.id}`);
           const companyResp = await axios.get(
-            `company/getCompanyById/${userResp.data.company.id}`
-          );
+            `v2/company/getCompanyById/${userResp.data.company?._id}`
+          , config);
           commit("setCompany", companyResp.data);
           localStorage.setItem("companyData", JSON.stringify(companyResp.data));
           commit("setUser", userResp.data);
@@ -409,6 +450,7 @@ export default {
         }
         resolve(result);
       } catch (err) {
+        Sentry.captureException(err);
         console.log(err);
         reject(err);
       }
@@ -416,7 +458,7 @@ export default {
   },
   async getInvitedSupplierByToken({ commit }, payload) {
     try {
-      const res = await axios.get(`/bid/getInvitedSupplierByToken/${payload}`);
+      const res = await axios.get(`v2/bid/getInvitedSupplierByToken/${payload}`);
 
       if (res.status === 200) {
         commit("setTokenInvitedSupplier", res.data);
@@ -426,7 +468,7 @@ export default {
       if (
         err.response &&
         err.response.status === 404 &&
-        err.response.data === "Supplier not found"
+        err.response.data.message === "Invalid token"
       ) {
         commit("setTokenInvitedSupplierError", true);
       }

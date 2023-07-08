@@ -2,12 +2,11 @@
   <div>
     <v-row class="supplier-row fill-height" no-gutters>
       <v-col sm="2" v-if="categories" class="category-col">
-        {{ itemBidId }}
         <v-list class="pt-0">
-          <v-list-group v-for="category in allcategories" :key="category.name" active-class="black--text">
+          <v-list-group v-for="category in sortedCategories" :key="category.category._id" active-class="black--text">
             <template v-slot:activator>
               <v-list-item-content>
-                <v-list-item-title v-text="category.name" class="text-left"></v-list-item-title>
+                <v-list-item-title v-text="category.category.name" class="text-left"></v-list-item-title>
               </v-list-item-content>
             </template>
 
@@ -32,7 +31,7 @@
               <v-tab class="text-capitalize font-weight-bold" href="#salesRep" @click="hideCategories">Sales
                 Rep</v-tab>
               <v-tab class="text-capitalize font-weight-bold" href="#serviceCategory"
-                @click="categories = !categories">Service Category</v-tab>
+                @click="hideCategories('name'); categories = !categories">Service Category</v-tab>
             </v-tabs>
           </div>
         </div>
@@ -40,7 +39,7 @@
           <v-tab-item value="companyName">
             <div class="available-search d-flex justify-space-between align-center mt-5 px-4">
               <div>
-                <input type="hidden" name="" :value="validat">
+                <input type="hidden" name="" :value="validateT">
                 <v-text-field type="text" hide-details outlined placeholder="Search" prepend-inner-icon="mdi-magnify"
                   v-model="companySearch" @keyup="getCompanies">
                 </v-text-field>
@@ -51,9 +50,9 @@
                   width="150px" v-model="companyBasin" min-height="28px" @change="getCompanies"></v-select>
               </div>
             </div>
-            <div class="companies-list">
+            <div class="companies-list" v-if="!getCompanyLoading">
               <div class="d-flex align-center justify-space-between list-company pa-4"
-                v-for="(company, index) in companiesList" v-if="user.company.id != company.objectID">
+                v-for="(company, index) in companiesList" v-if="user.company._id !== company._id" :key="index">
                 <div class="comapny-data d-flex align-center">
                   <div class="company-img">
                     <img v-if="company.image" class="image-class" :src="company.image" />
@@ -62,7 +61,7 @@
                     </div>
                   </div>
                   <div class="company-title text-left pl-4">
-                    <h4>{{ company.company }}
+                    <h4>{{ company ? company.companyName : '' }}
                       <span v-if="hasOfsPremium(company)">
                         <v-tooltip top>
                           <template v-slot:activator="{ on, attrs }">
@@ -78,9 +77,13 @@
                 </div>
                 <div class="add-company">
                   <v-btn color="rgba(13, 150, 72, 0.1)" tile min-width="32px" height="32" class="pa-0" elevation="0"
-                    @click="addCompany(company, index)"> <v-icon color="#0D9648">mdi-plus</v-icon></v-btn>
+                    @click="addCompany(company)"> <v-icon color="#0D9648">mdi-plus</v-icon></v-btn>
                 </div>
               </div>
+            </div>
+            <div v-else class="mt-16" align="center" justify="center">
+              <v-progress-circular :width="3" color="green" indeterminate></v-progress-circular>
+
             </div>
           </v-tab-item>
           <v-tab-item value="salesRep">
@@ -96,18 +99,20 @@
                   width="150px" v-model="basinFilter" @change="getSales"></v-select>
               </div>
             </div>
-            <div class="companies-list">
+            <div class="companies-list" v-if="!getSalesRepLoading">
               <div class="d-flex align-center justify-space-between list-company pa-4"
-                v-for="(list, index) in salesRepsList" v-if="user.id != list.objectID">
+                v-for="(list, index) in salesRepsList" v-if="user._id !== list._id" :key="index">
                 <div class="comapny-data d-flex align-center">
+
                   <div class="company-img">
-                    <img v-if="!list.image" :src="require('@/assets/images/chat/chatUser.png')">
-                    <img v-else :src="list.image" width="48px" height="48px">
+                    <img v-if="list.image" :src="list.image" width="48px" height="48px">
+                    <img v-else :src="require('@/assets/images/chat/chatUser.png')">
+
                   </div>
                   <div class="company-title text-left pl-4">
                     <h4>{{ list.firstName }} {{ list.lastName }}</h4>
-                    <p class="mb-0">{{ list.company }}
-                      <span v-if="hasOfsPremiumReps(list)">
+                    <p class="mb-0">{{ list.company ? list.company.companyName : '' }}
+                      <span v-if="hasOfsPremium(list.company)">
                         <v-tooltip top>
                           <template v-slot:activator="{ on, attrs }">
                             <v-icon color="#0D9647" size="14px" v-bind="attrs" v-on="on">mdi-check-decagram</v-icon>
@@ -124,6 +129,10 @@
                 </div>
               </div>
             </div>
+            <div v-else class="mt-16" align="center" justify="center">
+              <v-progress-circular :width="3" color="green" indeterminate></v-progress-circular>
+
+            </div>
           </v-tab-item>
           <v-tab-item value="serviceCategory">
             <div class="available-search d-flex justify-space-between align-center mt-5 px-4">
@@ -132,7 +141,7 @@
             <div class="companies-list">
               <div>
                 <div class="d-flex align-center justify-space-between list-company pa-4"
-                  v-for="(company, index) in companiesList" v-if="user.company.id != company.id">
+                  v-for="(company, index) in companiesList" v-if="user.company._id !== company._id" :key="index">
                   <div class="comapny-data d-flex align-center">
                     <div class="company-img">
                       <img v-if="company.image" class="image-class" :src="company.image" />
@@ -142,7 +151,7 @@
                       </div>
                     </div>
                     <div class="company-title text-left pl-4">
-                      <h4>{{ company.company }}
+                      <h4>{{ company ? company.companyName : '' }}
                         <span v-if="hasOfsPremium(company)">
                           <v-tooltip top>
                             <template v-slot:activator="{ on, attrs }">
@@ -158,7 +167,7 @@
                   </div>
                   <div class="add-company">
                     <v-btn color="rgba(13, 150, 72, 0.1)" tile min-width="32px" height="32" class="pa-0" elevation="0"
-                      @click="addServiceCompany(company, index)"> <v-icon color="#0D9648">mdi-plus</v-icon></v-btn>
+                      @click="addServiceCompany(company)"> <v-icon color="#0D9648">mdi-plus</v-icon></v-btn>
                   </div>
                 </div>
               </div>
@@ -177,7 +186,8 @@
           <div class="companies-list">
 
             <template v-for="(company, index) in repsInvited">
-              <div class="d-flex align-center justify-space-between list-company pa-4" v-if="!company.companyId">
+              <div class="d-flex align-center justify-space-between list-company pa-4"
+                v-if="company ? company.companyName : ''">
                 <div class="comapny-data d-flex align-center">
                   <div class="company-img">
                     <img v-if="company.image" class="image-class" :src="company.image" />
@@ -187,7 +197,7 @@
                     </div>
                   </div>
                   <div class="company-title text-left pl-4">
-                    <h4>{{ company.company }}
+                    <h4>{{ company ? company.companyName : '' }}
                       <span v-if="hasOfsPremium(company)">
                         <v-tooltip top>
                           <template v-slot:activator="{ on, attrs }">
@@ -201,12 +211,13 @@
                       Profile</router-link>
                   </div>
                 </div>
-                <div class="add-company" v-if="checkIntent(company.objectID) !== 'intended'">
+                <div class="add-company" v-if="checkIntent(company._id) !== 'intended'">
                   <v-btn color="rgba(243, 35, 73, 0.1)" tile min-width="32px" height="32" class="pa-0" elevation="0"
                     @click="removeCompany(company, index)"> <v-icon color="#F32349">mdi-minus</v-icon></v-btn>
                 </div>
               </div>
-              <div class="d-flex align-center justify-space-between list-company pa-4" v-if="company.companyId">
+              <div class="d-flex align-center justify-space-between list-company pa-4"
+                v-if="!company ? company.companyName : ''">
                 <div class="comapny-data d-flex align-center">
                   <div class="company-img">
                     <div class="avatar-image" v-if="!company.image">
@@ -218,8 +229,8 @@
                   </div>
                   <div class="company-title text-left pl-4">
                     <h4>{{ company.firstName }} {{ company.lastName }}</h4>
-                    <p class="mb-0">{{ company.company }}
-                      <span v-if="hasOfsPremiumReps(company)">
+                    <p class="mb-0">{{ company.company ? company.companyName : '' }}
+                      <span v-if="hasOfsPremium(company.company)">
                         <v-tooltip top>
                           <template v-slot:activator="{ on, attrs }">
                             <v-icon color="#0D9647" size="14px" v-bind="attrs" v-on="on">mdi-check-decagram</v-icon>
@@ -230,19 +241,18 @@
                     </p>
                   </div>
                 </div>
-                <div class="add-company" v-if="checkIntent(company.objectID) !== 'intended'">
+                <div class="add-company" v-if="checkIntent(company._id) !== 'intended'">
                   <v-btn color="rgba(243, 35, 73, 0.1)" tile min-width="32px" height="32" class="pa-0" elevation="0"
                     @click="removeReps(company, index)"> <v-icon color="#F32349">mdi-minus</v-icon></v-btn>
                 </div>
               </div>
             </template>
-            <template v-for="(company, index) in newRepsInvited">
+            <template v-for="(company) in newRepsInvited">
               <div class="d-flex align-center justify-space-between list-company pa-4">
                 <div class="comapny-data d-flex align-center">
                   <div class="company-img">
-                    <img v-if="company.image" class="image-class" :src="company.image" />
 
-                    <div v-else class="icon-class">
+                    <div class="icon-class">
                       <v-icon size="40">mdi-domain</v-icon>
                     </div>
                   </div>
@@ -252,9 +262,9 @@
 
                   </div>
                 </div>
-                <div class="add-company" v-if="checkIntent(company.objectID) !== 'intended'">
+                <div class="add-company">
                   <v-btn color="rgba(243, 35, 73, 0.1)" tile min-width="32px" height="32" class="pa-0" elevation="0"
-                    @click="removeNewSup(company, index)"> <v-icon color="#F32349">mdi-minus</v-icon></v-btn>
+                    @click=" removeNewSup(company)"> <v-icon color="#F32349">mdi-minus</v-icon></v-btn>
                 </div>
               </div>
             </template>
@@ -322,7 +332,8 @@
                   Supplier is pending registration and cannot be invited at this time.
                 </div>
 
-                <v-btn :loading="loadingInvite" :disabled="!valid || !getPhoneInfo.valid || getEmailLoading || emailError"
+                <v-btn :loading="loadingInvite"
+                  :disabled="!valid || !getPhoneInfo.valid || getEmailLoading || emailError || loadingInvite"
                   color="#0D9648" class="mr-4 text-capitalize white--text font-weight-bold" @click="validate" large
                   height="50px" min-width="220px">
                   Send Invite
@@ -331,8 +342,9 @@
             </v-card-text>
           </v-card>
         </v-dialog>
-        <v-btn color="#0D9648" elevation="0" height="56px" width="220px" large
-          class="white--text text-capitalize font-weight-bold mt-5 mb-5 save-btn" @click="changeTab">Save
+        <v-btn color="#0D9648" elevation="0" height="56px" width="220px" large :loading="saveBidLoading"
+          :disabled="saveBidLoading" class="white--text text-capitalize font-weight-bold mt-5 mb-5 save-btn"
+          @click="changeTab">Save
           Changes</v-btn>
       </v-col>
     </v-row>
@@ -366,7 +378,10 @@ export default {
       email: '',
       emailRules: [
         (v) => !!v || 'E-mail is required',
-        (v) => /^[\w-\.+]+@([\w-]+\.)+[\w-]{1,63}$/.test(v) || 'E-mail must be valid',
+        (v) => {
+          v = v && v.replace(/\s+/g, '');
+          return /^[\w.+-]+@(?!.*_{1})[A-Za-z0-9-]+(\.[A-Za-z0-9-]+)*\.[A-Za-z]{1,63}$/.test(v) || 'E-mail must be valid';
+        },
       ],
       phoneNumber: '',
       results: {},
@@ -397,109 +412,74 @@ export default {
       },
       supplierLoading: false,
       emailLoading: false,
+      companyLoading: false,
+      salesRepLoading: false,
     };
   },
   computed: {
-    ...mapGetters(['newSupplier', 'userInfo', 'loadingInvite', 'isEditBidChanges']),
-    allcategories() {
-      setTimeout(() => this.loading = false, 500);
-      return _.orderBy(this.$store.getters.categories, 'orderNumber', 'asc');
+    ...mapGetters(['newSupplier', 'userInfo', 'loadingInvite', 'isEditBidChanges', 'saveBidLoading']),
+    sortedCategories() {
+      const categories = [...this.$store.getters.categories];
+      categories.sort((a, b) => a.category.orderNumber - b.category.orderNumber);
+      return categories;
     },
     getPhoneInfo() {
       return this.phoneInfo;
     },
     salesRepsList() {
-      const unique = this.$store.getters.salesRepsList ? this.$store.getters.salesRepsList.filter((el) => !this.repsInvited.find((item) => {
-        if (item.id) return el.companyId === item.id;
-        if (item.companyId) return el.companyId === item.companyId;
-        return el.companyId === item.objectID;
-      }) && el.company !== this.userInfo.company.company) : [];
+      const unique = this.$store.getters.salesRepsList ? this.$store.getters.salesRepsList.filter((el) => !this.repsInvited.find((item) => el._id === item._id) && el._id !== this.userInfo.company._id) : [];
 
-      return [...new Map(unique.map((item) => [item.companyId, item])).values()];
+      return [...new Map(unique.map((item) => [item._id, item])).values()];
     },
 
-    itemBidId() {
-      return this.$store.getters.itemBidData;
-    },
     companiesList() {
-      let idType = '';
       let unique;
 
       if (this.$store.getters.companiesList && this.$store.getters.companiesList.length) {
         if (this.repsInvited.length) {
-          unique = this.$store.getters.companiesList ? this.$store.getters.companiesList.filter((el) => !this.repsInvited.find((item) => {
-            if (el.objectID) {
-              idType = 'objectID';
-              if (item.id) return el.objectID === item.id;
-              if (item.companyId) return el.objectID === item.companyId;
-              return el.objectID === item.objectID;
-            } if (el.id) {
-              idType = 'id';
-              if (item.id) return el.id === item.id;
-              if (item.companyId) return el.id === item.companyId;
-              return el.id === item.objectID;
-            }
-          }) && el.company !== this.userInfo.company.company) : [];
+          unique = this.$store.getters.companiesList ? this.$store.getters.companiesList.filter((el) => !this.repsInvited.find((item) => el._id === item._id) && el._id !== this.userInfo.company._id) : [];
 
-          return idType === 'id' ? [...new Map(unique.map((item) => [item.id, item])).values()] : [...new Map(unique.map((item) => [item.objectID, item])).values()];
+          return [...new Map(unique.map((item) => [item._id, item])).values()];
         }
 
-        this.$store.getters.companiesList.forEach((el) => {
-          if (el.objectID) {
-            idType = 'objectID';
-          } if (el.id) {
-            idType = 'id';
-          }
-        });
-
-        return idType === 'id' ? [...new Map(this.$store.getters.companiesList.map((item) => [item.id, item])).values()] : [...new Map(this.$store.getters.companiesList.map((item) => [item.objectID, item])).values()];
+        return [...new Map(this.$store.getters.companiesList.map((item) => [item._id, item])).values()];
       }
 
       return [];
     },
     serviceCompanies() {
       return this.$store.getters.serviceCompaniesList.sort((a, b) => {
-        const aHasOfsPremium = a.contracts.some((contract) => contract.contractType === 'ofs-premium');
+        const aHasOfsPremium = this.hasOfsPremium(a);
         if (aHasOfsPremium) {
           return -1;
         }
         return 1;
       });
     },
+    // eslint-disable-next-line vue/no-side-effects-in-computed-properties, vue/return-in-computed-property,
     filteredEntries() {
-      if (this.$store.getters.bidData.invitedSuppliers != '' && this.$store.getters.bidData.invitedSuppliers != null && this.$store.getters.bidData.invitedSuppliers != undefined) {
-        if (this.$route.name == 'EditBid') {
-          if (this.inviteCount == 1 && this.$store.getters.companiesList) {
-            const inviteData = this.$store.getters.companiesList ? this.$store.getters.companiesList.filter((el) => this.$store.state.bid.invitedSuppliers.find((supplier) => supplier.id === el.objectID)) : [];
-            this.repsInvited = inviteData.sort((a, b) => {
-              const aHasOfsPremium = a.contracts.some((contract) => contract.contractType === 'ofs-premium');
-              if (aHasOfsPremium) {
-                return -1;
-              }
-              return 1;
-            });
+      if (this.$store.getters.bidData.invitedSuppliers && this.$store.getters.bidData.invitedSuppliers.length) {
+        this.repsInvited = this.$store.getters.bidData.invitedSuppliers.sort((a, b) => {
+          let aHasOfsPremium;
+          if (a.contracts) {
+            aHasOfsPremium = this.hasOfsPremium(a);
           }
-        } else if (this.inviteCount == 1 && this.$store.getters.companiesList) {
-          const inviteData = this.$store.getters.companiesList ? this.$store.getters.companiesList.filter((el) => this.$store.state.bid.invitedSuppliers.includes(el.objectID)) : [];
-          this.repsInvited = inviteData.sort((a, b) => {
-            const aHasOfsPremium = a.contracts.some((contract) => contract.contractType === 'ofs-premium');
-            if (aHasOfsPremium) {
-              return -1;
-            }
-            return 1;
-          });
-        }
+
+          if (a.company && a.company.contracts) {
+            aHasOfsPremium = this.hasOfsPremium(a.company);
+          }
+
+          if (aHasOfsPremium) {
+            return -1;
+          }
+          return 1;
+        });
       }
     },
+    // eslint-disable-next-line vue/no-side-effects-in-computed-properties, vue/return-in-computed-property,
     newSupplierFiltered() {
-      if (this.$store.getters.bidData.invitedNewSuppliers) {
-        if (this.$route.name == 'EditBid') {
-          if (this.inviteCount == 1) {
-            this.newRepsInvited = this.$store.state.bid.invitedNewSuppliers;
-          }
-        } else if (this.inviteCount == 1) {
-          this.newRepsInvited = this.$store.state.bid.invitedNewSuppliers;
-        }
+      if (this.$store.getters.bidData.invitedNewSuppliers && this.$store.getters.bidData.invitedNewSuppliers.length) {
+        this.newRepsInvited = this.$store.state.bid.invitedNewSuppliers;
       }
     },
     getCounter() {
@@ -508,7 +488,7 @@ export default {
     getBidAllIntend() {
       return this.$store.getters.bidAllIntend;
     },
-    validat() {
+    validateT() {
       if (this.repsInvited.length > 0) {
         this.$emit('validation', { valid: true, supplier: '2' });
         return this.valid;
@@ -531,19 +511,26 @@ export default {
     getInvitedSupplierEmailExists() {
       return this.$store.getters.invitedSupplierEmailExists;
     },
+    getCompanyLoading() {
+      return this.companyLoading;
+    },
+    getSalesRepLoading() {
+      return this.salesRepLoading;
+    },
   },
   methods: {
     ...mapActions(['getCategories', 'getSalesReps', 'getCompanyInfo', 'searchByCompany', 'getCompanyByServices', 'saveDraftBid', 'inviteNewSupplier', 'updateDraftBid', 'updateTemplate', 'updateBid', 'checkEmail']),
-    changeTab() {
+    async changeTab() {
       if (this.$route.name == 'EditBid') {
         if (this.isEditBidChanges == true) {
-          this.updateBid({ invitedSuppliers: this.repsInvited });
+          await this.updateBid({ invitedSuppliers: this.repsInvited });
         }
       } else if (this.$route.name == 'EditTemplate') {
-        this.updateTemplate({ invitedSuppliers: this.repsInvited });
+        await this.updateTemplate({ invitedSuppliers: this.repsInvited });
       } else {
-        this.updateDraftBid({ invitedSuppliers: this.repsInvited });
+        await this.updateDraftBid({ invitedSuppliers: this.repsInvited });
       }
+
       this.$emit('changetab', 'tab-3');
     },
     onUpdate(payload) {
@@ -578,7 +565,7 @@ export default {
         firstName: this.firstName,
         lastName: this.lastName,
         company: this.company,
-        phone: this.results,
+        phoneNumber: this.results,
         email: this.email,
         bidTitle: this.$store.getters.bidData.title,
         bidType: this.$store.getters.bidData.type,
@@ -588,15 +575,17 @@ export default {
       };
 
       if (this.$refs.form.validate() && this.getPhoneInfo.valid && !this.emailError && !this.getInvitedSupplierEmailExists) {
-        try {
-          const user = await this.inviteNewSupplier(supplier);
-          this.supplierDialog = false;
+        const user = await this.inviteNewSupplier(supplier);
+
+        if (user && user._id) {
           this.oldCount = this.newRepsInvited.length;
+
           this.newRepsInvited.push(user);
           this.newCount = this.newRepsInvited.length;
           this.$store.commit('setInvitedNewSuppliers', this.newRepsInvited);
+          this.supplierDialog = false;
+
           this.$refs.form.reset();
-          this.loadingInvite = false;
           this.phoneNumber = '';
           this.phoneInfo = {
             valid: true,
@@ -605,15 +594,33 @@ export default {
           this.counter = 0;
           this.valid = false;
           this.results = '';
-        } catch (error) {
-          console.log(error);
+        } else if (user !== '' && typeof user === 'string') {
+          this.$toasted.show(
+            user,
+            {
+              class: 'error-toast',
+              type: 'error',
+              duration: 5000,
+              position: 'top-center',
+            },
+          );
+        } else {
+          this.$toasted.show(
+            'Error! Something went wrong. Please try again',
+            {
+              class: 'error-toast',
+              type: 'error',
+              duration: 5000,
+              position: 'top-center',
+            },
+          );
         }
       }
     },
     async checkEmailI() {
-      this.email = this.email.replace(/\s+/g, '');
+      this.email = this.email && this.email.replace(/\s+/g, '');
 
-      const testEmail = /^[\w-\.+]+@([\w-]+\.)+[\w-]{1,63}$/.test(this.email);
+      const testEmail = /^[\w.+-]+@(?!.*_{1})[A-Za-z0-9-]+(\.[A-Za-z0-9-]+)*\.[A-Za-z]{1,63}$/.test(this.email);
 
       if (this.email === '' || !testEmail) {
         this.$store.commit('setEmailExistSuccess', false);
@@ -648,20 +655,27 @@ export default {
     },
     hideCategories(name) {
       this.categories = false;
+      this.companyBasin = 'All';
 
-      if (name) this.getCompanies();
+      if (name) {
+        this.companySearch = '';
+        this.getCompanies();
+      }
     },
     subCategories(subCats) {
       return _.orderBy(subCats, 'orderNumber', 'asc');
     },
-    getSales() {
+    getSales: _.debounce(async function () {
+      this.salesRepLoading = true;
       if (this.basinFilter === 'All') {
         this.parsedSelectedBasin = 'all';
       } else {
         this.parsedSelectedBasin = this.basinFilter;
       }
-      this.getSalesReps({ query: this.searchCompany, basin: this.parsedSelectedBasin });
-    },
+      await this.getSalesReps({ query: this.searchCompany, basin: this.parsedSelectedBasin });
+
+      this.salesRepLoading = false;
+    }, 500),
     viewCompany(id, name) {
       this.getCompanyInfo({ id, name });
     },
@@ -672,7 +686,7 @@ export default {
       this.newCount = this.repsInvited.length;
       this.$store.commit('spliceSalesRepsList', index);
       this.$store.commit('setIsEditBidChanges', true);
-      const unique = [...new Map(this.repsInvited.map((m) => [m.company, m])).values()];
+      const unique = [...new Map(this.repsInvited.map((m) => [m._id, m])).values()];
 
       this.$store.commit('setInvitedSuppliersData', unique);
     },
@@ -685,35 +699,38 @@ export default {
       this.$store.commit('setIsEditBidChanges', true);
       this.$store.commit('setInvitedSuppliersData', this.repsInvited);
     },
-    getCompanies() {
+    getCompanies: _.debounce(async function () {
+      this.companyLoading = true;
       if (this.companyBasin === 'All') {
         this.parsedSelectedCompanyBasin = 'all';
       } else {
         this.parsedSelectedCompanyBasin = this.companyBasin;
       }
-      this.searchByCompany({ query: this.companySearch, basin: this.parsedSelectedCompanyBasin });
-    },
+      await this.searchByCompany({ query: this.companySearch, basin: this.parsedSelectedCompanyBasin });
+
+      this.companyLoading = false;
+    }, 500),
     getByCategory(category) {
       this.getCompanyByServices(category);
     },
-    addCompany(company, index) {
+    addCompany(company) {
       this.oldCount = this.repsInvited.length;
       this.repsInvited.push(company);
       this.inviteCount = 2;
       this.newCount = this.repsInvited.length;
       this.$store.commit('spliceCompanies', company);
       this.$store.commit('setIsEditBidChanges', true);
-      const unique = [...new Map(this.repsInvited.map((m) => [m.company, m])).values()];
+      const unique = [...new Map(this.repsInvited.map((m) => [m._id, m])).values()];
       this.$store.commit('setInvitedSuppliersData', unique);
     },
-    addServiceCompany(company, index) {
+    addServiceCompany(company) {
       this.oldCount = this.repsInvited.length;
       this.repsInvited.push(company);
       this.inviteCount = 2;
       this.newCount = this.repsInvited.length;
       this.$store.commit('spliceCompanies', company);
       this.$store.commit('setIsEditBidChanges', true);
-      const unique = [...new Map(this.repsInvited.map((m) => [m.company, m])).values()];
+      const unique = [...new Map(this.repsInvited.map((m) => [m._id, m])).values()];
       this.$store.commit('setInvitedSuppliersData', unique);
     },
     removeCompany(company, index) {
@@ -725,9 +742,12 @@ export default {
       this.$store.commit('setIsEditBidChanges', true);
       this.$store.commit('setInvitedSuppliersData', this.repsInvited);
     },
-    removeNewSup(company, index) {
-      this.oldCount = this.newRepsInvited.length;
-      this.newRepsInvited.splice(index, 1);
+    removeNewSup(company) {
+      this.oldCount = this.newRepsInvited.length;;
+      const index = this.newRepsInvited.findIndex((el) => el._id === company._id);
+      if (index !== -1) {
+        this.newRepsInvited.splice(index, 1);
+      }
       this.inviteCount = 2;
       this.newCount = this.newRepsInvited.length;
       this.$store.commit('setIsEditBidChanges', true);
@@ -735,12 +755,12 @@ export default {
     },
     savedraftOnInterval() {
       const timer = setInterval(() => {
-        if (this.oldCount != this.newCount) {
-          if (this.$route.name == 'EditBid') {
+        if (this.oldCount !== this.newCount) {
+          if (this.$route.name === 'EditBid') {
             if (this.isEditBidChanges == true) {
               this.updateBid({ invitedSuppliers: this.repsInvited });
             }
-          } else if (this.$route.name == 'EditTemplate') {
+          } else if (this.$route.name === 'EditTemplate') {
             this.updateTemplate({ invitedSuppliers: this.repsInvited });
           } else {
             this.updateDraftBid({ invitedSuppliers: this.repsInvited });
@@ -756,19 +776,16 @@ export default {
     hasOfsPremium(supplier) {
       return supplier.contracts.some((contract) => contract.contractType === 'ofs-premium');
     },
-    hasOfsPremiumReps(supplier) {
-      return supplier.contracts.some((contract) => contract === 'ofs-premium');
-    },
     checkIntent(id) {
       let result = 'neither';
       const intent = this.getBidAllIntend;
 
       if (intent && id) {
         intent.forEach((el) => {
-          if (el.companyId === id && el.answer === 'true') {
+          if (el.company === id && (el.answer === 'true' || el.answer === true)) {
             result = 'intended';
           }
-          if (el.companyId === id && el.answer === 'false') {
+          if (el.company === id && (el.answer === 'false' || el.answer === false)) {
             result = 'not-intended';
           }
         });

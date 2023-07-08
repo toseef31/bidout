@@ -338,7 +338,7 @@ export default {
           email: this.email,
           phoneNumber: this.results,
           title: this.title,
-          userid: this.$store.getters.userInfo.id,
+          userid: this.$store.getters.userInfo._id,
           timezone: this.userTimezone,
         };
         this.updateProfile(user);
@@ -346,13 +346,13 @@ export default {
     },
     history() {
       const user = {
-        userid: this.$store.getters.userInfo.id,
+        userid: this.$store.getters.userInfo._id,
       };
       this.loginHistory(user);
     },
     getAdmins() {
       const data = {
-        company: this.$store.getters.userInfo.company.company,
+        company: this.$store.getters.userInfo.company._id,
       };
       this.adminsCompany(data);
     },

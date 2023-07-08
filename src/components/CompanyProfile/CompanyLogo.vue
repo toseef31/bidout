@@ -104,7 +104,7 @@ export default {
         this.image_name = this.croppieImage = output;
           this.dialog = false;
           var data = {
-            companyId: this.$store.getters.userInfo.company.id,
+            companyId: this.$store.getters.userInfo.company._id,
             files: this.image_name,
           }
           this.companyProfileImg(data);
@@ -112,7 +112,7 @@ export default {
     },
     deleteLogo(){
       var data = {
-        companyId: this.$store.getters.userInfo.company.id,
+        companyId: this.$store.getters.userInfo.company._id,
         files: '',
       }
       this.companyProfileImg(data);

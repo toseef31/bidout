@@ -108,7 +108,7 @@ export default {
       email: '',
       emailRules: [
         (v) => !!v || 'E-mail is required',
-        (v) => /^[\w-\.+]+@([\w-]+\.)+[\w-]{1,63}$/.test(v) || 'E-mail must be valid',
+        (v) => /^[\w.+-]+@(?!.*_{1})[A-Za-z0-9-]+(\.[A-Za-z0-9-]+)*\.[A-Za-z]{1,63}$/.test(v) || 'E-mail must be valid',
       ],
       select: null,
       items: [
@@ -137,9 +137,9 @@ export default {
         lastName: this.lastName,
         email: this.email,
         role: this.select,
-        company: this.user.company.company,
-        companyId: this.user.company.id,
-        parent: this.user.id,
+        company: this.user.company.companyName,
+        companyId: this.user.company,
+        parent: this.user._id,
       }
       this.inviteUser(data);
     },

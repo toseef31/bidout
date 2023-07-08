@@ -31,15 +31,15 @@
 
               <v-list-item-content align-center>
                 <v-list-item-title v-text="getName(list)"></v-list-item-title>
-                <v-list-item-subtitle v-if="checkIfCompanyOfs(list.company)">
+                <v-list-item-subtitle v-if="checkIfCompanyOfs(list.company) && getUserType === 'buyer'">
                   <router-link :to="list.company && list.company.slug ? '/company/' + list.company.slug : ''"
                     class="text-decoration-underline">View Profile</router-link></v-list-item-subtitle>
               </v-list-item-content>
 
               <v-list-item-action>
                 <v-list-item-action-text>{{
-                  list.latestMessage ? istoday(list.latestMessage) :
-                  istoday(list.updatedAt)
+                  list.latestMessage ? isToday(list.latestMessage) :
+                  isToday(list.createdAt)
                 }}</v-list-item-action-text>
               </v-list-item-action>
             </template>
@@ -56,7 +56,7 @@
               <div class="company-title text-left" v-if="chatData">
                 <h4>{{ getConversationName(chatData.conversation) }}</h4>
 
-                <p class="mb-0" v-if="checkIfCompanyOfs(chatData.conversation.company)">
+                <p class="mb-0" v-if="checkIfCompanyOfs(chatData.conversation.company) && getUserType === 'buyer'">
                   <router-link
                     :to="(chatData.conversation.company && chatData.conversation.company.slug ? '/company/' + chatData.conversation.company.slug : '')"
                     class="text-decoration-underline">View Profile</router-link>
@@ -94,40 +94,35 @@
                   <template>
                     <v-list-item-content>
                       <v-list-item-title>{{
-                        message.sender.name
+                        message.sender && `${message.sender.firstName} ${message.sender.lastName}`
                       }}</v-list-item-title>
                       <template v-if="message.attachment">
-                        <a :href="message.attachment" target="_blank"
-                          v-if="get_url_extension(message.attachment) == 'pdf'"><v-img
+                        <a :href="message.attachment[0].url" class="text-decoration-none" target="_blank"
+                          v-if="get_url_extension(message.attachment[0].url) === 'pdf'"><v-img
                             :src="require('@/assets/images/chat/pdf.jpg')" max-height="50px" max-width="50px"
-                            class="mt-2"></v-img></a>
-                        <a :href="message.attachment" target="_blank"
-                          v-else-if="get_url_extension(message.attachment) == 'xlsx' || get_url_extension(message.attachment) == 'xls' || get_url_extension(message.attachment) == 'csv'"><v-img
+                            class="mt-2 mb-2"></v-img>{{ getFileName(message.attachment[0].fileName) }}</a>
+                        <a :href="message.attachment[0].url" class="text-decoration-none" target="_blank"
+                          v-else-if="get_url_extension(message.attachment[0].url) === 'xlsx' || get_url_extension(message.attachment[0].url) === 'xls' || get_url_extension(message.attachment[0].url) === 'csv'"><v-img
                             :src="require('@/assets/images/chat/excel.png')" max-height="50px" max-width="50px"
-                            class="mt-2"></v-img></a>
-                        <a :href="message.attachment" target="_blank"
-                          v-else-if="get_url_extension(message.attachment) == 'doc' || get_url_extension(message.attachment) == 'docx' || get_url_extension(message.attachment) == 'txt'"><v-img
+                            class="mt-2 mb-2"></v-img>{{ getFileName(message.attachment[0].fileName) }}</a>
+                        <a :href="message.attachment[0].url" class="text-decoration-none" target="_blank"
+                          v-else-if="get_url_extension(message.attachment[0].url) === 'doc' || get_url_extension(message.attachment[0].url) === 'docx' || get_url_extension(message.attachment[0].url) === 'txt'"><v-img
                             :src="require('@/assets/images/chat/doc.png')" max-height="50px" max-width="50px"
-                            class="mt-2"></v-img></a>
-                        <a :href="message.attachment" target="_blank"
-                          v-else-if="get_url_extension(message.attachment) == 'ppt' || get_url_extension(message.attachment) == 'pptx'"><v-img
+                            class="mt-2 mb-2"></v-img>{{ getFileName(message.attachment[0].fileName) }}</a>
+                        <a :href="message.attachment[0].url" class="text-decoration-none" target="_blank"
+                          v-else-if="get_url_extension(message.attachment[0].url) === 'ppt' || get_url_extension(message.attachment[0].url) === 'pptx'"><v-img
                             :src="require('@/assets/images/chat/ppt.png')" max-height="50px" max-width="50px"
-                            class="mt-2"></v-img></a>
-                        <a :href="message.attachment" target="_blank"
-                          v-else-if="get_url_extension(message.attachment) == 'zip' || get_url_extension(message.attachment) == 'rar' || get_url_extension(message.attachment) == 'tar' || get_url_extension(message.attachment) == '7z' || get_url_extension(message.attachment) == 'gz'"><v-img
+                            class="mt-2 mb-2"></v-img>{{ getFileName(message.attachment[0].fileName) }}</a>
+                        <a :href="message.attachment[0].url" class="text-decoration-none" target="_blank"
+                          v-else-if="get_url_extension(message.attachment[0].url) === 'zip' || get_url_extension(message.attachment[0].url) === 'rar' || get_url_extension(message.attachment[0].url) === 'tar' || get_url_extension(message.attachment[0].url) === '7z' || get_url_extension(message.attachment[0].url) === 'gz'"><v-img
                             :src="require('@/assets/images/chat/zip.png')" max-height="50px" max-width="50px"
-                            class="mt-2"></v-img></a>
+                            class="mt-2 mb-2"></v-img>{{ getFileName(message.attachment[0].fileName) }}</a>
                         <video class="chat-video"
-                          v-else-if="get_url_extension(message.attachment) == 'mp4' || get_url_extension(message.attachment) == 'webm' || get_url_extension(message.attachment) == 'mov' || get_url_extension(message.attachment) == 'avi'"
-                            :src="message.attachment"
-                            :autoplay="false"
-                            :controls="true"
-                            :loop="true"
-                            height="300"
-                            :style="{ width: '500px' }"
-                          ></video>
-                        <a :href="message.attachment" target="_blank" v-else>
-                          <v-img :src="message.attachment" max-height="125px" max-width="245px" class="mt-2"></v-img>
+                          v-else-if="get_url_extension(message.attachment[0].url) == 'mp4' || get_url_extension(message.attachment[0].url) === 'webm' || get_url_extension(message.attachment[0].url) === 'mov' || get_url_extension(message.attachment[0].url) === 'avi'"
+                          :src="message.attachment[0].url" :autoplay="false" :controls="true" :loop="true" height="300"
+                          :style="{ width: '500px' }"></video>
+                        <a :href="message.attachment[0].url" target="_blank" v-else>
+                          <v-img :src="message.attachment[0].url" max-height="125px" max-width="245px" class="mt-2"></v-img>
                         </a>
                       </template>
                       <v-list-item-subtitle class="text--primary">{{
@@ -135,9 +130,7 @@
                       }}</v-list-item-subtitle>
                     </v-list-item-content>
                     <v-list-item-action>
-                      <v-list-item-action-text>{{
-                        istoday(message.updatedAt)
-                      }}</v-list-item-action-text>
+                      <v-list-item-action-text>{{ isToday(message.createdAt) }}</v-list-item-action-text>
                     </v-list-item-action>
                   </template>
                 </v-list-item>
@@ -196,7 +189,7 @@ export default {
       selectedUser: null,
       pageLoading: true,
       dropzoneOptions: {
-        url: `${import.meta.env.VITE_API_BASE_URL}/chat/sendMessage`,
+        url: `${import.meta.env.VITE_API_BASE_URL}/v2/chat/sendMessage`,
         thumbnailWidth: 100,
         thumbnailHeight: 100,
         maxFiles: 10,
@@ -236,16 +229,18 @@ export default {
   methods: {
     ...mapActions(['getAllMessages', 'lastMessageRead', 'sendMessage', 'getBidAllConversations']),
     getName(conversation) {
-      return conversation.name.split('|||').find((el) => el.trim() !== this.user.company.company);
+      return conversation.displayName;
     },
     openChat(conversation) {
       this.chatData = {
         conversation,
       };
       this.conversationId = conversation._id;
+
       const ids = {
-        userId: this.user.id,
+        userId: this.user._id,
         conversationId: this.conversationId,
+        bidId: this.bidId,
       };
       this.getAllMessages(ids);
       var container = this.$refs.messagesSection;
@@ -265,14 +260,18 @@ export default {
     },
     dragfileupload(file, xhr, formData) {
       formData.append('conversationId', this.conversationId);
-      formData.append('sender[id]', this.user.id);
+      formData.append('sender[id]', this.user._id);
       formData.append(
         'sender[name]',
         `${this.user.firstName} ${this.user.lastName}`,
       );
-      formData.append('sender[company]', this.chatData.conversation.company);
+      formData.append('sender[company]', this.chatData.conversation.company.companyName);
       formData.append('sender[profilePicture]', this.user.image);
-      formData.append('content', this.message);
+      if (this.message && this.message !== '') {
+        formData.append('content', this.message);
+      } else {
+        formData.append("content", ' ');
+      }
     },
     afterComplete(file, response) {
       this.message = '';
@@ -282,8 +281,9 @@ export default {
         document.getElementById('dropzone').style.display = 'none';
       }
       const ids = {
-        userId: this.user.id,
-        conversationId: response.message.conversationId,
+        userId: this.user._id,
+        conversationId: response.message.conversation,
+        bidId: this.bidId,
       };
       this.getAllMessages(ids);
     },
@@ -299,7 +299,9 @@ export default {
         conversationId: this.conversationId,
         sender: {
           name: `${this.user.firstName} ${this.user.lastName}`,
-          id: this.user.id,
+          firstName: this.user.firstName,
+          lastName: this.user.lastName,
+          id: this.user._id,
           company: this.chatData.conversation.company,
           profilePicture: this.user.image,
         },
@@ -315,44 +317,27 @@ export default {
         container.scrollTop = container.scrollHeight;
       }, 500);
       this.message = '';
+      this.$refs.msgFile.value = null;
       this.filename = '';
     },
-    uploadfile(event) {
-      this.filename = '';
-      const chat_file = this.$refs.msgFile.files;
-      if (chat_file.length > 0) {
-        this.filename = chat_file[0].name;
-      }
-      const data = {
-        conversationId: this.conversationId,
-        sender: {
-          name: `${this.user.firstName} ${this.user.lastName}`,
-          id: this.user.id,
-          company: this.chatData.conversation.company,
-          profilePicture: this.user.image,
-        },
-        content: this.message,
-        attachment: chat_file.length > 0 ? chat_file[0] : null,
-      };
-      this.sendMessage(data);
-      const container = this.$refs.messagesSection;
-      setTimeout(() => {
-        container.scrollTop = container.scrollHeight;
-      }, 500);
-      this.message = '';
-      this.filename = '';
-    },
-    istoday(date) {
-      return moment(date).calendar();
+    isToday(date) {
+      const zone = moment.tz.guess();
+      return moment(date).tz(zone).calendar();
     },
     get_url_extension(url) {
-      return url.split(/[#?]/)[0].split('.').pop().trim();
+      if (url !== undefined) {
+        const lastDotIndex = url.lastIndexOf('.');
+        // Extract the file extension
+        const fileExtension = url.slice(lastDotIndex + 1);
+        return fileExtension;
+      }
+    },
+    getFileName(name) {
+      const filename = decodeURIComponent(name);
+      return filename;
     },
     getConversationName(conversation) {
-      if (conversation.type === 'GROUP') {
-        return conversation.name.split('|||').find((el) => el.trim() !== this.user.company.company);
-      }
-      return conversation.name;
+      return conversation.displayName;
     },
     checkIfCompanyOfs(company) {
       if (company && company.contracts) {
@@ -363,8 +348,8 @@ export default {
   },
   async created() {
     this.user = this.$store.getters.userInfo;
-    this.bidId = this.$store.getters.bidViewData.bidData.id;
-    await this.getBidAllConversations({ bidId: this.bidId, userId: this.user.id });
+    this.bidId = this.$store.getters.bidViewData.bidData._id;
+    await this.getBidAllConversations({ bidId: this.bidId, userId: this.user._id });
 
     this.pageLoading = false;
     const convo = await _.orderBy(

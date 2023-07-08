@@ -23,4 +23,6 @@ export default {
   keyfactsLoading: false,
   newsLoading: false,
   manageCompanyError : null,
+  companyExecutiveLoading: false,
+  basicError: false,
 }

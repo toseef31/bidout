@@ -43,12 +43,12 @@
 
         <v-row>
           <v-col md="2" class="text-right mr-1 title-desc">Region:</v-col>
-          <v-col class="title-brief">{{ bidDetail.bidData.regions }}</v-col>
+          <v-col class="title-brief">{{ bidDetail.bidData.region }}</v-col>
         </v-row>
 
         <v-row>
           <v-col md="2" class="text-right mr-1 title-desc">Q&A:</v-col>
-          <v-col class="title-brief">{{ bidDetail.bidData.qAndAEnabled === 'true' ? "Yes" : "No" }}</v-col>
+          <v-col class="title-brief">{{ bidDetail.bidData.qAndAEnabled === true ? "Yes" : "No" }}</v-col>
         </v-row>
         <br />
         <v-row>
@@ -64,7 +64,7 @@
         <v-row
           v-if="bidDetail.bidData && bidDetail.bidData.bidDescriptions && Array.isArray(bidDetail.bidData.bidDescriptions)"
           v-for="(item, index) in bidDetail.bidData.bidDescriptions.slice(1)" :key="index">
-          <v-col md="2" class="text-right mr-1 title-desc">{{ item && item.name }}:</v-col>
+          <v-col md="2" class="text-right mr-1 title-desc">{{ item && item.title }}:</v-col>
           <v-col class="title-brief bid-desc supplier-desc"> 
             <div class="ql-editor pa-0" v-html="item && item.body"></div>
           </v-col>
@@ -77,16 +77,16 @@
       <div class="title-detail">Buyer Team member</div>
       <div class="mt-10 d-flex flex-row flex-wrap team-member">
         <div class="d-flex align-center flex-child">
-          <v-img v-if="bidDetail.bidData.userId.image" max-width="100" height="auto" contain :aspect-ratio="16 / 9"
-            :src="bidDetail.bidData.userId.image"></v-img>
+          <v-img v-if="bidDetail.bidData.user.image" max-width="100" height="auto" contain :aspect-ratio="16 / 9"
+            :src="bidDetail.bidData.user.image"></v-img>
           <v-avatar v-else color="#0d96481a" size="62">
             <v-icon color="#0d9648" large>mdi-account-outline </v-icon>
           </v-avatar>
 
           <div class="d-flex flex-column">
             <div>
-              <span class="text--black pl-6  bid-creator">{{ bidDetail.bidData.userId.firstName }} {{
-                bidDetail.bidData.userId.lastName
+              <span class="text--black pl-6  bid-creator">{{ bidDetail.bidData.user.firstName }} {{
+                bidDetail.bidData.user.lastName
               }}</span>
               <v-tooltip top>
                 <template v-slot:activator="{ on, attrs }">
@@ -190,7 +190,8 @@
                 <td class="text-left">
                   <img :src="require('@/assets/images/bids/FilePdf.png')" v-if="checkFileType(doc.fileName) === 'pdf'" />
                   <img :src="require('@/assets/images/bids/FileDoc.png')"
-                    v-else-if="checkFileType(doc.fileName) === 'docx'" />
+                    v-else-if="checkFileType(doc.fileName) === 'docx' || checkFileType(doc.fileName) === 'doc'" />
+                    <v-icon color="#0D1139" v-else-if="checkFileType(doc.fileName) === 'xlsx' || checkFileType(doc.fileName) === 'xls'">mdi-microsoft-excel</v-icon>
                   <v-icon color="#0D1139" v-else>mdi-file-document</v-icon>
                 </td>
                 <td class="text-left doc-class"><a :href="doc.url" target="_blank" class="text-decoration-none">{{
@@ -200,7 +201,7 @@
                   <span>{{ doc.comment !== 'undefined' ? doc.comment : '' }}</span>
                 </td>
                 <td class="text-left">{{ size(doc.fileSize) }}</td>
-                <td class="text-left">{{ doc.uploadedBy }}</td>
+                <td class="text-left">{{ `${doc.uploadedBy.firstName} ${doc.uploadedBy.lastName}` }}</td>
                 <td class="text-left">
                   {{ doc.uploadedAt | moment("MM/DD/YYYY") }}
                 </td>
@@ -229,7 +230,7 @@
             <v-col md="6" class="first-child" v-if="item.type === 'question'">{{
               item.title
             }}</v-col>
-            <div class="second-child ml-auto" v-if="item.required === 'true'">Required Question</div>
+            <div class="second-child ml-auto" v-if="item.required === true">Required Question</div>
 
           </v-row>
         </div>

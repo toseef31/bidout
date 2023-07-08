@@ -153,7 +153,7 @@ export default {
         this.allMembers = this.chatData.group.participantDetails;
       }
       var ids = {
-        userId: this.user.id,
+        userId: this.user._id,
         conversationId: this.conversationId,
       }
       this.getAllMessages(ids);

@@ -52,7 +52,7 @@
                       outlined disabled
                     ></v-text-field>
                     <label class="d-block text-left font-weight-bold mb-2">Privileges
-                      <v-tooltip right v-if="userInfo.role == 'admin' && userInfo.id == userData.id">
+                      <v-tooltip right v-if="userInfo.role == 'admin' && userInfo._id == userData.id">
                         <template v-slot:activator="{ on, attrs }">
                           <v-icon small
                             v-bind="attrs"
@@ -78,7 +78,7 @@
                       required
                       outlined
                       solo-flat class="text-capitalize"
-                      :disabled="userInfo.role == 'admin' && userInfo.id == userData.id ? true : false "
+                      :disabled="userInfo.role == 'admin' && userInfo._id == userData._id ? true : false "
                     ></v-select>
                     <v-btn
                       :disabled="!valid"
@@ -157,7 +157,7 @@ export default {
         firstName: this.userData.firstName,
         lastName: this.userData.lastName,
         role: this.userData.role,
-        id: this.userData.id,
+        id: this.userData._id,
       }
       if (this.$store.getters.userData.type === 'general') {
         this.updateUser(data);

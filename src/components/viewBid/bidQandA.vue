@@ -1,6 +1,6 @@
 <template>
   <v-col class="my-7 pa-0 qanda-section fill-height" align="start">
-    <div v-if="bidDetail.bidData.qAndAEnabled === 'true'">
+    <div v-if="bidDetail.bidData.qAndAEnabled === true">
       <div class="px-6" v-if="(getUserType === 'buyer' && getQAndA.length)">
         <span class="title-detail" v-if="getQAndForAnswer.length">Unanswered questions</span>
 
@@ -20,10 +20,10 @@
 
                   <span class=" mt-3">{{ item.question }}</span>
 
-                  <span class="sub-title mt-4">By {{ (item.questionedUserName) }} ({{ item.questionedUserCompany
+                  <span class="sub-title mt-4">By {{ (item.questionBy.firstName) }} ({{ item.questionByCompany.companyName
                   }})</span>
-                  <span class="sub-title mt-2">{{ item.askedOn._seconds | moment('MM/DD/YYYY') }} - {{
-                    item.askedOn._seconds | moment('hh:mma') }}</span>
+                  <span class="sub-title mt-2">{{ item.askedOn | moment('MM/DD/YYYY') }} - {{ item.askedOn |
+                    moment('hh:mma') }}</span>
                 </div>
               </template>
             </v-expansion-panel-header>
@@ -33,7 +33,7 @@
 
               <div class="text-center">
                 <v-btn color="#0D9648" height="32" class="text-capitalize white--text font-weight-bold save-button px-12"
-                  @click="reply(item.id, index)" large :disabled="getLoading[index].loading">
+                  @click="reply(item._id, index)" large :disabled="getLoading[index].loading">
                   <v-progress-circular v-if="getLoading[index].loading" indeterminate :width="2" size="20"
                     color="#0D9648"></v-progress-circular>
 
@@ -54,9 +54,9 @@
 
             <span class=" mt-1">{{ item.question }}</span>
 
-            <span class="sub-title mt-4">By {{ (item.questionedUserName) }} ({{ item.questionedUserCompany
-            }})</span>
-            <span class="sub-title mt-2">{{ item.askedOn._seconds | moment('MM/DD/YYYY') }} - {{ item.askedOn._seconds |
+            <span class="sub-title mt-4">By {{ (item.questionBy.firstName) }} {{ (item.questionBy.lastName) }}
+              ({{ item.questionByCompany.companyName }})</span>
+            <span class="sub-title mt-2">{{ item.askedOn | moment('MM/DD/YYYY') }} - {{ item.askedOn |
               moment('hh:mma') }}</span>
           </div>
 
@@ -82,18 +82,17 @@
 
               <div class="text-right">
                 <v-btn color="#0D9648" height="40" class="text-capitalize font-weight-bold save-button px-8"
-                  @click="editA(item.id, index)" large depressed :disabled="showLoading">
+                  @click="editA(item._id, index)" large depressed :disabled="showLoading">
                   <v-progress-circular v-if="showLoading" indeterminate :width="3" size="25"
                     color="#0D9648"></v-progress-circular>
                   <div v-else>Edit</div>
                 </v-btn>
               </div>
             </div>
-            <span class="sub-title mt-4">By {{ item.answeredUserName
-            }} ({{ item.answeredUserCompany
-}}) </span>
-            <span class="sub-title mt-1">{{ item.answeredOn._seconds | moment('MM/DD/YYYY') }} - {{
-              item.answeredOn._seconds | moment('hh:mma') }}</span>
+            <span class="sub-title mt-4">By {{ item.answerBy.firstName + " " + item.answerBy.lastName }}
+              ({{ item.answerBy.company.companyName }}) </span>
+            <span class="sub-title mt-1">{{ item.answeredOn | moment('MM/DD/YYYY') }} - {{ item.answeredOn |
+              moment('hh:mma') }}</span>
           </div>
           <v-divider class="mb-1 mt-4" color="#5C5C5C" />
         </div>
@@ -127,14 +126,17 @@
               <span>Question:</span>
 
               <span class=" mt-1">{{ item.question }}</span>
-              <span class="sub-title mt-4" v-if="user.id === item.questionBy">By {{ (user.firstName + " " +
-                user.lastName) }} ({{ user.company.company }})</span>
 
-              <span class="sub-title mt-4" v-else-if="item.questionedUserName">By {{ item.questionedUserName }}
-                ({{ user.company.company }})</span>
+              <span class="sub-title mt-4" v-if="item.questionBy && user._id === item.questionBy._id">By {{
+                (user.firstName + " " +
+                  user.lastName) }} ({{ user.company.companyName }})</span>
+              <span class="sub-title mt-4"
+                v-else-if="item.questionBy && user.company && user.company._id === item.questionBy.company">By
+                {{ (item.questionBy.firstName + " " + item.questionBy.lastName) }}
+                ({{ item.questionByCompany.companyName }})</span>
 
               <span class="sub-title mt-4" v-else>By Supplier</span>
-              <span class="sub-title mt-1">{{ item.askedOn._seconds | moment('MM/DD/YYYY') }} - {{ item.askedOn._seconds |
+              <span class="sub-title mt-1">{{ item.askedOn | moment('MM/DD/YYYY') }} - {{ item.askedOn |
                 moment('hh:mma') }}</span>
             </div>
 
@@ -143,10 +145,10 @@
 
               <span class=" mt-1">{{ item.answer }}</span>
 
-              <span class="sub-title mt-4">By {{ item.answeredUserName
-              }} ({{ item.answeredUserCompany }}) </span>
-              <span class="sub-title mt-1">{{ item.answeredOn._seconds | moment('MM/DD/YYYY') }} - {{
-                item.answeredOn._seconds | moment('hh:mma') }}</span>
+              <span class="sub-title mt-4">By {{ item.answerBy.firstName }} {{ item.answerBy.lastName }}
+                ({{ item.answerBy.company.companyName }}) </span>
+              <span class="sub-title mt-1">{{ item.answeredOn | moment('MM/DD/YYYY') }} - {{ item.answeredOn |
+                moment('hh:mma') }}</span>
 
             </div>
 
@@ -162,15 +164,19 @@
               <span>Question:</span>
 
               <span class=" mt-1">{{ item.question }}</span>
-              <span class="sub-title mt-4" v-if="user.id === item.questionBy">By {{ (user.firstName + " " +
-                user.lastName) }} ({{ user.company.company }})</span>
-              <span class="sub-title mt-4" v-else-if="item.questionedUserName">By {{ item.questionedUserName }}
-                ({{ user.company.company }})</span>
+              <span class="sub-title mt-4" v-if="item.questionBy && user._id === item.questionBy._id">By {{
+                (user.firstName + " " +
+                  user.lastName) }} ({{ user.company.companyName }})</span>
+
+              <span class="sub-title mt-4"
+                v-else-if="item.questionBy && user.company && user.company._id === item.questionBy.company">By
+                {{ (item.questionBy.firstName + " " + item.questionBy.lastName) }}
+                ({{ item.questionByCompany.companyName }})</span>
+
               <span class="sub-title mt-4" v-else>By Supplier</span>
-              <span class="sub-title mt-1">{{ item.askedOn._seconds | moment('MM/DD/YYYY') }} - {{ item.askedOn._seconds |
+              <span class="sub-title mt-1">{{ item.askedOn | moment('MM/DD/YYYY') }} - {{ item.askedOn |
                 moment('hh:mma') }}</span>
             </div>
-
             <v-divider class="mb-1 mt-4" color="#5C5C5C" />
           </div>
         </div>
@@ -216,7 +222,7 @@ export default {
       return this.$store.getters.qAndA.filter((el) => el.answer);
     },
     getQAndAUnAnswered() {
-      return this.$store.getters.qAndA.filter((el) => !el.answer && this.user.id === el.questionBy);
+      return this.$store.getters.qAndA.filter((el) => !el.answer && el.questionBy && this.user._id === el.questionBy._id);
     },
     getQAndForAnswer() {
       return this.getQAndA.filter((el) => {
@@ -252,9 +258,9 @@ export default {
 
       await this.askQuestion({
         question: this.question,
-        userId: this.user.id,
-        bidId: this.bidDetail.bidData.id,
-        companyId: this.user.company.id,
+        userId: this.user._id,
+        bidId: this.bidDetail.bidData._id,
+        companyId: this.user.company._id,
       });
 
       this.loading = false;
@@ -265,8 +271,8 @@ export default {
 
       await this.answerQuestion({
         answer: this.answers[index].answer,
-        userId: this.user.id,
-        bidId: this.bidDetail.bidData.id,
+        userId: this.user._id,
+        bidId: this.bidDetail.bidData._id,
         questionId,
       });
 
@@ -282,8 +288,8 @@ export default {
 
       await this.editAnswer({
         answer: this.editedAnswer,
-        userId: this.user.id,
-        bidId: this.bidDetail.bidData.id,
+        userId: this.user._id,
+        bidId: this.bidDetail.bidData._id,
         questionId,
 
       });

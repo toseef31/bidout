@@ -65,7 +65,7 @@
                               <v-icon>mdi-square-edit-outline</v-icon>
                             Edit Details</v-btn>
                            
-                            <v-btn depressed color="transparent" class="text-capitalize" v-if="user.id != userInfo.id" @click="disable(user.id)">
+                            <v-btn depressed color="transparent" class="text-capitalize" v-if="user._id != userInfo._id" @click="disable(user._id)">
                               <v-icon color="#F32349">mdi-window-close</v-icon>
                             Disable </v-btn>
 
@@ -100,7 +100,7 @@
 
                           </td>
                         </tr>
-                        <tr v-if="invitedList.length < 1 && pendingUsers.length < 1">
+                        <tr v-if="invitedList.length < 1 && !pendingUsers">
                           <td colspan="5"><h4>There is no invited user.</h4></td>
                         </tr>
                         <tr
@@ -204,16 +204,16 @@ export default {
       this.getPendingUsers(company);
     },
     accept(user){
-      this.acceptPendingUser({user, companyName: this.user.company.company});
+      this.acceptPendingUser({user, companyId: this.user.company._id});
     },
   },
   mounted() {
     document.title = "Manage Users - BidOut";
     this.user = this.$store.getters.userInfo;
     this.userInfo = this.$store.getters.userInfo;
-    this.getUsers(this.user.company.company);
-    this.invitedUsers(this.user.company.company);
-    this.getPendingUsers(this.user.company.id);
+    this.getUsers(this.user.company._id);
+    this.invitedUsers(this.user.company._id);
+    this.getPendingUsers(this.user.company._id);
   }
 };
 </script>

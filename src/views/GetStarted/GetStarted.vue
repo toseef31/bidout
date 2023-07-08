@@ -194,11 +194,11 @@
                                   </v-list-item-content>
                                 </v-list-item>
                                 <template
-                                  v-for="(item) in                                                                                                             suppliers                                                                                                            ">
-                                  <v-list-item :key="item.title" class="second"
-                                    @click="companyList(item.company, item.objectID); hideList = false">
+                                  v-for="(item) in suppliers">
+                                  <v-list-item :key="item._id" class="second"
+                                    @click="companyList(item.companyName, item._id); hideList = false">
                                     <v-list-item-content>
-                                      <v-list-item-title v-html="item.company" class="text-left"></v-list-item-title>
+                                      <v-list-item-title v-html=" item.companyName " class="text-left"></v-list-item-title>
                                     </v-list-item-content>
                                   </v-list-item>
                                 </template>
@@ -629,7 +629,7 @@ export default {
     },
     suppliers(){
       if (this.$store.getters.supplier) {
-       this.supplierExists = this.$store.getters.supplier.some( (item) => item.company === this.supplier.companyName);
+       this.supplierExists = this.$store.getters.supplier.some( (item) => item.companyName === this.supplier.companyName);
       }
 
       return this.$store.getters.supplier;
@@ -651,7 +651,7 @@ export default {
         this.supplier.lastName = this.$store.getters.tokenInvitedSupplier.lastName
         this.supplier.email = this.$store.getters.tokenInvitedSupplier.email
         this.supplier.email = this.$store.getters.tokenInvitedSupplier.email
-        this.supplier.phoneNumber = this.$store.getters.tokenInvitedSupplier.phone
+        this.supplier.phoneNumber = this.$store.getters.tokenInvitedSupplier.phoneNumber
       } else {
         this.supplier.editCompany = this.supplier.firstName = this.supplier.lastName =  this.supplier.email =  this.supplier.phoneNumber = ''
 
@@ -727,8 +727,8 @@ export default {
       }
     },
     async checkEmailBuyer() {
-      let testEmail = /^[\w-\.+]+@([\w-]+\.)+[\w-]{1,63}$/.test(this.buyer.email)
-
+      // let testEmail = /^[\w-\.+]+@([\w-]+\.)+[\w-]{1,63}$/.test(this.buyer.email)
+      let testEmail = /^[\w.+-]+@(?!.*_{1})[A-Za-z0-9-]+(\.[A-Za-z0-9-]+)*\.[A-Za-z]{1,63}$/.test(this.buyer.email);
       if (this.buyer.email === '' || !testEmail) {
         this.$store.commit('setEmailExistSuccess',false)
         this.$store.commit('setInvitedSupplierEmailExists',false)
@@ -742,8 +742,9 @@ export default {
     },
 
     async checkEmailSupplier() {
-      let testEmail = /^[\w-\.+]+@([\w-]+\.)+[\w-]{1,63}$/.test(this.supplier.email)
-
+      // let testEmail = /^[\w-\.+]+@([\w-]+\.)+[\w-]{1,63}$/.test(this.supplier.email)
+      let testEmail = /^[\w.+-]+@(?!.*_{1})[A-Za-z0-9-]+(\.[A-Za-z0-9-]+)*\.[A-Za-z]{1,63}$/.test(this.supplier.email);
+      
       if (this.supplier.email === '' || !testEmail) {
         this.$store.commit('setEmailExistSuccess',false)
         this.$store.commit('setInvitedSupplierEmailExists',false)
@@ -911,8 +912,7 @@ export default {
       }
     },
     companyList(title,id){
-      this.supplierExists = this.suppliers.some( (item) => item.company === title);
-
+      this.supplierExists = this.suppliers.some( (item) => item.companyName === title);
       this.supplier.companyName = title;
       this.companyId = id;
       this.hideList = false;
