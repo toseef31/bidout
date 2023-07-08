@@ -108,6 +108,7 @@ export default {
                 .split(' ')
                 .every((v) => item.lastName.toLowerCase().includes(v))) && item._id !== this.$store.state.bid.bidData.user._id,
           );
+        }
      
         const unique = this.$store.getters.teamMembers && this.$store.state.bid.invitedTeamMembers
           ? this.$store.getters.teamMembers.filter(
