@@ -168,7 +168,7 @@ export default {
       .then(responce => {
         if(responce.status === 200){
           commit('setActivityList',responce.data)
-          commit('setPageLoader', false);
+          commit('setActivityLoader', false);
           
         }
     }).catch(async(err) => {
@@ -213,11 +213,12 @@ export default {
     try{
       const res = await axios.get('v2/bid/getBidList/'+payload,config);
         commit('setBidsList',res.data);
-        await dispatch('getActivities',payload);
         commit('setPageSubLoader',false);
+        commit('setPageLoader',false)
     }catch(err){
        Sentry.captureException(err);
       console.log(err);
+      commit('setPageLoader',false)
     }
     
   },

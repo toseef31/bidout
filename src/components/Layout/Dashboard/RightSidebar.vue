@@ -1,18 +1,19 @@
 <template>
-  <v-row fill-height align="center" class="fill-height" v-if="loading">
-    <v-col cols="12">
-      <v-progress-circular :width="3" color="green" indeterminate ></v-progress-circular>
-    </v-col>
-  </v-row>
-  <div class="rightSide-Module" v-else>
+  <div class="rightSide-Module">
     <div class="activity-section" :class="[ activityPanel ? '' : 'desktop-section']">
       <div class="title">
         <h3 class="font-weight-bold text-left">Activity</h3>
       </div>
       <v-list>
+        <v-row fill-height align="center" class="fill-height" v-if="activityLoader">
+          <v-col cols="12">
+            <v-progress-circular :width="3" color="green" indeterminate ></v-progress-circular>
+          </v-col>
+        </v-row>
         <v-list-item-group
           active-class="success--text"
           multiple
+          v-else
         >
         
           <template v-if="activities.length == 0 || !activities">
@@ -47,7 +48,6 @@
           </template>
         </v-list-item-group>
       </v-list>
-      
     </div>
     <div>
       <div class="social-section pa-2 mt-3" :class="[ activityPanel ? 'd-none d-md-block' : 'd-block']">
@@ -123,8 +123,8 @@ export default {
         return [];
       }
     },
-    loading() {
-      return this.$store.getters.pageLoader;
+    activityLoader() {
+      return this.$store.getters.activityLoader;
     },
     userDatas() {
       return this.$store.getters.userInfo;

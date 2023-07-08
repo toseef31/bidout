@@ -164,7 +164,6 @@
               <span>Question:</span>
 
               <span class=" mt-1">{{ item.question }}</span>
-
               <span class="sub-title mt-4" v-if="item.questionBy && user._id === item.questionBy._id">By {{
                 (user.firstName + " " +
                   user.lastName) }} ({{ user.company.companyName }})</span>
@@ -178,7 +177,6 @@
               <span class="sub-title mt-1">{{ item.askedOn | moment('MM/DD/YYYY') }} - {{ item.askedOn |
                 moment('hh:mma') }}</span>
             </div>
-
             <v-divider class="mb-1 mt-4" color="#5C5C5C" />
           </div>
         </div>

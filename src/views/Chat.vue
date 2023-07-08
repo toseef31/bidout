@@ -621,7 +621,6 @@ export default {
   async created() {
     this.user = this.$store.getters.userInfo;
     await this.getAllConversationsSearch(this.user._id);
-    // await this.getAllConversations({id: this.user.id, page: 1, limit: 10});
   },
   beforeMount() {},
   async mounted() {
