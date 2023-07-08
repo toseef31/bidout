@@ -71,11 +71,16 @@ export default {
                 commit("setError", error.response.data.message);
               }
               if (error.response.status === 403) {
-                // commit("setError", error.response.data.message);
-                commit("setError", "Please try again after few moments.");
-                setTimeout(() => {
-                  dispatch('apiSignOutAction');
-                }, 5000);
+                commit("setError", "User not found");
+                commit("setUser", null);
+                commit("setToken", null);
+                commit("setCompany", null);
+        
+                localStorage.removeItem("userData");
+        
+                localStorage.removeItem("token");
+                localStorage.removeItem("companyData");
+                localStorage.removeItem("companyId");
               }
               if (error.response.status === 401) {
                 commit("setError", "Please try again after few moments.");
@@ -128,7 +133,7 @@ export default {
               console.log('errors', error);
               if (error.response && error.response.status === 401) {
                 dispatch('apiSignOutAction');
-              }
+              } reject(error);
             });
         } else {
           dispatch("signOutAction");
