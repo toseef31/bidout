@@ -52,7 +52,7 @@
                   Not submitted
                 </td>
                 <td v-else>
-                  $ {{ submission.bidOutPricePre }}
+                  $ {{ formatPrice(submission.bidOutPricePre) }}
                 </td>
               </template>
             </tr>
@@ -67,7 +67,7 @@
                   Not submitted
                 </td>
                 <td v-else>
-                  $ {{ submission.bidOutPricePre }}
+                  $ {{ formatPrice(submission.bidOutPricePre) }}
                 </td>
               </template>
             </tr>
@@ -86,7 +86,7 @@
                 <td v-else>
                   <v-icon color="#0D9648">mdi-arrow-down-thin-circle-outline</v-icon>
                   <span class="ml-1">$ {{
-                    submission.postBidOutPrice
+                    formatPrice(submission.postBidOutPrice)
                   }}</span>
                   <div class="subscript">Saving {{
                     100 - Math.round(((submission.postBidOutPrice / submission.bidOutPricePre) +
@@ -307,7 +307,7 @@ export default {
           if (list.lineItems[lIndex].price === 'NO_BID') {
             dataD[lIndex].push('NO-BID');
           } else if (list.lineItems[lIndex].price === 0 || list.lineItems[lIndex].price === '0') {
-            dataD[lIndex].push(0);
+            dataD[lIndex].push(`$${Number(`${Math.round(parseFloat(`${list.lineItems[lIndex].price}e${2}`))}e-${2}`).toFixed(2)}`);
           } else {
             dataD[lIndex].push(`$${Number(`${Math.round(parseFloat(`${list.lineItems[lIndex].price}e${2}`))}e-${2}`).toFixed(2)}`);
           }
