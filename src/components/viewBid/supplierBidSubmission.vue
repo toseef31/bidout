@@ -467,7 +467,7 @@ export default {
       }
     },
     formatNumber(index) {
-      if (this.lineItems[index].price) {
+      if (this.lineItems[index].price || this.lineItems[index].price === 0) {
         const formatValue = `${Number(`${Math.round(`${this.removeNonNumeric(this.lineItems[index].price)}e${2}`)}e-${2}`).toFixed(2)}`;
 
         const afterFormat = formatValue.replace(/\d(?=(\d{3})+\.)/g, '$&,');
@@ -633,7 +633,7 @@ export default {
         if (this.getSupplierBid.lineItems[i].price === 'NO_BID') {
           updatePrice = this.getSupplierBid.lineItems[i].price;
         } else {
-          updatePrice = this.getSupplierBid.lineItems[i].price ? parseFloat(this.removeNonNumeric(this.getSupplierBid.lineItems[i].price.toString())).toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 }) : '';
+          updatePrice = this.getSupplierBid.lineItems[i].price || this.getSupplierBid.lineItems[i].price === 0 ? parseFloat(this.removeNonNumeric(this.getSupplierBid.lineItems[i].price.toString())).toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 }) : '';
         }
         this.lineItems.push({
           price: updatePrice,
@@ -733,7 +733,7 @@ export default {
 
             for (let i = 0; i < data.length; i++) {
               this.lineItems.push({
-                price: data[i].Price ? parseFloat(this.removeNonNumeric(data[i].Price.toString())).toLocaleString(undefined, {
+                price: data[i].Price || data[i].Price === 0 ? parseFloat(this.removeNonNumeric(data[i].Price.toString())).toLocaleString(undefined, {
                   minimumFractionDigits: 2, maximumFractionDigits: 2,
                 }) === 'NaN' ? '' : parseFloat(this.removeNonNumeric(data[i].Price.toString())).toLocaleString(undefined, {
                   minimumFractionDigits: 2, maximumFractionDigits: 2,
