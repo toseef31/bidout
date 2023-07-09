@@ -447,7 +447,7 @@ export default {
     
     if (payload.answers && payload.answers.length) {
       for (let i = 0; i < payload.answers.length; i++) {
-        formData.append(`answers[${i}][questionId]`, payload.answers[i].questionId);
+        payload.answers[i].questionId ? formData.append(`answers[${i}][questionId]`, payload.answers[i].questionId) : ''
         payload.answers[i].answer ? formData.append(`answers[${i}][answer]`, payload.answers[i].answer) : ''
       }
     }
