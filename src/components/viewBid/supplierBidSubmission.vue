@@ -218,9 +218,9 @@
               <tbody>
                 <tr v-for="(doc, index) in supplierDocList" :key="index">
                   <td class="text-left">
-                    <img :src="require('@/assets/images/bids/FilePdf.png')"
+                    <img :src="require('@/assets/images/bids/FilePdf.png')" height="24px"
                       v-if="checkFileType(doc.fileName) === 'pdf'" />
-                    <img :src="require('@/assets/images/bids/FileDoc.png')"
+                    <img :src="require('@/assets/images/bids/FileDoc.png')" height="24px"
                       v-else-if="checkFileType(doc.fileName) === 'docx' || checkFileType(doc.fileName) === 'doc'" />
                     <v-icon color="#0D1139"
                       v-else-if="checkFileType(doc.fileName) === 'xlsx' || checkFileType(doc.fileName) === 'xls'">mdi-microsoft-excel</v-icon>
