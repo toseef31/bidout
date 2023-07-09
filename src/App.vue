@@ -38,7 +38,7 @@ export default {
   watch: {
     userData(user) {
       if(user){
-        LogRocket.identify(user.id, {
+        LogRocket.identify(user._id, {
           name: `${user.firstName} ${user.lastName}`,
           email: user.email,
         });
