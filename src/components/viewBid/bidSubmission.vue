@@ -42,7 +42,7 @@
             </tr>
 
             <tr
-              v-if="bidDetail.supplierSubmissions && (!bidDetail.receivingBids && isBidOut) || (!bidDetail.receivingBids && !isBidOut)">
+              v-if="bidDetail.supplierSubmissions && ((!bidDetail.receivingBids && isBidOut) || (bidDetail.bidData.type === 'BidOut Process' && !bidDetail.bidout))">
               <td class="bid-example-title">Bid Example Pre-BidOut Period</td>
               <template v-for="(submission) in bidDetail.supplierSubmissions">
                 <td v-if="!submission.bidOutPricePre">
@@ -57,8 +57,23 @@
               </template>
             </tr>
 
+            <tr v-if="bidDetail.supplierSubmissions && bidDetail.bidData.type !== 'BidOut Process'">
+              <td class="bid-example-title">Total Price</td>
+              <template v-for="(submission) in bidDetail.supplierSubmissions">
+                <td v-if="!submission.bidOutPricePre">
+                  Not submitted
+                </td>
+                <td v-else-if="submission.bidOutPricePre === null">
+                  Not submitted
+                </td>
+                <td v-else>
+                  $ {{ submission.bidOutPricePre }}
+                </td>
+              </template>
+            </tr>
+
             <tr
-              v-if="bidDetail.supplierSubmissions && (!bidDetail.receivingBids && isBidOut) || (!bidDetail.receivingBids && !isBidOut)">
+              v-if="bidDetail.supplierSubmissions && ((!bidDetail.receivingBids && isBidOut) || (bidDetail.bidData.type === 'BidOut Process' && !bidDetail.bidout))">
               <td class="bid-example-title">Bid Example Post-BidOut Period</td>
               <template v-for="(submission) in bidDetail.supplierSubmissions">
                 <td v-if="!submission.postBidOutPrice">
@@ -101,8 +116,8 @@
                   <div class="pb-4  d-inline-flex pr-10"
                     v-for="(doc, attIndex) in bidDetail.supplierSubmissions[aIndex].supplierAttachments" :key="attIndex">
 
-                    <img :src="require('@/assets/images/bids/FilePdf.png')" height="24px" v-if="checkFileType(doc.fileName) === 'pdf'"
-                      class="pr-2" />
+                    <img :src="require('@/assets/images/bids/FilePdf.png')" height="24px"
+                      v-if="checkFileType(doc.fileName) === 'pdf'" class="pr-2" />
                     <img :src="require('@/assets/images/bids/FileDoc.png')" height="24px"
                       v-else-if="checkFileType(doc.fileName) === 'docx' || checkFileType(doc.fileName) === 'doc'"
                       class="pr-2" />
@@ -129,14 +144,16 @@
               <td class="text-left" v-if="item.type !== 'category'"> {{ item.title }}</td>
               <template v-for="(ans) in answers">
 
-                <td class="text-left" v-if="ans.answers[qIndex].answer !== null && ans.answers[qIndex].answer !== 'null' && item.questionType === 'checkbox'">
+                <td class="text-left"
+                  v-if="ans.answers[qIndex].answer !== null && ans.answers[qIndex].answer !== 'null' && item.questionType === 'checkbox'">
                   {{ ans.answers[qIndex].answer }}
                 </td>
                 <td class="text-left"
                   v-if="ans.answers[qIndex].answer !== null && ans.answers[qIndex].answer !== 'null' && item.questionType === 'textfield' || item.questionType === 'textarea'">
                   {{ ans.answers[qIndex].answer }}
                 </td>
-                <td class="text-left" v-if="ans.answers[qIndex].answer !== null && ans.answers[qIndex].answer !== 'null' && item.questionType === 'uploadFile'">
+                <td class="text-left"
+                  v-if="ans.answers[qIndex].answer !== null && ans.answers[qIndex].answer !== 'null' && item.questionType === 'uploadFile'">
                   <div class="pb-4 d-inline-flex">
                     <img :src="require('@/assets/images/bids/FilePdf.png')" height="24px"
                       v-if="checkFileType(ans.answers[qIndex].fileName) === 'pdf'" />
@@ -149,7 +166,8 @@
 
                   </div>
                 </td>
-                <td class="text-left " v-if="(ans.answers[qIndex].answer === null || ans.answers[qIndex].answer === 'null') && item.type !== 'category'">
+                <td class="text-left "
+                  v-if="(ans.answers[qIndex].answer === null || ans.answers[qIndex].answer === 'null') && item.type !== 'category'">
                   None
                 </td>
               </template>
@@ -296,32 +314,46 @@ export default {
         });
       });
 
-      dataD.push(['Bid Example Pre-BidOut Period']);
+      if (this.bidDetail.bidData.type === 'BidOut Process') {
+        dataD.push(['Bid Example Pre-BidOut Period']);
 
-      index = this.indexOfArray(['Bid Example Pre-BidOut Period'], dataD);
+        index = this.indexOfArray(['Bid Example Pre-BidOut Period'], dataD);
 
-      this.bidDetail.supplierSubmissions.forEach((list) => {
-        if (list.bidOutPricePre) {
-          dataD[index].push(`$${list.bidOutPricePre}`);
-        } else {
-          dataD[index].push('Not submitted');
-        }
-      });
+        this.bidDetail.supplierSubmissions.forEach((list) => {
+          if (list.bidOutPricePre) {
+            dataD[index].push(`$${list.bidOutPricePre}`);
+          } else {
+            dataD[index].push('Not submitted');
+          }
+        });
 
-      dataD = this.spacer(dataD, index);
+        dataD = this.spacer(dataD, index);
 
-      dataD.push(['Bid Example Post-BidOut Period']);
+        dataD.push(['Bid Example Post-BidOut Period']);
 
-      index = this.indexOfArray(['Bid Example Post-BidOut Period'], dataD);
+        index = this.indexOfArray(['Bid Example Post-BidOut Period'], dataD);
 
-      this.bidDetail.supplierSubmissions.forEach((list) => {
-        if (list.postBidOutPrice) {
-          dataD[index].push(`$${list.postBidOutPrice} (Saving-${100 - Math.round(((list.postBidOutPrice / list.bidOutPricePre)
-            + Number.EPSILON) * 100)}%)`);
-        } else {
-          dataD[index].push('Not submitted');
-        }
-      });
+        this.bidDetail.supplierSubmissions.forEach((list) => {
+          if (list.postBidOutPrice) {
+            dataD[index].push(`$${list.postBidOutPrice} (Saving-${100 - Math.round(((list.postBidOutPrice / list.bidOutPricePre)
+              + Number.EPSILON) * 100)}%)`);
+          } else {
+            dataD[index].push('Not submitted');
+          }
+        });
+      } else {
+        dataD.push(['Total Price']);
+
+        index = this.indexOfArray(['Total Price'], dataD);
+
+        this.bidDetail.supplierSubmissions.forEach((list) => {
+          if (list.bidOutPricePre) {
+            dataD[index].push(`$${list.bidOutPricePre}`);
+          } else {
+            dataD[index].push('Not submitted');
+          }
+        });
+      }
 
       dataD = this.spacer(dataD, index);
 
