@@ -71,6 +71,20 @@
                 </td>
               </template>
             </tr>
+            <tr v-if="bidDetail.supplierSubmissions && bidDetail.bidData.type === 'BidOut Process' &&!bidDetail.bidout && bidDetail.receivingBids">
+              <td class="bid-example-title">Total Price</td>
+              <template v-for="(submission) in bidDetail.supplierSubmissions">
+                <td v-if="!submission.bidOutPricePre">
+                  Not submitted
+                </td>
+                <td v-else-if="submission.bidOutPricePre === null">
+                  Not submitted
+                </td>
+                <td v-else>
+                  $ {{ formatPrice(submission.bidOutPricePre) }}
+                </td>
+              </template>
+            </tr>
 
             <tr
               v-if="bidDetail.supplierSubmissions && ((!bidDetail.receivingBids && isBidOut) || (bidDetail.bidData.type === 'BidOut Process' && !bidDetail.bidout && !bidDetail.receivingBids))">
