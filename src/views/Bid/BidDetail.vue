@@ -49,9 +49,9 @@
     </v-card>
 
     <v-card class="fill-height main-card" :elevation="0">
-      <v-alert type="success" v-show="showAlertEditBidSubmissionSuccess" class="mx-5 mt-5">
+      <!-- <v-alert type="success" v-show="showAlertEditBidSubmissionSuccess" class="mx-5 mt-5">
         This bid has been updated successfully!
-      </v-alert>
+      </v-alert> -->
 
       <v-alert type="success" v-show="showBidSubmissionAlert.award" class="mx-5 mt-5">
         You have awarded a company successfully!
@@ -70,9 +70,9 @@
         {{ getLoweringPriceAlert }}
       </v-alert>
 
-      <v-alert type="error" v-show="getBidSubmissionValidationAlert !== null" class="mx-5 mt-5">
+      <!-- <v-alert type="error" v-show="getBidSubmissionValidationAlert !== null" class="mx-5 mt-5">
         {{ getBidSubmissionValidationAlert }}
-      </v-alert>
+      </v-alert> -->
 
       <v-row class="px-5 my-5 row-title" no-gutters v-if="getUserType === 'buyer'">
         <v-col>
@@ -892,6 +892,36 @@ export default {
         && this.checkZero(seconds)
       ) {
         this.$router.go(0);
+      }
+    },
+    isBidSubmitted(val) {
+      if (val && this.getUserType === 'supplier') {
+        this.$toasted.show('Your bid submission has been received', {
+          position: "top-center",
+          duration: 5000,
+          className: "success-toast",
+          type: "success",
+        });
+      }
+    },
+    getBidSubmissionValidationAlert(val) {
+      if (val !== null) {
+        this.$toasted.show(val, {
+          position: "top-center",
+          duration: 8000,
+          className: "error-toast",
+          type: "error",
+        });
+      }
+    },
+    showAlertEditBidSubmissionSuccess(val) {
+      if (val) {
+        this.$toasted.show('This bid has been updated successfully!', {
+          position: "top-center",
+          duration: 5000,
+          className: "success-toast",
+          type: "success",
+        });
       }
     },
   },
