@@ -428,7 +428,7 @@ export default {
     },
     allValid() {
       for (let i = 0; i < this.value.length; i++) {
-        if (Number(this.lineItems[i].price) > Number(this.getSupplierBid.lineItems[i].price)) {
+        if (Number(this.lineItems[i].price.replace(/,/g, '')) > Number(this.getSupplierBid.lineItems[i].price)) {
           this.value[i].message = 'Suppliers can only lower the prices during the BidOut Phase!';
           this.value[i].status = false;
         }
@@ -457,7 +457,9 @@ export default {
         this.lineItems[index].price = this.addCommas(this.removeNonNumeric(event));
       }
       if (this.isBidSubmitted && this.isBidOut) {
-        if (Number(this.getSupplierBid.lineItems[index].price) < Number(event)) {
+        const itemPrice = event.replace(/,/g, '');
+
+        if (Number(this.getSupplierBid.lineItems[index].price) < Number(itemPrice)) {
           this.value[index].message = 'Suppliers can only lower the prices during the BidOut Phase!';
           this.value[index].status = false;
         } else {
@@ -479,7 +481,7 @@ export default {
     isValidForTheSame() {
       let counter = 0;
       for (let i = 0; i < this.value.length; i++) {
-        if (Number(this.lineItems[i].price) === Number(this.getSupplierBid.lineItems[i].price)) {
+        if (Number(this.lineItems[i].price.replace(/,/g, '')) === Number(this.getSupplierBid.lineItems[i].price)) {
           counter++;
         }
       }
@@ -508,7 +510,7 @@ export default {
       if (action === 'submit' && this.$refs.form.validate()) {
         this.loading = true;
         this.lineItems.map((item) => {
-          if (item.price != null) {
+          if (item.price !== null) {
             item.price = item.price.replace(/,/g, '');
           } else {
             item.price = '';
@@ -535,7 +537,7 @@ export default {
       } else if (action === 'edit' && this.$refs.form.validate() && this.isValid) {
         this.loading = true;
         this.lineItems.map((item) => {
-          if (item.price != null) {
+          if (item.price !== null) {
             item.price = item.price.replace(/,/g, '');
           } else {
             item.price = '';
@@ -665,7 +667,7 @@ export default {
       this.supplierNote = this.getSupplierBid.supplierNote;
 
       for (let i = 0; i < bidData.questions.length; i++) {
-        const selectId = bidData.questions[i].oldId ? bidData.questions[i].oldId : bidData.questions[i]._id
+        const selectId = bidData.questions[i].oldId ? bidData.questions[i].oldId : bidData.questions[i]._id;
         if (this.getSupplierBid.answers[i].questionId === selectId) {
           if (bidData.questions[i].questionType === 'uploadFile') {
             this.answers.push({
