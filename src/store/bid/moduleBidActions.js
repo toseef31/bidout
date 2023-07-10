@@ -556,9 +556,6 @@ export default {
         commit('setBidSubmissionValidationAlert', ' Suppliers can only lower the prices during the BidOut Phase!')     
       }
 
-      if (err.response && err.response.status === 403 && err.response.data.message === 'Line items price can\'t be increased') {
-        commit('setBidSubmissionValidationAlert', ' Suppliers can only lower the prices during the BidOut Phase!')     
-      }
       if (state.apiCounter === 2) {
         dispatch('apiSignOutAction');
       } else if (err.response && err.response.status === 403 && err.response.data.message !== 'Line items price can\'t be increased') {
