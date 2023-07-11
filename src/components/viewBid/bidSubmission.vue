@@ -182,7 +182,7 @@
                 </td>
                 <td class="text-left "
                   v-if="(!ans.answers[qIndex].answer && item.type !== 'category') || ((ans.answers[qIndex].answer === null || ans.answers[qIndex].answer === 'null') && item.type !== 'category')">
-                  No answer
+                  No Provided
                 </td>
               </template>
             </tr>
