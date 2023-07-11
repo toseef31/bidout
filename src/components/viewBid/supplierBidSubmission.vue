@@ -117,10 +117,10 @@
               <v-col class="second-child text-right">
 
                 <v-checkbox v-if="(item.questionType === 'checkbox' && !item.options)"
-                  :rules="item.required === true ? answerRule : []" :disabled="!bidDetail.receivingBids || (!bidDetail.receivingBids && !bidDetail.bidout)"
+                  :rules="item.required === true ? answerRule : []" :disabled="checkForQ"
                   v-model="answers[index]['answer']"></v-checkbox>
 
-                <v-radio-group v-model="answers[index]['answer']" row :disabled="!bidDetail.receivingBids || (!bidDetail.receivingBids && !bidDetail.bidout)"
+                <v-radio-group v-model="answers[index]['answer']" row :disabled="checkForQ"
                   :rules="item.required === true ? answerRule : []"
                   v-if="(item.questionType === 'checkbox' && item.options)">
                   <v-radio :label="item.options[selectIndex].label" :value="item.options[selectIndex].label"
@@ -128,10 +128,10 @@
                 </v-radio-group>
 
                 <v-text-field v-if="item.questionType === 'textfield'" :rules="item.required === true ? answerRule : []"
-                  outlined :disabled="!bidDetail.receivingBids || (!bidDetail.receivingBids && !bidDetail.bidout)" v-model="answers[index]['answer']"></v-text-field>
+                  outlined :disabled="checkForQ" v-model="answers[index]['answer']"></v-text-field>
 
                 <v-textarea v-if="item.questionType === 'textarea'" outlined auto-grow
-                  :disabled="!bidDetail.receivingBids || (!bidDetail.receivingBids && !bidDetail.bidout)" rows="3" row-height="25"
+                  :disabled="checkForQ" rows="3" row-height="25"
                   :rules="item.required === true ? answerRule : []" v-model="answers[index]['answer']"></v-textarea>
 
                 <div class="upload-attach" v-if="item.questionType === 'uploadFile'">
@@ -181,7 +181,7 @@
                       text-center
                     ">
                     <v-file-input :id="`uploadFileQ${index}`" @change="handleDocumentForAnswer($event, index)"
-                      :disabled="!bidDetail.receivingBids" :rules="item.required === true ? fileRule : []" />
+                      :disabled="checkForQ" :rules="item.required === true ? fileRule : []" />
 
                     <div class="mt-1">
                       <v-icon class="mr-4">mdi-cloud-upload-outline</v-icon>Upload here
@@ -389,6 +389,11 @@ export default {
 
       if (this.bidDetail.receivingBids) return false;
       return true;
+    },
+    checkForQ() {
+      if (this.bidDetail.receivingBids) return false
+      if (this.bidDetail.bidout) return false
+      return true
     },
     getPriceError() {
       return this.value;
@@ -667,7 +672,7 @@ export default {
 
       for (let i = 0; i < bidData.questions.length; i++) {
         const selectId = bidData.questions[i].oldId ? bidData.questions[i].oldId : bidData.questions[i]._id;
-        if (this.getSupplierBid.answers[i].questionId === selectId) {
+        if (this.getSupplierBid.answers[i].questionId === bidData.questions[i]._id || this.getSupplierBid.answers[i].questionId === selectId) {
           if (bidData.questions[i].questionType === 'uploadFile') {
             this.answers.push({
               questionId: this.getSupplierBid.answers[i].questionId,
