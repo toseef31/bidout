@@ -117,10 +117,10 @@
               <v-col class="second-child text-right">
 
                 <v-checkbox v-if="(item.questionType === 'checkbox' && !item.options)"
-                  :rules="item.required === true ? answerRule : []" :disabled="!bidDetail.receivingBids"
+                  :rules="item.required === true ? answerRule : []" :disabled="!bidDetail.receivingBids || (!bidDetail.receivingBids && !bidDetail.bidout)"
                   v-model="answers[index]['answer']"></v-checkbox>
 
-                <v-radio-group v-model="answers[index]['answer']" row :disabled="!bidDetail.receivingBids"
+                <v-radio-group v-model="answers[index]['answer']" row :disabled="!bidDetail.receivingBids || (!bidDetail.receivingBids && !bidDetail.bidout)"
                   :rules="item.required === true ? answerRule : []"
                   v-if="(item.questionType === 'checkbox' && item.options)">
                   <v-radio :label="item.options[selectIndex].label" :value="item.options[selectIndex].label"
@@ -128,10 +128,10 @@
                 </v-radio-group>
 
                 <v-text-field v-if="item.questionType === 'textfield'" :rules="item.required === true ? answerRule : []"
-                  outlined :disabled="!bidDetail.receivingBids" v-model="answers[index]['answer']"></v-text-field>
+                  outlined :disabled="!bidDetail.receivingBids || (!bidDetail.receivingBids && !bidDetail.bidout)" v-model="answers[index]['answer']"></v-text-field>
 
                 <v-textarea v-if="item.questionType === 'textarea'" outlined auto-grow
-                  :disabled="!bidDetail.receivingBids" rows="3" row-height="25"
+                  :disabled="!bidDetail.receivingBids || (!bidDetail.receivingBids && !bidDetail.bidout)" rows="3" row-height="25"
                   :rules="item.required === true ? answerRule : []" v-model="answers[index]['answer']"></v-textarea>
 
                 <div class="upload-attach" v-if="item.questionType === 'uploadFile'">
@@ -174,12 +174,12 @@
 
                   <label :for="`uploadFileQ${index}`" v-else
                     class="
-                                                                                                                                                                                                                                                    upload-file
-                                                                                                                                                                                                                                                   pa-4
-                                                                                                                                                                                                                                                    d-block
-                                                                                                                                                                                                                                                    font-weight-medium
-                                                                                                                                                                                                                                                    text-center
-                                                                                                                                                                                                                                                  ">
+                      upload-file
+                      pa-4
+                      d-block
+                      font-weight-medium
+                      text-center
+                    ">
                     <v-file-input :id="`uploadFileQ${index}`" @change="handleDocumentForAnswer($event, index)"
                       :disabled="!bidDetail.receivingBids" :rules="item.required === true ? fileRule : []" />
 
