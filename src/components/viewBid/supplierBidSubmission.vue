@@ -458,8 +458,7 @@ export default {
       }
       if (this.isBidSubmitted && this.isBidOut) {
         const itemPrice = event.replace(/,/g, '');
-
-        if (Number(this.getSupplierBid.lineItems[index].price) < Number(itemPrice)) {
+        if (Number(this.getSupplierBid.lineItems[index].price) < Number(this.removeNonNumeric(itemPrice))) {
           this.value[index].message = 'Suppliers can only lower the prices during the BidOut Phase!';
           this.value[index].status = false;
         } else {
