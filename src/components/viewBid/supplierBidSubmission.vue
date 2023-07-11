@@ -130,20 +130,20 @@
                 <v-text-field v-if="item.questionType === 'textfield'" :rules="item.required === true ? answerRule : []"
                   outlined :disabled="checkForQ" v-model="answers[index]['answer']"></v-text-field>
 
-                <v-textarea v-if="item.questionType === 'textarea'" outlined auto-grow
-                  :disabled="checkForQ" rows="3" row-height="25"
-                  :rules="item.required === true ? answerRule : []" v-model="answers[index]['answer']"></v-textarea>
+                <v-textarea v-if="item.questionType === 'textarea'" outlined auto-grow :disabled="checkForQ" rows="3"
+                  row-height="25" :rules="item.required === true ? answerRule : []"
+                  v-model="answers[index]['answer']"></v-textarea>
 
                 <div class="upload-attach" v-if="item.questionType === 'uploadFile'">
                   <div class="d-flex justify-space-between align-center"
                     v-if="((answers[index].answer && answers[index].answer.name || answers[index].fileName))">
                     <div class="doc-list">{{ (answers[index].answer.name || answers[index].fileName) }}</div>
 
-                    <v-dialog class="dialog-class" v-model="dialog" width="340">
+                    <v-dialog class="dialog-class" v-model="dialog" width="340" v-if="!checkForQ">
 
                       <template v-slot:activator="{ on, attrs }">
 
-                        <v-btn v-on="on" v-bind="attrs" icon v-if="bidDetail.receivingBids">
+                        <v-btn v-on="on" v-bind="attrs" icon>
                           <v-icon size="20" color="#F03F20">mdi-close
                           </v-icon>
                         </v-btn>
@@ -172,8 +172,7 @@
 
                   </div>
 
-                  <label :for="`uploadFileQ${index}`" v-else
-                    class="
+                  <label :for="`uploadFileQ${index}`" v-else class="
                       upload-file
                       pa-4
                       d-block
@@ -391,9 +390,9 @@ export default {
       return true;
     },
     checkForQ() {
-      if (this.bidDetail.receivingBids) return false
-      if (this.bidDetail.bidout) return false
-      return true
+      if (this.bidDetail.receivingBids) return false;
+      if (this.bidDetail.bidout) return false;
+      return true;
     },
     getPriceError() {
       return this.value;
