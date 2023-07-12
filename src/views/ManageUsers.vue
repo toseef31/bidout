@@ -1,122 +1,189 @@
 <template>
   <v-row class="manage-users pa-0 ma-0">
-   <v-col class="pa-0 pr-sm-3" :class="[ showSideBar ? 'col-md-12 col-12 col-sm-12' : 'mid-content-collapse', activityPanel ? 'd-sm-block' : 'd-md-block']" v-show="!activityPanel">
+    <v-col
+      class="pa-0 pr-sm-3"
+      :class="[
+        showSideBar ? 'col-md-12 col-12 col-sm-12' : 'mid-content-collapse',
+        activityPanel ? 'd-sm-block' : 'd-md-block',
+      ]"
+      v-show="!activityPanel"
+    >
       <div class="mid-content">
         <div class="content-section">
           <v-row class="mx-0">
             <v-col cols="12" sm="12" md="12" class="d-sm-block">
               <div class="manage-sections pa-4">
-                <v-alert type="success" v-show="showErrorAlert" v-if="message != null" class="text-left" dismissible>
+                <v-alert
+                  type="success"
+                  v-show="showErrorAlert"
+                  v-if="message != null"
+                  class="text-left"
+                  dismissible
+                >
                   {{ message }}
                 </v-alert>
                 <div class="top-section d-flex">
                   <h4>Manage Users</h4>
                   <div>
-                   
-                    <router-link to="/manage-users/disabled-users" class="pr-8 font-weight-bold">Show Disable Users</router-link>
-                    <router-link to="/manage-users/add-users" class="text-decoration-none"><v-btn 
-                    color="#0D9648" 
-                    large 
-                    dark 
-                    min-width="200px"
-                    class="text-capitalize">Add User</v-btn></router-link>
+                    <router-link
+                      to="/manage-users/disabled-users"
+                      class="pr-8 font-weight-bold"
+                      >Show Disable Users</router-link
+                    >
+                    <router-link to="/manage-users/add-users" class="text-decoration-none"
+                      ><v-btn
+                        color="#0D9648"
+                        large
+                        dark
+                        min-width="200px"
+                        class="text-capitalize"
+                        >Add User</v-btn
+                      ></router-link
+                    >
                   </div>
                 </div>
                 <div class="userlist-table mt-16">
-                  <v-alert type="success" v-if="statusMessage !== null" class="text-left" dismissible>
+                  <v-alert
+                    type="success"
+                    v-if="statusMessage !== null"
+                    class="text-left"
+                    dismissible
+                  >
                     {{ statusMessage }}
                   </v-alert>
                   <v-simple-table>
                     <template v-slot:default>
                       <thead>
                         <tr>
-                          <th class="text-left black--text font-weight-bold">
-                            Name
-                          </th>
-                          <th class="text-left black--text font-weight-bold">
-                            Email
-                          </th>
+                          <th class="text-left black--text font-weight-bold">Name</th>
+                          <th class="text-left black--text font-weight-bold">Email</th>
                           <th class="text-left black--text font-weight-bold">
                             Last Login
                           </th>
                           <th class="text-left black--text font-weight-bold">
                             User Permissions
                           </th>
-                          <th class="text-left black--text font-weight-bold">
-                            
-                          </th>
+                          <th class="text-left black--text font-weight-bold"></th>
                         </tr>
                       </thead>
                       <tbody>
                         <tr
                           v-for="(user, i) in users"
-                          :key="user.i" v-if="user.status != false"
+                          :key="user.i"
+                          v-if="user.status != false"
                         >
-
-                          <td class="text-left font-weight-medium">{{ user.firstName }} {{ user.lastName }}</td>
+                          <td class="text-left font-weight-medium">
+                            {{ user.firstName }} {{ user.lastName }}
+                          </td>
                           <td class="text-left font-weight-medium">{{ user.email }}</td>
-                          <td class="text-left font-weight-medium"><span v-if="user.lastSeen">{{ user.lastSeen | moment("MM/DD/YYYY") }}</span><span v-else>no history</span></td>
+                          <td class="text-left font-weight-medium">
+                            <span v-if="user.lastSeen">{{
+                              user.lastSeen | moment("MM/DD/YYYY")
+                            }}</span
+                            ><span v-else>no history</span>
+                          </td>
                           <td class="text-left font-weight-medium text-capitalize">
                             <template v-if="user.role == 'admin'">Administrator</template>
                             <template v-if="user.role == 'user'">User</template>
                           </td>
                           <td class="text-left">
-                            <v-btn depressed color="transparent" @click="editUser(user,'general')" class="text-capitalize edit-btn">
+                            <v-btn
+                              depressed
+                              color="transparent"
+                              @click="editUser(user, 'general')"
+                              class="text-capitalize edit-btn"
+                            >
                               <v-icon>mdi-square-edit-outline</v-icon>
-                            Edit Details</v-btn>
-                           
-                            <v-btn depressed color="transparent" class="text-capitalize" v-if="user._id != userInfo._id" @click="disable(user._id)">
-                              <v-icon color="#F32349">mdi-window-close</v-icon>
-                            Disable </v-btn>
+                              Edit Details</v-btn
+                            >
 
+                            <v-btn
+                              depressed
+                              color="transparent"
+                              class="text-capitalize"
+                              v-if="user._id != userInfo._id"
+                              @click="disable(user._id)"
+                            >
+                              <v-icon color="#F32349">mdi-window-close</v-icon>
+                              Disable
+                            </v-btn>
                           </td>
                         </tr>
                         <tr v-if="users.length < 1">
-                          <td colspan="5"> <h4>There is no user in this company</h4></td>
+                          <td colspan="5"><h4>There is no user in this company</h4></td>
                         </tr>
                         <tr class="white">
-                          <td colspan="5"><h2 class="my-4 text-left">Pending User Invitations</h2></td>
+                          <td colspan="5">
+                            <h2 class="my-4 text-left">Pending User Invitations</h2>
+                          </td>
                         </tr>
-                        <tr
-                          v-for="(user, i) in invitedList"
-                          :key="user.i"
-                        >
-
-                          <td class="text-left font-weight-medium">{{ user.firstName }} {{ user.lastName }}</td>
+                        <tr v-for="(user, i) in invitedList" :key="user.i">
+                          <td class="text-left font-weight-medium">
+                            {{ user.firstName }} {{ user.lastName }}
+                          </td>
                           <td class="text-left font-weight-medium">{{ user.email }}</td>
-                          <td class="text-left font-weight-medium"><span v-if="user.lastSeen">{{ user.lastSeen | moment("MM/DD/YYYY") }}</span><span v-else>no history</span></td>
+                          <td class="text-left font-weight-medium">
+                            <span v-if="user.lastSeen">{{
+                              user.lastSeen | moment("MM/DD/YYYY")
+                            }}</span
+                            ><span v-else>no history</span>
+                          </td>
                           <td class="text-left font-weight-medium text-capitalize">
                             <template v-if="user.role == 'admin'">Administrator</template>
                             <template v-else>User</template>
                           </td>
                           <td class="text-left">
-                            <v-btn depressed color="transparent" @click="editUser(user,'invited')" class="text-capitalize edit-btn">
+                            <v-btn
+                              depressed
+                              color="transparent"
+                              @click="editUser(user, 'invited')"
+                              class="text-capitalize edit-btn"
+                            >
                               <v-icon>mdi-square-edit-outline</v-icon>
-                            Edit Details</v-btn>
-                           
-                            <v-btn depressed color="transparent" class="text-capitalize edit-btn">
-                              <v-icon>mdi-check</v-icon>
-                            Invited </v-btn>
+                              Edit Details</v-btn
+                            >
 
+                            <v-btn
+                              depressed
+                              color="transparent"
+                              class="text-capitalize edit-btn"
+                            >
+                              <v-icon>mdi-check</v-icon>
+                              Invited
+                            </v-btn>
+                            <v-btn
+                              depressed
+                              color="transparent"
+                              class="text-capitalize"
+                              v-if="user._id != userInfo._id"
+                              @click="deletePending(user._id)"
+                            >
+                              <v-icon color="#F32349">mdi-window-close</v-icon>
+                              Delete
+                            </v-btn>
                           </td>
                         </tr>
                         <tr v-if="invitedList.length < 1 && !pendingUsers">
                           <td colspan="5"><h4>There is no invited user.</h4></td>
                         </tr>
-                        <tr
-                          v-for="(user, i) in pendingUsers"
-                          :key="user.i"
-                        >
-
-                          <td class="text-left font-weight-medium">{{ user.firstName }} {{ user.lastName }}</td>
+                        <tr v-for="(user, i) in pendingUsers" :key="user.i">
+                          <td class="text-left font-weight-medium">
+                            {{ user.firstName }} {{ user.lastName }}
+                          </td>
                           <td class="text-left font-weight-medium">{{ user.email }}</td>
                           <td class="text-left font-weight-medium">no history</td>
-                          
+
                           <td class="text-left font-weight-medium">User</td>
                           <td class="text-left">
-                            <v-btn depressed color="transparent" class="text-capitalize edit-btn" @click="accept(user)" >
-                                <v-icon>mdi-check</v-icon>
-                              Approve </v-btn>
+                            <v-btn
+                              depressed
+                              color="transparent"
+                              class="text-capitalize edit-btn"
+                              @click="accept(user)"
+                            >
+                              <v-icon>mdi-check</v-icon>
+                              Approve
+                            </v-btn>
                           </td>
                         </tr>
                       </tbody>
@@ -132,79 +199,92 @@
   </v-row>
 </template>
 <script>
-  import Navbar from '../components/Layout/Navbar.vue'
-  import LeftSidebar from '../components/Layout/Dashboard/LeftSidebar.vue'
-  import RightSidebar from '../components/Layout/Dashboard/RightSidebar.vue'
-  import { mapActions, mapState } from "vuex";
+import Navbar from "../components/Layout/Navbar.vue";
+import LeftSidebar from "../components/Layout/Dashboard/LeftSidebar.vue";
+import RightSidebar from "../components/Layout/Dashboard/RightSidebar.vue";
+import { mapActions, mapState } from "vuex";
 export default {
-  name : "ManageUsers",
+  name: "ManageUsers",
   components: {
     Navbar,
     LeftSidebar,
-    RightSidebar
+    RightSidebar,
   },
-  
+
   data() {
     return {
-      isHidden : false,
-      userInfo : '',
+      isHidden: false,
+      userInfo: "",
     };
   },
-  computed:{
-    showSideBar(){
-        return this.$store.getters.g_sideBarOpen;
+  computed: {
+    showSideBar() {
+      return this.$store.getters.g_sideBarOpen;
     },
-    activityPanel(){
-        return this.$store.getters.g_activityPanel;
+    activityPanel() {
+      return this.$store.getters.g_activityPanel;
     },
-    users(){
+    users() {
       return this.$store.getters.userList;
     },
-    userStatus () {
-      return this.$store.getters.userStatus
+    userStatus() {
+      return this.$store.getters.userStatus;
     },
-    statusMessage () {
-      return this.$store.getters.statusMessage
+    statusMessage() {
+      return this.$store.getters.statusMessage;
     },
-    responseId () {
-      return this.$store.getters.responseId
+    responseId() {
+      return this.$store.getters.responseId;
     },
-    message () {
-      return this.$store.getters.message
+    message() {
+      return this.$store.getters.message;
     },
-    invitedList () {
-      return this.$store.getters.invitedList
+    invitedList() {
+      return this.$store.getters.invitedList;
     },
-    pendingUsers(){
+    pendingUsers() {
       return this.$store.getters.pendingList;
     },
-    showErrorAlert(){
+    showErrorAlert() {
       return this.$store.getters.showErrorAlert;
-    }
+    },
   },
   methods: {
-    ...mapActions(["manageUsers","disableUser","enableUser","editData","getInvitedList","getPendingUsers","acceptPendingUser"]),
-    getUsers(company){
+    ...mapActions([
+      "manageUsers",
+      "disableUser",
+      "enableUser",
+      "editData",
+      "getInvitedList",
+      "getPendingUsers",
+      "acceptPendingUser",
+      "deletePendingSignUp",
+    ]),
+    getUsers(company) {
       this.manageUsers(company);
     },
-    disable(id){
+    disable(id) {
       this.disableUser(id);
     },
-    enable(id){
+    deletePending(id) {
+      this.deletePendingSignUp(id);
+      this.invitedUsers(this.user.company._id);
+    },
+    enable(id) {
       this.enableUser(id);
     },
-    editUser(user,type){
-      var data = {user,type};
+    editUser(user, type) {
+      var data = { user, type };
       this.editData(data);
     },
-    invitedUsers(company){
+    invitedUsers(company) {
       this.getInvitedList(company);
     },
-    pendingUser(company){
+    pendingUser(company) {
       this.getPendingUsers(company);
     },
-    accept(user){
-      this.acceptPendingUser({user, companyId: this.user.company._id});
+    accept(user) {
+      this.acceptPendingUser({ user, companyId: this.user.company._id });
     },
   },
   mounted() {
@@ -214,9 +294,7 @@ export default {
     this.getUsers(this.user.company._id);
     this.invitedUsers(this.user.company._id);
     this.getPendingUsers(this.user.company._id);
-  }
+  },
 };
 </script>
-<style scoped lang="scss">
-
-</style>
+<style scoped lang="scss"></style>

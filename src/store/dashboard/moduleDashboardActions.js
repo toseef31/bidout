@@ -113,6 +113,28 @@ export default {
           console.log(err);
       });
   }, 
+  deletePendingSignUp({commit,dispatch,state},payload){
+    axios.post('/v2/user/deletePendingSignUp/'+ payload)
+      .then(responce => {
+        if(responce.status === 200){
+          commit('setStatusMessage', 'User deleted sucessfully!')
+          commit('setUserStatus',false)
+          commit('showErrorAlert')
+        }
+    }).catch(async(err) => {
+       Sentry.captureException(err);
+      if(state.apiCounter === 2){
+        dispatch('apiSignOutAction')
+      }else{
+        if(err.response && err.response.status === 403){
+         await dispatch('refreshToken');
+         state.apiCounter = 2;
+         dispatch('deletePending',payload);
+        }
+      }
+          console.log(err);
+      });
+  }, 
 
   enableUser({commit,dispatch,state},payload){
     axios.post('/v2/company/enableUser/'+payload)
