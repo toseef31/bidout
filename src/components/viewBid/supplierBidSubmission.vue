@@ -143,7 +143,7 @@
 
                       <template v-slot:activator="{ on, attrs }">
 
-                        <v-btn v-on="on" v-bind="attrs" icon>
+                        <v-btn v-on="on" v-bind="attrs" icon @click="answerI = index">
                           <v-icon size="20" color="#F03F20">mdi-close
                           </v-icon>
                         </v-btn>
@@ -162,7 +162,7 @@
                           <v-btn color="#0d9648" outlined @click="dialog = false">
                             Cancel
                           </v-btn>
-                          <v-btn color="#F32349" outlined @click="dialog = false; removeQuesDoc(index)">
+                          <v-btn color="#F32349" outlined @click="dialog = false; removeQuesDoc()">
                             Agree
                           </v-btn>
                         </v-card-actions>
@@ -332,6 +332,7 @@ export default {
       fileRule: [
         (value) => !!value || 'File attachment is required!',
       ],
+      answerI: null
     };
   },
   computed: {
@@ -588,10 +589,10 @@ export default {
       this.$store.state.bid.supplierAttachment.splice(this.deletedFileI, 1);
       this.dialogT.splice(this.deletedFileI, 1);
     },
-    removeQuesDoc(index) {
-      this.answers[index].answer = null;
+    removeQuesDoc() {
+      this.answers[this.answerI].answer = null;
       this.answers.forEach((el, i) => {
-        if (index === i && el.fileName) {
+        if (this.answerI === i && el.fileName) {
           delete el.fileName;
           delete el.fileSize;
         }
