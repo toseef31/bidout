@@ -62,7 +62,7 @@
 
                     <v-btn
                       :disabled="!valid"
-                      :loading="btnLoading"
+                      :loading="profileLoading"
                       color="#0D9648"
                       class="mr-4 text-capitalize white--text font-weight-bold"
                       @click="validate"
@@ -83,7 +83,7 @@
   </v-row>
 </template>
 <script>
-import { mapActions } from 'vuex';
+import { mapActions, mapGetters } from 'vuex';
 import Navbar from '../components/Layout/Navbar.vue';
 import LeftSidebar from '../components/Layout/Dashboard/LeftSidebar.vue';
 import RightSidebar from '../components/Layout/Dashboard/RightSidebar.vue';
@@ -99,7 +99,6 @@ export default {
     return {
       isHidden: false,
       valid: true,
-      btnLoading: false,
       firstName: '',
       lastName: '',
       nameRules: [
@@ -119,11 +118,25 @@ export default {
     };
   },
   computed: {
+    ...mapGetters(['profileLoading', 'inviteMessage']),
     showSideBar() {
       return this.$store.getters.g_sideBarOpen;
     },
     activityPanel() {
       return this.$store.getters.g_activityPanel;
+    },
+  },
+  watch: {
+    inviteMessage(value) {
+      if (value) {
+        this.$toasted.show(value, {
+          position: 'top-center',
+          duration: 3000,
+          className: 'error-toast',
+          type: 'error',
+        });
+        this.valid = true;
+      }
     },
   },
   methods: {
@@ -141,7 +154,7 @@ export default {
         }
         this.inviteUser(data);
         this.btnLoading = true;
-      }
+      };
     },
   },
   mounted() {

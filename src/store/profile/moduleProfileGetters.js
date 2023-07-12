@@ -35,4 +35,7 @@ export default {
   resetPasswordMsg(state) {
     return state.resetPasswordMsg;
   },
+  inviteMessage(state) {
+    return state.inviteMessage;
+  },
 };
