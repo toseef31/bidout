@@ -129,19 +129,19 @@ export default {
   methods: {
     ...mapActions(['inviteUser']),
     validate() {
-      this.$refs.form.validate();
-      this.valid = false;
-      this.btnLoading = true;
-      const data = {
-        firstName: this.firstName,
-        lastName: this.lastName,
-        email: this.email,
-        role: this.select,
-        company: this.user.company.companyName,
-        companyId: this.user.company,
-        parent: this.user._id,
+      if (this.$refs.form.validate()) {
+        const data = {
+          firstName: this.firstName,
+          lastName: this.lastName,
+          email: this.email,
+          role: this.select,
+          company: this.user.company.companyName,
+          companyId: this.user.company,
+          parent: this.user._id,
+        }
+        this.inviteUser(data);
+        this.btnLoading = true;
       }
-      this.inviteUser(data);
     },
   },
   mounted() {
