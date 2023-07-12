@@ -267,9 +267,9 @@ export default {
         this.publishLoading = false;
       }
     },
-    async updateDraft(){
+    async updateDraft() {
       await this.updateDraftBid({'supplier': this.$store.state.bid.invitedSuppliers});
-    }
+    },
   },
   mounted() {
     document.title = 'Create Bid - BidOut';

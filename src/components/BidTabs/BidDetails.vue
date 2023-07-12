@@ -216,10 +216,10 @@ export default {
     },
     bidType: {
       get() {
-        if (!this.$store.getters.bidData._id) {
-          return '';
+        if (this.$store.getters.bidData != null) {
+          return this.$store.getters.bidData.type;
         }
-        return this.$store.getters.bidData.type;
+        return '';
       },
       set(value) {
         this.$store.commit('setBidType', value);
@@ -234,11 +234,10 @@ export default {
 
           return currentDate.format('YYYY-MM-DD');
         }
-        if (!this.$store.getters.bidData._id) {     
-          return '';
+        if (this.$store.getters.bidData != null) {
+          return this.$store.getters.bidData.dueDate;
         }
-
-        return this.$store.getters.bidData.dueDate;
+        return '';
       },
       set(value) {
         this.$store.commit('setBidDueDate', value);
@@ -246,10 +245,10 @@ export default {
     },
     dueTime: {
       get() {
-        if (!this.$store.getters.bidData._id) {
-          return '';
+        if (this.$store.getters.bidData != null) {
+          return this.$store.getters.bidData.dueTime;
         }
-        return this.$store.getters.bidData.dueTime;
+        return '';
       },
       set(value) {
         this.$store.commit('setBidDueTime', value);
@@ -257,10 +256,10 @@ export default {
     },
     bidRegions: {
       get() {
-        if (!this.$store.getters.bidData._id) {
-          return '';
+        if (this.$store.getters.bidData != null) {
+          return this.$store.getters.bidData.region;
         }
-        return this.$store.getters.bidData.region;
+        return '';
       },
       set(value) {
         this.$store.commit('setBidRegions', value);
@@ -279,14 +278,14 @@ export default {
     },
     qAndAEnabled: {
       get() {
-        if (!this.$store.getters.bidData._id) {
-          return 'yes';
-        } else {
+        if (this.$store.getters.bidData != null) {
           if (this.$store.getters.bidData.qAndAEnabled === true) {
             return 'true';
           } else {
             return 'false';
           }
+        } else {
+          return 'yes';
         }
         // return this.$store.getters.bidData.qAndAEnabled;;
       },
