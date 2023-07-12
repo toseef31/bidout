@@ -1,5 +1,10 @@
 <template>
-  <v-row class="createBid-module manage-template pa-0 ma-0">
+   <v-row fill-height align="center" v-if="getLoading">
+    <v-col cols="12">
+      <v-progress-circular :width="3" color="green" indeterminate></v-progress-circular>
+    </v-col>
+  </v-row>
+  <v-row v-else class="createBid-module manage-template pa-0 ma-0">
     <v-col
       class="pa-0 pr-sm-3"
       :class="[
@@ -154,6 +159,7 @@ export default {
       dialog: false,
       templateId: "",
       templateIndex: "",
+      loading: false
     };
   },
   computed: {
@@ -171,6 +177,9 @@ export default {
     bidTemplates() {
       return this.$store.getters.bidTemplates;
     },
+    getLoading() {
+      return this.loading
+    }
   },
   methods: {
     ...mapActions([
@@ -241,7 +250,9 @@ export default {
     },
   },
   async created() {
+    this.loading = true
     await this.getBidTemplates({ companyId: this.$store.getters.userInfo.company._id});
+    this.loading = false
   },
   mounted() {
     document.title = "Manage Templates - BidOut";
