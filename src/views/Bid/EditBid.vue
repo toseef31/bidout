@@ -237,9 +237,14 @@ export default {
       this.currentItem = tab;
     },
     validateValue(event) {
-      this.validate = event.valid;
-      this.value = event.value;
-      this.bidTitle = event.bidTitle;
+      if (event.type === 'L') {
+        this.itemsValid = event.valid;
+        this.itemsValue = event.items;
+      } else {
+        this.validate = event.valid;
+        this.value = event.value;
+        this.bidTitle = event.bidTitle;
+      }
     },
     validateSupplier(event) {
       this.supplierValid = event.valid;
