@@ -14,4 +14,5 @@ export default {
   profileLoading: false,
   passwordLoading: false,
   resetPasswordMsg: '',
+  inviteMessage: null,
 };

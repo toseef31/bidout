@@ -186,13 +186,20 @@ export default {
       });
   },
   inviteUser({ commit, dispatch, state }, payload) {
-    axios.post('/v2/company/addInvitedUser/', {'firstName':payload.firstName,'lastName': payload.lastName,'company': payload.company,'companyId':payload.companyId,'email':payload.email,'parent': payload.parent,'role': payload.role})
+    commit('editProfileLoading', true);
+    commit('setInviteMessage', null);
+    axios.post('/v2/company/addInvitedUser/', {'firstName':payload.firstName,'lastName': payload.lastName,'company': payload.company,'companyId':payload.companyId,'parent': payload.parent,'role': payload.role})
       .then((responce) => {
         if (responce.status === 200) {
+          commit('editProfileLoading', false);
           commit('setMessage', 'User invited successfully');
           router.replace({ name: 'ManageUsers' });
+        } else {
+          commit('editProfileLoading', false);
         }
       }).catch(async (err) => {
+        commit('setInviteMessage', err.response.data.message);
+        commit('editProfileLoading', false);
         if (state.apiCounter === 2) {
           dispatch('apiSignOutAction');
         } else {

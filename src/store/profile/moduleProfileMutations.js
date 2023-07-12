@@ -50,4 +50,7 @@ export default {
     console.log('payl', payload);
     state.resetPasswordMsg = payload;
   },
+  setInviteMessage(state, payload) {
+    state.inviteMessage = payload;
+  },
 };
