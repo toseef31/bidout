@@ -2,7 +2,7 @@
   <v-col class="my-7 pa-0 bid-submission-tab" align="start">
 
     <div class="table-class" v-if="bidDetail.supplierSubmissions.length">
-      <div class="d-flex justify-end mr-5" v-if="!isBidOut && !bidDetail.receivingBids">
+      <div class="d-flex justify-end mr-5" v-if="isBidOut || bidDetail.bidData.type !== 'BidOut Process' || (bidDetail.bidData.type === 'BidOut Process' && !bidDetail.bidout && !bidDetail.receivingBids)">
 
         <v-tooltip top>
           <template v-slot:activator="{ on, attrs }">
@@ -379,7 +379,7 @@ export default {
         if (list.supplierNote && list.supplierNote !== '') {
           dataD[index].push(`${list.supplierNote}`);
         } else {
-          dataD[index].push('None');
+          dataD[index].push('Not Provided');
         }
       });
 
@@ -397,7 +397,7 @@ export default {
           });
           dataD[index].push(`${doc}`);
         } else {
-          dataD[index].push('None');
+          dataD[index].push('Not Provided');
         }
       });
 
@@ -410,12 +410,12 @@ export default {
             const fI = this.indexOfArray([el.title], dataD);
             this.answers.forEach((list) => {
               if (el.questionType === 'checkbox') {
-                if (list.answers[qInd].answer === 'null') dataD[fI].push('None');
+                if (list.answers[qInd].answer === 'null' || list.answers[qInd].answer === null) dataD[fI].push('Not Provided');
                 else dataD[fI].push(list.answers[qInd].answer);
               } else if (el.questionType === 'uploadFile') {
                 dataD[fI].push(`${list.answers[qInd].fileName}`);
-              } else if (list.answers[qInd].answer === 'null') {
-                dataD[fI].push('None');
+              } else if (list.answers[qInd].answer === 'null' || list.answers[qInd].answer === null) {
+                dataD[fI].push('Not Provided');
               } else {
                 dataD[fI].push(`${list.answers[qInd].answer}`);
               }
