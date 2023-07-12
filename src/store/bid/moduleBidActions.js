@@ -1019,19 +1019,14 @@ export default {
         commit('setAttachement', null);
         commit('setQuestions', null);
         commit('setDraftBidData', null);
-        // commit('setBidTitle', '');
-        // commit('setBidType', '');
-        // commit('setBidDueDate', '');
-        // commit('setBidDueTime', '');
-        // commit('setBidRegions', '');
-        // commit('setBidEnabled', '');
+
         commit('setIsEditBidChanges', false);
         state.bidData.lastSerial = res.data.serial;
         state.bidData.serial = '';
         state.bidData._id = '';
         state.bidData.status = '';
         state.bidData.statusType = '';
-        // commit('setBidDescription', [{ body: '' }]);
+        
         state.bidData.attachments = '';
         state.bidData.invitedSuppliers = '';
         state.bidData.invitedTeamMembers = '';
