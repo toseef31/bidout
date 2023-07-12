@@ -188,7 +188,7 @@ export default {
   inviteUser({ commit, dispatch, state }, payload) {
     commit('editProfileLoading', true);
     commit('setInviteMessage', null);
-    axios.post('/v2/company/addInvitedUser/', {'firstName':payload.firstName,'lastName': payload.lastName,'company': payload.company,'companyId':payload.companyId,'parent': payload.parent,'role': payload.role})
+    axios.post('/v2/company/addInvitedUser/', {'firstName':payload.firstName,'lastName': payload.lastName,'company': payload.company,'companyId':payload.companyId,'email':payload.email,'parent': payload.parent,'role': payload.role})
       .then((responce) => {
         if (responce.status === 200) {
           commit('editProfileLoading', false);
