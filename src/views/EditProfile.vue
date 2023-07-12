@@ -13,7 +13,7 @@
                 <div class="editprofile-section mt-16">
                   <v-row justify="center">
                     <v-col cols="12" sm="10" md="10">
-                      <v-form @submit.prevent="editForm" ref="form">
+                      <v-form @submit.prevent="editForm" ref="form" v-model="valid">
                         <v-row justify="center">
                           <v-col cols="12" sm="6" text="left" class="pb-0">
                             <label class="d-block text-left input-label mb-2 font-weight-bold">First Name</label>
@@ -33,7 +33,7 @@
                           <v-col cols="12" sm="6" text="left" class="pb-0">
                             <label class="d-block text-left input-label mb-2 font-weight-bold">Title
                             </label>
-                            <v-text-field placeholder="Title" v-model="title" single-line outlined type="text">
+                            <v-text-field placeholder="Title" v-model="title" single-line outlined type="text" :rules="titleRule">
                             </v-text-field>
                           </v-col>
                           <v-col cols="12" sm="6" text="left" class="pb-0">
@@ -63,7 +63,7 @@
                             </label>
 
                             <v-text-field placeholder="Email Address" single-line outlined type="email" v-model="email"
-                              hide-details readonly>
+                              hide-details :rules="emailRule" readonly>
                             </v-text-field>
                           </v-col>
                         </v-row>
@@ -73,15 +73,15 @@
                             </label>
 
                             <v-autocomplete v-model="userTimezone" :items="timezone" :search-input.sync="searchTimezone"
-                              item-text="label" item-value="tzCode" flat auto-select-first hide-details
-                              outlined></v-autocomplete>
+                              item-text="label" item-value="tzCode" flat auto-select-first outlined :rules="timeZoneRule">
+                            </v-autocomplete>
                           </v-col>
                         </v-row>
                         <v-row justify="center">
                           <v-col cols="12">
                             <v-btn color="#0D9648" type="submit" height="56" min-width="220px"
                               class="text-capitalize white--text font-weight-bold save-btn px-9" :loading="profileLoading"
-                              :disabled="profileLoading || !getPhoneInfo.valid" large>Save</v-btn>
+                              :disabled="profileLoading || !getPhoneInfo.valid || !valid" large>Save</v-btn>
                           </v-col>
                         </v-row>
                       </v-form>
@@ -195,6 +195,7 @@ export default {
 
   data() {
     return {
+      valid: true,
       valueD: '',
       timezone: timezones,
       firstName: this.$store.getters.userInfo.firstName,
@@ -215,6 +216,15 @@ export default {
       ],
       lastNameRule: [
         (v) => !!v || 'Last name is required',
+      ],
+      titleRule: [
+        (v) => !!v || 'Title is required',
+      ],
+      emailRule: [
+        (v) => !!v || 'Email is required',
+      ],
+      timeZoneRule: [
+        (v) => !!v || 'Timezone is required',
       ],
       results: {},
       saveLoading: false,
