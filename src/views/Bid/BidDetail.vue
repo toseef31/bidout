@@ -260,6 +260,32 @@
                         </v-tooltip>
                       </v-list-item-content>
                     </v-list-item>
+
+                    <v-list-item class="edit-item">
+                      <router-link to="#" class="text-decoration-none">
+                        <v-list-item-icon class="mr-2 my-2" @click="createDraftBid" v-if="!getCreateDraftBidLoading">
+                          <v-icon size="24" color="#0D9648">mdi-book-edit-outline</v-icon>
+                        </v-list-item-icon>
+                        <v-progress-circular class="mr-3 my-2" size="20" v-else :width="2" color="#959595"
+                          indeterminate></v-progress-circular>
+                      </router-link>
+
+                      <v-list-item-content align-start color="#0D9648" class="pa-0">
+
+                        <div @click="createDraftBid" v-if="!getCreateDraftBidLoading">
+                          <v-list-item-title color="#0D9648" class="py-3">Create draft Bid
+                            from this Bid</v-list-item-title>
+                        </div>
+                        <div v-if="getCreateDraftBidLoading">
+                          <v-list-item-title color="#959595" class="py-3">
+                            <div class="disabled-item">Create draft Bid
+                              from this Bid</div>
+                          </v-list-item-title>
+                        </div>
+
+                      </v-list-item-content>
+
+                    </v-list-item>
                   </v-list-item-group>
                 </v-list>
               </v-card>
@@ -595,6 +621,7 @@ export default {
           value: 4,
         },
       ],
+      createDraftBidLoading: false
     };
   },
   methods: {
@@ -609,6 +636,8 @@ export default {
       'getAllIntent',
       'getBidAllConversations',
       'getBidActivityList',
+      'saveDraftBid',
+      'getDraftBySerial',
     ]),
     async reload(event) {
       if (this.getUserType === 'buyer' && event !== 'tab-4') {
@@ -745,6 +774,19 @@ export default {
         .tz(momentDueDate, 'America/Chicago')
         .format('MM/DD/YYYY @ ha');
     },
+    async createDraftBid() {
+      this.createDraftBidLoading = true;
+      const bidInfo = {
+        userId: this.users._id,
+        userName: `${this.users.firstName} ${this.users.lastName}`,
+        companyId: this.users.company._id,
+        company: this.users.company.companyName,
+      };
+      await this.saveDraftBid(bidInfo);
+      this.createDraftBidLoading = false;
+      this.isSetting = !this.isSetting;
+      this.getDraftBySerial({ serial: this.$store.getters.bidSerial});
+    },
   },
   computed: {
     changeTime() {
@@ -815,6 +857,9 @@ export default {
     },
     getBidSubmissionValidationAlert() {
       return this.$store.getters.bidSubmissionValidationAlert;
+    },
+    getCreateDraftBidLoading() {
+      return this.createDraftBidLoading;
     },
   },
   mounted() {
