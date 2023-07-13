@@ -198,7 +198,7 @@ export default {
           commit('editProfileLoading', false);
         }
       }).catch(async (err) => {
-        commit('setInviteMessage', err.response.data.message);
+        commit('setInviteMessage', err.response.data);
         commit('editProfileLoading', false);
         if (state.apiCounter === 2) {
           dispatch('apiSignOutAction');
