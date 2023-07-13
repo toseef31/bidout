@@ -377,7 +377,7 @@ export default {
     },
   },
   mounted() {
-    if (this.$store.getters.bidData.lineItems.length > 0) {
+    if (this.$store.getters.bidData &&  this.$store.getters.bidData.lineItems && this.$store.getters.bidData.lineItems.length > 0) {
       this.bidLines = this.$store.getters.bidData.lineItems;
       this.bidLines = JSON.parse(JSON.stringify(this.bidLines.map((item, index) => {
         if (item.required === true) {
