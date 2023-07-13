@@ -30,11 +30,11 @@
       <input type="hidden" name="" :value="validate">
       {{ validate }}
       <draggable :list="bidLines" :disabled="!enabled" class="list-group" ghost-class="ghost" @start="dragging = true"
-        @end="dragging = false">
+        @end="dragging = false" handle=".drag-item">
         <v-row class="bidline-list d-flex align-center px-6 mt-0" gap v-for="(items, index) in bidLines" :key="index">
           <v-col md="4" class="d-flex px-0">
             <v-row>
-              <v-col md="1" class="pl-1">
+              <v-col md="1" class="pl-1 drag-item">
                 <div class="mr-2 bid-item" :class="[index != 0 ? 'mt-1' : 'mt-6']">
                   <img :src="require('@/assets/images/bids/DotsSix.png')">
                 </div>
@@ -50,13 +50,13 @@
             </v-row>
           </v-col>
 
-          <v-col md="2" class="px-0">
+          <v-col md="2" class="px-0 drag-item">
             <div class="mr-2 bid-item">
               <label class="d-block input-label text-left" v-if="index === 0">Unit/Measure</label>
               <v-select outlined hide-details v-model="bidLines[index]['unit']" :items="units"></v-select>
             </div>
           </v-col>
-          <v-col md="2" class="px-0">
+          <v-col md="2" class="px-0 drag-item">
             <div class="mr-2 bid-item">
               <label class="d-block input-label text-left" v-if="index === 0">Input Type</label>
               <v-select outlined hide-details v-model="bidLines[index]['inputType']" :items="inputType"></v-select>

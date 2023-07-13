@@ -45,7 +45,7 @@
         <draggable
           :list="categories"
           ghost-class="ghost"
-          :group="{ name: 'g1' }"
+          :group="{ name: 'g1' }" handle=".drag-item"
         >
           <div
             class="operational-question pl-3"
@@ -70,7 +70,7 @@
                   ></template>
                   <template v-else>{{ cat.title }}</template>
                 </h4>
-                <div class="ml-5">
+                <div class="ml-5 drag-item">
                   <v-icon
                     color="#0D9648"
                     class="mr-6"
@@ -97,7 +97,7 @@
                   <div class="d-flex align-center">
                     <img
                       :src="require('@/assets/images/bids/DotsSix.png')"
-                      class="mr-4"
+                      class="mr-4 drag-item"
                     />
                     <template v-if="editQues === index && isQues[index]"
                       ><v-text-field
@@ -200,7 +200,7 @@
                     <div class="d-flex align-center mb-2">
                       <img
                         :src="require('@/assets/images/bids/DotsSix.png')"
-                        class="mr-4"
+                        class="mr-4 drag-item"
                       />
                       <template v-if="editQues === index && isQues[index]"
                         ><v-text-field
@@ -269,7 +269,7 @@
                     <div class="d-flex align-center mb-2">
                       <img
                         :src="require('@/assets/images/bids/DotsSix.png')"
-                        class="mr-4"
+                        class="mr-4 drag-item"
                       />
                       <template v-if="editQues === index && isQues[index]"
                         ><v-text-field
@@ -348,7 +348,7 @@
                     <div class="d-flex align-center mb-2">
                       <img
                         :src="require('@/assets/images/bids/DotsSix.png')"
-                        class="mr-4"
+                        class="mr-4 drag-item"
                       />
                       <template v-if="editQues === index && isQues[index]">
                         <v-text-field
