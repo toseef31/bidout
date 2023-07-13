@@ -36,7 +36,7 @@
                 <tr>
                   <th class="text-left pl-6">Template Name</th>
                   <th class="text-left">Type</th>
-                  <th class="text-left">Created Data</th>
+                  <th class="text-left">Created Date</th>
                   <th class="text-left">Creator</th>
                   <th class="text-left">Notes</th>
                   <th class="text-left pr-6"></th>
