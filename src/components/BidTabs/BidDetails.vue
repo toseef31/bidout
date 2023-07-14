@@ -529,7 +529,15 @@ export default {
     this.savedraftOnInterval();
   },
   destroyed() {
+    console.log("Page Leaved")
     this.$store.commit('setEntryCheckForEditBid',false)
+    this.$store.commit('setBidTitle', '');
+    this.$store.commit('setBidType', '');
+    this.$store.commit('setBidDueDate', '');
+    this.$store.commit('setBidDueTime', '');
+    this.$store.commit('setBidRegions', '');
+    this.$store.commit('setBidEnabled', '');
+    this.$store.commit('setBidDescription', [{ body: '' }]);
   }
 };
 </script>

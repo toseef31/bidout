@@ -420,8 +420,7 @@
                 ? "Bid Submission is not allowed"
                 : ""
               }}
-              {{ (showIntent === true || showIntent === 'true') && !isBidSubmitted && isBidOut ? 'Bid Submission is not
-                            allowed' : ''}}
+              {{ (showIntent === true || showIntent === 'true') && !isBidSubmitted && isBidOut ? 'Bid Submission is not allowed' : ''}}
               <div v-if="(showIntent === true ||
                   showIntent === 'true') && !isBidSubmitted && !isBidOut
                 " @click="ChangeT('tab-2')">
@@ -897,13 +896,6 @@ export default {
           position: 'top-center',
         },
       );
-      this.$store.commit('setBidTitle', '');
-      this.$store.commit('setBidType', '');
-      this.$store.commit('setBidDueDate', '');
-      this.$store.commit('setBidDueTime', '');
-      this.$store.commit('setBidRegions', '');
-      this.$store.commit('setBidEnabled', '');
-      this.$store.commit('setBidDescription', [{ body: '' }]);
     }
 
     if (this.getUserType === 'supplier') {
