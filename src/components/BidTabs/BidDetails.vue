@@ -529,7 +529,6 @@ export default {
     this.savedraftOnInterval();
   },
   destroyed() {
-    console.log("Page Leaved")
     this.$store.commit('setEntryCheckForEditBid',false)
     this.$store.commit('setBidTitle', '');
     this.$store.commit('setBidType', '');
