@@ -46,14 +46,15 @@
                 </v-col>
 
                 <v-col class="status-sec mx-auto">
-                    <v-sheet class="py-2 px-4 bid-status-card text-left" rounded="lg" height="119" width="300">
+                    <v-sheet class="py-2 px-4 bid-status-card text-left" rounded="lg" height="119" width="310">
                         <div class="status">
                             Status: Receiving Bids
                         </div>
                         <div class="time pt-2 align-center">
                             <v-icon small color="#0D9648"> mdi-timer-outline</v-icon>
-                            {{ days }} days, {{ hours }} hours, {{ minutes }} min,
-                            {{ seconds }} sec remaining
+                            {{ months > 0 ? `${months} months,` : "" }}
+              {{ days }} days, {{ hours }} hours, {{ minutes }} min
+              {{ months === 0 ? `, ${seconds} sec` : "" }} remaining
                         </div>
 
                         <v-divider color="#0D9648"></v-divider>
