@@ -67,7 +67,7 @@
                     </div>
                   </div>
 
-                  <div v-if="item.required === false && bidDetail.receivingBids">
+                  <div v-if="item.required === false && !checkTimeForLineItems">
                     <v-btn @click="noBidUpdate(index)" icon v-if="lineItems[index]['bid']">
                       <v-icon size="20" color="#F03F20">mdi-close</v-icon>
                     </v-btn>
