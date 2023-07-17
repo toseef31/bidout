@@ -136,7 +136,6 @@ export default {
     ...mapActions(["resetPassword","verifyToken"]),
     resetForm() {
       if (this.$refs.form.validate()) {
-        console.log('true');
         var resetData = {
           email: this.$store.getters.verifyData.email,
           oobCode: this.$store.getters.verifyData.oobCode,
