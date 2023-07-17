@@ -500,55 +500,13 @@ export default {
 
       if (this.bidDetail.bidData) {
         if ((invitedSuppliers && Array.isArray(invitedSuppliers) && invitedSuppliers.length > 0) && (invitedNewSuppliers && Array.isArray(invitedNewSuppliers) && invitedNewSuppliers.length > 0)) {
-          return [...invitedSuppliers, ...invitedNewSuppliers].sort((a, b) => {
-            let aHasOfsPremium;
-            if (a.contracts) {
-              aHasOfsPremium = this.hasOfsPremium(a);
-            }
-
-            if (a.company && a.company.contracts) {
-              aHasOfsPremium = this.hasOfsPremium(a.company);
-            }
-
-            if (aHasOfsPremium) {
-              return -1;
-            }
-            return 1;
-          });
+          return [...invitedSuppliers, ...invitedNewSuppliers]
         }
         if (invitedNewSuppliers && Array.isArray(invitedNewSuppliers) && invitedNewSuppliers.length > 0) {
-          return invitedNewSuppliers.sort((a, b) => {
-            let aHasOfsPremium;
-            if (a.contracts) {
-              aHasOfsPremium = this.hasOfsPremium(a);
-            }
-
-            if (a.company && a.company.contracts) {
-              aHasOfsPremium = this.hasOfsPremium(a.company);
-            }
-
-            if (aHasOfsPremium) {
-              return -1;
-            }
-            return 1;
-          });
+          return invitedNewSuppliers
         }
         if (invitedSuppliers && Array.isArray(invitedSuppliers) && invitedSuppliers.length > 0) {
-          return invitedSuppliers.sort((a, b) => {
-            let aHasOfsPremium;
-            if (a.contracts) {
-              aHasOfsPremium = this.hasOfsPremium(a);
-            }
-
-            if (a.company && a.company.contracts) {
-              aHasOfsPremium = this.hasOfsPremium(a.company);
-            }
-
-            if (aHasOfsPremium) {
-              return -1;
-            }
-            return 1;
-          });
+          return invitedSuppliers
         }
 
         return [];

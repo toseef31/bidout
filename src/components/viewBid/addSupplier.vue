@@ -486,21 +486,7 @@ export default {
 
         inviteData = [...this.bidDetail.bidData.invitedSuppliers];
 
-        this.repsInvited = inviteData.sort((a, b) => {
-          let aHasOfsPremium;
-          if (a.contracts) {
-            aHasOfsPremium = this.hasOfsPremium(a);
-          }
-
-          if (a.company && a.company.contracts) {
-            aHasOfsPremium = this.hasOfsPremium(a.company);
-          }
-
-          if (aHasOfsPremium) {
-            return -1;
-          }
-          return 1;
-        });
+        this.repsInvited = inviteData
       }
     },
     newSupplierFiltered() {
