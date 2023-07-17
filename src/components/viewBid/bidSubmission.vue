@@ -357,9 +357,9 @@ export default {
 
         dataD = this.spacer(dataD, index);
 
-        dataD.push(['Saving']);
+        dataD.push(['BidOut Period Savings']);
 
-        index = this.indexOfArray(['Saving'], dataD);
+        index = this.indexOfArray(['BidOut Period Savings'], dataD);
 
         this.bidDetail.supplierSubmissions.forEach((list) => {
           if (list.postBidOutPrice) {
