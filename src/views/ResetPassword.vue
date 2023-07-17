@@ -142,7 +142,7 @@ export default {
       if (value.length >= 6) {
         return true;
       } else {
-        return 'Password should have more than 6 characters.';
+        return 'Password must be at least 6 characters.';
       }
     },
     matchingPasswords: function() {
