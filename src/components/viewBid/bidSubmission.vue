@@ -102,9 +102,9 @@
                   <span class="ml-1 priceBoldClass">$ {{
                     formatPrice(submission.postBidOutPrice)
                   }}</span>
+     
                   <div class="subscript">Saving {{
-                    100 - Math.round(((submission.postBidOutPrice / submission.bidOutPricePre) +
-                      Number.EPSILON) * 100)
+                    Number((((submission.bidOutPricePre - submission.postBidOutPrice) / submission.bidOutPricePre) * 100)).toFixed(2)  
                   }}%</div>
                 </td>
               </template>
@@ -349,8 +349,7 @@ export default {
 
         this.bidDetail.supplierSubmissions.forEach((list) => {
           if (list.postBidOutPrice) {
-            dataD[index].push(`$${list.postBidOutPrice} (Saving-${100 - Math.round(((list.postBidOutPrice / list.bidOutPricePre)
-              + Number.EPSILON) * 100)}%)`);
+            dataD[index].push(`$${list.postBidOutPrice} (Saving-${Number((((list.bidOutPricePre - list.postBidOutPrice) / list.bidOutPricePre) * 100)).toFixed(2)}%)`);
           } else {
             dataD[index].push('Not submitted');
           }
