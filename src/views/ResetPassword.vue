@@ -12,8 +12,8 @@
             <v-alert type="success" v-if="emailSucess !== null">
               {{ emailSucess }}
             </v-alert>
-            <ValidationObserver ref="buyer" v-slot="{ valid, handleSubmit }">
-              <v-form @submit.prevent="resetForm" ref="form" class="login-form"
+            <ValidationObserver ref="form" v-slot="{ valid, handleSubmit }">
+              <v-form @submit.prevent="resetForm" class="login-form"
                 lazy-validation>
                   <label class="font-weight-bold">New Password</label> 
                   <input type="hidden" v-model="token">
@@ -51,7 +51,7 @@
                     </v-text-field>
                   </ValidationProvider>
                 <div class="text-center">
-                  <v-btn class="rounded-lg text-capitalize font-weight-bold white--text" width="100%" height="56" color="#0D9648" type="submit" :disabled="!valid" @click="handleSubmit(resetForm)">
+                  <v-btn class="rounded-lg text-capitalize font-weight-bold white--text" width="100%" height="56" color="#0D9648" type="submit" :disabled="!valid" >
                     Reset Password
                   </v-btn>
                 </div>
