@@ -177,6 +177,7 @@ export default {
       loading: true,
       page: 1,
       list: [],
+      bidTitleMatches: '',
     };
   },
   computed: {
@@ -186,8 +187,10 @@ export default {
         return _.orderBy(this.$store.getters.allConversations.filter((item) => {
           const searchTerms = this.$store.state.chat.searchConv.toLowerCase().split(' ');
           const displayNameMatches = searchTerms.every((v) => item.displayName.toLowerCase().includes(v));
-          const bidTitleMatches = searchTerms.every((v) => item.bid.title.toLowerCase().includes(v));
-          return displayNameMatches || bidTitleMatches;
+          if (item.bid != null) {
+            this.bidTitleMatches = searchTerms.every((v) => item.bid.title.toLowerCase().includes(v));
+          }
+          return displayNameMatches || this.bidTitleMatches;
         }), 'latestMessage', 'desc');
       } else {
         if (this.$store.getters.conversations) {
