@@ -332,7 +332,7 @@ export default {
       fileRule: [
         (value) => !!value || 'File attachment is required!',
       ],
-      answerI: null
+      answerI: null,
     };
   },
   computed: {
