@@ -321,9 +321,10 @@ export default {
           if (list.lineItems[lIndex].price === 'NO_BID') {
             dataD[lIndex].push('NO-BID');
           } else if (list.lineItems[lIndex].price === 0 || list.lineItems[lIndex].price === '0') {
-            dataD[lIndex].push(Number(`${Math.round(parseFloat(`${list.lineItems[lIndex].price}e${2}`))}e-${2}`).toFixed(2));
+            
+            dataD[lIndex].push(parseFloat(Number(`${Math.round(parseFloat(`${list.lineItems[lIndex].price}e${2}`))}e-${2}`).toFixed(2)));
           } else {
-            dataD[lIndex].push(Number(`${Math.round(parseFloat(`${list.lineItems[lIndex].price}e${2}`))}e-${2}`).toFixed(2));
+            dataD[lIndex].push(parseFloat(Number(`${Math.round(parseFloat(`${list.lineItems[lIndex].price}e${2}`))}e-${2}`).toFixed(2)));
           }
         });
       });
@@ -335,7 +336,7 @@ export default {
 
         this.bidDetail.supplierSubmissions.forEach((list) => {
           if (list.bidOutPricePre) {
-            dataD[index].push(list.bidOutPricePre);
+            dataD[index].push(parseFloat(list.bidOutPricePre));
           } else {
             dataD[index].push('Not submitted');
           }
@@ -349,7 +350,7 @@ export default {
 
         this.bidDetail.supplierSubmissions.forEach((list) => {
           if (list.postBidOutPrice) {
-            dataD[index].push(list.postBidOutPrice);
+            dataD[index].push(parseFloat(list.postBidOutPrice));
           } else {
             dataD[index].push('Not submitted');
           }
@@ -375,7 +376,7 @@ export default {
 
         this.bidDetail.supplierSubmissions.forEach((list) => {
           if (list.bidOutPricePre) {
-            dataD[index].push(list.bidOutPricePre);
+            dataD[index].push(parseFloat(list.bidOutPricePre));
           } else {
             dataD[index].push('Not submitted');
           }
