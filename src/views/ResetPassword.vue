@@ -80,14 +80,14 @@ export default {
     };
   },
   computed: {
-    emailError () {
-      return this.$store.getters.errorMessage
+    emailError() {
+      return this.$store.getters.errorMessage;
     },
-    emailSucess () {
-      return this.$store.getters.successMessage
+    emailSucess() {
+      return this.$store.getters.successMessage;
     },
-    verifyData (){
-     return this.$store.getters.verifyData;
+    verifyData() {
+      return this.$store.getters.verifyData;
     },
     passRule: function() {
       if (this.password === '') {
