@@ -183,7 +183,12 @@ export default {
     ...mapGetters(['noConversation']),
     conversationsList() {
       if (this.$store.state.chat.searchConv != '') {
-        return _.orderBy(this.$store.getters.allConversations.filter((item) => this.$store.state.chat.searchConv.toLowerCase().split(' ').every((v) => item.displayName.toLowerCase().includes(v))), 'latestMessage', 'desc');
+        return _.orderBy(this.$store.getters.allConversations.filter((item) => {
+          const searchTerms = this.$store.state.chat.searchConv.toLowerCase().split(' ');
+          const displayNameMatches = searchTerms.every((v) => item.displayName.toLowerCase().includes(v));
+          const bidTitleMatches = searchTerms.every((v) => item.bid.title.toLowerCase().includes(v));
+          return displayNameMatches || bidTitleMatches;
+        }), 'latestMessage', 'desc');
       } else {
         if (this.$store.getters.conversations) {
           this.$store.commit('setPageLoader', false);
