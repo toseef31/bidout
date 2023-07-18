@@ -2,7 +2,8 @@
   <v-col class="my-7 pa-0 bid-submission-tab" align="start">
 
     <div class="table-class" v-if="bidDetail.supplierSubmissions.length">
-      <div class="d-flex justify-end mr-5" v-if="isBidOut || bidDetail.bidData.type !== 'BidOut Process' || (bidDetail.bidData.type === 'BidOut Process' && !bidDetail.bidout && !bidDetail.receivingBids)">
+      <div class="d-flex justify-end mr-5"
+        v-if="isBidOut || bidDetail.bidData.type !== 'BidOut Process' || (bidDetail.bidData.type === 'BidOut Process' && !bidDetail.bidout && !bidDetail.receivingBids)">
 
         <v-tooltip top>
           <template v-slot:activator="{ on, attrs }">
@@ -71,7 +72,8 @@
                 </td>
               </template>
             </tr>
-            <tr v-if="bidDetail.supplierSubmissions && bidDetail.bidData.type === 'BidOut Process' &&!bidDetail.bidout && bidDetail.receivingBids">
+            <tr
+              v-if="bidDetail.supplierSubmissions && bidDetail.bidData.type === 'BidOut Process' && !bidDetail.bidout && bidDetail.receivingBids">
               <td class="bid-example-title">Total Price</td>
               <template v-for="(submission) in bidDetail.supplierSubmissions">
                 <td v-if="!submission.bidOutPricePre" class="priceBoldClass">
@@ -297,6 +299,9 @@ export default {
       }
       return false;
     },
+    getQAndA() {
+      return this.$store.getters.qAndA;
+    },
   },
   methods: {
     ...mapActions(['awardCompany', 'rejectCompany', 'UnAwardCompany', 'UnDisqualifyCompany']),
@@ -305,7 +310,7 @@ export default {
     },
     exportF() {
       const header = this.bidDetail.supplierSubmissions.map((el) => el.company.companyName);
-      
+
       header.unshift('Required');
       header.unshift('UOM');
       header.unshift('QTY');
@@ -430,10 +435,41 @@ export default {
 
       dataD.unshift(header);
 
+      const headerQA = [];
+      const dataQA = [];
+
+      if (this.getQAndA.length) {
+        headerQA.unshift('Answered By');
+        headerQA.unshift('Answers');
+        headerQA.unshift('Questioned By');
+        headerQA.unshift('Questions');
+
+        this.getQAndA.forEach((el, tIndex) => {
+          dataQA.push([el.question]);
+          dataQA[tIndex].push(`${el.questionedUserName} (${el.questionByCompany.companyName})`);
+
+          if (el.answer && el.answeredUserName && el.answeredUserCompany && el.answeredUserCompany !== '') {
+            dataQA[tIndex].push(el.answer);
+            dataQA[tIndex].push(`${el.answeredUserName} (${el.answeredUserCompany})`);
+          }
+        });
+
+        dataQA.unshift(headerQA);
+      }
+
       const data = XLSX.utils.aoa_to_sheet(dataD);
 
+      let data2;
+      if (this.getQAndA.length) {
+        data2 = XLSX.utils.aoa_to_sheet(dataQA);
+      }
+
       const wb = XLSX.utils.book_new();
-      XLSX.utils.book_append_sheet(wb, data, 'data');
+      XLSX.utils.book_append_sheet(wb, data, 'Data');
+
+      if (this.getQAndA.length) {
+        XLSX.utils.book_append_sheet(wb, data2, 'Q&A');
+      }
 
       XLSX.writeFile(wb, `${this.bidDetail.bidData.title}.xlsx`);
     },
