@@ -102,9 +102,9 @@
                   <span class="ml-1 priceBoldClass">$ {{
                     formatPrice(submission.postBidOutPrice)
                   }}</span>
+     
                   <div class="subscript">Saving {{
-                    100 - Math.round(((submission.postBidOutPrice / submission.bidOutPricePre) +
-                      Number.EPSILON) * 100)
+                    Number((((submission.bidOutPricePre - submission.postBidOutPrice) / submission.bidOutPricePre) * 100)).toFixed(2)  
                   }}%</div>
                 </td>
               </template>
