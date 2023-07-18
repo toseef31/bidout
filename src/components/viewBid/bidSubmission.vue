@@ -409,12 +409,12 @@ export default {
             dataD.push([el.title]);
             const fI = this.indexOfArray([el.title], dataD);
             this.answers.forEach((list) => {
-              if (el.questionType === 'checkbox') {
+              if (el.questionType === 'checkbox' && list.answers[qInd].answer) {
                 if (list.answers[qInd].answer === 'null' || list.answers[qInd].answer === null) dataD[fI].push('Not Provided');
                 else dataD[fI].push(list.answers[qInd].answer);
-              } else if (el.questionType === 'uploadFile') {
+              } else if (el.questionType === 'uploadFile' && list.answers[qInd].answer) {
                 dataD[fI].push(`${list.answers[qInd].fileName}`);
-              } else if (list.answers[qInd].answer === 'null' || list.answers[qInd].answer === null) {
+              } else if (!list.answers[qInd].answer || (list.answers[qInd].answer === 'null' || list.answers[qInd].answer === null)) {
                 dataD[fI].push('Not Provided');
               } else {
                 dataD[fI].push(`${list.answers[qInd].answer}`);
