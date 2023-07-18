@@ -298,9 +298,9 @@ export default {
     disable(id) {
       this.disableUser(id);
     },
-    deletePending(id) {
-      this.deleteInvitedUser(id);
-      this.invitedUsers(this.user.company._id);
+    async deletePending(id) {
+      await this.deleteInvitedUser(id);
+      await this.invitedUsers(this.user.company._id);
     },
     enable(id) {
       this.enableUser(id);
