@@ -305,7 +305,8 @@ export default {
     },
     exportF() {
       const header = this.bidDetail.supplierSubmissions.map((el) => el.company.companyName);
-
+      
+      header.unshift('Required');
       header.unshift('UOM');
       header.unshift('QTY');
       header.unshift('Line Items');
@@ -317,6 +318,8 @@ export default {
         dataD.push([el.description]);
         dataD[lIndex].push(el.quantity);
         dataD[lIndex].push(el.unit);
+        dataD[lIndex].push(el.required === true ? 'Yes' : 'No');
+
         this.bidDetail.supplierSubmissions.forEach((list) => {
           if (list.lineItems[lIndex].price === 'NO_BID') {
             dataD[lIndex].push('NO-BID');
@@ -437,6 +440,7 @@ export default {
     spacer(data, index) {
       data[index].splice(1, 0, '');
       data[index].splice(2, 0, '');
+      data[index].splice(3, 0, '');
 
       return data;
     },
