@@ -69,7 +69,6 @@
      </v-row>
    </section>
 </template>
-
 <script>
 import { mapActions } from "vuex";
 import {
