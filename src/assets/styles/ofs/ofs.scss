@@ -1,13 +1,20 @@
 .ofs-module{
+	.get-topHeader{
+		border-top-left-radius: 8px;
+		border-top-right-radius: 8px;
+		h1{
+			font-size: 32px;
+			line-height: 32px;
+		}
+	}
 	.search-form{
 		position:  relative;
 		.v-input{
-			
-			border-radius: 0;
+			border-radius: 8px;
 			&__slot{
 				margin-bottom: 0;
 				fieldset{
-					border: 2px solid #EFEFEF;
+					border: 1px solid #B8B8B8;
 				}
 			}
 			&__control{
@@ -70,9 +77,10 @@
 		  	border: 2px solid #EFEFEF;
 		  	height: 200px;
 		  	background-color: #fff;
+				border-radius: 8px;
 		  	cursor: pointer;
 		  	.slide-img{
-		  		height: 140px;
+		  		height: 137px;
 		  		overflow: hidden;
 		  		img{
 		  			width: 100%;
@@ -81,8 +89,10 @@
 		  	.slide-caption{
 				padding-top: 10px;
 		  		h3{
-		  			font-size: 16px;
+		  			font-size: 12px;
 		  			color: #013D3A;
+						border-radius: 0px 0px 8px 8px;
+    				background: linear-gradient(0deg, rgba(13, 150, 72, 0.10) 0%, rgba(13, 150, 72, 0.10) 100%), #FFF;
 		  		}
 		  	}
 		  }

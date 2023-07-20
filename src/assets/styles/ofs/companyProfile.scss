@@ -5,14 +5,19 @@
 			margin-top: 18px;
 			h3{
 				font-size: 20px;
-				color: #013D3A;
+				color: #0D1139;
 				line-height: 20px;
 			}
 			p{
-				color: #013D3A;
+				color: #0D1139;
 				a{
 					color: #013D3A !important;
 					font-weight: 500;
+				}
+			}
+			.company-links{
+				p{
+					font-size: 14px;
 				}
 			}
 			.contact-list{
@@ -72,11 +77,13 @@
 		    grid-column-gap: 5px;
 		    grid-row-gap: 15px;
 				label{
-					font-weight: 400;
-			    font-size: 11px;
+					font-weight: 500;
+			    font-size: 14px;
 			    line-height: 12px;
 			    margin-right: 2px;
-			    color: #013D3A;
+			    color: #0D1139;
+					display: flex;
+    			align-items: center;
 			    .v-icon{
 			    	color: #0D9647;
 			    	margin-right: 5px;

@@ -8,27 +8,34 @@
         <div class="content-section fill-height" v-else>
           <div class="get-Header d-flex pt-5">
             <v-container fill-height class="pl-0">
-              <v-row v-if="supplierData.image"
+              <v-row
                 align="center"
                 no-gutters
               >
                 <v-col
                   class="text-left"
-                  cols="12" sm="4"
+                  cols="12" sm="9"
                 >
-                  <v-img :src="supplierData.image"></v-img>
-                  <h4 class="pl-3 mt-2"><span v-if="supplierData.isOfsPremium"><span v-if="supplierData.isOfsPremium == true"></span><v-icon color="#0D9647">mdi-check-decagram</v-icon>Premium Service Provider</span></h4>
+                  <div class="d-flex align-center ml-3">
+                    <div>
+                      <v-img :src="supplierData.image" v-if="supplierData.image" width="335px"></v-img>
+                    </div>
+                    <div>
+                      <h4 class="pl-3 mt-2"><span v-if="supplierData.isOfsPremium"><span v-if="supplierData.isOfsPremium == true"></span><v-icon color="#0D9647">mdi-check-decagram</v-icon>Premium Service Provider</span></h4>
+                    </div>
+                  </div>
                 </v-col>
                 <v-col
                   class="text-left"
-                  cols="12" sm="8"
+                  cols="12" sm="3"
                 >
-                  <div class="company-title ml-10">
-                    <h1>{{supplierData.companyName}}</h1>
+                  <div class="d-flex justify-space-between order-btns">
+                    <router-link :to="'/place-order/'+supplierData.slug" class="text-decoration-none"><v-btn color="#0D9647" background-color="#0D9647" large tile dense width="100%" height="56" class="font-weight-bold text-capitalize mb-4 px-7 white--text">Place Order <v-icon class="pl-2">mdi-arrow-right-circle</v-icon></v-btn></router-link>
+                    <router-link to="/create" class="text-decoration-none"><v-btn color="#0D9647" large tile dense width="100%" height="56" class="font-weight-bold text-capitalize px-7" type="submit" outlined>Create RFP <v-icon class="pl-2">mdi-arrow-right-circle</v-icon></v-btn></router-link>
                   </div>
                 </v-col>
               </v-row>
-              <v-row v-else
+              <!-- <v-row v-else
                 align="center"
                 no-gutters
               >
@@ -42,25 +49,40 @@
                     <h4 class="mt-3"><span v-if="supplierData.isOfsPremium"><span v-if="supplierData.isOfsPremium == true"></span><v-icon color="#0D9647">mdi-check-decagram</v-icon>Premium Service Provider</span></h4>
                   </div>
                 </v-col>
-              </v-row>
+              </v-row> -->
             </v-container>
           </div>
             <v-container>
               <v-main class="mb-16 pt-0">
                 <v-row justify="center">
                   <v-col cols="12" md="9">
-                    <div class="company-content text-left">
-                     <div class="company-desc">
+                    <v-list class="d-flex main-menu-list pb-0">
+                      <v-list-item-group
+                        v-model="selectedItem"
+                        color="#0D1139"
+                        class="d-flex"
+                        active-class="active"
+                      >
+                      <v-list-item class="inline-list-item" v-for="(item, index) in sections" :key="index" @click="scrollToSection(index)">
+                        <v-list-item-title active-class="active">{{ item }}</v-list-item-title>
+                      </v-list-item>
+                      </v-list-item-group>
+                    </v-list>
+
+                  
+                    <div class="company-content text-left mt-10">
+                     <div class="company-desc"  key="0" id="About Company">
                         <h1 class="mb-4 font-weight-bold">Corporate Summary</h1>
-                        <p>{{supplierData.overview}}</p>
+                        <p class="font-weight-medium">{{supplierData.overview}}</p>
                         <h3 class="text-center" v-if="!supplierData.overview">No summary added yet</h3>
                       </div>
-                      <div class="company-service mb-12" v-if="supplierData.services && supplierData.services.length > 0">
+                      <v-divider class="my-10"></v-divider>
+                      <div class="company-service mb-12"  key="1" id="Services" v-if="supplierData.services && supplierData.services.length > 0">
                         <h1 class="mb-4 font-weight-bold">Services Portfolio</h1>
                         <div class="service-list text-left mt-4">
                           <template v-for="service in supplierData.services" v-if="service.serviceCategory">
                               <label>
-                                <v-icon>mdi-check</v-icon>
+                                <v-icon size="20">mdi-check-circle-outline</v-icon>
                                 <span>{{service.serviceCategory.name}}: {{service.name}}  </span>
                               </label>
                             </template>
@@ -68,13 +90,15 @@
                           <h3 v-if="!supplierData.services" class="text-center">No services added yet</h3>
                         <!-- <p class="text-right">View all services</p> -->
                       </div>
-                    <div class="company-location mb-12"  v-if="supplierData.companyLocations && supplierData.companyLocations.length > 0">
+                      <v-divider class="my-10"></v-divider>
+                    <div class="company-location mb-12" key="2" id="Locations" v-if="supplierData.companyLocations && supplierData.companyLocations.length > 0">
                       <h1 class="mb-4 font-weight-bold">Service Locations</h1>
                       <div id="map" class="map" style="height:350px" v-if="supplierData.companyLocations"></div>
                       <h3 class="text-center" v-if="!supplierData.companyLocations">Location not added</h3>
                     </div>
                     <template v-if="supplierData.isOfsPremium || supplierData.isOfsPremium == true">
-                      <div class="company-location mb-12" v-if="supplierData.corporateVideos && supplierData.corporateVideos.length > 0">
+                      <v-divider class="my-10"></v-divider>
+                      <div class="company-location mb-12"  key="3" id="Videos" v-if="supplierData.corporateVideos && supplierData.corporateVideos.length > 0">
                         <h1 class="mb-4 font-weight-bold">Corporate Videos</h1>
                         <v-row>
                           <v-col cols="12" md="6" v-for="video in supplierData.corporateVideos">
@@ -95,7 +119,8 @@
                           </v-col>
                         </v-row>
                       </div>
-                      <div class="company-documents mb-12" v-if="supplierData.corporateDocuments && supplierData.corporateDocuments.length > 0">
+                      <v-divider class="my-10"></v-divider>
+                      <div class="company-documents mb-12"  key="4" id="Documents" v-if="supplierData.corporateDocuments && supplierData.corporateDocuments.length > 0">
                         <h1 class="mb-4 font-weight-bold">Corporate Documents</h1>
                         <v-row>
                           <v-col cols="3" sm="2" v-for="docs in supplierData.corporateDocuments">
@@ -113,6 +138,7 @@
                           </v-col>
                         </v-row>
                       </div>
+                      <v-divider class="my-10"></v-divider>
                         <div class="company-news mb-12" v-if="supplierData.corporateNews && supplierData.corporateNews.length > 0">
                       <h1 class="mb-4 font-weight-bold">Corporate News & Press Releases</h1>
                       <div class="news-list" v-for="news in supplierData.corporateNews">
@@ -122,7 +148,8 @@
                         <h3 class="text-center">No news to show</h3>
                       </div>
                     </div>
-                      <div class="company-leadership mb-12" v-if="supplierData.executiveLeadership && supplierData.executiveLeadership.length > 0">
+                    <v-divider class="my-10"></v-divider>
+                      <div class="company-leadership mb-12"  key="5" id="Leadership" v-if="supplierData.executiveLeadership && supplierData.executiveLeadership.length > 0">
                         <h1 class="mb-4 font-weight-bold">Executive Leadership</h1>
                         <div class="leader-list text-left mt-10">
                           <div class="profile-list" v-for="excutive in orderCate(supplierData.executiveLeadership)">
@@ -137,7 +164,7 @@
                           </div>
                           <h3 v-if="!supplierData.executiveLeadership" class="text-center">No data to show</h3>
                         </div>
-
+                        <v-divider class="my-10"></v-divider>
                         <div class="company-esg mb-16" v-if="supplierData.esgInitiatives && supplierData.esgInitiatives.length > 0">
                           <h1 class="mb-4 font-weight-bold">ESG Initiatives</h1>
                           <v-row class="mt-5">
@@ -155,29 +182,39 @@
                 </v-col>
                 <v-col cols="12" md="3" class="pl-0">
                   <aside class="company-leftSidebar">
-                    <div>
-                      <router-link :to="'/place-order/'+supplierData.slug" class="text-decoration-none"><v-btn color="#0D9647" large tile dense width="100%" height="56" class="font-weight-bold text-capitalize mb-4" outlined>Place Order <v-icon class="pl-2">mdi-arrow-right-circle</v-icon></v-btn></router-link>
-                      <router-link to="/create" class="text-decoration-none"><v-btn color="#0D9647" large tile dense width="100%" height="56" class="font-weight-bold text-capitalize" type="submit" outlined>Create RFP <v-icon class="pl-2">mdi-arrow-right-circle</v-icon></v-btn></router-link>
-                    </div>
-                    <div class="facts-data pa-6 text-left" v-if="supplierData.founded || supplierData.employees || supplierData.hqLocation || supplierData.website || supplierData.linkedin || supplierData.careers">
-                      <h3 class="mb-4"><font color="#013D3A">Key Facts</font></h3>
-                      <p><font class="font-weight-bold">Founded:</font> {{supplierData.founded ? supplierData.founded : 'Not added'}}</p>
-                      <p><font class="font-weight-bold">Employees:</font> {{supplierData.employees ? supplierData.employees : 'Not added'}}</p>
-                      <p><font class="font-weight-bold">HQ Location:</font> {{supplierData.hqLocation ? supplierData.hqLocation : 'Not added'}}</p>
+                    <div class="facts-data pa-5 text-left mt-0" v-if="supplierData.founded || supplierData.employees || supplierData.hqLocation || supplierData.website || supplierData.linkedin || supplierData.careers">
+                      <div class="company-title mb-6 text-left">
+                        <h1>{{supplierData.companyName}}</h1>
+                      </div>
+                      <h3 class="mb-4"><font color="#0D1139">Alternative Company Names</font></h3>
+                      <p><v-icon color="#013D3A" size="20" class="mr-2">mdi-domain</v-icon> Company Name</p>
+                      <h3 class="mb-4 mt-11"><font color="#0D1139">Key Facts</font></h3>
+                      <p><font class="font-weight-bold">Founded: </font> <span> {{supplierData.founded ? supplierData.founded : 'Not added'}}</span></p>
+                      <p><font class="font-weight-bold">Employees: </font> <span> {{supplierData.employees ? supplierData.employees : 'Not added'}}</span></p>
+                      <p><font class="font-weight-bold">HQ Location: </font> <span> {{supplierData.hqLocation ? supplierData.hqLocation : 'Not added'}}</span></p>
                       <!-- <p><font class="font-weight-bold">Stock Price:</font> {{supplierData.stockPrice}} </p> -->
-                        <div class="company-links mt-6">
-                          <p><a :href="supplierData.website" target="_blank">Website</a><v-icon class="pl-2" color="#013D3A">mdi-arrow-top-right-bold-box-outline</v-icon></p>
-                          <p><a :href="supplierData.linkedin" target="_blank">LinkedIn</a><v-icon class="pl-2" color="#013D3A">mdi-arrow-top-right-bold-box-outline</v-icon></p>
-                          <p><a :href="supplierData.careers" target="_blank">Careers</a><v-icon class="pl-2" color="#013D3A">mdi-arrow-top-right-bold-box-outline</v-icon></p>
-                        </div>
-                    </div>
-                    <div class="facts-data pa-5 text-left">
-                      <h3 class="mb-4"><font color="#013D3A">Account Contacts</font></h3>
+                      <div class="company-links d-flex align-center justify-space-between">
+                        <p class="mb-0"><a :href="supplierData.website" target="_blank">Website</a><v-icon class="pl-1" color="#013D3A" size="20">mdi-arrow-top-right-bold-box-outline</v-icon></p>
+                        <p class="mb-0"><a :href="supplierData.linkedin" target="_blank">LinkedIn</a><v-icon class="pl-1" color="#013D3A" size="20">mdi-arrow-top-right-bold-box-outline</v-icon></p>
+                        <p class="mb-0"><a :href="supplierData.careers" target="_blank">Careers</a><v-icon class="pl-1" color="#013D3A" size="20">mdi-arrow-top-right-bold-box-outline</v-icon></p>
+                      </div>
+                      <h3 class="mb-4 mt-11"><font color="#0D1139">Account Contacts</font></h3>
                       <div class="contact-list mb-4" v-for="contacts in supplierData.accountContacts">
                         <h4 class="mb-0 font-weight-bold">{{contacts.name}}</h4>
                         <h4 class="font-weight-medium">{{contacts.position}}</h4>
-                        <h4 class="font-weight-medium contact-email"><span class="font-weight-bold">Email:</span> <a :href="'mailto:'+contacts.email" class="text-decoration-none"><font color="#013D3A">{{contacts.email}}</font></a></h4>
-                        <h4 class="font-weight-medium"><span class="font-weight-bold">Phone:</span> <a :href="'tel:'+contacts.phoneNumber" class="text-decoration-none"><font color="#013D3A">{{contacts.phoneNumber}}</font></a></h4>
+                        <h4 class="font-weight-medium"><a :href="'tel:'+contacts.phoneNumber" class="text-decoration-none"><font color="#013D3A">{{contacts.phoneNumber}}</font></a></h4>
+                        <h4 class="font-weight-medium contact-email">
+                          <v-tooltip top color="#0D1139">
+                            <template v-slot:activator="{ on, attrs }">
+                              <a v-bind="attrs"
+                                v-on="on" 
+                                :href="'mailto:'+contacts.email" class="text-decoration-none font-weight-bold">
+                                <font color="#0D9648">{{contacts.email}}</font>
+                              </a>
+                            </template>
+                            <span>{{contacts.email}}</span>
+                          </v-tooltip>
+                        </h4>
                       </div>
                       <h4 v-if="supplierData.accountContacts.length === 0" class="text-center"> No contacts added</h4>
                     </div>
@@ -208,6 +245,8 @@ export default {
   },
   data() {
     return {
+      drawer: false,
+      sections: ["About Company", "Services", "Locations", "Videos", "Documents", "Leadership", "ESG"],
       mapOptions: '',
       markerOptions: '',
       metaTitle: this.$store.getters.supplierCompany && this.$store.getters.supplierCompany.companyData ? this.$store.getters.supplierCompany.companyData.company : '',
@@ -234,6 +273,9 @@ export default {
           id: '1665493735995301876774201',
         },
       ],
+      activeIndex: 0,
+      scrollContainer: null,
+      selectedItem: 0,
     };
   },
 
@@ -373,6 +415,14 @@ export default {
     orderCate(leadership) {
       return _.orderBy(leadership, 'orderNumber', 'asc');
     },
+    scrollToSection(index) {
+      const element = document.getElementById(this.sections[index]);
+      this.activeIndex = index;
+      if (element) {
+        element.scrollIntoView({ behavior: "smooth" });
+        this.drawer = false; // Close the drawer after clicking a section link
+      }
+    },
   },
   async created() {
     const mapScpt = 'map-api-script';
@@ -395,5 +445,4 @@ export default {
 };
 </script>
 <style scoped lang="scss">
-
 </style>
