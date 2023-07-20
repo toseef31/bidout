@@ -152,6 +152,16 @@ export default {
             commit('setInvitedNewSuppliers', res.data.bidData.invitedNewSuppliers);
   
             commit('setTeamMembersForBid', res.data.bidData.invitedTeamMembers);
+
+            commit("setBidData", res.data.bidData);
+
+            commit("setInvitedTeamMembers", res.data.bidData.invitedTeamMembers);
+
+            commit("setBidlines", res.data.bidData.lineItems);
+
+            commit("setAttachement", res.data.bidData.attachments);
+
+            commit("setQuestions", res.data.bidData.questions);
           }
   
           if (res.data.user_type === 'supplier' && res.data.supplierSubmissions && res.data.supplierSubmissions._id) {
@@ -721,9 +731,10 @@ export default {
         formData.append(`invitedNewSuppliers[${i}]`, state.invitedNewSuppliers[i]._id);
       }
     }
+
     if (state.invitedTeamMembers && state.invitedTeamMembers?.length > 0) {
       for (let t = 0; t < state.invitedTeamMembers.length; t++) {
-        if (!state.invitedTeamMembers[t].id) {
+        if (!state.invitedTeamMembers[t]._id) {
           formData.append(`invitedTeamMembers[${t}]`, state.invitedTeamMembers[t]);
         } else {
           formData.append(`invitedTeamMembers[${t}]`, state.invitedTeamMembers[t]._id);

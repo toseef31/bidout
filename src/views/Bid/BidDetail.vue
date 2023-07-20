@@ -171,7 +171,8 @@
         </v-col>
 
         <v-col cols="auto">
-          <div class="toggle-setting" v-if="bidDetail.receivingBids && !isBidOut">
+        <v-row class="mt-5 mr-2">
+          <div class="toggle-setting mr-5" >
             <v-btn class="py-2 setting" plain color="#0d96481a" @click="isSetting = !isSetting"><v-icon color="#0D9648">
                 mdi-cog-outline</v-icon></v-btn>
             <div v-show="isSetting">
@@ -179,45 +180,47 @@
                 <v-list class="pa-0">
                   <v-list-item-group color="success">
                     <v-list-item class="edit-item">
-                      <router-link to="#" class="text-decoration-none" v-if="noOfBidSubmitted === 0">
+                      <router-link to="#" class="text-decoration-none" v-if="(noOfBidSubmitted === 0 && bidDetail.receivingBids) ">
                         <v-list-item-icon class="mr-2 my-2" @click="isSetting = !isSetting">
                           <v-icon size="24" color="#0D9648">mdi-note-edit-outline</v-icon>
                         </v-list-item-icon>
                       </router-link>
 
-                      <v-list-item-icon v-if="noOfBidSubmitted > 0" class="mr-2 my-2" @click="isSetting = !isSetting">
+                      <v-list-item-icon v-if="noOfBidSubmitted > 0 || !bidDetail.receivingBids" class="mr-2 my-2" @click="isSetting = !isSetting">
                         <v-icon size="24" color="#959595">mdi-note-edit-outline</v-icon>
                       </v-list-item-icon>
                       <v-list-item-content align-start color="#0D9648" class="pa-0">
                         <router-link :to="'/edit-bid/' + bidDetail.bidData.serial" class="text-decoration-none"
-                          v-if="noOfBidSubmitted === 0">
+                          v-if="noOfBidSubmitted === 0 && bidDetail.receivingBids">
                           <v-list-item-title color="#0D9648" @click="isSetting = !isSetting" class="py-3">Edit
                             Bid</v-list-item-title>
                         </router-link>
-                        <v-tooltip top v-if="noOfBidSubmitted > 0" >
+
+                        <v-tooltip top v-if="noOfBidSubmitted > 0 || !bidDetail.receivingBids" >
                           <template v-slot:activator="{ on, attrs }">
                             <v-list-item-title v-bind="attrs" v-on="on" color="#959595"
                               @click="isSetting = !isSetting" class="pt-2">
                               <p class="disabled-item">Edit Bid</p>
                             </v-list-item-title>
                           </template>
-                          <span>Editing this bid is not allowed once entries are
+                          <span v-if="noOfBidSubmitted > 0 || (noOfBidSubmitted > 0 && !bidDetail.receivingBids)">Editing this bid is not allowed once entries are
                             received</span>
+                            <span v-if="noOfBidSubmitted === 0 && !bidDetail.receivingBids">Editing this bid is not allowed once the due date is passed</span>
                         </v-tooltip>
                       </v-list-item-content>
                     </v-list-item>
                     <v-list-item class="delete-item">
-                      <router-link to="#" class="text-decoration-none" v-if="noOfBidSubmitted === 0">
+                      <router-link to="#" class="text-decoration-none" v-if="noOfBidSubmitted === 0 && bidDetail.receivingBids">
                         <v-list-item-icon class="mr-2 my-2" @click="isSetting = !isSetting">
                           <v-icon size="24" color="#F32349">mdi-trash-can-outline</v-icon>
                         </v-list-item-icon>
                       </router-link>
 
-                      <v-list-item-icon v-if="noOfBidSubmitted > 0" class="mr-2 my-2" @click="isSetting = !isSetting">
+                      <v-list-item-icon v-if="noOfBidSubmitted > 0 || !bidDetail.receivingBids" class="mr-2 my-2" @click="isSetting = !isSetting">
                         <v-icon size="24" color="#959595">mdi-trash-can-outline</v-icon>
                       </v-list-item-icon>
                       <v-list-item-content align-start color="#0D9648" class="pa-0">
-                        <v-dialog class="dialog-class" v-model="dialog" width="300" v-if="noOfBidSubmitted === 0">
+                        <v-dialog class="dialog-class" v-model="dialog" width="300" v-if="noOfBidSubmitted === 0 && bidDetail.receivingBids">
                           <template v-slot:activator="{ on, attrs }">
                             <v-btn color="#F32349" block plain :ripple="false" class="delete-button" v-bind="attrs"
                               @click="isSetting = !isSetting" v-on="on">
@@ -248,17 +251,44 @@
                           </v-card>
                         </v-dialog>
 
-                        <v-tooltip top v-if="noOfBidSubmitted > 0">
+                        <v-tooltip top v-if="noOfBidSubmitted > 0 || !bidDetail.receivingBids">
                           <template v-slot:activator="{ on, attrs }">
                             <v-list-item-title v-bind="attrs" v-on="on"  color="#959595"
                               @click="isSetting = !isSetting" class="pt-2">
                               <p class="disabled-item">Delete Bid</p>
                             </v-list-item-title>
                           </template>
-                          <span>Deleting this bid is not allowed once entries are
+                          <span v-if="noOfBidSubmitted > 0 || (noOfBidSubmitted > 0 && !bidDetail.receivingBids)">Deleting this bid is not allowed once entries are
                             received</span>
+                            <span v-if="noOfBidSubmitted === 0 && !bidDetail.receivingBids">Deleting this bid is not allowed once the due date is passed</span>
                         </v-tooltip>
                       </v-list-item-content>
+                    </v-list-item>
+
+                    <v-list-item class="edit-item">
+                      <router-link to="#" class="text-decoration-none">
+                        <v-list-item-icon class="mr-2 my-2" @click="createDraftBid" v-if="!getCreateDraftBidLoading">
+                          <v-icon size="24" color="#0D9648">mdi-book-edit-outline</v-icon>
+                        </v-list-item-icon>
+                        <v-progress-circular class="mr-3 my-2" size="20" v-else :width="2" color="#959595"
+                          indeterminate></v-progress-circular>
+                      </router-link>
+
+                      <v-list-item-content align-start color="#0D9648" class="pa-0">
+
+                        <div @click="createDraftBid" v-if="!getCreateDraftBidLoading">
+                          <v-list-item-title color="#0D9648" class="py-3">Create draft Bid
+                            from this Bid</v-list-item-title>
+                        </div>
+                        <div v-if="getCreateDraftBidLoading">
+                          <v-list-item-title color="#959595" class="py-3">
+                            <div class="disabled-item">Create draft Bid
+                              from this Bid</div>
+                          </v-list-item-title>
+                        </div>
+
+                      </v-list-item-content>
+
                     </v-list-item>
                   </v-list-item-group>
                 </v-list>
@@ -268,6 +298,7 @@
           <v-btn v-if="!bidDetail.receivingBids && !isBidOut" color="#F03F20" depressed @click="ChangeT('tab-2')">
             <div class="supplier-class">Select Supplier</div>
           </v-btn>
+        </v-row>
         </v-col>
       </v-row>
 
@@ -394,8 +425,7 @@
                 ? "Bid Submission is not allowed"
                 : ""
               }}
-              {{ (showIntent === true || showIntent === 'true') && !isBidSubmitted && isBidOut ? 'Bid Submission is not
-                            allowed' : ''}}
+              {{ (showIntent === true || showIntent === 'true') && !isBidSubmitted && isBidOut ? 'Bid Submission is not allowed' : ''}}
               <div v-if="(showIntent === true ||
                   showIntent === 'true') && !isBidSubmitted && !isBidOut
                 " @click="ChangeT('tab-2')">
@@ -595,6 +625,7 @@ export default {
           value: 4,
         },
       ],
+      createDraftBidLoading: false
     };
   },
   methods: {
@@ -609,6 +640,8 @@ export default {
       'getAllIntent',
       'getBidAllConversations',
       'getBidActivityList',
+      'saveDraftBid',
+      'getDraftBySerial',
     ]),
     async reload(event) {
       if (this.getUserType === 'buyer' && event !== 'tab-4') {
@@ -745,6 +778,19 @@ export default {
         .tz(momentDueDate, 'America/Chicago')
         .format('MM/DD/YYYY @ ha');
     },
+    async createDraftBid() {
+      this.createDraftBidLoading = true;
+      const bidInfo = {
+        userId: this.users._id,
+        userName: `${this.users.firstName} ${this.users.lastName}`,
+        companyId: this.users.company._id,
+        company: this.users.company.companyName,
+      };
+      await this.saveDraftBid(bidInfo);
+      this.createDraftBidLoading = false;
+      this.isSetting = !this.isSetting;
+      this.getDraftBySerial({ serial: this.$store.getters.bidSerial});
+    },
   },
   computed: {
     changeTime() {
@@ -816,6 +862,9 @@ export default {
     getBidSubmissionValidationAlert() {
       return this.$store.getters.bidSubmissionValidationAlert;
     },
+    getCreateDraftBidLoading() {
+      return this.createDraftBidLoading;
+    },
   },
   mounted() {
     moment.tz.setDefault('America/Chicago');
@@ -852,13 +901,6 @@ export default {
           position: 'top-center',
         },
       );
-      this.$store.commit('setBidTitle', '');
-      this.$store.commit('setBidType', '');
-      this.$store.commit('setBidDueDate', '');
-      this.$store.commit('setBidDueTime', '');
-      this.$store.commit('setBidRegions', '');
-      this.$store.commit('setBidEnabled', '');
-      this.$store.commit('setBidDescription', [{ body: '' }]);
     }
 
     if (this.getUserType === 'supplier') {

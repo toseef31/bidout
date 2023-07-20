@@ -103,9 +103,10 @@
                   <span class="ml-1 priceBoldClass">$ {{
                     formatPrice(submission.postBidOutPrice)
                   }}</span>
+
                   <div class="subscript">Saving {{
-                    100 - Math.round(((submission.postBidOutPrice / submission.bidOutPricePre) +
-                      Number.EPSILON) * 100)
+                    Number((((submission.bidOutPricePre - submission.postBidOutPrice) / submission.bidOutPricePre) *
+                      100)).toFixed(2)
                   }}%</div>
                 </td>
               </template>
@@ -328,9 +329,9 @@ export default {
           if (list.lineItems[lIndex].price === 'NO_BID') {
             dataD[lIndex].push('NO-BID');
           } else if (list.lineItems[lIndex].price === 0 || list.lineItems[lIndex].price === '0') {
-            dataD[lIndex].push(`$${Number(`${Math.round(parseFloat(`${list.lineItems[lIndex].price}e${2}`))}e-${2}`).toFixed(2)}`);
+            dataD[lIndex].push(parseFloat(Number(`${Math.round(parseFloat(`${list.lineItems[lIndex].price}e${2}`))}e-${2}`).toFixed(2)));
           } else {
-            dataD[lIndex].push(`$${Number(`${Math.round(parseFloat(`${list.lineItems[lIndex].price}e${2}`))}e-${2}`).toFixed(2)}`);
+            dataD[lIndex].push(parseFloat(Number(`${Math.round(parseFloat(`${list.lineItems[lIndex].price}e${2}`))}e-${2}`).toFixed(2)));
           }
         });
       });
@@ -342,7 +343,7 @@ export default {
 
         this.bidDetail.supplierSubmissions.forEach((list) => {
           if (list.bidOutPricePre) {
-            dataD[index].push(`$${list.bidOutPricePre}`);
+            dataD[index].push(parseFloat(list.bidOutPricePre));
           } else {
             dataD[index].push('Not submitted');
           }
@@ -356,10 +357,23 @@ export default {
 
         this.bidDetail.supplierSubmissions.forEach((list) => {
           if (list.postBidOutPrice) {
-            dataD[index].push(`$${list.postBidOutPrice} (Saving-${100 - Math.round(((list.postBidOutPrice / list.bidOutPricePre)
-              + Number.EPSILON) * 100)}%)`);
+            dataD[index].push(parseFloat(list.postBidOutPrice));
           } else {
             dataD[index].push('Not submitted');
+          }
+        });
+
+        dataD = this.spacer(dataD, index);
+
+        dataD.push(['BidOut Period Savings']);
+
+        index = this.indexOfArray(['BidOut Period Savings'], dataD);
+
+        this.bidDetail.supplierSubmissions.forEach((list) => {
+          if (list.postBidOutPrice) {
+            dataD[index].push(`${Number((((list.bidOutPricePre - list.postBidOutPrice) / list.bidOutPricePre) * 100)).toFixed(2)}%`);
+          } else {
+            dataD[index].push('No change');
           }
         });
       } else if ((this.bidDetail.bidData.type === 'BidOut Process' && !this.bidDetail.bidout && this.bidDetail.receivingBids) || this.bidDetail.bidData.type !== 'BidOut Process') {
@@ -369,7 +383,7 @@ export default {
 
         this.bidDetail.supplierSubmissions.forEach((list) => {
           if (list.bidOutPricePre) {
-            dataD[index].push(`$${list.bidOutPricePre}`);
+            dataD[index].push(parseFloat(list.bidOutPricePre));
           } else {
             dataD[index].push('Not submitted');
           }

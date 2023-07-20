@@ -12,44 +12,52 @@
             <v-alert type="success" v-if="emailSucess !== null">
               {{ emailSucess }}
             </v-alert>
-             <v-form @submit.prevent="resetForm" ref="form" class="login-form" v-model="valid"
-              lazy-validation>
-                <label class="font-weight-bold">New Password</label> 
-                <input type="hidden" v-model="token">
-                <v-text-field placeholder="Password" single-line outlined type="password" v-model="password" :rules="[required, min6]">
-                  <template v-slot:append>
-                    <v-icon
-                      v-if="successPass"
-                      color="green"
-                      >{{ passRule }}</v-icon>
-                    <v-icon
-                      v-if="!successPass"
-                      color="red"
-                      >{{ passRule }}</v-icon>
-                  </template>
-                </v-text-field>
-                <label class="font-weight-bold">Confirm Password</label> 
-                <v-text-field placeholder="Confirm Password" single-line outlined type="password" v-model="confirmPassword":rules="[required, min6, matchingPasswords ]">
-                  <template v-slot:append>
-                    <v-icon
-                      v-if="successPass1"
-                      color="green"
-                      >{{ passRule1 }}</v-icon
-                    >
-                    <v-icon
-                       v-if="!successPass1"
-                       color="red"
-                       >{{ passRule1 }}</v-icon
-                    >
-                  </template>
-                </v-text-field>
-               <div class="text-center">
-                 <v-btn class="signin-btn rounded-lg text-capitalize font-weight-bold"  type="submit" color="success" :disabled="!valid">
-                   Reset Password
-                 </v-btn>
-               </div>
+            <ValidationObserver ref="form" v-slot="{ valid, handleSubmit }">
+              <v-form @submit.prevent="resetForm" class="login-form"
+                lazy-validation>
+                  <label class="font-weight-bold">New Password</label> 
+                  <input type="hidden" v-model="token">
+                  <ValidationProvider name="Password" rules="required|min:6" vid="password"
+                  v-slot="{ errors, valid }">
+                    <v-text-field placeholder="Password" single-line outlined type="password" v-model="password" :error-messages="errors" :success="valid">
+                      <template v-slot:append>
+                        <v-icon
+                          v-if="successPass"
+                          color="green"
+                          >{{ passRule }}</v-icon>
+                        <v-icon
+                          v-if="!successPass"
+                          color="red"
+                          >{{ passRule }}</v-icon>
+                      </template>
+                    </v-text-field>
+                  </ValidationProvider>
+                  <label class="font-weight-bold">Confirm Password</label>
+                  <ValidationProvider name="Password confirmation" rules="confirmed:password|required"
+                  v-slot="{ errors, valid }">
+                    <v-text-field placeholder="Confirm Password" single-line outlined type="password" v-model="confirmPassword" :error-messages="errors" :success="valid">
+                      <template v-slot:append>
+                        <v-icon
+                          v-if="successPass1"
+                          color="green"
+                          >{{ passRule1 }}</v-icon
+                        >
+                        <v-icon
+                          v-if="!successPass1"
+                          color="red"
+                          >{{ passRule1 }}</v-icon
+                        >
+                      </template>
+                    </v-text-field>
+                  </ValidationProvider>
+                <div class="text-center">
+                  <v-btn class="rounded-lg text-capitalize font-weight-bold white--text" width="100%" height="56" color="#0D9648" type="submit" :disabled="!valid" >
+                    Reset Password
+                  </v-btn>
+                </div>
 
-             </v-form>
+              </v-form>
+            </ValidationObserver>
           </div>
           <div class="bottom-section">
             <router-link to="/login" class="center font-weight-bold font-lg text-decoration-none"><v-icon large color="#0D1139">mdi-chevron-left</v-icon> <span class="text-decoration-underline">Back to Log In</span></router-link>
@@ -61,11 +69,18 @@
      </v-row>
    </section>
 </template>
-
 <script>
-  import { mapActions } from "vuex";
+import { mapActions } from "vuex";
+import {
+  ValidationObserver,
+  ValidationProvider
+} from "vee-validate";
 export default {
-  name : "ResetPassword",
+  name: "ResetPassword",
+  components: {
+    ValidationProvider,
+    ValidationObserver,
+  },
   data() {
     return {
       valid: true,
@@ -80,14 +95,14 @@ export default {
     };
   },
   computed: {
-    emailError () {
-      return this.$store.getters.errorMessage
+    emailError() {
+      return this.$store.getters.errorMessage;
     },
-    emailSucess () {
-      return this.$store.getters.successMessage
+    emailSucess() {
+      return this.$store.getters.successMessage;
     },
-    verifyData (){
-     return this.$store.getters.verifyData;
+    verifyData() {
+      return this.$store.getters.verifyData;
     },
     passRule: function() {
       if (this.password === '') {
@@ -118,15 +133,15 @@ export default {
   },
   methods: {
     ...mapActions(["resetPassword","verifyToken"]),
-    
     resetForm() {
-      this.$refs.form.validate();
-      var resetData = {
-        email: this.$store.getters.verifyData.email,
-        oobCode: this.$store.getters.verifyData.oobCode,
-        password: this.password,
+      if (this.$refs.form.validate()) {
+        var resetData = {
+          email: this.$store.getters.verifyData.email,
+          oobCode: this.$store.getters.verifyData.oobCode,
+          password: this.password,
+        }
+        this.resetPassword(resetData);
       }
-      this.resetPassword(resetData);
     },
     verify(){
       this.verifyToken(this.token);
@@ -142,7 +157,7 @@ export default {
       if (value.length >= 6) {
         return true;
       } else {
-        return 'Password should have more than 6 characters.';
+        return 'Password must be at least 6 characters.';
       }
     },
     matchingPasswords: function() {
