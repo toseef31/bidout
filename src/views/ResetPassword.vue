@@ -95,14 +95,14 @@ export default {
     };
   },
   computed: {
-    emailError () {
-      return this.$store.getters.errorMessage
+    emailError() {
+      return this.$store.getters.errorMessage;
     },
-    emailSucess () {
-      return this.$store.getters.successMessage
+    emailSucess() {
+      return this.$store.getters.successMessage;
     },
-    verifyData (){
-     return this.$store.getters.verifyData;
+    verifyData() {
+      return this.$store.getters.verifyData;
     },
     passRule: function() {
       if (this.password === '') {
@@ -157,7 +157,7 @@ export default {
       if (value.length >= 6) {
         return true;
       } else {
-        return 'Password should have more than 6 characters.';
+        return 'Password must be at least 6 characters.';
       }
     },
     matchingPasswords: function() {
