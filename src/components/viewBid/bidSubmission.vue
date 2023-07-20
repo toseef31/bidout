@@ -335,7 +335,7 @@ export default {
         });
       });
 
-      if (this.bidDetail.bidData.type === 'BidOut Process') {
+      if ((this.bidDetail.bidData.type === 'BidOut Process' && this.bidDetail.bidout) || (this.bidDetail.bidData.type === 'BidOut Process' && !this.bidDetail.bidout && !this.bidDetail.receivingBids)) {
         dataD.push(['Bid Example Pre-BidOut Period']);
 
         index = this.indexOfArray(['Bid Example Pre-BidOut Period'], dataD);
@@ -362,7 +362,7 @@ export default {
             dataD[index].push('Not submitted');
           }
         });
-      } else {
+      } else if ((this.bidDetail.bidData.type === 'BidOut Process' && !this.bidDetail.bidout && this.bidDetail.receivingBids) || this.bidDetail.bidData.type !== 'BidOut Process') {
         dataD.push(['Total Price']);
 
         index = this.indexOfArray(['Total Price'], dataD);
