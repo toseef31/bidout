@@ -10,23 +10,16 @@
 
         <v-expansion-panels accordion multiple v-model="getPanel" :readonly="true">
           <v-expansion-panel v-model="getPanel" v-for="(item, index) in getQAndForAnswer" :key="index">
-            <v-expansion-panel-header>
-              <template v-slot:actions>
-                <v-col align="center"> <v-icon> </v-icon></v-col>
-              </template>
-              <template>
-                <div class="header d-flex flex-column">
-                  <span>Question:</span>
+            <div class="header d-flex flex-column mx-6 mt-3">
+                  <span class="question-class">Question:</span>
 
-                  <span class=" mt-3">{{ item.question }}</span>
+                  <span class=" mt-2 question-class">{{ item.question }}</span>
 
-                  <span class="sub-title mt-4">By {{ (item.questionBy.firstName) }} ({{ item.questionByCompany.companyName
+                  <span class="sub-title mt-2">By {{ (item.questionBy.firstName) }} ({{ item.questionByCompany.companyName
                   }})</span>
-                  <span class="sub-title mt-2">{{ item.askedOn | moment('MM/DD/YYYY') }} - {{ item.askedOn |
+                  <span class="sub-title">{{ item.askedOn | moment('MM/DD/YYYY') }} - {{ item.askedOn |
                     moment('hh:mma') }}</span>
                 </div>
-              </template>
-            </v-expansion-panel-header>
             <v-expansion-panel-content>
               <v-textarea placeholder="Answer here..." single-line outlined type="text" v-model="answers[index].answer">
               </v-textarea>
