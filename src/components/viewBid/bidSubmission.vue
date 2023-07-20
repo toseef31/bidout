@@ -2,8 +2,7 @@
   <v-col class="my-7 pa-0 bid-submission-tab" align="start">
 
     <div class="table-class" v-if="bidDetail.supplierSubmissions.length">
-      <div class="d-flex justify-end mr-5"
-        v-if="isBidOut || bidDetail.bidData.type !== 'BidOut Process' || (bidDetail.bidData.type === 'BidOut Process' && !bidDetail.bidout && !bidDetail.receivingBids)">
+      <div class="d-flex justify-end mr-5">
 
         <v-tooltip top>
           <template v-slot:activator="{ on, attrs }">
