@@ -2,7 +2,7 @@
   <v-col class="my-7 pa-0 bid-submission-tab" align="start">
 
     <div class="table-class" v-if="bidDetail.supplierSubmissions.length">
-      <div class="d-flex justify-end mr-5" v-if="!isBidOut && !bidDetail.receivingBids">
+      <div class="d-flex justify-end mr-5">
 
         <v-tooltip top>
           <template v-slot:activator="{ on, attrs }">
@@ -71,7 +71,8 @@
                 </td>
               </template>
             </tr>
-            <tr v-if="bidDetail.supplierSubmissions && bidDetail.bidData.type === 'BidOut Process' &&!bidDetail.bidout && bidDetail.receivingBids">
+            <tr
+              v-if="bidDetail.supplierSubmissions && bidDetail.bidData.type === 'BidOut Process' && !bidDetail.bidout && bidDetail.receivingBids">
               <td class="bid-example-title">Total Price</td>
               <template v-for="(submission) in bidDetail.supplierSubmissions">
                 <td v-if="!submission.bidOutPricePre" class="priceBoldClass">
@@ -102,9 +103,10 @@
                   <span class="ml-1 priceBoldClass">$ {{
                     formatPrice(submission.postBidOutPrice)
                   }}</span>
+
                   <div class="subscript">Saving {{
-                    100 - Math.round(((submission.postBidOutPrice / submission.bidOutPricePre) +
-                      Number.EPSILON) * 100)
+                    Number((((submission.bidOutPricePre - submission.postBidOutPrice) / submission.bidOutPricePre) *
+                      100)).toFixed(2)
                   }}%</div>
                 </td>
               </template>
@@ -297,6 +299,9 @@ export default {
       }
       return false;
     },
+    getQAndA() {
+      return this.$store.getters.qAndA;
+    },
   },
   methods: {
     ...mapActions(['awardCompany', 'rejectCompany', 'UnAwardCompany', 'UnDisqualifyCompany']),
@@ -306,6 +311,7 @@ export default {
     exportF() {
       const header = this.bidDetail.supplierSubmissions.map((el) => el.company.companyName);
 
+      header.unshift('Required');
       header.unshift('UOM');
       header.unshift('QTY');
       header.unshift('Line Items');
@@ -317,25 +323,27 @@ export default {
         dataD.push([el.description]);
         dataD[lIndex].push(el.quantity);
         dataD[lIndex].push(el.unit);
+        dataD[lIndex].push(el.required === true ? 'Yes' : 'No');
+
         this.bidDetail.supplierSubmissions.forEach((list) => {
           if (list.lineItems[lIndex].price === 'NO_BID') {
             dataD[lIndex].push('NO-BID');
           } else if (list.lineItems[lIndex].price === 0 || list.lineItems[lIndex].price === '0') {
-            dataD[lIndex].push(`$${Number(`${Math.round(parseFloat(`${list.lineItems[lIndex].price}e${2}`))}e-${2}`).toFixed(2)}`);
+            dataD[lIndex].push(parseFloat(Number(`${Math.round(parseFloat(`${list.lineItems[lIndex].price}e${2}`))}e-${2}`).toFixed(2)));
           } else {
-            dataD[lIndex].push(`$${Number(`${Math.round(parseFloat(`${list.lineItems[lIndex].price}e${2}`))}e-${2}`).toFixed(2)}`);
+            dataD[lIndex].push(parseFloat(Number(`${Math.round(parseFloat(`${list.lineItems[lIndex].price}e${2}`))}e-${2}`).toFixed(2)));
           }
         });
       });
 
-      if (this.bidDetail.bidData.type === 'BidOut Process') {
+      if ((this.bidDetail.bidData.type === 'BidOut Process' && this.bidDetail.bidout) || (this.bidDetail.bidData.type === 'BidOut Process' && !this.bidDetail.bidout && !this.bidDetail.receivingBids)) {
         dataD.push(['Bid Example Pre-BidOut Period']);
 
         index = this.indexOfArray(['Bid Example Pre-BidOut Period'], dataD);
 
         this.bidDetail.supplierSubmissions.forEach((list) => {
           if (list.bidOutPricePre) {
-            dataD[index].push(`$${list.bidOutPricePre}`);
+            dataD[index].push(parseFloat(list.bidOutPricePre));
           } else {
             dataD[index].push('Not submitted');
           }
@@ -349,20 +357,33 @@ export default {
 
         this.bidDetail.supplierSubmissions.forEach((list) => {
           if (list.postBidOutPrice) {
-            dataD[index].push(`$${list.postBidOutPrice} (Saving-${100 - Math.round(((list.postBidOutPrice / list.bidOutPricePre)
-              + Number.EPSILON) * 100)}%)`);
+            dataD[index].push(parseFloat(list.postBidOutPrice));
           } else {
             dataD[index].push('Not submitted');
           }
         });
-      } else {
+
+        dataD = this.spacer(dataD, index);
+
+        dataD.push(['BidOut Period Savings']);
+
+        index = this.indexOfArray(['BidOut Period Savings'], dataD);
+
+        this.bidDetail.supplierSubmissions.forEach((list) => {
+          if (list.postBidOutPrice) {
+            dataD[index].push(`${Number((((list.bidOutPricePre - list.postBidOutPrice) / list.bidOutPricePre) * 100)).toFixed(2)}%`);
+          } else {
+            dataD[index].push('No change');
+          }
+        });
+      } else if ((this.bidDetail.bidData.type === 'BidOut Process' && !this.bidDetail.bidout && this.bidDetail.receivingBids) || this.bidDetail.bidData.type !== 'BidOut Process') {
         dataD.push(['Total Price']);
 
         index = this.indexOfArray(['Total Price'], dataD);
 
         this.bidDetail.supplierSubmissions.forEach((list) => {
           if (list.bidOutPricePre) {
-            dataD[index].push(`$${list.bidOutPricePre}`);
+            dataD[index].push(parseFloat(list.bidOutPricePre));
           } else {
             dataD[index].push('Not submitted');
           }
@@ -379,7 +400,7 @@ export default {
         if (list.supplierNote && list.supplierNote !== '') {
           dataD[index].push(`${list.supplierNote}`);
         } else {
-          dataD[index].push('None');
+          dataD[index].push('Not Provided');
         }
       });
 
@@ -397,7 +418,7 @@ export default {
           });
           dataD[index].push(`${doc}`);
         } else {
-          dataD[index].push('None');
+          dataD[index].push('Not Provided');
         }
       });
 
@@ -409,13 +430,13 @@ export default {
             dataD.push([el.title]);
             const fI = this.indexOfArray([el.title], dataD);
             this.answers.forEach((list) => {
-              if (el.questionType === 'checkbox') {
-                if (list.answers[qInd].answer === 'null') dataD[fI].push('None');
+              if (el.questionType === 'checkbox' && list.answers[qInd].answer) {
+                if (list.answers[qInd].answer === 'null' || list.answers[qInd].answer === null) dataD[fI].push('Not Provided');
                 else dataD[fI].push(list.answers[qInd].answer);
-              } else if (el.questionType === 'uploadFile') {
+              } else if (el.questionType === 'uploadFile' && list.answers[qInd].answer) {
                 dataD[fI].push(`${list.answers[qInd].fileName}`);
-              } else if (list.answers[qInd].answer === 'null') {
-                dataD[fI].push('None');
+              } else if (!list.answers[qInd].answer || (list.answers[qInd].answer === 'null' || list.answers[qInd].answer === null)) {
+                dataD[fI].push('Not Provided');
               } else {
                 dataD[fI].push(`${list.answers[qInd].answer}`);
               }
@@ -427,16 +448,48 @@ export default {
 
       dataD.unshift(header);
 
+      const headerQA = [];
+      const dataQA = [];
+
+      if (this.getQAndA.length) {
+        headerQA.unshift('Answered By');
+        headerQA.unshift('Answers');
+        headerQA.unshift('Questioned By');
+        headerQA.unshift('Questions');
+
+        this.getQAndA.forEach((el, tIndex) => {
+          dataQA.push([el.question]);
+          dataQA[tIndex].push(`${el.questionedUserName} (${el.questionByCompany.companyName})`);
+
+          if (el.answer && el.answeredUserName && el.answeredUserCompany && el.answeredUserCompany !== '') {
+            dataQA[tIndex].push(el.answer);
+            dataQA[tIndex].push(`${el.answeredUserName} (${el.answeredUserCompany})`);
+          }
+        });
+
+        dataQA.unshift(headerQA);
+      }
+
       const data = XLSX.utils.aoa_to_sheet(dataD);
 
+      let data2;
+      if (this.getQAndA.length) {
+        data2 = XLSX.utils.aoa_to_sheet(dataQA);
+      }
+
       const wb = XLSX.utils.book_new();
-      XLSX.utils.book_append_sheet(wb, data, 'data');
+      XLSX.utils.book_append_sheet(wb, data, 'Data');
+
+      if (this.getQAndA.length) {
+        XLSX.utils.book_append_sheet(wb, data2, 'Q&A');
+      }
 
       XLSX.writeFile(wb, `${this.bidDetail.bidData.title}.xlsx`);
     },
     spacer(data, index) {
       data[index].splice(1, 0, '');
       data[index].splice(2, 0, '');
+      data[index].splice(3, 0, '');
 
       return data;
     },

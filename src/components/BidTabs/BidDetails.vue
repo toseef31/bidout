@@ -499,7 +499,25 @@ export default {
       this.$store.commit('setAttachData', null);
       this.$store.commit('setAttachement', null);
       this.$store.commit('setAttachement', this.$store.getters.bidData.attachments);
+
+      if (this.$store.getters.bidData.lineItems !== '' && this.$store.getters.bidData.lineItems.length) {
+        this.$emit('validation', { valid: true, items: '4', type: 'L' });
+        this.$store.commit('setLineItemsComplete', true);
+      } else {
+        this.$emit('validation', { valid: false, items: '4', type: 'L' });
+        this.$store.commit('setLineItemsComplete', false);
+      }
+      this.$refs.form.validate();
     } else if (this.$store.getters.bidData.statusType === 'draftBid') {
+      this.$refs.form.validate();
+      if (this.$store.getters.bidData.lineItems !== '' && this.$store.getters.bidData.lineItems.length) {
+        this.$emit('validation', { valid: true, items: '4', type: 'L' });
+        this.$store.commit('setLineItemsComplete', true);
+      } else {
+        this.$emit('validation', { valid: false, items: '4', type: 'L' });
+        this.$store.commit('setLineItemsComplete', false);
+      }
+
       this.$store.commit('setAttachData', null);
       this.$store.commit('setAttachement', null);
       this.$store.commit('setAttachement', this.$store.getters.bidData.attachments);
@@ -511,6 +529,16 @@ export default {
       this.$store.commit('setAttachData', null);
       this.$store.commit('setAttachement', null);
       this.$store.commit('setAttachement', this.$store.getters.bidData.attachments); 
+      
+      this.$refs.form.validate();
+      if (this.$store.getters.bidData.lineItems !== '' && this.$store.getters.bidData.lineItems.length) {
+        this.$emit('validation', { valid: true, items: '4', type: 'L' });
+        this.$store.commit('setLineItemsComplete', true);
+      } else {
+        this.$emit('validation', { valid: false, items: '4', type: 'L' });
+        this.$store.commit('setLineItemsComplete', false);
+      }
+      
     } else {
       this.$store.commit('setAttachData', null);
       this.$store.commit('setAttachement', null);
