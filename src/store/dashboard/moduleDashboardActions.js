@@ -113,8 +113,8 @@ export default {
           console.log(err);
       });
   }, 
-  deletePendingSignUp({commit,dispatch,state},payload){
-    axios.post('/v2/user/deletePendingSignUp/'+ payload)
+  deleteInvitedUser({commit,dispatch,state},payload){
+    axios.post('/v2/user/deleteInvitedUser/'+ payload)
       .then(responce => {
         if(responce.status === 200){
           commit('setStatusMessage', 'User deleted sucessfully!')
