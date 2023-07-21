@@ -148,16 +148,16 @@
           <v-sheet class="py-2 px-5 text-left award-status-card" rounded="lg" height="85" width="290"
             v-if="!bidDetail.receivingBids && !isBidOut">
             <div class="award-status" v-if="(bidDetail.bidData.rejectees &&
-                bidDetail.bidData.rejectees.length === 0 &&
-                bidDetail.bidData.awardees &&
-                bidDetail.bidData.awardees.length === 0) ||
+              bidDetail.bidData.rejectees.length === 0 &&
+              bidDetail.bidData.awardees &&
+              bidDetail.bidData.awardees.length === 0) ||
               (!bidDetail.bidData.rejectees && !bidDetail.bidData.awardees)
               ">
               Status: Not Awarded
             </div>
 
             <div class="award-status" v-if="(bidDetail.bidData.rejectees &&
-                bidDetail.bidData.rejectees.length) ||
+              bidDetail.bidData.rejectees.length) ||
               (bidDetail.bidData.awardees &&
                 bidDetail.bidData.awardees.length)
               ">
@@ -194,10 +194,10 @@
                           <v-list-item-title color="#0D9648" @click="isSetting = !isSetting" class="py-3">Edit
                             Bid</v-list-item-title>
                         </router-link>
-                        <v-tooltip top v-if="noOfBidSubmitted > 0" >
+                        <v-tooltip top v-if="noOfBidSubmitted > 0">
                           <template v-slot:activator="{ on, attrs }">
-                            <v-list-item-title v-bind="attrs" v-on="on" color="#959595"
-                              @click="isSetting = !isSetting" class="pt-2">
+                            <v-list-item-title v-bind="attrs" v-on="on" color="#959595" @click="isSetting = !isSetting"
+                              class="pt-2">
                               <p class="disabled-item">Edit Bid</p>
                             </v-list-item-title>
                           </template>
@@ -250,8 +250,8 @@
 
                         <v-tooltip top v-if="noOfBidSubmitted > 0">
                           <template v-slot:activator="{ on, attrs }">
-                            <v-list-item-title v-bind="attrs" v-on="on"  color="#959595"
-                              @click="isSetting = !isSetting" class="pt-2">
+                            <v-list-item-title v-bind="attrs" v-on="on" color="#959595" @click="isSetting = !isSetting"
+                              class="pt-2">
                               <p class="disabled-item">Delete Bid</p>
                             </v-list-item-title>
                           </template>
@@ -420,7 +420,8 @@
                 ? "Bid Submission is not allowed"
                 : ""
               }}
-              {{ (showIntent === true || showIntent === 'true') && !isBidSubmitted && isBidOut ? 'Bid Submission is not allowed' : ''}}
+              {{ (showIntent === true || showIntent === 'true') && !isBidSubmitted && isBidOut ? 'Bid Submission is not
+                            allowed' : ''}}
               <div v-if="(showIntent === true ||
                   showIntent === 'true') && !isBidSubmitted && !isBidOut
                 " @click="ChangeT('tab-2')">
@@ -620,7 +621,7 @@ export default {
           value: 4,
         },
       ],
-      createDraftBidLoading: false
+      createDraftBidLoading: false,
     };
   },
   methods: {
@@ -784,7 +785,7 @@ export default {
       await this.saveDraftBid(bidInfo);
       this.createDraftBidLoading = false;
       this.isSetting = !this.isSetting;
-      this.getDraftBySerial({ serial: this.$store.getters.bidSerial});
+      this.getDraftBySerial({ serial: this.$store.getters.bidSerial });
     },
   },
   computed: {
