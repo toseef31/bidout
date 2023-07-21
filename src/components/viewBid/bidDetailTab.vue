@@ -174,8 +174,7 @@
 
                     <span>{{
                       item && item.companyName ?
-                      item.companyName : item.company }} doesn't want to
-                      sent Bid Submissions</span>
+                      item.companyName : item.company }} will not be submitting a bid</span>                     
                   </v-tooltip>
                 </div>
               </v-col>
