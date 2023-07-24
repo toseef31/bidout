@@ -99,12 +99,13 @@
                   Not submitted
                 </td>
                 <td v-else>
-                  <v-icon color="#0D9648">mdi-arrow-down-thin-circle-outline</v-icon>
+                  <v-icon 
+                  v-if="submission.bidOutPricePre > submission.postBidOutPrice" color="#0D9648">mdi-arrow-down-thin-circle-outline</v-icon>
                   <span class="ml-1 priceBoldClass">$ {{
                     formatPrice(submission.postBidOutPrice)
                   }}</span>
 
-                  <div class="subscript">Saving {{
+                  <div class="subscript" v-if="submission.bidOutPricePre > submission.postBidOutPrice">Saving {{
                     Number((((submission.bidOutPricePre - submission.postBidOutPrice) / submission.bidOutPricePre) *
                       100)).toFixed(2)
                   }}%</div>
