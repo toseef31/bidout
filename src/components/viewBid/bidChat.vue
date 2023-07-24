@@ -90,7 +90,6 @@
             acceptedFiles="image/*,application/pdf">
           </vue-dropzone>
           <v-list two-line class="own-user message-list" v-for="message in messagesList" :key="message._id">
-            <v-list-item-group>
               <template>
                 <v-list-item class="text-left px-5" active-class="white--text">
                   <template>
@@ -137,7 +136,6 @@
                   </template>
                 </v-list-item>
               </template>
-            </v-list-item-group>
           </v-list>
         </div>
         <div class="message-send-area px-5 pt-5">
