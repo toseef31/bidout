@@ -31,7 +31,9 @@
                 <v-icon color="#0D1139" v-else>mdi-file-document</v-icon>
               </td>
               <td class="text-left d-block text-truncate pt-4" style="width: 200px">
-                {{ doc.fileName }}
+                <a :href="doc.url" target="_blank" class="text-decoration-none">{{
+                  doc.fileName
+                }}</a>
               </td>
               <td class="text-left">
                 <div v-if="edit === index && isEdit" class="d-flex edit-comment align-center">
