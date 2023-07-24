@@ -1,9 +1,14 @@
 <template>
-  <v-container class="pa-sm-10 pa-4">
+  <v-container class="pa-sm-10 py-sm-0 pa-4">
     <label class="d-block text-left main-label">Services Location</label>
-    <div class="pac-card" id="pac-card">
+    <div class="pac-card mt-0 mt-md-10" id="pac-card">
       <div id="pac-container">
         <v-row>
+          <v-col cols="12" sm="12">
+            <div id="map" class="map" style="height:400px"></div>
+          </v-col>
+        </v-row>
+        <v-row class="py-4">
           <v-col cols="10" sm="10">
             <input type="text" class="location-input" name="" placeholder="Add a location here ..." id="pac-input">
            <!--  <v-text-field placeholder="Add a location here ..." single-line outlined hide-details id="pac-input"></v-text-field> -->
@@ -14,31 +19,43 @@
         </v-row>
         <!-- <input id="pac-input" type="text" placeholder="Enter a location" /> -->
       </div>
-
-      <v-row>
-        <v-col cols="12" sm="12">
-          <div id="map" class="map" style="height:400px"></div>
-        </v-col>
-      </v-row>
     </div>
     <v-row>
       <v-col cols="12" sm="12">
-        <v-row>
-          <v-col cols="12" class="-list text-left pt-2"  v-for="(location,index) in companyData.companyLocations" :key="index">
-            <div  class="d-flex justify-space-between">
-            <label>
-              <span>
-              <v-icon>mdi-map-marker-outline</v-icon>
-                {{location.location}}
-              </span>
-            </label>
-            <label>
-            <v-icon color="#F32349" @click="deleteLocation(location,index)">mdi-trash-can-outline
-            </v-icon>
-        </label>
-      </div>
-          </v-col>
-        </v-row>
+        <div class="locations">
+          <h4 class="my-4 text-left">HQ Location</h4>
+          <v-row class="grey lighten-5 mx-0 my-4 rounded-lg hq-location">
+            <v-col cols="12" class="text-left py-4">
+              <div  class="d-flex justify-space-between">
+                <label>
+                  <span>
+                  <v-icon color="#0D9648">mdi-map-marker-outline</v-icon>
+                    {{companyData.hqLocation}}
+                  </span>
+                </label>
+              </div>
+            </v-col>
+          </v-row>
+        </div>
+        <div class="other-listing my-4">
+          <h4  class="py-4 text-left">Other Locations</h4>
+          <v-row>
+            <v-col cols="12" sm="6" class="-list text-left pt-2"  v-for="(location,index) in companyData.companyLocations" :key="index">
+              <div  class="d-flex justify-space-between py-4 grey lighten-5 rounded-lg">
+                <label>
+                  <span>
+                  <v-icon color="#0D9648">mdi-map-marker-outline</v-icon>
+                    {{location.location}}
+                  </span>
+                </label>
+                <label>
+                  <v-icon color="#0D9648" size="20" class="pr-2">mdi-pencil-outline</v-icon>
+                  <v-icon color="#F32349" size="20" @click="deleteLocation(location,index)">mdi-trash-can-outline</v-icon>
+                </label>
+              </div>
+            </v-col>
+          </v-row>
+        </div>
       </v-col>
     </v-row>
   </v-container>

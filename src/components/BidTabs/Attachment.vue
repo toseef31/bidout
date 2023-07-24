@@ -1,7 +1,12 @@
 <template>
-  <div>
+  <div class="attachment-tab-class">
+   
     <div class="attachment-list">
-      <v-simple-table fixed-header height="300px">
+      <vue-dropzone ref="myVueDropzone" :class="{ dropzoneActive: false }" :duplicateCheck="true"
+       id="dropzone" @vdropzone-success="afterComplete"
+      v-on:vdropzone-sending="dragfileupload" :options="dropzoneOptions">
+    </vue-dropzone>
+      <v-simple-table fixed-header height="300px" class="table-class-drag">
         <template v-slot:default>
           <thead>
             <tr>
@@ -21,11 +26,14 @@
                 <img :src="require('@/assets/images/bids/FilePdf.png')" v-if="checkFileType(doc.fileName) === 'pdf'" />
                 <img :src="require('@/assets/images/bids/FileDoc.png')"
                   v-else-if="checkFileType(doc.fileName) === 'docx' || checkFileType(doc.fileName) === 'doc'" />
-                <v-icon color="#0D1139" v-else-if="checkFileType(doc.fileName) === 'xlsx' || checkFileType(doc.fileName) === 'xls'">mdi-microsoft-excel</v-icon>
+                <v-icon color="#0D1139"
+                  v-else-if="checkFileType(doc.fileName) === 'xlsx' || checkFileType(doc.fileName) === 'xls'">mdi-microsoft-excel</v-icon>
                 <v-icon color="#0D1139" v-else>mdi-file-document</v-icon>
               </td>
               <td class="text-left d-block text-truncate pt-4" style="width: 200px">
-                {{ doc.fileName }}
+                <a :href="doc.url" target="_blank" class="text-decoration-none">{{
+                  doc.fileName
+                }}</a>
               </td>
               <td class="text-left">
                 <div v-if="edit === index && isEdit" class="d-flex edit-comment align-center">
@@ -36,9 +44,10 @@
                 <span v-else>{{ doc.comment !== 'undefined' ? doc.comment : '' }}</span>
               </td>
               <td class="text-left">{{ size(doc.fileSize) }}</td>
-              <td class="text-left">{{ doc.uploadedBy.firstName ?  `${doc.uploadedBy.firstName} ${doc.uploadedBy.lastName}` : `${uploadedBy.firstName} ${uploadedBy.lastName}` }}  </td>
+              <td class="text-left">{{ doc.uploadedBy.firstName ? `${doc.uploadedBy.firstName} ${doc.uploadedBy.lastName}`
+                : `${uploadedBy.firstName} ${uploadedBy.lastName}` }} </td>
               <td class="text-left">
-                {{  doc.uploadedAt ? doc.uploadedAt  : uploadedAt | moment("MM/DD/YYYY hh:mm a")  }}
+                {{ doc.uploadedAt ? doc.uploadedAt : uploadedAt | moment("MM/DD/YYYY hh:mm a") }}
               </td>
               <td>
                 <div class="d-flex">
@@ -51,6 +60,7 @@
           </tbody>
         </template>
       </v-simple-table>
+
     </div>
 
     <v-row no-gutters align="center" class="px-6 mt-16">
@@ -70,8 +80,13 @@
 </template>
 <script>
 import { mapActions, mapGetters } from 'vuex';
+import vueDropzone from 'vue2-dropzone';
+import 'vue2-dropzone/dist/vue2Dropzone.min.css';
 
 export default {
+  components: {
+    vueDropzone,
+  },
   data() {
     return {
       edit: '',
@@ -89,6 +104,17 @@ export default {
       docs: '',
       uploadDoc: [],
       docId: null,
+      dropzoneOptions: {
+        url: `${import.meta.env.VITE_API_BASE_URL}/v2/bid/uploadBidAttachment/`,
+        thumbnailWidth: 100,
+        thumbnailHeight: 100,
+        maxFiles: 10,
+        maxFilesize: 420,
+        chunking: true,
+        headers: {
+          Authorization: `Bearer ${JSON.parse(localStorage.getItem('token'))}`,
+        },
+      },
     };
   },
   computed: {
@@ -143,7 +169,7 @@ export default {
           this.$store.commit('setAttachement', null);
           this.$store.commit('setAttachement', this.documents);
 
-          this.documents&& this.documents.forEach((el) => {
+          this.documents && this.documents.forEach((el) => {
             el.comment === 'undefined' ? el.comment = '' : '';
           });
 
@@ -198,11 +224,11 @@ export default {
       this.fileExt = this.fileName.split('.').pop();
       this.fileSize = (this.file.size / (1024 * 1024)).toFixed(2);
       this.uploadDoc.push(this.file);
-      this.uploadedBy = this.$store.getters.userInfo
+      this.uploadedBy = this.$store.getters.userInfo;
       const data = {
         uploadedBy: this.$store.getters.userInfo._id,
         uploadedByName: `${this.$store.getters.userInfo.firstName} ${this.$store.getters.userInfo.lastName}`,
-        attachement: this.uploadDoc
+        attachement: this.uploadDoc,
       };
       await this.uploadBidAttach(data);
       this.isAttaching = false;
@@ -229,13 +255,12 @@ export default {
       const indexToRemove = this.documents.findIndex((obj) => {
         if (obj._id && doc._id) {
           return obj._id === doc._id;
-        } else {
-          return obj.id === doc.id;
         }
+        return obj.id === doc.id;
       });
-      if(doc._id){
+      if (doc._id) {
         this.docId = doc._id;
-      }else{
+      } else {
         this.docId = doc.id;
       }
 
@@ -288,8 +313,44 @@ export default {
         clearInterval(timer);
       });
     },
+    dragfileupload(file, xhr, formData) {
+      this.isAttaching = true;
+      formData.append('uploadedBy', this.$store.getters.userInfo._id);
+    },
+    afterComplete(file, response) {
+      this.isAttaching = false;
+      this.$store.commit('setAttachData', response);
+      this.$store.commit('setIsEditBidChanges', true);
+      this.attachStatus = true;
+      if (this.$route.name === 'EditBid') {
+        this.$store.commit('setAttachement', this.docsList);
+        this.updateBid({ attachement: this.docsList });
+      } else if (this.$route.name === 'EditTemplate') {
+        this.$store.commit('setAttachement', this.docsList);
+        this.updateTemplate({ attachement: this.docsList });
+      } else {
+        this.$store.commit('setAttachement', this.docsList);
+        this.updateDraftBid({ attachement: this.docsList });
+      }
+
+      this.$refs.myVueDropzone.removeFile(file);
+      if (document.getElementById('dropzone')) {
+        document.getElementById('dropzone').style.display = 'none';
+      }
+    },
   },
-  mounted() {
+  async mounted() {
+    document.addEventListener('dragenter', (e) => {
+      if (
+        e.target.className === 'attachment-tab-class'
+        || e.target.className === 'attachment-list' || e.target.className === 'v-window__container' || e.target.className === 'v-data-table' || e.target.className === 'row' || e.target.className === 'v-data-table__wrapper' || e.target.className === 'upload-attach'
+      ) {
+        document.getElementById('dropzone').style.display = 'block';
+      } else {
+        document.getElementById('dropzone').style.display = 'none';
+      }
+    });
+
     if (this.$store.getters.attachData) {
       this.documents = this.$store.getters.attachData;
     }
@@ -321,3 +382,15 @@ export default {
   },
 };
 </script>
+
+<style lang="scss">
+.vue-dropzone {
+  font-family: 'Mulish', sans-serif;
+  font-weight: 600;
+  color: black;
+
+  .dz-message {
+    margin-top: 10%;
+  }
+}
+</style>

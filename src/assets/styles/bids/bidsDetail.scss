@@ -1190,22 +1190,18 @@
           }
         }
 
-        .v-expansion-panel-header {
-          .header {
-            font-weight: 700;
-
-            .sub-title {
-              font-weight: 500;
-            }
+        .header {
+          .question-class {
+            font-size: 15px;
+            line-height: 1.2;
           }
+          font-weight: 700;
 
-          .icon-desc {
+          .sub-title {
             font-weight: 500;
-            font-size: 12px;
-            color: #959595;
-            margin-right: 10px;
           }
         }
+
 
         .v-expansion-panel-content {
           .save-button {
@@ -1380,8 +1376,8 @@
           box-sizing: border-box;
           display: none;
           position: absolute;
-          width: 51.5%;
-          height: 82%;
+          width: 58.3%;
+          height: 68.5%;
           z-index: 99999;
           background: #80808066;
           border: 6px dashed #0d9648;

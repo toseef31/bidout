@@ -83,12 +83,13 @@
           </v-row>
         </div>
         <div class="messages-section" ref="messagesSection">
-          <vue-dropzone ref="myVueDropzone" :class="{ dropzoneActive: uploadDrag }" @ondragleave="dragLeave(event)"
+          <vue-dropzone ref="myVueDropzone"  :class="{ dropzoneActive: false }"
+          :duplicateCheck="true"
             id="dropzone" @vdropzone-success="afterComplete" v-on:vdropzone-sending="dragfileupload"
-            :options="dropzoneOptions" @dragstart="startDrag($event, item)" acceptedFiles="image/*,application/pdf">
+            :options="dropzoneOptions" 
+            acceptedFiles="image/*,application/pdf">
           </vue-dropzone>
           <v-list two-line class="own-user message-list" v-for="message in messagesList" :key="message._id">
-            <v-list-item-group>
               <template>
                 <v-list-item class="text-left px-5" active-class="white--text">
                   <template>
@@ -135,7 +136,6 @@
                   </template>
                 </v-list-item>
               </template>
-            </v-list-item-group>
           </v-list>
         </div>
         <div class="message-send-area px-5 pt-5">
@@ -165,6 +165,7 @@
 </template>
 <script>
 import vueDropzone from 'vue2-dropzone';
+import 'vue2-dropzone/dist/vue2Dropzone.min.css'
 import moment from 'moment-timezone';
 import _ from 'lodash';
 import { mapActions } from 'vuex';
@@ -180,12 +181,11 @@ export default {
       conversationId: '',
       message: '',
       filename: '',
-      uploadDrag: false,
+      true: false,
       fileExt: '',
       chatData: '',
       searchMessage: '',
       loading: true,
-      showMsgBlock: false,
       selectedUser: null,
       pageLoading: true,
       dropzoneOptions: {
@@ -362,5 +362,37 @@ export default {
       await this.openChat(convo);
     }
   },
+  async mounted() {
+    document.addEventListener('dragenter', (e) => {
+      if (
+        e.target.className === 'message-area'
+        || e.target.className === 'messages-section'
+        || e.target.className === 'v-list-item__content'
+        || e.target.className === 'v-list-item__title'
+        || e.target.className
+          === 'v-list own-user message-list v-sheet theme--light v-list--two-line'
+        || e.target.className === 'v-item-group theme--light v-list-item-group'
+        || e.target.className === 'message-send-area'
+        || e.target.className === 'row'
+        || e.target.className === 'col-sm-10 col-md-10 col-12'
+        || e.target.className === 'msg-text-box'
+      ) {
+        document.getElementById('dropzone').style.display = 'block';
+      } else {
+        document.getElementById('dropzone').style.display = 'none';
+      }
+    });
+  }
 };
 </script>
+<style lang="scss">
+
+.vue-dropzone {
+    font-family: 'Mulish', sans-serif;
+    font-weight: 600;
+    color: black;
+    .dz-message {
+      margin-top: 10%;
+    }
+  }
+</style>

@@ -459,21 +459,7 @@ export default {
     // eslint-disable-next-line vue/no-side-effects-in-computed-properties, vue/return-in-computed-property,
     filteredEntries() {
       if (this.$store.getters.bidData.invitedSuppliers && this.$store.getters.bidData.invitedSuppliers.length) {
-        this.repsInvited = this.$store.getters.bidData.invitedSuppliers.sort((a, b) => {
-          let aHasOfsPremium;
-          if (a.contracts) {
-            aHasOfsPremium = this.hasOfsPremium(a);
-          }
-
-          if (a.company && a.company.contracts) {
-            aHasOfsPremium = this.hasOfsPremium(a.company);
-          }
-
-          if (aHasOfsPremium) {
-            return -1;
-          }
-          return 1;
-        });
+        this.repsInvited = this.$store.getters.bidData.invitedSuppliers
       }
     },
     // eslint-disable-next-line vue/no-side-effects-in-computed-properties, vue/return-in-computed-property,
