@@ -483,14 +483,17 @@ export default {
       }
     },
     isValidForTheSame() {
-      let counter = 0;
+      let counter = 0; let noBidCounter = 0;
       for (let i = 0; i < this.value.length; i++) {
+        if (this.lineItems[i].price === 'NO_BID') noBidCounter++;
         if (Number(this.lineItems[i].price.replace(/,/g, '')) === Number(this.getSupplierBid.lineItems[i].price)) {
           counter++;
         }
       }
 
-      if (counter === this.value.length) {
+      if (noBidCounter) {
+        if ((this.value.length - noBidCounter) === counter) return false;
+      } else if (!noBidCounter && counter === this.value.length) {
         return false;
       }
       return true;
