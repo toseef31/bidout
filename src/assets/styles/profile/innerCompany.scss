@@ -1,3 +1,26 @@
+@font-face {
+  font-family: 'Metropolis';
+  src: url('@/assets/fonts/Metropolis-Regular.ttf') format('truetype');
+  font-weight: normal;
+  font-style: normal;
+}
+.dialog-h3{
+	font-size: 24px;
+  color: #0D1139;
+  font-family: 'Metropolis';
+}
+.dialog-p{
+	font-size: 14px;
+  color: #0D1139;
+  font-family: 'Metropolis';
+}
+.dialog-btn{
+	font-family: 'Metropolis';
+	font-size: 14px;
+	font-style: normal;
+	font-weight: 700;
+	line-height: normal
+}
 .inner-Company{
 	.mid-content{
 		flex: 0 0 100%;
@@ -13,6 +36,57 @@
 				font-size: 28px;
 				font-weight: 700;
 				color: #013D3A;
+				font-family: 'Metropolis';
+			}
+		}
+		.report-btns{
+			.v-btn{
+				font-size: 12px;
+				border-width: 2px;
+				font-family: 'Metropolis';
+				@media(max-width:1540px) {
+					font-size: 9px;
+				}
+			}
+			.v-dialog{
+				h3{
+					color: #013D3A;
+					font-family: 'Metropolis';
+				}
+			}
+		}
+		.similar-companies{
+			display: flex;
+			padding: 32px 24px;
+			flex-direction: column;
+			align-items: flex-start;
+			gap: 16px;
+			align-self: stretch;
+			h3{
+				color: var(--secondary, #0D1139);
+				font-family: Mulish;
+				font-size: 24px;
+				font-style: normal;
+				font-weight: 700;
+				line-height: normal;
+			}
+			.v-list{
+				display: flex;
+				flex-direction: column;
+				align-items: flex-start;
+				gap: 16px;
+				.v-list-item__content{
+					.v-list-item__title{
+						color: #013D3A;
+						font-family: Metropolis;
+						font-size: 16px;
+						font-style: normal;
+						font-weight: 500;
+						line-height: normal;
+						text-decoration-line: underline;
+						text-align: left;
+					}
+				}
 			}
 		}
 	}

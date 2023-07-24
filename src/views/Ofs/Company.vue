@@ -7,16 +7,16 @@
         </div>
         <div class="content-section fill-height" v-else>
           <div class="get-Header d-flex pt-5">
-            <v-container fill-height class="pl-0">
+            <v-container fill-height class="pl-md-0">
               <v-row
                 align="center"
                 no-gutters
               >
                 <v-col
                   class="text-left"
-                  cols="12" sm="9"
+                  cols="12" md="9"
                 >
-                  <div class="d-flex align-center ml-3">
+                  <div class="d-block d-md-flex align-center ml-md-3">
                     <div>
                       <v-img :src="supplierData.image" v-if="supplierData.image" width="335px"></v-img>
                     </div>
@@ -26,8 +26,8 @@
                   </div>
                 </v-col>
                 <v-col
-                  class="text-left"
-                  cols="12" sm="3"
+                  class="text-left mt-4 mt-md-0"
+                  cols="12" md="3"
                 >
                   <div class="d-flex justify-space-between order-btns">
                     <router-link :to="'/place-order/'+supplierData.slug" class="text-decoration-none"><v-btn color="#0D9647" background-color="#0D9647" large tile dense width="100%" height="56" class="font-weight-bold text-capitalize mb-4 px-7 white--text">Place Order <v-icon class="pl-2">mdi-arrow-right-circle</v-icon></v-btn></router-link>
@@ -95,23 +95,58 @@
                       <h1 class="mb-4 font-weight-bold">Service Locations</h1>
                       <div id="map" class="map" style="height:350px" v-if="supplierData.companyLocations"></div>
                       <h3 class="text-center" v-if="!supplierData.companyLocations">Location not added</h3>
+                      <div class="locations">
+                        <h4 class="my-4">HQ Location</h4>
+                        <v-row class="grey lighten-5 mx-0 my-4 rounded-lg hq-location">
+                          <v-col cols="12" class="text-left py-4">
+                            <div  class="d-flex justify-space-between">
+                              <label>
+                                <span>
+                                <v-icon>mdi-map-marker-outline</v-icon>
+                                  {{supplierData.hqLocation}}
+                                </span>
+                              </label>
+                            </div>
+                          </v-col>
+                        </v-row>
+                      </div>
+                      <div class="other-listing my-4">
+                        <h4  class="py-4">Other Locations</h4>
+                        <v-row class=" mx-0 my-4 hq-location" v-if="supplierData.companyLocations && supplierData.companyLocations.length > 0">
+                          <v-col cols="12" sm="6" class="text-left pr-0 pt-0" v-for="(location, index) in supplierData.companyLocations">
+                            <div  class="d-flex justify-space-between py-4 grey lighten-5 rounded-lg">
+                              <label>
+                                <span>
+                                <v-icon>mdi-map-marker-outline</v-icon>
+                                  {{location.location}}
+                                </span>
+                              </label>
+                            </div>
+                          </v-col>
+                        </v-row>
+                      </div>
                     </div>
                     <template v-if="supplierData.isOfsPremium || supplierData.isOfsPremium == true">
                       <v-divider class="my-10"></v-divider>
                       <div class="company-location mb-12"  key="3" id="Videos" v-if="supplierData.corporateVideos && supplierData.corporateVideos.length > 0">
                         <h1 class="mb-4 font-weight-bold">Corporate Videos</h1>
                         <v-row>
-                          <v-col cols="12" md="6" v-for="video in supplierData.corporateVideos">
+                          <v-col cols="12" sm="6" v-for="video in supplierData.corporateVideos">
                             <div class="video-col">
 
                               <iframe
                                 width="100%"
-                                height="350px"
+                                height="240px"
                                 :src="'https://www.youtube.com/embed/'+video"
                                 frameborder="0"
                                 allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture"
                                 allowfullscreen
+                                class="rounded-lg"
                               ></iframe>
+                              <div class="video-title pa-4 d-flex align-center justify-space-between">
+                                <h4>Video title here</h4>
+                                <a href="#"><v-icon color="#0D9648">mdi-share-variant-outline</v-icon></a>
+                              </div>
                             </div>
                           </v-col>
                           <v-col cols="12" md="12" v-if="!supplierData.corporateVideos">
@@ -120,17 +155,29 @@
                         </v-row>
                       </div>
                       <v-divider class="my-10"></v-divider>
-                      <div class="company-documents mb-12"  key="4" id="Documents" v-if="supplierData.corporateDocuments && supplierData.corporateDocuments.length > 0">
+                      <div class="company-documents"  key="4" id="Documents" v-if="supplierData.corporateDocuments && supplierData.corporateDocuments.length > 0">
                         <h1 class="mb-4 font-weight-bold">Corporate Documents</h1>
                         <v-row>
-                          <v-col cols="3" sm="2" v-for="docs in supplierData.corporateDocuments">
-                            <div class="doc-col text-center">
-                              <a :href="docs.attachment" target="_blank" class="text-decoration-none">
-                                <v-img v-if="get_url_extension(docs.attachment) == 'pdf'" :src="require('@/assets/images/profile/pdf.png')" width="80px" class="mx-auto"></v-img>
-                                <v-img v-else-if="get_url_extension(docs.attachment) == 'xlsx' || get_url_extension(docs.attachment) == 'xls'" :src="require('@/assets/images/profile/excel.png')" width="80px" class="mx-auto"></v-img>
-                                <v-img v-else :src="require('@/assets/images/profile/other.png')" width="80px" class="mx-auto"></v-img>
-                              </a>
-                              <a :href="docs.attachment" target="_blank" class="text-decoration-none"><p>{{docs.name}}</p></a>
+                          <v-col cols="12" sm="6" v-for="docs in supplierData.corporateDocuments">
+                            <div class="doc-col text-center grey lighten-5 rounded-lg d-flex justify-space-between align-center">
+                              <v-row align="center" class="mx-0">
+                                <v-col cols="10" class="px-0">
+                                  <div class="d-flex align-center pa-2">
+                                    <div class="pr-2">
+                                      <a :href="docs.attachment" target="_blank" class="text-decoration-none">
+                                        <v-img :src="require('@/assets/images/profile/docs.png')" width="80px" class="mx-auto"></v-img>
+                                      </a>
+                                    </div>
+                                    <div class="text-left">
+                                      <h4 class="text-left mb-2">{{docs.name}}</h4>
+                                      <p class="mb-0"><span class="text-uppercase">{{get_url_extension(docs.attachment)}}</span><span> • 30MB</span></p>
+                                    </div>
+                                  </div>
+                                </v-col>
+                                <v-col cols="2">
+                                  <a :href="docs.attachment" target="_blank" class="text-decoration-none"><v-icon color="#0D9648">mdi-download-outline</v-icon></a>
+                                </v-col>
+                              </v-row>
                             </div>
                           </v-col>
                           <v-col cols="12" sm="12" v-if="!supplierData.corporateDocuments">
@@ -138,8 +185,7 @@
                           </v-col>
                         </v-row>
                       </div>
-                      <v-divider class="my-10"></v-divider>
-                        <div class="company-news mb-12" v-if="supplierData.corporateNews && supplierData.corporateNews.length > 0">
+                        <!-- <div class="company-news mb-12" v-if="supplierData.corporateNews && supplierData.corporateNews.length > 0">
                       <h1 class="mb-4 font-weight-bold">Corporate News & Press Releases</h1>
                       <div class="news-list" v-for="news in supplierData.corporateNews">
                          <p>{{news.date | moment('MM/DD/YYYY')}} -  <a :href="news.url" target="_blank" class="text-decoration-none">{{news.title}}</a></p>
@@ -147,32 +193,54 @@
                       <div class="news-list" v-if="!supplierData.corporateNews">
                         <h3 class="text-center">No news to show</h3>
                       </div>
-                    </div>
+                    </div> -->
                     <v-divider class="my-10"></v-divider>
-                      <div class="company-leadership mb-12"  key="5" id="Leadership" v-if="supplierData.executiveLeadership && supplierData.executiveLeadership.length > 0">
+                      <div class="company-leadership mb-12"  key="5" v-if="supplierData.executiveLeadership && supplierData.executiveLeadership.length > 0">
                         <h1 class="mb-4 font-weight-bold">Executive Leadership</h1>
-                        <div class="leader-list text-left mt-10">
-                          <div class="profile-list" v-for="excutive in orderCate(supplierData.executiveLeadership)">
-                            <v-img  width="175px" height="175px" :src="excutive.profilePicture"></v-img>
-                            <h6>{{excutive.name}}</h6>
-                            <p class="mb-1">{{excutive.role}}</p>
-                            <a v-if="excutive.linkedin" class="text-decoration-none" target="_blank" :href="excutive.linkedin">
-                              <v-icon color="#013D3A">mdi-linkedin</v-icon>
-                            </a>
+                        <div class="leader-list text-left mt-10" id="Leadership">
+                          <div class="profile-list d-flex grey lighten-5 rounded-lg pa-2" v-for="excutive in orderCate(supplierData.executiveLeadership)">
+                            <div>
+                              <v-img  width="64px" height="64px" :src="excutive.profilePicture"></v-img>
+                            </div>
+                            <div class="pl-2">
+                              <h6>{{excutive.name}}</h6>
+                              <a v-if="excutive.linkedin" class="text-decoration-none" target="_blank" :href="excutive.linkedin">
+                                <v-icon color="#0E56C0">mdi-linkedin</v-icon>
+                              </a><span>{{excutive.role}}</span>
+                            </div>
 
                             </div>
                           </div>
                           <h3 v-if="!supplierData.executiveLeadership" class="text-center">No data to show</h3>
                         </div>
                         <v-divider class="my-10"></v-divider>
-                        <div class="company-esg mb-16" v-if="supplierData.esgInitiatives && supplierData.esgInitiatives.length > 0">
+                        <div class="company-esg mb-16" id="ESG" v-if="supplierData.esgInitiatives && supplierData.esgInitiatives.length > 0">
                           <h1 class="mb-4 font-weight-bold">ESG Initiatives</h1>
                           <v-row class="mt-5">
                             <v-col cols="12" sm="4" v-for="esg in esgCompanyData">
                               <div class="esg-list text-left">
                                 <h4 class="text-left mb-5">{{esg.name}}</h4>
-                                <p class="text-left">{{esg.description}}</p>
-                                <a :href="esg.attachment" download class="text-decoration-none px-5" v-if="esg.attachment">Download <v-icon>mdi-tray-arrow-down</v-icon></a>
+                                <div class="doc-col text-center grey lighten-5 rounded-lg d-flex justify-space-between align-center" v-if="esg.attachment">
+                                  <v-row align="center" class="mx-0">
+                                    <v-col cols="10" class="px-0">
+                                      <div class="d-flex align-center pa-2">
+                                        <div class="pr-2">
+                                          <a :href="esg.attachment" target="_blank" class="text-decoration-none">
+                                            <v-img :src="require('@/assets/images/profile/docs.png')" width="64px" class="mx-auto"></v-img>
+                                          </a>
+                                        </div>
+                                        <div class="text-left">
+                                          <h4 class="text-left mb-2">Doc Name</h4>
+                                          <p class="mb-0"><span class="text-uppercase">{{get_url_extension(esg.attachment)}}</span><span> • 30MB</span></p>
+                                        </div>
+                                      </div>
+                                    </v-col>
+                                    <v-col cols="2">
+                                      <a :href="esg.attachment" target="_blank" class="text-decoration-none"><v-icon color="#0D9648">mdi-download-outline</v-icon></a>
+                                    </v-col>
+                                  </v-row>
+                                </div>
+                                <p class="text-left mt-6">{{esg.description}}</p>
                               </div>
                             </v-col>
                           </v-row>
@@ -180,7 +248,7 @@
                       </template>
                   </div>
                 </v-col>
-                <v-col cols="12" md="3" class="pl-0">
+                <v-col cols="12" md="3" class="pl-md-0">
                   <aside class="company-leftSidebar">
                     <div class="facts-data pa-5 text-left mt-0" v-if="supplierData.founded || supplierData.employees || supplierData.hqLocation || supplierData.website || supplierData.linkedin || supplierData.careers">
                       <div class="company-title mb-6 text-left">
@@ -201,9 +269,9 @@
                       <h3 class="mb-4 mt-11"><font color="#0D1139">Account Contacts</font></h3>
                       <div class="contact-list mb-4" v-for="contacts in supplierData.accountContacts">
                         <h4 class="mb-0 font-weight-bold">{{contacts.name}}</h4>
-                        <h4 class="font-weight-medium">{{contacts.position}}</h4>
-                        <h4 class="font-weight-medium"><a :href="'tel:'+contacts.phoneNumber" class="text-decoration-none"><font color="#013D3A">{{contacts.phoneNumber}}</font></a></h4>
-                        <h4 class="font-weight-medium contact-email">
+                        <h4>{{contacts.position}}</h4>
+                        <h4><a :href="'tel:'+contacts.phoneNumber" class="text-decoration-none"><font color="#013D3A">{{contacts.phoneNumber}}</font></a></h4>
+                        <h4 class="font-weight-medium contact-email text-truncate">
                           <v-tooltip top color="#0D1139">
                             <template v-slot:activator="{ on, attrs }">
                               <a v-bind="attrs"
@@ -217,9 +285,95 @@
                         </h4>
                       </div>
                       <h4 v-if="supplierData.accountContacts.length === 0" class="text-center"> No contacts added</h4>
+                      <div class="tag-box pa-3 d-flex align-center mt-11" v-if="!supplierData.isOfsPremium">
+                        <h4 class="font-weight-bold mb-0"><a href="mailto:hello@bidout.app" class="text-decoration-none green-color"><v-icon color="#0D9647" size="20">mdi-check-decagram-outline</v-icon> Upgrade to a Premium Profile Today</a></h4>
+                      </div>
                     </div>
-                    <div class="tag-box pa-3 d-flex align-center" v-if="!supplierData.isOfsPremium">
-                      <h4 class="font-weight-bold mb-0"><a href="mailto:hello@bidout.app" class="text-decoration-none green-color"><v-icon color="#0D9647">mdi-check-decagram-outline</v-icon> Upgrade to a Premium Profile Today</a></h4>
+                    <div class="d-flex justify-space-between report-btns my-8">
+                      <v-btn color="#0D9647" large tile dense width="49%" height="44" class="font-weight-bold text-capitalize mb-4 px-7 rounded-lg" outlined>Request Updated Info</v-btn>
+                      <v-btn color="#0D9647" large tile dense width="49%" height="44" class="font-weight-bold text-capitalize px-7 rounded-lg" outlined @click="dialog = true">Report this profile</v-btn>
+                      <v-dialog
+                        v-model="dialog"
+                        width="500"
+                      >
+                        <template v-slot:activator="{ on, attrs }">
+                        </template>
+
+                        <v-card class="pa-8">
+                          <v-card-title class="text-h5 pa-0 justify-space-between dialog-h3">
+                            <span>Report on this profile</span>
+                            <v-icon @click="dialog = false">mdi-close</v-icon>
+                          </v-card-title>
+
+                          <v-card-text class="pa-0">
+                            <div class="my-4">
+                              <label class="d-block text-left font-weight-bold dialog-p">Your comments</label>
+                              <v-textarea outlined hide-details></v-textarea>
+                            </div>
+                          </v-card-text>
+
+                          <v-card-actions class="pa-0">
+                            <v-spacer></v-spacer>
+                            <v-btn
+                              color="#0D9648"
+                              tile
+                              dense
+                              large
+                              class="white--text text-capitalize pa-4 dialog-btn"
+                              @click="dialog = false; successDialog = true;"
+                            >
+                              Report Now <v-icon class="pl-2">mdi-arrow-right-circle</v-icon>
+                            </v-btn>
+                          </v-card-actions>
+                        </v-card>
+                      </v-dialog>
+                      <v-dialog
+                        v-model="successDialog"
+                        width="500"
+                      >
+                        <template v-slot:activator="{ on, attrs }">
+                        </template>
+
+                        <v-card class="pa-8">
+                          <v-card-title class="text-h5 pa-0 justify-end">
+                            <v-icon @click="successDialog = false">mdi-close</v-icon>
+                          </v-card-title>
+
+                          <v-card-text class="pa-0">
+                            <div class="my-4">
+                              <v-btn
+                                class="mx-2 rounded-circle mb-3"
+                                fab
+                                dark
+                                color="#0D9648"
+                              >
+                                <v-icon dark>
+                                  mdi-check
+                                </v-icon>
+                              </v-btn>
+                              <h3 class="mb-2 dialog-h3">Report sent with success.</h3>
+                              <p class="dialog-p">Donec vulputate dolor ac tempus fringilla. Vestibulum et consectetur dui, nec condimentum risus. Vivamus vel mauris lacus. Sed vel sagittis augue, sed aliquet velit. </p>
+                            </div>
+                          </v-card-text>
+
+                        </v-card>
+                      </v-dialog>
+                    </div>
+                    <div class="similar-companies">
+                      <h3 class="font-weight-bold">Similar Companies</h3>
+                      <v-list class="pt-0">
+                        <v-list-item-group
+                          color="primary"
+                        >
+                          <v-list-item
+                            v-for="(item, i) in similarComapanies" class="px-0"
+                          >
+                            <v-list-item-content class="py-0">
+                              <v-list-item-title v-text="item.text"></v-list-item-title>
+                            </v-list-item-content>
+                          </v-list-item>
+                        </v-list-item-group>
+                      </v-list>
                     </div>
                   </aside>
                 </v-col>
@@ -276,6 +430,31 @@ export default {
       activeIndex: 0,
       scrollContainer: null,
       selectedItem: 0,
+      similarComapanies: [ 
+        {
+          text: 'Nabors Industries',
+        },
+        {
+          text: 'Helmerich & Payne',
+        },
+        {
+          text: 'Precision Drilling',
+        },
+        {
+          text: 'Transocean',
+        },
+        {
+          text: 'Ensign Energy Services',
+        },
+        {
+          text: 'Independents Contract Drilling'
+        },
+        {
+          text: 'Cactus Drilling',
+        }
+      ],
+      dialog: false,
+      successDialog: false,
     };
   },
 
