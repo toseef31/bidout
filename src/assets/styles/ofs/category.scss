@@ -1,4 +1,15 @@
 .catgeory-module{
+	.search-form{
+		.v-input{
+			border-radius: 8px;
+			&__slot{
+				margin-bottom: 0;
+				fieldset{
+					border: 1px solid #B8B8B8;
+				}
+			}
+		}
+	}
 	.category-list{
 		.service-title{
 			font-size: 32px;
@@ -61,32 +72,49 @@
 				thead{
 					tr{
 						height: 52px;
+						background: #FBFBFB;
 						th{
-							font-size: 16px;
-							color: #0D9648;
-							line-height: 20px;
+							font-size: 12px;
+							color: #7A7979;
+							line-height: normal;
 							font-weight: 700;
 							text-align: left;
+							text-transform: uppercase;
+							border-bottom: 0 !important;
 						}
 					}
 				}
 				tbody{
 					tr{
 						height: 36px;
+						border-bottom: 1px solid #F1F1F1;
 						&:nth-child(odd){
-							background: #F4F5F7;
+							background: #fff;
+						}
+						&:hover{
+							background: #F1F1F1 !important;
 						}
 						td{
 							color: #0D1139;
 							font-size: 16px;
 							line-height: 20px;
-							font-weight: 700;
+							font-weight: 400;
 							text-align: left;
-							border-bottom: 0 !important;
+							border-bottom: 1px solid  #F1F1F1 !important;
+							height: 34px !important;
 							&:first-child{
 								display: block;
 								align-self: center;
 								margin-top: 10px;
+								color: #0D9648;
+								
+								font-weight: 700;
+								a{
+									color: #0D9648 !important;
+									div{
+										max-width: 300px;
+									}
+								}
 							}
 						}
 					}

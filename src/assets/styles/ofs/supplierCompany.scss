@@ -21,8 +21,37 @@
 	  				font-size: 26px;
 	  			}
 	  		}
+				.order-btns{
+					a{
+						width: 49%;
+						.v-btn{
+							border-radius: 8px;
+							border: 2px solid #0D9647;
+						}
+					}
+				}
 	  	}
-      
+      .main-menu-list{
+				border-bottom: 1px solid #DEDEDE;
+				.v-list-item-group{
+					width: 100%;
+					overflow: auto;
+					.v-list-item{
+						color: #0D1139;
+						font-weight: 700;
+						&:nth-child(1){
+							padding-left: 0;
+						}
+						&:before{
+							background-color: #FFFFFF;
+						}
+						&--active{
+							border-bottom: 4px solid #0D9647;
+							border-radius: 4px 4px 4px 4px;
+						}
+					}
+				}
+			}
 		}
 	}
 	

@@ -8,11 +8,22 @@
     <v-col class="pa-0 pr-sm-3"
       :class="[showSideBar ? 'col-md-12 col-12 col-sm-12' : 'mid-content-collapse', activityPanel ? 'd-sm-block' : 'd-md-block']"
       v-show="!activityPanel">
+      <div class="get-topHeader d-flex">
+        <v-container fill-height>
+          <v-row align="center" justify="center" no-gutters>
+            <v-col class="text-left" cols="12">
+              <h1 class="font-weight-bolder white--text pl-5 mt-n10">
+                OFS Provider Directory
+              </h1>
+            </v-col>
+          </v-row>
+        </v-container>
+      </div>
       <div class="mid-content">
         <div class="content-section fill-height">
           <v-container class="px-sm-8">
-            <v-row>
-              <v-col cols="12" md="12">
+            <v-row class="mt-n16">
+              <v-col cols="12" md="12" class="mt-n5">
                 <VueSlickCarousel v-bind="settings" class="company-slider" v-if="premiumCompanies.length > 0">
                   <div class="slide-item" v-for="(premium, index) in premiumCompanies" :key="index">
                     <router-link :to="premium.slug ? '/company/' + premium.slug : ''" class="text-decoration-none">
@@ -20,8 +31,13 @@
                         <img v-if="premium.image" :src="premium.image" class="mx-auto">
                         <img v-else :src="require('@/assets/images/ofs/no-image.jpg')">
                       </div>
-                      <div class="slide-caption">
-                        <h3 class="font-weight-bold">{{ premium.companyName }}</h3>
+                      <!-- {{ premium.contracts }} -->
+                      <div class="slide-caption mt-5">
+                        <h3 class="font-weight-bold py-2">{{ premium.companyName }}
+                          <span v-if="hasOfsPremium(premium)">
+                            <v-icon color="#0D9647" size="16px">mdi-check-decagram</v-icon>
+                          </span>
+                        </h3>
                       </div>
                     </router-link>
                   </div>
@@ -29,18 +45,29 @@
               </v-col>
             </v-row>
             <v-row justify="center">
-              <v-col cols="12" md="12" class="pl-sm-5 pr-sm-5">
+              <v-col cols="12" md="8" class="pl-sm-5 pr-sm-5">
                 <v-form class="search-form">
-                  <v-text-field label="Search here ..." single-line outlined type="text" placeholder="Search here"
-                  v-click-outside="closeList"
-                    v-model="searchCompany" prepend-inner-icon="mdi-magnify" @input="getSupplierList"
-                    @focus="hideList = true" :loading="getSupplierLoading"
-                    color="#0D9648" loader-height="3">
-                    <template v-slot:append>
-                      <v-icon size="25" @click="clearCompany" class="clear-icon ml-2" v-if="searchCompany !== ''"
-                        color="#0D9648">mdi-close</v-icon>
-                    </template>
-                  </v-text-field>
+                  <v-row>
+                    <v-col cols="8" md="8">
+                      <v-text-field label="Search for a service or company ..." single-line outlined type="text" placeholder="Search for a service or company"
+                        v-click-outside="closeList"
+                          v-model="searchCompany" prepend-inner-icon="mdi-magnify" @input="getSupplierList"
+                          @focus="hideList = true" :loading="getSupplierLoading"
+                          color="#0D9648" loader-height="3">
+                          <template v-slot:append>
+                            <v-icon size="25" @click="clearCompany" class="clear-icon ml-2" v-if="searchCompany !== ''"
+                              color="#0D9648">mdi-close</v-icon>
+                          </template>
+                      </v-text-field>
+                    </v-col>
+                    <v-col cols="4" md="4">
+                      <v-select
+                        v-model="searchKey"
+                        :items="searchItems"
+                        outlined
+                      ></v-select>
+                    </v-col>
+                  </v-row>
                   <div v-if="hideList === true && searchCompany && searchCompany.length >= 3">
                     <v-list class="company-list" v-if="companies.length">
                       <template v-for="(company) in companies">
@@ -108,7 +135,7 @@
                       class="sub-catLink">
                       <router-link :to="'/ofs-supplier/' + category.category.slug + '/' + subcategry.slug"
                         class="text-decoration-none">
-                        <font class="font-weight-bold">{{ subcategry.name }} </font>
+                        <font class="font-weight-bold" color="#4A4242">{{ subcategry.name }} </font>
                         <font class="font-weight-medium">({{ subcategry.spCount }}) </font>
                       </router-link>
                     </span>
@@ -116,7 +143,7 @@
                 </div>
               </v-col>
             </v-row>
-            <v-row justify="center" class="mt-16">
+            <!-- <v-row justify="center" class="mt-16">
               <v-col cols="12" md="12" class="pl-sm-5 pr-sm-5">
                 <div class="ofs-bottom-section text-left pl-2">
                   <router-link to="/manage-module" class="text-decoration-none">
@@ -133,7 +160,7 @@
                   </router-link>
                 </div>
               </v-col>
-            </v-row>
+            </v-row> -->
           </v-container>
         </div>
       </div>
@@ -237,7 +264,9 @@ export default {
       },
       loading: true,
       hideList: false,
-      supplierLoading: false
+      supplierLoading: false,
+      searchItems: ['All'],
+      searchKey: 'All',
     };
   },
   directives: {

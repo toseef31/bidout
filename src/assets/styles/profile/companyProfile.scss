@@ -1,3 +1,15 @@
+@font-face {
+  font-family: 'Metropolis';
+  src: url('@/assets/fonts/Metropolis-Regular.ttf') format('truetype');
+  font-weight: normal;
+  font-style: normal;
+}
+.sub-heading-h5{
+	font-family: 'Metropolis';
+	font-size: 16px;
+	line-height: 16px;
+	font-weight: 400;
+}
 .companyProfile-module {
 	min-height: calc(100vh - 110px);
 
@@ -6,7 +18,38 @@
 	  max-width: 78%;*/
 		z-index: 2;
 		padding-left: 0 !important;
+		.top-section {
+			justify-content: space-between;
+			align-items: center;
 
+			h4 {
+				font-weight: 700;
+				font-size: 32px;
+				line-height: 40px;
+				color: #0D1139;
+			}
+
+			.progress-section {
+				width: 25%;
+
+				.progress-heading {
+					justify-content: space-between;
+
+					p {
+						color: #0D1139;
+						font-size: 14px;
+					}
+
+					small {
+						color: #0D1139;
+					}
+				}
+
+				.v-progress-linear {
+					width: 100%;
+				}
+			}
+		}
 		.content-section {
 			background: #FFFFFF;
 			border: 1px solid #B8B8B8;
@@ -53,7 +96,27 @@
 					::v-deep .v-file-input .v-file-input__text {
 						color: rgb(13 150 72);
 					}
-
+					.main-menu-list{
+						border-bottom: 1px solid #DEDEDE;
+						.v-list-item-group{
+							width: 100%;
+							overflow: auto;
+							.v-list-item{
+								color: #0D1139;
+								font-weight: 700;
+								&:nth-child(1){
+									padding-left: 0;
+								}
+								&:before{
+									background-color: #FFFFFF;
+								}
+								&--active{
+									border-bottom: 4px solid #0D9647;
+									border-radius: 4px 4px 4px 4px;
+								}
+							}
+						}
+					}
 					.row {
 						align-items: center;
 					}
@@ -61,7 +124,11 @@
 					hr {
 						border: 1px solid #F1F1F1;
 					}
-
+					.company-logo-row{
+						.logo-box{
+							border: 1px solid #B8B8B8;
+						}
+					}
 					.input-label {
 						font-weight: 700;
 						font-size: 16px;
@@ -160,7 +227,7 @@
 
 						.del-btn {
 							box-shadow: none;
-							color: #F32349;
+							color: #0D9648;
 						}
 					}
 
@@ -179,10 +246,15 @@
 							border-color: #B8B8B8;
 						}
 					}
-
+					.services-title-row{
+						.col-md-6:last-child{
+							border: 1px solid #0D9647;
+						}
+					}
 					.service-cate {
-						border: 1px solid #ddd;
+						border: 1px solid #B8B8B8;
 						border-radius: 12px;
+						background-color: #ffffff;
 
 						.v-list {
 							height: 400px;
@@ -239,7 +311,7 @@
 
 						.v-list {
 							margin-top: 20px;
-							height: 450px;
+							height: 390px;
 							overflow: auto;
 						}
 					}
@@ -501,7 +573,14 @@
 			max-width: 100%;
 			z-index: 2;
 			padding-left: 0 !important;
+			.top-section {
+				display: block !important;
 
+				.progress-section {
+					width: 100%;
+					margin-top: 20px;
+				}
+			}
 			.content-section {
 				border: 0px;
 				padding: 0;

@@ -1,9 +1,8 @@
 <template>
-  <v-container class="pa-sm-10 pa-4">
-    <v-row class="company-logo-row">
-      <v-col cols="12" sm="6" class="pt-10 text-left">
-        <label class="d-block text-left input-label">Company's Logo</label>
-        
+  <v-container class="px-sm-10 px-4">
+    <v-row class="company-logo-row" justify="space-between" align="center">
+      <v-col cols="12" sm="4" class="text-left">
+        <label class="d-block text-left input-label mb-2">Company's Logo</label>
         <v-dialog
           v-model="dialog"
           width="700"
@@ -33,13 +32,21 @@
           </v-card>
         </v-dialog>
         <!-- the result -->
-        <img :src="companyData.image">
+        <div class="logo-box rounded pa-4 pt-1">
+          <div class="text-right pa-1 pr-0">
+            <label for="logo-input" class="text-capitalize white--text add-logo font-weight-bold justify-center"><v-icon color="#0D9648">mdi-pencil-outline</v-icon>
+              <input type="file" accept="image/*" class="logo-input d-none" id="logo-input" @change="croppie($event)">
+            </label>
+            <v-icon color="#F32349" @click="deleteLogo">mdi-delete-outline</v-icon>
+          </div>
+          <img :src="companyData.image" width="100%">
+        </div>
       </v-col>
-      <v-col cols="12" sm="6" class="pt-sm-10 mt-sm-4 btn-col pl-0 d-flex align-center justify-end">
-        <label for="logo-input" class="text-capitalize mr-2 white--text add-logo d-flex align-center font-weight-bold justify-center">Add Image
+      <v-col cols="12" sm="4" class="btn-col d-flex align-center justify-end">
+        <v-btn color="#F1F1F1" class="text-capitalize del-btn mr-2" width="48%" height="56px" @click="deleteLogo">Cancel</v-btn>
+        <label for="logo-input" class="text-capitalize white--text add-logo d-flex align-center font-weight-bold justify-center">Save
           <input type="file" accept="image/*" class="logo-input d-none" id="logo-input" @change="croppie($event)">
         </label>
-        <v-btn color="rgb(243, 35, 73, 0.1)" class="text-capitalize del-btn" width="48%" height="56px" @click="deleteLogo">Delete</v-btn>
       </v-col>
     </v-row>
   </v-container>

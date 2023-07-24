@@ -4,13 +4,50 @@
       showSideBar ? 'col-md-12 col-12 col-sm-12' : 'mid-content-collapse',
       activityPanel ? 'd-sm-block' : 'd-md-block',
     ]" v-show="!activityPanel">
+    <div class="get-topHeader d-flex">
+        <v-container fill-height>
+          <v-row align="center" justify="center" no-gutters>
+            <v-col class="text-left" cols="12">
+              <h3 class="font-weight-bolder white--text pl-5 mt-n5 mb-2">
+                <router-link to="/view-ofs-suppliers"><v-icon color="#fff" class="pr-2">mdi-arrow-left</v-icon></router-link>OFS Provider Directory
+              </h3>
+              <h1 class="text-left service-title white--text pl-6">
+                {{ categoryName }}
+              </h1>
+            </v-col>
+          </v-row>
+        </v-container>
+      </div>
       <div class="mid-content">
         <div class="content-section fill-height">
-          <v-container class="px-sm-0">
+          <v-container class="px-sm-0 mt-n10">
+            <v-row justify="center">
+              <v-col cols="12" md="8" class="pl-sm-5 pr-sm-5">
+                <v-form class="search-form">
+                  <v-row>
+                    <v-col cols="8" md="8">
+                      <v-text-field label="Search for a service or company ..." single-line outlined type="text" min-height="40px" min-width="100%" placeholder="Search for a service or company"
+                          v-model="searchCompany" prepend-inner-icon="mdi-magnify" background-color="#fff" >
+                      </v-text-field>
+                    </v-col>
+                    <v-col cols="4" md="4">
+                      <v-select
+                        background-color="#fff"
+                        v-model="searchKey"
+                        :items="items"
+                        outlined
+                        @change="getByBasin"
+                        class="text-capitalize"
+                      ></v-select>
+                    </v-col>
+                  </v-row>
+                </v-form>
+              </v-col>
+            </v-row>
             <v-row justify="center">
               <v-col cols="12" md="12">
-                <div class="category-list">
-                  <div class="d-flex justify-space-between px-4">
+                <div class="category-list px-10">
+                  <!-- <div class="d-flex justify-space-between px-4">
                     <h1 class="text-left service-title mb-8">
                       {{ categoryName }}
                     </h1>
@@ -25,7 +62,7 @@
                         <span class="text-capitalize">{{ item }}</span>
                       </v-tab>
                     </v-tabs>
-                  </div>
+                  </div> -->
                   <v-tabs-items v-model="tab">
                     <v-tab-item v-for="item in items" :key="item">
                       <v-simple-table dense v-if="!showLoading" class="company-table mb-12">
@@ -42,7 +79,7 @@
                           </thead>
                           <tbody>
                             <tr v-for="company in allcompanies" :key="company._id">
-                              <td class="pl-4" style="width: 300px">
+                              <td class="pl-4 w-25">
                                 <router-link class="text-decoration-none d-flex"
                                   :to="company.slug ? '/company/' + company.slug : ''">
                                   <div class="text-truncate pr-1">
@@ -80,7 +117,7 @@
                               </td>
                               <td class="view-class">
                                 <span class="text-decoration-none company-link"><router-link class="text-decoration-none"
-                                    :to="company.slug ? '/company/' + company.slug : ''">View Details</router-link></span>
+                                    :to="company.slug ? '/company/' + company.slug : ''"><v-icon color="#0D9648">mdi-eye-outline</v-icon></router-link></span>
                               </td>
                             </tr>
                           </tbody>
@@ -117,7 +154,7 @@ export default {
 
   data() {
     return {
-      tab: null,
+      tab: 1,
       searchCompany: '',
       page: 1,
       items: [
@@ -132,6 +169,7 @@ export default {
         'Other',
       ],
       cateSlug: '',
+      searchKey: 'all',
     };
   },
   computed: {
@@ -189,12 +227,13 @@ export default {
       'getCategories',
     ]),
     getByBasin(basin) {
+      // console.log('basin', this.searchKey);
       if (this.$route.params.name) {
       this.cateSlug = this.$route.params.name;
     } else {
       this.cateSlug = this.$route.params.slug;
     }
-      this.getCompanyByBasin({ basin, slug: this.cateSlug });
+      this.getCompanyByBasin({ basin: this.searchKey, slug: this.cateSlug });
     },
     hasOfsPremium(supplier) {
       return supplier.contracts.some((contract) => contract.contractType === 'ofs-premium');
