@@ -92,7 +92,7 @@ export default {
         return this.$store.getters.g_activityPanel;
     },
     moduleData(){
-      if(this.$store.getters.userInfo.company.contracts){
+      if(this.$store.getters.userInfo && this.$store.getters.userInfo.company.contracts){
         return this.$store.getters.userInfo.company.contracts;
       }else{
         return [];
