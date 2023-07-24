@@ -290,6 +290,30 @@
                       </v-list-item-content>
 
                     </v-list-item>
+                    <v-list-item class="edit-item">
+                      <router-link to="#" class="text-decoration-none">
+                        <v-list-item-icon class="mr-2 my-2" @click="createTemplateForBid"
+                          v-if="!getCreateTemplateLoading">
+                          <v-icon size="24" color="#0D9648">mdi-file-arrow-left-right-outline</v-icon>
+                        </v-list-item-icon>
+                        <v-progress-circular class="mr-3 my-2" size="20" v-else :width="2" color="#959595"
+                          indeterminate></v-progress-circular>
+                      </router-link>
+
+                      <v-list-item-content align-start color="#0D9648" class="pa-0">
+
+                        <div @click="createTemplateForBid" v-if="!getCreateTemplateLoading">
+                          <v-list-item-title color="#0D9648" class="py-3">Create Template from this Bid</v-list-item-title>
+                        </div>
+                        <div v-if="getCreateTemplateLoading">
+                          <v-list-item-title color="#959595" class="py-3">
+                            <div class="disabled-item">Create Template from Bid</div>
+                          </v-list-item-title>
+                        </div>
+
+                      </v-list-item-content>
+
+                    </v-list-item>
                   </v-list-item-group>
                 </v-list>
               </v-card>
@@ -627,6 +651,7 @@ export default {
         },
       ],
       createDraftBidLoading: false,
+      createTemplateLoading: false,
     };
   },
   methods: {
@@ -643,6 +668,7 @@ export default {
       'getBidActivityList',
       'saveDraftBid',
       'getDraftBySerial',
+      'createTemplateBid',
     ]),
     async reload(event) {
       if (this.getUserType === 'buyer' && event !== 'tab-4') {
@@ -792,6 +818,21 @@ export default {
       this.isSetting = !this.isSetting;
       this.getDraftBySerial({ serial: this.$store.getters.bidSerial });
     },
+    async createTemplateForBid() {
+      this.createTemplateLoading = true;
+      const bidInfo = {
+        userId: this.users._id,
+        userName: `${this.users.firstName} ${this.users.lastName}`,
+        companyId: this.users.company._id,
+        company: this.users.company.companyName,
+      };
+      const res = await this.createTemplateBid(bidInfo);
+      this.createTemplateLoading = false;
+      this.isSetting = !this.isSetting;
+      if (res === 200) {
+        this.$router.push('/manage-templates');
+      }
+    },
   },
   computed: {
     changeTime() {
@@ -865,6 +906,9 @@ export default {
     },
     getCreateDraftBidLoading() {
       return this.createDraftBidLoading;
+    },
+    getCreateTemplateLoading() {
+      return this.createTemplateLoading;
     },
   },
   mounted() {

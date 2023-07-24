@@ -19,9 +19,6 @@
             <v-col cols="12" md="5" class="text-left">
               <div class="d-flex align-center">
                 <h3 class="pl-1 mr-4">{{ bidTitle }}</h3>
-                <!-- <p class="preview-text mb-0 ml-3">
-                    <a href="" class="text-decoration-none"><v-icon color="#0D9648" class="pr-2">mdi-open-in-new</v-icon>Preview Bid in Supplier View</a>
-                  </p> -->
               </div>
             </v-col>
             <v-col cols="12" md="7" class="text-right">
@@ -29,6 +26,19 @@
                 <p class="mb-0 mr-4 auto-text" v-if="draftTime">
                   <strong>Autosaved Draft:</strong> {{ draftTime }}
                 </p>
+                <v-btn
+                  color="#0D9648"
+                  :loading="getCreateTemplateLoading"
+                  :disabled="getCreateTemplateLoading"
+                  class="white--text text-capitalize publish-btn mr-4"
+                  width="237px"
+                  height="52px"
+                  large
+                  @click="createTemplateForBid"
+                  v-if="getBidStatusType === 'draftBid'"
+                >
+                  Create template
+                </v-btn>
                 <v-btn
                   color="#0D9648"
                   :loading="publishLoading"
@@ -199,6 +209,7 @@ export default {
       questionValid: '',
       questionValue: '',
       publishLoading: false,
+      createTemplateLoading: false
     };
   },
   computed: {
@@ -224,9 +235,15 @@ export default {
       }
       return false;
     },
+    getBidStatusType() {
+      return this.$store.getters.bidData.statusType
+    },
+    getCreateTemplateLoading() {
+      return this.createTemplateLoading
+    }
   },
   methods: {
-    ...mapActions(["updateDraftBid"]),
+    ...mapActions(["updateDraftBid",'createTemplateBid']),
     ...mapState(["invitedSuppliers"]),
     ChangeT(tab) {
       this.currentItem = tab;
@@ -274,6 +291,20 @@ export default {
     },
     async updateDraft() {
       await this.updateDraftBid({'supplier': this.$store.state.bid.invitedSuppliers});
+    },
+    async createTemplateForBid() {
+      this.createTemplateLoading = true;
+      const bidInfo = {
+        userId: this.users._id,
+        userName: `${this.users.firstName} ${this.users.lastName}`,
+        companyId: this.users.company._id,
+        company: this.users.company.companyName,
+      };
+      const res = await this.createTemplateBid(bidInfo);
+      this.createTemplateLoading = false;
+      if (res === 200) {
+        this.$router.push('/manage-templates');
+      }
     },
   },
   mounted() {
