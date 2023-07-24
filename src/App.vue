@@ -4,11 +4,11 @@
 
 <script>
 import LogRocket from 'logrocket';
-import store from '@/store';
+import * as Sentry from '@sentry/vue';
+
 export default {
   name: 'Settings',
-  metaInfo: {
-    
+  metaInfo: {   
     meta: [
       {
         vmid: 'title',
@@ -38,6 +38,7 @@ export default {
   watch: {
     userData(user) {
       if(user){
+        Sentry.setUser({ email: user.email, username: `${user.firstName} ${user.lastName}`, id: user._id });
         LogRocket.identify(user._id, {
           name: `${user.firstName} ${user.lastName}`,
           email: user.email,
