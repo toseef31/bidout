@@ -204,12 +204,12 @@ export default {
           icon: "tag.png",
           link: "view-ofs-suppliers",
         },
-        {
-          id: 4,
-          text: "Messages",
-          icon: "message.png",
-          link: "messages",
-        },
+        // {
+        //   id: 4,
+        //   text: "Messages",
+        //   icon: "message.png",
+        //   link: "messages",
+        // },
         // { id: 5, text: "Browse Public RFx's", icon: 'mdi-compass-outline' },
         // { id: 6, text: 'Manage Invoices', icon: 'mdi-calendar-text-outline' },
         // { id: 7, text: 'Reporting', icon: 'mdi-note-multiple-outline' },
