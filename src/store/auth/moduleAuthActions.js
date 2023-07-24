@@ -47,9 +47,11 @@ export default {
                 commit(
                   "setError",
                   "Disabled account! You cannot login with this account"
-                );
-                commit("showErrorAlert");
-                commit("setLoginLoading", false);
+                  );
+                  commit("showErrorAlert");
+                  commit("setLoginLoading", false);
+                  localStorage.removeItem("token")
+                  commit("setToken", null)
               } else {
                 axios
                   .get(`/v2/auth/addUserLoginHistory/${responce.data._id}`)
@@ -430,8 +432,10 @@ export default {
         const userResp = await axios.get(
           `/v2/user/getUserData/${result.user.multiFactor.user.email}`
           , config);
-        if (userResp.data.status === false) {
-          commit(
+          if (userResp.data.status === false) {
+            localStorage.removeItem("token")
+            commit("setToken", null)
+            commit(
             "setError",
             "Disabled account! You cannot login with this account"
           );
