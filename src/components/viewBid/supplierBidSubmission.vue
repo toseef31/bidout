@@ -604,6 +604,8 @@ export default {
     noBidUpdate(index) {
       this.lineItems[index].price = 'NO_BID';
       this.lineItems[index].bid = false;
+      this.value[index].message = '';
+      this.value[index].status = true;
     },
     yesBidUpdate(index) {
       this.lineItems[index].price = '';
