@@ -100,7 +100,7 @@
                 </td>
                 <td v-else>
                   <v-icon 
-                  v-if="submission.bidOutPricePre > submission.postBidOutPrice" color="#0D9648">mdi-arrow-down-thin-circle-outline</v-icon>
+                  v-if="submission.bidOutPricePre > submission.postBidOutPrice" color="#0D9648" class=" icon-saving-class">mdi-arrow-down-thin-circle-outline</v-icon>
                   <span class="ml-1 priceBoldClass">$ {{
                     formatPrice(submission.postBidOutPrice)
                   }}</span>
