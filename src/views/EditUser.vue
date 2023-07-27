@@ -51,6 +51,18 @@
                       required
                       outlined disabled
                     ></v-text-field>
+                    <div class="mb-9 phone-block">
+                      <label class="d-block text-left input-label mb-2 font-weight-bold">Mobile Number
+                      </label>
+
+                      <VuePhoneNumberInput @phone-number-blur="onBlurB" default-country-code="US" :required="true"
+                        clearable :error="!getPhoneInfo.valid && getCounter >= 1" :border-radius="8" size="lg"
+                        v-model="userData.phoneNumber" error-color="#FF0000" valid-color="#9E9E9E"
+                        :translations="translations" class="mb-5" @update="onUpdate" />
+
+                      <div class="phone-class" v-if="!getPhoneInfo.valid && getCounter >= 1">
+                        {{ getPhoneInfo.message }}</div>
+                    </div>
                     <label class="d-block text-left font-weight-bold mb-2">Privileges
                       <v-tooltip right v-if="userInfo.role == 'admin' && userInfo._id == userData.id">
                         <template v-slot:activator="{ on, attrs }">
@@ -81,7 +93,7 @@
                       :disabled="userInfo.role == 'admin' && userInfo._id == userData._id ? true : false "
                     ></v-select>
                     <v-btn
-                      :disabled="!valid"
+                      :disabled="!getPhoneInfo.valid ||!valid"
                       :loading="btnLoading"
                       color="#0D9648"
                       class="mr-4 text-capitalize white--text font-weight-bold"
@@ -104,6 +116,8 @@
 </template>
 <script>
 import { mapActions, mapState, mapGetters } from 'vuex';
+import VuePhoneNumberInput from 'vue-phone-number-input';
+import 'vue-phone-number-input/dist/vue-phone-number-input.css';
 import Navbar from '../components/Layout/Navbar.vue';
 import LeftSidebar from '../components/Layout/Dashboard/LeftSidebar.vue';
 
@@ -112,6 +126,7 @@ export default {
   components: {
     Navbar,
     LeftSidebar,
+    VuePhoneNumberInput,
   },
   data() {
     return {
@@ -132,6 +147,19 @@ export default {
         { value: 'admin', label: 'Administrator' },
         { value: 'user', label: 'User' },
       ],
+      mobileNumber: '',
+      translations: {
+        countrySelectorLabel: 'Country Code',
+        countrySelectorError: 'Choose country',
+        phoneNumberLabel: 'Phone Number',
+        example: 'Example',
+      },
+      results: {},
+      phoneInfo: {
+        valid: false,
+        message: '',
+      },
+      counter: 0,
     };
   },
   computed: {
@@ -146,9 +174,46 @@ export default {
     userData() {
       return this.$store.getters.userData.user;
     },
+    getPhoneInfo() {
+      return this.phoneInfo;
+    },
+    getCounter() {
+      return this.counter;
+    },
   },
   methods: {
     ...mapActions(['updateUser','updateInvite']),
+    onUpdate(payload) {
+      this.counter++;
+      this.phoneInfo.valid = payload.isValid;
+
+      if (!payload) {
+        this.phoneInfo.message = 'Phone number is required';
+      } else if (payload.phoneNumber && payload.phoneNumber !== '' && payload.phoneNumber.length >= 1) {
+        if (!payload.isValid) {
+          this.phoneInfo.message = 'Invalid Phone number format';
+        }
+
+        if (payload.formattedNumber && payload.isValid) {
+          this.phoneInfo.message = '';
+          this.results = payload.formattedNumber;
+          this.mobileNumber = payload.formattedNumber;
+        }
+      } else {
+        this.phoneInfo.message = 'Phone number is required';
+      }
+    },
+    onBlurB() {
+      if (this.userData.phoneNumber === '') {
+        this.phoneInfo.message = 'Phone number is required';
+        this.phoneInfo.valid = false;
+        this.counter++;
+      } else if (this.userData.phoneNumber !== null && this.userData.phoneNumber.length === 1) {
+        this.phoneInfo.message = 'Invalid Phone number format';
+        this.phoneInfo.valid = false;
+        this.counter++;
+      }
+    },
     validate() {
       this.$refs.form.validate();
       this.valid = false;
@@ -157,6 +222,7 @@ export default {
         firstName: this.userData.firstName,
         lastName: this.userData.lastName,
         role: this.userData.role,
+        phoneNumber: this.userData.phoneNumber,
         id: this.userData._id,
       }
       if (this.$store.getters.userData.type === 'general') {

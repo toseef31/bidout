@@ -39,16 +39,18 @@
                       required
                       outlined
                     ></v-text-field>
-                    <label class="d-block text-left input-label mb-2 font-weight-bold">Mobile Number
-                    </label>
+                    <div class="mb-9 phone-block">
+                      <label class="d-block text-left input-label mb-2 font-weight-bold">Mobile Number
+                      </label>
 
-                    <VuePhoneNumberInput @phone-number-blur="onBlurB" default-country-code="US" :required="true"
-                      clearable :error="!getPhoneInfo.valid && getCounter >= 1" :border-radius="8" size="lg"
-                      v-model="mobileNumber" error-color="#FF0000" valid-color="#9E9E9E"
-                      :translations="translations" class="mb-5" @update="onUpdate" />
+                      <VuePhoneNumberInput @phone-number-blur="onBlurB" default-country-code="US" :required="true"
+                        clearable :error="!getPhoneInfo.valid && getCounter >= 1" :border-radius="8" size="lg"
+                        v-model="mobileNumber" error-color="#FF0000" valid-color="#9E9E9E"
+                        :translations="translations" class="mb-5" @update="onUpdate" />
 
-                    <div class="phone-class" v-if="!getPhoneInfo.valid && getCounter >= 1">
-                      {{ getPhoneInfo.message }}</div>
+                      <div class="phone-class" v-if="!getPhoneInfo.valid && getCounter >= 1">
+                        {{ getPhoneInfo.message }}</div>
+                    </div>
                     <label class="d-block text-left font-weight-bold mb-2">Privileges
                       <v-tooltip right>
                         <template v-slot:activator="{ on, attrs }">
