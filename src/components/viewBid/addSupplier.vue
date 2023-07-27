@@ -532,7 +532,11 @@ export default {
       this.supplierLoading = true;
 
       this.repsInvited.forEach((el) => {
-        invitedSuppliers.push(el._id);
+        if(el.company){
+          invitedSuppliers.push(el.company._id);
+        } else {
+          invitedSuppliers.push(el._id);
+        }
       });
 
       this.newRepsInvited.forEach((el) => invitedNewSuppliers.push(el._id));
