@@ -187,7 +187,7 @@
 
             <template v-for="(company, index) in repsInvited">
               <div class="d-flex align-center justify-space-between list-company pa-4"
-                v-if="company ? company.companyName : ''">
+                v-if="!company.company">
                 <div class="comapny-data d-flex align-center">
                   <div class="company-img">
                     <img v-if="company.image" class="image-class" :src="company.image" />
@@ -217,7 +217,7 @@
                 </div>
               </div>
               <div class="d-flex align-center justify-space-between list-company pa-4"
-                v-if="!company ? company.companyName : ''">
+                v-if="company.company">
                 <div class="comapny-data d-flex align-center">
                   <div class="company-img">
                     <div class="avatar-image" v-if="!company.image">
