@@ -229,7 +229,7 @@
                   </div>
                   <div class="company-title text-left pl-4">
                     <h4>{{ company.firstName }} {{ company.lastName }}</h4>
-                    <p class="mb-0">{{ company.company ? company.companyName : '' }}
+                    <p class="mb-0">{{ company.company ? company.company.companyName : '' }}
                       <span v-if="hasOfsPremium(company.company)">
                         <v-tooltip top>
                           <template v-slot:activator="{ on, attrs }">
