@@ -436,7 +436,6 @@ export default {
     },
 
     companiesList() {
-      console.log(this.repsInvited);
       let unique;
       if (this.$store.getters.companiesList && this.$store.getters.companiesList.length) {
         if (this.repsInvited.length) {
