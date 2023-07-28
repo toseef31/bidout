@@ -186,8 +186,7 @@
           <div class="companies-list">
 
             <template v-for="(company, index) in repsInvited">
-              <div class="d-flex align-center justify-space-between list-company pa-4"
-                v-if="!company.company">
+              <div class="d-flex align-center justify-space-between list-company pa-4" v-if="!company.company">
                 <div class="comapny-data d-flex align-center">
                   <div class="company-img">
                     <img v-if="company.image" class="image-class" :src="company.image" />
@@ -216,8 +215,7 @@
                     @click="removeCompany(company, index)"> <v-icon color="#F32349">mdi-minus</v-icon></v-btn>
                 </div>
               </div>
-              <div class="d-flex align-center justify-space-between list-company pa-4"
-                v-if="company.company">
+              <div class="d-flex align-center justify-space-between list-company pa-4" v-if="company.company">
                 <div class="comapny-data d-flex align-center">
                   <div class="company-img">
                     <div class="avatar-image" v-if="!company.image">
@@ -312,9 +310,9 @@
                 <div class="phone-class" v-if="!getPhoneInfo.valid && getCounter >= 1">
                   {{ getPhoneInfo.message }}</div>
                 <label class="d-block text-left font-weight-bold mb-2" :class="{
-                  ' mt-2': !getPhoneInfo.valid && getCounter >= 1,
-                  'mt-6': getPhoneInfo.valid
-                }">Email<span class="required-class">*</span></label>
+                                  ' mt-2': !getPhoneInfo.valid && getCounter >= 1,
+                                  'mt-6': getPhoneInfo.valid
+                                }">Email<span class="required-class">*</span></label>
                 <v-text-field v-model="email" :class="{ 'error--text': emailError }" :rules="emailRules"
                   @keypress="removeSpace($event)" @input="checkEmailI" placeholder="example@email.com" required outlined>
                   <template v-slot:append>
@@ -427,16 +425,27 @@ export default {
       return this.phoneInfo;
     },
     salesRepsList() {
-      const unique = this.$store.getters.salesRepsList ? this.$store.getters.salesRepsList.filter((el) => !this.repsInvited.find((item) => el.company._id === item._id) && el.company._id !== this.userInfo.company._id) : [];
+      const unique = this.$store.getters.salesRepsList ? this.$store.getters.salesRepsList.filter((el) => !this.repsInvited.find((item) => {
+        if (item.company && item.company._id) {
+          return el.company._id === item.company._id;
+        }
+        return el.company._id === item._id;
+      }) && el.company._id !== this.userInfo.company._id) : [];
 
       return [...new Map(unique.map((item) => [item._id, item])).values()];
     },
 
     companiesList() {
+      console.log(this.repsInvited);
       let unique;
       if (this.$store.getters.companiesList && this.$store.getters.companiesList.length) {
         if (this.repsInvited.length) {
-          unique = this.$store.getters.companiesList ? this.$store.getters.companiesList.filter((el) => !this.repsInvited.find((item) => el._id === item._id) && el._id !== this.userInfo.company._id) : [];
+          unique = this.$store.getters.companiesList ? this.$store.getters.companiesList.filter((el) => !this.repsInvited.find((item) => {
+            if (item.company && item.company._id) {
+              return el._id === item.company._id;
+            }
+            return el._id === item._id;
+          }) && el._id !== this.userInfo.company._id) : [];
 
           return [...new Map(unique.map((item) => [item._id, item])).values()];
         }
@@ -458,7 +467,7 @@ export default {
     // eslint-disable-next-line vue/no-side-effects-in-computed-properties, vue/return-in-computed-property,
     filteredEntries() {
       if (this.$store.getters.bidData.invitedSuppliers && this.$store.getters.bidData.invitedSuppliers.length) {
-        this.repsInvited = this.$store.getters.bidData.invitedSuppliers
+        this.repsInvited = this.$store.getters.bidData.invitedSuppliers;
       }
     },
     // eslint-disable-next-line vue/no-side-effects-in-computed-properties, vue/return-in-computed-property,
@@ -728,7 +737,7 @@ export default {
       this.$store.commit('setInvitedSuppliersData', this.repsInvited);
     },
     removeNewSup(company) {
-      this.oldCount = this.newRepsInvited.length;;
+      this.oldCount = this.newRepsInvited.length;
       const index = this.newRepsInvited.findIndex((el) => el._id === company._id);
       if (index !== -1) {
         this.newRepsInvited.splice(index, 1);
