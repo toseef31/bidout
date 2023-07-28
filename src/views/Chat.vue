@@ -168,7 +168,7 @@
                       <template>
                         <v-list-item
                           class="text-left px-5"
-                          active-class="white--text" selectable="true" link="false" inactive
+                          active-class="white--text" :selectable="true" :link="false" inactive
                         >
                           <template>
                             <v-list-item-content>
