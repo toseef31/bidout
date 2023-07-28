@@ -451,7 +451,7 @@ export default {
       return this.fetchSupplierLoading;
     },
     salesRepsList() {
-      const unique = this.$store.getters.salesRepsList ? this.$store.getters.salesRepsList.filter((el) => !this.repsInvited.find((item) => el._id === item._id) && el._id !== this.user.company._id) : [];
+      const unique = this.$store.getters.salesRepsList ? this.$store.getters.salesRepsList.filter((el) => !this.repsInvited.find((item) => el.company._id === item._id) && el._id !== this.user.company._id) : [];
 
       return [...new Map(unique.map((item) => [item._id, item])).values()];
     },

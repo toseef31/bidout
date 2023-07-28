@@ -427,7 +427,7 @@ export default {
       return this.phoneInfo;
     },
     salesRepsList() {
-      const unique = this.$store.getters.salesRepsList ? this.$store.getters.salesRepsList.filter((el) => !this.repsInvited.find((item) => el._id === item._id) && el._id !== this.userInfo.company._id) : [];
+      const unique = this.$store.getters.salesRepsList ? this.$store.getters.salesRepsList.filter((el) => !this.repsInvited.find((item) => el.company._id === item._id) && el._id !== this.userInfo.company._id) : [];
 
       return [...new Map(unique.map((item) => [item._id, item])).values()];
     },
@@ -672,8 +672,7 @@ export default {
       this.newCount = this.repsInvited.length;
       this.$store.commit('spliceSalesRepsList', index);
       this.$store.commit('setIsEditBidChanges', true);
-      const unique = [...new Map(this.repsInvited.map((m) => [m._id, m])).values()];
-
+      const unique = [...new Map(this.repsInvited.map((m) => [m.company._id, m])).values()];
       this.$store.commit('setInvitedSuppliersData', unique);
     },
     removeReps(list, index) {
