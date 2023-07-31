@@ -451,12 +451,8 @@ export default {
       return this.fetchSupplierLoading;
     },
     salesRepsList() {
-      const unique = this.$store.getters.salesRepsList ? this.$store.getters.salesRepsList.filter((el) => !this.repsInvited.find((item) => {
-        if (item.company && item.company._id) {
-          return el.company._id === item.company._id;
-        }
-        return el.company._id === item._id;
-      }) && el.company._id !== this.userInfo.company._id) : [];
+      const unique = this.$store.getters.salesRepsList ? this.$store.getters.salesRepsList.filter((el) => !this.repsInvited.find((item) =>  el._id === item._id
+      ) && el.company._id !== this.userInfo.company._id) : [];
 
       return [...new Map(unique.map((item) => [item._id, item])).values()];
     },
@@ -465,12 +461,7 @@ export default {
 
       if (this.$store.getters.companiesList && this.$store.getters.companiesList.length) {
         if (this.repsInvited.length) {
-          unique = this.$store.getters.companiesList ? this.$store.getters.companiesList.filter((el) => !this.repsInvited.find((item) => {
-            if (item.company && item.company._id) {
-              return el._id === item.company._id;
-            }
-            return el._id === item._id;
-          }) && el._id !== this.user.company._id) : [];
+          unique = this.$store.getters.companiesList ? this.$store.getters.companiesList.filter((el) => !this.repsInvited.find((item) =>  el._id === item._id) && el._id !== this.user.company._id) : [];
 
           return [...new Map(unique.map((item) => [item._id, item])).values()];
         }
@@ -537,7 +528,7 @@ export default {
   methods: {
     ...mapActions(['getCategories', 'getSalesReps', 'getCompanyInfo', 'searchByCompany', 'getCompanyByServices', 'inviteNewSupplier', 'inviteSupplierToBid', 'checkEmail']),
     async saveSuppliers() {
-      const invitedSuppliers = [];
+      let invitedSuppliers = [];
       const invitedNewSuppliers = [];
       this.supplierLoading = true;
 
@@ -548,6 +539,8 @@ export default {
           invitedSuppliers.push(el._id);
         }
       });
+
+      invitedSuppliers = [...new Set(invitedSuppliers)];
 
       this.newRepsInvited.forEach((el) => invitedNewSuppliers.push(el._id));
 

@@ -425,12 +425,8 @@ export default {
       return this.phoneInfo;
     },
     salesRepsList() {
-      const unique = this.$store.getters.salesRepsList ? this.$store.getters.salesRepsList.filter((el) => !this.repsInvited.find((item) => {
-        if (item.company && item.company._id) {
-          return el.company._id === item.company._id;
-        }
-        return el.company._id === item._id;
-      }) && el.company._id !== this.userInfo.company._id) : [];
+      const unique = this.$store.getters.salesRepsList ? this.$store.getters.salesRepsList.filter((el) => !this.repsInvited.find((item) => 
+         el._id === item._id ) && el.company._id !== this.userInfo.company._id) : [];
 
       return [...new Map(unique.map((item) => [item._id, item])).values()];
     },
@@ -439,12 +435,7 @@ export default {
       let unique;
       if (this.$store.getters.companiesList && this.$store.getters.companiesList.length) {
         if (this.repsInvited.length) {
-          unique = this.$store.getters.companiesList ? this.$store.getters.companiesList.filter((el) => !this.repsInvited.find((item) => {
-            if (item.company && item.company._id) {
-              return el._id === item.company._id;
-            }
-            return el._id === item._id;
-          }) && el._id !== this.userInfo.company._id) : [];
+          unique = this.$store.getters.companiesList ? this.$store.getters.companiesList.filter((el) => !this.repsInvited.find((item) =>  el._id === item._id) && el._id !== this.userInfo.company._id) : [];
 
           return [...new Map(unique.map((item) => [item._id, item])).values()];
         }
