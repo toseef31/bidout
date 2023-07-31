@@ -859,13 +859,13 @@ export default {
     if (state.invitedSuppliers && state.invitedSuppliers?.length > 0) {
 
       let DI = []
-
+      
       state.invitedSuppliers.forEach((el) => {
         if (el.company) {
           DI.push(el.company._id);
-        } else {
+        } else if (el._id) {
           DI.push(el._id);
-        }
+        } else DI.push(el)
       });
   
       function countDuplicates(arr) {
@@ -1342,9 +1342,9 @@ export default {
     state.invitedSuppliers.forEach((el) => {
       if (el.company) {
         DI.push(el.company._id);
-      } else {
+      } else if (el._id) {
         DI.push(el._id);
-      }
+      } else DI.push(el)
     });
 
     function countDuplicates(arr) {
@@ -1683,9 +1683,9 @@ export default {
       state.invitedSuppliers.forEach((el) => {
         if (el.company) {
           DI.push(el.company._id);
-        } else {
+        }  else if (el._id) {
           DI.push(el._id);
-        }
+        } else DI.push(el)
       });
 
       function countDuplicates(arr) {
