@@ -857,6 +857,34 @@ export default {
     }
 
     if (state.invitedSuppliers && state.invitedSuppliers?.length > 0) {
+
+      let DI = []
+      
+      state.invitedSuppliers.forEach((el) => {
+        if (el.company) {
+          DI.push(el.company._id);
+        } else if (el._id) {
+          DI.push(el._id);
+        } else DI.push(el)
+      });
+  
+      function countDuplicates(arr) {
+        const countsByItem = {};
+        for (const item of arr) {
+          countsByItem[item] = (countsByItem[item] || 0) + 1;
+        }
+
+        return Object.values(countsByItem)
+          .filter(val => val >= 2)
+          .length;
+      }
+      
+      let dup = countDuplicates(DI)
+  
+      if (dup > 0) {
+        state.invitedSuppliers = [...new Set(DI)];
+      } 
+  
       for (let i = 0; i < state.invitedSuppliers.length; i++) {
         if (Array.isArray(state.invitedSuppliers) && state.invitedSuppliers?.length > 0 && typeof state.invitedSuppliers[0] === 'object') {
           if (!state.invitedSuppliers[i].company && !state.invitedSuppliers[i]._id) {
@@ -1308,6 +1336,34 @@ export default {
       }
     }
 
+    if (state.invitedSuppliers && state.invitedSuppliers.length) {
+      let DI = []
+
+    state.invitedSuppliers.forEach((el) => {
+      if (el.company) {
+        DI.push(el.company._id);
+      } else if (el._id) {
+        DI.push(el._id);
+      } else DI.push(el)
+    });
+
+    function countDuplicates(arr) {
+      const countsByItem = {};
+      for (const item of arr) {
+        countsByItem[item] = (countsByItem[item] || 0) + 1;
+      }
+      return Object.values(countsByItem)
+        .filter(val => val >= 2)
+        .length;
+    }
+    
+    let dup = countDuplicates(DI)
+
+    if (dup > 0) {
+      state.invitedSuppliers = [...new Set(DI)];
+    } 
+
+    }
     if (state.bidData.status === 'templateCreate') {
       if (state.invitedSuppliers && state.invitedSuppliers.length) {
         for (let i = 0; i < state.invitedSuppliers.length; i++) {
@@ -1621,7 +1677,33 @@ export default {
         formData.append(`bidDescriptions[${d}][body]`, state.bidData.bidDescriptions[d].body);
       }
     }
+    
     if (state.invitedSuppliers && state.invitedSuppliers.length > 0) {
+      let DI = []
+      state.invitedSuppliers.forEach((el) => {
+        if (el.company) {
+          DI.push(el.company._id);
+        }  else if (el._id) {
+          DI.push(el._id);
+        } else DI.push(el)
+      });
+
+      function countDuplicates(arr) {
+        const countsByItem = {};
+        for (const item of arr) {
+          countsByItem[item] = (countsByItem[item] || 0) + 1;
+        }
+        return Object.values(countsByItem)
+          .filter(val => val >= 2)
+          .length;
+      }
+      
+      let dup = countDuplicates(DI)
+  
+      if (dup > 0) {
+        state.invitedSuppliers = [...new Set(DI)];
+      } 
+  
       for (let i = 0; i < state.invitedSuppliers.length; i++) {
         if (Array.isArray(state.invitedSuppliers) && state.invitedSuppliers.length > 0 && typeof state.invitedSuppliers[0] === 'object') {
           if (!state.invitedSuppliers[i].company && !state.invitedSuppliers[i]._id) {
