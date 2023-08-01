@@ -203,7 +203,7 @@
                       <div v-else>Award</div>
 
                     </v-btn>
-                    <v-btn @click="mainIndex = index; openRegretDialogue(item.company._id, index, 'disqualify')" color="#F03F20"
+                    <v-btn @click="mainIndex = index; openRegretDialogue(item.company, index, 'disqualify')" color="#F03F20"
                       depressed class="mt-2"
                       :disabled="showLoading[index].load && showLoading[index].action === 'disqualify'">
 
@@ -221,7 +221,7 @@
                       <div v-else>Un-Award</div>
 
                     </v-btn>
-                    <v-btn @click="mainIndex = index; unDisqualify(item.company._id, index, 'disqualify')" color="#F03F20"
+                    <v-btn @click="mainIndex = index; unDisqualify(item.company, index, 'disqualify')" color="#F03F20"
                       depressed :disabled="showLoading[index].load && showLoading[index].action === 'disqualify'"
                       v-if="!checkAwardee(item.company._id) && checkRejectee(item.company._id)">
 
@@ -244,7 +244,7 @@
                   <div class=" action d-flex align-center" color="white" height="56" rounded width="190"
                     v-if="checkRejectee(item.company._id)">
                     <img :src="require('@/assets/images/bids/disqualified.png')" />
-                    Disqualified Bid
+                    Regrets Sent
                   </div>
 
                   <div class=" action d-flex align-center" color="white" height="56" rounded width="190"
@@ -328,6 +328,7 @@ export default {
       mainIndex: 0,
       companyId: '',
       message: '',
+      companyName: ''
     };
   },
   computed: {
@@ -601,14 +602,15 @@ export default {
       this.loadings[this.mainIndex].action = 'neither';
       this.modalOpenAward = false;
     },
-
-    openRegretDialogue(id, index, action) {
+    openRegretDialogue(company, index, action) {
       this.modalOpenRegret = true;
-      this.companyId = id;
+      this.companyId = company._id;
       this.loadings[index].action = action;
+      this.companyName = company.companyName
     },
     async disqualify() {
       this.loadings[this.mainIndex].load = true;
+      this.$emit('companyName',this.companyName)
 
       await this.rejectCompany({
         companyId: this.companyId,
@@ -638,12 +640,14 @@ export default {
       this.loadings[index].load = false;
       this.loadings[index].action = 'neither';
     },
-    async unDisqualify(id, index, action) {
+    async unDisqualify(company, index, action) {
       this.loadings[index].action = action;
       this.loadings[index].load = true;
+      this.companyName = company.companyName
+      this.$emit('companyName',this.companyName)
 
       await this.UnDisqualifyCompany({
-        companyId: id,
+        companyId: company._id,
         userId: this.user._id,
         bidId: this.bidDetail.bidData._id,
         serial: this.$route.params.serial,
