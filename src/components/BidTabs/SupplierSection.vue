@@ -210,7 +210,8 @@
                       Profile</router-link>
                   </div>
                 </div>
-                <div class="add-company" v-if="checkIntent(company._id) !== 'intended'">
+                <div class="add-company"
+                  v-if="checkIntent(company._id) !== 'intended' || checkIntent(company._id) === true">
                   <v-btn color="rgba(243, 35, 73, 0.1)" tile min-width="32px" height="32" class="pa-0" elevation="0"
                     @click="removeCompany(company, index)"> <v-icon color="#F32349">mdi-minus</v-icon></v-btn>
                 </div>
@@ -239,7 +240,8 @@
                     </p>
                   </div>
                 </div>
-                <div class="add-company" v-if="checkIntent(company._id) !== 'intended'">
+                <div class="add-company"
+                  v-if="checkIntent(company._id) !== 'intended' || checkIntent(company._id) === true">
                   <v-btn color="rgba(243, 35, 73, 0.1)" tile min-width="32px" height="32" class="pa-0" elevation="0"
                     @click="removeReps(company, index)"> <v-icon color="#F32349">mdi-minus</v-icon></v-btn>
                 </div>
@@ -310,9 +312,9 @@
                 <div class="phone-class" v-if="!getPhoneInfo.valid && getCounter >= 1">
                   {{ getPhoneInfo.message }}</div>
                 <label class="d-block text-left font-weight-bold mb-2" :class="{
-                                  ' mt-2': !getPhoneInfo.valid && getCounter >= 1,
-                                  'mt-6': getPhoneInfo.valid
-                                }">Email<span class="required-class">*</span></label>
+                  ' mt-2': !getPhoneInfo.valid && getCounter >= 1,
+                  'mt-6': getPhoneInfo.valid
+                }">Email<span class="required-class">*</span></label>
                 <v-text-field v-model="email" :class="{ 'error--text': emailError }" :rules="emailRules"
                   @keypress="removeSpace($event)" @input="checkEmailI" placeholder="example@email.com" required outlined>
                   <template v-slot:append>
@@ -425,8 +427,7 @@ export default {
       return this.phoneInfo;
     },
     salesRepsList() {
-      const unique = this.$store.getters.salesRepsList ? this.$store.getters.salesRepsList.filter((el) => !this.repsInvited.find((item) => 
-         el._id === item._id ) && el.company._id !== this.userInfo.company._id) : [];
+      const unique = this.$store.getters.salesRepsList ? this.$store.getters.salesRepsList.filter((el) => !this.repsInvited.find((item) => el._id === item._id) && el.company._id !== this.userInfo.company._id) : [];
 
       return [...new Map(unique.map((item) => [item._id, item])).values()];
     },
@@ -435,7 +436,7 @@ export default {
       let unique;
       if (this.$store.getters.companiesList && this.$store.getters.companiesList.length) {
         if (this.repsInvited.length) {
-          unique = this.$store.getters.companiesList ? this.$store.getters.companiesList.filter((el) => !this.repsInvited.find((item) =>  el._id === item._id) && el._id !== this.userInfo.company._id) : [];
+          unique = this.$store.getters.companiesList ? this.$store.getters.companiesList.filter((el) => !this.repsInvited.find((item) => el._id === item._id) && el._id !== this.userInfo.company._id) : [];
 
           return [...new Map(unique.map((item) => [item._id, item])).values()];
         }
@@ -500,6 +501,12 @@ export default {
     },
     getSalesRepLoading() {
       return this.salesRepLoading;
+    },
+    removeIntendCheck() {
+      if (this.$route.name === 'EditBid') {
+        return false;
+      }
+      return true;
     },
   },
   methods: {
@@ -761,20 +768,22 @@ export default {
       return supplier.contracts.some((contract) => contract.contractType === 'ofs-premium');
     },
     checkIntent(id) {
-      let result = 'neither';
-      const intent = this.getBidAllIntend;
+      if (!this.removeIntendCheck) {
+        let result = 'neither';
+        const intent = this.getBidAllIntend;
 
-      if (intent && id) {
-        intent.forEach((el) => {
-          if (el.company === id && (el.answer === 'true' || el.answer === true)) {
-            result = 'intended';
-          }
-          if (el.company === id && (el.answer === 'false' || el.answer === false)) {
-            result = 'not-intended';
-          }
-        });
-      }
-      return result;
+        if (intent && id) {
+          intent.forEach((el) => {
+            if (el.company === id && (el.answer === 'true' || el.answer === true)) {
+              result = 'intended';
+            }
+            if (el.company === id && (el.answer === 'false' || el.answer === false)) {
+              result = 'not-intended';
+            }
+          });
+        }
+        return result;
+      } return true;
     },
   },
   beforeMount() {
