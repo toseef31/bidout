@@ -151,6 +151,34 @@
                 </template>
               </v-list-item>
             </template>
+            <template v-if="checkIfCompanyRfx()">
+              <v-list-item @click="redirectRfxSettings">
+                <template>
+                  <v-list-item-icon class="mr-6 mt-3" v-show="!showSideBar">
+                    <router-link
+                      :to="'/manage-rfx-settings'"
+                      class="text-decoration-none"
+                      ><v-icon>mdi-file-sign</v-icon></router-link
+                    >
+                  </v-list-item-icon>
+                  <v-list-item-content
+                    class="text-left py-1"
+                    v-show="showSideBar"
+                  >
+                    <router-link
+                      :to="'/manage-rfx-settings'"
+                      @click="isHidden = !isHidden"
+                      :class="{ 'active-btn': isHidden }"
+                      class="text-decoration-none"
+                    >
+                      <v-list-item-title class="font-weight-bold"
+                        >Manage RFx Settings</v-list-item-title
+                      >
+                    </router-link>
+                  </v-list-item-content>
+                </template>
+              </v-list-item>
+            </template>
           </v-list-group>
         </v-list>
         <v-list nav dense class="pa-0">
@@ -293,12 +321,28 @@ export default {
       }
       return false;
     },
+    checkIfCompanyRfx() {
+      if (
+        this.$store.getters.userInfo &&
+        this.$store.getters.userInfo.company &&
+        this.$store.getters.userInfo.company.contracts
+      ) {
+        return this.$store.getters.userInfo.company.contracts.find(
+          (contract) =>
+            contract.contractType === "rfx-enterprise"
+        ) && this.$store.getters.userInfo.role === 'admin'
+      }
+      return false;
+    },
     redirectLink(item) {
       this.$router.push(`/${item.link}`).catch(() => {});
     },
     redirectCompany() {
       this.$router.push("/company-profile").catch(() => {});
     },
+    redirectRfxSettings() {
+      this.$router.push('/manage-rfx-settings').catch(() => {})
+    }
   },
   mounted() {
     this.userId = this.$store.getters.userInfo._id;

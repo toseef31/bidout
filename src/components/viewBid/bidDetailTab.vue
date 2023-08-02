@@ -92,6 +92,27 @@
                 </v-tooltip>
 
               </v-col>
+
+              <v-col class="mr-10">
+                <v-tooltip top>
+                  <template v-slot:activator="{ on, attrs }">
+                    <v-badge color="#0D9648" dot overlap v-if="checkActiveSupplier(item._id)">
+                      <v-icon v-bind="attrs" v-on="on">mdi-file-sign</v-icon>
+                    </v-badge>
+                  </template>
+                  <span>NDA Signed</span>
+                </v-tooltip>
+
+                <v-tooltip top>
+                  <template v-slot:activator="{ on, attrs }">
+                    <v-badge color="#D5D91C" dot overlap v-if="checkInActiveSupplier(item._id)">
+                      <v-icon v-bind="attrs" v-on="on">mdi-file-sign</v-icon>
+                    </v-badge>
+                  </template>
+                  <span>NDA not Signed</span>
+                </v-tooltip>
+
+              </v-col>
               <v-col class="mr-10">
                 <v-tooltip top>
                   <template v-slot:activator="{ on, attrs }">
