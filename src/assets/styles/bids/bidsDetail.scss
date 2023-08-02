@@ -17,6 +17,25 @@
   }
 }
 
+.bid-message-class {
+
+  .v-card > .v-card__title {
+    padding: 7px 15px;
+    font-size: 18px;
+    font-weight: 900;
+  }
+
+  .v-card__actions {
+    .v-btn {
+      .v-btn__content {
+        font-size: 14px;
+        text-transform: capitalize;
+      }
+    }
+  }
+
+}
+
 .bid-detail-module {
   overflow-x: auto;
 

@@ -58,13 +58,13 @@
       </v-alert>
 
       <v-alert type="success" v-show="showBidSubmissionAlert.disqualify" class="mx-5 mt-5">
-        You have disqualified a company successfully!
+        You have sent regrets to {{comName}} successfully!
       </v-alert>
       <v-alert type="success" v-show="showBidSubmissionAlert.unAward" class="mx-5 mt-5">
         You have un-awarded a company successfully!
       </v-alert>
       <v-alert type="success" v-show="showBidSubmissionAlert.unDisqualify" class="mx-5 mt-5">
-        You have un-disqualified a company successfully!
+        You have undone the regrets sent {{comName}}, please award {{comName}} if that is your desire.
       </v-alert>
       <v-alert type="error" v-show="getLoweringPriceAlert !== null" class="mx-5 mt-5">
         {{ getLoweringPriceAlert }}
@@ -513,7 +513,7 @@
             <BidDetailTab @changetab="ChangeT($event)"></BidDetailTab>
           </v-tab-item>
           <v-tab-item value="tab-2">
-            <BidSubmission @changetab="ChangeT($event)"></BidSubmission>
+            <BidSubmission @changetab="ChangeT($event)" @companyName="(el) => comName = el"></BidSubmission>
           </v-tab-item>
           <v-tab-item value="tab-3">
             <BidChat @changetab="ChangeT($event)"></BidChat>
@@ -652,6 +652,7 @@ export default {
       ],
       createDraftBidLoading: false,
       createTemplateLoading: false,
+      comName: ''
     };
   },
   methods: {
