@@ -186,8 +186,7 @@
           <div class="companies-list">
 
             <template v-for="(company, index) in repsInvited">
-              <div class="d-flex align-center justify-space-between list-company pa-4"
-                v-if="company ? company.companyName : ''">
+              <div class="d-flex align-center justify-space-between list-company pa-4" v-if="!company.company">
                 <div class="comapny-data d-flex align-center">
                   <div class="company-img">
                     <img v-if="company.image" class="image-class" :src="company.image" />
@@ -216,8 +215,7 @@
                     @click="removeCompany(company, index)"> <v-icon color="#F32349">mdi-minus</v-icon></v-btn>
                 </div>
               </div>
-              <div class="d-flex align-center justify-space-between list-company pa-4"
-                v-if="!company ? company.companyName : ''">
+              <div class="d-flex align-center justify-space-between list-company pa-4" v-if="company.company">
                 <div class="comapny-data d-flex align-center">
                   <div class="company-img">
                     <div class="avatar-image" v-if="!company.image">
@@ -229,7 +227,7 @@
                   </div>
                   <div class="company-title text-left pl-4">
                     <h4>{{ company.firstName }} {{ company.lastName }}</h4>
-                    <p class="mb-0">{{ company.company ? company.companyName : '' }}
+                    <p class="mb-0">{{ company.company ? company.company.companyName : '' }}
                       <span v-if="hasOfsPremium(company.company)">
                         <v-tooltip top>
                           <template v-slot:activator="{ on, attrs }">
@@ -276,8 +274,9 @@
     <v-row justify="center" align="center" no-gutters>
       <v-col cols="12" md="12" class="mb-n2">
         <v-btn color="rgba(13, 150, 72, 0.1)" elevation="0" height="56px" width="220px" large
-              class="text-capitalize font-weight-bold mt-5 mb-5 invite-btn mr-5" @click="$emit('toggle-dialog', true)" v-if="!$route.path.includes('create-template')">Invite New
-              Supplier </v-btn>
+          class="text-capitalize font-weight-bold mt-5 mb-5 invite-btn mr-5" @click="$emit('toggle-dialog', true)"
+          v-if="!$route.path.includes('create-template')">Invite New
+          Supplier </v-btn>
         <v-btn color="#0D9648" elevation="0" height="56px" width="220px" large :loading="saveBidLoading"
           :disabled="saveBidLoading" class="white--text text-capitalize font-weight-bold mt-5 mb-5 save-btn"
           @click="changeTab">Save
@@ -331,14 +330,13 @@ export default {
       return categories;
     },
     salesRepsList() {
-      const unique = this.$store.getters.salesRepsList ? this.$store.getters.salesRepsList.filter((el) => !this.repsInvited.find((item) => el._id === item._id) && el._id !== this.userInfo.company._id) : [];
+      const unique = this.$store.getters.salesRepsList ? this.$store.getters.salesRepsList.filter((el) => !this.repsInvited.find((item) => el._id === item._id) && el.company._id !== this.userInfo.company._id) : [];
 
       return [...new Map(unique.map((item) => [item._id, item])).values()];
     },
 
     companiesList() {
       let unique;
-
       if (this.$store.getters.companiesList && this.$store.getters.companiesList.length) {
         if (this.repsInvited.length) {
           unique = this.$store.getters.companiesList ? this.$store.getters.companiesList.filter((el) => !this.repsInvited.find((item) => el._id === item._id) && el._id !== this.userInfo.company._id) : [];
@@ -363,7 +361,7 @@ export default {
     // eslint-disable-next-line vue/no-side-effects-in-computed-properties, vue/return-in-computed-property,
     filteredEntries() {
       if (this.$store.getters.bidData.invitedSuppliers && this.$store.getters.bidData.invitedSuppliers.length) {
-        this.repsInvited = this.$store.getters.bidData.invitedSuppliers
+        this.repsInvited = this.$store.getters.bidData.invitedSuppliers;
       }
     },
     // eslint-disable-next-line vue/no-side-effects-in-computed-properties, vue/return-in-computed-property,
@@ -406,7 +404,7 @@ export default {
 
       this.$emit('changetab', 'tab-3');
     },
-    
+
     hideCategories(name) {
       this.categories = false;
       this.companyBasin = 'All';
@@ -497,7 +495,7 @@ export default {
       this.$store.commit('setInvitedSuppliersData', this.repsInvited);
     },
     removeNewSup(company) {
-      this.oldCount = this.newRepsInvited.length;;
+      this.oldCount = this.newRepsInvited.length;
       const index = this.newRepsInvited.findIndex((el) => el._id === company._id);
       if (index !== -1) {
         this.newRepsInvited.splice(index, 1);

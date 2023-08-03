@@ -99,8 +99,8 @@
                   Not submitted
                 </td>
                 <td v-else>
-                  <v-icon 
-                  v-if="submission.bidOutPricePre > submission.postBidOutPrice" color="#0D9648">mdi-arrow-down-thin-circle-outline</v-icon>
+                  <v-icon v-if="submission.bidOutPricePre > submission.postBidOutPrice" color="#0D9648"
+                    class=" icon-saving-class">mdi-arrow-down-thin-circle-outline</v-icon>
                   <span class="ml-1 priceBoldClass">$ {{
                     formatPrice(submission.postBidOutPrice)
                   }}</span>
@@ -196,23 +196,24 @@
                 <td class="text-left">
                   <div class="d-flex flex-column"
                     v-if="!checkAwardee(item.company._id) && !checkRejectee(item.company._id)">
-                    <v-btn @click="award(item.company._id, index, 'award')" color="#0d9648" depressed
-                      :disabled="showLoading[index].load && showLoading[index].action === 'award'">
+                    <v-btn @click="mainIndex = index; openAwardDialogue(item.company._id, index, 'award')" color="#0d9648"
+                      depressed :disabled="showLoading[index].load && showLoading[index].action === 'award'">
                       <v-progress-circular v-if="showLoading[index].load && showLoading[index].action === 'award'"
                         indeterminate :width="3" size="25" color="#0D9648"></v-progress-circular>
-                      <div v-else>Award Bid</div>
+                      <div v-else>Award</div>
 
                     </v-btn>
-                    <v-btn @click="disqualify(item.company._id, index, 'disqualify')" color="#F03F20" depressed
-                      class="mt-2" :disabled="showLoading[index].load && showLoading[index].action === 'disqualify'">
+                    <v-btn @click="mainIndex = index; openRegretDialogue(item.company, index, 'disqualify')" color="#F03F20"
+                      depressed class="mt-2"
+                      :disabled="showLoading[index].load && showLoading[index].action === 'disqualify'">
 
                       <v-progress-circular v-if="showLoading[index].load && showLoading[index].action === 'disqualify'"
                         indeterminate :width="3" size="25" color="#F03F20"></v-progress-circular>
-                      <div v-else> Disqualify Bid</div>
+                      <div v-else> Regrets</div>
                     </v-btn>
                   </div>
                   <div v-else class="d-flex flex-column">
-                    <v-btn @click="unAward(item.company._id, index, 'award')" color="#0d9648" depressed
+                    <v-btn @click="mainIndex = index; unAward(item.company._id, index, 'award')" color="#0d9648" depressed
                       :disabled="showLoading[index].load && showLoading[index].action === 'award'"
                       v-if="checkAwardee(item.company._id) && !checkRejectee(item.company._id)">
                       <v-progress-circular v-if="showLoading[index].load && showLoading[index].action === 'award'"
@@ -220,13 +221,13 @@
                       <div v-else>Un-Award</div>
 
                     </v-btn>
-                    <v-btn @click="unDisqualify(item.company._id, index, 'disqualify')" color="#F03F20" depressed
-                      :disabled="showLoading[index].load && showLoading[index].action === 'disqualify'"
+                    <v-btn @click="mainIndex = index; unDisqualify(item.company, index, 'disqualify')" color="#F03F20"
+                      depressed :disabled="showLoading[index].load && showLoading[index].action === 'disqualify'"
                       v-if="!checkAwardee(item.company._id) && checkRejectee(item.company._id)">
 
                       <v-progress-circular v-if="showLoading[index].load && showLoading[index].action === 'disqualify'"
                         indeterminate :width="3" size="25" color="#F03F20"></v-progress-circular>
-                      <div v-else>Un-Disqualify</div>
+                      <div v-else>Un-Regret</div>
                     </v-btn>
 
                   </div>
@@ -243,7 +244,7 @@
                   <div class=" action d-flex align-center" color="white" height="56" rounded width="190"
                     v-if="checkRejectee(item.company._id)">
                     <img :src="require('@/assets/images/bids/disqualified.png')" />
-                    Disqualified Bid
+                    Regrets Sent
                   </div>
 
                   <div class=" action d-flex align-center" color="white" height="56" rounded width="190"
@@ -259,6 +260,52 @@
           </tbody>
         </template>
       </v-simple-table>
+
+      <v-dialog content-class="bid-message-class" v-model="modalOpenAward" width="570">
+
+        <v-card>
+          <v-card-title class="justify-space-between grey lighten-2">
+            <div>Send Custom Award Message</div>
+            <v-btn icon @click="modalOpenAward = false"><v-icon size="23">mdi-close-circle</v-icon></v-btn>
+          </v-card-title>
+
+          <v-textarea v-model="message" hide-details outlined auto-grow rows="6" row-height="25"
+            class="mx-5 my-5"></v-textarea>
+          <v-card-actions class="justify-center pb-4 mt-n2">
+
+            <v-btn width="270" height="45" color="#0D9648" outlined @click="award"
+              :disabled="showLoading[mainIndex].load && showLoading[mainIndex].action === 'award'">
+              <v-progress-circular v-if="showLoading[mainIndex].load && showLoading[mainIndex].action === 'award'"
+                indeterminate :width="3" size="25" color="#0D9648"></v-progress-circular>
+              <div v-else>Send Award Notification</div>
+            </v-btn>
+          </v-card-actions>
+        </v-card>
+
+      </v-dialog>
+
+      <v-dialog content-class="bid-message-class" v-model="modalOpenRegret" width="570">
+
+        <v-card>
+          <v-card-title class="justify-space-between grey lighten-2">
+            <div>Send Custom Regrets Message</div>
+            <v-btn icon @click="modalOpenRegret = false"><v-icon size="23">mdi-close-circle</v-icon></v-btn>
+          </v-card-title>
+
+          <v-textarea v-model="message" hide-details outlined auto-grow rows="6" row-height="25"
+            class="mx-5 my-5"></v-textarea>
+          <v-card-actions class="justify-center pb-4 mt-n2">
+
+            <v-btn width="270" height="45" color="#F03F20" outlined @click="disqualify"
+              :disabled="showLoading[mainIndex].load && showLoading[mainIndex].action === 'disqualify'">
+              <v-progress-circular v-if="showLoading[mainIndex].load && showLoading[mainIndex].action === 'disqualify'"
+                indeterminate :width="3" size="25" color="#F03F20"></v-progress-circular>
+              <div v-else>Send Regrets Notification</div>
+            </v-btn>
+          </v-card-actions>
+        </v-card>
+
+      </v-dialog>
     </div>
 
     <div class="text-center b-title-detail " v-if="!bidDetail.supplierSubmissions.length">There are currently no
@@ -276,6 +323,12 @@ export default {
       answers: [],
       user: '',
       loadings: [],
+      modalOpenAward: false,
+      modalOpenRegret: false,
+      mainIndex: 0,
+      companyId: '',
+      message: '',
+      companyName: ''
     };
   },
   computed: {
@@ -528,35 +581,49 @@ export default {
       }
       return result;
     },
-    async award(id, index, action) {
+    openAwardDialogue(id, index, action) {
+      this.modalOpenAward = true;
+      this.companyId = id;
       this.loadings[index].action = action;
-      this.loadings[index].load = true;
+    },
+    async award() {
+      this.loadings[this.mainIndex].load = true;
 
       await this.awardCompany({
-        companyId: id,
+        companyId: this.companyId,
         userId: this.user._id,
         bidId: this.bidDetail.bidData._id,
         serial: this.$route.params.serial,
         company: this.user.company,
+        customMessage: this.message,
       });
 
-      this.loadings[index].load = false;
-      this.loadings[index].action = 'neither';
+      this.loadings[this.mainIndex].load = false;
+      this.loadings[this.mainIndex].action = 'neither';
+      this.modalOpenAward = false;
     },
-    async disqualify(id, index, action) {
+    openRegretDialogue(company, index, action) {
+      this.modalOpenRegret = true;
+      this.companyId = company._id;
       this.loadings[index].action = action;
-      this.loadings[index].load = true;
+      this.companyName = company.companyName
+    },
+    async disqualify() {
+      this.loadings[this.mainIndex].load = true;
+      this.$emit('companyName',this.companyName)
 
       await this.rejectCompany({
-        companyId: id,
+        companyId: this.companyId,
         userId: this.user._id,
         bidId: this.bidDetail.bidData._id,
         serial: this.$route.params.serial,
         company: this.user.company,
+        customMessage: this.message,
       });
 
-      this.loadings[index].load = false;
-      this.loadings[index].action = 'neither';
+      this.loadings[this.mainIndex].load = false;
+      this.loadings[this.mainIndex].action = 'neither';
+      this.modalOpenRegret = false;
     },
     async unAward(id, index, action) {
       this.loadings[index].action = action;
@@ -573,12 +640,14 @@ export default {
       this.loadings[index].load = false;
       this.loadings[index].action = 'neither';
     },
-    async unDisqualify(id, index, action) {
+    async unDisqualify(company, index, action) {
       this.loadings[index].action = action;
       this.loadings[index].load = true;
+      this.companyName = company.companyName
+      this.$emit('companyName',this.companyName)
 
       await this.UnDisqualifyCompany({
-        companyId: id,
+        companyId: company._id,
         userId: this.user._id,
         bidId: this.bidDetail.bidData._id,
         serial: this.$route.params.serial,

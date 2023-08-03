@@ -168,7 +168,7 @@
                       <template>
                         <v-list-item
                           class="text-left px-5"
-                          active-class="white--text" selectable="true" link="false" inactive
+                          active-class="white--text" :selectable="true" :link="false" inactive
                         >
                           <template>
                             <v-list-item-content>
@@ -435,14 +435,23 @@ export default {
       };
       this.getAllMessages(ids);
       var container = this.$refs.messagesSection;
-      setTimeout(() => {
+
+      if (container && container.scrollHeight) {
+        setTimeout(() => {
         container.scrollTop = container.scrollHeight;
       }, 4000);
+      }
+      
       this.lastMessageRead(ids);
+      
       var container = this.$refs.messagesSection;
-      setTimeout(() => {
+      
+      if (container && container.scrollHeight) {
+        setTimeout(() => {
         container.scrollTop = container.scrollHeight;
       }, 1000);
+      }
+     
       this.isChatMenu = false;
     },
     ChangeT(data) {

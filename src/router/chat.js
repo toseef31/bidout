@@ -7,25 +7,23 @@ const routes = [
     component: Settings,
     meta: { requiresAuth: true },
     children: [
-      // {
-      //   path: '/messages',
-      //   name: 'Messages',
-      //   component: () => import('@/views/Chat.vue'),
-      //   beforeEnter: (to, from, next) => {
-      //      if(store.getters.userInfo == null) {
-      //         store.dispatch('getCurrentUser').then((data) => {
-      //           next();
-      //         }).catch((error) => {
-      //           console.log(error);
-      //           next('/login');
-      //         });
-      //      } else {
-      //          next();
-      //      }
-      //  }
-      // },
-      
-      
+      {
+        path: '/messages',
+        name: 'Messages',
+        component: () => import('@/views/Chat.vue'),
+        beforeEnter: (to, from, next) => {
+           if(store.getters.userInfo == null) {
+              store.dispatch('getCurrentUser').then((data) => {
+                next();
+              }).catch((error) => {
+                console.log(error);
+                next('/login');
+              });
+           } else {
+               next();
+           }
+       }
+      },   
     ],
   },
 ];
