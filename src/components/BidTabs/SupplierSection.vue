@@ -210,7 +210,8 @@
                       Profile</router-link>
                   </div>
                 </div>
-                <div class="add-company" v-if="checkIntent(company._id) !== 'intended'">
+                <div class="add-company"
+                  v-if="checkIntent(company._id) !== 'intended' || checkIntent(company._id) === true">
                   <v-btn color="rgba(243, 35, 73, 0.1)" tile min-width="32px" height="32" class="pa-0" elevation="0"
                     @click="removeCompany(company, index)"> <v-icon color="#F32349">mdi-minus</v-icon></v-btn>
                 </div>
@@ -239,7 +240,8 @@
                     </p>
                   </div>
                 </div>
-                <div class="add-company" v-if="checkIntent(company._id) !== 'intended'">
+                <div class="add-company"
+                  v-if="checkIntent(company._id) !== 'intended' || checkIntent(company._id) === true">
                   <v-btn color="rgba(243, 35, 73, 0.1)" tile min-width="32px" height="32" class="pa-0" elevation="0"
                     @click="removeReps(company, index)"> <v-icon color="#F32349">mdi-minus</v-icon></v-btn>
                 </div>
@@ -388,6 +390,12 @@ export default {
     getSalesRepLoading() {
       return this.salesRepLoading;
     },
+    removeIntendCheck() {
+      if (this.$route.name === 'EditBid') {
+        return false;
+      }
+      return true;
+    },
   },
   methods: {
     ...mapActions(['getCategories', 'getSalesReps', 'getCompanyInfo', 'searchByCompany', 'getCompanyByServices', 'saveDraftBid', 'updateDraftBid', 'updateTemplate', 'updateBid']),
@@ -529,20 +537,22 @@ export default {
       return supplier.contracts.some((contract) => contract.contractType === 'ofs-premium');
     },
     checkIntent(id) {
-      let result = 'neither';
-      const intent = this.getBidAllIntend;
+      if (!this.removeIntendCheck) {
+        let result = 'neither';
+        const intent = this.getBidAllIntend;
 
-      if (intent && id) {
-        intent.forEach((el) => {
-          if (el.company === id && (el.answer === 'true' || el.answer === true)) {
-            result = 'intended';
-          }
-          if (el.company === id && (el.answer === 'false' || el.answer === false)) {
-            result = 'not-intended';
-          }
-        });
-      }
-      return result;
+        if (intent && id) {
+          intent.forEach((el) => {
+            if (el.company === id && (el.answer === 'true' || el.answer === true)) {
+              result = 'intended';
+            }
+            if (el.company === id && (el.answer === 'false' || el.answer === false)) {
+              result = 'not-intended';
+            }
+          });
+        }
+        return result;
+      } return true;
     },
   },
   beforeMount() {
