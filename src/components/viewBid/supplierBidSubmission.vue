@@ -172,20 +172,9 @@
 
                   </div>
 
-                  <label :for="`uploadFileQ${index}`" v-else class="
-                      upload-file
-                      pa-4
-                      d-block
-                      font-weight-medium
-                      text-center
-                    ">
-                    <v-file-input :id="`uploadFileQ${index}`" @change="handleDocumentForAnswer($event, index)"
-                      :disabled="checkForQ" :rules="item.required === true ? fileRule : []" />
-
-                    <div class="mt-1">
-                      <v-icon class="mr-4">mdi-cloud-upload-outline</v-icon>Upload here
-                    </div>
-                  </label>
+                  <v-file-input v-else label="Upload here" :id="`uploadFileQ${index}`"
+                    @change="handleDocumentForAnswer($event, index)" color="#0d9648" :disabled="checkForQ"
+                    :rules="item.required === true ? fileRule : []" />
                 </div>
               </v-col>
 
