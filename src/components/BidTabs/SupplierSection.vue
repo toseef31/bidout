@@ -317,7 +317,10 @@ export default {
   props: ['data'],
   watch: {
     data(el) {
+      this.oldCount = this.newRepsInvited.length;
       this.newRepsInvited.push(el);
+      this.$store.commit('setInvitedNewSuppliers', this.newRepsInvited);
+      this.newCount = this.newRepsInvited.length;
     },
   },
   computed: {
