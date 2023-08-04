@@ -25,4 +25,6 @@ export default {
   manageCompanyError : null,
   companyExecutiveLoading: false,
   basicError: false,
+  ndaDocument: null,
+  ndaDocumentAlert: false
 }

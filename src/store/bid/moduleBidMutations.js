@@ -321,4 +321,7 @@ export default {
       state.bidSubmissionValidationAlert = null;
     }, 8000);
   },
+  setCompanyNda(state,payload) {
+    state.companyNda = payload
+  }
 };

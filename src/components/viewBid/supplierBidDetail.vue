@@ -1,21 +1,29 @@
 <template>
-  <v-col v-if="true" class="mt-7 bid-detail-supplier pa-0 mb-5" align="center">
+  <v-col v-if="!isSignedNDA" class="mt-7 bid-detail-supplier pa-0 mb-5" align="center">
     <div class="contract-class">{{ bidDetail.bidData.company.companyName }} requires all suppliers to execute a
       confidentiality agreement before reviewing any bid details, please execute this agreement to access this bid.</div>
-    <vue-pdf-embed class="white text-left pa-4 font-weight-medium mb-5 contract-section" :source="pdfSource" />
+    <div class="border-contract">
+      <p class="white text-left pa-4 font-weight-medium mb-5 contract-section" v-html="getCompanyNda" />
+    </div>
+
     <v-row justify="center" align="center" class="mt-0 sign-class">
       <v-col cols="12" md="8" class="pb-1 middle-align-class">
-        <v-checkbox color="#0D9648" hide-details>
+        <v-checkbox color="#0D9648" hide-details v-model="agree">
           <template v-slot:label>
             <div class="font-weight-bold">
-              I {{userData.firstName}} {{userData.lastName}} with {{userData.company.companyName}} agrees to abide by the above confidentiality agreement between {{userData.company.companyName}} and  {{ bidDetail.bidData.company.companyName }}
+              I {{ userData.firstName }} {{ userData.lastName }} with {{ userData.company.companyName }} agrees to abide by the
+              above confidentiality agreement between {{ userData.company.companyName }} and {{
+                bidDetail.bidData.company.companyName }}
             </div>
           </template>
         </v-checkbox>
       </v-col>
       <v-col cols="12" md="4" class="text-right">
-        <v-btn color="#0D9647" outlined class="black--text text-capitalize mb-2" height="45" width="120"><strong>Sign
-            </strong>
+        <v-btn color="#0D9647" outlined class="black--text text-capitalize mb-2" height="45" width="120"
+          :disabled="!agree" @click="signContract">
+          <v-progress-circular v-if="getLoading" indeterminate :width="3" size="25" color="#0D9648"></v-progress-circular>
+          <strong v-else>Sign
+          </strong>
         </v-btn>
       </v-col>
     </v-row>
@@ -262,18 +270,20 @@
 
 <script>
 import moment from 'moment-timezone';
-import VuePdfEmbed from 'vue-pdf-embed/dist/vue2-pdf-embed';
+import { mapActions } from 'vuex';
 
 export default {
-  components: {
-    VuePdfEmbed,
-  },
   data() {
     return {
-      pdfSource: '',
+      loading: false,
+      agree: false,
+      users: '',
     };
   },
   methods: {
+    ...mapActions([
+      'signCompanyNda',
+    ]),
     size(size) {
       const sizeInMB = (size / (1024 * 1024)).toFixed(2);
       return `${sizeInMB}mb`;
@@ -295,16 +305,38 @@ export default {
 
       return moment.tz(momentDueDate, 'America/Chicago').format('MM/DD/YYYY @ ha');
     },
+    async signContract() {
+      this.loading = true;
+      await this.signCompanyNda({
+        companyId: this.bidDetail.bidData.company._id,
+        supplierCompanyId: this.users.company._id,
+        supplierUserId: this.users._id,
+        bidId: this.bidDetail.bidData._id,
+        serial: this.bidDetail.bidData.serial,
+        company: this.users.company,
+      });
+      this.loading = false;
+    },
   },
   computed: {
     bidDetail() {
       return this.$store.getters.bidViewData;
     },
     userData() {
-      return this.$store.getters.userInfo
-    }
+      return this.$store.getters.userInfo;
+    },
+    getCompanyNda() {
+      return this.$store.getters.companyNda;
+    },
+    isSignedNDA() {
+      return this.$store.getters.bidViewData.bidData.signedNDAs.length;
+    },
+    getLoading() {
+      return this.loading;
+    },
   },
   mounted() {
+    this.users = this.$store.getters.userInfo;
     window.scrollTo({ top: 0, behavior: 'smooth' });
   },
 };

@@ -96,7 +96,7 @@
               <v-col class="mr-10">
                 <v-tooltip top>
                   <template v-slot:activator="{ on, attrs }">
-                    <v-badge color="#0D9648" dot overlap v-if="checkActiveSupplier(item._id)">
+                    <v-badge color="#0D9648" dot overlap v-if="checkNDASigned(item._id)">
                       <v-icon v-bind="attrs" v-on="on">mdi-file-sign</v-icon>
                     </v-badge>
                   </template>
@@ -105,7 +105,7 @@
 
                 <v-tooltip top>
                   <template v-slot:activator="{ on, attrs }">
-                    <v-badge color="#D5D91C" dot overlap v-if="checkInActiveSupplier(item._id)">
+                    <v-badge color="#D5D91C" dot overlap v-if="!checkNDASigned(item._id)">
                       <v-icon v-bind="attrs" v-on="on">mdi-file-sign</v-icon>
                     </v-badge>
                   </template>
@@ -195,7 +195,7 @@
 
                     <span>{{
                       item && item.companyName ?
-                      item.companyName : item.company }} will not be submitting a bid</span>                     
+                      item.companyName : item.company }} will not be submitting a bid</span>
                   </v-tooltip>
                 </div>
               </v-col>
@@ -501,6 +501,20 @@ export default {
     changeDate() {
       this.$router.push(`/update-dueDate/${this.$route.params.serial}`);
     },
+    checkNDASigned(id) {
+      const { signedNDAs } = this.bidDetail.bidData;
+      let active = false;
+
+      if (signedNDAs && signedNDAs.length) {
+        signedNDAs.forEach((el) => {
+          if (el && el.company === id) {
+            active = true;
+          }
+        });
+      }
+
+      return active;
+    },
   },
   computed: {
     bidDetail() {
@@ -520,13 +534,13 @@ export default {
 
       if (this.bidDetail.bidData) {
         if ((invitedSuppliers && Array.isArray(invitedSuppliers) && invitedSuppliers.length > 0) && (invitedNewSuppliers && Array.isArray(invitedNewSuppliers) && invitedNewSuppliers.length > 0)) {
-          return [...invitedSuppliers, ...invitedNewSuppliers]
+          return [...invitedSuppliers, ...invitedNewSuppliers];
         }
         if (invitedNewSuppliers && Array.isArray(invitedNewSuppliers) && invitedNewSuppliers.length > 0) {
-          return invitedNewSuppliers
+          return invitedNewSuppliers;
         }
         if (invitedSuppliers && Array.isArray(invitedSuppliers) && invitedSuppliers.length > 0) {
-          return invitedSuppliers
+          return invitedSuppliers;
         }
 
         return [];

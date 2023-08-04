@@ -2067,4 +2067,53 @@ export default {
       }
     }
   },
+  async getCompanyNda({ commit, state, dispatch }, payload) {
+    try {
+      const res = await axios.post('/v2/bid/getCompanyNda',{
+        companyId: payload.companyId,
+        supplierCompanyId: payload.supplierCompanyId,
+        supplierUserId: payload.supplierUserId
+      });
+
+      if (res.status === 200) {
+        commit('setCompanyNda', res.data);
+      }
+    } catch (err) {
+      Sentry.captureException(err);
+      if (state.apiCounter === 2) {
+        dispatch('apiSignOutAction');
+      } else if (err.response && err.response.status === 403) {
+        await dispatch('refreshToken');
+        state.apiCounter = 2;
+        dispatch('getCompanyNda', payload);
+      }
+    }
+  },
+  async signCompanyNda({ commit, state, dispatch }, payload) {
+    try {
+      const res = await axios.post('/v2/bid/signCompanyNda',{
+        companyId: payload.companyId,
+        supplierCompanyId: payload.supplierCompanyId,
+        supplierUserId: payload.supplierUserId,
+        bidId: payload.bidId
+      });
+
+      if (res.status === 200) {
+        dispatch('getBidBySerial', {
+          id: payload.supplierUserId,
+          serial: payload.serial,
+          company: payload.company,
+        });
+      }
+    } catch (err) {
+      Sentry.captureException(err);
+      if (state.apiCounter === 2) {
+        dispatch('apiSignOutAction');
+      } else if (err.response && err.response.status === 403) {
+        await dispatch('refreshToken');
+        state.apiCounter = 2;
+        dispatch('signCompanyNda', payload);
+      }
+    }
+  },
 };

@@ -152,4 +152,7 @@ export default {
   bidSubmissionValidationAlert(state) {
     return state.bidSubmissionValidationAlert;
   },
+  companyNda(state) {
+    return state.companyNda
+  }
 };

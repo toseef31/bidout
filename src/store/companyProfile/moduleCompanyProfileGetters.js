@@ -31,5 +31,11 @@ export default {
    },
    companyExecutiveLoading(state) {
     return state.companyExecutiveLoading
+   },
+   ndaDocument(state) {
+    return state.ndaDocument
+   },
+   ndaDocumentAlert(state) {
+    return state.ndaDocumentAlert
    }
 }

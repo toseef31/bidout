@@ -900,11 +900,11 @@
       .contract-class {
         font-size: 18px;
         font-weight: 500;
-        width: 70%;
+        width: 72%;
       }
 
       .sign-class {
-        width: 70%;
+        width: 72%;
       }
 
       .middle-align-class {
@@ -921,9 +921,14 @@
           }
         }
       }
-
+      
+      .border-contract {
+        border: 2px solid black;
+        width: 72%;
+        margin-top: 10px;
+      }
       .contract-section {
-        width: 70%;
+        width: 100%;
         height: 700px;
         overflow-x: hidden;
         overflow-y: auto;
