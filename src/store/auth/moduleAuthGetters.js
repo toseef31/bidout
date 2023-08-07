@@ -92,4 +92,7 @@ export default {
   invitedSupplierEmailExists(state) {
     return state.invitedSupplierEmailExists;
   },
+  contractType(state) {
+    return state.contractType
+  }
 };

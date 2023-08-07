@@ -12,8 +12,8 @@
           <h4 class="mb-2 contract-title">Respond to Bids - OFS Directory</h4>
           <h1 class="mb-8 ">Execute Contract</h1>
         </div>
-        <vue-pdf-embed class="white text-left pa-4 font-weight-medium mb-5 contract-section" ref="pdfRef"
-          :source="pdfSource" />
+        <p class="white text-left pa-4 font-weight-medium mb-5 contract-section"
+          v-html="file" />
 
         <v-row justify="center" align="center" class="mt-0 ">
           <v-col cols="12" md="8" class="pb-1 middle-align-class">
@@ -73,7 +73,7 @@ export default {
   data() {
     return {
       loading: false,
-      pdfSource: this.$store.getters.contractData.pdfFile,
+      file: this.$store.getters.contractData,
       isAgree: false
     };
   },
@@ -102,6 +102,9 @@ export default {
    getCompanyErrorAlert() {
       return this.$store.getters.companyError
    },
+   getContractType() {
+    return this.$store.getters.contractType
+   }
   },
 
   methods: {
@@ -109,10 +112,10 @@ export default {
     async sign() {
         this.loading = true
         let agreement = {
-        contractType : this.contractData.contractType,
-        fileName : this.contractData.fileName,
+        contractType : this.getContractType,
         supplierId: this.getSupplierId,
         plan: this.getPlan ? this.getPlan : 1,
+        ip: this.ip
       }
       await this.signAgreement(agreement);
       this.loading = false;
