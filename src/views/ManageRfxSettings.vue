@@ -106,7 +106,6 @@
 
 <script>
 import { mapActions } from 'vuex';
-import moment from 'moment-timezone';
 
 export default {
   name: 'ManageRFxSettings',
@@ -184,6 +183,9 @@ export default {
   },
   mounted() {
     document.title = 'Manage RFx Settings - BidOut';
+    if (this.users.company.ndaDocument && this.users.company.requireNda !== null) {
+      this.$store.commit('setNDADocument', { document: this.users.company.ndaDocument.fileName, requireNda: this.users.company.requireNda, href: this.users.company.ndaDocument.filePath});
+    }
 
     if (this.getNDADocument) {
       this.requireNda = this.getNDADocument.requireNda;

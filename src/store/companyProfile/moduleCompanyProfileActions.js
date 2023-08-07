@@ -809,8 +809,10 @@ export default {
       })
 
       if (res.status === 200) {
+        await dispatch('getCurrentUser')
         commit('setNDADocumentUpdateAlert');
         commit('setNDADocument',{document: res.data.ndaDocument.fileName,requireNda: res.data.requireNda})
+        
       }
     } catch (err) {
       Sentry.captureException(err);

@@ -93,7 +93,7 @@
 
               </v-col>
 
-              <v-col class="mr-10">
+              <v-col class="mr-10" v-if="isEligible">
                 <v-tooltip top v-if="checkNDASigned(item._id)">
                   <template v-slot:activator="{ on, attrs }">
                     <v-badge color="#0D9648" dot overlap >
@@ -785,6 +785,19 @@ export default {
     getInvitedSupplierEmailExists() {
       return this.$store.getters.invitedSupplierEmailExists;
     },
+    isEligible() {
+      if (
+        this.$store.getters.userInfo &&
+        this.$store.getters.userInfo.company &&
+        this.$store.getters.userInfo.company.contracts
+      ) {
+        return this.$store.getters.userInfo.company.contracts.find(
+          (contract) =>
+            contract.contractType === "rfx-enterprise"
+        ) && this.bidDetail.bidData.requiresNDA
+      }
+      return false;
+    }
   },
 };
 </script>
