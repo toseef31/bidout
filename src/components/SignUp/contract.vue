@@ -60,16 +60,11 @@
 <script type="application/javascript" src="https://api.ipify.org?format=jsonp&callback=getIP"></script>
 
 <script>
-  import VuePdfEmbed from 'vue-pdf-embed/dist/vue2-pdf-embed'
   import { mapActions } from "vuex";
   import moment from 'moment-timezone';
 
 export default {
   name : "Contract",
-  components: {
-    VuePdfEmbed,
-  },
-
   data() {
     return {
       loading: false,
