@@ -37,5 +37,8 @@ export default {
    },
    ndaDocumentAlert(state) {
     return state.ndaDocumentAlert
+   },
+   ndaDocumentUpdateAlert(state) {
+    return state.ndaDocumentUpdateAlert
    }
 }

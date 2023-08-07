@@ -56,5 +56,11 @@ export default {
   },
   setNDADocument(state,payload) {
     state.ndaDocument = payload
+  },
+  setNDADocumentUpdateAlert(state) {
+    state.ndaDocumentUpdateAlert = true
+    setTimeout(() => {
+      state.ndaDocumentUpdateAlert = false;
+    }, 5000);
   }
 };

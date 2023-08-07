@@ -801,4 +801,26 @@ export default {
       }
     }
   },
+  async updateNDARequirement ({commit,dispatch,state},payload) {
+    try {
+      const res = await axios.post('v2/company/updateNDARequirement/',{
+        companyId: payload.companyId,
+        requireNda: payload.requireNda
+      })
+
+      if (res.status === 200) {
+        commit('setNDADocumentUpdateAlert');
+        commit('setNDADocument',{document: res.data.ndaDocument.fileName,requireNda: res.data.requireNda})
+      }
+    } catch (err) {
+      Sentry.captureException(err);
+      if (state.apiCounter === 2) {
+        dispatch('apiSignOutAction');
+      } else if (err.response && err.response.status === 403) {
+        await dispatch('refreshToken');
+        state.apiCounter = 2;
+        dispatch('updateNDARequirement', payload);
+      }
+    }
+  }
 }

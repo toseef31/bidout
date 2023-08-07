@@ -913,7 +913,10 @@ export default {
       return this.createTemplateLoading;
     },
     isSignedNDA() {
-      return this.$store.getters.bidViewData.bidData.signedNDAs.length
+      if (this.bidDetail.bidData.requiresNDA) {
+        return this.$store.getters.bidViewData.bidData.signedNDAs.length
+      }
+      return true
     }
   },
   mounted() {

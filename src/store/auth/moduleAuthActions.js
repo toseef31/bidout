@@ -53,10 +53,6 @@ export default {
                   localStorage.removeItem("token")
                   commit("setToken", null)
               } else {
-                if (responce.data.company.ndaDocument && responce.data.company.requireNda) {
-                  commit('setNDADocument',{document: responce.data.company.ndaDocument.fileName,requireNda: responce.data.company.requireNda})
-                }
-               
                 axios
                   .get(`/v2/auth/addUserLoginHistory/${responce.data._id}`)
                   .then((response) => {});
@@ -133,10 +129,6 @@ export default {
           axios
             .get(`/v2/user/getUserData/${users.multiFactor.user.email}`, config)
             .then((responce) => {
-              if (responce.data.company.ndaDocument && responce.data.company.requireNda) {
-                commit('setNDADocument',{document: responce.data.company.ndaDocument.fileName,requireNda: responce.data.company.requireNda})
-              }
-
               commit("setUser", responce.data);
               resolve(responce.data);
             }, (error) => {

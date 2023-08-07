@@ -329,7 +329,10 @@ export default {
       return this.$store.getters.companyNda;
     },
     isSignedNDA() {
-      return this.$store.getters.bidViewData.bidData.signedNDAs.length;
+      if (this.bidDetail.bidData.requiresNDA) {
+        return this.$store.getters.bidViewData.bidData.signedNDAs.length
+      }
+      return true
     },
     getLoading() {
       return this.loading;
