@@ -223,7 +223,71 @@
                                                                                       ">mdi-close</v-icon>
           </v-btn>
         </div>
-        <AddSupplier />
+        <AddSupplier @toggle-dialog="(el) => supplierDialog = el" :data="newRepsInvited">
+        </AddSupplier>
+        <v-dialog v-model="supplierDialog" width="800">
+
+          <v-card class="inviteSupplier-dialog">
+            <v-card-title class="text-h5 justify-end">
+              <v-icon @click=" supplierDialog = false" color="#0D1139"> mdi-close</v-icon>
+            </v-card-title>
+
+            <v-card-text>
+              <h2 class="text-left mb-6 font-weight-bold">Invite New Supplier</h2>
+              <v-form ref="form" v-model="valid" lazy-validation>
+                <label class="d-block text-left font-weight-bold mb-2">First Name<span
+                    class="required-class">*</span></label>
+                <v-text-field v-model="firstName" :rules="nameRules" placeholder="First Name" required
+                  outlined></v-text-field>
+                <label class="d-block text-left font-weight-bold mb-2">Last Name<span
+                    class="required-class">*</span></label>
+                <v-text-field v-model="lastName" :rules="nameRules" placeholder="Last Name" required
+                  outlined></v-text-field>
+                <label class="d-block text-left font-weight-bold mb-2">Company<span
+                    class="required-class">*</span></label>
+                <v-text-field v-model="company" :rules="companyRules" placeholder="Company Name" required
+                  outlined></v-text-field>
+                <label class="d-block text-left font-weight-bold mb-2">Phone Number<span
+                    class="required-class">*</span></label>
+
+                <VuePhoneNumberInput @phone-number-blur="onBlurS" default-country-code="US" :border-radius="0" size="lg"
+                  :required="true" clearable :error="!getPhoneInfo.valid && getCounter >= 1" v-model="phoneNumber"
+                  error-color="#FF0000" valid-color="#9E9E9E" :translations="translations" class="mb-2"
+                  @update="onUpdate" />
+                <div class="phone-class" v-if="!getPhoneInfo.valid && getCounter >= 1">
+                  {{ getPhoneInfo.message }}</div>
+                <label class="d-block text-left font-weight-bold mb-2 " :class="{
+                  ' mt-2': !getPhoneInfo.valid && getCounter >= 1,
+                  'mt-6': getPhoneInfo.valid
+                }">Email<span class="required-class">*</span></label>
+                <v-text-field v-model="email" :rules="emailRules" @input="checkEmailI" @keypress="removeSpace($event)"
+                  placeholder="example@email.com" required outlined :class="{ 'error--text': emailError }">
+                  <template v-slot:append>
+
+                    <v-progress-circular v-if="getEmailLoading" indeterminate :size="20" :width="2"
+                      color="
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                         #0D1139"
+                      :value="80"></v-progress-circular>
+                  </template>
+                </v-text-field>
+                <div class=" email-error-text text-left" v-if="emailError && !getInvitedSupplierEmailExists">
+                  Email already exists! Please try a different one.
+                </div>
+                <div class=" email-error-text text-left" v-if="getInvitedSupplierEmailExists">
+                  Supplier is pending registration and cannot be invited at this time.
+                </div>
+
+                <v-btn :loading="loadingInvite"
+                  :disabled="!valid || !getPhoneInfo.valid || getEmailLoading || emailError || getInvitedSupplierEmailExists"
+                  color="#0D9648" class="mr-4 text-capitalize white--text font-weight-bold" @click="validate" large
+                  height="50px" min-width="220px">
+                  Send Invite
+                </v-btn>
+              </v-form>
+            </v-card-text>
+          </v-card>
+        </v-dialog>
+
       </div>
     </div>
 
@@ -394,6 +458,9 @@
 import moment from 'moment-timezone';
 import AddSupplier from '@/components/viewBid/addSupplier.vue';
 import AddTeamMember from '@/components/viewBid/addTeamMember.vue';
+import { mapActions, mapGetters } from 'vuex';
+import VuePhoneNumberInput from 'vue-phone-number-input';
+import 'vue-phone-number-input/dist/vue-phone-number-input.css';
 
 export default {
   data() {
@@ -401,13 +468,49 @@ export default {
       users: '',
       toggleSupplier: false,
       toggleTeam: false,
+      supplierDialog: false,
+      valid: false,
+      firstName: '',
+      lastName: '',
+      nameRules: [
+        (v) => !!v || 'Name is required',
+      ],
+      company: '',
+      companyRules: [
+        (v) => !!v || 'Company name is required',
+      ],
+      email: '',
+      emailRules: [
+        (v) => !!v || 'E-mail is required',
+        (v) => {
+          v = v && v.replace(/\s+/g, '');
+          return /^[\w.+-]+@(?!.*_{1})[A-Za-z0-9-]+(\.[A-Za-z0-9-]+)*\.[A-Za-z]{1,63}$/.test(v) || 'E-mail must be valid';
+        },
+      ],
+      phoneNumber: '',
+      results: {},
+      counter: 0,
+      phoneInfo: {
+        valid: true,
+        message: '',
+      },
+      emailLoading: false,
+      translations: {
+        countrySelectorLabel: 'Country Code',
+        countrySelectorError: 'Choose country',
+        phoneNumberLabel: 'Phone Number',
+        example: 'Example',
+      },
+      newRepsInvited: []
     };
   },
   components: {
     AddTeamMember,
     AddSupplier,
+    VuePhoneNumberInput,
   },
   methods: {
+    ...mapActions(['inviteNewSupplier', 'checkEmail']),
     openTeam() {
       this.toggleTeam = true;
     },
@@ -515,8 +618,122 @@ export default {
 
       return active;
     },
+    onUpdate(payload) {
+      this.counter++;
+      this.phoneInfo.valid = payload.isValid;
+
+      if (!payload) {
+        this.phoneInfo.message = 'Phone number is required';
+      } else if (payload.phoneNumber && payload.phoneNumber !== '' && payload.phoneNumber.length >= 1) {
+        if (!payload.isValid) {
+          this.phoneInfo.message = 'Invalid Phone number format';
+        }
+
+        if (payload.formattedNumber && payload.isValid) {
+          this.phoneNumber = payload.formattedNumber;
+          this.results = payload.formattedNumber;
+        }
+      } else {
+        this.phoneInfo.message = 'Phone number is required';
+      }
+    },
+    async validate() {
+      if (this.results === '' && this.results === undefined) {
+        this.counter += 2;
+        this.phoneInfo = {
+          valid: false,
+          message: 'Phone number is required',
+        };
+      }
+      const supplier = {
+        firstName: this.firstName,
+        lastName: this.lastName,
+        company: this.company,
+        phoneNumber: this.results,
+        email: this.email,
+        bidTitle: this.bidDetail.bidData.title,
+        bidType: this.bidDetail.bidData.type,
+        bidDueDate: this.bidDetail.bidData.dueDate,
+        bidDueTime: this.bidDetail.bidData.dueTime,
+        serial: this.bidDetail.bidData.serial,
+      };
+
+      if (this.$refs.form.validate() && this.getPhoneInfo.valid && !this.emailError && !this.getInvitedSupplierEmailExists) {
+        const user = await this.inviteNewSupplier(supplier);
+
+        if (user && user._id) {
+          this.newRepsInvited = user;
+          this.$refs.form.reset();
+          this.phoneNumber = '';
+          this.phoneInfo = {
+            valid: true,
+            message: '',
+          };
+          this.counter = 0;
+          this.valid = false;
+          this.results = '';
+          this.supplierDialog = false;
+        } else if (user !== '' && typeof user === 'string') {
+          this.$toasted.show(
+            user,
+            {
+              class: 'error-toast',
+              type: 'error',
+              duration: 5000,
+              position: 'top-center',
+            },
+          );
+        } else {
+          this.$toasted.show(
+            'Error! Something went wrong. Please try again',
+            {
+              class: 'error-toast',
+              type: 'error',
+              duration: 5000,
+              position: 'top-center',
+            },
+          );
+        }
+      }
+    },
+    async checkEmailI() {
+      this.email = this.email && this.email.replace(/\s+/g, '');
+      const testEmail = /^[\w.+-]+@(?!.*_{1})[A-Za-z0-9-]+(\.[A-Za-z0-9-]+)*\.[A-Za-z]{1,63}$/.test(this.email);
+
+      if (this.email === '' || !testEmail) {
+        this.$store.commit('setEmailExistSuccess', false);
+        this.$store.commit('setInvitedSupplierEmailExists', false);
+      }
+
+      if (testEmail) {
+        this.emailLoading = true;
+        await this.checkEmail(this.email);
+        this.emailLoading = false;
+      }
+    },
+    onBlurS() {
+      if (this.phoneNumber === '') {
+        this.phoneInfo.message = 'Phone number is required';
+        this.phoneInfo.valid = false;
+        this.counter++;
+      } else if (this.phoneNumber !== null && this.phoneNumber.length === 1) {
+        this.phoneInfo.message = 'Invalid Phone number format';
+        this.phoneInfo.valid = false;
+        this.counter++;
+      }
+    },
+    removeSpace(event) {
+      const charCode = event.keyCode;
+
+      if (charCode === 32) {
+        event.preventDefault();
+      } else {
+        return true;
+      }
+    },
   },
   computed: {
+    ...mapGetters(['loadingInvite']),
     bidDetail() {
       return this.$store.getters.bidViewData;
     },
@@ -546,6 +763,27 @@ export default {
         return [];
       }
       return [];
+    },
+    getPhoneInfo() {
+      return this.phoneInfo;
+    },
+    getCounter() {
+      return this.counter;
+    },
+    getEmailLoading() {
+      return this.emailLoading;
+    },
+    emailMessage() {
+      return this.$store.getters.emailExists;
+    },
+    emailError() {
+      if (this.emailMessage) {
+        return true;
+      }
+      return false;
+    },
+    getInvitedSupplierEmailExists() {
+      return this.$store.getters.invitedSupplierEmailExists;
     },
   },
 };

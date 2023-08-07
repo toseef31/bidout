@@ -321,6 +321,7 @@ export default {
         companyId: payload.companyId,
         bidId: payload.bidId,
         userId: payload.userId,
+        customMessage: payload.customMessage
       });
 
       if (res.status === 200) {
@@ -348,6 +349,7 @@ export default {
         companyId: payload.companyId,
         bidId: payload.bidId,
         userId: payload.userId,
+        customMessage: payload.customMessage
       });
 
       if (res.status === 200) {
