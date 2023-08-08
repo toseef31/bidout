@@ -45,7 +45,7 @@
               v-if="bidDetail.supplierSubmissions && ((!bidDetail.receivingBids && isBidOut) || (bidDetail.bidData.type === 'BidOut Process' && !bidDetail.bidout && !bidDetail.receivingBids))">
               <td class="bid-example-title">Bid Example Pre-BidOut Period</td>
               <template v-for="(submission) in bidDetail.supplierSubmissions">
-                <td v-if="!submission.bidOutPricePre" class="priceBoldClass">
+                <td v-if="!submission.bidOutPricePre && submission.bidOutPricePre !== 0" class="priceBoldClass">
                   Not submitted
                 </td>
                 <td v-else-if="submission.bidOutPricePre === null" class="priceBoldClass">
@@ -60,7 +60,7 @@
             <tr v-if="bidDetail.supplierSubmissions && bidDetail.bidData.type !== 'BidOut Process'">
               <td class="bid-example-title">Total Price</td>
               <template v-for="(submission) in bidDetail.supplierSubmissions">
-                <td v-if="!submission.bidOutPricePre" class="priceBoldClass">
+                <td v-if="!submission.bidOutPricePre && submission.bidOutPricePre !== 0" class="priceBoldClass">
                   Not submitted
                 </td>
                 <td v-else-if="submission.bidOutPricePre === null" class="priceBoldClass">
@@ -75,7 +75,7 @@
               v-if="bidDetail.supplierSubmissions && bidDetail.bidData.type === 'BidOut Process' && !bidDetail.bidout && bidDetail.receivingBids">
               <td class="bid-example-title">Total Price</td>
               <template v-for="(submission) in bidDetail.supplierSubmissions">
-                <td v-if="!submission.bidOutPricePre" class="priceBoldClass">
+                <td v-if="!submission.bidOutPricePre && submission.bidOutPricePre !== 0" class="priceBoldClass">
                   Not submitted
                 </td>
                 <td v-else-if="submission.bidOutPricePre === null" class="priceBoldClass">
@@ -91,7 +91,7 @@
               v-if="bidDetail.supplierSubmissions && ((!bidDetail.receivingBids && isBidOut) || (bidDetail.bidData.type === 'BidOut Process' && !bidDetail.bidout && !bidDetail.receivingBids))">
               <td class="bid-example-title">Bid Example Post-BidOut Period</td>
               <template v-for="(submission) in bidDetail.supplierSubmissions">
-                <td v-if="!submission.postBidOutPrice" class="priceBoldClass">
+                <td v-if="!submission.postBidOutPrice && submission.bidOutPricePre !== 0" class="priceBoldClass">
                   Not submitted
                 </td>
                 <td v-else-if="submission.postBidOutPrice
