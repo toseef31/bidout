@@ -96,7 +96,7 @@
               <v-col class="mr-10" v-if="isEligible">
                 <v-tooltip top v-if="checkNDASigned(item._id)">
                   <template v-slot:activator="{ on, attrs }">
-                    <v-badge color="#0D9648" dot overlap >
+                    <v-badge color="#0D9648" dot overlap>
                       <v-icon v-bind="attrs" v-on="on">mdi-file-sign</v-icon>
                     </v-badge>
                   </template>
@@ -105,7 +105,7 @@
 
                 <v-tooltip top v-if="!checkNDASigned(item._id)">
                   <template v-slot:activator="{ on, attrs }">
-                    <v-badge color="#D5D91C" dot overlap >
+                    <v-badge color="#D5D91C" dot overlap>
                       <v-icon v-bind="attrs" v-on="on">mdi-file-sign</v-icon>
                     </v-badge>
                   </template>
@@ -501,7 +501,7 @@ export default {
         phoneNumberLabel: 'Phone Number',
         example: 'Example',
       },
-      newRepsInvited: []
+      newRepsInvited: [],
     };
   },
   components: {
@@ -522,6 +522,11 @@ export default {
       return file.substring(file.lastIndexOf('.') + 1);
     },
     getBidViewNumber(id) {
+      if (this.bidDetail.bidData.requiresNDA) {
+        const test = this.bidDetail.bidData.signedNDAs.some((el) => el.company === id);
+
+        if (!test) return 0;
+      }
       const { supplierViews } = this.bidDetail.bidData;
       let number = 0;
 
@@ -787,17 +792,16 @@ export default {
     },
     isEligible() {
       if (
-        this.$store.getters.userInfo &&
-        this.$store.getters.userInfo.company &&
-        this.$store.getters.userInfo.company.contracts
+        this.$store.getters.userInfo
+        && this.$store.getters.userInfo.company
+        && this.$store.getters.userInfo.company.contracts
       ) {
         return this.$store.getters.userInfo.company.contracts.find(
-          (contract) =>
-            contract.contractType === "rfx-enterprise"
-        ) && this.bidDetail.bidData.requiresNDA
+          (contract) => contract.contractType === 'rfx-enterprise',
+        ) && this.bidDetail.bidData.requiresNDA;
       }
       return false;
-    }
+    },
   },
 };
 </script>

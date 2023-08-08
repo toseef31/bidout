@@ -11,7 +11,8 @@
         <v-checkbox color="#0D9648" hide-details v-model="agree">
           <template v-slot:label>
             <div class="font-weight-bold">
-              I {{ userData.firstName }} {{ userData.lastName }} with {{ userData.company.companyName }} agrees to abide by the
+              I {{ userData.firstName }} {{ userData.lastName }} with {{ userData.company.companyName }} agrees to abide
+              by the
               above confidentiality agreement between {{ userData.company.companyName }} and {{
                 bidDetail.bidData.company.companyName }}
             </div>
@@ -330,9 +331,9 @@ export default {
     },
     isSignedNDA() {
       if (this.bidDetail.bidData.requiresNDA) {
-        return this.$store.getters.bidViewData.bidData.signedNDAs.length
+        return this.bidDetail.bidData.signedNDAs.length;
       }
-      return true
+      return true;
     },
     getLoading() {
       return this.loading;
