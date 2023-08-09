@@ -393,6 +393,7 @@ export default {
       if (res.status === 200) {
         commit("setContractData", res.data);
         commit("setPlan", payload.plan);
+        commit("setContractType",payload.contractType)
         commit("setGoToModuleSelection", null);
         commit("setGoToAgreement", true);
       }

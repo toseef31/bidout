@@ -111,4 +111,7 @@ export default {
   setInvitedSupplierEmailExists(state, payload) {
     state.invitedSupplierEmailExists = payload;
   },
+  setContractType(state,payload) {
+    state.contractType = payload
+  }
 };

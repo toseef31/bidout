@@ -32,4 +32,5 @@ export default {
   goToModuleSelection: null,
   goToAgreement: null,
   supplierSignUpSuccess: null,
+  contractType: null
 };
