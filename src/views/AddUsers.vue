@@ -39,6 +39,18 @@
                       required
                       outlined
                     ></v-text-field>
+                    <div class="mb-9 phone-block">
+                      <label class="d-block text-left input-label mb-2 font-weight-bold">Mobile Number
+                      </label>
+
+                      <VuePhoneNumberInput @phone-number-blur="onBlurB" default-country-code="US" :required="true"
+                        clearable :error="!getPhoneInfo.valid && getCounter >= 1" :border-radius="8" size="lg"
+                        v-model="mobileNumber" error-color="#FF0000" valid-color="#9E9E9E"
+                        :translations="translations" class="mb-5" @update="onUpdate" />
+
+                      <div class="phone-class" v-if="!getPhoneInfo.valid && getCounter >= 1">
+                        {{ getPhoneInfo.message }}</div>
+                    </div>
                     <label class="d-block text-left font-weight-bold mb-2">Privileges
                       <v-tooltip right>
                         <template v-slot:activator="{ on, attrs }">
@@ -61,7 +73,7 @@
                     ></v-select>
 
                     <v-btn
-                      :disabled="!valid"
+                      :disabled="profileLoading || !getPhoneInfo.valid || !valid"
                       :loading="profileLoading"
                       color="#0D9648"
                       class="mr-4 text-capitalize white--text font-weight-bold"
@@ -84,6 +96,8 @@
 </template>
 <script>
 import { mapActions, mapGetters } from 'vuex';
+import VuePhoneNumberInput from 'vue-phone-number-input';
+import 'vue-phone-number-input/dist/vue-phone-number-input.css';
 import Navbar from '../components/Layout/Navbar.vue';
 import LeftSidebar from '../components/Layout/Dashboard/LeftSidebar.vue';
 import RightSidebar from '../components/Layout/Dashboard/RightSidebar.vue';
@@ -93,7 +107,8 @@ export default {
   components: {
     Navbar,
     LeftSidebar,
-    RightSidebar
+    RightSidebar,
+    VuePhoneNumberInput,
   },
   data() {
     return {
@@ -115,6 +130,19 @@ export default {
         { value: 'user', label: 'User' },
       ],
       user: '',
+      mobileNumber: '',
+      translations: {
+        countrySelectorLabel: 'Country Code',
+        countrySelectorError: 'Choose country',
+        phoneNumberLabel: 'Phone Number',
+        example: 'Example',
+      },
+      results: {},
+      phoneInfo: {
+        valid: false,
+        message: '',
+      },
+      counter: 0,
     };
   },
   computed: {
@@ -124,6 +152,12 @@ export default {
     },
     activityPanel() {
       return this.$store.getters.g_activityPanel;
+    },
+    getPhoneInfo() {
+      return this.phoneInfo;
+    },
+    getCounter() {
+      return this.counter;
     },
   },
   watch: {
@@ -141,8 +175,46 @@ export default {
   },
   methods: {
     ...mapActions(['inviteUser']),
+    onUpdate(payload) {
+      this.counter++;
+      this.phoneInfo.valid = payload.isValid;
+
+      if (!payload) {
+        this.phoneInfo.message = 'Phone number is required';
+      } else if (payload.phoneNumber && payload.phoneNumber !== '' && payload.phoneNumber.length >= 1) {
+        if (!payload.isValid) {
+          this.phoneInfo.message = 'Invalid Phone number format';
+        }
+
+        if (payload.formattedNumber && payload.isValid) {
+          this.phoneInfo.message = '';
+          this.results = payload.formattedNumber;
+          this.mobileNumber = payload.formattedNumber;
+        }
+      } else {
+        this.phoneInfo.message = 'Phone number is required';
+      }
+    },
+    onBlurB() {
+      if (this.mobileNumber === '') {
+        this.phoneInfo.message = 'Phone number is required';
+        this.phoneInfo.valid = false;
+        this.counter++;
+      } else if (this.mobileNumber !== null && this.mobileNumber.length === 1) {
+        this.phoneInfo.message = 'Invalid Phone number format';
+        this.phoneInfo.valid = false;
+        this.counter++;
+      }
+    },
     validate() {
-      if (this.$refs.form.validate()) {
+      if (this.results === '' && this.results === undefined) {
+        this.counter += 2;
+        this.phoneInfo = {
+          valid: false,
+          message: 'Phone number is required',
+        };
+      }
+      if (this.$refs.form.validate() && this.getPhoneInfo.valid) {
         const data = {
           firstName: this.firstName,
           lastName: this.lastName,
@@ -151,6 +223,7 @@ export default {
           company: this.user.company.companyName,
           companyId: this.user.company,
           parent: this.user._id,
+          phoneNumber: this.results,
         }
         this.inviteUser(data);
         this.btnLoading = true;

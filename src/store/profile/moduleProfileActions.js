@@ -188,7 +188,7 @@ export default {
   inviteUser({ commit, dispatch, state }, payload) {
     commit('editProfileLoading', true);
     commit('setInviteMessage', null);
-    axios.post('/v2/company/addInvitedUser/', {'firstName':payload.firstName,'lastName': payload.lastName,'company': payload.company,'companyId':payload.companyId,'email':payload.email,'parent': payload.parent,'role': payload.role})
+    axios.post('/v2/company/addInvitedUser/', {'firstName':payload.firstName,'lastName': payload.lastName,'company': payload.company,'companyId':payload.companyId,'email':payload.email,'parent': payload.parent,'role': payload.role, 'phoneNumber': payload.phoneNumber})
       .then((responce) => {
         if (responce.status === 200) {
           commit('editProfileLoading', false);
@@ -218,7 +218,7 @@ export default {
     router.replace({ name: 'EditUser' });
   },
   updateUser({ commit, dispatch, state }, payload) {
-    axios.post('/v2/company/updateUser/'+payload.id,{'firstName':payload.firstName,'lastName': payload.lastName,'role': payload.role})
+    axios.post('/v2/company/updateUser/'+payload.id,{'firstName':payload.firstName,'lastName': payload.lastName,'role': payload.role,'phoneNumber': payload.phoneNumber})
       .then((responce) => {
         if (responce.status === 200) {
           commit('setMessage', 'User updated successfully');
@@ -239,7 +239,7 @@ export default {
       });
   },
   updateInvite({ commit, dispatch, state }, payload) {
-    axios.post('/v2/company/updateInvitedUser/'+payload.id,{'firstName':payload.firstName,'lastName': payload.lastName,'role': payload.role})
+    axios.post('/v2/company/updateInvitedUser/'+payload.id,{'firstName':payload.firstName,'lastName': payload.lastName,'role': payload.role,'phoneNumber': payload.phoneNumber})
       .then((responce) => {
         if (responce.status === 200) {
           commit('setMessage', 'User updated successfully');

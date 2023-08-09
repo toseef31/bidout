@@ -39,6 +39,18 @@
 	  				select{
 	  					box-shadow: none;
 	  				}
+						.phone-block{
+							position: relative;
+							.phone-class {
+								color: #ff5252;
+								font-size: 12px;
+								text-align: left;
+								margin-top: 14px;
+								padding-left: 12px;
+								position: absolute;
+								left: 0;
+							}
+						}
 	  			}
 	  		}
 	  	}
