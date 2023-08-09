@@ -48,4 +48,19 @@ export default {
   setCompanyExecutiveLoading(state, payload) {
     state.companyExecutiveLoading = payload;
   },
+  setNDADocumentAlert(state) {
+    state.ndaDocumentAlert = true;
+    setTimeout(() => {
+      state.ndaDocumentAlert = false;
+    }, 5000);
+  },
+  setNDADocument(state,payload) {
+    state.ndaDocument = payload
+  },
+  setNDADocumentUpdateAlert(state) {
+    state.ndaDocumentUpdateAlert = true
+    setTimeout(() => {
+      state.ndaDocumentUpdateAlert = false;
+    }, 5000);
+  }
 };

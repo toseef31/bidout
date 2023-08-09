@@ -150,7 +150,23 @@ const routes = [
           }
         },
       },
-
+      {
+        path: '/manage-rfx-settings',
+        name: 'ManageRFxSettings',
+        component: () => import('@/views/ManageRfxSettings.vue'),
+        beforeEnter: (to, from, next) => {
+          if (store.getters.userInfo == null) {
+            store.dispatch('getCurrentUser').then((data) => {
+              next();
+            }).catch((error) => {
+              console.log(error);
+              next('/login');
+            });
+          } else {
+            next();
+          }
+        },
+      },
     ],
   },
 ];

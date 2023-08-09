@@ -1,5 +1,35 @@
 <template>
-  <v-col class="mt-7 bid-detail-supplier pa-0 mb-5" align="start">
+  <v-col v-if="!isSignedNDA" class="mt-7 bid-detail-supplier pa-0 mb-5" align="center">
+    <div class="contract-class">{{ bidDetail.bidData.company.companyName }} requires all suppliers to execute a
+      confidentiality agreement before reviewing any bid details, please execute this agreement to access this bid.</div>
+    <div class="border-contract">
+      <p class="white text-left pa-4 font-weight-medium mb-5 contract-section" v-html="getCompanyNda" />
+    </div>
+
+    <v-row justify="center" align="center" class="mt-0 sign-class">
+      <v-col cols="12" md="8" class="pb-1 middle-align-class">
+        <v-checkbox color="#0D9648" hide-details v-model="agree">
+          <template v-slot:label>
+            <div class="font-weight-bold">
+              I {{ userData.firstName }} {{ userData.lastName }} with {{ userData.company.companyName }} agrees to abide
+              by the
+              above confidentiality agreement between {{ userData.company.companyName }} and {{
+                bidDetail.bidData.company.companyName }}
+            </div>
+          </template>
+        </v-checkbox>
+      </v-col>
+      <v-col cols="12" md="4" class="text-right">
+        <v-btn color="#0D9647" outlined class="black--text text-capitalize mb-2" height="45" width="120"
+          :disabled="!agree" @click="signContract">
+          <v-progress-circular v-if="getLoading" indeterminate :width="3" size="25" color="#0D9648"></v-progress-circular>
+          <strong v-else>Sign
+          </strong>
+        </v-btn>
+      </v-col>
+    </v-row>
+  </v-col>
+  <v-col v-else class="mt-7 bid-detail-supplier pa-0 mb-5" align="start">
     <div class="bid-row pb-5">
       <div class="px-5">
         <div class="title-detail">Bid Details</div>
@@ -30,14 +60,14 @@
               </template>
               <template v-else>
                 {{ formatDate(bidDetail.bidData.dueDate) }} @
-                  {{ bidDetail.bidData.dueTime }} CST
+                {{ bidDetail.bidData.dueTime }} CST
               </template>
             </template>
             <template v-else>
               {{ formatDate(bidDetail.bidData.dueDate) }} @
-                {{ bidDetail.bidData.dueTime }} CST
+              {{ bidDetail.bidData.dueTime }} CST
             </template>
-            </v-col>
+          </v-col>
 
         </v-row>
 
@@ -53,11 +83,11 @@
         <br />
         <v-row>
           <v-col md="2" class="text-right mr-1 title-desc">Description:</v-col>
-          <v-col class="title-brief bid-desc supplier-desc"> 
+          <v-col class="title-brief bid-desc supplier-desc">
             <div class="ql-editor pa-0" v-html="bidDetail.bidData.bidDescriptions &&
-            Array.isArray(bidDetail.bidData.bidDescriptions)
-            ? bidDetail.bidData.bidDescriptions[0].body
-            : bidDetail.bidData.bidDescriptions"></div>
+              Array.isArray(bidDetail.bidData.bidDescriptions)
+              ? bidDetail.bidData.bidDescriptions[0].body
+              : bidDetail.bidData.bidDescriptions"></div>
           </v-col>
         </v-row>
         <br />
@@ -65,7 +95,7 @@
           v-if="bidDetail.bidData && bidDetail.bidData.bidDescriptions && Array.isArray(bidDetail.bidData.bidDescriptions)"
           v-for="(item, index) in bidDetail.bidData.bidDescriptions.slice(1)" :key="index">
           <v-col md="2" class="text-right mr-1 title-desc">{{ item && item.title }}:</v-col>
-          <v-col class="title-brief bid-desc supplier-desc"> 
+          <v-col class="title-brief bid-desc supplier-desc">
             <div class="ql-editor pa-0" v-html="item && item.body"></div>
           </v-col>
         </v-row>
@@ -101,11 +131,10 @@
           </div>
         </div>
 
-        <div v-if="
-          bidDetail.bidData &&
+        <div v-if="bidDetail.bidData &&
           bidDetail.bidData.invitedTeamMembers &&
           bidDetail.bidData.invitedTeamMembers.length > 0
-        " v-for="(item, index) in bidDetail.bidData.invitedTeamMembers" :key="index"
+          " v-for="(item, index) in bidDetail.bidData.invitedTeamMembers" :key="index"
           class="d-flex align-center flex-child">
           <v-img v-if="item.image" max-width="100" height="auto" contain :aspect-ratio="16 / 9" :src="item.image"></v-img>
           <v-avatar v-else color="#0d96481a" size="62">
@@ -134,11 +163,10 @@
     <div class="pt-8 pb-10 bid-row-2">
       <div class="title-detail px-6">Line items</div>
 
-      <v-simple-table class="template-table-style mt-8" v-if="
-        bidDetail.bidData &&
+      <v-simple-table class="template-table-style mt-8" v-if="bidDetail.bidData &&
         bidDetail.bidData.lineItems &&
         bidDetail.bidData.lineItems.length > 0
-      ">
+        ">
         <template v-slot:default>
           <thead>
             <tr>
@@ -168,11 +196,10 @@
 
     <div class="py-8 bid-row-2">
       <div class="title-detail px-6">Attachments</div>
-      <div class="attachment-list-style" v-if="
-        bidDetail.bidData &&
+      <div class="attachment-list-style" v-if="bidDetail.bidData &&
         bidDetail.bidData.attachments &&
         bidDetail.bidData.attachments.length
-      ">
+        ">
         <v-simple-table fixed-header>
           <template v-slot:default>
             <thead>
@@ -191,7 +218,8 @@
                   <img :src="require('@/assets/images/bids/FilePdf.png')" v-if="checkFileType(doc.fileName) === 'pdf'" />
                   <img :src="require('@/assets/images/bids/FileDoc.png')"
                     v-else-if="checkFileType(doc.fileName) === 'docx' || checkFileType(doc.fileName) === 'doc'" />
-                    <v-icon color="#0D1139" v-else-if="checkFileType(doc.fileName) === 'xlsx' || checkFileType(doc.fileName) === 'xls'">mdi-microsoft-excel</v-icon>
+                  <v-icon color="#0D1139"
+                    v-else-if="checkFileType(doc.fileName) === 'xlsx' || checkFileType(doc.fileName) === 'xls'">mdi-microsoft-excel</v-icon>
                   <v-icon color="#0D1139" v-else>mdi-file-document</v-icon>
                 </td>
                 <td class="text-left doc-class"><a :href="doc.url" target="_blank" class="text-decoration-none">{{
@@ -243,9 +271,20 @@
 
 <script>
 import moment from 'moment-timezone';
+import { mapActions } from 'vuex';
 
 export default {
+  data() {
+    return {
+      loading: false,
+      agree: false,
+      users: '',
+    };
+  },
   methods: {
+    ...mapActions([
+      'signCompanyNda',
+    ]),
     size(size) {
       const sizeInMB = (size / (1024 * 1024)).toFixed(2);
       return `${sizeInMB}mb`;
@@ -267,13 +306,41 @@ export default {
 
       return moment.tz(momentDueDate, 'America/Chicago').format('MM/DD/YYYY @ ha');
     },
+    async signContract() {
+      this.loading = true;
+      await this.signCompanyNda({
+        companyId: this.bidDetail.bidData.company._id,
+        supplierCompanyId: this.users.company._id,
+        supplierUserId: this.users._id,
+        bidId: this.bidDetail.bidData._id,
+        serial: this.bidDetail.bidData.serial,
+        company: this.users.company,
+      });
+      this.loading = false;
+    },
   },
   computed: {
     bidDetail() {
       return this.$store.getters.bidViewData;
     },
+    userData() {
+      return this.$store.getters.userInfo;
+    },
+    getCompanyNda() {
+      return this.$store.getters.companyNda;
+    },
+    isSignedNDA() {
+      if (this.bidDetail.bidData.requiresNDA) {
+        return this.bidDetail.bidData.signedNDAs.length;
+      }
+      return true;
+    },
+    getLoading() {
+      return this.loading;
+    },
   },
   mounted() {
+    this.users = this.$store.getters.userInfo;
     window.scrollTo({ top: 0, behavior: 'smooth' });
   },
 };

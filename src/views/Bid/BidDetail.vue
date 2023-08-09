@@ -532,7 +532,7 @@
       <div v-else class="bidDetail-tabs-section mt-7">
         <v-tabs v-model="currentItem" class="bids-tabs" fixed-tabs hide-slider :mobile-breakpoint="767" @change="reload">
           <v-tab v-for="item in tabsSupplier" :key="item.value" :href="'#tab-' + item.value"
-            class="text-capitalize black--text font-weight-bold">
+            class="text-capitalize black--text font-weight-bold" :disabled="!isSignedNDA">
             {{ item.text }}
             <v-badge v-if="item.value === 3 && showBidMessageC !== 0" color="#0D9648" :content="showBidMessageC" inline
               tile>
@@ -670,6 +670,7 @@ export default {
       'saveDraftBid',
       'getDraftBySerial',
       'createTemplateBid',
+      'getCompanyNda'
     ]),
     async reload(event) {
       if (this.getUserType === 'buyer' && event !== 'tab-4') {
@@ -911,6 +912,12 @@ export default {
     getCreateTemplateLoading() {
       return this.createTemplateLoading;
     },
+    isSignedNDA() {
+      if (this.bidDetail.bidData.requiresNDA) {
+        return this.$store.getters.bidViewData.bidData.signedNDAs.length
+      }
+      return true
+    }
   },
   mounted() {
     moment.tz.setDefault('America/Chicago');
@@ -928,6 +935,14 @@ export default {
       });
     } else {
       this.$router.push('/login');
+    }
+
+    if (!this.isSignedNDA) {
+      this.getCompanyNda({
+        companyId: this.bidDetail.bidData.company._id,
+        supplierCompanyId: this.users.company._id,
+        supplierUserId: this.users._id
+      })
     }
 
     this.compute();

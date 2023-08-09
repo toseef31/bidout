@@ -67,4 +67,5 @@ export default {
   teamMembersForBid: [],
   teamMembersInitial: [],
   bidSubmissionValidationAlert: null,
+  companyNda: null
 };

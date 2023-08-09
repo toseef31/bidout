@@ -770,6 +770,59 @@ export default {
           console.log(err);
       });
   },  
+  async addCompanyNDADocument({ commit, dispatch, state }, payload) {
+    var config = {
+      headers: {
+        "Content-Type": "multipart/form-data",
+        "Authorization": `Bearer ${JSON.parse(localStorage.getItem('token'))}`
+      },
+    };
+    const formData = new FormData()
+    formData.append('companyId', payload.companyId);
+    formData.append('userId', payload.userId);
+    formData.append('requireNda', payload.requireNda);
+    formData.append('document', payload.document);
+    
+    try {
+      const res = await axios.post('v2/company/addCompanyNDADoc/', formData,config);
 
-  
+      if (res.status === 200 && res.data.ndaDocument) {    
+        commit('setNDADocumentAlert');
+        commit('setNDADocument',{document: res.data.ndaDocument.fileName,requireNda: res.data.requireNda})
+      }
+    } catch (err) {
+      Sentry.captureException(err);
+      if (state.apiCounter === 2) {
+        dispatch('apiSignOutAction');
+      } else if (err.response && err.response.status === 403) {
+        await dispatch('refreshToken');
+        state.apiCounter = 2;
+        dispatch('addCompanyNDADocument', payload);
+      }
+    }
+  },
+  async updateNDARequirement ({commit,dispatch,state},payload) {
+    try {
+      const res = await axios.post('v2/company/updateNDARequirement/',{
+        companyId: payload.companyId,
+        requireNda: payload.requireNda
+      })
+
+      if (res.status === 200) {
+        await dispatch('getCurrentUser')
+        commit('setNDADocumentUpdateAlert');
+        commit('setNDADocument',{document: res.data.ndaDocument.fileName,requireNda: res.data.requireNda})
+        
+      }
+    } catch (err) {
+      Sentry.captureException(err);
+      if (state.apiCounter === 2) {
+        dispatch('apiSignOutAction');
+      } else if (err.response && err.response.status === 403) {
+        await dispatch('refreshToken');
+        state.apiCounter = 2;
+        dispatch('updateNDARequirement', payload);
+      }
+    }
+  }
 }

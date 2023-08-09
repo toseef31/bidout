@@ -916,7 +916,42 @@
         color: #959595;
       }
 
+      .contract-class {
+        font-size: 18px;
+        font-weight: 500;
+        width: 72%;
+      }
 
+      .sign-class {
+        width: 72%;
+      }
+
+      .middle-align-class {
+        .v-input {
+          margin-top: -8px !important;
+          padding-top: 0px !important;
+          .v-input__control {
+            .v-input__slot {
+              .v-input--selection-controls__input {
+                margin-right: 15px;
+              }
+            }
+            
+          }
+        }
+      }
+      
+      .border-contract {
+        border: 2px solid black;
+        width: 72%;
+        margin-top: 10px;
+      }
+      .contract-section {
+        width: 100%;
+        height: 700px;
+        overflow-x: hidden;
+        overflow-y: auto;
+      }
 
       .bid-row {
         border-bottom: 1px solid #f1f1f1;
