@@ -91,21 +91,26 @@
               v-if="bidDetail.supplierSubmissions && ((!bidDetail.receivingBids && isBidOut) || (bidDetail.bidData.type === 'BidOut Process' && !bidDetail.bidout && !bidDetail.receivingBids))">
               <td class="bid-example-title">Bid Example Post-BidOut Period</td>
               <template v-for="(submission) in bidDetail.supplierSubmissions">
-                <td v-if="!submission.postBidOutPrice && submission.bidOutPricePre !== 0" class="priceBoldClass">
+                <td v-if="!submission.postBidOutPrice && submission.postBidOutPrice !== 0" class="priceBoldClass">
                   Not submitted
+                </td>
+                <td v-if="submission.postBidOutPrice === 0" class="priceBoldClass">
+                  $ {{formatPrice(submission.postBidOutPrice)}}
                 </td>
                 <td v-else-if="submission.postBidOutPrice
                   === null" class="priceBoldClass">
                   Not submitted
                 </td>
+                
                 <td v-else>
+                  
                   <v-icon v-if="submission.bidOutPricePre > submission.postBidOutPrice" color="#0D9648"
                     class=" icon-saving-class">mdi-arrow-down-thin-circle-outline</v-icon>
-                  <span class="ml-1 priceBoldClass">$ {{
+                  <span v-if="submission.postBidOutPrice" class="ml-1 priceBoldClass">$ {{
                     formatPrice(submission.postBidOutPrice)
                   }}</span>
 
-                  <div class="subscript" v-if="submission.bidOutPricePre > submission.postBidOutPrice">Saving {{
+                  <div class="subscript" v-if="submission.postBidOutPrice &&submission.bidOutPricePre > submission.postBidOutPrice">Saving {{
                     Number((((submission.bidOutPricePre - submission.postBidOutPrice) / submission.bidOutPricePre) *
                       100)).toFixed(2)
                   }}%</div>
